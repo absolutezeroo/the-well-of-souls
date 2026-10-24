@@ -49,6 +49,25 @@ Call it only when what `_draw()` shows changed:
 same order, so the same sums and the same seeded fights. A line of sight asked every frame is
 cast again only after 0.1 s or 4 px of movement (`MonsterSteering.can_see`).
 
+**A crowd** (task: 145 monsters, 108 awake, 36 fps on the PC). What each awake monster costs
+every frame adds up: on the development VM, 120 awake cost ~11-12 ms a frame headless (the
+probe's `--pack=120`), of which ~5.5 ms its scripts and ~4 ms the engine's own physics (bodies
+pushing each other: monsters collide with monsters). What was cut:
+
+- The spacing push (`MonsterSteering.keep_spacing`) is summed one frame in `SPACING_EVERY` (3),
+  each monster on its own beat, and kept between (1.9 -> 0.95 ms for 120).
+- A monster's two overlays (`MonsterOverlay`) are drawn again only when what they show changed
+  (its health, its ward) or moves every frame (an elite's aura, a guard's arc: `MonsterTrait.
+  draws_under()`); they were drawn again every frame, two per monster (0.27 ms -> 0).
+- A body out of view (`Actor._in_view()`, `Monster.VIEW_MARGIN` past `World.view_rect()`)
+  keeps only its timers: no pose, tint or statuses (`ActorRig.on_view`), until it comes back.
+
+Not cut (the engine's): the physics step and `move_and_slide` (~5 ms for 120 in a crowd). A
+crowd that size needs a decision of design (fewer awake at once, or monsters that don't collide
+with each other, or physics at 30 ticks with interpolation): the roadmap has the card.
+Measure the PC and the phone on an exported build: a run from the editor is a debug build, its
+scripts slower and its debugger listening.
+
 **No GPU readback during play.** `Texture2D.get_image()` reads the texture back from the GPU on
 the Compatibility renderer, a stall on a phone. What needs pixels reads each sheet once while the
 floor loads and measures its frames on that copy (`BodyTops.warm`, `_sheets`).

@@ -31,6 +31,8 @@ var elite: EliteAffixDef
 ## the debug panel; World.spent_data() "later" keeps those still standing).
 var floor_index := -1
 
+## How far outside the view a monster's body still keeps its look up to date (px).
+const VIEW_MARGIN := 96.0
 ## Big monsters shake the floor when they walk.
 const HEAVY_RADIUS := 14.0
 const HEAVY_STEP_INTERVAL := 0.45
@@ -435,6 +437,12 @@ func _physics_process(delta: float) -> void:
 		_show_cast_rim()  # before the body's look is drawn this frame (Actor)
 	super._physics_process(delta)
 	steering.track_progress(delta)
+
+
+## Within the view, with a margin for its sprite and a step or two (World.view_rect(): once a
+## frame), or no world to ask.
+func _in_view() -> bool:
+	return world == null or world.view_rect(VIEW_MARGIN).has_point(global_position)
 
 
 func _update_heavy_steps() -> void:

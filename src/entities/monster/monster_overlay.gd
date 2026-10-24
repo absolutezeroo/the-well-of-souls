@@ -12,6 +12,16 @@ var layer := Layer.UNDER
 var monster: Monster
 ## The attack warning (UNDER only).
 var _telegraph: TelegraphView
+## What the last _draw() showed (OVER: the health bar, the ward, the name; it moves with the
+## monster, so it is drawn again only when one of these changes; docs/performance.md).
+var _drawn_hp := -1
+var _drawn_max_hp := -1
+var _drawn_ward := -1
+var _drawn_gone := false
+## UNDER: something moves every frame (an elite's pulsing aura, a guard's arc, a weak point's
+## pool); else nothing is drawn there and it is never drawn again.
+var _animated_under := false
+var _drawn_once := false
 
 
 static func create(host: Monster, overlay_layer: Layer) -> MonsterOverlay:
@@ -35,7 +45,7 @@ func _process(delta: float) -> void:
 	if not Vfx.shown:
 		return  # a simulation: nothing to see (Vfx.shown)
 	# Off screen nothing needs drawing (the telegraph still follows what the monster does).
-	if monster.world and monster.world.view_rect().has_point(monster.global_position):
+	if _needs_redraw() and monster.world and monster.world.view_rect().has_point(monster.global_position):
 		queue_redraw()
 	if _telegraph:
 		_update_telegraph()
@@ -46,7 +56,11 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if monster.is_dead or monster.is_falling:
+	_drawn_hp = monster.hp
+	_drawn_max_hp = monster.get_max_hp()
+	_drawn_ward = monster.ward
+	_drawn_gone = monster.is_dead or monster.is_falling
+	if _drawn_gone:
 		return
 	if layer == Layer.UNDER:
 		if monster.rank:
@@ -63,6 +77,22 @@ func _draw() -> void:
 			var top_left := monster.head_position() - monster.global_position + Vector2(-HP_BAR_WIDTH * 0.5, -6.0)
 			draw_rect(Rect2(top_left - Vector2.ONE, Vector2(HP_BAR_WIDTH + 2.0, 6.0)), Palette.INK)
 			draw_rect(Rect2(top_left, Vector2(HP_BAR_WIDTH * monster.hp / monster.get_max_hp(), 4.0)), Palette.BLOOD)
+
+
+## Whether what _draw() shows changed since it last drew (or moves every frame).
+func _needs_redraw() -> bool:
+	var gone := monster.is_dead or monster.is_falling
+	if not _drawn_once:
+		_drawn_once = true
+		_animated_under = monster.def.traits.any(func(t: MonsterTrait) -> bool: return t != null and t.draws_under())
+		return true
+	if gone != _drawn_gone:
+		return true
+	if layer == Layer.UNDER:
+		return not gone and (_animated_under or monster.rank != null)  # (a rank may come after the spawn)
+	# A ward shimmers (every frame while it holds); an elite's name is redrawn with it (few of them).
+	return monster.hp != _drawn_hp or monster.get_max_hp() != _drawn_max_hp or monster.ward != _drawn_ward \
+		or monster.ward > 0 or (monster.rank != null and not monster.is_boss())
 
 
 ## Red warning (TelegraphView): the area of a skill being cast, the cone of a melee swing, the

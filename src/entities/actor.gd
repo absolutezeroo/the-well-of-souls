@@ -541,10 +541,19 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_check_ground()
 	if rig:
-		rig.update_state(facing, velocity.length(), is_dashing(), delta)
-		rig.modulate = _body_modulate()
-		rig.look.show_statuses(statuses, delta, _shader_shows_statuses())
+		# Out of view, the body's look waits (a crowd's pose, tint and statuses are script work
+		# each frame: docs/performance.md, "A crowd"); it is brought up to date as it comes back.
+		rig.on_view = _in_view()
+		if rig.on_view:
+			rig.update_state(facing, velocity.length(), is_dashing(), delta)
+			rig.modulate = _body_modulate()
+			rig.look.show_statuses(statuses, delta, _shader_shows_statuses())
 	_redraw_if_changed()
+
+
+## Whether its body can be seen (Monster: within the view, with a margin); the hero always.
+func _in_view() -> bool:
+	return true
 
 
 ## The shadow is drawn in the actor's own space (it moves with the node): only a body drawn by

@@ -76,6 +76,10 @@ func incoming_damage(monster: Monster, hit: HitInfo, damage: int) -> int:
 
 
 ## The shielded side: an arc in front.
+func draws_under() -> bool:
+	return true
+
+
 func draw_under(monster: Monster, canvas: CanvasItem) -> void:
 	var half := deg_to_rad(arc) * 0.5
 	var angle := direction_of(monster).angle()

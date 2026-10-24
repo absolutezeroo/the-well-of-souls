@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 240,
+  "next_id": 242,
   "tags": [
     "pc",
     "test",
@@ -3578,6 +3578,35 @@
       ],
       "created_at": 1792858951,
       "updated_at": 1792858951,
+      "due_date": null
+    },
+    {
+      "id": "task_240",
+      "title": "Perf : foule de monstres (145, 108 réveillés : 36 fps sur PC)",
+      "description": "Vu par Clayton (24/10, partie de débug). Mesuré (sonde --pack=120) : ~11-12 ms par image sur la VM, dont ~5,5 ms de scripts des monstres et ~4 ms de physique du moteur (les monstres se poussent entre eux). Fait : poussée d'espacement calculée 1 image sur 3 (1,9 -> 0,95 ms), surcouches des monstres redessinées seulement quand elles changent (0,27 -> 0 ms), corps hors de l'écran qui n'actualisent plus leur pose/teinte/statuts. Gain modeste : le gros reste le moteur. À mesurer sur une version exportée (l'éditeur = build de debug, plus lent).",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "perf"
+      ],
+      "created_at": 1792860189,
+      "updated_at": 1792860189,
+      "due_date": null
+    },
+    {
+      "id": "task_241",
+      "title": "Perf : décider pour les grosses foules",
+      "description": "Le reste du coût d'une foule de 100+ monstres est la physique du moteur. Pistes à décider par Clayton : limiter le nombre de monstres réveillés en même temps ; monstres qui ne se bloquent plus entre eux (seulement l'écartement doux, comme les survivors-like) ; physique à 30 ticks avec interpolation ; IA des monstres loin du héros à mi-cadence.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "perf",
+        "idée"
+      ],
+      "created_at": 1792860189,
+      "updated_at": 1792860189,
       "due_date": null
     }
   ]

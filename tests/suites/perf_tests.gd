@@ -55,6 +55,7 @@ func run_in_game(world: World, player: Player) -> void:
 	await _frames(15)  # (they wake and crowd)
 	_check_buckets(world)
 	_check_nearest_free_point(world, player)
+	await _check_crowd(world, spawned)
 	for monster in spawned:
 		if is_instance_valid(monster):
 			monster.queue_free()
@@ -85,6 +86,40 @@ func _check_buckets(world: World) -> void:
 				missed += 1
 	check(missed == 0, "the spacing grid hands every monster all those close enough to push it (%d missed)" % missed)
 	check(unsorted == 0, "and in the awake list's order")
+
+
+## A crowd's per-monster work (docs/performance.md, "A crowd"): the spacing push summed one frame
+## in SPACING_EVERY and kept between; a plain monster's overlays drawn again only when what they
+## show changes (its health); a body out of view keeps only its timers.
+func _check_crowd(world: World, crowd: Array[Monster]) -> void:
+	var monster: Monster = null
+	for one in crowd:
+		if is_instance_valid(one) and not one.is_dead and one.rank == null:
+			monster = one
+			break
+	if monster == null:
+		check(false, "a plain monster in the crowd")
+		return
+	var summed := 0
+	var last := monster.steering._push_frame
+	for i in MonsterSteering.SPACING_EVERY * 4:
+		await get_tree().physics_frame
+		if monster.steering._push_frame != last:
+			summed += 1
+			last = monster.steering._push_frame
+	check(summed >= 3 and summed <= 5, "the spacing push is summed one frame in %d (%d times in %d frames)" % [MonsterSteering.SPACING_EVERY, summed, MonsterSteering.SPACING_EVERY * 4])
+	var over: MonsterOverlay = monster.get_node("Over")
+	var under: MonsterOverlay = monster.get_node("Under")
+	await _frames(2)
+	check(not over._needs_redraw() and not under._needs_redraw(), "a plain monster's overlays aren't drawn again while nothing they show changes")
+	monster.hp -= 1
+	check(over._needs_redraw(), "its health bar is, once it is hurt")
+	monster.hp += 1
+	var at := monster.global_position
+	monster.global_position = world.view_rect().position - Vector2(500, 500)
+	check(not monster._in_view(), "out of view, its body's look waits")
+	monster.global_position = at
+	check(monster._in_view(), "back in view, it is kept up again")
 
 
 ## World.nearest_free_point() walks only its rings' cells now: the same cell as the whole square's

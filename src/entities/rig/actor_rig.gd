@@ -35,6 +35,9 @@ const CHEST_HEIGHT := 14.0  # world pixels above the feet
 const FX_DISTANCE := 16.0
 
 var direction: StringName = &"down"
+## Within the view (its actor says, each physics frame: Actor._in_view()); out of it the rig
+## keeps only its timers.
+var on_view := true
 var _attacking := false
 var _winding_up := false
 var _dead := false
@@ -370,6 +373,8 @@ func _process(delta: float) -> void:
 		return  # a simulation: nothing to see (Vfx.shown)
 	_flash = maxf(_flash - delta, 0.0)
 	_squash = maxf(_squash - delta, 0.0)
+	if not on_view:
+		return  # (its owner says it is out of view: nothing to keep up there)
 	var t := _squash / SQUASH_TIME
 	squash_node.scale = Vector2(1.0 + 0.25 * t, 1.0 - 0.2 * t)
 	look.set_shared(&"flash_amount", 1.0 if _flash > 0.0 else pallor)

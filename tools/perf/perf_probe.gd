@@ -1,6 +1,6 @@
 extends TestSuite
 ## Performance probe (docs/performance.md): the real game, headless, with fixed seeds.
-##   godot --headless --fixed-fps 60 res://tools/perf/perf_probe.tscn [-- --fight-frames=1200 --floors=4]
+##   godot --headless --fixed-fps 60 res://tools/perf/perf_probe.tscn [-- --fight-frames=1200 --floors=4 --pack=40]
 ## 1. Floor generation: lays the same floors (seeds x depths) and times `World.build_floor`; prints
 ##    a digest of each floor (tiles, monsters, props, items), so a change that should only be
 ##    faster can be checked to lay exactly the same floors.
@@ -20,12 +20,15 @@ const FIGHTERS: Array[String] = [
 	"res://data/monsters/shaman.tres",
 	"res://data/monsters/snake.tres",
 ]
+## Monsters kept around the bot in the fight (--pack=N: a crowd of 120...).
 const PACK := 40
 const DEPTHS: Array[int] = [1, 2, 3, 4, 6, 7, 8, 9]
 
 ## Each measured frame: [process ms (with the drawing), physics ms (its physics steps), whole frame ms].
 var _samples: Array[PackedFloat32Array] = []
 var _measuring := false
+## The fight's crowd (PACK, or --pack).
+var _pack := PACK
 var _last_usec := 0
 var _process_usec := 0
 ## Whether _now_usec() reads the thread's CPU time (false once it can't).
@@ -48,6 +51,7 @@ func _ready() -> void:
 	seed(1)
 	var fight_frames := int(_option("fight-frames", "1200"))
 	var floors := int(_option("floors", "4"))
+	_pack = int(_option("pack", str(PACK)))
 	var game := GAME_SCENE.instantiate() as Game
 	game.show_act_cards = false
 	add_child(game)
@@ -104,7 +108,7 @@ func _digest(world: World) -> int:
 	return hash("|".join(parts))
 
 
-## A bot against PACK monsters around it for `frames` physics frames, from a fixed floor.
+## A bot against `_pack` monsters around it for `frames` physics frames, from a fixed floor.
 func _measure_fight(game: Game, frames: int) -> Dictionary:
 	var world := game.world
 	var player := game.player
@@ -124,7 +128,7 @@ func _measure_fight(game: Game, frames: int) -> Dictionary:
 	var awake_total := [0]
 	var keep_up := func() -> void:
 		player.hp = player.get_max_hp()
-		var missing := PACK - world.monster_count()
+		var missing := _pack - world.monster_count()
 		for i in missing:
 			var angle := TAU * float(spawned[0] % 12) / 12.0
 			var at := world.nearest_free_point(player.global_position + Vector2.from_angle(angle) * 110.0)

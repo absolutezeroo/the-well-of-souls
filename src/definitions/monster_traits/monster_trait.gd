@@ -65,6 +65,12 @@ func draw_under(_monster: Monster, _canvas: CanvasItem) -> void:
 	pass
 
 
+## Whether draw_under() draws anything (the overlay under a monster redraws every frame only
+## then: docs/performance.md, "Redraw on change").
+func draws_under() -> bool:
+	return false
+
+
 ## Its look drawn outside a fight (the bestiary's page and its attack preview): what on_spawn()
 ## does to the body that a picture of it needs too (a shade's darkness, its lantern). `sprite`
 ## shows the monster's frames, one unit an art pixel, its origin at the feet.

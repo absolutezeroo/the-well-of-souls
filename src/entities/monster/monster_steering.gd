@@ -21,6 +21,10 @@ const SIGHT_RECHECK := 0.1
 const SIGHT_MOVE := 4.0
 ## The turns (radians) a walker tries, in order, to keep off a hole ahead (avoid_holes()).
 const HOLE_TURNS: Array[float] = [0.0, 0.6, -0.6, 1.3, -1.3]
+## The push away from the others is summed every this many physics frames (each monster on its
+## own beat) and kept between: a crowd moves a pixel or two a frame, the push barely changes, and
+## a crowd of 100 summed every frame cost ~2 ms (docs/performance.md, "A crowd").
+const SPACING_EVERY := 3
 
 
 ## A straight walk checked toward one cell: when, and whether it was clear.
@@ -46,6 +50,9 @@ var _sight_frame := -1000
 var _sight_from := Vector2.ZERO
 var _sight_to := Vector2.ZERO
 var _sight_clear := false
+## The last push away from the others (keep_spacing), and the physics frame it was summed.
+var _push := Vector2.ZERO
+var _push_frame := -1000
 
 
 func _init(monster: Monster) -> void:
@@ -149,6 +156,17 @@ func can_see(other: Actor, max_distance: float) -> bool:
 ## Steps aside from the monsters it bumps into, so a pack spreads around the hero instead of
 ## pushing in a line through a door.
 func keep_spacing(direction: Vector2) -> Vector2:
+	var frame := Engine.get_physics_frames()
+	if frame - _push_frame >= SPACING_EVERY or (frame + _monster.get_instance_id()) % SPACING_EVERY == 0:
+		_push = _spacing_push()
+		_push_frame = frame
+	if _push == Vector2.ZERO:
+		return direction
+	return (direction + _push * 0.8).limit_length(direction.length())
+
+
+## The push away from the monsters it overlaps (with SPACING), summed now.
+func _spacing_push() -> Vector2:
 	var monster := _monster
 	var world := monster.world
 	var push := Vector2.ZERO
@@ -166,9 +184,7 @@ func keep_spacing(direction: Vector2) -> Vector2:
 		var distance := away.length()
 		if distance < limit and distance > 0.01:
 			push += away / distance * (1.0 - distance / limit)
-	if push == Vector2.ZERO:
-		return direction
-	return (direction + push * 0.8).limit_length(direction.length())
+	return push
 
 
 ## Walking monsters don't step into holes on their own (being knocked in is another story):
