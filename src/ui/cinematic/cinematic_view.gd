@@ -2,7 +2,7 @@ class_name CinematicView
 extends Control
 ## What a cinematic shows over the frozen world (CinematicDirector): two black bars sliding in,
 ## a name and its title in the top one, lines written in the bottom one, which grows to hold
-## them (a chapter's title over them, "New" beside it). A tap anywhere, a key or a button says
+## them (a chapter's title over them, "New" beside it, then the subject's words, then the lines). A tap anywhere, a key or a button says
 ## so (`tapped`); the director decides what it does. Built in code, on its own CanvasLayer
 ## above the HUD; the pixel font at Fonts sizes only.
 
@@ -22,7 +22,7 @@ var _name_box: VBoxContainer
 var _name: Label
 var _title: Label
 var _text_box: VBoxContainer
-## The subject's own words, above the chapter's title.
+## The subject's own words, under the chapter's title, over the lines.
 var _speech: Label
 var _heading_row: HBoxContainer
 var _heading: Label
@@ -112,7 +112,7 @@ func add_line(text: String, color: Color) -> Label:
 	return label
 
 
-## The subject's words, above the heading, empty-looking until the director writes them out.
+## The subject's words, under the heading, empty-looking until the director writes them out.
 func set_speech(text: String, color: Color) -> Label:
 	_speech.text = text
 	_speech.add_theme_color_override("font_color", color)
@@ -266,10 +266,8 @@ func _build() -> void:
 	_text_box.add_theme_constant_override("separation", 6)
 	_text_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_text_box)
-	_speech = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
-	_speech.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_speech.hide()
-	_text_box.add_child(_speech)
+	# The chapter's title first, then the subject's words, then the lines: a title between the
+	# words and the story read as the warden's name cutting the dialogue in two.
 	_heading_row = HBoxContainer.new()
 	_heading_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	_heading_row.add_theme_constant_override("separation", 10)
@@ -279,6 +277,10 @@ func _build() -> void:
 	_new_mark = MenuWindow.badge(tr("New"), Fonts.SMALL, UiSkin.GOLD)
 	_new_mark.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_heading_row.add_child(_new_mark)
+	_speech = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
+	_speech.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_speech.hide()
+	_text_box.add_child(_speech)
 	_lines = VBoxContainer.new()
 	_lines.add_theme_constant_override("separation", 4)
 	_text_box.add_child(_lines)

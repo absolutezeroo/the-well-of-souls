@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 239,
+  "next_id": 240,
   "tags": [
     "pc",
     "test",
@@ -3562,6 +3562,22 @@
       ],
       "created_at": 1792858090,
       "updated_at": 1792858090,
+      "due_date": null
+    },
+    {
+      "id": "task_239",
+      "title": "Cinématique de boss : le titre du chapitre coupait le dialogue",
+      "description": "Vu par Clayton (24/10) : « Tu sens la margelle… » puis « Le Nushi de la margelle [Nouveau] » puis l'histoire : le nom passait au milieu des dialogues. Maintenant la barre du bas montre le titre du chapitre (avec Nouveau), puis les paroles du gardien, puis les lignes. Testé (title.tap). À revoir en jeu.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_1",
+      "tags": [
+        "ui",
+        "lore",
+        "bug"
+      ],
+      "created_at": 1792858951,
+      "updated_at": 1792858951,
       "due_date": null
     }
   ]

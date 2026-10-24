@@ -144,6 +144,16 @@ func _test_cinematic() -> void:
 	_key(KEY_SPACE)
 	await _frames(4)
 	check(taps[0] == 2, "a cinematic: a key is a tap")
+	# The chapter's title first, then the warden's words, then the lines (never the title
+	# between the words and the story).
+	view.begin_text("A chapter", true)
+	view.set_speech("\"Words\"", UiSkin.TEXT)
+	view.add_line("A line", UiSkin.TEXT)
+	await _frames(1)
+	var heading_row: Control = view.get("_heading_row")
+	var speech: Control = view.get("_speech")
+	var lines: Control = view.get("_lines")
+	check(heading_row.get_index() < speech.get_index() and speech.get_index() < lines.get_index(), "a cinematic: the chapter's title, then the words, then the lines")
 	view.queue_free()
 	await _frames(1)
 

@@ -391,9 +391,10 @@ one are in [adding-content.md](../adding-content.md#the-story-chronicles-fragmen
   wakes, a short cinematic plays over the frozen world (the game is paused: nothing moves, nothing
   hurts; `BossMeeting`, `CinematicDirector`): two black bars slide in and the HUD steps aside, the
   camera eases to the warden, it plays its waking animation if it has one (the Tengu), its name and
-  title appear in the top bar (Fonts.TITLE, then BODY), its own words in quotes if it carries a
-  memory of the hero (pale blue), then the chapter: its title over the lines, typed letter by
-  letter in the bottom bar, which grows to hold them (Fonts.BODY, at most 1000 UI pixels wide); the
+  title appear in the top bar (Fonts.TITLE, then BODY), then in the bottom bar the chapter's
+  title (with "New"), its own words in quotes under it if it carries a memory of the hero (pale
+  blue), then the chapter's lines (the title between the words and the lines read as its name
+  cutting the dialogue in two), typed letter by letter in the bottom bar, which grows to hold them (Fonts.BODY, at most 1000 UI pixels wide); the
   camera comes back and the fight begins (the boss music, the bar; no banner: its name was said).
   Steps and timings are data (`data/story/cinematics/boss_full.tres`): about 8 to 15 seconds.
 - **Never annoying.** The first meeting tells the first chapter. A meeting after a chapter opened
