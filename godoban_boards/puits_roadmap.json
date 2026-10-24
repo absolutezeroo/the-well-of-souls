@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 243,
+  "next_id": 244,
   "tags": [
     "pc",
     "test",
@@ -3624,6 +3624,23 @@
       ],
       "created_at": 1792862104,
       "updated_at": 1792862104,
+      "due_date": null
+    },
+    {
+      "id": "task_243",
+      "title": "Épreuves de salle : objectifs dans certaines salles (idée de Clayton)",
+      "description": "Idée du 24/10. Des salles avec un objectif, dans le lore : 1) Âmes captives : libérer X âmes de Kagari prises dans le goudron ou les chaînes (rester près de chacune quelques secondes, des vagues arrivent). 2) Le Sceau : rallumer les X lanternes aux pointes d'un pentagramme pour défaire le sceau qui ferme une porte. 3) Clés de niche : trouver X clés d'os (tombées d'élites ou cachées) pour ouvrir des niches de l'Ossuaire. 4) La Veille : garder une lanterne allumée pendant des vagues ; si les monstres l'atteignent, elle faiblit. Tout en données (RoomTrialDef comme PactDef/EncounterDef), une ligne d'objectif au HUD, gardé dans la sauvegarde de l'étage, récompenses (âmes, relique, fragment). À décider : obligatoire ou optionnel, fréquence, récompenses, lesquels d'abord.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_7",
+      "tags": [
+        "idée",
+        "contenu",
+        "lore",
+        "niveaux"
+      ],
+      "created_at": 1792865111,
+      "updated_at": 1792865111,
       "due_date": null
     }
   ]
