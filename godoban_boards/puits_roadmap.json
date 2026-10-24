@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 244,
+  "next_id": 245,
   "tags": [
     "pc",
     "test",
@@ -3641,6 +3641,22 @@
       ],
       "created_at": 1792865111,
       "updated_at": 1792865402,
+      "due_date": null
+    },
+    {
+      "id": "task_244",
+      "title": "Cauchemar : cartes de difficulté choisies avant la descente (idée de Clayton)",
+      "description": "Idée du 24/10. Pas imposé d'office : en Cauchemar, avant de descendre, le joueur choisit des cartes qui durcissent la descente (héros plus faible, monstres plus forts, deux règles d'étage à la fois, moins de soins…), chacune avec un poids ; le total donne plus d'âmes, des succès uniques, un classement à part. Piste de lore : « les Nœuds du Sceau » (Tôma a défait les nœuds ; le héros choisit d'en reporter, chacun pèse sur sa descente). À décider : à côté des ascensions actuelles (Cauchemar +1, +2…) ou à leur place ; lesquelles ; récompenses.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_7",
+      "tags": [
+        "idée",
+        "équilibrage",
+        "lore"
+      ],
+      "created_at": 1792865544,
+      "updated_at": 1792865544,
       "due_date": null
     }
   ]
