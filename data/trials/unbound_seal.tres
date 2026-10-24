@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="SealTrialDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/trials/seal_trial_def.gd" id="1"]
+[ext_resource type="Resource" path="res://data/chests/big_chest.tres" id="2"]
+[ext_resource type="Resource" path="res://data/props/lantern.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+lanterns = 5
+chest = ExtResource("2")
+lantern = ExtResource("3")
+objective = "Lanterns lit: %d / %d"
+call_line = "A seal is drawn before a sealed door, its five points dark. Lanterns stand cold somewhere on this floor."
+done_line = "The fifth flame takes. The seal comes undone, and the door with it."
+foes_per_step = 2
+depths_per_extra_foe = 4.0
+bonus_souls = 15
+relic_choices = 0
+id = &"unbound_seal"
+display_name = "The Unbound Seal"
+description = "Tôma undid the seal's knots one by one. Here a lesser seal still holds a door: light its five lanterns, and tie the knots back the other way."
+color = Color(0.78, 0.6, 1, 1)
+min_depth = 2
+spawn_weight = 10

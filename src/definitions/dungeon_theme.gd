@@ -50,13 +50,14 @@ extends Resource
 @export var face_top_left: int = 104
 @export var face_top: int = 105
 @export var face_top_right: int = 106
-@export var face_top_single: int = 108
+@export var face_top_single: int = 111
 ## The cliff face's foot (wall with floor right below it), joining the top above it.
 @export var face_left: int = 144
 @export var face: int = 145
 @export var face_right: int = 146
-## Cliff face only one cell wide.
-@export var face_single: int = 148
+## Cliff face only one cell wide (the tileset's narrow face, outlined both sides; the column
+## beside the plain face is a stretch of face shaded on one side, not an end).
+@export var face_single: int = 151
 
 @export_group("Mist")
 ## The mist over the plateau above the walls (PlateauMist): its dark depths, its lighter wisps,

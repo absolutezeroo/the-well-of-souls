@@ -55,6 +55,8 @@ TEXT_FIELDS = {
     "title_line",
     # The Nameless Keeper (NamelessKeeperDef, EndingDef, FinaleDef): after his fall, his records.
     "keeper_hint", "keeper_text", "keeper_choice_lore", "records_title", "record_line",
+    # The room trials (TrialDef): the objective's line, the floor's call, the end.
+    "objective", "call_line", "done_line",
 }
 LIST_FIELDS = {"intro_pages", "death_lines", "greetings", "branches", "branch_texts", "rank_names", "tips", "lines",
                "key_words", "mouse_glyphs"}

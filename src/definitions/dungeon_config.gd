@@ -211,6 +211,14 @@ extends Resource
 ## Lights either side of a pact door, inside the room (candles).
 @export var pact_light: PropDef
 
+@export_group("Room trials")
+## Chance for a normal floor with no other event (no curse, no floor event; never the first,
+## never a boss floor) to hold a room trial (RoomTrial: the Souls of Kagari, the Unbound Seal):
+## one thing of its own per floor. A floor with a trial has no pact door.
+@export_range(0.0, 1.0) var trial_chance: float = 0.45
+## The trials a floor may hold (`min_depth`, `spawn_weight`).
+@export var trials: Array[TrialDef] = []
+
 @export_group("Merchant")
 ## Chance for a floor to have the merchant (never on boss floors).
 @export_range(0.0, 1.0) var merchant_chance: float = 0.55

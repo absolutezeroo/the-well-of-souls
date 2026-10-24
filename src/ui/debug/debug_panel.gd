@@ -238,6 +238,9 @@ func _build_world(page: VBoxContainer) -> void:
 	var pacts := _row(page, "Pact door")
 	for pact_def in _game_content().dungeon.pacts:
 		pacts.add_child(_button(pact_def.id.capitalize(), _debug_pact.bind(pact_def)))
+	var trials := _row(page, "Room trial")
+	for trial_def in _game_content().dungeon.trials:
+		trials.add_child(_button(trial_def.id.capitalize(), _debug_trial.bind(trial_def)))
 
 
 # --- Hero ----------------------------------------------------------------------------------
@@ -577,6 +580,28 @@ func _debug_pact(pact_def: PactDef) -> void:
 	pact.seen = true
 	world.cells_changed.emit(world.fog.reveal_rect(pact.room.grow(1)))
 	_status.text = "%s: see the map" % pact_def.display_name
+
+
+## `trial_def` on this floor (not a boss floor, nor one with a pact door or a trial already):
+## laid as a floor would lay it, away from the hero's room, its line shown.
+func _debug_trial(trial_def: TrialDef) -> void:
+	var world: World = _game.world
+	if world.pact or world.arena or world.room_trial:
+		_status.text = "This floor already has a trial or a pact door, or is a boss floor"
+		return
+	var here: Array[int] = [0]
+	for i in world.map.rooms.size():
+		if world.map.rooms[i].grow(1).has_point(world.map.world_to_cell(_game.player.global_position)):
+			here.append(i)
+	var planned := trial_def.plan(world, world.rng, here)
+	if planned.is_empty():
+		_status.text = "No room for it on this floor"
+		return
+	DebugCheats.mark_run()
+	planned["trial"] = trial_def
+	world.spawn_trial(planned, {})
+	_game.hud.trial_line.watch(world)
+	_status.text = "%s: see the map" % trial_def.display_name
 
 
 ## Down into the Deeps from here, as if the hero had fallen into a hole (not from a boss floor,

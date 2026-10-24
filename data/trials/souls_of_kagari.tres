@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="CaptiveSoulsDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/trials/captive_souls_def.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/characters/npc/merchant.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/characters/npc/smith.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/characters/npc/vigil_keeper.png" id="4"]
+[ext_resource type="Resource" path="res://data/vfx/elements/spirit.tres" id="5"]
+
+[sub_resource type="AtlasTexture" id="look_1"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="look_2"]
+atlas = ExtResource("3")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="look_3"]
+atlas = ExtResource("4")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+script = ExtResource("1")
+souls_min = 3
+souls_max = 4
+free_seconds = 3.0
+reach = 40.0
+heal_share = 0.06
+looks = Array[Texture2D]([SubResource("look_1"), SubResource("look_2"), SubResource("look_3")])
+element = ExtResource("5")
+objective = "Souls freed: %d / %d"
+call_line = "Pale shapes wait in the dark, held by chains of tar. They were Kagari's, once."
+done_line = "The last soul rises. Somewhere above, a lantern burns a little brighter."
+foes_per_step = 2
+depths_per_extra_foe = 4.0
+bonus_souls = 25
+relic_choices = 0
+id = &"souls_of_kagari"
+display_name = "The Souls of Kagari"
+description = "The villagers Tôma gave to the Well on the moonless night. The tar holds them still; stand by each one long enough, and it lets go."
+color = Color(0.72, 0.86, 1, 1)
+min_depth = 2
+spawn_weight = 10

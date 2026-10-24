@@ -17,9 +17,11 @@ func run() -> void:
 	var ambush_chance := CONTENT.dungeon.ambush_chance
 	var event_chance := CONTENT.dungeon.floor_event_chance
 	var pact_chance := CONTENT.dungeon.pact_chance
+	var trial_chance := CONTENT.dungeon.trial_chance
 	CONTENT.dungeon.ambush_chance = 0.0
 	CONTENT.dungeon.floor_event_chance = 0.0
 	CONTENT.dungeon.pact_chance = 0.0
+	CONTENT.dungeon.trial_chance = 0.0
 	var curse_chances := {}
 	for difficulty in CONTENT.difficulties:
 		curse_chances[difficulty] = difficulty.curse_chance
@@ -47,6 +49,7 @@ func run() -> void:
 	CONTENT.dungeon.ambush_chance = ambush_chance
 	CONTENT.dungeon.floor_event_chance = event_chance
 	CONTENT.dungeon.pact_chance = pact_chance
+	CONTENT.dungeon.trial_chance = trial_chance
 	for difficulty in curse_chances:
 		difficulty.curse_chance = curse_chances[difficulty]
 

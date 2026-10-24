@@ -73,6 +73,8 @@ static var _word_and_number := RegEx.create_from_string("(\\S) (\\d)")
 @onready var _full_map: Minimap = %FullMap
 ## Under the map during a pact's fight: its rule and how it holds (built in code).
 var pact_line := PactLine.new()
+## The floor's room trial and its objective (in the pact line's place: never both on a floor).
+var trial_line := TrialLine.new()
 ## Loot left on the ground (auto loot, a full bag) with its Take button (built in code).
 var loot_prompt := LootPrompt.new()
 ## Left of the map while perk choices wait: their count, a glow (built in code).
@@ -117,6 +119,8 @@ func _ready() -> void:
 	_apply_settings()
 	pact_line.hud = self
 	add_child(pact_line)
+	trial_line.hud = self
+	add_child(trial_line)
 	loot_prompt.hud = self
 	add_child(loot_prompt)
 	_add_offers_button()

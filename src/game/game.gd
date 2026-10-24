@@ -195,6 +195,7 @@ func _connect_events() -> void:
 	Events.pact_requested.connect(open_pact)
 	Events.fragment_requested.connect(open_fragment)
 	Events.pact_ended.connect(_on_pact_ended)
+	Events.trial_completed.connect(_on_trial_completed)
 	Events.perk_offer_requested.connect(func(rarity: int, title: String, subtitle: String) -> void:
 		_queue_offer(rarity as PerkDef.Rarity, PERK_CHOICES, title, subtitle))
 	Events.boss_started.connect(_on_boss_started)
@@ -482,6 +483,24 @@ func _on_pact_ended(pact: PactRoom) -> void:
 	if pact.outcome != PactRoom.Outcome.KEPT:
 		return
 	offers.add(PerkDef.Rarity.RARE, pact.def.relic_choices, tr("Relic"), tr("The pact is kept. Choose a relic."))
+	var keeper := player
+	await get_tree().create_timer(RELIC_DELAY, false).timeout
+	if player == keeper and not player.is_dead:
+		_show_next_offer()
+
+
+## A room trial done (RoomTrial): its souls to the run (paid at its end, as the hidden floor's),
+## its relics offered after a moment if it gives any, counted for the feats.
+func _on_trial_completed(trial: RoomTrial) -> void:
+	var def := trial.def
+	Events.stat_counted.emit("trials", 1)
+	if def.bonus_souls > 0:
+		run.bonus_souls += def.bonus_souls
+		Events.log_message(tr("+%d souls for the descent.") % run.bonus_souls_worth(def.bonus_souls), def.color)
+		Events.run_souls_changed.emit()
+	if def.relic_choices <= 0:
+		return
+	offers.add(PerkDef.Rarity.RARE, def.relic_choices, tr("Relic"), tr("The trial is done. Choose a relic."))
 	var keeper := player
 	await get_tree().create_timer(RELIC_DELAY, false).timeout
 	if player == keeper and not player.is_dead:

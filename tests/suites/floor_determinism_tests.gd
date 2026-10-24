@@ -14,16 +14,17 @@ extends TestSuite
 const WORLD_SCENE := "res://src/world/world.tscn"
 
 ## kind -> fingerprint (hash), recorded on main before the split, again when the save block's
-## stamp (the game's version) was left out of it (0.3.1). Change only on purpose.
+## stamp (the game's version) was left out of it (0.3.1), and when the room trials came (plain_d5
+## and route hold one). Change only on purpose.
 const EXPECTED := {
 	"plain_d2": 1045983556,
-	"plain_d5": 3023719226,
+	"plain_d5": 1964547306,
 	"plain_d8": 2738072162,
 	"boss_act1": 1577078614,
 	"boss_act2": 229918303,
 	"forced_curse": 3443624490,
 	"forced_plain": 2510512769,
-	"route": 318331991,
+	"route": 3827804543,
 	"two_ways": 174426613,
 	"resumed": 870587092,
 	"hidden": 1109123916,

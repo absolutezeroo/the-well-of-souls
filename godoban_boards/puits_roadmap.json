@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 245,
+  "next_id": 249,
   "tags": [
     "pc",
     "test",
@@ -3629,8 +3629,8 @@
     {
       "id": "task_243",
       "title": "Épreuves de salle : objectifs dans certaines salles (idée de Clayton)",
-      "description": "Idée du 24/10. Des salles avec un objectif, dans le lore : 1) Âmes captives : libérer X âmes de Kagari prises dans le goudron ou les chaînes (rester près de chacune quelques secondes, des vagues arrivent). 2) Le Sceau : rallumer les X lanternes aux pointes d'un pentagramme pour défaire le sceau qui ferme une porte. 3) Clés de niche : trouver X clés d'os (tombées d'élites ou cachées) pour ouvrir des niches de l'Ossuaire. 4) La Veille : garder une lanterne allumée pendant des vagues ; si les monstres l'atteignent, elle faiblit. Tout en données (RoomTrialDef comme PactDef/EncounterDef), une ligne d'objectif au HUD, gardé dans la sauvegarde de l'étage, récompenses (âmes, relique, fragment). À décider : obligatoire ou optionnel, fréquence, récompenses, lesquels d'abord. Précision de Clayton (24/10) : un seul événement par étage, jamais mélangé (une épreuve OU le froid / la nuit / la chaleur…). Les mélanges seraient réservés à un mode Cauchemar à modificateurs (les ascensions : héros plus faible, monstres plus forts, plusieurs règles d'étage à la fois).",
-      "status": "backlog",
+      "description": "Idée du 24/10. Des salles avec un objectif, dans le lore : 1) Âmes captives : libérer X âmes de Kagari prises dans le goudron ou les chaînes (rester près de chacune quelques secondes, des vagues arrivent). 2) Le Sceau : rallumer les X lanternes aux pointes d'un pentagramme pour défaire le sceau qui ferme une porte. 3) Clés de niche : trouver X clés d'os (tombées d'élites ou cachées) pour ouvrir des niches de l'Ossuaire. 4) La Veille : garder une lanterne allumée pendant des vagues ; si les monstres l'atteignent, elle faiblit. Tout en données (RoomTrialDef comme PactDef/EncounterDef), une ligne d'objectif au HUD, gardé dans la sauvegarde de l'étage, récompenses (âmes, relique, fragment). À décider : obligatoire ou optionnel, fréquence, récompenses, lesquels d'abord. Précision de Clayton (24/10) : un seul événement par étage, jamais mélangé (une épreuve OU le froid / la nuit / la chaleur…). Les mélanges seraient réservés à un mode Cauchemar à modificateurs (les ascensions : héros plus faible, monstres plus forts, plusieurs règles d'étage à la fois). Fait (24/10) : les Âmes de Kagari (libérer 3-4 âmes en restant près d'elles, des ennemis à chacune, +6 % de vie par âme, 25 âmes) et le Sceau Défait (allumer 5 lanternes dans l'étage, un pentagramme devant une porte scellée, son trésor derrière les barreaux, 15 âmes). Un seul événement par étage (jamais avec une malédiction, un événement d'étage ni une porte de pacte), ligne d'objectif au HUD, marques sur la minicarte, gardé dans la sauvegarde, bouton de débug. À tester sur le S23 : lisibilité, durée, difficulté des vagues. Fait (24/10) : les Âmes de Kagari (libérer 3-4 âmes en restant près d'elles, des ennemis à chacune, +6 % de vie par âme, 25 âmes) et le Sceau Défait (allumer 5 lanternes dans l'étage, un pentagramme devant une porte scellée, son trésor derrière les barreaux, 15 âmes). Un seul événement par étage (jamais avec une malédiction, un événement d'étage ni une porte de pacte), ligne d'objectif au HUD, marques sur la minicarte, gardé dans la sauvegarde, bouton de débug. À tester sur le S23 : lisibilité, durée, difficulté des vagues.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_7",
       "tags": [
@@ -3640,13 +3640,13 @@
         "niveaux"
       ],
       "created_at": 1792865111,
-      "updated_at": 1792865402,
+      "updated_at": 1792868405,
       "due_date": null
     },
     {
       "id": "task_244",
       "title": "Cauchemar : cartes de difficulté choisies avant la descente (idée de Clayton)",
-      "description": "Idée du 24/10. Pas imposé d'office : en Cauchemar, avant de descendre, le joueur choisit des cartes qui durcissent la descente (héros plus faible, monstres plus forts, deux règles d'étage à la fois, moins de soins…), chacune avec un poids ; le total donne plus d'âmes, des succès uniques, un classement à part. Piste de lore : « les Nœuds du Sceau » (Tôma a défait les nœuds ; le héros choisit d'en reporter, chacun pèse sur sa descente). À décider : à côté des ascensions actuelles (Cauchemar +1, +2…) ou à leur place ; lesquelles ; récompenses.",
+      "description": "Idée du 24/10. Pas imposé d'office : en Cauchemar, avant de descendre, le joueur choisit des cartes qui durcissent la descente (héros plus faible, monstres plus forts, deux règles d'étage à la fois, moins de soins…), chacune avec un poids ; le total donne plus d'âmes, des succès uniques, un classement à part. Piste de lore : « les Nœuds du Sceau » (Tôma a défait les nœuds ; le héros choisit d'en reporter, chacun pèse sur sa descente). À décider : à côté des ascensions actuelles (Cauchemar +1, +2…) ou à leur place ; lesquelles ; récompenses. Décidé (24/10) : optionnels, le Cauchemar se joue aussi sans aucun nœud.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -3656,7 +3656,71 @@
         "lore"
       ],
       "created_at": 1792865544,
-      "updated_at": 1792865544,
+      "updated_at": 1792865632,
+      "due_date": null
+    },
+    {
+      "id": "task_245",
+      "title": "Épreuves : la suite (la Veille, les Clés de niche, succès)",
+      "description": "Les deux autres épreuves proposées le 24/10 : la Veille (défendre une lanterne pendant des vagues) et les Clés de niche (Ossuaire : clés d'os portées par des élites). Succès liés (compteur « trials » déjà compté).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "tags": [
+        "idée",
+        "contenu",
+        "lore"
+      ],
+      "created_at": 1792867308,
+      "updated_at": 1792867308,
+      "due_date": null
+    },
+    {
+      "id": "task_246",
+      "title": "Murs : faces d'une case de large (et coins) à vérifier",
+      "description": "Clayton (24/10) : « sur certaines directions » la face utilise un milieu au lieu d'un haut. Corrigé ce qui se voyait : une face d'une case de large prenait la colonne 8 du tileset (une face ombrée d'un côté), maintenant la colonne 11 (face étroite, contour des deux côtés). À confirmer avec une capture de Clayton.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_3",
+      "tags": [
+        "visuel",
+        "niveaux",
+        "bug"
+      ],
+      "created_at": 1792867308,
+      "updated_at": 1792867308,
+      "due_date": null
+    },
+    {
+      "id": "task_247",
+      "title": "Épreuves : la suite (la Veille, les Clés de niche, succès)",
+      "description": "Les deux autres épreuves proposées le 24/10 : la Veille (défendre une lanterne pendant des vagues) et les Clés de niche (Ossuaire : clés d'os portées par des élites). Succès liés (compteur « trials » déjà compté).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "tags": [
+        "idée",
+        "contenu",
+        "lore"
+      ],
+      "created_at": 1792868405,
+      "updated_at": 1792868405,
+      "due_date": null
+    },
+    {
+      "id": "task_248",
+      "title": "Murs : bord du plateau sans son liseré entre deux salles",
+      "description": "Vu par Clayton (24/10, capture de la Bibliothèque) : un mur de trois cases entre deux salles (sol au-dessus, face en dessous) prenait une tuile de plateau « milieu » au lieu du bord du haut avec son liseré. Corrigé : sol au-dessus = bord du haut. Aussi : une face d'une case de large prend maintenant la face étroite du tileset (colonne 11) au lieu d'une face ombrée d'un côté. Testé (unit.plateau_mist). À revoir en jeu.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_3",
+      "tags": [
+        "visuel",
+        "niveaux",
+        "bug"
+      ],
+      "created_at": 1792868405,
+      "updated_at": 1792868405,
       "due_date": null
     }
   ]

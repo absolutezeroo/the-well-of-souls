@@ -102,6 +102,8 @@ const SHAPE := {
 		# The warden fell before quitting: the run picks up in his cleared arena, with what lay
 		# there ([kind, data, x, y]; FloorSave.left_behind()).
 		"arena_cleared": "bool",
+		# The floor's room trial: its id and steps done (RoomTrial.save_data()).
+		"trial": "dict",
 		"left": ["array"],
 	},
 }

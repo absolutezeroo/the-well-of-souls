@@ -60,8 +60,13 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 	var not_pact: Array[int] = [merchant_index, forge_index]
 	for secret in map.secrets:
 		not_pact.append(secret.host)
-	var pact_plan := PactRoom.plan(world, config, depth, not_pact)
+	# A room trial (RoomTrial), on a floor with no other event; a floor with one has no pact.
+	var trial_plan := RoomTrial.plan(world, config, depth, not_pact)
+	var pact_plan := PactRoom.plan(world, config, depth, not_pact) if trial_plan.is_empty() else {}
 	var pact_index: int = pact_plan.get("room", -1)
+	# The Unbound Seal shuts a room as a pact door does: nothing else in it.
+	if trial_plan.get("trial") is SealTrialDef:
+		pact_index = int(trial_plan.room)
 	# One quiet room may be an ambush: no monsters in it until the hero walks in, and no
 	# chest or encounter either (picked now, before they claim rooms).
 	var ambush_index := -1
@@ -76,9 +81,11 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 	for i in map.rooms.size():
 		if i != merchant_index and i != forge_index:
 			place_lights(world, config, map.rooms[i], taken)
-	if pact_index >= 0:
+	if not pact_plan.is_empty():
 		world.spawn_pact(pact_plan.pact, map.rooms[pact_index], taken)
 		_reserve_rect(taken, map.rooms[pact_index])  # its own fight only: nothing else in it
+	if not trial_plan.is_empty():
+		world.spawn_trial(trial_plan, taken)
 
 	# Springs, altars, statues: in the middle of a room, before anything else claims it.
 	var encounter_count := roundi(rng.randi_range(config.encounters_min, config.encounters_max) * spread)

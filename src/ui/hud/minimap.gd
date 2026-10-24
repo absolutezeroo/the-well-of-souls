@@ -144,6 +144,21 @@ func _draw_markers(origin: Vector2, factor: float) -> void:
 		elif pact.seen:
 			var door := origin + (Vector2(pact.door_cell) + Vector2(0.5, 0.5)) * factor
 			_marker(door, dot * 1.6, PACT_COLOR if pact.is_open_offer() else SPENT_COLOR)
+	# The room trial's things still to do, once seen: souls held, lanterns out, the sealed door.
+	var trial := _world.room_trial
+	if trial and is_instance_valid(trial) and not trial.completed:
+		var mark := trial.def.color
+		if trial is CaptiveSoulsTrial:
+			for soul in (trial as CaptiveSoulsTrial).souls:
+				if not soul.freed and _world.is_explored(map.world_to_cell(soul.global_position)):
+					_marker(origin + soul.global_position / map.tile_size * factor, dot * 1.2, mark)
+		elif trial is SealTrial:
+			var seal := trial as SealTrial
+			for lantern in seal.lanterns:
+				if not lantern.is_lit and _world.is_explored(map.world_to_cell(lantern.global_position)):
+					_marker(origin + lantern.global_position / map.tile_size * factor, dot * 1.2, mark)
+			if _world.is_explored(seal.door_cell):
+				_marker(origin + (Vector2(seal.door_cell) + Vector2(0.5, 0.5)) * factor, dot * 1.6, mark)
 	if _world.arena and _world.arena.boss and not _world.arena.boss.is_dead and _world.arena.is_started:
 		_marker(origin + _world.arena.boss.global_position / map.tile_size * factor, dot * 1.6, DANGER_COLOR)
 	if _world.player:

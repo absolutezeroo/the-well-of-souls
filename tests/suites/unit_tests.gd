@@ -69,6 +69,7 @@ func test_cases() -> Array:
 		["remote_config", func() -> void: await _part(RemoteConfigTests.new(), func(suite: RemoteConfigTests) -> void: await suite.run_unit())],
 		["feedback", func() -> void: await _part(FeedbackTests.new(), func(suite: FeedbackTests) -> void: await suite.run_unit())],
 		["cosmetics", func() -> void: await _part(CosmeticTests.new(), func(suite: CosmeticTests) -> void: await suite.run_unit())],
+		["trials", func() -> void: await _part(TrialTests.new(), func(suite: TrialTests) -> void: suite.run_unit())],
 		["online_session", func() -> void: await _part(OnlineSessionTests.new(), func(suite: OnlineSessionTests) -> void: await suite.run_unit())],
 		["talo_contract", func() -> void: await _part(TaloContractTests.new(), func(suite: TaloContractTests) -> void: await suite.run_unit())],
 		["gear_look", func() -> void: await _part(GearLookTests.new(), func(suite: GearLookTests) -> void: suite.run())],
@@ -2288,6 +2289,21 @@ func _test_plateau_mist() -> void:
 	check(at.call(5, 3) < 0.01 and at.call(5, 2) < 0.01, "nor on a cliff face (both its cells: its foot over the floor, its top: DungeonView)")
 	check(at.call(5, 1) > 0.1 and at.call(5, 1) < 0.5, "thin at the rim (%.2f)" % at.call(5, 1))
 	check(at.call(0, 0) > 0.95 and image.get_pixel(0, 0).r > 0.95, "thick deep in the plateau and all around the map")
+	# The walls' tiles (DungeonView): a wall three cells thick between two rooms is the plateau's
+	# top edge (floor above), then the face's top, then its foot; one cell thick, the short edge.
+	var between := DungeonMap.new(10, 12, 32)
+	for x in range(2, 8):
+		between.set_floor(Vector2i(x, 2))
+		between.set_floor(Vector2i(x, 6))
+		between.set_floor(Vector2i(x, 8))
+	var cave: DungeonTheme = load("res://data/dungeon/themes/cave.tres")
+	var view := DungeonView.new()
+	view._map = between
+	view._theme = cave
+	check(view._wall_top_tile(Vector2i(4, 3)) == cave.wall_top, "floor above a face: the plateau's top edge, its rim on top (not a plain middle)")
+	check(view._face_row(Vector2i(4, 4)) == DungeonView.FaceRow.TOP and view._face_row(Vector2i(4, 5)) == DungeonView.FaceRow.FOOT, "then the face's top over its foot")
+	check(view._face_row(Vector2i(4, 7)) == DungeonView.FaceRow.SHORT, "a wall one cell thick between two floors: the short edge")
+	view.free()
 	for theme_path in DirAccess.get_files_at("res://data/dungeon/themes"):
 		if not theme_path.ends_with(".tres"):
 			continue

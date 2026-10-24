@@ -5,7 +5,8 @@
 - **Walls** are cliffs drawn from a 16x16 tileset (`DungeonView`): plateau edges, inner corners,
   cliff faces. A face is the two wall cells over the floor, two tiles of one face that join: its
   top (`face_top*`: the plateau's rim, the face going down) over its foot (`face*`); the plateau
-  above it goes on plain (its rim is the top's). The tileset's middle row of the face (between
+  above it goes on plain (its rim is the top's), unless a floor lies right above it (a wall
+  three cells thick between two rooms): then it is the plateau's top edge, its rim on top. The tileset's middle row of the face (between
   top and foot) would make taller cliffs; a wall one cell thick shows the plateau's short edge
   (`wall_bottom*`). The mist leaves both cells of the face clear. The generator smooths every floor so only shapes the tiles can draw remain
   (no wall thinner than 3 cells between two floors, `DungeonGenerator.MIN_WALL_THICKNESS`: they
@@ -511,3 +512,60 @@ quitting is lost (no relic); a cost already paid stays paid.
 
 The first pact door seen brings a tutorial hint. Debug panel: "Pact door" spawns one of each in a
 dead-end room of the current floor.
+
+## Room trials
+
+A floor may hold a trial (« épreuve », `RoomTrial`, `data/trials/`, `TrialDef`): something to do
+besides reaching the stairs, optional, in the Well's voice. **One thing of its own a floor**: only
+a normal floor past the first with no curse and no floor event (cold, night, heat...), never a
+boss floor, and a floor with a trial has no pact door (`DungeonConfig` > Room trials:
+`trial_chance` 0.45 of those floors). It comes from the floor's seed (its own generator,
+`RoomTrial.floor_rng()`: the rest of the floor is laid the same), so a daily run has the same.
+As the floor begins a banner names it and the log says its call; under the minimap a line says
+its objective ("Souls freed: 2 / 4", `TrialLine`); the minimap marks what is left to do once
+seen; each step is a toast, the end a banner ("Trial done") and the log's last line. Each step
+brings foes (`foes_per_step`, +1 every `depths_per_extra_foe` floors). Done, it pays
+(`bonus_souls` to the run, paid at its end like the hidden floor's; `relic_choices` relics if
+any: the Game, on `Events.trial_completed`). A floor's save keeps its steps done (`"trial"`): a
+resumed floor finds them done again, quietly (no foes, no reward again). Debug panel: "Room
+trial" lays one on the current floor.
+
+| Trial (FR / EN) | What to do | Each step | Reward |
+|---|---|---|---|
+| Les Âmes de Kagari / The Souls of Kagari | free 3-4 souls held by chains of tar in the floor's biggest quiet room: stand by each for 3 s (stepping away stops the count, it is not lost) | the first moment by a soul, the Well sends foes to take it back; freed, it rises (spirit nova, light) and gives back 6% of max Health | 25 souls |
+| Le Sceau Défait / The Unbound Seal | light the 5 lanterns standing cold in other rooms (Interact: "Kindle"); a dead-end room is shut behind violet spikes, a star drawn before its door, a point for each lantern | the dark answers each lantern with foes around it; its point of the star lights | the door opens on its hoard (a big chest, seen through the bars all along), 15 souls |
+
+The souls are villagers' figures (the merchant's, the smith's, the Vigil-Keeper's frames),
+washed pale and see-through in spirit's ramp, a soft halo behind them (`CaptiveSoul`); the seal's
+star and the lanterns' flames are drawn on the art's grid at 8 and 12 fps (`SealTrial`,
+`SealLantern`). The trials' lore: the souls Tôma gave to the Well on the moonless night; the seal
+whose knots he undid, tied back here one flame at a time (docs/lore.md).
+
+## Room trials
+
+A floor may hold a trial (« épreuve », `RoomTrial`, `data/trials/`, `TrialDef`): something to do
+besides reaching the stairs, optional, in the Well's voice. **One thing of its own a floor**: only
+a normal floor past the first with no curse and no floor event (cold, night, heat...), never a
+boss floor, and a floor with a trial has no pact door (`DungeonConfig` > Room trials:
+`trial_chance` 0.45 of those floors). It comes from the floor's seed (its own generator,
+`RoomTrial.floor_rng()`: the rest of the floor is laid the same), so a daily run has the same.
+As the floor begins a banner names it and the log says its call; under the minimap a line says
+its objective ("Souls freed: 2 / 4", `TrialLine`); the minimap marks what is left to do once
+seen; each step is a toast, the end a banner ("Trial done") and the log's last line. Each step
+brings foes (`foes_per_step`, +1 every `depths_per_extra_foe` floors). Done, it pays
+(`bonus_souls` to the run, paid at its end like the hidden floor's; `relic_choices` relics if
+any: the Game, on `Events.trial_completed`). A floor's save keeps its steps done (`"trial"`): a
+resumed floor finds them done again, quietly (no foes, no reward again). Debug panel: "Room
+trial" lays one on the current floor.
+
+| Trial (FR / EN) | What to do | Each step | Reward |
+|---|---|---|---|
+| Les Âmes de Kagari / The Souls of Kagari | free 3-4 souls held by chains of tar in the floor's biggest quiet room: stand by each for 3 s (stepping away stops the count, it is not lost) | the first moment by a soul, the Well sends foes to take it back; freed, it rises (spirit nova, light) and gives back 6% of max Health | 25 souls |
+| Le Sceau Défait / The Unbound Seal | light the 5 lanterns standing cold in other rooms (Interact: "Kindle"); a dead-end room is shut behind violet spikes, a star drawn before its door, a point for each lantern | the dark answers each lantern with foes around it; its point of the star lights | the door opens on its hoard (a big chest, seen through the bars all along), 15 souls |
+
+The souls are villagers' figures (the merchant's, the smith's, the Vigil-Keeper's frames),
+washed pale and see-through in spirit's ramp, a soft halo behind them (`CaptiveSoul`); the seal's
+star and the lanterns' flames are drawn on the art's grid at 8 and 12 fps (`SealTrial`,
+`SealLantern`). The trials' lore: the souls Tôma gave to the Well on the moonless night; the seal
+whose knots he undid, tied back here one flame at a time (docs/lore.md).
+

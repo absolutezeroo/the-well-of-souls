@@ -64,6 +64,10 @@ signal pact_started(pact: PactRoom)
 signal pact_broken(pact: PactRoom)
 ## The pact's last foe fell and the door opened (`pact.outcome`: kept or broken).
 signal pact_ended(pact: PactRoom)
+## A room trial's step was done (a soul freed, a lantern lit): `trial.done` of `trial.total`.
+signal trial_progressed(trial: RoomTrial)
+## A room trial's last step was done: its reward (the Game).
+signal trial_completed(trial: RoomTrial)
 ## A cinematic began over the frozen world (a warden's story, CinematicDirector): the HUD steps
 ## aside until it is finished.
 signal cinematic_started

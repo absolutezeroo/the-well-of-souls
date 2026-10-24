@@ -38,6 +38,9 @@
 [ext_resource type="Resource" path="res://data/pacts/knell.tres" id="103_knell"]
 [ext_resource type="Resource" path="res://data/pacts/fast.tres" id="104_fast"]
 [ext_resource type="Resource" path="res://data/pacts/tithe.tres" id="105_tithe"]
+[ext_resource type="Script" path="res://src/definitions/trials/trial_def.gd" id="120_trialdef"]
+[ext_resource type="Resource" path="res://data/trials/souls_of_kagari.tres" id="121_souls"]
+[ext_resource type="Resource" path="res://data/trials/unbound_seal.tres" id="122_seal"]
 [ext_resource type="Resource" path="res://data/props/furniture/candles.tres" id="106_candles"]
 [ext_resource type="Resource" path="res://data/abyss/abyss.tres" id="107_abyss"]
 [ext_resource type="Resource" path="res://data/hazards/pit.tres" id="x_chasm"]
@@ -94,3 +97,5 @@ abyss = ExtResource("107_abyss")
 pact_chance = 0.7
 pacts = Array[ExtResource("101_pactdef")]([ExtResource("102_untouched"), ExtResource("103_knell"), ExtResource("104_fast"), ExtResource("105_tithe")])
 pact_light = ExtResource("106_candles")
+trial_chance = 0.45
+trials = Array[ExtResource("120_trialdef")]([ExtResource("121_souls"), ExtResource("122_seal")])

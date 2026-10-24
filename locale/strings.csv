@@ -196,6 +196,8 @@ Seen,Seen,Vu
 Unknown,Unknown,Inconnu
 Level %d!,Level %d!,Niveau %d !
 The pact is kept. Choose a relic.,The pact is kept. Choose a relic.,Le pacte est tenu. Choisis une relique.
++%d souls for the descent.,+%d souls for the descent.,+%d âmes pour la descente.
+The trial is done. Choose a relic.,The trial is done. Choose a relic.,L'épreuve est accomplie. Choisis une relique.
 New record: %s!,New record: %s!,Nouveau record : %s !
 "Endless mode: the dungeon goes on, harder and harder.","Endless mode: the dungeon goes on, harder and harder.","Mode sans fin : le donjon continue, de plus en plus dur."
 New record!,New record!,Nouveau record !
@@ -490,6 +492,7 @@ Slay %d spectre before the knell,Slay %d spectre before the knell,Abats %d spect
 Slay %d spectres before the knell,Slay %d spectres before the knell,Abats %d spectres avant le glas
 Slain %d / %d,Slain %d / %d,Abattus %d / %d
 %d s,%d s,%d s
+Trial done,Trial done,Épreuve accomplie
 Your perks,Your perks,Tes atouts
 Families  -  hold 3 perks of one to awaken its bonus,Families  -  hold 3 perks of one to awaken its bonus,Familles  -  réunis 3 atouts d'une famille pour éveiller son bonus
 Perks taken this run,Perks taken this run,Atouts pris dans cette partie
@@ -923,6 +926,7 @@ The wall gives way: a hidden room.,The wall gives way: a hidden room.,Le mur cè
 The seal shatters. The way down lies open.,The seal shatters. The way down lies open.,Le sceau vole en éclats. La voie des profondeurs s'ouvre.
 Sealed. Slay %d more monster to open the stairs.,Sealed. Slay %d more monster to open the stairs.,Scellé. Abats encore %d monstre pour ouvrir les escaliers.
 Sealed. Slay %d more monsters to open the stairs.,Sealed. Slay %d more monsters to open the stairs.,Scellé. Abats encore %d monstres pour ouvrir les escaliers.
+Kindle,Kindle,Allumer
 Act I,Act I,Acte I
 The Well's Maw,The Well's Maw,La Gueule du Puits
 Lore,Lore,Récit
@@ -2677,6 +2681,16 @@ Sung in the Ossuary,Sung in the Ossuary,Chantée à l'Ossuaire
 "Sleep, the bell has rung for you, the earth is waiting.","Sleep, the bell has rung for you, the earth is waiting.","Dors, la cloche a sonné pour toi, la terre t'attend."
 "Sleep: we weep, so you need not.","Sleep: we weep, so you need not.","Dors : nous pleurons, toi, tu n'as plus à le faire."
 "Between the Well and the light, the dead wait their turn. Not yours. Not yet.","Between the Well and the light, the dead wait their turn. Not yours. Not yet.","Entre le Puits et la lumière, les morts attendent leur tour. Pas le tien. Pas encore."
+Souls freed: %d / %d,Souls freed: %d / %d,Âmes libérées : %d / %d
+"Pale shapes wait in the dark, held by chains of tar. They were Kagari's, once.","Pale shapes wait in the dark, held by chains of tar. They were Kagari's, once.","Des formes pâles attendent dans le noir, tenues par des chaînes de goudron. Elles étaient de Kagari, autrefois."
+"The last soul rises. Somewhere above, a lantern burns a little brighter.","The last soul rises. Somewhere above, a lantern burns a little brighter.","La dernière âme s'élève. Quelque part en haut, une lanterne brûle un peu plus fort."
+The Souls of Kagari,The Souls of Kagari,Les Âmes de Kagari
+"The villagers Tôma gave to the Well on the moonless night. The tar holds them still; stand by each one long enough, and it lets go.","The villagers Tôma gave to the Well on the moonless night. The tar holds them still; stand by each one long enough, and it lets go.","Les villageois que Tôma a donnés au Puits la nuit sans lune. Le goudron les tient encore ; reste assez longtemps près de chacun, et il lâche prise."
+Lanterns lit: %d / %d,Lanterns lit: %d / %d,Lanternes allumées : %d / %d
+"A seal is drawn before a sealed door, its five points dark. Lanterns stand cold somewhere on this floor.","A seal is drawn before a sealed door, its five points dark. Lanterns stand cold somewhere on this floor.","Un sceau est tracé devant une porte scellée, ses cinq pointes éteintes. Des lanternes froides attendent quelque part à cet étage."
+"The fifth flame takes. The seal comes undone, and the door with it.","The fifth flame takes. The seal comes undone, and the door with it.","La cinquième flamme prend. Le sceau se défait, et la porte avec lui."
+The Unbound Seal,The Unbound Seal,Le Sceau Défait
+"Tôma undid the seal's knots one by one. Here a lesser seal still holds a door: light its five lanterns, and tie the knots back the other way.","Tôma undid the seal's knots one by one. Here a lesser seal still holds a door: light its five lanterns, and tie the knots back the other way.","Tôma a défait les nœuds du sceau un à un. Ici, un sceau plus petit tient encore une porte : allume ses cinq lanternes, et renoue les nœuds dans l'autre sens."
 Move,Move,Bouger
 Drag your thumb on the left side of the screen to walk.,Drag your thumb on the left side of the screen to walk.,Fais glisser ton pouce sur la gauche de l'écran pour marcher.
 Walk with {move}.,Walk with {move}.,Marche avec {move}.

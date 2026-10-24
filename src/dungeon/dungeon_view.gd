@@ -145,11 +145,13 @@ func _touches_low(cell: Vector2i) -> bool:
 func _wall_top_tile(cell: Vector2i) -> int:
 	var left := _is_low(cell + Vector2i.LEFT)
 	var right := _is_low(cell + Vector2i.RIGHT)
+	# Floor above: the plateau's top edge (its rim on top), even with a face below it (a wall
+	# between two rooms, three cells thick: the edge, then the face's top and foot).
+	if _map.is_floor(cell + Vector2i.UP):
+		return _theme.wall_top_left if left else (_theme.wall_top_right if right else _theme.wall_top)
 	if _is_face(cell + Vector2i.DOWN):
 		# Over the face's top, which draws the rim: the plateau goes on, plain.
 		return _theme.wall_left if left else (_theme.wall_right if right else _theme.wall_center)
-	if _map.is_floor(cell + Vector2i.UP):
-		return _theme.wall_top_left if left else (_theme.wall_top_right if right else _theme.wall_top)
 	if left:
 		return _theme.wall_left
 	if right:

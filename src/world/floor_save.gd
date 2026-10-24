@@ -71,6 +71,8 @@ func to_data() -> Dictionary:
 		"wounded": wounded_spawns(),
 		"later": later_monsters(),
 	}
+	if world.room_trial and is_instance_valid(world.room_trial):
+		data["trial"] = world.room_trial.save_data()  # (only on a floor with one: the others' saves as they were)
 	if arena_cleared():
 		data["arena_cleared"] = true
 		data["left"] = left_behind()
@@ -164,6 +166,9 @@ func apply() -> void:
 		world.fragment.take()  # read before quitting: not laid again
 	if world.pact and _number(data, "pact") > 0:
 		world.pact.set_spent()  # sworn before quitting: never offered again
+	var saved_trial: Variant = data.get("trial", {})
+	if world.room_trial and saved_trial is Dictionary:
+		world.room_trial.restore(saved_trial)  # its steps done before quitting, done again quietly
 	restore_collapsed(_array(data, "collapsed"))  # (older saves have none)
 	restore_sealed(_array(data, "sealed"))  # after: a crack the hero fell through was filled
 

@@ -44,6 +44,7 @@ func test_cases() -> Array:
 		["bestiary", _on_game(func(game: Game) -> void: await combat._test_bestiary(game.world, game.player))],
 		["difficulty", _on_game(func(game: Game) -> void: await combat._test_difficulty_in_game(game, game.world, game.player))],
 		["perf", _on_game(func(game: Game) -> void: await (_borrow(PerfTests.new()) as PerfTests).run_in_game(game.world, game.player))],
+		["trials", _on_game(func(game: Game) -> void: await (_borrow(TrialTests.new()) as TrialTests).run_game(game))],
 		["animations", _on_game(_test_animations)],
 		["armor_look", _on_game(_test_armor_look)],
 		["inventory_screen", _on_game(_test_inventory_screen)],
@@ -109,9 +110,9 @@ func before_cases() -> void:
 	privacy = PrivacyTests.new()
 	for suite: Node in [combat, floor_suite, boss, secrets, finale, levels, privacy]:
 		add_child(suite)
-	# No merchant, encounter, ambush or special floor popping up in the middle of other tests (they have their own).
+	# No merchant, encounter, ambush, pact, trial or special floor popping up in the middle of other tests (they have their own).
 	var dungeon := CONTENT.dungeon
-	for key: String in ["merchant_chance", "encounters_max", "ambush_chance", "floor_event_chance", "pact_chance"]:
+	for key: String in ["merchant_chance", "encounters_max", "ambush_chance", "floor_event_chance", "pact_chance", "trial_chance"]:
 		_kept_chances[key] = dungeon.get(key)
 		dungeon.set(key, 0)
 	# No curses either (they have their own test).

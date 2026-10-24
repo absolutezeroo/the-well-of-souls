@@ -88,6 +88,8 @@ var ambush: AmbushRoom
 var storyteller: Storyteller
 ## The floor's pact door, if it has one.
 var pact: PactRoom
+## The floor's room trial (RoomTrial: the Souls of Kagari, the Unbound Seal...), if it has one.
+var room_trial: RoomTrial
 ## The fragment lying on this floor (FragmentPlacer), if any; `fragment_taken`: read already
 ## (saved with the floor: a run picked up again doesn't lay another).
 var fragment: Fragment
@@ -235,6 +237,7 @@ func clear_floor() -> void:
 	ambush = null
 	secrets.clear()
 	pact = null
+	room_trial = null
 	ceiling = null
 	fragment = null
 	fragment_taken = false
@@ -541,6 +544,17 @@ func spawn_ambush(room: Rect2i) -> AmbushRoom:
 	_entities.add_child(ambush)
 	ambush.setup(self, room)
 	return ambush
+
+
+## The room trial `planned` (RoomTrial.plan()) laid on this floor; `taken`: cells claimed.
+func spawn_trial(planned: Dictionary, taken: Dictionary) -> RoomTrial:
+	var def := planned.get("trial") as TrialDef
+	if def == null:
+		return null
+	room_trial = def.make(self, planned, taken)
+	if room_trial:
+		_entities.add_child(room_trial)
+	return room_trial
 
 
 ## A pact door on `room` (PactRoom): sealed at once, candles inside by the door (pact_light).
