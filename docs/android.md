@@ -2,7 +2,7 @@
 
 Everything is ready in `export_presets.cfg` (preset **Android**): the app takes the game's name
 (`config/name_localized`: "The Well of Souls", "Le Puits des Âmes" on a French phone), package
-`com.absolutezeroo.puitsdesames`, version 0.3.0 (code 3, also `application/config/version` in
+`com.absolutezeroo.puitsdesames`, version 0.3.1 (code 4, also `application/config/version` in
 project.godot: the leaderboards send it), arm64-v8a, landscape, immersive, the Vibrate and
 Internet permissions (Internet: the online leaderboards, docs/online.md), no Gradle build needed. Tests, tools, docs and the roadmap
 (`godoban_boards/`) are left out (`exclude_filter`, checked by the unit tests). The

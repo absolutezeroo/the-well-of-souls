@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 242,
+  "next_id": 243,
   "tags": [
     "pc",
     "test",
@@ -3607,6 +3607,23 @@
       ],
       "created_at": 1792860189,
       "updated_at": 1792860189,
+      "due_date": null
+    },
+    {
+      "id": "task_242",
+      "title": "Build 0.3.1 (APK signé + Windows)",
+      "description": "24/10 : version 0.3.1 (code 4). APK release signé avec la clé de sortie, .exe Windows. Contient les auras et la Garde-robe, les nouveaux murs, la reprise dans l'arène vidée, l'ordre de la cinématique, l'allègement des foules. À installer et tester sur le S23 et le PC. Les sauvegardes de 0.3.0 reprennent (l'étage en cours est relaid : autre version).",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_6",
+      "tags": [
+        "build",
+        "release",
+        "android",
+        "pc"
+      ],
+      "created_at": 1792862104,
+      "updated_at": 1792862104,
       "due_date": null
     }
   ]

@@ -13,20 +13,21 @@ extends TestSuite
 
 const WORLD_SCENE := "res://src/world/world.tscn"
 
-## kind -> fingerprint (hash) recorded on main before the split. Change only on purpose.
+## kind -> fingerprint (hash), recorded on main before the split, again when the save block's
+## stamp (the game's version) was left out of it (0.3.1). Change only on purpose.
 const EXPECTED := {
-	"plain_d2": 2607835942,
-	"plain_d5": 1109182108,
-	"plain_d8": 3546800068,
-	"boss_act1": 48167352,
-	"boss_act2": 3785902337,
-	"forced_curse": 409428364,
-	"forced_plain": 4287101347,
-	"route": 4095978745,
-	"two_ways": 1498691095,
-	"resumed": 3335077592,
-	"hidden": 172986158,
-	"finale": 337954603,
+	"plain_d2": 1045983556,
+	"plain_d5": 3023719226,
+	"plain_d8": 2738072162,
+	"boss_act1": 1577078614,
+	"boss_act2": 229918303,
+	"forced_curse": 3443624490,
+	"forced_plain": 2510512769,
+	"route": 318331991,
+	"two_ways": 174426613,
+	"resumed": 870587092,
+	"hidden": 1109123916,
+	"finale": 1179196937,
 }
 
 
@@ -53,9 +54,9 @@ func run_unit() -> void:
 			world.build_floor(int(case.depth), CONTENT, case.get("taken") as FloorRoute)
 			facts = _facts(world)
 			await get_tree().process_frame
-			facts += _loose(world) + "\n" + JSON.stringify(spent) + "\n" + JSON.stringify(world.spent_data())
+			facts += _loose(world) + "\n" + _spent_facts(spent) + "\n" + _spent_facts(world.spent_data())
 		else:
-			facts += "\n" + JSON.stringify(world.spent_data())
+			facts += "\n" + _spent_facts(world.spent_data())
 		got[case.name] = hash(facts)
 		world.hidden_floor = null
 		world.finale = null
@@ -188,3 +189,12 @@ func _loose(world: World) -> String:
 			things.append("gold %s" % str((node as Node2D).position.round()))
 	things.sort()
 	return "\n" + "\n".join(things)
+
+
+## The floor's save block in the fingerprint, without its stamp (the game's version: a new
+## version number lays the same floors).
+func _spent_facts(spent: Dictionary) -> String:
+	var copy := spent.duplicate()
+	copy.erase("stamp")
+	return JSON.stringify(copy)
+
