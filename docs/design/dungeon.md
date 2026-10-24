@@ -3,7 +3,11 @@
 ## Floors
 
 - **Walls** are cliffs drawn from a 16x16 tileset (`DungeonView`): plateau edges, inner corners,
-  cliff faces. The generator smooths every floor so only shapes the tiles can draw remain
+  cliff faces. A face is the two wall cells over the floor, two tiles of one face that join: its
+  top (`face_top*`: the plateau's rim, the face going down) over its foot (`face*`); the plateau
+  above it goes on plain (its rim is the top's). The tileset's middle row of the face (between
+  top and foot) would make taller cliffs; a wall one cell thick shows the plateau's short edge
+  (`wall_bottom*`). The mist leaves both cells of the face clear. The generator smooths every floor so only shapes the tiles can draw remain
   (no wall thinner than 3 cells between two floors, `DungeonGenerator.MIN_WALL_THICKNESS`: they
   looked like flimsy fences; no walls touching by a corner).
 - **Props** (`data/props/`): crates, vases and barrels break under any attack and may drop loot;

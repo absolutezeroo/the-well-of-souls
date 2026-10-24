@@ -2,7 +2,8 @@ class_name DungeonView
 extends Node2D
 ## Draws a DungeonMap with the tiles of a DungeonTheme.
 ##   - floor cells: floor tiles plus a little decor
-##   - walls with floor right below: cliff face
+##   - the two walls right above the floor: the cliff face, its top over its foot (one cell thick
+##     between two floors: the plateau's short edge)
 ##   - walls next to the floor or a cliff face (8 neighbours): plateau edge tiles, picked from
 ##     which sides are lower, with inner corners for diagonals
 ##   - every other wall: flat plateau color
@@ -12,6 +13,9 @@ extends Node2D
 ## Over it all, the plateau's mist (PlateauMist).
 
 const OUTSIDE_MARGIN := 24  # tiles of plateau color drawn around the map
+
+## A wall cell's place in the cliff face (_face_row()).
+enum FaceRow { NONE, FOOT, TOP, SHORT }
 ## Cells on a chunk's side.
 const CHUNK := 8
 
@@ -98,7 +102,7 @@ func draw_cells(canvas: CanvasItem, area: Rect2i) -> void:
 							_draw_tile(canvas, _theme.decor_atlas, DungeonTheme.pick(_theme.decor_tiles, cell, 2), rect, tint)
 					2:
 						# Soft shadow at the foot of the cliffs.
-						if is_floor and _is_face(cell + Vector2i.UP):
+						if is_floor and _map.in_bounds(cell + Vector2i.UP) and not _map.is_floor(cell + Vector2i.UP):
 							canvas.draw_rect(Rect2(rect.position, Vector2(rect.size.x, 8.0)), Color(0, 0, 0, 0.22))
 					3:
 						if is_floor:
@@ -110,7 +114,19 @@ func draw_cells(canvas: CanvasItem, area: Rect2i) -> void:
 
 
 func _is_face(cell: Vector2i) -> bool:
-	return not _map.is_floor(cell) and _map.is_floor(cell + Vector2i.DOWN)
+	return _face_row(cell) != FaceRow.NONE
+
+
+## Where `cell` is in the cliff face: its foot (right above the floor), its top (right above the
+## foot), the short edge of a wall one cell thick (floor above and below), or none.
+func _face_row(cell: Vector2i) -> FaceRow:
+	if _map.is_floor(cell):
+		return FaceRow.NONE
+	if _map.is_floor(cell + Vector2i.DOWN):
+		return FaceRow.SHORT if _map.is_floor(cell + Vector2i.UP) else FaceRow.FOOT
+	if _map.is_floor(cell + Vector2i.DOWN * 2):
+		return FaceRow.TOP
+	return FaceRow.NONE
 
 
 ## Floor or cliff face: the plateau looks down on it.
@@ -130,7 +146,8 @@ func _wall_top_tile(cell: Vector2i) -> int:
 	var left := _is_low(cell + Vector2i.LEFT)
 	var right := _is_low(cell + Vector2i.RIGHT)
 	if _is_face(cell + Vector2i.DOWN):
-		return _theme.wall_bottom_left if left else (_theme.wall_bottom_right if right else _theme.wall_bottom)
+		# Over the face's top, which draws the rim: the plateau goes on, plain.
+		return _theme.wall_left if left else (_theme.wall_right if right else _theme.wall_center)
 	if _map.is_floor(cell + Vector2i.UP):
 		return _theme.wall_top_left if left else (_theme.wall_top_right if right else _theme.wall_top)
 	if left:
@@ -162,15 +179,17 @@ func _inner_corner_tile(cell: Vector2i) -> int:
 
 
 func _draw_face(canvas: CanvasItem, cell: Vector2i, rect: Rect2, tint: Color) -> void:
-	var left_open := not _is_face(cell + Vector2i.LEFT)
-	var right_open := not _is_face(cell + Vector2i.RIGHT)
-	var tile := _theme.face
-	if left_open and right_open:
-		tile = _theme.face_single
-	elif left_open:
-		tile = _theme.face_left
-	elif right_open:
-		tile = _theme.face_right
+	var row := _face_row(cell)
+	var left_open := _face_row(cell + Vector2i.LEFT) != row
+	var right_open := _face_row(cell + Vector2i.RIGHT) != row
+	var tile: int
+	match row:
+		FaceRow.SHORT:
+			tile = _theme.wall_bottom_left if left_open and not right_open else (_theme.wall_bottom_right if right_open and not left_open else _theme.wall_bottom)
+		FaceRow.TOP:
+			tile = _theme.face_top_single if left_open and right_open else (_theme.face_top_left if left_open else (_theme.face_top_right if right_open else _theme.face_top))
+		_:
+			tile = _theme.face_single if left_open and right_open else (_theme.face_left if left_open else (_theme.face_right if right_open else _theme.face))
 	_draw_tile(canvas, _theme.wall_atlas, tile, rect, tint)
 
 

@@ -3,8 +3,10 @@ extends Resource
 ## Look and music of a floor. Tiles are referenced by index in their atlas
 ## (left to right, top to bottom, starting at 0; 16x16 tiles).
 ##
-## Walls use a "cliff" tileset: the top of the walls is a plateau with a rim,
-## and walls that have floor right below them show a cliff face.
+## Walls use a "cliff" tileset: the top of the walls is a plateau with a rim, and the two wall
+## cells right above the floor show a cliff face: its top (the plateau's rim and the face's
+## upper part) over its bottom (the face's foot), two tiles of the same face that join. A wall
+## one cell thick (floor right above it) shows the plateau's short edge (`wall_bottom`).
 
 @export var tint: Color = Color.WHITE
 ## How the floor is lit: its own light, and the colors of the light as it fades (LightField).
@@ -31,7 +33,7 @@ extends Resource
 @export var wall_left: int = 121
 @export var wall_center: int = 122
 @export var wall_right: int = 123
-## Plateau edge above a cliff face (rim + top of the cliff).
+## The plateau's short edge (rim + a lip of cliff): a wall one cell thick, floor above and below.
 @export var wall_bottom_left: int = 141
 @export var wall_bottom: int = 142
 @export var wall_bottom_right: int = 143
@@ -43,7 +45,13 @@ extends Resource
 ## Both top or both bottom diagonals.
 @export var inner_top: int = 182
 @export var inner_bottom: int = 183
-## Cliff face seen from the front (wall with floor right below it).
+## The cliff face's top (the plateau's rim, the face going down): the wall two cells above the
+## floor. Left and right ends, middle, and one cell wide.
+@export var face_top_left: int = 104
+@export var face_top: int = 105
+@export var face_top_right: int = 106
+@export var face_top_single: int = 108
+## The cliff face's foot (wall with floor right below it), joining the top above it.
 @export var face_left: int = 144
 @export var face: int = 145
 @export var face_right: int = 146

@@ -103,7 +103,7 @@ func _draw() -> void:
 		draw_texture_rect(_viewport.get_texture(), Rect2(to_local(_view.position), _view.size), false)
 
 
-## The mist's thickness per cell (red): 0 on the floor and the cliff faces, more with each cell
+## The mist's thickness per cell (red): 0 on the floor and the cliff faces (both their cells), more with each cell
 ## away from them, full outside the map.
 static func mask_image(map: DungeonMap, margin: int) -> Image:
 	var w := map.width
@@ -115,7 +115,9 @@ static func mask_image(map: DungeonMap, margin: int) -> Image:
 	for y in h:
 		for x in w:
 			var i := y * w + x
-			var low := map.tiles[i] == DungeonMap.Tile.FLOOR or (y + 1 < h and map.tiles[i + w] == DungeonMap.Tile.FLOOR)
+			# The floor and both cells of the cliff face (its foot, its top: DungeonView).
+			var low := map.tiles[i] == DungeonMap.Tile.FLOOR or (y + 1 < h and map.tiles[i + w] == DungeonMap.Tile.FLOOR) \
+				or (y + 2 < h and map.tiles[i + w * 2] == DungeonMap.Tile.FLOOR)
 			if low:
 				depth[i] = 0
 				queue.append(i)

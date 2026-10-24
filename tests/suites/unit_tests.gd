@@ -2285,8 +2285,8 @@ func _test_plateau_mist() -> void:
 	var at := func(x: int, y: int) -> float: return image.get_pixel(x + margin, y + margin).r
 	check(image.get_size() == Vector2i(18, 18), "the mask covers the map and its margin")
 	check(at.call(5, 5) < 0.01, "no mist on the floor")
-	check(at.call(5, 3) < 0.01, "nor on a cliff face (the wall above the floor)")
-	check(at.call(5, 2) > 0.1 and at.call(5, 2) < 0.5, "thin at the rim (%.2f)" % at.call(5, 2))
+	check(at.call(5, 3) < 0.01 and at.call(5, 2) < 0.01, "nor on a cliff face (both its cells: its foot over the floor, its top: DungeonView)")
+	check(at.call(5, 1) > 0.1 and at.call(5, 1) < 0.5, "thin at the rim (%.2f)" % at.call(5, 1))
 	check(at.call(0, 0) > 0.95 and image.get_pixel(0, 0).r > 0.95, "thick deep in the plateau and all around the map")
 	for theme_path in DirAccess.get_files_at("res://data/dungeon/themes"):
 		if not theme_path.ends_with(".tres"):

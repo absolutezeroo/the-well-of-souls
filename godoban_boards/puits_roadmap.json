@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 237,
+  "next_id": 239,
   "tags": [
     "pc",
     "test",
@@ -3531,6 +3531,37 @@
       ],
       "created_at": 1792857515,
       "updated_at": 1792857515,
+      "due_date": null
+    },
+    {
+      "id": "task_237",
+      "title": "Murs : la face de falaise ne se raccordait pas",
+      "description": "Vu par Clayton (24/10) sur toutes les cartes : le mur était fait du bord court du plateau (avec sa propre lèvre et son trait sombre) posé sur le bas de la face : une couture au milieu. Maintenant la face prend les deux cases au-dessus du sol avec les tuiles d'une même face qui se raccordent : le haut (bord du plateau + début de la face) sur le bas ; le plateau au-dessus reste uni ; la brume laisse les deux cases de la face nettes. Thèmes gris et orange. La rangée du milieu du tileset permettrait des falaises plus hautes. À voir sur le S23.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_3",
+      "tags": [
+        "visuel",
+        "niveaux",
+        "bug"
+      ],
+      "created_at": 1792858090,
+      "updated_at": 1792858090,
+      "due_date": null
+    },
+    {
+      "id": "task_238",
+      "title": "Test instable : « a room out of sight, a short walk away » (game.ai_movement)",
+      "description": "Échoue avec la graine 413192, aussi sans le changement des murs : l'étage tiré n'a pas de salle hors de vue à courte distance pour le test. Rendre le test indépendant de la graine (chercher sur plusieurs étages, ou poser l'étage).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "tags": [
+        "tests",
+        "bug"
+      ],
+      "created_at": 1792858090,
+      "updated_at": 1792858090,
       "due_date": null
     }
   ]
