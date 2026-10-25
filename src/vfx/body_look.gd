@@ -4,7 +4,11 @@ extends RefCounted
 ## body, in the elements' ramps: statuses (a burn's heat crawling up the rim, rime creeping in,
 ## a poison wave on each tick, a haunt's pale flicker, a storm hit's crackle), an elite's rim,
 ## and the death in the killing element (DeathFx). The rig owns one per body (its material is
-## its own); it only sets a uniform when its value changes. StatusFx's particles are the accent;
+## its own); it only sets a uniform when its value changes. A body with no layers following it
+## (a monster) wears, while nothing moves on it (no status, flash, crackle nor death), a material
+## shared by every body showing the same (`_pool`: its frame, its rim): a crowd's sprites then
+## batch into a few draw calls instead of one each, since the renderer can't batch two different
+## materials (docs/performance.md, "Draw calls"); it is back on its own the moment something does. StatusFx's particles are the accent;
 ## this is the base. With Settings.fewer_effects the statuses and the rim are off (the body takes
 ## the old flat tint instead, Actor._body_modulate) and only the deaths stay (one pass, no
 ## neighbour reads but the frozen edge). docs/vfx.md, "Shaders on bodies".
@@ -29,6 +33,7 @@ static var _image: Image
 static var _rows := {}  # VfxElementDef -> row
 static var _looks := {}  # status id -> StatusLookDef (or null)
 
+## The body's own material: every uniform is set here (worn while something moves on the body).
 var material: ShaderMaterial
 ## Other layers' materials that follow this one (the hero's armor layers and weapon have their
 ## own, for their trim: ActorRig): every uniform set here is set there too, but the frame for
@@ -59,6 +64,20 @@ var _told_beat := true
 var _values := PackedFloat32Array()
 ## The uniforms set every frame something changes, in `_values`' order.
 const VALUES: Array[StringName] = [&"burn", &"chill", &"frozen", &"poison", &"poison_wave", &"haunt", &"crackle"]
+## A body at rest: these uniforms at these values (nothing moves on it), the others either fixed
+## by the frame and the rim (the pool's key) or unread at these values (the rows, the flash's color).
+const AT_REST := {
+	&"burn": 0.0, &"chill": 0.0, &"frozen": 0.0, &"poison": 0.0, &"poison_wave": 2.0, &"haunt": 0.0,
+	&"crackle": 0.0, &"flash_amount": 0.0, &"dissolve": 0.0, &"death_style": 0,
+}
+## The uniforms that tell bodies at rest apart (the pool's key).
+const KEYED: Array[StringName] = [&"frame_rect", &"outline_color", &"outline_beat", &"outer_rim", &"hue_shift", &"shimmer"]
+
+## The shared materials of bodies at rest, by what they show (KEYED's values as text).
+static var _pool := {}
+## The node wearing the material (the rig's Visual) when this body may share; null: never shares.
+var _wearer: CanvasItem
+var _sharing := false
 
 
 func _init(look: ShaderMaterial) -> void:
@@ -214,6 +233,8 @@ func die(look: DeathLookDef, element: VfxElementDef) -> void:
 	_param(&"outline_color", Color.TRANSPARENT)
 	_param(&"death_style", int(look.style))
 	_param(&"death_row", row(element))
+	if _wearer:
+		_wear()
 
 
 ## How far the death has gone (0..1).
@@ -226,6 +247,10 @@ func set_dying(progress: float) -> void:
 func follow(other: ShaderMaterial, own_frame: bool = false) -> void:
 	if other == null or _followers.has(other):
 		return
+	if _wearer:
+		_wearer.material = material  # (layers follow: its own from now on)
+		_wearer = null
+		_sharing = false
 	other.set_shader_parameter(&"ramps", ramps())
 	for name: StringName in _set:
 		if not (own_frame and name == &"frame_rect"):
@@ -246,3 +271,46 @@ func _param(name: StringName, value: Variant) -> void:
 		for i in _followers.size():
 			if not (_own_frames[i] and name == &"frame_rect"):
 				_followers[i].set_shader_parameter(name, value)
+		if _wearer:
+			_wear()
+
+
+## This body may wear a shared material while at rest, on `wearer` (the rig's Visual): a body
+## with no layers following it.
+func share_on(wearer: CanvasItem) -> void:
+	_wearer = wearer if _followers.is_empty() else null
+	if _wearer:
+		_wear()
+
+
+## Whether this body wears a shared material now (the tests).
+func is_sharing() -> bool:
+	return _sharing
+
+
+## At rest: the pool's material for what it shows; else its own.
+func _wear() -> void:
+	var rest := not _dying and _followers.is_empty()
+	if rest:
+		for name: StringName in AT_REST:
+			if _set.has(name) and _set[name] != AT_REST[name]:
+				rest = false
+				break
+	if rest:
+		var key := "%s|%s|%s|%s|%s|%s" % [_set.get(&"frame_rect"), _set.get(&"outline_color"), _set.get(&"outline_beat"), _set.get(&"outer_rim"), _set.get(&"hue_shift"), _set.get(&"shimmer")]
+		var shared: ShaderMaterial = _pool.get(key)
+		if shared == null:
+			shared = ShaderMaterial.new()
+			shared.shader = material.shader
+			shared.set_shader_parameter(&"ramps", ramps())
+			for name: StringName in KEYED:
+				if _set.has(name):
+					shared.set_shader_parameter(name, _set[name])
+			_pool[key] = shared
+		if _wearer.material != shared:
+			_wearer.material = shared
+		_sharing = true
+	else:
+		if _wearer.material != material:
+			_wearer.material = material
+		_sharing = false

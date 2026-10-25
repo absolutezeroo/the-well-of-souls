@@ -89,6 +89,8 @@ var equipment := Equipment.new()
 var skills := SkillSet.new()
 var perks := PerkSet.new()
 var statuses := StatusSet.new()
+## Its shadow on the floor (ActorShadow: drawn one step down, so a crowd's shadows batch).
+var shadow: ActorShadow
 ## Draws the statuses on the body (StatusFx).
 var status_fx: StatusFx
 ## Healing from "per hit" and "per kill" perks (see sustain_heal()).
@@ -124,6 +126,11 @@ func _init() -> void:
 
 
 func _ready() -> void:
+	# Its shadow, one step down in the draw order (ActorShadow: a crowd's shadows batch).
+	shadow = ActorShadow.new()
+	add_child(shadow)
+	move_child(shadow, 0)
+	shadow.fit(_feet_y(), radius)
 	# What its statuses look like (flames, bubbles, frost), drawn over the body.
 	status_fx = StatusFx.new(self)
 	add_child(status_fx)
@@ -635,9 +642,11 @@ func _shows_gear() -> bool:
 func _draw() -> void:
 	_drawn_ward = false
 	_drawn_radius = radius
+	if shadow:
+		shadow.visible = not is_falling
+		shadow.fit(_feet_y(), radius)
 	if is_falling:
 		return
-	BodySketch.shadow(self, _feet_y(), radius)
 	if frames == null:
 		var color := Color.WHITE if _flash_time > 0.0 else body_color * _body_modulate()
 		BodySketch.draw(self, radius, color, facing, glyph)

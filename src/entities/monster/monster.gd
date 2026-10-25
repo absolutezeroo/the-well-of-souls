@@ -104,7 +104,10 @@ func setup(monster_def: MonsterDef, depth: int, config: DungeonConfig) -> void:
 
 func _ready() -> void:
 	super._ready()
-	# Warnings and auras under the body, name and health bar over it.
+	if rig:
+		# At rest it wears the material every body like it shares (a crowd batches: BodyLook).
+		rig.look.share_on(rig.visual)
+	# Warnings and auras under the body, name and health bar over it (the shadow over them).
 	_under = MonsterOverlay.create(self, MonsterOverlay.Layer.UNDER)
 	add_child(_under)
 	move_child(_under, 0)
@@ -153,9 +156,8 @@ func make_ranked(new_rank: MonsterRankDef, new_affixes: Array[EliteAffixDef]) ->
 		drops.xp_multiplier = rank.xp_multiplier
 	drops.bonus_drops = rank.bonus_drops
 	if rig and (rank.hue_shift > 0.0 or rank.shimmer):
-		var look := rig.visual.material as ShaderMaterial
-		look.set_shader_parameter("hue_shift", rank.hue_shift)
-		look.set_shader_parameter("shimmer", 1.0 if rank.shimmer else 0.0)
+		rig.look.set_shared(&"hue_shift", rank.hue_shift)
+		rig.look.set_shared(&"shimmer", 1.0 if rank.shimmer else 0.0)
 	if rig:
 		rig.look.outline = rank_color()  # a rim of its color around the body (BodyLook)
 

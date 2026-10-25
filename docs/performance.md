@@ -68,6 +68,23 @@ with each other, or physics at 30 ticks with interpolation): the roadmap has the
 Measure the PC and the phone on an exported build: a run from the editor is a debug build, its
 scripts slower and its debugger listening.
 
+**Draw calls (a crowd batches).** The Compatibility renderer draws in one call a run of items
+that share a texture and a material, in draw order; anything else between them, or another
+material, starts a new call. A crowd of 200 of the same monster drew one call per body
+(~280 calls, October 2026, measured with `Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME` under
+xvfb), for two reasons, both cut:
+- **Each body's own shader material** (its hit flash, statuses, rim: `BodyLook`): two materials
+  never batch, even with the same shader. A monster at rest (no status, flash, crackle nor death)
+  now wears a material shared by every body showing the same (its frame and rim: `BodyLook._pool`),
+  and its own again the moment something moves on it; the hero (layers following its body) never
+  shares.
+- **The shadow drawn between two sprites** (an untextured disc in the actor's own `_draw`, so
+  disc, sprite, disc, sprite...). It is on its own node one step down (`ActorShadow`, z_index -1,
+  with the floor's markings): all the shadows first, then the sprites, each in a few calls.
+Same kind: 284 -> 137 calls (the level's own ~125 included: the monsters 160 -> 11). Four
+kinds mixed: 441 -> 226 (bodies of different sheets still alternate in the y order: one call
+per change of sheet). Measure on the phone with the debug panel's line (draw calls).
+
 **No GPU readback during play.** `Texture2D.get_image()` reads the texture back from the GPU on
 the Compatibility renderer, a stall on a phone. What needs pixels reads each sheet once while the
 floor loads and measures its frames on that copy (`BodyTops.warm`, `_sheets`).

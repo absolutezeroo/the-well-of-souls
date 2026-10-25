@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 257,
+  "next_id": 258,
   "tags": [
     "pc",
     "test",
@@ -2656,7 +2656,7 @@
     {
       "id": "task_179",
       "title": "Test instable : « visible again: it notices him » (debug_tests)",
-      "description": "Vu une fois sur deux passages de la suite game (24/10, après les fusions du Gardien Sans Nom, des réglages à distance et des avis) : FAIL « visible again: it notices him » (tests/suites/debug_tests.gd:246, _test_invisible). Le squelette est posé par World.find_open_point_near(), qui depuis task_149 évite les autres corps et peut retomber sur la case libre la plus proche, plus loin : peut-être hors de vue ou de portée de détection du héros. À reproduire (graine) ; si c'est ça, poser le monstre à une place vérifiée (en vue, à portée) dans le test.\n\nCause trouvée (24/10) : ce n'était pas l'écart de find_open_point_near() mais le placement à l'aveugle : le squelette était posé 60 px à droite du héros, là où le test précédent l'avait laissé ; find_open_point_near() vérifie la vue depuis ce point, pas depuis le héros, donc contre un mur ou un pilier le monstre tombait derrière, hors de vue, et ne pouvait jamais le remarquer (sonde _tool/probe_invisible : 6 échecs sur 120, tous « pas de ligne de vue » dès la pose). Corrigé dans le test : héros sur un coin calme, monstre au bout d'un couloir dégagé de 120 px (_clear_lane), et un contrôle de mise en place (en vue, à portée). Le contrôle « visible again: it notices him » est inchangé. Preuve : 240 passages de la sonde sans échec, deux suites game propres.",
+      "description": "Vu une fois sur deux passages de la suite game (24/10, après les fusions du Gardien Sans Nom, des réglages à distance et des avis) : FAIL « visible again: it notices him » (tests/suites/debug_tests.gd:246, _test_invisible). Le squelette est posé par World.find_open_point_near(), qui depuis task_149 évite les autres corps et peut retomber sur la case libre la plus proche, plus loin : peut-être hors de vue ou de portée de détection du héros. À reproduire (graine) ; si c'est ça, poser le monstre à une place vérifiée (en vue, à portée) dans le test.\n\nCause trouvée (24/10) : ce n'était pas l'écart de find_open_point_near() mais le placement à l'aveugle : le squelette était posé 60 px à droite du héros, là où le test précédent l'avait laissé ; find_open_point_near() vérifie la vue depuis ce point, pas depuis le héros, donc contre un mur ou un pilier le monstre tombait derrière, hors de vue, et ne pouvait jamais le remarquer (sonde _tool/probe_invisible : 6 échecs sur 120, tous « pas de ligne de vue » dès la pose). Corrigé dans le test : héros sur un coin calme, monstre au bout d'un couloir dégagé de 120 px (_clear_lane), et un contrôle de mise en place (en vue, à portée). Le contrôle « visible again: it notices him » est inchangé. Preuve : 240 passages de la sonde sans échec, deux suites game propres. Vu aussi une fois en parallèle : « the spacing push is summed one frame in 3 (1 times in 12 frames) » (game.perf, seed 709392 ; passe seul) : le monstre suivi s'arrête peut-être (pas de poussée quand il ne bouge pas).",
       "status": "review",
       "priority": "medium",
       "epic_id": "epic_5",
@@ -3597,7 +3597,7 @@
     {
       "id": "task_241",
       "title": "Perf : décider pour les grosses foules",
-      "description": "Le reste du coût d'une foule de 100+ monstres est la physique du moteur. Pistes à décider par Clayton : limiter le nombre de monstres réveillés en même temps ; monstres qui ne se bloquent plus entre eux (seulement l'écartement doux, comme les survivors-like) ; physique à 30 ticks avec interpolation ; IA des monstres loin du héros à mi-cadence.",
+      "description": "Le reste du coût d'une foule de 100+ monstres est la physique du moteur. Pistes à décider par Clayton : limiter le nombre de monstres réveillés en même temps ; monstres qui ne se bloquent plus entre eux (seulement l'écartement doux, comme les survivors-like) ; physique à 30 ticks avec interpolation ; IA des monstres loin du héros à mi-cadence.\n\n25/10 : mesuré une foule de 175-210 monstres (IA coupée) : ~1 appel de dessin par monstre (matériau propre à chaque corps + ombre dessinée entre deux sprites). Corrigé sans toucher au jeu : matériau partagé au repos et ombres sur leur propre couche (même espèce : 284 -> 137 appels ; 4 espèces mélangées : 441 -> 226). Côté processeur (VM, 158 éveillés, IA active) : ~13 ms/image dont IA 2,6, déplacement + physique du moteur ~5,4, rig 1,5, espacement 1,2. Options proposées à Clayton (non faites) : IA moins fréquente hors de l'écran ; pas de collision monstre-monstre (séparation douce) ; physique à 30 Hz interpolée ; pour un mode vagues, des monstres « de horde » légers (sans corps physique, dessinés en lot).",
       "status": "todo",
       "priority": "high",
       "epic_id": "epic_5",
@@ -3606,7 +3606,7 @@
         "idée"
       ],
       "created_at": 1792860189,
-      "updated_at": 1792860189,
+      "updated_at": 1792901891,
       "due_date": null
     },
     {
@@ -3842,6 +3842,21 @@
       ],
       "created_at": 1792896169,
       "updated_at": 1792896169,
+      "due_date": null
+    },
+    {
+      "id": "task_257",
+      "title": "Test instable : « visible again: it notices him » (game.debug_panel)",
+      "description": "Échoue avec --seed=286597 (déjà avant le 25/10, même code). Le monstre ne reprend pas le héros pour cible dans les 60 images après « Invisible » coupé. À regarder. Vu aussi une fois en parallèle : « the spacing push is summed one frame in 3 (1 times in 12 frames) » (game.perf, seed 709392 ; passe seul) : le monstre suivi s'arrête peut-être (pas de poussée quand il ne bouge pas).",
+      "status": "todo",
+      "priority": "low",
+      "epic_id": "epic_4",
+      "tags": [
+        "tests",
+        "bug"
+      ],
+      "created_at": 1792901891,
+      "updated_at": 1792901891,
       "due_date": null
     }
   ]

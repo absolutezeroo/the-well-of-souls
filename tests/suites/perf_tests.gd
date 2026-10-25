@@ -20,6 +20,7 @@ func run_unit() -> void:
 	var four: Array[Vector2i] = [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
 	check(GridDirs.FOUR == four, "the grid's four steps keep their order (it decides ties: the same seed, the same floor)")
 	_test_body_tops()
+	_test_shared_looks()
 
 
 ## The weapon at rest bobs with the body's art (BodyTops.bob): every frame of the hero measured
@@ -159,3 +160,45 @@ func _square_scan(world: World, point: Vector2, max_radius: int, clear_of: Array
 		if best != Vector2i(-1, -1):
 			return map.cell_to_world(best)
 	return point
+
+
+## A crowd batches (docs/performance.md, "Draw calls"): bodies at rest showing the same wear one
+## shared material, a body with something moving on it (a flash, a death) its own with every
+## uniform as before, and back to the shared one at rest; a body whose layers follow it never
+## shares. Shadows are on their own node one step down.
+func _test_shared_looks() -> void:
+	var a_node := Node2D.new()
+	var b_node := Node2D.new()
+	var a := BodyLook.new(_own_material(a_node))
+	var b := BodyLook.new(_own_material(b_node))
+	var a_own := a.material
+	a.set_frame(Rect2(-8, -16, 16, 16))
+	b.set_frame(Rect2(-8, -16, 16, 16))
+	a.share_on(a_node)
+	b.share_on(b_node)
+	check(a.is_sharing() and b.is_sharing() and a_node.material == b_node.material and a_node.material != a_own, "two bodies at rest showing the same: one shared material")
+	a.set_shared(&"flash_amount", 1.0)
+	check(not a.is_sharing() and a_node.material == a_own and a_own.get_shader_parameter(&"flash_amount") == 1.0 and b.is_sharing(), "a flash: that body on its own material, the uniform set there")
+	a.set_shared(&"flash_amount", 0.0)
+	check(a.is_sharing() and a_node.material == b_node.material, "at rest again: back on the shared one")
+	b.set_frame(Rect2(-12, -24, 24, 24))
+	check(b.is_sharing() and a_node.material != b_node.material, "another frame: another shared material (what it shows)")
+	b.die(load("res://data/vfx/deaths/ash.tres"), null)
+	check(not b.is_sharing() and b_node.material == b.material, "a death: its own material")
+	var follower := ShaderMaterial.new()
+	a.follow(follower)
+	a.set_shared(&"flash_amount", 0.0)
+	check(not a.is_sharing() and a_node.material == a_own, "layers following it (the hero's): never shared")
+	a_node.free()
+	b_node.free()
+	var actor := Actor.new()
+	add_child(actor)
+	check(actor.shadow != null and actor.shadow.z_index == -1 and actor.shadow.get_parent() == actor, "an actor's shadow on its own node, one step down (a crowd's shadows batch)")
+	actor.free()
+
+
+func _own_material(node: CanvasItem) -> ShaderMaterial:
+	var own := ShaderMaterial.new()
+	own.shader = BodyLook.SHADER
+	node.material = own
+	return own
