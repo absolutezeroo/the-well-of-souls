@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="EliteAffixDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/elite_affix_def.gd" id="affix"]
+[ext_resource type="Script" path="res://src/definitions/monster_traits/monster_trait.gd" id="trait"]
+[ext_resource type="Script" path="res://src/definitions/monster_traits/warned_pulse_trait.gd" id="pulse"]
+[ext_resource type="Resource" path="res://data/vfx/elements/spirit.tres" id="element"]
+
+[sub_resource type="Resource" id="Pulse"]
+script = ExtResource("pulse")
+interval = 0.0
+hits_required = 3
+cooldown = 6.0
+fuse = 0.9
+radius = 48.0
+trigger_range = 180.0
+damage = 6
+knockback = 180.0
+shake = 0.15
+element = ExtResource("element")
+
+[resource]
+script = ExtResource("affix")
+id = &"vengeful"
+display_name = "Vengeful"
+description = "Warns before a riposte after 3 direct hits. Cooldown: 6 s."
+glyph = "V"
+color = Color(0.72, 0.5, 1, 1)
+min_depth = 4
+spawn_weight = 5
+hp_multiplier = 0.9
+traits = Array[ExtResource("trait")]([SubResource("Pulse")])
+allow_bosses = false
+excludes = Array[StringName]([&"spiked", &"unstable"])

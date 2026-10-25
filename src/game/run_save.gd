@@ -25,7 +25,7 @@ const OLDEST_VERSION := 1
 ## Bump it when a change makes a floor come out otherwise from the same seed (the generator, the
 ## order things are laid in, the pools they are drawn from) without a new game version: saved
 ## floors are then laid fresh (floor_of()).
-const FLOOR_FORMAT := 2
+const FLOOR_FORMAT := 3
 
 ## What a field may hold: "number" (int or float, as JSON reads it), "bool" (or a number),
 ## "string", "dict", "array", "any"; a Dictionary: a dictionary whose listed keys are checked

@@ -130,9 +130,37 @@ payload again. Poison is refreshed, not stacked, by the existing StatusSet rules
 
 Saved later monsters keep affix ids, rank, definition and Health share; resuming reconstructs
 the same modules and fresh temporary state, as other short-lived combat state already does.
-The new weighted pool changes floors from depth four: `FLOOR_FORMAT` is 2 so an older saved
-floor is rebuilt under the existing stamp rule, with the hero and run retained. Recorded floor
-fingerprints for the five affected cases were updated intentionally; all other cases agree.
+The expanded weighted pool changes floors from depth three: `FLOOR_FORMAT` is 3 so an older
+saved floor is rebuilt under the existing stamp rule, with the hero and run retained. Recorded
+floor fingerprints for the five affected cases were updated intentionally; all other cases agree.
+
+Four more affixes reuse these pieces and the existing sprite/effect library. Each has weight 5,
+never applies to bosses, and uses the normal rank's affix limit (one for an Elite, the existing
+higher limits for Fell/Legendary). No rank or original affix numbers were changed.
+
+| Affix | First floor | Behaviour | Rank Health factor | Incompatible affixes |
+|---|---:|---|---:|---|
+| Glacial / Glacial | 3 | Direct hits slow 25% for 2 s. Death: radius 52, warning 0.8 s, dungeon damage 3 and the same slow. Nothing after a fall. | x0.9 | Pestilent, Bursting, Unstable |
+| Frenzied / Frénétique | 3 | Walks 30% faster at or below 50% Health. Healing above the threshold removes it immediately; attack speed is unchanged. | x1 | Swift |
+| Vengeful / Vengeur | 4 | After 3 direct hostile damaging hits, warns 0.9 s then strikes radius 48 for dungeon damage 6, push 180. Six seconds after the warning ends before counting hits again. | x0.9 | Thorned, Unstable |
+| Unstable / Instable | 5 | Every 5 seconds of engagement, warns 0.9 s then strikes radius 48 for dungeon damage 6, push 180. | x0.9 | Bursting, Pestilent, Glacial, Vengeful |
+
+Vengeful and Unstable share `WarnedPulseTrait`: per-owner timers, hit count and one pending
+`GroundStrike`. Warnings are placed at the monster's position and stay there when it moves;
+the existing red ground telegraph precedes the spirit/fire nova. Warning time is multiplied by
+`get_telegraph_scale()` as for other monster attacks. A live hostile target within 180 px and
+in sight is needed to begin a pulse. Dormancy and absence of a target pause the periodic clock;
+sleeping monsters retain the game's existing sleep policy. Secondary hits/ticks, fully absorbed
+hits and lethal blows never charge a riposte; hits during cooldown are discarded. A pending
+pulse cancels on death, falling, a freed/detached source or leaving the floor. Fresh temporary
+counters on resume deliberately give a new full periodic interval and no hidden pending strike.
+
+Glacial needs no new behaviour script: it combines `OnHitStatusTrait` and `DeathBurstTrait`.
+Frenzied uses `FrenzyTrait`'s walking-speed multiplier, derived from current Health without
+editing stats or allocating frame buffs. An existing fire pop announces entry into frenzy;
+its attacks do not gain fire damage. The original **Vampiric / Vampirique** remains on
+`LifestealPassive`: 60% of direct damage after Armor and wards, fractional healing accumulated,
+no healing from secondary hits or ticks. It was already present and was not duplicated.
 
 ## Bosses
 

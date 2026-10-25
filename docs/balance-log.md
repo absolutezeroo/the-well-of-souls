@@ -3,6 +3,40 @@
 Dated entries, newest first: what was measured, what changed and why, before/after numbers, open
 questions. How to measure: [balance.md](balance.md).
 
+## 2026-10-25 - Glacial, Frenzied, Vengeful and Unstable
+
+Four additional modular affixes, each weight 5, no bosses: Glacial and Frenzied from floor 3,
+Vengeful from 4, Unstable from 5. Glacial: 25% slow for 2 s on direct hits and a death burst
+(radius 52, warning 0.8 s, dungeon damage 3). Frenzied: walking speed x1.3 at or below 50%
+Health, no attack-speed bonus. Vengeful: 3 direct damaging hostile hits start a warning (0.9 s,
+radius 48, dungeon damage 6), then 6 s cooldown after the warning. Unstable: same warned area
+strike every 5 s of engagement. Warning durations use normal FloorRules telegraph scaling.
+Rank Health factor x0.9 except Frenzied x1. Existing Vampiric remains 60% direct-hit healing;
+new tests cover actual Armor/ward results and rejection of ticks. Incompatibilities prevent
+multiple burst modules and Swift+Frenzied or Thorned+Vengeful combinations (full table in
+monsters.md). Original affix values and rank limits are unchanged.
+
+Real engine pack probe: seed 347348, Keeper, act II depth 5, expected_a2, one ranked skeleton
+and two commons, maximum hero Health 210; bots face_tank and kite, two workers, no cache:
+
+| Elite | Ranked TTK, contact / kite (s) | Total damage taken, contact / kite |
+|---|---|---|
+| Glacial | 3.68 / 6.02 | 13 / 0 |
+| Frenzied | 5.03 / 5.68 | 3 / 0 |
+| Vengeful | 3.38 / 5.25 | 0 / 0 |
+| Unstable | 3.98 / 5.48 | 0 / 0 |
+| Vampiric (unchanged) | 4.58 / 5.22 | 7 / 0 |
+
+Every variant cleared. Report: zero errors, one pre-existing plain-bat TTK warning (0 s versus
+0.5-2.5 s target). Use the same command as the previous entry. These are single-seed fights,
+not evidence of global balance: Vengeful/Unstable caused no damage in this sample, and a final
+death burst can fall after the pack tool stops measuring. Separate game.modifiers checks prove
+the riposte/pulse damage, fuse, cooldown and cancellation rules. Broader difficulties/crowds
+and warning readability on S23/Windows remain task_269. Balance models also need to honour
+compatibility when enumerating hypothetical affix combinations; these rows explicitly validate
+the actual single affix on the spawned monster. The new pool intentionally changes five floor
+fingerprints; FLOOR_FORMAT 3 discards old floor ledgers while preserving hero/run state.
+
 ## 2026-10-25 - Composable monster modifiers and Pestilent
 
 Pestilent is a new weighted affix from depth 4 (weight 5 versus 10 for the original affixes),

@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="EliteAffixDef" load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://src/definitions/elite_affix_def.gd" id="affix"]
+[ext_resource type="Script" path="res://src/definitions/monster_traits/monster_trait.gd" id="trait"]
+[ext_resource type="Script" path="res://src/definitions/monster_traits/on_hit_status_trait.gd" id="on_hit"]
+[ext_resource type="Script" path="res://src/definitions/monster_traits/death_burst_trait.gd" id="burst"]
+[ext_resource type="Script" path="res://src/definitions/effects/on_hit_status.gd" id="status"]
+[ext_resource type="Resource" path="res://data/vfx/elements/frost.tres" id="frost"]
+
+[sub_resource type="Resource" id="Cold"]
+script = ExtResource("status")
+slow = 0.25
+slow_duration = 2.0
+
+[sub_resource type="Resource" id="FrostHits"]
+script = ExtResource("on_hit")
+status = SubResource("Cold")
+
+[sub_resource type="Resource" id="ColdBurst"]
+script = ExtResource("burst")
+radius = 52.0
+damage = 3
+fuse = 0.8
+status = SubResource("Cold")
+element = ExtResource("frost")
+
+[resource]
+script = ExtResource("affix")
+id = &"glacial"
+display_name = "Glacial"
+description = "Slows on hit by 25% for 2 s. Releases a warned cold burst after death."
+glyph = "G"
+color = Color(0.45, 0.8, 1, 1)
+min_depth = 3
+spawn_weight = 5
+hp_multiplier = 0.9
+traits = Array[ExtResource("trait")]([SubResource("FrostHits"), SubResource("ColdBurst")])
+allow_bosses = false
+excludes = Array[StringName]([&"pestilent", &"explosive", &"unstable"])

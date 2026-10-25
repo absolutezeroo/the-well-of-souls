@@ -130,11 +130,14 @@ Skills: %s,Skills: %s,Compétences : %s
 {item} {suffix},{item} {suffix},{item} {suffix}
 Bursts when it dies.,Bursts when it dies.,Explose à sa mort.
 Splits when it dies.,Splits when it dies.,Se divise à sa mort.
+Moves %d%% faster at or below %d%% Health.,Moves %d%% faster at or below %d%% Health.,Se déplace %d%% plus vite à %d%% de Santé ou moins.
 Blocked,Blocked,Bloqué
 Blocks %d%% of the blows from the front.,Blocks %d%% of the blows from the front.,Bloque %d %% des coups portés de face.
 -%d gold,-%d gold,-%d or
 +%d gold,+%d gold,+%d or
 Steals gold and runs. Slay it to get it back.,Steals gold and runs. Slay it to get it back.,Vole de l'or et s'enfuit. Abats-le pour le récupérer.
+Warns before a riposte after %d direct hits. Cooldown: %g s.,Warns before a riposte after %d direct hits. Cooldown: %g s.,Annonce une riposte après %d coups directs. Recharge : %g s.
+Warns before a pulse every %g s in combat.,Warns before a pulse every %g s in combat.,Annonce une déflagration toutes les %g s en combat.
 Only its open mouth can be hurt.,Only its open mouth can be hurt.,Seule sa gueule ouverte peut être blessée.
 No effect,No effect,Sans effet
 Its long body burns at a touch: only the head can be hurt,Its long body burns at a touch: only the head can be hurt,Son long corps brûle au contact : seule la tête peut être blessée
@@ -1226,9 +1229,18 @@ Act IV,Act IV,Acte IV
 "Beneath the pyres lies Solhar itself, under a sky of stone: a kingdom the dust swallowed whole. Its king still counts what he took. Souls, mostly.","Beneath the pyres lies Solhar itself, under a sky of stone: a kingdom the dust swallowed whole. Its king still counts what he took. Souls, mostly.","Sous les bûchers s'étend Solhar même, sous un ciel de pierre : un royaume que la poussière a englouti. Son roi y compte encore ce qu'il a pris. Des âmes, surtout."
 Ironclad,Ironclad,Cuirassé
 Bursting,Bursting,Fulminant
+Frenzied,Frenzied,Frénétique
+Moves 30% faster at or below 50% Health.,Moves 30% faster at or below 50% Health.,Se déplace 30% plus vite à 50% de Santé ou moins.
+Glacial,Glacial,Glacial
+Slows on hit by 25% for 2 s. Releases a warned cold burst after death.,Slows on hit by 25% for 2 s. Releases a warned cold burst after death.,Ralentit de 25% pendant 2 s à l’impact. Libère une bouffée glaciale annoncée après sa mort.
 Pestilent,Pestilent,Pestilentiel
 Poisons on hit. Releases a warned toxic burst after death.,Poisons on hit. Releases a warned toxic burst after death.,Empoisonne à l’impact. Libère une bouffée toxique annoncée après sa mort.
 Thorned,Thorned,Épineux
+Unstable,Unstable,Instable
+Warns before an explosion every 5 s in combat.,Warns before an explosion every 5 s in combat.,Annonce une explosion toutes les 5 s en combat.
+Heals for 60% of direct hit damage. Secondary hits and damage over time heal nothing.,Heals for 60% of direct hit damage. Secondary hits and damage over time heal nothing.,Récupère en Santé 60% des dégâts des coups directs. Les dégâts secondaires et sur la durée ne soignent pas.
+Vengeful,Vengeful,Vengeur
+Warns before a riposte after 3 direct hits. Cooldown: 6 s.,Warns before a riposte after 3 direct hits. Cooldown: 6 s.,Annonce une riposte après 3 coups directs. Recharge : 6 s.
 The altar drinks. A relic rises from the stone.,The altar drinks. A relic rises from the stone.,L'autel boit. Une relique s'élève de la pierre.
 Offer your blood,Offer your blood,Offrir ton sang
 Offer,Offer,Offrir
@@ -2976,8 +2988,12 @@ grammar:feminine:Vampiric,grammar:feminine:Vampiric,Vampirique
 grammar:feminine:Venomous,grammar:feminine:Venomous,Venimeuse
 grammar:feminine:Ironclad,grammar:feminine:Ironclad,Cuirassée
 grammar:feminine:Bursting,grammar:feminine:Bursting,Fulminante
+grammar:feminine:Frenzied,grammar:feminine:Frenzied,Frénétique
+grammar:feminine:Glacial,grammar:feminine:Glacial,Glaciale
 grammar:feminine:Pestilent,grammar:feminine:Pestilent,Pestilentielle
 grammar:feminine:Thorned,grammar:feminine:Thorned,Épineuse
+grammar:feminine:Unstable,grammar:feminine:Unstable,Instable
+grammar:feminine:Vengeful,grammar:feminine:Vengeful,Vengeresse
 grammar:gender:Chain Mail,grammar:gender:Chain Mail,f
 grammar:gender:Iron Helm,grammar:gender:Iron Helm,m
 grammar:gender:Leather Armor,grammar:gender:Leather Armor,f

@@ -72,7 +72,7 @@ func _land() -> void:
 	queue_free()
 	if not is_instance_valid(_world) or _world.floor_id != _floor_id or not _world.is_inside_tree():
 		return
-	if not is_instance_valid(source) or source.is_dead:
+	if not is_instance_valid(source) or source.is_dead or source.is_falling or not source.is_inside_tree() or source.world != _world:
 		return
 	var at := global_position
 	Combat.damage_area(_world, source, at, radius, damage, knockback, false, status, element)

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EliteAffixDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/elite_affix_def.gd" id="affix"]
+[ext_resource type="Script" path="res://src/definitions/monster_traits/monster_trait.gd" id="trait"]
+[ext_resource type="Script" path="res://src/definitions/monster_traits/frenzy_trait.gd" id="frenzy"]
+[ext_resource type="Resource" path="res://data/vfx/elements/fire.tres" id="fire"]
+
+[sub_resource type="Resource" id="Frenzy"]
+script = ExtResource("frenzy")
+health_ratio = 0.5
+speed_multiplier = 1.3
+element = ExtResource("fire")
+flash_radius = 18.0
+
+[resource]
+script = ExtResource("affix")
+id = &"frenzied"
+display_name = "Frenzied"
+description = "Moves 30% faster at or below 50% Health."
+glyph = "F"
+color = Color(1, 0.42, 0.18, 1)
+min_depth = 3
+spawn_weight = 5
+traits = Array[ExtResource("trait")]([SubResource("Frenzy")])
+allow_bosses = false
+excludes = Array[StringName]([&"swift"])

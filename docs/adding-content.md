@@ -44,7 +44,7 @@ you can; by hand, keep the `[ext_resource]` paths right.
 | A prop | New `PropDef` in `data/props/` (sprite, hits, loot, explosion, light), add it to `content_db.tres` > Props |
 | A trap or hazard | New `TrapDef` / `ArrowTrapDef` / `PitDef` / `QuicksandDef` / `HeatSourceDef` / `DarkRoomDef` in `data/hazards/`, add it to an act's Hazards |
 | A new kind of hazard | New script in `src/definitions/hazards/` extending `HazardDef`, override `place()` |
-| An elite affix | New `EliteAffixDef` in `data/elites/` (name, color, a perk), add it to `content_db.tres` > Elite Affixes |
+| An elite affix | New `EliteAffixDef` in `data/elites/` (name, color, optional perk and reusable traits), add it to `content_db.tres` > Elite Affixes |
 | A chest | New `ChestDef` in `data/chests/`, set it in `dungeon_config.tres` > Chests |
 | A special floor | New `FloorEventDef` in `data/floor_events/`, add it to `content_db.tres` > Floor Events |
 | A biome | New `BiomeDef` in `data/biomes/` (a theme, grounds, scenes, decor, lights), add it to an act's Biomes |
@@ -289,3 +289,11 @@ entries warn rather than silently writing a path that would break on the next mo
 Hooks read MonsterTraits.active as a read-only view. Do not append during a damage/update
 callback: composition belongs to spawn/ranking. Put appearance in a trait or the affix's color;
 no new sprites or per-frame texture generation are required for the provided example.
+
+Additional examples: Glacial reuses status/death modules with a shared slow payload; Frenzied
+uses FrenzyTrait's Health threshold and walking multiplier; Vengeful and Unstable configure the
+same WarnedPulseTrait with hit-count/interval triggers. Set interval to 0 to disable periodic
+pulses, hits_required to 0 to disable ripostes. A pulse's cooldown starts after its warning; a
+periodic interval counts from warning start and pauses without an engaged target. Pulse counters
+are fresh on resume, while Frenzy derives its speed immediately from restored Health. Set both
+triggers only when that combined behaviour is intended: they share cooldown and pending strike.

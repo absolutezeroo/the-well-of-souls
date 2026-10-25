@@ -245,6 +245,13 @@ func get_power() -> int:
 	return maxi(1, roundi(super.get_power() * _damage_multiplier))
 
 
+func get_move_speed() -> float:
+	var speed := super.get_move_speed()
+	for behavior in behaviors.active:
+		speed *= behavior.move_speed_multiplier(self)
+	return speed
+
+
 ## Wind-ups and casts last longer on easy, shorter on hard (and in late boss phases).
 func get_telegraph_scale() -> float:
 	return _windup_multiplier
@@ -487,6 +494,8 @@ func _on_damaged(hit: HitInfo, _damage: int) -> void:
 		world.add_splat(global_position + Vector2(world.rng.randf_range(-6, 6), world.rng.randf_range(-3, 5)), def.splat_color, 0.35, hit.knockback.normalized())
 	if brain and not hit.is_tick and hit.source and is_hostile_to(hit.source):
 		brain.count_hit()
+	for behavior in behaviors.active:
+		behavior.on_damaged(self, hit, _damage)
 
 
 func _tick_timers(delta: float) -> void:

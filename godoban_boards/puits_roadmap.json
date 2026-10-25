@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 270,
+  "next_id": 272,
   "tags": [
     "pc",
     "test",
@@ -4025,7 +4025,7 @@
     {
       "id": "task_269",
       "title": "Tester les modificateurs composables sur S23 et Windows",
-      "description": "Après task_267 : lisibilité de l’aura verte, de l’annonce de 0,8 s et de la bouffée toxique Pestilentielle ; foule avec plusieurs comportements actifs, retrait après mort/chute, reprise d’une sauvegarde et charge mémoire/temps par image. Vérifier le ressenti des combinaisons aux étages 4–12 et aux difficultés supérieures. Les tests headless et la mesure limitée acte II ne valident ni le rendu ni un équilibrage global.",
+      "description": "Après task_267 : lisibilité de l’aura verte, de l’annonce de 0,8 s et de la bouffée toxique Pestilentielle ; foule avec plusieurs comportements actifs, retrait après mort/chute, reprise d’une sauvegarde et charge mémoire/temps par image. Vérifier le ressenti des combinaisons aux étages 4–12 et aux difficultés supérieures. Les tests headless et la mesure limitée acte II ne valident ni le rendu ni un équilibrage global. Étendre le passage aux quatre affixes de task_270 : Glacial, Frénétique, Vengeur, Instable ; avertissement fixé au sol, distinction aura/effet, seuil de frénésie et difficulté supérieure. La mesure acte II graine unique donne zéro dégât pris face à Vengeur/Instable : vérifier leur pression en jeu sans raccourcir une annonce pour forcer un résultat.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -4036,7 +4036,39 @@
         "pc"
       ],
       "created_at": 1792950041,
-      "updated_at": 1792950041,
+      "updated_at": 1792952798,
+      "due_date": null
+    },
+    {
+      "id": "task_270",
+      "title": "Enrichir les affixes modulaires : Glacial, Frénétique, Vengeur et Instable",
+      "description": "Quatre nouveaux affixes enregistrés, traduits et réglés en données : Glacial (étage 3, ralentissement 25%/2 s et mort froide annoncée), Frénétique (étage 3, déplacement +30% sous 50% Santé), Vengeur (étage 4, 3 coups directs puis riposte annoncée, recharge 6 s), Instable (étage 5, explosion annoncée toutes les 5 s de combat). Vampirique existait : conservé à 60% et vérifié après Armure/absorption, sans soin sur ticks. Modules indépendants FrenzyTrait et WarnedPulseTrait ; Glacial réutilise les modules statut/mort. États isolés, aucun sprite neuf ni tableau reconstruit par image, exclusions en données. Avertissements fixes au sol, annulation sur mort/chute/source libérée ou détachée/changement d’étage. Reprise des quatre ids/Santé/vitesse et réinitialisation des compteurs temporaires testées. FLOOR_FORMAT 3, cinq empreintes volontairement mises à jour. Suite complète graine 347348 : 19 651 vérifications, zéro échec ; 633 scripts zéro avertissement ; 7 tests Python ; 3 006 clés traduites et 303 références stables validées. Mesure réelle acte II Gardien, contact/kite : toutes les variantes vaincues, zéro erreur de rapport et seul avertissement préexistant bat TTK 0. Limites et chiffres dans balance-log.md. Restes : playtest S23/Windows task_269, variantes théoriques de l’outil task_271, effets de mort en mesure task_268.",
+      "status": "done",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "tags": [
+        "combat",
+        "contenu",
+        "tests"
+      ],
+      "created_at": 1792952320,
+      "updated_at": 1792952837,
+      "due_date": null
+    },
+    {
+      "id": "task_271",
+      "title": "Outils d’équilibrage : respecter la compatibilité des affixes dans les variantes théoriques",
+      "description": "En ajoutant task_270 : BalanceModel.rank_variants énumère toutes les combinaisons circulaires sans affix.fits, y compris avant leur profondeur et sur boss ; le modèle peut donc décrire des associations interdites en jeu. Faire filtrer les variantes par monstre/profondeur et afficher les affixes effectivement appliqués dans chaque mesure. Les lignes Elite acte II à un seul affixe du 25/10 sont contrôlées dans les données brutes ; les 4 nouveaux ids sont réellement appliqués. Ne pas en déduire la validité des courbes multi-affixes du modèle.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_7",
+      "tags": [
+        "équilibrage",
+        "qualité",
+        "tests"
+      ],
+      "created_at": 1792952798,
+      "updated_at": 1792952798,
       "due_date": null
     }
   ]

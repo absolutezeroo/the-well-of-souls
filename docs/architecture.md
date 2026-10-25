@@ -371,3 +371,8 @@ Resource definitions stay shared and immutable. Native hooks precede affix hooks
 Monster dispatches the existing hooks through that list, and MonsterOverlay reads its cached
 under-drawing flag. No per-frame merge or trait-array allocation is introduced. Affix ids remain
 the persistence boundary, so changing a filename does not change a saved modifier.
+
+The `move_speed_multiplier` hook derives transient movement changes without editing cached
+stats. The post-damage `on_damaged` hook lets a trait react to actual damage; reactions reject
+lethal and secondary hits themselves. `FrenzyTrait` uses the first; `WarnedPulseTrait` uses the
+second plus update, with per-owner counters and a GroundStrike owning the warning lifetime.

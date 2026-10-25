@@ -189,3 +189,11 @@ created. New trait hooks run only with their owner (sleeping monsters keep the e
 policy). The example status/death modules allocate no frame state and reuse the existing poison
 visuals. More behaviours still mean more work: validate large crowds and the warning readability
 on S23; a headless regression is not a GPU measurement.
+
+Frenzy and pulse state is created at spawn. Walking-speed hooks read Health and multiply a
+scalar; they never rebuild StatBlock or add timed buffs every frame. Pulse updates decrement
+scalars, consult the current target and use the existing sight cache only when a pulse is due.
+A warning node and its VFX allocate once per triggered pulse, bounded by one pending warning
+per behaviour and its data cooldown/interval. Frenzy emits one existing pop on entering the
+threshold, not on every low-Health frame. These are implementation bounds, not an S23 frame-time
+measurement; crowd checks remain task_269.

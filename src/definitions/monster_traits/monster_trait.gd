@@ -28,6 +28,16 @@ func steer(_monster: Monster, direction: Vector2) -> Vector2:
 	return direction
 
 
+## Multiplies walking speed without rebuilding stats or changing shared definitions.
+func move_speed_multiplier(_monster: Monster) -> float:
+	return 1.0
+
+
+## After damage is applied. Reactions must reject lethal, secondary and friendly hits.
+func on_damaged(_monster: Monster, _hit: HitInfo, _damage: int) -> void:
+	pass
+
+
 ## False to stop the monster from attacking for now.
 func can_attack(_monster: Monster) -> bool:
 	return true

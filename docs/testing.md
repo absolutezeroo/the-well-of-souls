@@ -349,5 +349,9 @@ immutable definitions, repeat ranking, tag/depth/species eligibility and symmetr
 `game.modifiers` applies Pestilent, verifies poison and expiry (ticks must not refresh their own
 payload), saves/restores its id/modules/remaining Health, and checks the delayed death warning
 and the absence of a burst after a fall. Existing combat/rank and save suites cover legacy
-perks. Floor fingerprints intentionally change only for cases affected by the new pool from
-floor 4; FLOOR_FORMAT 2 protects older floor ledgers. Device checks remain in the roadmap.
+perks. The additional modifiers test Health thresholds, slow interaction, healing out of frenzy,
+cold payload/expiry, actual Vampiric healing through Armor and ward absorption, riposte counting
+and cooldown, rejection of secondary/lethal blows, dormant periodic clocks, fixed warning spots,
+fall/floor cancellation and save/restore of all four ids/modules with fresh transient state.
+Floor fingerprints intentionally change only for cases affected by the expanded pool from
+floor 3; FLOOR_FORMAT 3 protects older floor ledgers. Device checks remain in the roadmap.
