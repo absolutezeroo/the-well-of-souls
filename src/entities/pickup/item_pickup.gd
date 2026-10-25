@@ -18,6 +18,14 @@ var _taken := false
 var _offered := false
 var _time := 0.0
 var _glint_seed := 0.0
+## What it shows, worked out once (setup()): the rim's color, the glint's rest and element.
+var _shine := Color.TRANSPARENT
+var _glint_period := 0.0
+var _glint_element: VfxElementDef
+## What the last _draw() showed (the bob's pixel, the glow's beat, the glint's front): drawn again
+## only when one changed (docs/performance.md, "Redraw on change"; a floor of loot redrew every
+## piece every frame).
+var _drawn_key := -1
 
 
 func setup(item_def: ItemDef, armed: bool = true) -> void:
@@ -34,6 +42,13 @@ func setup(item_def: ItemDef, armed: bool = true) -> void:
 	_glint_seed = randf() * 4.0
 	if ItemRarity.of(item) > ItemRarity.COMMON:
 		LootShine.dress(self, ItemLook.rarity_look(item), Vector2(0, -4))
+	_shine = _shine_color()
+	var look := ItemLook.rarity_look(item)
+	_glint_period = look.glint_every if look else 0.0
+	_glint_element = look.element if look else null
+	if item is RuneDef:
+		_glint_period = 2.0
+		_glint_element = ItemLook.rune_element(item as RuneDef)
 
 
 func _ready() -> void:
@@ -43,8 +58,30 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_time += delta
-	if Vfx.on_screen(self, 24.0):
-		queue_redraw()  # (its bob and glint move every frame: off screen, nothing to draw)
+	if not Vfx.on_screen(self, 24.0):
+		_drawn_key = -1  # (off screen, nothing to draw: drawn again as it comes back)
+		return
+	var key := _draw_key()
+	if key != _drawn_key:
+		_drawn_key = key
+		queue_redraw()
+
+
+## What _draw() would show now, as one number: the bob's pixel row, the glow's beat, the glint's
+## front (64 when resting).
+func _draw_key() -> int:
+	var bob := roundi(PixelDraw.snap(Vector2(0, sin(_time * 3.0) * 2.0 - 4.0)).y) + 16  # (as _draw() places it)
+	var glow := 1 if sin(_time * 4.0) > 0.0 else 0
+	return (bob * 2 + glow) * 128 + _glint_front() + 3
+
+
+## The glint's front this frame (64: resting, nothing drawn).
+func _glint_front() -> int:
+	if _glint_period <= 0.0 or _glint_element == null or item == null or item.icon == null:
+		return 64
+	var sweep := 36.0 / 30.0
+	var front := floori(fmod(_time + _glint_seed, sweep + _glint_period) * 30.0) - 3
+	return front if front <= 33 else 64
 
 
 func _on_body_entered(body: Node2D) -> void:
@@ -108,11 +145,11 @@ func _draw() -> void:
 	var icon_scale := Actor.SPRITE_SCALE if maxf(item.icon.get_width(), item.icon.get_height()) <= 18.0 else 1.0
 	var size := item.icon.get_size() * icon_scale
 	var corner := PixelDraw.snap(bob - size * 0.5)
-	var shine := _shine_color()
-	if shine.a > 0.0:
-		# The rarity's (or a rune's element's) rim: one art pixel round the icon's silhouette.
+	if _shine.a > 0.0:
+		# The rarity's (or a rune's element's) rim: one art pixel round the icon's silhouette
+		# (plain rects: they batch with the shadow's; a texture there drew more calls).
 		for p in rim_of(item.icon):
-			draw_rect(Rect2(corner + p * icon_scale, Vector2.ONE * icon_scale), shine)
+			draw_rect(Rect2(corner + p * icon_scale, Vector2.ONE * icon_scale), _shine)
 	draw_texture_rect(item.icon, Rect2(corner, size), false, item.icon_tint)
 	_draw_glint(corner, icon_scale)
 
@@ -132,19 +169,11 @@ func _shine_color() -> Color:
 ## A glint running over the icon, then `glint_every` seconds of rest: a band two pixels wide, on the
 ## diagonal, in the rarity's core (a rune's element), over the icon's own pixels only.
 func _draw_glint(corner: Vector2, icon_scale: float) -> void:
-	var look := ItemLook.rarity_look(item)
-	var period := look.glint_every if look else 0.0
-	var element := look.element if look else null
-	if item is RuneDef:
-		period = 2.0
-		element = ItemLook.rune_element(item as RuneDef)
-	if period <= 0.0 or element == null:
-		return
-	# The sweep crosses a 16-pixel icon in about a second (30 steps a second), then waits `period`.
-	var sweep := 36.0 / 30.0
-	var front := floori(fmod(_time + _glint_seed, sweep + period) * 30.0) - 3
+	# The sweep crosses a 16-pixel icon in about a second (30 steps a second), then waits its rest.
+	var front := _glint_front()
 	if front > 33:
 		return
+	var element := _glint_element
 	for p in WeaponAura.pixels_of(item.icon):
 		var d := int(p.x) + int(p.y)
 		if d == front or d == front - 1:

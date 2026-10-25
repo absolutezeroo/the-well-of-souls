@@ -35,6 +35,10 @@ Call it only when what `_draw()` shows changed:
 - What moves continuously (a bob, a breathing glow, a trail) redraws only on screen:
   `Vfx.on_screen(node, reach)` (`reach`: how far its drawing goes from its origin). It is drawn
   again the frame it comes back into view. `MonsterOverlay` gates on `World.view_rect()`.
+- Loot on the floor (`ItemPickup`) redraws only when its bob moved a pixel, its glow beat or
+  its glint stepped (`_draw_key()`); it redrew every piece every frame (a hundred on screen:
+  thousands of rects a frame, its rim one rect a pixel). A baked rim texture was tried: it drew
+  more calls (a texture between the shadow's rects and the icon), so the rim stays rects.
 - Something drawn in the node's own space (an actor's shadow) moves with the node: no redraw
   (`Actor._redraw_if_changed()`).
 - A big static layer and a few moving things go on two nodes: the moving ones redraw every frame,

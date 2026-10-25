@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 259,
+  "next_id": 260,
   "tags": [
     "pc",
     "test",
@@ -3872,6 +3872,20 @@
       ],
       "created_at": 1792905652,
       "updated_at": 1792905652,
+      "due_date": null
+    },
+    {
+      "id": "task_259",
+      "title": "Perf : une centaine d'objets au sol fait chuter les fps",
+      "description": "Vu par Clayton (25/10, capture). Chaque objet redessinait son ombre, son contour de rareté (un rectangle par pixel) et son icône à chaque image. Corrigé : redessiné seulement quand le flottement bouge d'un pixel, que la lueur clignote ou que le reflet avance ; rien hors de l'écran. Essayé puis écarté : contour en texture (plus d'appels de dessin). À mesurer sur le S23.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "tags": [
+        "perf"
+      ],
+      "created_at": 1792909013,
+      "updated_at": 1792909013,
       "due_date": null
     }
   ]
