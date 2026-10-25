@@ -14,7 +14,7 @@ This email doesn't look right.,This email doesn't look right.,Cet e-mail ne semb
 Choose a password different from the current one.,Choose a password different from the current one.,Choisis un mot de passe différent de l'actuel.
 Sign in first.,Sign in first.,Connecte-toi d'abord.
 You signed in on another device: sign in again here.,You signed in on another device: sign in again here.,Tu t'es connecté sur un autre appareil : reconnecte-toi ici.
-The server refused it.,The server refused it.,Le serveur a refusé.
+The server refused it (%s).,The server refused it (%s).,Le serveur a refusé (%s).
 The dark gathers...,The dark gathers...,Les ténèbres s'amassent...
 Rekindling the lantern...,Rekindling the lantern...,On ravive la lanterne...
 The Well of Souls,The Well of Souls,Le Puits des Âmes
@@ -302,7 +302,7 @@ The account and its online save are deleted.,The account and its online save are
 Please wait...,Please wait...,Patiente...
 Saving online...,Saving online...,Sauvegarde en ligne...
 No network: your progress goes online as soon as the game is.,No network: your progress goes online as soon as the game is.,Pas de réseau : ta progression part en ligne dès que le jeu l'est.
-The server refused the online save; it tries again later.,The server refused the online save; it tries again later.,Le serveur a refusé la sauvegarde en ligne ; nouvel essai plus tard.
+The server refused the online save (%s); it tries again later.,The server refused the online save (%s); it tries again later.,Le serveur a refusé la sauvegarde en ligne (%s) ; nouvel essai plus tard.
 Two different progressions: choose the one to keep.,Two different progressions: choose the one to keep.,Deux progressions différentes : choisis celle à garder.
 Your profile is too big to be saved online.,Your profile is too big to be saved online.,Ton profil est trop gros pour être sauvegardé en ligne.
 A newer save from another device comes in once this run is over.,A newer save from another device comes in once this run is over.,Une sauvegarde plus récente d'un autre appareil arrivera à la fin de cette partie.

@@ -3771,15 +3771,15 @@
     {
       "id": "task_252",
       "title": "Talo : ajouter les portées Game Saves et Player Presence à la clé",
-      "description": "Sur dashboard.trytalo.com, clé d'accès du jeu : cocher Game saves lecture + écriture (sauvegarde en ligne des comptes) et Player presence écriture (statut « Étage 7 »). Sans elles, le test réel du 25/10 répond 403. Rien à changer dans le jeu ensuite.",
-      "status": "todo",
+      "description": "Sur dashboard.trytalo.com, clé d'accès du jeu : cocher Game saves lecture + écriture (sauvegarde en ligne des comptes) et Player presence écriture (statut « Étage 7 »). Sans elles, le test réel du 25/10 répond 403. Rien à changer dans le jeu ensuite.\n\nVérifié (25/10, 03h45) : inscription, liste et création de sauvegarde, statut de présence répondent 200 avec la clé du jeu.",
+      "status": "done",
       "priority": "high",
       "epic_id": "epic_5",
       "tags": [
         "en ligne"
       ],
       "created_at": 1792893512,
-      "updated_at": 1792893512,
+      "updated_at": 1792896524,
       "due_date": null
     },
     {

@@ -274,6 +274,8 @@ func _test_accounts() -> void:
 	talo.answer("/v1/game-saves", 401, JSON.stringify({ "message": "invalid", "errorCode": "INVALID_SESSION" }))
 	var refused: BoardBackend.SaveAnswer = await talo.saves_list(auth)
 	check(refused.status == BoardBackend.Status.REJECTED and refused.error == "INVALID_SESSION", "saves: a session taken elsewhere is said so")
+	talo.answer("/v1/game-saves", 403, JSON.stringify({ "message": "Missing access key scope(s): read:gameSaves" }))
+	check((await talo.saves_list(auth)).error == "HTTP 403", "saves: a refusal without Talo's reason keeps its HTTP code (a missing scope: shown to the player)")
 	talo.answer("/v1/players/auth", 204, "")
 	check((await talo.account_delete(auth, "a long password")).status == BoardBackend.Status.OK and talo.requests.back().method == HTTPClient.METHOD_DELETE and JSON.parse_string(talo.requests.back().body) == { "currentPassword": "a long password" }, "delete: DELETE with the password")
 	talo.free()

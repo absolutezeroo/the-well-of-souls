@@ -385,7 +385,7 @@ static func parse_body(bytes: PackedByteArray) -> Variant:
 func _account_of(answer: Dictionary) -> BoardBackend.AccountAnswer:
 	var result := BoardBackend.AccountAnswer.new()
 	result.status = answer.status
-	result.error = error_of(answer.body)
+	result.error = error_of(answer)
 	if answer.status != Status.OK:
 		return result
 	var body: Variant = answer.body
@@ -410,9 +410,14 @@ func _account_of(answer: Dictionary) -> BoardBackend.AccountAnswer:
 	return result
 
 
-## Talo's reason for a refusal ({errorCode} in its body), "" none.
-static func error_of(body: Variant) -> String:
-	return str((body as Dictionary).get("errorCode", "")) if body is Dictionary and (body as Dictionary).get("errorCode") is String else ""
+## Talo's reason for a refusal ({errorCode} in its body), else "HTTP <code>" for a refusal
+## without one (a missing scope: "HTTP 403"), "" for an answer that isn't a refusal.
+static func error_of(answer: Dictionary) -> String:
+	var body: Variant = answer.get("body")
+	if body is Dictionary and (body as Dictionary).get("errorCode") is String:
+		return str((body as Dictionary).errorCode)
+	var code := int(answer.get("code", 0))
+	return "HTTP %d" % code if code >= 400 else ""
 
 
 func account_register(identifier: String, password: String, email: String) -> BoardBackend.AccountAnswer:
@@ -441,7 +446,7 @@ func account_reset_password(code: String, password: String) -> BoardBackend.Acco
 	var answer := await _request(HTTPClient.METHOD_POST, "/v1/players/auth/reset_password", { "code": code, "password": password }, true)
 	var result := BoardBackend.AccountAnswer.new()
 	result.status = answer.status
-	result.error = error_of(answer.body)
+	result.error = error_of(answer)
 	return result
 
 
@@ -449,7 +454,7 @@ func account_change_password(auth: BoardBackend.AccountAuth, current: String, ne
 	var answer := await _request(HTTPClient.METHOD_POST, "/v1/players/auth/change_password", { "currentPassword": current, "newPassword": new_password }, true, auth)
 	var result := BoardBackend.AccountAnswer.new()
 	result.status = answer.status
-	result.error = error_of(answer.body)
+	result.error = error_of(answer)
 	return result
 
 
@@ -457,7 +462,7 @@ func account_delete(auth: BoardBackend.AccountAuth, password: String) -> BoardBa
 	var answer := await _request(HTTPClient.METHOD_DELETE, "/v1/players/auth", { "currentPassword": password }, true, auth)
 	var result := BoardBackend.AccountAnswer.new()
 	result.status = answer.status
-	result.error = error_of(answer.body)
+	result.error = error_of(answer)
 	return result
 
 
@@ -477,7 +482,7 @@ func saves_list(auth: BoardBackend.AccountAuth) -> BoardBackend.SaveAnswer:
 	var answer := await _request(HTTPClient.METHOD_GET, "/v1/game-saves", null, true, auth)
 	var result := BoardBackend.SaveAnswer.new()
 	result.status = answer.status
-	result.error = error_of(answer.body)
+	result.error = error_of(answer)
 	if answer.status != Status.OK:
 		return result
 	var list: Variant = (answer.body as Dictionary).get("saves") if answer.body is Dictionary else null
@@ -494,7 +499,7 @@ func saves_list(auth: BoardBackend.AccountAuth) -> BoardBackend.SaveAnswer:
 func _save_answer(answer: Dictionary) -> BoardBackend.SaveAnswer:
 	var result := BoardBackend.SaveAnswer.new()
 	result.status = answer.status
-	result.error = error_of(answer.body)
+	result.error = error_of(answer)
 	if answer.status == Status.OK:
 		result.slot = _slot_of((answer.body as Dictionary).get("save") if answer.body is Dictionary else null)
 		if result.slot == null:

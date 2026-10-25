@@ -36,6 +36,9 @@ var auth: BoardBackend.AccountAuth
 var last_name := ""
 ## The password kept for signing in again by itself (only with stay_signed_in).
 var stay_signed_in := false
+## The server's reason for the last refusal (shown with "The server refused it": Talo's
+## errorCode, or "HTTP 403").
+var last_error := ""
 ## Signed out because another device took the session (the window says so, once).
 var session_ended := false
 
@@ -159,7 +162,7 @@ func explain(result: Result) -> String:
 			return tr("Sign in first.")
 		Result.SESSION_ENDED:
 			return tr("You signed in on another device: sign in again here.")
-	return tr("The server refused it.")
+	return tr("The server refused it (%s).") % (last_error if not last_error.is_empty() else "?")
 
 
 # --- The steps ------------------------------------------------------------------------
@@ -369,6 +372,7 @@ func _status_result(status: BoardBackend.Status) -> Result:
 
 ## The server's answer as a Result, from its errorCode when refused.
 func _result_of(answer: BoardBackend.AccountAnswer) -> Result:
+	last_error = answer.error
 	if answer.status != BoardBackend.Status.REJECTED:
 		return _status_result(answer.status)
 	match answer.error:

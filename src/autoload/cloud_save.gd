@@ -42,6 +42,8 @@ var dirty := false
 var synced_at := 0
 ## The online copy in a conflict, or waiting for the menus (a CloudSlot; null none).
 var online: BoardBackend.CloudSlot
+## The server's reason for the last refusal (Talo's errorCode, or "HTTP 403": a scope missing).
+var refused_reason := ""
 ## A run is being played (the profile is never replaced then).
 var in_run := false
 
@@ -255,6 +257,7 @@ func _answered(answer: BoardBackend.SaveAnswer) -> bool:
 		if await Account.session_refused():
 			store.start_in(0.1)  # (signed in again: the sync once more)
 		return false
+	refused_reason = answer.error
 	_set_state(Step.REFUSED)
 	store.retry_later(config().retry_seconds, OnlineSession.max_backoff())
 	return false
@@ -282,7 +285,7 @@ func _upload(slot_id: int, rev: int) -> void:
 		answer = await backend.save_create(Account.auth, config().save_name, content)
 	if not store.end_flush(token):
 		return
-	if answer.status == BoardBackend.Status.REJECTED and slot_id > 0 and answer.error.is_empty():
+	if answer.status == BoardBackend.Status.REJECTED and slot_id > 0 and (answer.error.is_empty() or answer.error == "HTTP 404"):
 		# (that save is gone from the server: made again at the next sync)
 		save_id = 0
 		base_rev = 0

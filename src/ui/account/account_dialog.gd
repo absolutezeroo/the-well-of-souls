@@ -328,7 +328,7 @@ static func save_state_words() -> String:
 		CloudSave.Step.OFFLINE:
 			return TranslationServer.tr("No network: your progress goes online as soon as the game is.")
 		CloudSave.Step.REFUSED:
-			return TranslationServer.tr("The server refused the online save; it tries again later.")
+			return TranslationServer.tr("The server refused the online save (%s); it tries again later.") % (CloudSave.refused_reason if not CloudSave.refused_reason.is_empty() else "?")
 		CloudSave.Step.CONFLICT:
 			return TranslationServer.tr("Two different progressions: choose the one to keep.")
 		CloudSave.Step.TOO_BIG:
