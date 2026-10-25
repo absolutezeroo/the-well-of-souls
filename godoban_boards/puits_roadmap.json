@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 260,
+  "next_id": 262,
   "tags": [
     "pc",
     "test",
@@ -3886,6 +3886,35 @@
       ],
       "created_at": 1792909013,
       "updated_at": 1792909013,
+      "due_date": null
+    },
+    {
+      "id": "task_260",
+      "title": "Build 0.3.2 (APK signé + exe Windows)",
+      "description": "Proposée le 25/10, pas encore faite : regroupe les comptes et la sauvegarde en ligne, la présence Talo, les perfs (foules sans collision entre monstres, ombres et matériaux partagés, butin au sol) et le correctif des noms de touches sur Android. Signature : docs/android.md (clé et mot de passe chez Clayton, jamais dans git).",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_6",
+      "tags": [
+        "build",
+        "release"
+      ],
+      "created_at": 1792941305,
+      "updated_at": 1792941305,
+      "due_date": null
+    },
+    {
+      "id": "task_261",
+      "title": "Ranger src/vfx et src/world en sous-dossiers",
+      "description": "Idée du 25/10 : src/vfx (45 fichiers à plat) en vfx/bodies, vfx/lights, vfx/strikes ; src/world (28 fichiers) avec un world/rooms pour les salles spéciales (embuscade, pacte, secrète, arène). Confort seulement : déplacer met à jour toutes les références (data/, docs/). Seulement si Clayton le demande.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "tags": [
+        "qualité"
+      ],
+      "created_at": 1792941305,
+      "updated_at": 1792941305,
       "due_date": null
     }
   ]
