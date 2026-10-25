@@ -1,4 +1,4 @@
-extends Node
+extends OnlineService
 ## The gameplay statistics (autoload "Telemetry"; docs/online.md "Gameplay statistics"): with the
 ## player's consent only (OnlineSession.statistics_allowed(): Privacy.analytics_allowed(), a
 ## server, the kill switch), the summary of each run that ends and the events of its boss fights,
@@ -68,7 +68,7 @@ func _ready() -> void:
 
 
 ## The tests: no file, nothing waiting, no run followed.
-func use_for_tests() -> void:
+func use_for_tests(_fake: BoardBackend = null) -> void:
 	path = ""
 	reset()
 

@@ -337,3 +337,27 @@ GPU readback while playing) and the probe that measures them: docs/performance.m
   The light goes with it: a lamp by a wall reaches into the mist over the rim, losing two levels
   a tile instead of one, and light that went into the mist never comes out the other side (no
   light through the walls). Moving lights (the torch, shots) do the same in the light shader.
+
+## Ownership and stable persistence
+
+`Game` owns `GameOffers`, a child node for the whole perk-choice interaction (dealing, rerolls,
+banishes, postponement). Panel signals target that child and disappear with it. `OfferQueue`
+remains the saved data; Game keeps its public open/queue/show entry points as delegates.
+`World` owns `WorldSpawner`, which receives the entity, projectile and effect layers after
+those nodes are ready. Creation, placement, ranks and loot use exactly the same floor rules
+and random stream; World keeps the public factory facade used by effects and floor kinds.
+
+All online autoloads implement `OnlineService`'s typed lifecycle: `boot()` reads local state,
+`settle()` may consult other initialized services, `use_for_tests()` resets isolated state.
+`OnlineSession.services` is typed; reset and startup no longer discover methods by strings.
+`OnlineLinks.bind()` is the single, idempotent composition point for subscriptions between
+autoloads: privacy/leaderboards -> world statistics and remote config, privacy/identity ->
+presence, profile/account -> cloud save. It binds public reconciliation callbacks after all
+`_init()` methods, from OnlineSession's `_ready()`. Gameplay subscriptions remain with each
+service. Autoload facades and the existing consent gates retain their roles.
+
+`ContentCatalog` maps stable namespaced save ids to current Resource targets. The generated
+`data/save/content_catalog.tres` also keeps historical paths. `RunSave` loads it lazily, so
+the class dependency graph does not preload content recursively. Version 3 migrates references
+in older runs; resource-file references inside `.tres` and `.tscn` remain ordinary paths.
+See progression.md and adding-content.md for migration and registration rules.

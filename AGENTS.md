@@ -21,6 +21,8 @@ for a system before changing it.
   their output inspected (docs/testing.md). Failures print as `FAIL: ...`.
 - Translations: `python3 tools/i18n/extract.py` after adding texts, then fill the French in
   `locale/strings.csv`; `python3 tools/i18n/extract.py --check` must pass.
+- Save references: after content changes run `python3 tools/saves/build_catalog.py`;
+  `python3 tools/saves/build_catalog.py --check` must pass. Keep historical aliases.
 - Balance: the `balance` suite is opt-in and slow, and some of its checks fail on purpose
   (`FAIL (KNOWN ...)`). The measuring tools are described in docs/balance.md.
 

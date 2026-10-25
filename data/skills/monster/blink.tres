@@ -15,6 +15,7 @@ duration = 0.12
 [resource]
 script = ExtResource("3_1iaai")
 id = &"blink"
+save_id = &"monster/blink"
 display_name = "Blink"
 short_label = ""
 color = Color(0.6039216, 0.81960785, 0.83137256, 1)

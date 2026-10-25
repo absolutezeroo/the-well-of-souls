@@ -1,4 +1,4 @@
-extends Node
+extends OnlineService
 ## The online save (autoload "CloudSave"; docs/online.md "Accounts and the online save"): with an
 ## account signed in (Account), the profile (Profile.to_data(): souls, the Tree, records, the
 ## bestiary, the codex...; never a run in progress nor the settings) is kept online as one of the
@@ -70,10 +70,6 @@ func _init() -> void:
 
 func _ready() -> void:
 	OnlineSession.register(self)
-	Profile.saved.connect(mark_dirty)
-	Account.signed_in.connect(_on_signed_in)
-	Account.signed_out.connect(_on_signed_out)
-	Account.deleted.connect(forget)
 	Events.run_started.connect(func(_run: RunState, _player: Player) -> void: in_run = true)
 	Events.run_closed.connect(_out_of_run)
 	Events.run_left.connect(func(_summary: RunSummary, for_good: bool) -> void:
@@ -85,7 +81,7 @@ func _ready() -> void:
 
 
 ## The tests: no file, nothing known, no account.
-func use_for_tests() -> void:
+func use_for_tests(_fake: BoardBackend = null) -> void:
 	path = ""
 	reset()
 
@@ -368,7 +364,7 @@ func _set_state(new_state: Step) -> void:
 	changed.emit()
 
 
-func _on_signed_in() -> void:
+func on_signed_in() -> void:
 	store.reset()
 	if Account.auth.player_id != account_player:
 		account_player = Account.auth.player_id
@@ -379,7 +375,7 @@ func _on_signed_in() -> void:
 	sync()
 
 
-func _on_signed_out() -> void:
+func on_signed_out() -> void:
 	store.reset()
 	_upload_wait = -1.0
 	online = null

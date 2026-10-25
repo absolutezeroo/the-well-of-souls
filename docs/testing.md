@@ -328,3 +328,16 @@ Every cheat ends with the run (`Game._begin_run()`, leaving the game). Checks: `
 Release exports have no button and no panel (`DebugPanel.is_available()`), and every
 `DebugCheats` setter refuses outside a debug build: the hooks in `Actor`, `Monster`, `Player`,
 `SkillSet`, `HitStop`, `GameCamera` and `World` stay inert.
+
+## Architecture and reference regressions
+
+`unit.architecture` checks every registered content reference, version 2 -> 3 migration,
+rolled gear, removed/unknown targets, historical paths after relocation, shared skill ids and
+idempotent cross-service wiring. The existing startup-order matrix now calls OnlineService's
+typed boot/settle methods. `unit.floor_determinism` keeps every original fingerprint field;
+it normalizes stable ids to the legacy reference spelling before comparing recorded hashes.
+Game suites exercise the same public offer and spawning entry points after their extraction.
+
+`python3 tools/saves/build_catalog.py --check` checks shipped registration. Host tests
+(`python3 -m unittest discover -s tools/tests -v`) also verify alias preservation after moves,
+rejection of historical-path reuse and duplicate ids, and separation of root/subresource ids.

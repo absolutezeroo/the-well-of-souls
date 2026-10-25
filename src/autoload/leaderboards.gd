@@ -1,4 +1,4 @@
-extends Node
+extends OnlineService
 ## The online leaderboards (autoload "Leaderboards"; design/progression.md "Online leaderboards",
 ## docs/online.md). Listens for runs that end (Events.run_ended, a RunSummary from RunRecords),
 ## queues the scores the boards take (LeaderboardDef.accepts(): the Dawn Knell's official attempt

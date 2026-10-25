@@ -197,5 +197,24 @@ func _loose(world: World) -> String:
 func _spent_facts(spent: Dictionary) -> String:
 	var copy := spent.duplicate()
 	copy.erase("stamp")
-	return JSON.stringify(copy)
+	return JSON.stringify(_legacy_references(copy))
 
+
+
+## Compare the same saved content across the path-to-id format migration. Keep every field
+## in the original fingerprint; only its reference spelling returns to the recorded form.
+func _legacy_references(value: Variant) -> Variant:
+	if value is Dictionary:
+		var result := {}
+		for key: Variant in value:
+			result[key] = _legacy_references(value[key])
+		return result
+	if value is Array:
+		var result: Array = []
+		for entry: Variant in value:
+			result.append(_legacy_references(entry))
+		return result
+	if value is String and value.begins_with("@"):
+		var resource := RunSave.load_ref(value)
+		return resource.resource_path if resource else value
+	return value

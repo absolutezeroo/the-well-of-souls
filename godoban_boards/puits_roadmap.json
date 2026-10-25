@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 265,
+  "next_id": 267,
   "tags": [
     "pc",
     "test",
@@ -2975,8 +2975,8 @@
     {
       "id": "task_200",
       "title": "Sauvegarde de partie : références par id au lieu des chemins de fichiers",
-      "description": "Audit 24/10 (world.md 1.3) : RunSave garde le contenu par chemin res:// (renommer un .tres casse les parties en cours), alors que KeeperSnapshot garde des ids. Passer par ContentDB pour les objets, atouts, boss, avec une migration (VERSION 3).",
-      "status": "backlog",
+      "description": "RunSave v3 : catalogue de 303 références stables par type/id, migration des versions 1 et 2, alias historiques conservés après déplacement des fichiers. Objets simples et roulés, affixes, runes, compétences, atouts, serments, boss, offres et monstres venus après passent par ContentCatalog. Deux save_id de compétences lèvent des collisions historiques sans changer leurs ids de gameplay. Générateur versionné, contrôle de fraîcheur et tests de déplacement/collisions/ancien format. 19 520 vérifications complètes passent ; sept tests Python et 628 scripts sans avertissement. Validation appareil : task_263.",
+      "status": "done",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -2985,7 +2985,7 @@
         "données"
       ],
       "created_at": 1792815301,
-      "updated_at": 1792815301
+      "updated_at": 1792947444
     },
     {
       "id": "task_201",
@@ -3934,7 +3934,7 @@
     {
       "id": "task_263",
       "title": "Vérifier les correctifs de l’audit sur S23 et Windows",
-      "description": "Après task_262 : jouer une foule sous plafond avec brûlure, poison et gel ; contrôler les éclats de glace et les matériaux partagés, le temps de chargement, la mémoire et les pointes de temps par image. Export Compatibility Android (S23) et Windows. Vérifier aussi la reprise après fermeture/mise en arrière-plan et le remplacement atomique des fichiers sur ces systèmes. Les tests Linux headless ne valident ni le rendu ni les performances GPU sur appareils. Mesurer avant/après ; aucune amélioration chiffrée sur téléphone annoncée sans mesure.",
+      "description": "Après task_262 : jouer une foule sous plafond avec brûlure, poison et gel ; contrôler les éclats de glace et les matériaux partagés, le temps de chargement, la mémoire et les pointes de temps par image. Export Compatibility Android (S23) et Windows. Vérifier aussi la reprise après fermeture/mise en arrière-plan et le remplacement atomique des fichiers sur ces systèmes. Les tests Linux headless ne valident ni le rendu ni les performances GPU sur appareils. Mesurer avant/après ; aucune amélioration chiffrée sur téléphone annoncée sans mesure. Vérifier aussi le refactoring (task_200, task_265, task_266) : reprise d’une sauvegarde v2 sur Android/Windows, choix/report/reroll d’atouts et retour au titre, retrait du consentement puis reconnexion du compte ; observer le chargement/mémoire du catalogue de contenu.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -3946,7 +3946,7 @@
         "sauvegarde"
       ],
       "created_at": 1792944992,
-      "updated_at": 1792944992,
+      "updated_at": 1792947444,
       "due_date": null
     },
     {
@@ -3962,6 +3962,34 @@
       ],
       "created_at": 1792945436,
       "updated_at": 1792945626,
+      "due_date": null
+    },
+    {
+      "id": "task_265",
+      "title": "Alléger Game et World par responsabilités",
+      "description": "GameOffers, enfant de Game, possède les choix d’atouts (tirage, reroll, bannissement, report et signaux du panneau). WorldSpawner reçoit explicitement les trois couches du World et possède la création/position des entités, projectiles, butin et rangs. Les façades Game/World sont conservées. Les 12 empreintes d’étages d’origine restent identiques ; seul le format des références dans la sauvegarde est normalisé pour la comparaison. Suite complète : 19 520 vérifications, zéro échec (graine 347348), 628 scripts sans avertissement. Docs actualisées ; validation sur appareils : task_263.",
+      "status": "done",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "tags": [
+        "qualité"
+      ],
+      "created_at": 1792946659,
+      "updated_at": 1792947444,
+      "due_date": null
+    },
+    {
+      "id": "task_266",
+      "title": "Expliciter les contrats et connexions des services en ligne",
+      "description": "Tous les autoloads en ligne héritent du contrat typé OnlineService (boot, settle, use_for_tests). Le registre et les tests de démarrage appellent ce contrat sans has_method ni call par nom. OnlineLinks est le point de composition idempotent des abonnements entre services : consentement, identité, profil et compte ; callbacks publics explicites. Les abonnements gameplay restent locaux. Tests de retrait du consentement, courses, ordre de démarrage et double branchement passent avec la suite complète. Aucune nouvelle collecte ni appel réel aux services dans les tests.",
+      "status": "done",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "tags": [
+        "qualité"
+      ],
+      "created_at": 1792946659,
+      "updated_at": 1792947444,
       "due_date": null
     }
   ]

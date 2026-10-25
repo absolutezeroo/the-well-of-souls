@@ -1,4 +1,4 @@
-extends Node
+extends OnlineService
 ## The live session and presence (autoload "Presence"; docs/online.md "Sessions and presence"):
 ## while the gameplay statistics are allowed (OnlineSession.statistics_allowed(): the player's
 ## consent, a server, the remote kill switch), the game keeps one live connection open to Talo
@@ -67,8 +67,6 @@ func _init() -> void:
 
 func _ready() -> void:
 	OnlineSession.register(self)
-	Privacy.changed.connect(_on_privacy_changed)
-	OnlineSession.identity_forgotten.connect(_on_identity_forgotten)
 	Events.run_started.connect(func(run: RunState, _player: Player) -> void: _daily = run.daily_day >= 0)
 	Events.floor_entered.connect(_on_floor_entered)
 	Events.run_ended.connect(func(_summary: RunSummary) -> void: show_menus())
@@ -79,7 +77,7 @@ func _ready() -> void:
 
 
 ## The tests: closed, nothing counted, nothing waited for, in the foreground.
-func use_for_tests() -> void:
+func use_for_tests(_fake: BoardBackend = null) -> void:
 	stop()
 	sessions = 0
 	_failures = 0
@@ -188,7 +186,7 @@ func stop() -> void:
 
 ## The player forgotten: their session ends now; the next one (if still allowed) is the new
 ## player's.
-func _on_identity_forgotten() -> void:
+func on_identity_forgotten() -> void:
 	if phase != Phase.OFF:
 		stop()
 		_wait = 0.0
@@ -287,6 +285,6 @@ func _notification(what: int) -> void:
 
 
 ## A withdrawal closes the link immediately, even between two network steps.
-func _on_privacy_changed() -> void:
+func reconcile_privacy() -> void:
 	if not wanted():
 		stop()

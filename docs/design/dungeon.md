@@ -573,3 +573,11 @@ star and the lanterns' flames are drawn on the art's grid at 8 and 12 fps (`Seal
 `SealLantern`). The trials' lore: the souls Tôma gave to the Well on the moonless night; the seal
 whose knots he undid, tied back here one flame at a time (docs/lore.md).
 
+
+## Creation ownership
+
+`WorldSpawner`, owned by World and given its layers explicitly, creates entities, projectiles,
+loot and their ranks/placement. Public World methods delegate to it. Floor generation, rules,
+activity, saving and geometry remain their existing components; no spawn ordering or floor
+dice change. The twelve recorded floor fingerprints stay unchanged after normalizing only
+the save-reference spelling (version 3 ids back to the recorded legacy paths).

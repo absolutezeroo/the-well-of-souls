@@ -3,6 +3,9 @@ extends Resource
 ## An active ability on a cooldown. Usable by the player and by monsters.
 ## A skill is just a list of effects, so new skills rarely need new code.
 
+## Stable save key override for historical ids shared by player and monster skills.
+## Empty uses id; never change a released save_id.
+@export var save_id: StringName
 @export var id: StringName
 @export var display_name: String
 @export_multiline var description: String

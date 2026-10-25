@@ -1,4 +1,4 @@
-extends Node
+extends OnlineService
 ## What every online service shares (autoload "OnlineSession", the first of them; docs/online.md
 ## "The shared session"): the backend (Talo, or the offline one without an access key), the
 ## device's player on it (its random id, made the first time a feature is turned on, and the
@@ -42,7 +42,7 @@ var fake_now := -1
 ## Where an older game kept the device's id ("" none: the tests).
 var legacy_path := LEGACY_PATH
 ## The services that registered (their _ready()): the tests reset and start them all.
-var services: Array[Node] = []
+var services: Array[OnlineService] = []
 ## The id this device will take when a feature is turned on, drawn early so the pseudonym's
 ## question can show the player's tag before the choice (Leaderboards.tag()): in memory only,
 ## never written nor sent until device() adopts it (the rule "no id before the choice" is about
@@ -76,6 +76,10 @@ func _init() -> void:
 	use_backend(default_backend())
 
 
+func _ready() -> void:
+	OnlineLinks.bind()
+
+
 ## Its data and file, read (no other service is asked: start-up order).
 func boot() -> void:
 	config = load(DEFS) as OnlineSessionDef
@@ -107,7 +111,7 @@ func use_backend(new_backend: BoardBackend) -> void:
 
 
 ## A service tells it exists (from its _ready()).
-func register(service: Node) -> void:
+func register(service: OnlineService) -> void:
 	if not services.has(service):
 		services.append(service)
 
@@ -128,8 +132,8 @@ func use_for_tests(fake: BoardBackend = null) -> void:
 func use_all_for_tests(fake: BoardBackend = null) -> void:
 	_all_for_tests = true  # (Leaderboards.use_for_tests() would put the session on another backend)
 	for service in services:
-		if service != self and service.has_method("use_for_tests"):
-			service.call("use_for_tests")
+		if service != self:
+			service.use_for_tests()
 	_all_for_tests = false
 	fake_now = -1
 	use_for_tests(fake)

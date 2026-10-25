@@ -245,3 +245,20 @@ French first). The pieces:
   did: a mark set by `RunRecords`, `Events.run_marked`).
 - **A new code** (`{something}` in a line): a key in `RunFacts.codes()`, and in the tests' `CODES`.
 
+
+## Register saved content
+
+After adding, moving or removing an item, perk, skill, monster/boss, item affix or oath, run
+`python3 tools/saves/build_catalog.py`, then commit `data/save/content_catalog.tres`.
+`--check` must pass. This is an exported Resource, so resolution works in Android/Windows
+packages without filesystem scans. The generator checks the root resource's id, never a
+subresource's, and rejects duplicate save keys. Existing historical path aliases must stay: a
+rename adds a new current target while preserving old aliases. Never reuse an old path for
+another identity, nor change a released id. If content is removed its old alias remains but
+resolves to nothing. Resource references inside scenes/data still use `res://` paths.
+
+Most save keys are `kind:id`. Two historical player/monster skills share `blink` and `volley`;
+the monster resources have explicit `SkillDef.save_id` values (`monster/blink`, `monster/volley`)
+without changing their gameplay ids. Leave `save_id` empty normally; once released, keep it
+stable along with the id. The runtime writes only registered references. Missing catalog
+entries warn rather than silently writing a path that would break on the next move.

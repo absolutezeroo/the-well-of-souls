@@ -1,4 +1,4 @@
-extends Node
+extends OnlineService
 ## The Well's account (autoload "Account"; docs/online.md "Accounts and the online save"): an
 ## optional name and password on Talo (its player auth), with an optional email to reset a lost
 ## password, so the profile can follow the player from a phone to a PC (CloudSave). The account
@@ -64,7 +64,7 @@ func _ready() -> void:
 
 
 ## The tests: no file, signed out, nothing kept.
-func use_for_tests() -> void:
+func use_for_tests(_fake: BoardBackend = null) -> void:
 	path = ""
 	reset()
 

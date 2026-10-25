@@ -5,8 +5,8 @@ class_name RunSave
 ## depth, with the hero exactly as saved and what was used up on the floor kept used up
 ## (World.spent_data(), "floor").
 ##
-## Content (items, perks, skills) is saved by resource path: renaming a .tres breaks old saves
-## of runs in progress (only those, never the profile).
+## Content is saved by stable namespaced ids through ContentCatalog. Version 3 migrates old
+## paths, whose aliases stay valid after a file moves. Unknown content resolves to null.
 ##
 ## Robustness: a save from an older version is migrated (_migrate()), not thrown away; one from a
 ## newer game is refused. A damaged or hand-edited file never crashes the game: every field the
@@ -17,9 +17,9 @@ class_name RunSave
 ## it: the hero and the run come back, the floor is laid fresh.
 
 const PATH := "user://run.json"
-## 2: the floor's stamp, the things laid on it used up (FloorLedger), the merchant's stock, the
+## 3: stable content references. 2: the floor's stamp, the things laid on it used up (FloorLedger), the merchant's stock, the
 ## ambush, the last boss. 1: the first saves.
-const VERSION := 2
+const VERSION := 3
 ## The oldest version _migrate() still reads.
 const OLDEST_VERSION := 1
 ## Bump it when a change makes a floor come out otherwise from the same seed (the generator, the
@@ -196,6 +196,9 @@ static func _migrate(data: Dictionary) -> Dictionary:
 		# Version 1 had no floor stamp: floor_of() lays its floor fresh (the generator may have
 		# changed with the update that brought version 2), the hero and the run are kept whole.
 		version = 2
+	if version < 3:
+		data = catalog().migrate(data) as Dictionary
+		version = 3
 	data["version"] = version
 	return data
 
@@ -229,16 +232,23 @@ static func erase() -> void:
 
 # --- Content references ------------------------------------------------------
 
+static var _catalog: ContentCatalog
+
+
+## Loaded lazily, after class registration: preloading the catalog would cycle through skills.
+static func catalog() -> ContentCatalog:
+	if _catalog == null:
+		_catalog = load("res://data/save/content_catalog.tres") as ContentCatalog
+	return _catalog
+
+
 static func ref(resource: Resource) -> String:
-	return resource.resource_path if resource else ""
+	return catalog().encode(resource) if resource else ""
 
 
-## Loads a saved reference; null if it is empty or the file is gone.
+## Resolves a stable id or historical path; null for unknown or removed content.
 static func load_ref(saved_ref: Variant) -> Resource:
-	var resource_path := str(saved_ref) if saved_ref != null else ""
-	if resource_path.is_empty() or not ResourceLoader.exists(resource_path):
-		return null
-	return load(resource_path)
+	return catalog().resolve(saved_ref)
 
 
 static func refs(resources: Array) -> Array:

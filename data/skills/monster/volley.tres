@@ -19,6 +19,7 @@ spread_degrees = 30.0
 [resource]
 script = ExtResource("4_hesfl")
 id = &"volley"
+save_id = &"monster/volley"
 display_name = "Volley"
 short_label = ""
 color = Color(0.823529, 0.290196, 0.52549, 1)

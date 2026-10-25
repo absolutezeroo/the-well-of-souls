@@ -129,7 +129,7 @@ static func rolled_name(base_name: String, prefix: String, suffix: String) -> St
 	return words.item
 
 
-## Plain items save as their path, rolled ones as { base, rarity, affixes, runes, level }.
+## Plain items save as stable ids; rolled items keep base/affix/rune ids and rarity/level.
 static func to_data(item: ItemDef) -> Variant:
 	var equipment := item as EquipmentDef
 	if equipment and equipment.is_rolled():

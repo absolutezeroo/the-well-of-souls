@@ -98,7 +98,7 @@ var announcer := RunAnnouncer.new()
 var debug := GameDebug.new(self)
 ## The player opened the perk choices (the HUD's perk button): they follow one another until
 ## none is left or one is put off. Otherwise only those that come up by themselves show (relics).
-var _choosing := false
+var choices := GameOffers.new()
 ## The souls and the record of a win at the bottom of the Well, kept for the victory screen
 ## shown once an ending is chosen.
 var _ending_earned := 0
@@ -141,6 +141,10 @@ func _ready() -> void:
 	hud.bind_offers(offers)
 	if menus.debug:
 		menus.debug.closed.connect(_on_menu_closed)
+	choices.name = "Offers"
+	choices.game = self
+	add_child(choices)
+	choices.bind_panel()
 	_connect_menus()
 	_connect_events()
 	var saved := RunSave.read() if resume_requested else {}
@@ -175,10 +179,6 @@ func _connect_menus() -> void:
 	menus.pact.closed.connect(_on_menu_closed)
 	menus.fragment.closed.connect(_on_menu_closed)
 	encounter_panel.closed.connect(_on_menu_closed)
-	perk_panel.chosen.connect(_on_perk_chosen)
-	perk_panel.reroll_requested.connect(_on_perk_reroll)
-	perk_panel.banish_requested.connect(_on_perk_banish)
-	perk_panel.postponed.connect(_on_perk_postponed)
 	game_over_panel.restart_requested.connect(start_run)
 	game_over_panel.continue_requested.connect(_on_continue_endless)
 	game_over_panel.title_requested.connect(func() -> void:
@@ -240,7 +240,7 @@ func _begin_run(saved: Dictionary, daily: bool = false) -> void:
 	menus.hide_all()
 	inventory_panel.forget_run()  # the last run's new marks and tab
 	offers.clear()
-	_choosing = false
+	choices.reset()
 	_transitioning = false
 	_into_hidden = false
 	if player:
@@ -902,124 +902,19 @@ func pending_offers() -> int:
 ## rerolls and banishes, until none is left or one is put off. False if none waits or a menu
 ## can't open now.
 func open_offers() -> bool:
-	if offers.is_empty() or not _can_open_menu() or is_away():
-		return false
-	_choosing = true
-	tutorial.action(&"opened_offers")
-	_show_next_offer()
-	return perk_panel.visible
+	return choices.open()
 
 
 ## `on_demand`: it waits for the player (a level up); otherwise it comes up by itself as soon as
 ## no menu is open (relics, an encounter's gift).
 func _queue_offer(rarity: PerkDef.Rarity, count: int, title: String, subtitle: String, on_demand: bool = false, level: int = 0) -> void:
-	offers.add(rarity, count, title, subtitle, on_demand, level)
-	if not on_demand:
-		# Deferred: gifts are handed out in the middle of other code.
-		_show_next_offer.call_deferred()
+	choices.queue(rarity, count, title, subtitle, on_demand, level)
 
 
 ## Shows the next choice that is due: any of them while the player is choosing (open_offers()),
 ## otherwise only those that come up by themselves.
 func _show_next_offer() -> void:
-	while true:
-		if is_menu_open() or player == null or player.is_dead or is_away():
-			return
-		var offer := offers.pop(not _choosing)
-		if offer == null:
-			_choosing = false
-			return
-		var perks := _cards_for(offer)
-		if perks.is_empty():
-			continue  # everything is maxed out
-		offers.shown = offer
-		_set_paused(true)
-		perk_panel.open(offer.shown_title(), tr(offer.subtitle), perks, player.perks, run.rerolls, run.banishes)
-		Events.perks_offered.emit(perks)
-		return
-
-
-## An offer's cards: those dealt before (the choice was put off, or saved) while they can still
-## be taken, the rest dealt now. Putting a choice off never rerolls it.
-func _cards_for(offer: OfferQueue.Offer) -> Array[PerkDef]:
-	var cards: Array[PerkDef] = []
-	for perk in offer.cards:
-		if perk and not run.banished.has(perk) and player.perks.can_take(perk) and not cards.has(perk):
-			cards.append(perk)
-	if cards.size() < offer.count:
-		cards.append_array(_pick_offer(offer.count - cards.size(), offer.rarity, cards))
-	return cards
-
-
-## Perks for an offer: never banished ones nor `also_left_out`, leaning toward started families.
-func _pick_offer(count: int, rarity: PerkDef.Rarity, also_left_out: Array[PerkDef]) -> Array[PerkDef]:
-	var left_out: Array[PerkDef] = run.banished.duplicate()
-	left_out.append_array(also_left_out)
-	return content.pick_perks(player.perks, count, rarity, world.rng, left_out, content.dungeon.family_bias)
-
-
-## Three new cards (others than those on the table, when there are enough).
-func _on_perk_reroll() -> void:
-	var shown := offers.shown
-	if shown == null or run.rerolls <= 0:
-		return
-	var current := perk_panel.get_offered()
-	var fresh := _pick_offer(current.size(), shown.rarity, current)
-	if fresh.is_empty():
-		Events.log_message(tr("Nothing else to offer."), Palette.DANGER)
-		return
-	run.rerolls -= 1
-	perk_panel.set_charges(run.rerolls, run.banishes)
-	perk_panel.show_cards(fresh)
-	Events.perks_offered.emit(fresh)
-	Sfx.play_ui(Sfx.bank.ui_open)
-
-
-## The perk on card `index` is gone for the run; another takes its place (if any is left).
-func _on_perk_banish(index: int) -> void:
-	var shown := offers.shown
-	var current := perk_panel.get_offered()
-	if shown == null or run.banishes <= 0 or index < 0 or index >= current.size():
-		return
-	var gone := current[index]
-	run.banishes -= 1
-	run.banished.append(gone)
-	Events.log_message(tr("%s is banished for this run.") % tr(gone.display_name), Palette.DANGER)
-	Events.perk_banished.emit(gone)
-	var cards: Array[PerkDef] = current.duplicate()
-	var replacement := _pick_offer(1, shown.rarity, current)
-	if replacement.is_empty():
-		cards.remove_at(index)
-	else:
-		cards[index] = replacement[0]
-	perk_panel.set_charges(run.rerolls, run.banishes)
-	if cards.is_empty():
-		perk_panel.hide()
-		offers.shown = null
-		_on_menu_closed()
-		return
-	perk_panel.show_cards(cards)
-
-
-## Later (or Back): the choice goes back in line, first, with its cards, behind the perk button.
-func _on_perk_postponed() -> void:
-	var shown := offers.shown
-	offers.shown = null
-	_choosing = false
-	if shown:
-		shown.cards = perk_panel.get_offered().duplicate()
-		offers.put_back(shown)
-	_on_menu_closed()
-
-
-func _on_perk_chosen(perk: PerkDef) -> void:
-	offers.shown = null
-	player.perks.add(perk)
-	Events.perk_chosen.emit(perk)
-	Events.log_message(tr("%s (level %d)") % [tr(perk.display_name), player.perks.stacks_of(perk)], perk.color)
-	Vfx.sparkles(world, player.global_position, perk.color)
-	tutorial.cue(&"perk_chosen")
-	_on_menu_closed()
+	choices.show_next()
 
 
 # --- End of the run -------------------------------------------------------------

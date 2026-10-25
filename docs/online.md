@@ -110,6 +110,14 @@ their own four digits, and nobody can type them (decided by Clayton, 24 October 
 
 ## The shared session
 
+Every online autoload extends `OnlineService` (`src/online/online_service.gd`), the typed
+boot/settle/test-reset contract. `OnlineSession.register()` accepts only that type; resetting
+services calls the contract directly. `OnlineLinks` owns the cross-service subscriptions in
+one explicit list, binding public reconciliation callbacks once (idempotently) after all
+autoload initialization. Queue/timer and gameplay callbacks stay local. The privacy, device
+identity, remote-switch and account links are documented together in architecture.md.
+
+
 Six autoloads talk to Talo or keep an online choice: `Leaderboards`, `Privacy`, `Telemetry`,
 `WorldStats`, `RemoteConfig`, `Feedback`. What they share is written once:
 

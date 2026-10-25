@@ -253,7 +253,7 @@ away and coming back never hands anything out again.
 - **Monsters that came later** and still stand (a summoner's calls, a trapped chest's or an
   encounter's monsters, a campfire's waves, what a slain one split into) come back **where they
   stood**, with their rank, affixes, share of Health and whether they were called in (no reward)
-  ("later", by file and id: a kind the game no longer has is skipped). Not an ambush's waves under
+  ("later", by stable reference and id: a kind the game no longer has is skipped). Not an ambush's waves under
   way (an ambush quit mid-fight starts over), nor what stands in a living warden's arena (the fight
   starts over, the warden whole), nor statuses (seconds long), nor where the floor's own monsters
   had wandered.
@@ -280,7 +280,15 @@ cell and number data would land on the wrong things: the floor is laid fresh ins
 so ("The Well has shifted since you left: this floor is laid anew."), and the hero and the run
 come back whole.
 
-**Versions and damaged files**: `RunSave.VERSION` (2) is written in every save. An older one is
+**Stable content references**: items (including belt and rolled gear), perks, skills, oaths,
+bosses, banished cards, merchant stock and later monsters use namespaced ids such as
+`@item:katana`, independent of their current filename. `ContentCatalog` resolves them through
+`data/save/content_catalog.tres`. Version 3 converts known legacy paths recursively without
+changing unrelated data; version 1 still receives its original migration first. Historical
+paths remain aliases even after the old file disappears. Removed content is skipped; unknown
+paths never load arbitrary resources. The floor stamp and its rebuild rules are unchanged.
+
+**Versions and damaged files**: `RunSave.VERSION` (3) is written in every save. An older one is
 migrated (`RunSave._migrate()`, one step per version; version 1 saves keep their run and hero,
 their floor is laid fresh, having no stamp), a newer one (a game rolled back) is not read. Every
 field the game reads is checked against `RunSave.SHAPE` first: a field of the wrong kind (a

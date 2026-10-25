@@ -140,7 +140,8 @@ many choices wait on a badge, `OffersButton`). Tapping it (or C, the left trigge
 and pauses the game; several waiting choices follow one another, with Reroll and Banish as below.
 **Later** (or Back) puts the one on screen off: back to the fight, it waits at the head of the line
 with the same cards (putting off never rerolls). Choices wait as long as the player wants, across
-floors, and are saved with the run, the one on screen with its cards (`OfferQueue`, `RunSave`).
+floors, and are saved with the run, the one on screen with its cards (`OfferQueue`, `RunSave`). `GameOffers` owns dealing, rerolls, banishes and postponement;
+its panel subscriptions follow the Game child's lifetime.
 Saved titles/subtitles are English message keys, with the level stored separately; translation
 happens when shown, so changing language also changes waiting offers. Older rendered titles are
 recovered through the installed translations when possible.

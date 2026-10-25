@@ -313,7 +313,7 @@ func later_monsters() -> Array:
 		if world.arena and not world.arena.is_defeated and world.map.boss_room.has_point(world.map.world_to_cell(monster.global_position)):
 			continue
 		result.append({
-			"def": monster.def.resource_path, "id": String(monster.def.id),
+			"def": RunSave.ref(monster.def), "id": String(monster.def.id),
 			"at": [roundi(monster.global_position.x), roundi(monster.global_position.y)],
 			"health": snappedf(float(monster.hp) / monster.get_max_hp(), 0.001),
 			"rank": String(monster.rank.id) if monster.rank else "",
@@ -336,11 +336,11 @@ func restore_later(saved: Array) -> void:
 		var data := entry as Dictionary
 		var path := str(data.get("def", ""))
 		var at: Variant = data.get("at")
-		if not path.begins_with("res://data/") or not ResourceLoader.exists(path) or not (at is Array and (at as Array).size() == 2):
+		if not (at is Array and (at as Array).size() == 2):
 			continue
 		if not _coordinate(at[0]) or not _coordinate(at[1]):
 			continue
-		var def := load(path) as MonsterDef
+		var def := RunSave.load_ref(path) as MonsterDef
 		if def == null or def is BossDef or String(def.id) != str(data.get("id", "")):
 			continue
 		var point := Vector2(float(at[0]), float(at[1]))

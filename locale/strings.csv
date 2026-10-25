@@ -215,12 +215,12 @@ New record: %s!,New record: %s!,Nouveau record : %s !
 "Endless mode: the dungeon goes on, harder and harder.","Endless mode: the dungeon goes on, harder and harder.","Mode sans fin : le donjon continue, de plus en plus dur."
 New record!,New record!,Nouveau record !
 (record %s),(record %s),(record %s)
-Nothing else to offer.,Nothing else to offer.,Plus rien à proposer.
-%s is banished for this run.,%s is banished for this run.,Banni pour cette partie : %s.
-%s (level %d),%s (level %d),%s (niveau %d)
 Level %d!,Level %d!,Niveau %d !
 The pact is kept. Choose a relic.,The pact is kept. Choose a relic.,Le pacte est tenu. Choisis une relique.
 The trial is done. Choose a relic.,The trial is done. Choose a relic.,L'épreuve est accomplie. Choisis une relique.
+Nothing else to offer.,Nothing else to offer.,Plus rien à proposer.
+%s is banished for this run.,%s is banished for this run.,Banni pour cette partie : %s.
+%s (level %d),%s (level %d),%s (niveau %d)
 "The key in your bag turns to ice. Beneath the arena, a sealed way opens.","The key in your bag turns to ice. Beneath the arena, a sealed way opens.","La clef dans ton sac se glace. Sous l'arène, une voie scellée s'ouvre."
 The hidden floor gives up its hoard: +%d souls.,The hidden floor gives up its hoard: +%d souls.,L'étage caché livre son trésor : +%d âmes.
 A relic lies in the warden's remains. Choose one.,A relic lies in the warden's remains. Choose one.,Une relique gît dans les restes du gardien. Choisis-en une.

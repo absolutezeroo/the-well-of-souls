@@ -13,13 +13,7 @@ signal cells_changed(cells: Array[Vector2i])
 ## `set_piece`): the Game names it.
 signal set_piece_entered(shape: RoomShapeDef)
 
-const MONSTER_SCENE := preload("res://src/entities/monster/monster.tscn")
-const PICKUP_SCENE := preload("res://src/entities/pickup/item_pickup.tscn")
-const PROJECTILE_SCENE := preload("res://src/entities/projectile/projectile.tscn")
 const STAIRS_SCENE := preload("res://src/entities/stairs/stairs.tscn")
-const PROP_SCENE := preload("res://src/entities/prop/prop.tscn")
-const TRAP_SCENE := preload("res://src/entities/trap/trap.tscn")
-const FLASH_SCENE := preload("res://src/vfx/light_flash.tscn")
 ## Room a body put down on the floor needs around it (find_open_point_near(), WorldSpace).
 const BODY_ROOM := WorldSpace.BODY_ROOM
 
@@ -153,6 +147,8 @@ var space := WorldSpace.new(self)
 @onready var holes := HoleField.new(self, $Pits as PitLayer)
 ## The floor's part of the run's save: what the hero changed on it, laid back on a rebuilt floor.
 @onready var floor_save := FloorSave.new(self, _entities)
+## Owns creation and placement of entities and projectiles. World remains the public gateway.
+@onready var spawns := WorldSpawner.new(self, _entities, _projectiles, _effects)
 
 
 # --- Floor lifecycle ---------------------------------------------------------
@@ -279,12 +275,7 @@ func bestiary_rules() -> BestiaryRules:
 
 ## (Awake until the next look at who sleeps: see ActivityManager.)
 func spawn_monster(def: MonsterDef, at: Vector2) -> Monster:
-	var monster := MONSTER_SCENE.instantiate() as Monster
-	monster.world = self
-	monster.setup(def, depth, _content.dungeon)
-	monster.position = at
-	_entities.add_child(monster)
-	return monster
+	return spawns.spawn_monster(def, at)
 
 
 ## Found loot: equipment may come out Magic, Rare or Epic (see LootRoller). `quality` above 1
@@ -292,78 +283,44 @@ func spawn_monster(def: MonsterDef, at: Vector2) -> Monster:
 ## A consumable the hero already carries plenty of comes as gold instead
 ## (DungeonConfig.consumable_carry_cap): then this returns null.
 func spawn_loot(item: ItemDef, at: Vector2, quality: float = 1.0) -> ItemPickup:
-	# (Never while the floor is laid: what the seed lays must not hang on the hero's bag, or a
-	# resumed floor would come out otherwise.)
-	if item is ConsumableDef and player and not ledger.numbering and player.pack.carried_count(item) >= config().consumable_carry_cap:
-		spawn_gold(at, maxi(config().consumable_gold_min, roundi(item.value * config().consumable_gold_share)))
-		return null
-	return spawn_item(roll_item(item, rules.drop_quality(quality)), at)
+	return spawns.spawn_loot(item, at, quality)
 
 
 ## `item`, or a better rolled copy of it if it is equipment.
 func roll_item(item: ItemDef, quality: float = 1.0) -> ItemDef:
-	return LootRoller.roll(item, depth, quality, config(), _content.item_affixes, rng)
+	return spawns.roll_item(item, quality)
 
 
 ## Coins on the floor, split in a few piles that fly to the hero when close.
 func spawn_gold(at: Vector2, amount: int) -> void:
-	amount = rules.floor_gold(amount)
-	if amount <= 0:
-		return
-	var piles := clampi(ceili(amount / config().gold_per_pile), 1, config().gold_max_piles)
-	for i in piles:
-		var share := floori(float(amount) / piles) + (1 if i < amount % piles else 0)
-		if share <= 0:
-			continue
-		var coin := GoldPickup.create(at, share, self)
-		if ledger.lay(FloorLedger.GOLD, coin, str(share)) >= 0:
-			coin.collected.connect(func(pile: GoldPickup) -> void: ledger.spend(FloorLedger.GOLD, pile))
-		_entities.add_child.call_deferred(coin)
+	spawns.spawn_gold(at, amount)
 
 
 func spawn_encounter(def: EncounterDef, cell: Vector2i) -> Encounter:
-	var encounter := Encounter.new()
-	encounter.setup(def, self)
-	_place_on_cell(encounter, cell)
-	ledger.lay(FloorLedger.ENCOUNTER, encounter, String(def.id))
-	return encounter
+	return spawns.spawn_encounter(def, cell)
 
 
 ## A fragment of `boss`'s past lying on `cell` (it doesn't block the way).
 func spawn_fragment(def: FragmentDef, boss: BossDef, cell: Vector2i) -> Fragment:
-	var piece := Fragment.new()
-	piece.setup(def, boss)
-	_place_on_cell(piece, cell, false)
-	fragment = piece
-	return piece
+	return spawns.spawn_fragment(def, boss, cell)
 
 
 func spawn_forge(def: ForgeDef, cell: Vector2i) -> Forge:
-	var forge := Forge.new()
-	forge.setup(def, self)
-	_place_on_cell(forge, cell)
-	return forge
+	return spawns.spawn_forge(def, cell)
 
 
 ## A rune for this floor (null if none).
 func pick_rune() -> RuneDef:
-	return _content.pick_rune(depth, rng) if _content else null
+	return spawns.pick_rune()
 
 
 ## Drops a rune at `at` (`chance`: 1 = always).
 func drop_rune(at: Vector2, chance: float = 1.0) -> void:
-	if chance < 1.0 and rng.randf() >= chance:
-		return
-	var rune := pick_rune()
-	if rune:
-		spawn_item(rune, at)
+	spawns.drop_rune(at, chance)
 
 
 func spawn_merchant(def: ShopDef, cell: Vector2i) -> Merchant:
-	var merchant := Merchant.new()
-	merchant.setup(def, self)
-	_place_on_cell(merchant, cell)
-	return merchant
+	return spawns.spawn_merchant(def, cell)
 
 
 ## The locked stock waiting for the next merchant, plus what is locked at this floor's
@@ -402,123 +359,58 @@ func open_cells(cells: Array[Vector2i]) -> void:
 
 ## Puts `node` on `cell` among the entities; it blocks the cell for pathfinding unless told not to.
 func _place_on_cell(node: Node2D, cell: Vector2i, blocks: bool = true) -> void:
-	node.position = map.cell_to_world(cell)
-	_entities.add_child(node)
-	if blocks:
-		set_cell_blocked(cell, true)
+	spawns.place_on_cell(node, cell, blocks)
 
 
 func spawn_item(item: ItemDef, at: Vector2, armed: bool = true) -> ItemPickup:
-	var pickup := PICKUP_SCENE.instantiate() as ItemPickup
-	pickup.setup(item, armed)
-	pickup.position = at
-	if ledger.lay(FloorLedger.ITEM, pickup, String(item.id)) >= 0:
-		pickup.taken.connect(func(gone: ItemPickup) -> void: ledger.spend(FloorLedger.ITEM, gone))
-	_entities.add_child.call_deferred(pickup)  # may be called from physics callbacks
-	return pickup
+	return spawns.spawn_item(item, at, armed)
 
 
 ## Fires a volley. Spread is spread evenly; 360 degrees makes a full ring.
 ## The shooter's perks can change the volley first (extra projectiles...).
 ## `from`: where it starts (the shooter by default; shards bursting out of a body...).
 func fire_projectiles(shooter: Actor, direction: Vector2, spec: ProjectileSpec, from: Vector2 = Vector2.INF) -> void:
-	if not spec.secondary:  # shards and rings fired by passives get no extra projectiles
-		shooter.perks.modify_projectiles(shooter, spec)
-	for i in spec.count:
-		var angle := 0.0
-		if spec.spread_degrees >= 360.0:
-			angle = 360.0 * i / spec.count
-		elif spec.count > 1:
-			angle = lerpf(-spec.spread_degrees * 0.5, spec.spread_degrees * 0.5, float(i) / (spec.count - 1))
-		var shot_direction := direction.rotated(deg_to_rad(angle))
-		var projectile := PROJECTILE_SCENE.instantiate() as Projectile
-		projectile.setup(shooter, shot_direction, spec)
-		if from == Vector2.INF:
-			projectile.position = shooter.global_position + shot_direction * (shooter.radius * 0.5)
-		else:
-			projectile.position = from + shot_direction * 6.0
-		_projectiles.add_child.call_deferred(projectile)
+	spawns.fire_projectiles(shooter, direction, spec, from)
 
 
 ## Props stand on a cell (the top-left one of a bigger footprint) and block it until they break.
 func spawn_prop(def: PropDef, cell: Vector2i) -> Prop:
-	var prop := PROP_SCENE.instantiate() as Prop
-	prop.world = self
-	prop.setup(def)
-	_place_on_cell(prop, cell)
-	if ledger.lay(FloorLedger.PROP, prop, String(def.id)) >= 0:
-		prop.broken.connect(func(gone: Prop) -> void: ledger.spend(FloorLedger.PROP, gone))
-	if def.footprint != Vector2i.ONE:
-		prop.position += (Vector2(def.footprint) - Vector2.ONE) * map.tile_size * 0.5
-		for y in def.footprint.y:
-			for x in def.footprint.x:
-				set_cell_blocked(cell + Vector2i(x, y), true)
-	return prop
+	return spawns.spawn_prop(def, cell)
 
 
 ## A framed floor (3x3 tiles in `region` of `tiles`) over `cells`: a carpet, a mosaic...
 func spawn_floor_patch(tiles: Texture2D, region: Rect2i, cells: Rect2i) -> FloorPatch:
-	var patch := FloorPatch.new()
-	patch.setup(tiles, region, self, cells)
-	_effects.add_child(patch)
-	return patch
+	return spawns.spawn_floor_patch(tiles, region, cells)
 
 
 func spawn_trap(def: TrapDef, cell: Vector2i, cycle_offset: float = 0.0) -> Trap:
-	var trap := TRAP_SCENE.instantiate() as Trap
-	trap.world = self
-	trap.setup(def, cycle_offset)
-	_place_on_cell(trap, cell, false)
-	return trap
+	return spawns.spawn_trap(def, cell, cycle_offset)
 
 
 ## Monsters roll to be elites with the floor's chance (DungeonConfig > Elites, the difficulty).
 ## Maybe raises a freshly spawned monster's rank: the rare ranks first (Shiny, Legendary,
 ## Epic: DungeonConfig.rare_ranks), then the plain elite.
 func roll_elite(monster: Monster) -> void:
-	for rank in config().rare_ranks:
-		if rank and rng.randf() < rules.rank_chance(rank):
-			make_ranked(monster, rank)
-			return
-	if rng.randf() < rules.elite_chance():
-		make_elite(monster)
+	spawns.roll_elite(monster)
 
 
 ## A boss may come at a rare rank too (a Legendary Vampiric King Slime...). The debug panel's
 ## (FloorOverrides.boss_rank) wins once.
 func roll_boss_rank(boss: Monster) -> void:
-	var forced := overrides.take_boss_rank()
-	if forced:
-		make_ranked(boss, forced)
-		return
-	for rank in config().rare_ranks:
-		if rank and rng.randf() < rules.boss_rank_chance(rank):
-			make_ranked(boss, rank)
-			return
+	spawns.roll_boss_rank(boss)
 
 
 func make_elite(monster: Monster) -> void:
-	make_ranked(monster, config().elite_rank)
+	spawns.make_elite(monster)
 
 
 ## `rank` with as many different affixes as it asks for.
 func make_ranked(monster: Monster, rank: MonsterRankDef) -> void:
-	var picked: Array[EliteAffixDef] = []
-	for attempt in rank.affixes * 6:
-		if picked.size() >= rank.affixes:
-			break
-		var affix := _content.pick_affix(depth, rng)
-		if affix and not picked.has(affix):
-			picked.append(affix)
-	monster.make_ranked(rank, picked)
+	spawns.make_ranked(monster, rank)
 
 
 func spawn_chest(def: ChestDef, cell: Vector2i, trapped: bool) -> Chest:
-	var chest := Chest.new()
-	chest.setup(def, self, trapped)
-	_place_on_cell(chest, cell)
-	chest.opened.connect(func(_chest: Chest) -> void: floor_save.opened_chests.append(cell))
-	return chest
+	return spawns.spawn_chest(def, cell, trapped)
 
 
 ## What was taken from this floor, for a save file (FloorSave.to_data()).
@@ -541,37 +433,21 @@ func floor_merchant() -> Merchant:
 
 
 func spawn_ambush(room: Rect2i) -> AmbushRoom:
-	ambush = AmbushRoom.new()
-	_entities.add_child(ambush)
-	ambush.setup(self, room)
-	return ambush
+	return spawns.spawn_ambush(room)
 
 
 ## The room trial `planned` (RoomTrial.plan()) laid on this floor; `taken`: cells claimed.
 func spawn_trial(planned: Dictionary, taken: Dictionary) -> RoomTrial:
-	var def := planned.get("trial") as TrialDef
-	if def == null:
-		return null
-	room_trial = def.make(self, planned, taken)
-	if room_trial:
-		_entities.add_child(room_trial)
-	return room_trial
+	return spawns.spawn_trial(planned, taken)
 
 
 ## A pact door on `room` (PactRoom): sealed at once, candles inside by the door (pact_light).
 func spawn_pact(def: PactDef, room: Rect2i, taken: Dictionary) -> PactRoom:
-	pact = PactRoom.new()
-	_entities.add_child(pact)
-	pact.setup_pact(self, room, def, config().pact_light, taken)
-	return pact
+	return spawns.spawn_pact(def, room, taken)
 
 
 func spawn_crumbling_floor(def: PitDef, cell: Vector2i) -> CrumblingFloor:
-	var tile := CrumblingFloor.new()
-	tile.setup(def, self, cell)
-	_effects.add_child(tile)
-	holes.add_crack(cell, tile)
-	return tile
+	return spawns.spawn_crumbling_floor(def, cell)
 
 
 func forget_crack(cell: Vector2i) -> void:
@@ -626,28 +502,17 @@ func is_dark_room(room: Rect2i) -> bool:
 
 
 func spawn_quicksand(def: QuicksandDef, rect: Rect2i) -> Quicksand:
-	var pool := Quicksand.new()
-	pool.setup(def, self, rect)
-	_effects.add_child(pool)
-	return pool
+	return spawns.spawn_quicksand(def, rect)
 
 
 ## A shot from the dungeon itself (arrow traps): it hurts players and monsters alike.
 func fire_trap_projectile(from: Vector2, direction: Vector2, spec: ProjectileSpec) -> void:
-	var projectile := PROJECTILE_SCENE.instantiate() as Projectile
-	projectile.setup_trap(self, direction, spec)
-	projectile.position = from
-	_projectiles.add_child.call_deferred(projectile)
+	spawns.fire_trap_projectile(from, direction, spec)
 
 
 ## A short burst of light (explosions...).
 func flash_light(at: Vector2, color: Color, size: float) -> void:
-	if not Vfx.shown:
-		return
-	var flash := FLASH_SCENE.instantiate() as LightFlash
-	flash.position = at
-	flash.setup(color, size)
-	_effects.add_child(flash)
+	spawns.flash_light(at, color, size)
 
 
 # --- The stairs' seal -------------------------------------------------------

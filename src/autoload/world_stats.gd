@@ -1,4 +1,4 @@
-extends Node
+extends OnlineService
 ## The world counters, "The Well's Toll" (autoload "WorldStats"; docs/online.md "World
 ## counters"): numbers every player adds to, kept by Talo as global game stats (the demons slain in
 ## the Well by everyone, the bells rung, the souls offered to the Tree...), and each player's own
@@ -111,12 +111,10 @@ func _ready() -> void:
 	Events.depth_changed.connect(_on_depth_changed)
 	Events.ending_chosen.connect(_on_ending_chosen)
 	Events.souls_offered.connect(_on_souls_offered)
-	Privacy.changed.connect(_on_choices_changed)
-	Leaderboards.changed.connect(_on_choices_changed)
 
 
 ## The tests: no file, nothing counted or read, debug builds kept silent.
-func use_for_tests() -> void:
+func use_for_tests(_fake: BoardBackend = null) -> void:
 	path = ""
 	debug_builds_send = false
 	reset()
@@ -350,7 +348,7 @@ func _on_souls_offered(amount: int) -> void:
 
 
 ## Consent withdrawn (or the scores unpublished): nothing waits any more, nothing is shown.
-func _on_choices_changed() -> void:
+func reconcile_choices() -> void:
 	if not may_send() and (not pending.is_empty() or not queue.is_empty() or not draft.is_empty()):
 		pending.clear()
 		queue.clear()

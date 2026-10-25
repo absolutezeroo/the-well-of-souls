@@ -1,4 +1,4 @@
-extends Node
+extends OnlineService
 ## The player's choices about their data (autoload "Privacy"; docs/privacy-ops.md, design/
 ## interface.md "Privacy"): whether the gameplay statistics may be sent (Telemetry), the neutral
 ## age question asked before them, when a refusal lets the question come back, and "delete my
@@ -65,7 +65,7 @@ func _ready() -> void:
 
 ## The tests: no file, no question on the title screen, every choice forgotten, the real clock
 ## (OnlineSession.fake_now).
-func use_for_tests() -> void:
+func use_for_tests(_fake: BoardBackend = null) -> void:
 	path = ""
 	ask_on_title = false
 	OnlineSession.fake_now = -1

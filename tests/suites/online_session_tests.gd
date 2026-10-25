@@ -273,7 +273,7 @@ func _test_release_paths() -> void:
 # --- Start-up -------------------------------------------------------------------------
 
 ## The online autoloads in project.godot's order.
-func _services() -> Array[Node]:
+func _services() -> Array[OnlineService]:
 	return [OnlineSession, Leaderboards, Privacy, Telemetry, WorldStats, RemoteConfig, Feedback]
 
 
@@ -322,17 +322,16 @@ func _unborn() -> void:
 
 ## One start-up in a release build: each service's _init() part (boot()) in `order`, the others
 ## not made yet, then each one's _ready() part (settle()) in the same order.
-func _start_up(order: Array[Node], key: bool) -> void:
+func _start_up(order: Array[OnlineService], key: bool) -> void:
 	_unborn()
 	for service in order:
-		service.call("boot")
+		service.boot()
 		if service == OnlineSession:
 			var fake: FakeBoardBackend = FakeBoardBackend.new()
 			fake.configured = key
 			OnlineSession.use_backend(fake)
 	for service in order:
-		if service.has_method("settle"):
-			service.call("settle")
+		service.settle()
 
 
 func _test_startup_orders() -> void:
@@ -340,11 +339,11 @@ func _test_startup_orders() -> void:
 	var orders: Array = []
 	var project := _services()
 	for shift in project.size():
-		var rotated: Array[Node] = []
+		var rotated: Array[OnlineService] = []
 		for i in project.size():
 			rotated.append(project[(i + shift) % project.size()])
 		orders.append(rotated)
-		var backwards: Array[Node] = []
+		var backwards: Array[OnlineService] = []
 		for i in range(rotated.size() - 1, -1, -1):
 			backwards.append(rotated[i])
 		orders.append(backwards)
@@ -352,7 +351,7 @@ func _test_startup_orders() -> void:
 	for consent in [true, false]:
 		for kill in [false, true]:
 			for key in [true, false]:
-				for order: Array[Node] in orders:
+				for order: Array[OnlineService] in orders:
 					var files := _write_files(consent, kill)
 					_point_at(files)
 					OnlineSession.release_mode = true
@@ -384,5 +383,5 @@ func _test_startup_orders() -> void:
 	WorldStats.debug_builds_send = false
 	_point_at({})
 	for service in _services():
-		service.call("boot")
+		service.boot()
 	OnlineSession.use_all_for_tests()

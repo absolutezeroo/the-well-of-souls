@@ -1,4 +1,4 @@
-extends Node
+extends OnlineService
 ## "Send feedback" (autoload "Feedback"; docs/online.md "Player feedback", design/interface.md):
 ## a bug, an idea or anything else the player writes in the form (FeedbackDialog, from the pause
 ## menu and the title's credits), sent to Talo's game feedback, where it shows in the dashboard
@@ -71,7 +71,7 @@ func _ready() -> void:
 
 
 ## The tests: no file, nothing waiting, no delay.
-func use_for_tests() -> void:
+func use_for_tests(_fake: BoardBackend = null) -> void:
 	path = ""
 	reset()
 

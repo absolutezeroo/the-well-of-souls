@@ -1,4 +1,4 @@
-extends Node
+extends OnlineService
 ## The remote settings (autoload "RemoteConfig"; docs/online.md "Remote settings"): a few values
 ## the game takes from Talo's game config, so a balance hotfix, a weekend event, the Dawn Knell's
 ## omen, a message of the day or a kill switch needs no update. The game's own data stays the
@@ -104,13 +104,11 @@ func _ready() -> void:
 	RemoteTuning.for_run_hook = tuning
 	RemoteTuning.omen_hook = omen_for
 	RemoteTuning.run_starting_hook = begin_run
-	Privacy.changed.connect(_on_choices_changed)
-	Leaderboards.changed.connect(_on_choices_changed)
 	store.start_in(config.start_delay)
 
 
 ## The tests: no file, nothing read, the game's own values.
-func use_for_tests() -> void:
+func use_for_tests(_fake: BoardBackend = null) -> void:
 	path = ""
 	quiet = true
 	reset()
@@ -537,7 +535,7 @@ func _content_ids(pool: RemoteKeyDef.Pool) -> Array[StringName]:
 
 
 ## A choice was made (scores published, statistics accepted): the config may be read now.
-func _on_choices_changed() -> void:
+func reconcile_choices() -> void:
 	if may_fetch() and not _read_this_session:
 		fetch()
 
