@@ -12,7 +12,6 @@ extends Node
 
 const PLAYER_SCENE := preload("res://src/entities/player/player.tscn")
 const TITLE_SCENE := "res://src/ui/title/title_screen.tscn"
-const PERK_CHOICES := 3
 ## Pause between the boss' death and the relic choice, to enjoy the explosions.
 const RELIC_DELAY := 1.6
 ## Pause between the last form's death at the bottom of the Well and the choice of an ending
@@ -197,7 +196,7 @@ func _connect_events() -> void:
 	Events.pact_ended.connect(_on_pact_ended)
 	Events.trial_completed.connect(_on_trial_completed)
 	Events.perk_offer_requested.connect(func(rarity: int, title: String, subtitle: String) -> void:
-		_queue_offer(rarity as PerkDef.Rarity, PERK_CHOICES, title, subtitle))
+		_queue_offer(rarity as PerkDef.Rarity, content.player.perk_choices, title, subtitle))
 	Events.boss_started.connect(_on_boss_started)
 	Events.boss_defeated.connect(_on_boss_defeated)
 	Events.boss_rising.connect(_on_boss_rising)
@@ -281,7 +280,7 @@ func _begin_run(saved: Dictionary, daily: bool = false) -> void:
 	player.died.connect(_on_player_died)
 	# A level up opens nothing: its choice waits behind the HUD's perk button.
 	player.leveled_up.connect(func(level: int) -> void:
-		_queue_offer(PerkDef.Rarity.COMMON, PERK_CHOICES, tr("Level %d!") % level, tr("Choose an upgrade"), true)
+		_queue_offer(PerkDef.Rarity.COMMON, content.player.perk_choices, "Level %d!", "Choose an upgrade", true, level)  # i18n
 		tutorial.cue(&"offer_waiting"))
 	player.damaged.connect(func(damage: int) -> void:
 		screen_fx.kick(clampf(float(damage) / player.get_max_hp() * 5.0, 0.3, 1.0)))
@@ -482,7 +481,7 @@ func open_pact(pact: PactRoom) -> void:
 func _on_pact_ended(pact: PactRoom) -> void:
 	if pact.outcome != PactRoom.Outcome.KEPT:
 		return
-	offers.add(PerkDef.Rarity.RARE, pact.def.relic_choices, tr("Relic"), tr("The pact is kept. Choose a relic."))
+	offers.add(PerkDef.Rarity.RARE, pact.def.relic_choices, "Relic", "The pact is kept. Choose a relic.")  # i18n
 	var keeper := player
 	await get_tree().create_timer(RELIC_DELAY, false).timeout
 	if player == keeper and not player.is_dead:
@@ -500,7 +499,7 @@ func _on_trial_completed(trial: RoomTrial) -> void:
 		Events.run_souls_changed.emit()
 	if def.relic_choices <= 0:
 		return
-	offers.add(PerkDef.Rarity.RARE, def.relic_choices, tr("Relic"), tr("The trial is done. Choose a relic."))
+	offers.add(PerkDef.Rarity.RARE, def.relic_choices, "Relic", "The trial is done. Choose a relic.")  # i18n
 	var keeper := player
 	await get_tree().create_timer(RELIC_DELAY, false).timeout
 	if player == keeper and not player.is_dead:
@@ -913,8 +912,8 @@ func open_offers() -> bool:
 
 ## `on_demand`: it waits for the player (a level up); otherwise it comes up by itself as soon as
 ## no menu is open (relics, an encounter's gift).
-func _queue_offer(rarity: PerkDef.Rarity, count: int, title: String, subtitle: String, on_demand: bool = false) -> void:
-	offers.add(rarity, count, title, subtitle, on_demand)
+func _queue_offer(rarity: PerkDef.Rarity, count: int, title: String, subtitle: String, on_demand: bool = false, level: int = 0) -> void:
+	offers.add(rarity, count, title, subtitle, on_demand, level)
 	if not on_demand:
 		# Deferred: gifts are handed out in the middle of other code.
 		_show_next_offer.call_deferred()
@@ -935,7 +934,7 @@ func _show_next_offer() -> void:
 			continue  # everything is maxed out
 		offers.shown = offer
 		_set_paused(true)
-		perk_panel.open(offer.title, offer.subtitle, perks, player.perks, run.rerolls, run.banishes)
+		perk_panel.open(offer.shown_title(), tr(offer.subtitle), perks, player.perks, run.rerolls, run.banishes)
 		Events.perks_offered.emit(perks)
 		return
 
@@ -1072,6 +1071,7 @@ func _save_run() -> void:
 func _exit_tree() -> void:
 	var slowed := DebugCheats.time_step > 0
 	DebugCheats.reset()
+	Events.run_closed.emit()
 	if slowed:
 		HitStop.reset()  # the next scene runs at the real speed
 

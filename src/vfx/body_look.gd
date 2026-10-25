@@ -48,6 +48,7 @@ var outline_beat := true
 var layered := false
 var _set := {}
 var _ages := {}  # status id -> seconds it has been on
+var _age_ids: Array[StringName] = []
 var _crackle := -1  # frame of the current crackle, -1: none
 var _crackle_row := 0
 var _dying := false
@@ -61,9 +62,6 @@ var _told_enabled := false
 var _told_outline := Color.TRANSPARENT
 var _told_layered := false
 var _told_beat := true
-var _values := PackedFloat32Array()
-## The uniforms set every frame something changes, in `_values`' order.
-const VALUES: Array[StringName] = [&"burn", &"chill", &"frozen", &"poison", &"poison_wave", &"haunt", &"crackle"]
 ## A body at rest: these uniforms at these values (nothing moves on it), the others either fixed
 ## by the frame and the rim (the pool's key) or unread at these values (the rows, the flash's color).
 const AT_REST := {
@@ -160,16 +158,24 @@ func show_statuses(statuses: StatusSet, delta: float, enabled: bool) -> void:
 	var poison := 0.0
 	var wave := 2.0
 	var haunt := 0.0
-	var ages := {}
+	var active := statuses.active_ids()
+	var i := _age_ids.size() - 1
+	while i >= 0:
+		if not enabled or not active.has(_age_ids[i]):
+			_ages.erase(_age_ids[i])
+			_age_ids.remove_at(i)
+		i -= 1
 	if enabled and not statuses.is_empty():
-		for id in statuses.active_ids():
+		for id in active:
 			if not _looks.has(id):
 				_looks[id] = LOOKS.look(id)
 			var look: StatusLookDef = _looks[id]
 			if look == null or look.body == StatusLookDef.Body.NONE or look.element == null:
 				continue
 			var age: float = _ages.get(id, 0.0) + delta
-			ages[id] = age
+			if not _ages.has(id):
+				_age_ids.append(id)
+			_ages[id] = age
 			var on_row := row(look.element)
 			match look.body:
 				StatusLookDef.Body.HEAT:
@@ -187,20 +193,21 @@ func show_statuses(statuses: StatusSet, delta: float, enabled: bool) -> void:
 				StatusLookDef.Body.FLICKER:
 					haunt = 1.0
 					_param(&"haunt_row", on_row)
-	_ages = ages
 	var crackling := false
 	if _crackle >= 0:
 		crackling = enabled and CRACKLE[_crackle]
 		_crackle += 1
 		if _crackle >= CRACKLE.size():
 			_crackle = -1
-	# Most frames nothing moved a step: one comparison instead of a uniform each.
-	var values := PackedFloat32Array([burn, chill, frozen, poison, wave, haunt, 1.0 if crackling else 0.0])
-	if values != _values:
-		_values = values
-		for i in VALUES.size():
-			_param(VALUES[i], values[i])
-		_param(&"crackle_row", _crackle_row)
+	# _param compares the scalar with its last value, with no comparison array.
+	_param(&"burn", burn)
+	_param(&"chill", chill)
+	_param(&"frozen", frozen)
+	_param(&"poison", poison)
+	_param(&"poison_wave", wave)
+	_param(&"haunt", haunt)
+	_param(&"crackle", 1.0 if crackling else 0.0)
+	_param(&"crackle_row", _crackle_row)
 	if not same:
 		_param(&"outline_color", outline if enabled else Color.TRANSPARENT)
 		_param(&"outline_beat", outline_beat)
@@ -303,6 +310,8 @@ func _wear() -> void:
 			shared = ShaderMaterial.new()
 			shared.shader = material.shader
 			shared.set_shader_parameter(&"ramps", ramps())
+			for name: StringName in AT_REST:
+				shared.set_shader_parameter(name, AT_REST[name])
 			for name: StringName in KEYED:
 				if _set.has(name):
 					shared.set_shader_parameter(name, _set[name])

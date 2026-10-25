@@ -389,7 +389,7 @@ func flush() -> void:
 		if def == null or not def.enabled:
 			queue.erase(internal_name)
 			continue
-		while int(queue.get(internal_name, 0)) > 0:
+		while int(queue.get(internal_name, 0)) > 0 and may_send():
 			var part := mini(int(queue[internal_name]), def.max_change)
 			@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
 			status = await OnlineSession.backend.add_to_stat(internal_name, part)
@@ -427,6 +427,11 @@ func refresh(force: bool = false) -> void:
 	_reading = true
 	var generation := _read_generation
 	await flush()
+	if generation != _read_generation:
+		return
+	if not may_read():
+		_reading = false
+		return
 	@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
 	var read := await OnlineSession.backend.fetch_world_stats()
 	if generation != _read_generation:
@@ -441,7 +446,7 @@ func refresh(force: bool = false) -> void:
 			if read.values.has(def.internal_name):
 				world[def.internal_name] = float(read.values[def.internal_name])
 		read_at = now
-		if may_send() and await OnlineSession.identity() == BoardBackend.Status.OK:
+		if may_send() and await OnlineSession.identity() == BoardBackend.Status.OK and may_send() and generation == _read_generation:
 			@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
 			var own := await OnlineSession.backend.fetch_my_stats()
 			if generation != _read_generation:

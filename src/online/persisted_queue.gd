@@ -127,6 +127,11 @@ func still(token: int) -> bool:
 	return token == _generation
 
 
+## Snapshot for an operation that does not claim the sending lock (e.g. a board read).
+func generation() -> int:
+	return _generation
+
+
 func is_busy() -> bool:
 	return _busy
 

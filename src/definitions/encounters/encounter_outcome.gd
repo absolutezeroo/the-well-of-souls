@@ -44,9 +44,9 @@ func apply(player: Player, at: Vector2) -> void:
 			world.spawn_loot(item, at + Vector2(0, 28), item_quality)
 	match gift:
 		Gift.PERK:
-			Events.perk_offer_requested.emit(PerkDef.Rarity.COMMON, tr("A boon"), tr("Choose an upgrade"))
+			Events.perk_offer_requested.emit(PerkDef.Rarity.COMMON, "A boon", "Choose an upgrade")  # i18n
 		Gift.RELIC:
-			Events.perk_offer_requested.emit(PerkDef.Rarity.RARE, tr("Relic"), tr("Choose a relic"))
+			Events.perk_offer_requested.emit(PerkDef.Rarity.RARE, "Relic", "Choose a relic")  # i18n
 	if monsters > 0:
 		# Next frame (not while the encounter's panel is answered). Weak references: the hero or
 		# the floor may be gone by then (conventions.md, "Lambdas that run later").

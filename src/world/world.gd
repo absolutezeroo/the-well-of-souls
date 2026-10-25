@@ -180,6 +180,7 @@ func build_floor(new_depth: int, content: ContentDB, taken: FloorRoute = null) -
 	ledger.numbering = true  # (until the floor is laid: what comes later is never laid again)
 	forge_drought_at_start = floors_without_forge
 	_content = content
+	DeathPiecesVfx.warm_content(content)
 	var kind := FloorKind.choose(self, content, taken)
 	var twist := kind.twist(self, content)
 	curse = twist.curse if twist else null

@@ -33,6 +33,7 @@ var _key := ""
 var _url := DEFAULT_URL
 var _alias_id := 0
 var _player_id := ""
+var _identity_generation := 0
 
 
 ## Reads the key (read_key()) unless one is given (a smoke test with its own).
@@ -71,6 +72,7 @@ func player_id() -> String:
 
 
 func forget() -> void:
+	_identity_generation += 1
 	_alias_id = 0
 	_player_id = ""
 
@@ -176,7 +178,11 @@ func fetch_config() -> BoardBackend.ConfigValues:
 
 
 func identify(device_id: String) -> Status:
+	_identity_generation += 1
+	var generation := _identity_generation
 	var answer := await _request(HTTPClient.METHOD_GET, "/v1/players/identify?service=%s&identifier=%s" % [SERVICE, device_id.uri_encode()])
+	if generation != _identity_generation:
+		return Status.UNAVAILABLE
 	if answer.status != Status.OK:
 		return answer.status
 	var alias: Variant = (answer.body as Dictionary).get("alias") if answer.body is Dictionary else null
@@ -190,17 +196,24 @@ func identify(device_id: String) -> Status:
 ## The live connection's ticket (POST /v1/socket-tickets: valid five minutes, once) and the
 ## player's socket token (POST /v1/players/socket-token: a new one each time, valid an hour).
 ## The ticket carries the dev build flag, so a debug build's sessions are dev data too.
-func live_access() -> BoardBackend.LiveAccess:
+func live_access(allowed: Callable = Callable()) -> BoardBackend.LiveAccess:
 	var access := BoardBackend.LiveAccess.new()
-	if _alias_id <= 0:
+	var generation := _identity_generation
+	if _alias_id <= 0 or (allowed.is_valid() and not allowed.call()):
 		access.status = Status.REJECTED
 		return access
 	var ticket := await _request(HTTPClient.METHOD_POST, "/v1/socket-tickets", {})
+	if generation != _identity_generation or (allowed.is_valid() and not allowed.call()):
+		access.status = Status.UNAVAILABLE
+		return access
 	var ticket_text := str((ticket.body as Dictionary).get("ticket", "")) if ticket.body is Dictionary else ""
 	if ticket.status != Status.OK or ticket_text.is_empty():
 		access.status = ticket.status if ticket.status != Status.OK else Status.REJECTED
 		return access
 	var token := await _request(HTTPClient.METHOD_POST, "/v1/players/socket-token", {})
+	if generation != _identity_generation or (allowed.is_valid() and not allowed.call()):
+		access.status = Status.UNAVAILABLE
+		return access
 	var token_text := str((token.body as Dictionary).get("socketToken", "")) if token.body is Dictionary else ""
 	if token.status != Status.OK or token_text.is_empty():
 		access.status = token.status if token.status != Status.OK else Status.REJECTED

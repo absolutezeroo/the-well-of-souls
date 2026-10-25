@@ -26,6 +26,7 @@ signal applied
 
 const PATH := "user://cloud_save.json"
 const VERSION := 1
+const ProfileScript := preload("res://src/autoload/profile.gd")
 
 ## OFF: no account. IDLE: in step. SYNCING: on its way. OFFLINE: no answer (tried again).
 ## REFUSED: the server refused (the key's scopes?). CONFLICT: the player chooses. TOO_BIG: the
@@ -55,6 +56,8 @@ var path: String:
 		store.path = value
 var _upload_wait := -1.0
 var _applying := false
+## Every saved mutation, including one made while an upload is awaiting its answer.
+var _mutation := 0
 
 
 func _init() -> void:
@@ -72,7 +75,7 @@ func _ready() -> void:
 	Account.signed_out.connect(_on_signed_out)
 	Account.deleted.connect(forget)
 	Events.run_started.connect(func(_run: RunState, _player: Player) -> void: in_run = true)
-	Events.run_ended.connect(func(_summary: RunSummary) -> void: _out_of_run())
+	Events.run_closed.connect(_out_of_run)
 	Events.run_left.connect(func(_summary: RunSummary, for_good: bool) -> void:
 		if for_good:
 			_out_of_run())
@@ -110,6 +113,7 @@ func config() -> AccountDef:
 func mark_dirty() -> void:
 	if _applying:
 		return
+	_mutation += 1
 	if not dirty:
 		dirty = true
 		save_state()
@@ -118,7 +122,7 @@ func mark_dirty() -> void:
 
 
 func _process(delta: float) -> void:
-	if _upload_wait < 0.0:
+	if _upload_wait < 0.0 or Profile.held or DebugCheats.debug_run:
 		return
 	_upload_wait -= delta
 	if _upload_wait < 0.0:
@@ -127,19 +131,20 @@ func _process(delta: float) -> void:
 
 ## Reads the online copy and brings both in step (the rules above). Answers when done.
 func sync() -> void:
-	_upload_wait = -1.0
-	if not Account.is_signed_in() or state == Step.CONFLICT:
+	if not Account.is_signed_in() or state == Step.CONFLICT or Profile.held or DebugCheats.debug_run:
 		return
+	_upload_wait = -1.0
 	var token := store.begin_flush()
 	if token < 0:
 		return
+	var auth := Account.auth
 	_set_state(Step.SYNCING)
 	var backend := OnlineSession.backend
 	@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
-	var listed: BoardBackend.SaveAnswer = await backend.saves_list(Account.auth)
-	if not store.end_flush(token):
+	var listed: BoardBackend.SaveAnswer = await backend.saves_list(auth)
+	if not store.end_flush(token) or auth != Account.auth or not Account.is_signed_in():
 		return
-	if not await _answered(listed):
+	if not await _answered(listed) or not store.still(token) or auth != Account.auth:
 		return
 	var slot: BoardBackend.CloudSlot = null
 	for item in listed.saves:
@@ -264,10 +269,14 @@ func _answered(answer: BoardBackend.SaveAnswer) -> bool:
 
 
 func _upload(slot_id: int, rev: int) -> void:
+	if not Account.is_signed_in() or Profile.held or DebugCheats.debug_run:
+		return
+	var auth := Account.auth
+	var mutation := _mutation
 	var content := {
 		"rev": rev, "saved_at": OnlineSession.now(), "platform": OS.get_name(),
 		"version": str(ProjectSettings.get_setting("application/config/version", "")),
-		"profile": Profile.to_data(),
+		"profile": Profile.to_data().duplicate(true),
 	}
 	if JSON.stringify(content).to_utf8_buffer().size() > config().max_bytes:
 		_set_state(Step.TOO_BIG)
@@ -279,26 +288,30 @@ func _upload(slot_id: int, rev: int) -> void:
 	var answer: BoardBackend.SaveAnswer
 	if slot_id > 0:
 		@warning_ignore("redundant_await")
-		answer = await backend.save_update(Account.auth, slot_id, content)
+		answer = await backend.save_update(auth, slot_id, content)
 	else:
 		@warning_ignore("redundant_await")
-		answer = await backend.save_create(Account.auth, config().save_name, content)
-	if not store.end_flush(token):
+		answer = await backend.save_create(auth, config().save_name, content)
+	if not store.end_flush(token) or auth != Account.auth or not Account.is_signed_in():
 		return
 	if answer.status == BoardBackend.Status.REJECTED and slot_id > 0 and (answer.error.is_empty() or answer.error == "HTTP 404"):
 		# (that save is gone from the server: made again at the next sync)
 		save_id = 0
 		base_rev = 0
-	if not await _answered(answer):
+	if not await _answered(answer) or not store.still(token) or auth != Account.auth:
 		return
 	save_id = answer.slot.id
 	base_rev = rev
-	dirty = false
+	dirty = _mutation != mutation
+	if dirty:
+		_upload_wait = config().upload_delay
 	_in_step()
 
 
 func _take(slot: BoardBackend.CloudSlot) -> void:
-	if in_run:
+	if not Account.is_signed_in():
+		return
+	if in_run or Profile.held or DebugCheats.debug_run:
 		online = slot
 		_set_state(Step.WAITING)
 		return
@@ -326,7 +339,7 @@ func _conflict(slot: BoardBackend.CloudSlot) -> void:
 ## Online and here hold the same profile (a first sign-in on a device already in step).
 func _same_profile(slot: BoardBackend.CloudSlot) -> bool:
 	var profile: Variant = slot.content.get("profile")
-	if not profile is Dictionary:
+	if not ProfileScript.is_valid_data(profile):
 		return false
 	# Read as this game reads a profile (a copy of the Profile script, never added to the tree),
 	# so what reading changes (old fields, numbers) doesn't count as a difference.
@@ -356,6 +369,7 @@ func _set_state(new_state: Step) -> void:
 
 
 func _on_signed_in() -> void:
+	store.reset()
 	if Account.auth.player_id != account_player:
 		account_player = Account.auth.player_id
 		save_id = 0
@@ -366,6 +380,7 @@ func _on_signed_in() -> void:
 
 
 func _on_signed_out() -> void:
+	store.reset()
 	_upload_wait = -1.0
 	online = null
 	_set_state(Step.OFF)

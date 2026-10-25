@@ -82,11 +82,16 @@ func _free(soul: CaptiveSoul, player: Player) -> void:
 
 func save_data() -> Dictionary:
 	var freed: Array = []
+	var begun: Array = []
 	for soul in souls:
 		if soul.freed:
 			freed.append(soul.index)
+		elif soul.called:
+			begun.append({ "index": soul.index, "progress": soul.progress })
 	var data := super.save_data()
 	data["freed"] = freed
+	if not begun.is_empty():
+		data["begun"] = begun
 	return data
 
 
@@ -102,3 +107,17 @@ func restore(saved: Dictionary) -> void:
 			souls[i].set_free(true)
 			done += 1
 	completed = done >= total and total > 0
+
+	var begun: Variant = saved.get("begun", [])
+	if begun is Array:
+		for entry: Variant in begun:
+			if not entry is Dictionary:
+				continue
+			var index: Variant = entry.get("index")
+			var progress: Variant = entry.get("progress")
+			if not (index is int or index is float) or not (progress is int or progress is float):
+				continue
+			var i := int(index)
+			if i >= 0 and i < souls.size() and not souls[i].freed and is_finite(float(progress)):
+				souls[i].called = true
+				souls[i].progress = clampf(float(progress), 0.0, 1.0)

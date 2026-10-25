@@ -23,6 +23,7 @@ max_hp = 8
 attack = 1
 
 [resource]
+perk_choices = 3
 script = ExtResource("3_mcj0m")
 frames = ExtResource("2_vrhwe")
 frames_offset = Vector2(0, -10)

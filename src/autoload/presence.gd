@@ -67,6 +67,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	OnlineSession.register(self)
+	Privacy.changed.connect(_on_privacy_changed)
 	OnlineSession.identity_forgotten.connect(_on_identity_forgotten)
 	Events.run_started.connect(func(run: RunState, _player: Player) -> void: _daily = run.daily_day >= 0)
 	Events.floor_entered.connect(_on_floor_entered)
@@ -117,6 +118,10 @@ func set_status(text: String) -> void:
 
 
 func _process(delta: float) -> void:
+	if not wanted():
+		if phase != Phase.OFF:
+			stop()
+		return
 	if _link:
 		_poll(delta)
 	_status_wait -= delta
@@ -143,14 +148,14 @@ func start() -> void:
 	_since = 0.0
 	var generation := _generation
 	var identified: BoardBackend.Status = await OnlineSession.identity()
-	if generation != _generation:
+	if generation != _generation or not wanted():
 		return
 	if identified != BoardBackend.Status.OK:
 		_failed()
 		return
 	var backend := OnlineSession.backend
 	@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
-	var access: BoardBackend.LiveAccess = await backend.live_access()
+	var access: BoardBackend.LiveAccess = await backend.live_access(func() -> bool: return generation == _generation and wanted())
 	if generation != _generation:
 		return
 	if access.status != BoardBackend.Status.OK or access.url.is_empty() or not wanted():
@@ -232,6 +237,8 @@ func _on_message(text: String) -> void:
 
 
 func _send_status() -> void:
+	if not wanted() or phase != Phase.LIVE:
+		return
 	var text := status
 	var generation := _generation
 	_sending_status = true
@@ -277,3 +284,9 @@ func _notification(what: int) -> void:
 			in_background = false
 			_wait = 0.0
 			_check = 0.0
+
+
+## A withdrawal closes the link immediately, even between two network steps.
+func _on_privacy_changed() -> void:
+	if not wanted():
+		stop()

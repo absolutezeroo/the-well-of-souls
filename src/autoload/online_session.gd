@@ -229,7 +229,7 @@ func identity() -> BoardBackend.Status:
 	@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
 	var status: BoardBackend.Status = await backend.identify(device())
 	if generation != _generation:
-		return status  # (the backend or the player changed meanwhile: _forget_identity() answered the waiting)
+		return BoardBackend.Status.UNAVAILABLE  # the old player cannot authorize a caller's next request
 	_identifying = false
 	_identified = status == BoardBackend.Status.OK
 	if status == BoardBackend.Status.REJECTED and config:

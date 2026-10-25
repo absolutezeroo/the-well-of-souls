@@ -10,17 +10,21 @@ static func write_json(path: String, data: Variant) -> bool:
 	if file == null:
 		push_warning("Could not save %s: %s" % [path, error_string(FileAccess.get_open_error())])
 		return false
-	file.store_string(JSON.stringify(data, "\t"))
+	var bytes := JSON.stringify(data, "\t").to_utf8_buffer()
+	file.store_buffer(bytes)
+	file.flush()
+	var written := file.get_error() == OK and file.get_length() == bytes.size()
 	file.close()
-	var dir := DirAccess.open(temp.get_base_dir())
-	if dir == null:
+	# A short write must never replace the previous save, nor become the recovery copy.
+	if not written or FileAccess.get_file_as_bytes(temp) != bytes:
+		DirAccess.remove_absolute(temp)
+		push_warning("Could not finish saving %s" % path)
 		return false
-	if dir.rename(temp, path) != OK:
-		# Some file systems won't replace a file in one step: replace it in two.
-		dir.remove(path)
-		if dir.rename(temp, path) != OK:
-			push_warning("Could not save %s" % path)
-			return false
+	# rename replaces an existing file atomically. If the filesystem refuses, keep both
+	# copies: deleting the destination first would turn a recoverable error into data loss.
+	if DirAccess.rename_absolute(temp, path) != OK:
+		push_warning("Could not replace %s" % path)
+		return false
 	return true
 
 
@@ -29,7 +33,7 @@ static func write_json(path: String, data: Variant) -> bool:
 static func read_json(path: String) -> Variant:
 	for candidate in [path, path + ".tmp"]:
 		if FileAccess.file_exists(candidate):
-			var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(candidate))
-			if data != null:
-				return data
+			var json := JSON.new()
+			if json.parse(FileAccess.get_file_as_string(candidate)) == OK and json.data != null:
+				return json.data
 	return null

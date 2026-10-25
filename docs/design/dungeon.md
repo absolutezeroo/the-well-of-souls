@@ -527,8 +527,10 @@ seen; each step is a toast, the end a banner ("Trial done") and the log's last l
 brings foes (`foes_per_step`, +1 every `depths_per_extra_foe` floors). Done, it pays
 (`bonus_souls` to the run, paid at its end like the hidden floor's; `relic_choices` relics if
 any: the Game, on `Events.trial_completed`). A floor's save keeps its steps done (`"trial"`): a
-resumed floor finds them done again, quietly (no foes, no reward again). Debug panel: "Room
-trial" lays one on the current floor.
+resumed floor finds them done again, quietly (no foes, no reward again). A partly freed soul
+also keeps its progress and whether its foes were already called, so resuming beside it never
+calls a second wave. Older saves without that state start untouched souls normally. Debug panel:
+"Room trial" lays one on the current floor.
 
 | Trial (FR / EN) | What to do | Each step | Reward |
 |---|---|---|---|
@@ -555,8 +557,10 @@ seen; each step is a toast, the end a banner ("Trial done") and the log's last l
 brings foes (`foes_per_step`, +1 every `depths_per_extra_foe` floors). Done, it pays
 (`bonus_souls` to the run, paid at its end like the hidden floor's; `relic_choices` relics if
 any: the Game, on `Events.trial_completed`). A floor's save keeps its steps done (`"trial"`): a
-resumed floor finds them done again, quietly (no foes, no reward again). Debug panel: "Room
-trial" lays one on the current floor.
+resumed floor finds them done again, quietly (no foes, no reward again). A partly freed soul
+also keeps its progress and whether its foes were already called, so resuming beside it never
+calls a second wave. Older saves without that state start untouched souls normally. Debug panel:
+"Room trial" lays one on the current floor.
 
 | Trial (FR / EN) | What to do | Each step | Reward |
 |---|---|---|---|

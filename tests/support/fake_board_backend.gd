@@ -274,7 +274,7 @@ func _ranked(board: LeaderboardDef, period_key: String) -> Array[BoardBackend.En
 	return result
 
 
-func live_access() -> BoardBackend.LiveAccess:
+func live_access(_allowed: Callable = Callable()) -> BoardBackend.LiveAccess:
 	live_asks += 1
 	var access := BoardBackend.LiveAccess.new()
 	if not await _answers():

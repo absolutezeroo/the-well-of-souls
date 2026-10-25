@@ -9,6 +9,23 @@ signal saved
 
 const SAVE_PATH := "user://profile.json"
 
+## Fields read by _read(). Missing fields keep older saves compatible; malformed fields
+## reject the whole replacement before the current profile or its file is touched.
+const SAVE_SHAPE := {
+	"souls": "number", "runs": "number", "victories": "number", "best_depth": "number",
+	"difficulty": "string", "seen_intro": "bool", "ascension": "number", "ascension_unlocked": "number",
+	"daily_day": "number", "daily_score": "number", "daily_best": "number", "daily_streak": "number",
+	"oath": "string", "starting_weapon": "string", "ending": "string", "runs_since_reset": "number", "deepest": "number",
+	"levels": {"*": "number"}, "wins": {"*": "number"}, "kills_by_monster": {"*": "number"},
+	"stats": {"*": "number"}, "achievements": {"*": "number"}, "seen_monsters": {"*": "number"},
+	"bestiary_ranks": {"*": "number"}, "challenges_done": {"*": "number"}, "shinies": {"*": "number"},
+	"hints_seen": {"*": "number"}, "best_times": {"*": "number"}, "chronicle_told": {"*": "number"},
+	"fragments_found": {"*": "number"}, "deeds_done": {"*": "number"}, "boss_meetings": {"*": "number"},
+	"lines_told": {"*": "number"}, "lines_order": {"*": "number"}, "deaths_by": {"*": "number"},
+	"worn": {"*": "string"}, "best_splits": {"*": ["number"]}, "period_stats": {"*": {"*": "number"}},
+	"quests_claimed": {"*": ["string"]}, "keeper": "dict", "keepers_freed": ["dict"], "history": ["dict"],
+}
+
 var souls := 0
 ## Upgrade id -> level bought.
 var levels := {}
@@ -592,11 +609,15 @@ func reach_depth(depth: int) -> void:
 	deepest = maxi(deepest, depth)
 
 
-func save_profile() -> void:
-	if save_path.is_empty() or held:
-		return
-	SafeFile.write_json(save_path, to_data())
+func save_profile() -> bool:
+	if held:
+		return false
+	if save_path.is_empty():
+		return true  # in-memory tests, deliberately no file and no saved notification
+	if not SafeFile.write_json(save_path, to_data()):
+		return false
 	saved.emit()
+	return true
 
 
 ## Everything kept, as the file holds it (the online save carries it too: CloudSave).
@@ -627,8 +648,8 @@ func load_profile() -> void:
 	var data: Variant = SafeFile.read_json(save_path)
 	if data == null:
 		return
-	if not data is Dictionary:
-		push_warning("Profile file is damaged, starting fresh.")
+	if not is_valid_data(data, false):
+		push_warning("Profile file is damaged, keeping the current profile.")
 		return
 	_read(data)
 
@@ -636,13 +657,24 @@ func load_profile() -> void:
 ## The profile replaced by `data` (to_data()'s form, from another device: CloudSave), checked as
 ## the file is, then written. False (nothing changed) when it isn't a profile.
 func from_data(data: Variant) -> bool:
-	if not data is Dictionary or not (data as Dictionary).has("souls") or not (data as Dictionary).has("runs"):
+	if held or not is_valid_data(data):
 		return false
-	reset()
-	_read(data)
-	save_profile()
+	# Commit the file before publishing the replacement. A failed write leaves memory,
+	# observers and CloudSave's revision untouched as well as the old file.
+	var copy: Dictionary = (data as Dictionary).duplicate(true)
+	if not save_path.is_empty() and not SafeFile.write_json(save_path, copy):
+		return false
+	_read(copy)
+	if not save_path.is_empty():
+		saved.emit()
 	changed.emit()
 	return true
+
+
+## A profile the reader can consume completely, without resetting progress on an error.
+static func is_valid_data(data: Variant, require_progress: bool = true) -> bool:
+	return data is Dictionary and (not require_progress or (data.has("souls") and data.has("runs"))) \
+		and RunSave.sanitized(data, SAVE_SHAPE, "profile") == data
 
 
 ## Anything to lose: a run counted, souls, upgrades or the intro seen (a fresh profile takes an

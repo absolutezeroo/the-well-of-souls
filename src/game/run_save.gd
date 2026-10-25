@@ -79,7 +79,7 @@ const SHAPE := {
 		"belt": "array",
 		"perks": [{ "stacks": "number", "memory": "dict" }],
 	},
-	"offers": [{ "rarity": "number", "count": "number", "on_demand": "bool", "cards": "array" }],
+	"offers": [{ "level": "number", "rarity": "number", "count": "number", "on_demand": "bool", "cards": "array" }],
 	"kept_stock": [{ "price": "number" }],
 	"floor": {
 		"stamp": "string",
@@ -113,7 +113,7 @@ static var path := PATH
 
 
 static func exists() -> bool:
-	return not path.is_empty() and FileAccess.file_exists(path)
+	return not path.is_empty() and not read().is_empty()
 
 
 static func write(data: Dictionary) -> void:
@@ -126,7 +126,7 @@ static func write(data: Dictionary) -> void:
 ## The saved run, or an empty Dictionary if there is none (or it can't be read: not a run, from a
 ## newer game, the hero damaged). Older versions come migrated, damaged fields dropped.
 static func read() -> Dictionary:
-	if not exists():
+	if path.is_empty():
 		return {}
 	return parse(SafeFile.read_json(path))
 
@@ -159,7 +159,7 @@ static func sanitized(value: Variant, shape: Variant, where: String) -> Variant:
 		for key: Variant in value:
 			var key_shape: Variant = shape.get(str(key), shape.get("*", "any"))
 			var kept: Variant = sanitized(value[key], key_shape, "%s/%s" % [where, key])
-			if kept == null and value[key] != null:
+			if kept == null and str(key_shape) != "any":
 				push_warning("Run save: dropped the damaged field %s/%s." % [where, key])
 				continue
 			result[key] = kept
@@ -177,7 +177,7 @@ static func sanitized(value: Variant, shape: Variant, where: String) -> Variant:
 		return entries
 	match str(shape):
 		"number":
-			return value if value is float or value is int else null
+			return value if (value is float or value is int) and is_finite(float(value)) else null
 		"bool":
 			return value if value is bool or value is float or value is int else null
 		"string":

@@ -59,19 +59,23 @@ func _process(delta: float) -> void:
 	if actor == null or not is_instance_valid(actor):
 		return
 	_time += delta
-	var now := actor.statuses.active_ids() if not actor.is_dead else ([] as Array[StringName])
+	var now := actor.statuses.active_ids()
+	if now != _active:
+		for status in _active:
+			if not now.has(status):
+				_end(status)
+		for status in now:
+			var look := LOOKS.look(status)
+			if look != null and not _active.has(status):
+				_start(look)
+		_active.assign(now)
 	for status in _active:
-		if not now.has(status):
-			_end(status)
-	for status in now:
 		var look := LOOKS.look(status)
-		if look == null:
-			continue
-		if not _active.has(status):
-			_start(look)
-		_feed(look, delta)
-	_active = now
-	for bit in _bits.duplicate():
+		if look:
+			_feed(look, delta)
+	var i := 0
+	while i < _bits.size():
+		var bit := _bits[i]
 		bit.age += delta
 		bit.position += bit.velocity * delta
 		match bit.kind:
@@ -83,7 +87,9 @@ func _process(delta: float) -> void:
 			Kind.MIST:
 				bit.velocity *= 1.0 - 2.0 * delta  # spreads, then hangs
 		if bit.age >= bit.life and bit.kind != Kind.CRUST:
-			_bits.erase(bit)
+			_bits.remove_at(i)
+		else:
+			i += 1
 	visible = not _bits.is_empty() or not _active.is_empty()
 	if not visible:
 		set_process(false)  # asleep until a status lands again (wake())
@@ -135,15 +141,19 @@ func _start(look: StatusLookDef) -> void:
 
 ## A status is gone: what clung to the body breaks into chips that fall.
 func _end(status: StringName) -> void:
-	for bit in _bits.duplicate():
+	var i := 0
+	while i < _bits.size():
+		var bit := _bits[i]
 		if bit.kind == Kind.CRUST and bit.look.status == status:
-			_bits.erase(bit)
-			for i in 2:
+			_bits.remove_at(i)
+			for piece in 2:
 				_mote(bit.look, bit.position + Vector2(randf_range(-2.0, 2.0), 0.0), StatusLookDef.Mote.CHIP)
+		else:
+			i += 1
 
 
 func _feed(look: StatusLookDef, delta: float) -> void:
-	var timers: Array = _spawn.get(look.status, [0.0, 0.0, 0.0])
+	var timers: Array = _spawn[look.status]
 	var body := _body()
 	if look.particle and look.particle_rate > 0.0:
 		timers[0] -= delta

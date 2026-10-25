@@ -87,6 +87,7 @@ func _ready() -> void:
 
 func setup(frames: SpriteFrames, offset: Vector2) -> void:
 	body.sprite_frames = frames
+	DeathPiecesVfx.warm(frames)
 	for sprite: AnimatedSprite2D in [body, body_armor, helmet, weapon]:
 		sprite.offset = offset
 	_play(&"idle")

@@ -109,6 +109,13 @@ legal advice.** Where the report was unsure, the safer choice was taken and is m
   nothing runs there. The consent question has a line for it, the in-game policy's statistics
   section and `docs/privacy.html` section 4 (both languages, with a retention row: sessions go
   with the player, deletion or the 730-day purge) say it. Same processor (Talo), same id.
+- **Withdrawal during a request (audit fixes, 25 October 2026):** presence closes immediately
+  on a privacy change and checks consent before every status send and between the live ticket
+  and token requests. Score publication and world-counter requests recheck their permission
+  after identification and before each follow-up request. Forgetting the device invalidates
+  unfinished identification in both the session and the REST backend, so a late response cannot
+  restore the old alias. A request already sent cannot be recalled; no later request is started
+  on the withdrawn permission. These enforce the existing purposes; no new data or consent version.
 - **Accounts and the online save (25 October 2026, policy 1.5, no consent version):** an
   account is made only when the player asks, for the service they ask for (their progress on
   another device): GDPR 6(1)(b), and keeping its session (and, if they tick "Stay signed in",

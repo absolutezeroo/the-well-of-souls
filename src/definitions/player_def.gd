@@ -43,6 +43,8 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var attack_buffer: float = 0.3
 
 @export_group("Leveling")
+## Cards in an ordinary upgrade offer (level ups and encounters).
+@export_range(1, 8) var perk_choices: int = 3
 @export var xp_base: int = 20
 @export var xp_growth: float = 1.5
 ## Added to the base stats on every level up.

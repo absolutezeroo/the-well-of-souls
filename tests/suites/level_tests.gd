@@ -305,6 +305,23 @@ func _test_ceilings(game: Game) -> void:
 	await _frames(3)
 	check(layer.shown_at(rat.head_position()) == 0.0, "a monster under it is not hidden either")
 	rat.queue_free()
+	# More bodies than the shader accepts: the bounded selector matches a full sort.
+	for i in 30:
+		var monster := world.spawn_monster(load("res://data/monsters/rat.tres"), player.global_position + Vector2(12 + i * 3, i % 3 * 5))
+		monster.process_mode = Node.PROCESS_MODE_DISABLED
+	await _frames(2)
+	var nearest := world.actors_this_frame().filter(func(actor: Actor) -> bool:
+		return actor != player and world.view_rect(64.0).has_point(actor.global_position))
+	nearest.sort_custom(func(a: Actor, b: Actor) -> bool:
+		return a.global_position.distance_squared_to(player.global_position) < b.global_position.distance_squared_to(player.global_position))
+	layer._process(0.0)
+	var matches := layer.bodies.size() == CeilingLayer.MAX_BODIES
+	for i in mini(nearest.size(), CeilingLayer.MAX_BODIES - 1):
+		matches = matches and layer.bodies.has(layer._body(nearest[i]))
+	check(matches, "the ceiling keeps the hero and the nearest bodies, as a full sort would")
+	var steady := layer.bodies.duplicate()
+	layer._process(0.0)
+	check(layer.bodies == steady, "the ceiling's reused buffers keep a stationary crowd unchanged")
 	# Never over a boss arena.
 	var boss_depth := 0
 	for depth in range(2, 20):

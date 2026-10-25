@@ -13,9 +13,11 @@ signal changed
 
 class Offer:
 	var rarity: PerkDef.Rarity = PerkDef.Rarity.COMMON
-	var count := 3
+	var count: int
 	var title := ""
 	var subtitle := ""
+	## A level-up title keeps the number separately, so changing language can translate it.
+	var level := 0
 	## Waits for the player to open it (a level up, or a choice put off).
 	var on_demand := false
 	## The cards dealt (after rerolls and banishes), kept when the choice is put off or saved;
@@ -23,17 +25,23 @@ class Offer:
 	var cards: Array[PerkDef] = []
 
 
+	func shown_title() -> String:
+		return tr("Level %d!") % level if level > 0 else tr(title)
+
+
 	func to_data() -> Dictionary:
 		return { "rarity": rarity, "count": count, "title": title, "subtitle": subtitle,
-			"on_demand": on_demand, "cards": RunSave.refs(cards) }
+			"on_demand": on_demand, "cards": RunSave.refs(cards), "level": level }
 
 
 	static func from_data(data: Dictionary) -> Offer:
 		var offer := Offer.new()
 		offer.rarity = int(data.get("rarity", 0)) as PerkDef.Rarity
-		offer.count = int(data.get("count", 3))
+		offer.count = int(data.get("count", (load("res://data/player/player_def.tres") as PlayerDef).perk_choices))
 		offer.title = str(data.get("title", ""))
 		offer.subtitle = str(data.get("subtitle", ""))
+		offer.level = int(data.get("level", 0))
+		OfferQueue._migrate_words(offer)
 		# Saves from before choices waited: whatever was pending waits for the player.
 		offer.on_demand = bool(data.get("on_demand", true))
 		for ref: Variant in data.get("cards", []):
@@ -50,13 +58,14 @@ var _pending: Array[Offer] = []
 
 
 ## `on_demand`: it waits for the player (a level up) instead of coming up by itself.
-func add(rarity: PerkDef.Rarity, count: int, title: String, subtitle: String, on_demand: bool = false) -> Offer:
+func add(rarity: PerkDef.Rarity, count: int, title: String, subtitle: String, on_demand: bool = false, level: int = 0) -> Offer:
 	var offer := Offer.new()
 	offer.rarity = rarity
 	offer.count = count
 	offer.title = title
 	offer.subtitle = subtitle
 	offer.on_demand = on_demand
+	offer.level = level
 	_pending.append(offer)
 	changed.emit()
 	return offer
@@ -66,7 +75,7 @@ func add(rarity: PerkDef.Rarity, count: int, title: String, subtitle: String, on
 ## `extra`: more relics to choose from (a Legendary or Shiny boss).
 func add_relic(boss: BossDef, extra: int = 0) -> void:
 	if boss and boss.relic_choices > 0:
-		add(PerkDef.Rarity.RARE, boss.relic_choices + extra, tr("Relic"), tr("A relic lies in the warden's remains. Choose one."))
+		add(PerkDef.Rarity.RARE, boss.relic_choices + extra, "Relic", "A relic lies in the warden's remains. Choose one.")  # i18n
 
 
 func is_empty() -> bool:
@@ -117,3 +126,27 @@ func load_data(data: Array) -> void:
 		if entry is Dictionary:
 			_pending.append(Offer.from_data(entry))
 	changed.emit()
+
+
+## Older runs saved rendered words. Recover the known keys in every loaded language,
+## including a formatted level title, without changing the current locale.
+static func _migrate_words(offer: Offer) -> void:
+	for locale in TranslationServer.get_loaded_locales():
+		var translation := TranslationServer.get_translation_object(locale)
+		if translation == null:
+			continue
+		for key: String in ["A boon", "Relic", "Choose an upgrade", "Choose a relic", "The pact is kept. Choose a relic.", "The trial is done. Choose a relic.", "A relic lies in the warden's remains. Choose one."]:  # i18n
+			var rendered := String(translation.get_message(key))
+			if not rendered.is_empty() and offer.title == rendered:
+				offer.title = key
+			if not rendered.is_empty() and offer.subtitle == rendered:
+				offer.subtitle = key
+		var template := String(translation.get_message("Level %d!"))
+		if template.is_empty():
+			template = "Level %d!"  # i18n
+		var parts := template.split("%d")
+		if offer.level == 0 and parts.size() == 2 and offer.title.begins_with(parts[0]) and offer.title.ends_with(parts[1]):
+			var number := offer.title.trim_prefix(parts[0]).trim_suffix(parts[1])
+			if number.is_valid_int() and int(number) > 0:
+				offer.level = int(number)
+				offer.title = "Level %d!"  # i18n

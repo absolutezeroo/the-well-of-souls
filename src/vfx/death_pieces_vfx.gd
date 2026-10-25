@@ -21,6 +21,17 @@ class Piece:
 	var size := 1
 	var landed := false
 
+## One immutable atlas and its pieces, shared by every death showing the same frame.
+class Fragments:
+	var texture: Texture2D
+	var regions: Array[Rect2] = []
+	var corners: Array[Vector2] = []
+	var size := Vector2.ZERO
+
+static var _fragments: Dictionary[String, Fragments] = {}
+static var _warmed: Dictionary[SpriteFrames, bool] = {}
+static var _content_warmed: Dictionary[ContentDB, bool] = {}
+
 var element: VfxElementDef
 var _texture: Texture2D
 var _texel := 2.0
@@ -119,12 +130,82 @@ func _draw() -> void:
 ## Breaks `frame` (drawn with its top left at `corner`, in art pixels from the feet) into
 ## pieces: a few seeds, each art pixel to the nearest, packed side by side in one texture.
 func _break(frame: Texture2D, corner: Vector2, fewer: bool) -> void:
-	var image := frame.get_image()
-	if image == null or image.is_empty():
+	var key := _key(frame, element, fewer)
+	var fragments: Fragments = _fragments.get(key)
+	if fragments == null:
+		# Custom art/elements can use the CPU copy too; no GPU readback during play.
+		fragments = _bake(frame, element, fewer)
+		_fragments[key] = fragments
+	_texture = fragments.texture
+	var center := fragments.size * Vector2(0.5, 0.55)
+	for i in fragments.regions.size():
+		var piece := Piece.new()
+		piece.region = fragments.regions[i]
+		piece.position = (corner + fragments.corners[i]) * _texel
+		var out := fragments.corners[i] + piece.region.size * 0.5 - center
+		var direction := out.normalized() if out.length() > 0.5 else Vector2.from_angle(randf() * TAU)
+		piece.velocity = direction * randf_range(50.0, 120.0) + Vector2(0, -randf_range(60.0, 140.0))
+		piece.floor_y = randf_range(-6.0, 6.0) - piece.region.size.y * _texel * 0.5
+		piece.life = randf_range(0.8, 1.1)
+		_pieces.append(piece)
+	_life = 1.2
+
+
+## The floor loads every kind that may appear later, including summons and boss forms.
+static func warm_content(content: ContentDB) -> void:
+	if not Vfx.shown or _content_warmed.has(content):
 		return
-	if image.is_compressed():
-		image.decompress()
-	image.convert(Image.FORMAT_RGBA8)
+	_content_warmed[content] = true
+	var kinds := content.all_monsters()
+	kinds.append_array(content.abyss_monsters())
+	for act in content.dungeon.acts:
+		kinds.append(act.boss)
+		kinds.append_array(act.other_bosses)
+	if content.dungeon.finale:
+		kinds.append(content.dungeon.finale.boss)
+	for kind in kinds:
+		var seen: Array[MonsterDef] = []
+		while kind and not seen.has(kind):
+			seen.append(kind)
+			warm(kind.frames)
+			kind = (kind as BossDef).next_boss if kind is BossDef else null
+	warm(content.player.frames)
+
+
+## Death poses are baked once, in both effect densities, with private cosmetic dice.
+## Without a death animation the current pose falls over, so every pose can shatter.
+static func warm(frames: SpriteFrames) -> void:
+	if frames == null or not Vfx.shown or _warmed.has(frames):
+		return
+	_warmed[frames] = true
+	var has_death := false
+	for animation in frames.get_animation_names():
+		if String(animation).begins_with("dead"):
+			has_death = true
+	var frost := VfxElementDef.named(&"frost")
+	for animation in frames.get_animation_names():
+		if has_death and not String(animation).begins_with("dead"):
+			continue
+		for i in frames.get_frame_count(animation):
+			var frame := frames.get_frame_texture(animation, i)
+			if frame == null:
+				continue
+			BodyTops.top_of(frame)
+			for fewer: bool in [false, true]:
+				var key := _key(frame, frost, fewer)
+				if not _fragments.has(key):
+					_fragments[key] = _bake(frame, frost, fewer)
+
+
+static func _key(frame: Texture2D, made_of: VfxElementDef, fewer: bool) -> String:
+	return "%d/%d/%s" % [frame.get_instance_id(), made_of.get_instance_id(), fewer]
+
+
+static func _bake(frame: Texture2D, made_of: VfxElementDef, fewer: bool) -> Fragments:
+	var result := Fragments.new()
+	var image := BodyTops.cached_frame_image(frame)
+	if image == null or image.is_empty():
+		return result
 	var size := image.get_size()
 	var opaque := 0
 	for y in size.y:
@@ -132,10 +213,12 @@ func _break(frame: Texture2D, corner: Vector2, fewer: bool) -> void:
 			if image.get_pixel(x, y).a >= 0.5:
 				opaque += 1
 	if opaque == 0:
-		return
+		return result
 	var seeds: Array[Vector2] = []
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash("%s/%s/%s" % [frame.resource_path, size, fewer])
 	for i in clampi(int(opaque / float(SHARD_AREA * (2 if fewer else 1))), 3, 24):
-		seeds.append(Vector2(randf() * size.x, randf() * size.y))
+		seeds.append(Vector2(rng.randf() * size.x, rng.randf() * size.y))
 	# Which piece each art pixel falls in (stretched a little: ice breaks in slabs).
 	var owners := PackedInt32Array()
 	owners.resize(size.x * size.y)
@@ -167,7 +250,7 @@ func _break(frame: Texture2D, corner: Vector2, fewer: bool) -> void:
 			width += boxes[s].size.x + 1
 	var atlas := Image.create(maxi(width, 1), size.y, false, Image.FORMAT_RGBA8)
 	var x0 := 0
-	var center := Vector2(size) * Vector2(0.5, 0.55)
+	result.size = Vector2(size)
 	for s in seeds.size():
 		if not used[s]:
 			continue
@@ -176,34 +259,27 @@ func _break(frame: Texture2D, corner: Vector2, fewer: bool) -> void:
 			for x in range(box.position.x, box.end.x):
 				if owners[y * size.x + x] != s:
 					continue
-				atlas.set_pixel(x0 + x - box.position.x, y, _ice(image, owners, size, x, y, s))
-		var piece := Piece.new()
-		piece.region = Rect2(x0, box.position.y, box.size.x, box.size.y)
-		piece.position = (corner + Vector2(box.position)) * _texel
-		var out := (Vector2(box.get_center()) - center)
-		var direction := out.normalized() if out.length() > 0.5 else Vector2.from_angle(randf() * TAU)
-		piece.velocity = direction * randf_range(50.0, 120.0) + Vector2(0, -randf_range(60.0, 140.0))
-		piece.floor_y = randf_range(-6.0, 6.0) - box.size.y * _texel * 0.5
-		piece.life = randf_range(0.8, 1.1)
-		_pieces.append(piece)
+				atlas.set_pixel(x0 + x - box.position.x, y, _ice(image, owners, size, x, y, s, made_of))
+		result.regions.append(Rect2(x0, box.position.y, box.size.x, box.size.y))
+		result.corners.append(Vector2(box.position))
 		x0 += box.size.x + 1
-	_texture = ImageTexture.create_from_image(atlas)
-	_life = 1.2
+	result.texture = ImageTexture.create_from_image(atlas)
+	return result
 
 
 ## The ice color of art pixel (x, y) of piece `s`: the frozen body's step for its brightness
 ## (as flash.gdshader's freeze), lit on the piece's top left edge, dark on its bottom right.
-func _ice(image: Image, owners: PackedInt32Array, size: Vector2i, x: int, y: int, s: int) -> Color:
+static func _ice(image: Image, owners: PackedInt32Array, size: Vector2i, x: int, y: int, s: int, made_of: VfxElementDef) -> Color:
 	var source := image.get_pixel(x, y)
 	var luma := source.r * 0.299 + source.g * 0.587 + source.b * 0.114
 	var step := 0 if luma > 0.72 else (1 if luma > 0.5 else (2 if luma > 0.32 else (3 if luma > 0.17 else 4)))
 	step = clampi(step - 1, 0, 3)
-	var inside := func(dx: int, dy: int) -> bool:
-		var nx := x + dx
-		var ny := y + dy
-		return nx >= 0 and ny >= 0 and nx < size.x and ny < size.y and owners[ny * size.x + nx] == s
-	if not inside.call(0, -1) or not inside.call(-1, 0):
+	if not _inside(owners, size, x, y - 1, s) or not _inside(owners, size, x - 1, y, s):
 		step = 0
-	elif not inside.call(0, 1) or not inside.call(1, 0):
+	elif not _inside(owners, size, x, y + 1, s) or not _inside(owners, size, x + 1, y, s):
 		step = 4
-	return element.shade(step / 4.0)
+	return made_of.shade(step / 4.0)
+
+
+static func _inside(owners: PackedInt32Array, size: Vector2i, x: int, y: int, piece: int) -> bool:
+	return x >= 0 and y >= 0 and x < size.x and y < size.y and owners[y * size.x + x] == piece

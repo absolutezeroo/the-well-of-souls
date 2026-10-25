@@ -1554,19 +1554,19 @@ func _test_belt_and_balance(game: Game) -> void:
 	var saved_bag := player.inventory.items.duplicate()
 	player.belt.load_data([])
 	player.inventory.items.clear()
-	for i in Belt.MAX_STACK + 1:
+	for i in Belt.rules.max_stack + 1:
 		player.pack.pick_up(potion)
-	check(player.belt.count_at(0) == Belt.MAX_STACK and player.belt.count_at(1) == 1, "potions stack on the belt (%d a slot)" % Belt.MAX_STACK)
+	check(player.belt.count_at(0) == Belt.rules.max_stack and player.belt.count_at(1) == 1, "potions stack on the belt (%d a slot)" % Belt.rules.max_stack)
 	check(player.inventory.items.is_empty(), "they take no room in the bag")
 	player.pack.pick_up(bomb)
 	player.pack.pick_up(haste)
 	check(player.belt.item_at(2) == bomb and player.inventory.items.size() == 1 and player.inventory.items[0] == haste, "a full belt sends the rest to the bag")
 	await _frames(2)
 	var buttons: Array = [game.hud.get_node("%QuickItemButton"), game.hud.get_node("%Belt2Button"), game.hud.get_node("%Belt3Button")]
-	check(buttons.all(func(b: ActionButton) -> bool: return b.visible) and (buttons[0] as ActionButton).counter == Belt.MAX_STACK, "one button per belt slot, with its count")
+	check(buttons.all(func(b: ActionButton) -> bool: return b.visible) and (buttons[0] as ActionButton).counter == Belt.rules.max_stack, "one button per belt slot, with its count")
 	player.hp = 1
 	player.pack.use_belt(0)
-	check(player.hp > 1 and player.belt.count_at(0) == Belt.MAX_STACK - 1, "a belt button uses its potion")
+	check(player.hp > 1 and player.belt.count_at(0) == Belt.rules.max_stack - 1, "a belt button uses its potion")
 	var bombs_before := player.belt.count_of(bomb)
 	player.pack.use_belt(2)
 	check(player.belt.item_at(2) == null and bombs_before == 1, "the last one empties the slot")

@@ -693,7 +693,7 @@ asks: **Options > Privacy > Account** (`AccountDialog`); nothing is sent before.
   revision it last matched) and `dirty` (`Profile.saved` since) in `user://cloud_save.json`. A
   sync lists the account's saves and: same revision: this device's changes go up as `rev + 1`;
   newer and nothing changed here: it replaces the profile (`Profile.from_data()`, out of a run
-  only: in a run it waits, `WAITING`, until `Events.run_ended`/`run_left`); newer and changed here,
+  only: in a run it waits, `WAITING`, until `Events.run_closed`/`run_left`); newer and changed here,
   or a first sign-in with two different progressions: **a conflict**, the player chooses
   (`CloudConflictDialog`: runs, souls, deepest floor, victories; the online one with its date and
   system; no Back out). A fresh profile takes the online one without asking; the same profile on
@@ -701,7 +701,12 @@ asks: **Options > Privacy > Account** (`AccountDialog`); nothing is sent before.
   `upload_delay` (20 s) after a profile write, when the app goes to the background or comes back,
   Sync now; failures retry with the backoff. Over `max_bytes` (900 kB; Talo's body limit is 1 MB):
   `TOO_BIG`, not sent. Two devices writing the same second: the last one wins (Talo has no
-  compare-and-set on saves).
+  compare-and-set on saves). An upload owns a deep snapshot and a mutation counter: edits made
+  while it waits stay dirty for the next upload. Account changes invalidate in-flight operations
+  before their response can touch local state. A downloaded profile is type-checked and written
+  successfully before memory or `base_rev` changes; a disk failure leaves both unchanged.
+  `run_ended` reports a victory while endless play can continue: only closing the game scene (or
+  leaving for good) releases the run guard. Held/debug profiles never upload their temporary gains.
 - **Key scopes to add in Talo** (they were missing on 25 October 2026: the smoke test was
   refused with 403): **Game saves read and write**, and **Player presence write** for the custom
   status.

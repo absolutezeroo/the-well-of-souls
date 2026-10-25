@@ -131,7 +131,8 @@ path), heal, buff, summon. Statuses (`OnHitStatus`): burn and slow.
 
 ## Perks and relics
 
-Every level up offers **1 perk out of 3**, but **only when the player asks**: a level up opens
+Every level up offers **1 perk out of 3** (`PlayerDef.perk_choices`, before shrine bonuses),
+but **only when the player asks**: a level up opens
 nothing and never pauses. It is a short moment in the world instead (rings of golden light widening
 around the hero and a column of light behind him, `LevelUpVfx`; "LEVEL UP" floating up; a chime),
 and the choice waits behind the HUD's **perk button** (left of the minimap: a glowing star with how
@@ -140,6 +141,9 @@ and pauses the game; several waiting choices follow one another, with Reroll and
 **Later** (or Back) puts the one on screen off: back to the fight, it waits at the head of the line
 with the same cards (putting off never rerolls). Choices wait as long as the player wants, across
 floors, and are saved with the run, the one on screen with its cards (`OfferQueue`, `RunSave`).
+Saved titles/subtitles are English message keys, with the level stored separately; translation
+happens when shown, so changing language also changes waiting offers. Older rendered titles are
+recovered through the installed translations when possible.
 Taking a perk again levels it up (up to its `max_stacks`). Bosses drop a choice of **relics** (rare
 perks), and so does a kept pact (pact doors, see [dungeon.md](dungeon.md)).
 

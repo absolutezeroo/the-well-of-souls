@@ -175,6 +175,7 @@ func set_shown(on: bool) -> void:
 	if on:
 		OnlineSession.device()  # (the tag shown in the question then stays this device's)
 	else:
+		store.reset()  # invalidate sends and reads begun under the previous choice
 		queue.clear()
 	name_chosen = true
 	save_state()
@@ -184,6 +185,7 @@ func set_shown(on: bool) -> void:
 ## "Delete my online data" (Privacy.forget_online(), with OnlineSession.forget() for the device's
 ## id and its server player): off, the pseudonym and the queue forgotten.
 func forget() -> void:
+	store.reset()
 	pseudonym = ""
 	synced_name = ""
 	shown = false
@@ -255,7 +257,7 @@ func flush() -> void:
 	if status == BoardBackend.Status.REJECTED:
 		status = BoardBackend.Status.OFFLINE  # (a refused identity is tried again later, by every service alike)
 	var backend := OnlineSession.backend
-	if status == BoardBackend.Status.OK and synced_name != display_name() and (name_chosen or not queue.is_empty()):
+	if OnlineSession.scores_allowed() and status == BoardBackend.Status.OK and synced_name != display_name() and (name_chosen or not queue.is_empty()):
 		var named := display_name()
 		@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
 		status = await backend.set_pseudonym(named)
@@ -264,7 +266,7 @@ func flush() -> void:
 		if status == BoardBackend.Status.OK:
 			synced_name = named
 			save_state()
-	while status != BoardBackend.Status.OFFLINE and status != BoardBackend.Status.UNAVAILABLE and not queue.is_empty():
+	while OnlineSession.scores_allowed() and status != BoardBackend.Status.OFFLINE and status != BoardBackend.Status.UNAVAILABLE and not queue.is_empty():
 		var item: Dictionary = queue[0]
 		var def := config.board(StringName(item.board))
 		if def == null or not def.submits or not def.is_open(str(item.period)):
@@ -311,14 +313,21 @@ func load_board(board: LeaderboardDef, back: int = 0) -> View:
 	var view := View.new()
 	if not OnlineSession.scores_published():
 		return view  # (not chosen to publish: the server isn't even read)
+	var generation := store.generation()
 	await flush()
+	if not _may_read_board(generation):
+		return view
 	var key := board.period_key(back)
 	var past := back > 0
 	view.waiting = waiting_score(board, key)
 	var identity_status := await OnlineSession.identity()
 	var backend := OnlineSession.backend
+	if not _may_read_board(generation):
+		return View.new()
 	@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
 	var top := await backend.fetch(board, key, past, 0)
+	if not _may_read_board(generation):
+		return View.new()
 	view.status = top.status
 	if top.status != BoardBackend.Status.OK:
 		return view
@@ -335,8 +344,12 @@ func load_board(board: LeaderboardDef, back: int = 0) -> View:
 	# Past the top: the player's entry, then the page around it.
 	var page_size := BoardBackend.PAGE_SIZE
 	if view.mine == null:
+		if not _may_read_board(generation):
+			return View.new()
 		@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
 		var mine := await backend.fetch_mine(board, key, past)
+		if not _may_read_board(generation):
+			return View.new()
 		if mine.status != BoardBackend.Status.OK or mine.entries.is_empty():
 			return view
 		view.mine = mine.entries[0]
@@ -345,8 +358,12 @@ func load_board(board: LeaderboardDef, back: int = 0) -> View:
 			for page_index in range(1, config.rank_scan_pages):
 				if top.last_page:
 					break
+				if not _may_read_board(generation):
+					return View.new()
 				@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
 				var page := await backend.fetch(board, key, past, page_index)
+				if not _may_read_board(generation):
+					return View.new()
 				if page.status != BoardBackend.Status.OK:
 					break
 				top = page
@@ -359,8 +376,12 @@ func load_board(board: LeaderboardDef, back: int = 0) -> View:
 	var around := top
 	var wanted := floori(float(view.mine.rank - 1) / page_size)
 	if wanted != 0:
+		if not _may_read_board(generation):
+			return View.new()
 		@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
 		around = await backend.fetch(board, key, past, wanted)
+		if not _may_read_board(generation):
+			return View.new()
 	if around.status == BoardBackend.Status.OK:
 		_fill_around(view, around.entries)
 	return view
@@ -436,3 +457,8 @@ static func _migrate(data: Dictionary, version: int) -> Dictionary:
 		result.erase("name_chosen")
 		result.erase("shown")
 	return result
+
+
+## Every step of a board read belongs to the choice that started it.
+func _may_read_board(generation: int) -> bool:
+	return store.still(generation) and OnlineSession.scores_published()

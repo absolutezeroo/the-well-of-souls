@@ -47,6 +47,7 @@ func test_cases() -> Array:
 		["boss_slows", _test_boss_slows],
 		["nameless_keeper", _test_nameless_keeper],
 		["profile", _test_profile],
+		["audit_regressions", func() -> void: await _part(AuditRegressionTests.new(), func(suite: AuditRegressionTests) -> void: await suite.run_unit())],
 		["soul_economy", _test_soul_economy],
 		["run_time", _test_run_time],
 		["floor_size", _test_floor_size],

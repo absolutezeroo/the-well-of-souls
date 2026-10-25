@@ -58,3 +58,17 @@ static func _measure(texture: Texture2D) -> int:
 	if region.has_area():
 		return image.get_region(region).get_used_rect().position.y
 	return 0
+
+
+## A frame's pixels from the sheet already warmed at loading. Never reads the GPU.
+## The caller may read this image, but must not modify the shared sheet.
+static func cached_frame_image(texture: Texture2D) -> Image:
+	var atlas := texture as AtlasTexture
+	var source: Texture2D = atlas.atlas if atlas and atlas.atlas else texture
+	var image: Image = _sheets.get(source)
+	if image == null:
+		return null
+	if atlas == null or source == texture:
+		return image
+	var region := Rect2i(atlas.region).intersection(Rect2i(Vector2i.ZERO, image.get_size()))
+	return image.get_region(region) if region.has_area() else null

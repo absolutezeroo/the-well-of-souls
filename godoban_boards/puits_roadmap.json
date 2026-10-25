@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 262,
+  "next_id": 265,
   "tags": [
     "pc",
     "test",
@@ -3915,6 +3915,53 @@
       ],
       "created_at": 1792941305,
       "updated_at": 1792941305,
+      "due_date": null
+    },
+    {
+      "id": "task_262",
+      "title": "Corriger les 20 points de l’audit sauvegardes, confidentialité et performance",
+      "description": "Les 20 points de l’audit ba5f782 sont corrigés : écritures vérifiées, validation et reprise, courses cloud/identité, retrait du consentement, âmes captives, mode infini/debug, détection des erreurs moteur, caches graphiques, offres traduisibles et réglages dans data/. Régressions ajoutées, documentation actualisée. Suite complète : 19 213 vérifications, zéro échec (graine 347348) ; 622 scripts sans avertissement ; trois tests Python dont une écriture réellement tronquée. Intégration dans main autorisée par Clayton le 25/10/2026 ; autorisations GitHub rétablies et publication suivie par task_264. Vérification visuelle et mesures S23/Windows à faire : task_263.",
+      "status": "done",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "qualité"
+      ],
+      "created_at": 1792943195,
+      "updated_at": 1792945626,
+      "due_date": null
+    },
+    {
+      "id": "task_263",
+      "title": "Vérifier les correctifs de l’audit sur S23 et Windows",
+      "description": "Après task_262 : jouer une foule sous plafond avec brûlure, poison et gel ; contrôler les éclats de glace et les matériaux partagés, le temps de chargement, la mémoire et les pointes de temps par image. Export Compatibility Android (S23) et Windows. Vérifier aussi la reprise après fermeture/mise en arrière-plan et le remplacement atomique des fichiers sur ces systèmes. Les tests Linux headless ne valident ni le rendu ni les performances GPU sur appareils. Mesurer avant/après ; aucune amélioration chiffrée sur téléphone annoncée sans mesure.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_7",
+      "tags": [
+        "playtest",
+        "perf",
+        "android",
+        "pc",
+        "sauvegarde"
+      ],
+      "created_at": 1792944992,
+      "updated_at": 1792944992,
+      "due_date": null
+    },
+    {
+      "id": "task_264",
+      "title": "Publier les correctifs de l’audit dans main sur GitHub",
+      "description": "Les autorisations GitHub ont été corrigées par Clayton. Les 52 fichiers de correctifs, tests et documentation sont intégrés à main, sans écrasement de son historique ; le contenu publié est vérifié contre l’arbre Git local validé. Suite complète : 19 213 vérifications, zéro échec (graine 347348), 622 scripts sans avertissement et trois tests Python. Le blocage HTTP 403 initial est résolu. Vérification visuelle et mesures S23/Windows : task_263.",
+      "status": "done",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "git",
+        "qualité"
+      ],
+      "created_at": 1792945436,
+      "updated_at": 1792945626,
       "due_date": null
     }
   ]

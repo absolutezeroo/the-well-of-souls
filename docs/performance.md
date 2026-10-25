@@ -98,7 +98,20 @@ per change of sheet). Measure on the phone with the debug panel's line (draw cal
 
 **No GPU readback during play.** `Texture2D.get_image()` reads the texture back from the GPU on
 the Compatibility renderer, a stall on a phone. What needs pixels reads each sheet once while the
-floor loads and measures its frames on that copy (`BodyTops.warm`, `_sheets`).
+floor loads and measures its frames on that copy (`BodyTops.warm`, `_sheets`). Frozen deaths also
+prepare their fragment geometry and atlases at loading (`DeathPiecesVfx.warm_content`, including
+summons and boss forms). Deaths sharing a frame and effect density reuse the same atlas; only
+flight state is created at death. Baking uses private cosmetic dice, leaving gameplay's random
+stream alone. The fracture pattern is shared, the flight still varies. New custom frames/elements
+can bake from the CPU copy on first use; add them to warming if used during combat.
+
+`StatusSet` reuses its tick snapshot and refreshes status-id/element lists only when membership
+or appearance changes. Returned lists are read-only views: consume before a later refresh;
+`StatusFx` copies only on change. `BodyLook` retains its ages and compares scalar shader values.
+`CeilingLayer` keeps fixed nearest-body buffers, selects at most 16 bodies without sorting the
+whole crowd, and uploads uniforms only when positions, sizes or count change. Headless regressions
+check shared atlases and buffer semantics; load-time/memory cost and GPU frame pacing still need
+measurement on exported S23 and Windows builds.
 
 **Same results.** A shortcut must give the answer the plain way gave: the same floors from the
 same seed (the probe prints a digest per floor) and the same fights. `tests/suites/perf_tests.gd`

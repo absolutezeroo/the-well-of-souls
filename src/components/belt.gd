@@ -6,7 +6,7 @@ extends RefCounted
 signal changed
 
 const SLOTS := 3
-const MAX_STACK := 9
+static var rules: BeltRules = preload("res://data/items/belt_rules.tres")
 
 ## A slot's stack: one kind of consumable and how many (none: an empty slot).
 class Slot:
@@ -92,7 +92,7 @@ func _slot_for(item: ItemDef) -> int:
 	if not item is ConsumableDef:
 		return -1
 	for i in SLOTS:
-		if item_at(i) == item and count_at(i) < MAX_STACK:
+		if item_at(i) == item and count_at(i) < rules.max_stack:
 			return i
 	for i in SLOTS:
 		if slots[i].is_empty():
@@ -123,5 +123,5 @@ func load_data(data: Array) -> void:
 		var item := RunSave.load_ref(data[i].get("item")) as ConsumableDef
 		if item:
 			slot.item = item
-			slot.count = clampi(int(data[i].get("count", 1)), 1, MAX_STACK)
+			slot.count = clampi(int(data[i].get("count", 1)), 1, rules.max_stack)
 	changed.emit()

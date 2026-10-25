@@ -16,8 +16,9 @@ for a system before changing it.
   `godot --headless --fixed-fps 60 res://tests/run_tests.tscn`)
 - One test, again: `... -- --test=game.pacts --seed=N` (the seed is printed first; `--list`
   names the tests, `--timings` times them; docs/testing.md "Fast").
-- Exit code = failed checks; failures print as `FAIL: ...`. Engine `ERROR:` / `SCRIPT ERROR:` lines
-  don't fail the run, so read the output: docs/testing.md lists the known ones, anything else is a bug.
+- `tools/run_tests.py` fails on failed checks and unexpected engine `ERROR:` / `SCRIPT ERROR:`
+  lines; only the documented shutdown leak diagnostics are exempt. Direct Godot runs still need
+  their output inspected (docs/testing.md). Failures print as `FAIL: ...`.
 - Translations: `python3 tools/i18n/extract.py` after adding texts, then fill the French in
   `locale/strings.csv`; `python3 tools/i18n/extract.py --check` must pass.
 - Balance: the `balance` suite is opt-in and slow, and some of its checks fail on purpose

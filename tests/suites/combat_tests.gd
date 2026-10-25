@@ -526,7 +526,11 @@ func _test_sustain_in_game(world: World, player: Player) -> void:
 	player.xp = -1000000  # no level up (it heals to full) from these kills
 	player.perks.clear()
 	player.invincible = true  # nothing else may change the hero's health meanwhile
-	var spot := world.find_open_point_near(player.global_position, 90.0)
+	var lane := _clear_lane(world, player.global_position, 96.0)
+	if lane.is_empty():
+		return
+	var shot_direction: Vector2 = lane[1]
+	var spot: Vector2 = lane[0] + shot_direction * 64.0
 	var leech: RuneDef = load("res://data/runes/leech.tres")
 	var ratio: float = (leech.passives[0] as LifestealPassive).ratio_per_stack
 	var dummy := world.spawn_monster(load("res://data/monsters/slime.tres"), spot)
@@ -566,7 +570,8 @@ func _test_sustain_in_game(world: World, player: Player) -> void:
 	player.hp = 10
 	player.sustain = SustainMeter.new()
 	var dummy_hp := dummy.hp
-	world.fire_projectiles(player, Vector2.RIGHT, spec, dummy.global_position + Vector2(-24, 0))
+	check(_body_fits(world, dummy.global_position - shot_direction * 24.0, spec.radius), "the sustain shard starts clear of walls and props")
+	world.fire_projectiles(player, shot_direction, spec, dummy.global_position - shot_direction * 24.0)
 	await _frames(10)
 	check(dummy.hp < dummy_hp and player.hp == 10, "a shard fired by a perk hurts (%d -> %d) but heals nothing (%d)" % [dummy_hp, dummy.hp, player.hp])
 

@@ -122,7 +122,8 @@ Three things keep the compartments from getting in the way.
 ## The belt
 
 Potions, bombs and scrolls don't take room in the bag: they go on the **belt** (`Belt`),
-3 slots of one kind each, stacking up to 9. Each slot has its own button on screen, so you choose
+3 slots of one kind each, stacking up to 9 (`data/items/belt_rules.tres`, `BeltRules.max_stack`).
+Adding and restoring stacks use this same limit. Each slot has its own button on screen, so you choose
 what to drink or throw. When the belt is full, the rest goes to the bag; the bag screen moves
 consumables between the two ("To belt" / "To bag"). The merchant buys from the belt too.
 

@@ -117,6 +117,19 @@ func _test_souls(game: Game) -> void:
 	await _stand_still(world, player)
 	check(soul.called and world.monster_count() >= def.foes_at(world.depth), "the Well sends foes to take it back (%d)" % world.monster_count())
 	check(not soul.freed and soul.progress > 0.0, "it frees by standing by it")
+	var progress := soul.progress
+	game._save_run()
+	game.resume_run(RunSave.read())
+	await _frames(5)
+	world = game.world
+	trial = world.room_trial as CaptiveSoulsTrial
+	player = game.player
+	player.invincible = true
+	soul = trial.souls[0]
+	check(soul.called and (soul.progress >= progress or is_equal_approx(soul.progress, progress)) and not soul.freed, "a partly freed soul keeps its progress and remembers the foes already called (%.8f -> %.8f, called %s)" % [progress, soul.progress, soul.called])
+	player.global_position = soul.global_position + Vector2(0, 12)
+	player.hp = player.get_max_hp() - 20
+	hp_before = player.hp
 	for i in ceili(def.free_seconds * 60.0) + 10:
 		await get_tree().physics_frame
 	check(soul.freed and trial.done == 1, "freed after %.1f s by it" % def.free_seconds)

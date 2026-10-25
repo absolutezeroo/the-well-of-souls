@@ -108,7 +108,7 @@ func left_behind() -> Array:
 func restore_left(saved: Array) -> void:
 	var world := _world
 	for entry: Variant in saved:
-		if not (entry is Array and (entry as Array).size() == 4):
+		if not (entry is Array and (entry as Array).size() == 4) or not _coordinate(entry[2]) or not _coordinate(entry[3]):
 			continue
 		var at := Vector2(float(entry[2]), float(entry[3]))
 		if not world.is_solid_ground(at):
@@ -338,6 +338,8 @@ func restore_later(saved: Array) -> void:
 		var at: Variant = data.get("at")
 		if not path.begins_with("res://data/") or not ResourceLoader.exists(path) or not (at is Array and (at as Array).size() == 2):
 			continue
+		if not _coordinate(at[0]) or not _coordinate(at[1]):
+			continue
 		var def := load(path) as MonsterDef
 		if def == null or def is BossDef or String(def.id) != str(data.get("id", "")):
 			continue
@@ -376,3 +378,8 @@ static func saved_cells(saved: Array) -> Array[Vector2i]:
 		if pair is Array and (pair as Array).size() == 2 and (pair as Array).all(func(n: Variant) -> bool: return n is float or n is int):
 			cells.append(Vector2i(int(pair[0]), int(pair[1])))
 	return cells
+
+
+## Coordinates from JSON must be finite numbers before a Vector2 is built.
+static func _coordinate(value: Variant) -> bool:
+	return (value is int or value is float) and is_finite(float(value))

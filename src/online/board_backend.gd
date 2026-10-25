@@ -222,7 +222,7 @@ func send_feedback(_internal_name: String, _comment: String, _props: Dictionary)
 
 ## What the identified player's live connection needs (Presence): asked again before each one
 ## (the ticket serves once).
-func live_access() -> LiveAccess:
+func live_access(_allowed: Callable = Callable()) -> LiveAccess:
 	return LiveAccess.new()
 
 

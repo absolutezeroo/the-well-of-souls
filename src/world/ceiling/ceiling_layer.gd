@@ -54,6 +54,11 @@ var def: CeilingDef
 var laid: Array[Laid] = []
 ## The bodies handed to the shader this frame (feet, radius, height): for the tests.
 var bodies := PackedVector4Array()
+## Fixed nearest-body and upload buffers; steady frames allocate and upload nothing.
+var _near: Array[Actor] = []
+var _distances := PackedFloat32Array()
+var _padded := PackedVector4Array()
+var _sent_count := -1
 
 var _world: World
 var _material: ShaderMaterial
@@ -68,6 +73,10 @@ func build(world: World, ceiling: CeilingDef, skip: Rect2i = Rect2i()) -> void:
 	def = ceiling
 	name = "Ceiling"
 	_rng.seed = hash("ceiling-%d" % world.rng.seed)
+	_near.resize(MAX_BODIES)
+	_distances.resize(MAX_BODIES)
+	_padded.resize(MAX_BODIES)
+	_sent_count = -1
 	_material = ShaderMaterial.new()
 	_material.shader = SHADER
 	_material.set_shader_parameter("clear_radius", def.clear_radius)
@@ -342,33 +351,51 @@ func piece_spots() -> Array[Vector2]:
 func _process(_delta: float) -> void:
 	if _world == null or _material == null:
 		return
-	bodies = PackedVector4Array()
 	var view := _world.view_rect(64.0)
 	var hero := _world.player
-	var near: Array[Actor] = []
+	var has_hero := is_instance_valid(hero) and not hero.is_dead
+	var capacity := MAX_BODIES - (1 if has_hero else 0)
+	var count := 0
+	var worst := 0
 	for actor in _world.actors_this_frame():
-		if actor != hero and is_instance_valid(actor) and view.has_point(actor.global_position):
-			near.append(actor)
-	if hero and is_instance_valid(hero) and not hero.is_dead:
-		_add_body(hero)
-	# Nearest first only when they don't all fit (the shader and shown_at() take the nearest body
-	# to each point: the order of those sent changes nothing; no sort every frame).
-	if hero and is_instance_valid(hero) and not hero.is_dead and near.size() + 1 > MAX_BODIES:
-		near.sort_custom(func(a: Actor, b: Actor) -> bool:
-			return a.global_position.distance_squared_to(hero.global_position) < b.global_position.distance_squared_to(hero.global_position))
-	for actor in near:
-		if bodies.size() >= MAX_BODIES:
-			break
-		_add_body(actor)
-	var padded := bodies.duplicate()
-	padded.resize(MAX_BODIES)
-	_material.set_shader_parameter("bodies", padded)
-	_material.set_shader_parameter("body_count", bodies.size())
+		if actor == hero or not is_instance_valid(actor) or not view.has_point(actor.global_position):
+			continue
+		var distance := actor.global_position.distance_squared_to(hero.global_position) if has_hero else 0.0
+		if count < capacity:
+			_near[count] = actor
+			_distances[count] = distance
+			if distance > _distances[worst]:
+				worst = count
+			count += 1
+		elif has_hero and distance < _distances[worst]:
+			_near[worst] = actor
+			_distances[worst] = distance
+			for i in count:
+				if _distances[i] > _distances[worst]:
+					worst = i
+	var total := count + (1 if has_hero else 0)
+	if bodies.size() != total:
+		bodies.resize(total)
+	if has_hero:
+		bodies[0] = _body(hero)
+	for i in count:
+		bodies[i + (1 if has_hero else 0)] = _body(_near[i])
+	var changed := total != _sent_count
+	for i in MAX_BODIES:
+		var value := bodies[i] if i < total else Vector4.ZERO
+		if _padded[i] != value:
+			_padded[i] = value
+			changed = true
+	if changed:
+		_material.set_shader_parameter("bodies", _padded)
+	if total != _sent_count:
+		_material.set_shader_parameter("body_count", total)
+		_sent_count = total
 
 
-func _add_body(actor: Actor) -> void:
+func _body(actor: Actor) -> Vector4:
 	var feet := actor.global_position
-	bodies.append(Vector4(feet.x, feet.y, actor.radius, maxf(feet.y - actor.head_position().y, actor.radius)))
+	return Vector4(feet.x, feet.y, actor.radius, maxf(feet.y - actor.head_position().y, actor.radius))
 
 
 ## How much of the ceiling shows at `point` (0: none, around a body; 1: all of it), as the shader

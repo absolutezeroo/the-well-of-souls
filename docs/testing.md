@@ -165,12 +165,20 @@ The runner prints `FAIL: <what>` for every failed check, a count per suite, then
 `N checks, M failed`. The exit code is the number of failures (a suite that doesn't compile counts as
 one).
 
-**Read the output, not only the exit code.** Engine errors printed while a test runs (`ERROR:`,
-`SCRIPT ERROR:`) don't fail the run today. Known ones (2026-10-22): `Parse JSON failed` twice (the
-damaged-save test, on purpose), `WARNING: Run save: ...` lines (the unit and game suites' damaged and
-too-new run saves, on purpose: SaveTests, `_test_save_rules`), plus the leak warnings at exit. Any other is a bug, even if
-every check passed (`Lambda capture at index 0 was freed`, seen in the game suite until then, was
-one: see docs/conventions.md, "Lambdas that run later").
+**Engine errors fail the Python runner.** `tools/run_tests.py` counts every `SCRIPT ERROR:` and
+unexpected `ERROR:` as a failure, even if the interrupted test prints no failed check. Only the
+known resource/RID leaks explicitly reported **at exit** are exempt. Direct Godot runs still
+return only failed checks: inspect their output. Damaged JSON is parsed quietly by `SafeFile`;
+`WARNING: Run save: ...` from intentionally damaged/too-new saves remains expected.
+
+`unit.audit_regressions` releases suspended network operations by signals to exercise uploads
+changed in flight, sign-out/account changes, consent withdrawal, and stale Talo identities.
+It also covers rejected profile writes, debug isolation, temporary-run recovery, status buffers,
+shared frost atlases, translated offers and belt tuning. `game.trials` resumes a partly freed
+soul; `game.status_looks` reaches the checks after returning to a pooled material.
+Host-side checks: `GODOT=/path/to/godot python3 -m unittest discover -s tools/tests -v` tests the
+runner's error classification and (Linux) forces a real short write with `RLIMIT_FSIZE` in an
+isolated temporary Godot project, verifying that the previous save survives.
 
 - **balance** (opt-in: only with `--only=balance`): the balance tools' quick runs against the
   targets of `data/balance/targets.tres`. Some of its checks fail on purpose today (the balance

@@ -37,6 +37,19 @@ SUITE_LINE = re.compile(r"^(\w+): (\d+) checks$")
 TOTAL_LINE = re.compile(r"^(\d+) checks, (\d+) failed$")
 
 
+def unexpected_engine_error(line):
+	"""Only the documented shutdown diagnostics are allowed."""
+	if line.startswith("SCRIPT ERROR:"):
+		return True
+	if not line.startswith("ERROR:"):
+		return False
+	if re.fullmatch(r"ERROR: \d+ resources still in use at exit .*", line):
+		return False
+	if re.fullmatch(r"ERROR: \d+ RID allocations of type '.+' were leaked at exit\.", line):
+		return False
+	return True
+
+
 def find_godot(given):
 	"""The Godot binary to run: the option, $GODOT, `godot` on the PATH, or a downloaded one."""
 	candidates = [given, os.environ.get("GODOT"), shutil.which("godot")]
@@ -104,6 +117,9 @@ def main():
 		with open(log_path, errors="replace") as handle:
 			for line in handle:
 				line = line.rstrip("\n")
+				if unexpected_engine_error(line):
+					failures += 1
+					pending.append("FAIL: " + line)
 				if line.startswith("FAIL"):
 					pending.append(line)
 					continue
@@ -128,6 +144,9 @@ def main():
 		else:
 			checks += total[0]
 			failures += total[1]
+			if code not in (0, total[1]):
+				failures += 1
+				failed_lines.append("FAIL: shard %d exited %s despite a reported total (see %s)" % (index, code, log_path))
 	elapsed = time.monotonic() - started
 	usage = resource.getrusage(resource.RUSAGE_CHILDREN)
 	cpu = usage.ru_utime + usage.ru_stime
