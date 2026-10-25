@@ -1,0 +1,217 @@
+extends Node
+## The live session and presence (autoload "Presence"; docs/online.md "Sessions and presence"):
+## while the gameplay statistics are allowed (OnlineSession.statistics_allowed(): the player's
+## consent, a server, the remote kill switch), the game keeps one live connection open to Talo
+## (a WebSocket, LiveLink). The player identified on it, Talo starts a session and shows them
+## online; the connection gone, it ends the session (its length) and shows them offline. That is
+## what fills the dashboard's "Total sessions", "Average session duration" and "Online players".
+##
+## Its steps: the player identified (OnlineSession.identity()), a one-use ticket and the player's
+## socket token asked (BoardBackend.live_access()), the connection opened with the ticket, then,
+## once the server says "v1.connected", the player identified on it ("v1.players.identify");
+## "v1.players.identify.success": live. The app put in the background (a phone) or closed: the
+## connection is closed, so the session ends there; back: a new one. A failure or a connection
+## lost tries again after PresenceDef.retry_seconds, doubled per failure. Consent taken back, the
+## online data deleted or the kill switch: closed within check_seconds. Nothing else goes on it:
+## no gameplay is sent, and the game never waits for it.
+
+## The player is shown online (a session started).
+signal went_live
+## The session ended (closed, lost, or the consent taken back).
+signal went_off
+
+const DEFS := "res://data/online/presence.tres"
+
+## OFF: no connection. ASKING: the ticket asked. CONNECTING: opening. IDENTIFYING: open, the
+## player sent. LIVE: a session runs.
+enum Phase { OFF, ASKING, CONNECTING, IDENTIFYING, LIVE }
+
+var config: PresenceDef
+var phase := Phase.OFF
+## The app is in the background (or closing): no session.
+var in_background := false
+## Sessions started since launch (the tests count them).
+var sessions := 0
+
+var _link: LiveLink
+var _token := ""
+## Seconds in the current phase (its timeout).
+var _since := 0.0
+## Seconds before a new try may start.
+var _wait := 0.0
+## Seconds before the next look at whether a connection should be open.
+var _check := 0.0
+var _failures := 0
+## Bumped when it stops: a step answered after that is dropped.
+var _generation := 0
+
+
+func _init() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS  # (the game paused: still online)
+	config = load(DEFS) as PresenceDef
+
+
+func _ready() -> void:
+	OnlineSession.register(self)
+	OnlineSession.identity_forgotten.connect(_on_identity_forgotten)
+
+
+## The tests: closed, nothing counted, nothing waited for, in the foreground.
+func use_for_tests() -> void:
+	stop()
+	sessions = 0
+	_failures = 0
+	_wait = 0.0
+	_check = 0.0
+	in_background = false
+
+
+## A connection should be open now.
+func wanted() -> bool:
+	return config != null and config.enabled and not in_background and OnlineSession.statistics_allowed()
+
+
+func is_live() -> bool:
+	return phase == Phase.LIVE
+
+
+func _process(delta: float) -> void:
+	if _link:
+		_poll(delta)
+	_wait -= delta
+	_check -= delta
+	if _check > 0.0:
+		return
+	_check = config.check_seconds if config else 2.0
+	if not wanted():
+		if phase != Phase.OFF:
+			stop()
+		return
+	if phase == Phase.OFF and _wait <= 0.0:
+		start()
+
+
+## Opens the connection (the player identified first). Answers at once; the steps follow.
+func start() -> void:
+	if phase != Phase.OFF or not wanted():
+		return
+	phase = Phase.ASKING
+	_since = 0.0
+	var generation := _generation
+	var status: BoardBackend.Status = await OnlineSession.identity()
+	if generation != _generation:
+		return
+	if status != BoardBackend.Status.OK:
+		_failed()
+		return
+	var backend := OnlineSession.backend
+	@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
+	var access: BoardBackend.LiveAccess = await backend.live_access()
+	if generation != _generation:
+		return
+	if access.status != BoardBackend.Status.OK or access.url.is_empty() or not wanted():
+		_failed()
+		return
+	_token = access.token
+	_link = backend.open_live()
+	if _link == null or _link.open(access.url) != OK:
+		_link = null
+		_failed()
+		return
+	phase = Phase.CONNECTING
+	_since = 0.0
+
+
+## Closed: the session ends (the server sees the connection go).
+func stop() -> void:
+	_generation += 1
+	var was_live := phase == Phase.LIVE
+	if _link:
+		_link.close()
+	_link = null
+	_token = ""
+	phase = Phase.OFF
+	if was_live:
+		went_off.emit()
+
+
+## The player forgotten: their session ends now; the next one (if still allowed) is the new
+## player's.
+func _on_identity_forgotten() -> void:
+	if phase != Phase.OFF:
+		stop()
+		_wait = 0.0
+
+
+func _poll(delta: float) -> void:
+	_link.poll()
+	_since += delta
+	var state := _link.state()
+	if state == LiveLink.State.CLOSED or state == LiveLink.State.CLOSING:
+		_lost()
+		return
+	if state == LiveLink.State.OPEN:
+		while _link:
+			var text := _link.receive()
+			if text.is_empty():
+				break
+			_on_message(text)
+	if _link and phase != Phase.LIVE and _since > config.connect_timeout:
+		_failed()
+
+
+## A message from the server: {"res": name, "data": {...}}. The rest (other players' presence,
+## channels) is not the game's.
+func _on_message(text: String) -> void:
+	var json := JSON.new()
+	if json.parse(text) != OK or not json.data is Dictionary:
+		return
+	match str((json.data as Dictionary).get("res", "")):
+		"v1.connected":
+			if phase == Phase.CONNECTING:
+				phase = Phase.IDENTIFYING
+				_link.send(JSON.stringify({ "req": "v1.players.identify", "data": {
+					"playerAliasId": OnlineSession.backend.alias_id(),
+					"socketToken": _token,
+				} }))
+		"v1.players.identify.success":
+			if phase == Phase.IDENTIFYING:
+				phase = Phase.LIVE
+				_failures = 0
+				sessions += 1
+				went_live.emit()
+		"v1.error":
+			if phase != Phase.LIVE:
+				_failed()  # (a token refused: asked again at the next try)
+
+
+## A try failed: again after retry_seconds, doubled per failure up to the session's max backoff.
+func _failed() -> void:
+	stop()
+	_failures += 1
+	var factor := minf(pow(2.0, _failures - 1), OnlineSession.max_backoff())
+	_wait = config.retry_seconds * factor
+
+
+## The connection went (the network, the server): a live one is opened again after
+## retry_seconds; one that never got live counts as a failure.
+func _lost() -> void:
+	if phase == Phase.LIVE:
+		stop()
+		_failures = 0
+		_wait = config.retry_seconds
+	else:
+		_failed()
+
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_WM_CLOSE_REQUEST:
+			# To the background (a phone, maybe killed there) or closing: the session ends now.
+			in_background = true
+			stop()
+		NOTIFICATION_APPLICATION_RESUMED:
+			# Back: a new session at once.
+			in_background = false
+			_wait = 0.0
+			_check = 0.0

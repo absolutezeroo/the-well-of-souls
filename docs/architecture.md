@@ -69,9 +69,10 @@ src/
                        the consent gates, the clock), Leaderboards (the online leaderboards), Privacy (the player's privacy choices),
                        Telemetry (the gameplay statistics, with consent), WorldStats (the world counters),
                        RemoteConfig (the remote settings: Talo's game config, checked against the allow-list),
-                       Feedback (the player's feedback messages and their queue)
+                       Feedback (the player's feedback messages and their queue),
+                       Presence (Talo's live connection: play sessions and online presence, with consent)
   online/              The online pieces: RunSummary (a run that ended), PlayerName (the pseudonym's
-                       filter), BoardBackend (offline) > TaloBackend (Talo's REST API), RunTelemetry (what
+                       filter), BoardBackend (offline) > TaloBackend (Talo's REST API), LiveLink (the live WebSocket), RunTelemetry (what
                        the statistics learn of a run), RemoteTuning (what the remote settings change in a run, saved with it),
                        FeedbackInfo (the game's details a feedback message can carry), PersistedQueue (a
                        service's versioned file, bounded queue, flush latch and retry with backoff)
@@ -296,6 +297,7 @@ shared session"):
 | `WorldStats` | `src/autoload/world_stats.gd` | The world counters (the Well's Toll): the player's share of each, sent with consent from release builds, and the world's numbers read for the title and the page. `user://world_stats.json` |
 | `RemoteConfig` | `src/autoload/remote_config.gd` | The remote settings: Talo's game config checked against the allow-list, applied at safe points, the kill switches. `user://remote_config.json` |
 | `Feedback` | `src/autoload/feedback.gd` | The player's feedback messages, queued and sent to Talo's game feedback. `user://feedback.json` |
+| `Presence` | `src/autoload/presence.gd` | Talo's live connection (`LiveLink`, a WebSocket) while the statistics are allowed: a play session and the player shown online; closed in the background (docs/online.md "Sessions and presence"). No file |
 
 **Start-up order.** Godot makes every autoload (`_init()`) before any `_ready()`. The online ones
 read their data and file in `_init()` and ask no other service there, so from `_ready()` on any

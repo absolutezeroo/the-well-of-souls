@@ -606,6 +606,48 @@ answered **404 "Feedback category not found"**: the key, its scope and the alias
 categories don't exist yet. Once they are made, run it again (or send one from an editor build) to
 see a message arrive; that player can then be deleted.
 
+## Sessions and presence (Talo's live connection)
+
+What fills the dashboard's **Total sessions**, **Average session duration** and **Online
+players**: Talo counts a session only while a player is identified on its **WebSocket**, not
+through the REST calls (verified in its code: `v1.players.identify` on the socket starts the
+session and sets the presence online; the socket closing ends the session, with its length, and
+sets it offline). So, with the statistics' consent only (`OnlineSession.statistics_allowed()`:
+the consent, a server, the remote kill switch `statistics_off`), the game keeps one live
+connection open while it runs:
+
+- **`Presence`** (autoload, `src/autoload/presence.gd`) looks every `check_seconds` whether a
+  connection should be open (`wanted()`). If so: the player identified
+  (`OnlineSession.identity()`), then `BoardBackend.live_access()` asks a one-use **ticket**
+  (`POST /v1/socket-tickets`, valid five minutes; it carries the dev build flag, so a debug
+  build's sessions are dev data) and a fresh **socket token** for the player
+  (`POST /v1/players/socket-token`, valid an hour; scope Players write). It opens
+  `wss://api.trytalo.com/?ticket=...`; on the server's `v1.connected` it sends
+  `{"req":"v1.players.identify","data":{"playerAliasId":..,"socketToken":..}}`; on
+  `v1.players.identify.success` the session runs (`Presence.is_live()`, `went_live`). Nothing
+  else goes on it; the server's pings are answered by `WebSocketPeer.poll()` every frame.
+- **The app in the background** (`NOTIFICATION_APPLICATION_PAUSED`, a phone) or **closing**: the
+  connection is closed, so Talo ends the session there (a phone killed in the background ends it
+  anyway: Talo drops a connection that stops answering its 30-second pings). Back
+  (`NOTIFICATION_APPLICATION_RESUMED`): a new session at once. A desktop window losing the focus
+  keeps its session (alt-tab is not leaving).
+- **Failures**: a connection lost after it was live is opened again after `retry_seconds`; one
+  that never got live (no network, a refused token, `connect_timeout` passed) waits
+  `retry_seconds`, doubled per failure up to `OnlineSessionDef.max_backoff` times. The consent
+  taken back or the kill switch: closed at the next look; the online data deleted
+  (`OnlineSession.forget()`, signal `identity_forgotten`): closed at once.
+- **`LiveLink`** (`src/online/live_link.gd`) is the WebSocket itself (`WebSocketPeer`, 256 KiB
+  buffers like Talo's plugin); `BoardBackend.open_live()` makes it, the offline backend asks no
+  ticket. The numbers are data: `data/online/presence.tres` (`PresenceDef`: `enabled`,
+  `check_seconds` 2, `retry_seconds` 30, `connect_timeout` 20).
+- **Not done (yet)**: a custom presence status ("Étage 7", `PUT /v1/players/presence`); the
+  dashboard's online count only needs the session.
+
+Smoke test (25 October 2026, a throwaway scene, dev data): the dev player `smoke-presence-dev`
+(alias 666909) identified, ticket and token taken, `v1.connected` then
+`v1.players.identify.success` answered, the connection closed cleanly. The numbers show in the
+dashboard with dev data turned on; from a release build they count as live data.
+
 ## Privacy
 
 Leaderboards: a random id made on the device, the pseudonym, the scores and their run summary.
@@ -613,7 +655,8 @@ Statistics: the events above, linked to the same id; with them, the player's sha
 counters (their totals per counter, and Talo's snapshot of each update). The remote settings'
 read sends no id (Talo sees the device's IP address, as with any request), only once an online
 feature is on. Feedback: only the messages the player sends, with what they left ticked, linked
-to the same id. No email, no account, no hardware device id
+to the same id. With the statistics' consent too: the play sessions (when each starts and ends)
+and the online presence, over the live connection above, linked to the same id. No email, no account, no hardware device id
 (the id is random, never `OS.get_unique_id()`), no location. Both are off until chosen and can be
 turned off in Options > Privacy, which also shows the id and prepares a deletion request. The
 policy is `docs/privacy.html` (FR and EN) and, short, in the game (`data/online/privacy.tres`);
@@ -672,6 +715,14 @@ the release-only paths, and the **start-up of the seven online autoloads in a re
 14 orders (each one first, each one last, others not made yet) for every mix of consent, key and
 kill switch. `TaloContractTests` (unit, a transport in memory under `TaloBackend._send()`): the
 status rule, non-JSON bodies, identify's parsing, the feedback's 404, the stats' and config's
-lists, a line's name, the headers, the period's query, the key's file.
+lists, a line's name, the live session's ticket, token and WebSocket address, the headers, the
+period's query, the key's file.
+`PresenceTests` (unit, `FakeBoardBackend` and `FakeLiveLink`, a Talo socket in memory): no
+connection without consent; a session started with the ticket's address, the player's id and
+token sent on `v1.connected`, one connection while it lasts; ended in the background and a new
+one on return; a lost connection opened again only after the wait; a server that never opens
+backing off, then live; closed when the consent is taken back, the data deleted or the kill
+switch read. (Presence reads no file and asks no other service before its first `_process()`,
+so it has no part in the start-up orders.)
 A real call to Talo can only be checked by hand (a probe under `_tool/`, with the key): done on
 23 October 2026 (an identify and a `run_end` event as dev data).

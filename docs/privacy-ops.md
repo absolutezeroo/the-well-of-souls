@@ -99,6 +99,16 @@ legal advice.** Where the report was unsure, the safer choice was taken and is m
   **policy version** change (1.3 to 1.4), not a consent version: players who accepted under 1.3
   are not asked again (their answer is logged with policy 1.3; new answers with 1.4). Had any of
   it been a new kind of data or a new use on consent, `consent_version` would go to 3.
+- **Policy 1.5 (25 October 2026): play sessions and presence, `consent_version` 3.** The game now
+  keeps Talo's live connection open while it runs (online.md "Sessions and presence"), so Talo
+  records each play session's start and end and shows the player online: what fills the
+  dashboard's sessions, average duration and online players. It is new data (when and how long
+  the game is played), collected by itself on consent, so by the rule below **consent version 3**:
+  players who accepted version 2 are asked again and send nothing until they answer. Under the
+  statistics' consent only (16 or older, accepted), never otherwise; closed in the background, so
+  nothing runs there. The consent question has a line for it, the in-game policy's statistics
+  section and `docs/privacy.html` section 4 (both languages, with a retention row: sessions go
+  with the player, deletion or the 730-day purge) say it. Same processor (Talo), same id.
 - **The rule for a new purpose**, made explicit: a new purpose that runs **on consent** (or by
   itself in the background) raises `consent_version`; a new feature that only sends when the
   player explicitly asks for it, each time, and says what it sends, only changes the policy
@@ -168,7 +178,7 @@ Answers from the report (check them again against the build you publish):
 | Personal info > **Name** (the pseudonym: Google's "name" includes nicknames) | Yes | App functionality | Optional | No |
 | **Device or other IDs** (the random install id) | Yes | App functionality, Analytics | Optional | No |
 | App activity > **Other actions** (gameplay: scores, run summaries, builds, deaths, perks...) | Yes | App functionality, Analytics | Optional | No |
-| App activity > **App interactions** (the input device type) | Yes | Analytics | Optional | No |
+| App activity > **App interactions** (the input device type; play sessions: when the game is open, their length, online presence) | Yes | Analytics | Optional | No |
 | App info and performance > **Other app performance data** (game version, OS name, screen size; with feedback also the OS version and device model) | Yes | Analytics, App functionality | Optional | No |
 | App activity > **Other user-generated content** (a feedback message's words) | Yes | App functionality | Optional | No |
 | App info and performance > **Diagnostics** (the last lines of the game's log, sent with feedback if ticked; Android keeps no log file by default, so in practice desktop only) | Yes | App functionality | Optional | No |

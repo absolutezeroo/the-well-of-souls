@@ -83,6 +83,15 @@ class ConfigValues:
 	var values := {}
 
 
+## What opening a live session needs (Presence): the connection's address with its one-use
+## ticket, and the player's socket token (the proof, on that connection, that it is them).
+class LiveAccess:
+	extends RefCounted
+	var status: BoardBackend.Status = BoardBackend.Status.UNAVAILABLE
+	var url := ""
+	var token := ""
+
+
 ## There is a server to talk to (an access key).
 func is_configured() -> bool:
 	return false
@@ -164,3 +173,14 @@ func fetch_mine(_board: LeaderboardDef, _period_key: String, _past: bool) -> Pag
 ## OFFLINE: try again later. See Feedback.
 func send_feedback(_internal_name: String, _comment: String, _props: Dictionary) -> Status:
 	return Status.UNAVAILABLE
+
+
+## What the identified player's live connection needs (Presence): asked again before each one
+## (the ticket serves once).
+func live_access() -> LiveAccess:
+	return LiveAccess.new()
+
+
+## A new live connection, not opened yet (the tests' fake server gives its own).
+func open_live() -> LiveLink:
+	return LiveLink.new()

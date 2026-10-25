@@ -21,7 +21,7 @@ text = "When you choose to publish your scores, the game sends: a random ID made
 [sub_resource type="Resource" id="stats"]
 script = ExtResource("2_section")
 title = "Gameplay statistics (only if you accept)"
-text = "If you accept, at the end of each run, or when it is left or the app is closed, the game sends a summary of it: your build (weapons, armor, skills and their damage), potions, dodges, the cause and floor of your death, perks offered and picked, in-game purchases, boss fights, the kind of controls you use, plus the game version, the system and the screen size. It is linked to the random ID of this device, never to your name. Your runs also add to the world counters every player sees (the Well's Toll: monsters slain, wardens defeated, deaths, floors, potions, endings, Dawn Knells, souls offered), sent at the same moments: your own totals are kept with the same random ID, and only the sums of all players are shown. Why: to balance the game, fix its bugs and show the world counters. Basis: your consent, which you can withdraw at any time in Options > Privacy; refusing changes nothing in the game. Kept {months} months. Only offered to players aged {age} or older."
+text = "If you accept, at the end of each run, or when it is left or the app is closed, the game sends a summary of it: your build (weapons, armor, skills and their damage), potions, dodges, the cause and floor of your death, perks offered and picked, in-game purchases, boss fights, the kind of controls you use, plus the game version, the system and the screen size. It is linked to the random ID of this device, never to your name. Your runs also add to the world counters every player sees (the Well's Toll: monsters slain, wardens defeated, deaths, floors, potions, endings, Dawn Knells, souls offered), sent at the same moments: your own totals are kept with the same random ID, and only the sums of all players are shown. While the game is open, it also keeps a connection to Talo, so Talo records when each play session starts and ends and shows you as online; it closes when the app goes to the background. Why: to balance the game, fix its bugs, show the world counters and count play sessions and players online. Basis: your consent, which you can withdraw at any time in Options > Privacy; refusing changes nothing in the game. Kept {months} months. Only offered to players aged {age} or older."
 
 [sub_resource type="Resource" id="settings"]
 script = ExtResource("2_section")
@@ -63,7 +63,7 @@ script = ExtResource("1_privacy")
 controller_name = "[CONTROLLER_NAME]"
 contact_email = "[CONTACT_EMAIL]"
 policy_url = "[POLICY_URL]"
-policy_version = "1.4"
-policy_date = "2026-10-24"
-consent_version = 2
+policy_version = "1.5"
+policy_date = "2026-10-25"
+consent_version = 3
 sections = Array[ExtResource("2_section")]([SubResource("who"), SubResource("short"), SubResource("boards"), SubResource("stats"), SubResource("settings"), SubResource("feedback"), SubResource("device"), SubResource("who_receives"), SubResource("rights"), SubResource("children"), SubResource("changes")])

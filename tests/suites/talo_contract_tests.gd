@@ -4,7 +4,7 @@ extends TestSuite
 ## TaloBackend._send()): never the network. run_unit(): what an HTTP status means (429 and 5xx:
 ## try later; other 4xx: refused), bodies that aren't JSON (a captive portal's page) read without
 ## an engine error, identify's parsing, the feedback's 404 rule, the stats' and config's lists,
-## a board line's name, the headers (dev build, the player), the period's query, the key's file.
+## a board line's name, the live session's ticket and token, the headers (dev build, the player), the period's query, the key's file.
 
 
 ## A TaloBackend whose requests are answered from `answers` (the first whose path part is in the
@@ -40,6 +40,7 @@ func run_unit() -> void:
 	await _test_events_and_stats()
 	await _test_config()
 	await _test_boards()
+	await _test_live()
 	_test_key_file()
 
 
@@ -211,3 +212,29 @@ func _test_key_file() -> void:
 	check(found.key == "abc" and found.url == "https://example.test", "the key's file: the key trimmed, the address")
 	check(str(TaloBackend.read_key("user://no_such_key_%d.cfg" % OS.get_process_id()).key).is_empty(), "no key file: no key (offline)")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(file))
+
+
+## The live session (Presence): nothing before a player, then a ticket and a fresh socket token,
+## the API's address on WebSocket with the ticket; a refusal or the server down at either step.
+func _test_live() -> void:
+	var talo := _identified()
+	check((await talo.live_access()).status == BoardBackend.Status.REJECTED and talo.requests.is_empty(), "live: nothing asked before the player is identified")
+	await talo.identify("dev")
+	talo.answer("/v1/socket-tickets", 200, JSON.stringify({ "ticket": "6c6e f3" }))
+	talo.answer("/v1/players/socket-token", 200, JSON.stringify({ "socketToken": "tok-1" }))
+	var access: BoardBackend.LiveAccess = await talo.live_access()
+	check(access.status == BoardBackend.Status.OK and access.url == "wss://talo.test/?ticket=6c6e%20f3" and access.token == "tok-1", "live: the ticket in the WebSocket address, the token kept (%s)" % access.url)
+	var asked := talo.requests.slice(1).map(func(r: Dictionary) -> String: return str(r.url))
+	check(asked.size() == 2 and str(asked[0]).ends_with("/v1/socket-tickets") and str(asked[1]).ends_with("/v1/players/socket-token") and talo.requests.slice(1).all(func(r: Dictionary) -> bool: return r.method == HTTPClient.METHOD_POST and _header(r, "X-Talo-Alias:") == "X-Talo-Alias: 7"), "live: a ticket then the player's token, both POST, for that player")
+	talo.answer("/v1/players/socket-token", 403, "")
+	check((await talo.live_access()).status == BoardBackend.Status.REJECTED, "live: a token refused (the key's scopes) is REJECTED")
+	talo.answer("/v1/socket-tickets", 503, "")
+	check((await talo.live_access()).status == BoardBackend.Status.OFFLINE, "live: the server down is OFFLINE")
+	talo.answer("/v1/socket-tickets", 200, "<html>portal</html>")
+	check((await talo.live_access()).status == BoardBackend.Status.REJECTED, "live: a ticket that isn't Talo's answer is refused")
+	talo.free()
+	var local := TaloBackend.new("k", "http://localhost:3000/")
+	var hosted := TaloBackend.new("k")
+	check(local.socket_url() == "ws://localhost:3000" and hosted.socket_url() == "wss://api.trytalo.com", "live: https goes wss, http goes ws")
+	local.free()
+	hosted.free()

@@ -187,6 +187,39 @@ func identify(device_id: String) -> Status:
 	return Status.OK if _alias_id > 0 and not _player_id.is_empty() else Status.REJECTED
 
 
+## The live connection's ticket (POST /v1/socket-tickets: valid five minutes, once) and the
+## player's socket token (POST /v1/players/socket-token: a new one each time, valid an hour).
+## The ticket carries the dev build flag, so a debug build's sessions are dev data too.
+func live_access() -> BoardBackend.LiveAccess:
+	var access := BoardBackend.LiveAccess.new()
+	if _alias_id <= 0:
+		access.status = Status.REJECTED
+		return access
+	var ticket := await _request(HTTPClient.METHOD_POST, "/v1/socket-tickets", {})
+	var ticket_text := str((ticket.body as Dictionary).get("ticket", "")) if ticket.body is Dictionary else ""
+	if ticket.status != Status.OK or ticket_text.is_empty():
+		access.status = ticket.status if ticket.status != Status.OK else Status.REJECTED
+		return access
+	var token := await _request(HTTPClient.METHOD_POST, "/v1/players/socket-token", {})
+	var token_text := str((token.body as Dictionary).get("socketToken", "")) if token.body is Dictionary else ""
+	if token.status != Status.OK or token_text.is_empty():
+		access.status = token.status if token.status != Status.OK else Status.REJECTED
+		return access
+	access.status = Status.OK
+	access.url = socket_url() + "/?ticket=" + ticket_text.uri_encode()
+	access.token = token_text
+	return access
+
+
+## The live connection's server: the API's address on WebSocket (https -> wss).
+func socket_url() -> String:
+	if _url.begins_with("https://"):
+		return "wss://" + _url.trim_prefix("https://")
+	if _url.begins_with("http://"):
+		return "ws://" + _url.trim_prefix("http://")
+	return _url
+
+
 func set_pseudonym(pseudonym: String) -> Status:
 	if _player_id.is_empty():
 		return Status.OFFLINE

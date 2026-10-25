@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 249,
+  "next_id": 252,
   "tags": [
     "pc",
     "test",
@@ -3721,6 +3721,51 @@
       ],
       "created_at": 1792868405,
       "updated_at": 1792868405,
+      "due_date": null
+    },
+    {
+      "id": "task_249",
+      "title": "Sessions et joueurs en ligne sur Talo (connexion live)",
+      "description": "Demandé par Clayton (25/10) : le tableau de bord Talo montrait 0 session, durée moyenne 0 et 0 joueur en ligne. Talo ne compte une session que sur sa WebSocket. Fait : autoload Presence (src/autoload/presence.gd) + LiveLink (WebSocket). Avec le consentement aux statistiques seulement : ticket (POST /v1/socket-tickets) + jeton (POST /v1/players/socket-token), connexion wss, v1.players.identify ; la session commence, le joueur est en ligne. Fermée en arrière-plan (téléphone) ou à la fermeture : la session finit ; au retour, une nouvelle. Reconnexion avec attente qui double. Données : data/online/presence.tres. Politique 1.5 et consent_version 3 (nouvelle donnée : les joueurs qui avaient accepté sont redemandés), ligne ajoutée à la question, docs/privacy.html FR/EN. Tests : unit.presence, unit.talo_contract. Vérifié contre le vrai Talo (joueur de dev smoke-presence-dev). À vérifier : les chiffres dans le tableau de bord (données de dev activées) après une partie sur le S23.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "tags": [
+        "en ligne",
+        "données"
+      ],
+      "created_at": 1792888065,
+      "updated_at": 1792888065,
+      "due_date": null
+    },
+    {
+      "id": "task_250",
+      "title": "Présence : statut personnalisé (écran titre, étage, Glas de l'Aube)",
+      "description": "Idée : PUT /v1/players/presence avec un customStatus (« Sur l'écran titre », « Étage 7 », « Glas de l'Aube ») pour voir dans le tableau de bord où sont les joueurs en ligne. Pas fait : le compteur de joueurs en ligne n'en a pas besoin. À décider par Clayton (et c'est une donnée de plus dans la politique).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "tags": [
+        "en ligne",
+        "idée"
+      ],
+      "created_at": 1792888065,
+      "updated_at": 1792888065,
+      "due_date": null
+    },
+    {
+      "id": "task_251",
+      "title": "Play Console : mettre à jour la fiche Sécurité des données (sessions)",
+      "description": "Avant de publier une build avec la clé : dans Activité dans l'appli > Interactions avec l'appli, ajouter les sessions de jeu (quand le jeu est ouvert, leur durée, la présence en ligne), analyse, facultatif (docs/privacy-ops.md, tableau mis à jour le 25/10).",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "tags": [
+        "en ligne",
+        "release"
+      ],
+      "created_at": 1792888065,
+      "updated_at": 1792888065,
       "due_date": null
     }
   ]

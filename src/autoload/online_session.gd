@@ -23,6 +23,9 @@ const VERSION := 1
 
 ## Answered when an identify in flight ends (every caller waiting on it gets the same answer).
 signal _identity_answered(status: BoardBackend.Status)
+## The player identified is forgotten (another backend, the online data deleted, the tests):
+## what holds a connection for them (Presence) closes it.
+signal identity_forgotten
 
 var config: OnlineSessionDef
 var backend: BoardBackend
@@ -257,6 +260,7 @@ func forget() -> void:
 
 
 func _forget_identity() -> void:
+	identity_forgotten.emit()
 	_identified = false
 	_refused_until = 0
 	_generation += 1

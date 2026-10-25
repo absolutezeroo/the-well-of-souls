@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PresenceDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/online/presence_def.gd" id="1_presence"]
+
+[resource]
+script = ExtResource("1_presence")
+enabled = true
+check_seconds = 2.0
+retry_seconds = 30.0
+connect_timeout = 20.0

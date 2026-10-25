@@ -41,6 +41,18 @@ var config := {}
 ## Reads of the config (each also counts in `calls`).
 var config_reads := 0
 
+## The live sessions (Presence): the server opens connections (false: they never open, like a
+## firewall), the token it gave last, the sessions started and ended, the player shown online,
+## every connection made (the last one: the test can drop it).
+var live_answers := true
+var live_token := ""
+var live_started := 0
+var live_ended := 0
+var live_online := false
+var live_links: Array[FakeLiveLink] = []
+## live_access() calls (each asks a ticket and a token).
+var live_asks := 0
+
 var _alias := 0
 
 
@@ -245,3 +257,25 @@ func _ranked(board: LeaderboardDef, period_key: String) -> Array[BoardBackend.En
 		entry.props = line.props
 		result.append(entry)
 	return result
+
+
+func live_access() -> BoardBackend.LiveAccess:
+	live_asks += 1
+	var access := BoardBackend.LiveAccess.new()
+	if not await _answers():
+		access.status = Status.OFFLINE
+		return access
+	if _alias == 0:
+		access.status = Status.REJECTED
+		return access
+	live_token = "token-%d" % live_asks
+	access.status = Status.OK
+	access.url = "wss://talo.test/?ticket=ticket-%d" % live_asks
+	access.token = live_token
+	return access
+
+
+func open_live() -> LiveLink:
+	var link := FakeLiveLink.new(self)
+	live_links.append(link)
+	return link
