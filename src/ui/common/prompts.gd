@@ -104,6 +104,12 @@ static func glyphs(action: StringName, kind: int) -> Array[Dictionary]:
 const LOGICAL := 1 << 30
 
 
+## The display servers that can name a key in the keyboard's layout
+## (keyboard_get_label_from_physical()); the others (Android with a keyboard plugged in, the web,
+## headless) print an engine error for each call, so their keys read by their US name.
+const LAYOUT_SERVERS: PackedStringArray = ["Windows", "macOS", "X11"]
+
+
 ## A key's word on its cap: its own word in the data ("Esc", ","), else its name in the layout of
 ## the player's keyboard (the key in W's place reads Z on a French one). A key bound by its
 ## letter (LOGICAL) reads as itself.
@@ -112,7 +118,7 @@ static func key_word(code: int) -> String:
 	if not word.is_empty():
 		return word
 	var shown := code & ~LOGICAL
-	if code & LOGICAL == 0 and DisplayServer.get_name() != "headless":
+	if code & LOGICAL == 0 and DisplayServer.get_name() in LAYOUT_SERVERS:
 		shown = DisplayServer.keyboard_get_label_from_physical(shown as Key)
 		word = DATA.key_word(shown)  # the label may be a sign: "," not "Comma"
 		if not word.is_empty():

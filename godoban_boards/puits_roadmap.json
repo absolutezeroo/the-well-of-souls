@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 256,
+  "next_id": 257,
   "tags": [
     "pc",
     "test",
@@ -3826,6 +3826,22 @@
       ],
       "created_at": 1792893512,
       "updated_at": 1792893512,
+      "due_date": null
+    },
+    {
+      "id": "task_256",
+      "title": "Bug : erreur « Not supported by this display server » sur les touches",
+      "description": "Vu par Clayton (25/10) : prompts.gd key_word() appelait keyboard_get_label_from_physical() sur un affichage qui ne le gère pas (Android avec un clavier branché, web) : une erreur moteur à chaque affichage d'une touche. Corrigé : seulement sous Windows, macOS et X11 ; ailleurs la touche garde son nom anglais (QWERTY). À revoir sur le S23 avec un clavier.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_4",
+      "tags": [
+        "bug",
+        "android",
+        "ui"
+      ],
+      "created_at": 1792896169,
+      "updated_at": 1792896169,
       "due_date": null
     }
   ]
