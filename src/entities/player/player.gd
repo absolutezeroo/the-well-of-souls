@@ -397,7 +397,7 @@ func _on_damaged(hit: HitInfo, damage: int) -> void:
 		last_hurt_frame = Engine.get_physics_frames()
 	damaged.emit(damage)
 	if is_instance_valid(hit.source) and hit.source is Monster:
-		(hit.source as Monster).on_hit_player(self)
+		(hit.source as Monster).on_hit_player(self, hit)
 	if hit.is_tick:
 		return
 	_invulnerable_time = tuning().hit_invulnerability

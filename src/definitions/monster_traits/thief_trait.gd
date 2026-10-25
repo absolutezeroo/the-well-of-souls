@@ -54,7 +54,7 @@ func can_attack(monster: Monster) -> bool:
 	return not is_fleeing(monster)
 
 
-func on_hit_player(monster: Monster, player: Player) -> void:
+func on_hit_player(monster: Monster, player: Player, _hit: HitInfo = null) -> void:
 	if player.gold <= 0:
 		return
 	var amount := mini(steal + roundi(monster.world.depth * steal_per_depth), player.gold)

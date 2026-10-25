@@ -15,16 +15,18 @@ const WORLD_SCENE := "res://src/world/world.tscn"
 
 ## kind -> fingerprint (hash), recorded on main before the split, again when the save block's
 ## stamp (the game's version) was left out of it (0.3.1), and when the room trials came (plain_d5
-## and route hold one). Change only on purpose.
+## and route hold one). Pestilent adds a weighted affix from depth four (2026-10-25): the
+## five affected floors are recorded again, with FLOOR_FORMAT 2 protecting older saves.
+## Change only on purpose.
 const EXPECTED := {
 	"plain_d2": 1045983556,
-	"plain_d5": 1964547306,
-	"plain_d8": 2738072162,
+	"plain_d5": 3148540007,
+	"plain_d8": 3747064926,
 	"boss_act1": 1577078614,
 	"boss_act2": 229918303,
-	"forced_curse": 3443624490,
-	"forced_plain": 2510512769,
-	"route": 3827804543,
+	"forced_curse": 1118936685,
+	"forced_plain": 1201939856,
+	"route": 2337003093,
 	"two_ways": 174426613,
 	"resumed": 870587092,
 	"hidden": 1109123916,

@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 267,
+  "next_id": 270,
   "tags": [
     "pc",
     "test",
@@ -3990,6 +3990,53 @@
       ],
       "created_at": 1792946659,
       "updated_at": 1792947444,
+      "due_date": null
+    },
+    {
+      "id": "task_267",
+      "title": "Modificateurs de monstres composables et affixe Pestilentiel",
+      "description": "EliteAffixDef compose désormais des MonsterTrait en plus de son atout facultatif. MonsterTraits garde une liste native puis affixes, sans doublon de ressource, avec état propre par monstre. Hooks combat, déplacement, sorts, mort et dessin utilisent cette composition ; classement appliqué une fois. Compatibilité en données (profondeurs, boss, tags, espèces, exclusions symétriques, limite du rang), contrôlée aux tirages et à la restauration. Affixe Pestilentiel ajouté dès l’étage 4 : poison sur coup direct et bouffée toxique différée à la mort ; interdit avec Venimeux/Fulminant et sur les boss. Aucun sprite neuf. Sauvegarde des ids, tests de reprise et d’expiration du poison, docs et traductions. Suite complète : 19 559 vérifications, zéro échec (graine 347348), 631 scripts sans avertissement, 7 tests Python. Mesures réelles acte II Gardien, bots contact/kite : victoire sur chaque variante, Pestilentiel TTK 4,88/6,02 s et dégâts 13/0 sur 210 de Santé. Cinq empreintes d’étages actualisées volontairement ; FLOOR_FORMAT 2 protège les anciens étages sauvegardés. Restes appareils/mesure : task_268 et task_269.",
+      "status": "done",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "tags": [
+        "combat",
+        "qualité"
+      ],
+      "created_at": 1792949246,
+      "updated_at": 1792950041,
+      "due_date": null
+    },
+    {
+      "id": "task_268",
+      "title": "Outils d’équilibrage : terminer les effets de mort après le dernier ennemi",
+      "description": "Mesure du 25/10 : le pack s’arrête à la dernière mort, avant une éventuelle bouffée retardée de Pestilentiel. Ajouter une phase de règlement des effets différés pour mesurer aussi ces dégâts ; sans la confondre avec le temps pour tuer. Le test game.modifiers couvre déjà fuse et payload. Revoir aussi le signalement du bat tué en un coup : TTK 0 s contre une cible 0,5–2,5 s dans le rapport acte II, sans modifier le jeu pour satisfaire une convention de mesure.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "tags": [
+        "équilibrage",
+        "tests"
+      ],
+      "created_at": 1792950041,
+      "updated_at": 1792950041,
+      "due_date": null
+    },
+    {
+      "id": "task_269",
+      "title": "Tester les modificateurs composables sur S23 et Windows",
+      "description": "Après task_267 : lisibilité de l’aura verte, de l’annonce de 0,8 s et de la bouffée toxique Pestilentielle ; foule avec plusieurs comportements actifs, retrait après mort/chute, reprise d’une sauvegarde et charge mémoire/temps par image. Vérifier le ressenti des combinaisons aux étages 4–12 et aux difficultés supérieures. Les tests headless et la mesure limitée acte II ne valident ni le rendu ni un équilibrage global.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_7",
+      "tags": [
+        "playtest",
+        "perf",
+        "android",
+        "pc"
+      ],
+      "created_at": 1792950041,
+      "updated_at": 1792950041,
       "due_date": null
     }
   ]

@@ -1226,6 +1226,8 @@ Act IV,Act IV,Acte IV
 "Beneath the pyres lies Solhar itself, under a sky of stone: a kingdom the dust swallowed whole. Its king still counts what he took. Souls, mostly.","Beneath the pyres lies Solhar itself, under a sky of stone: a kingdom the dust swallowed whole. Its king still counts what he took. Souls, mostly.","Sous les bûchers s'étend Solhar même, sous un ciel de pierre : un royaume que la poussière a englouti. Son roi y compte encore ce qu'il a pris. Des âmes, surtout."
 Ironclad,Ironclad,Cuirassé
 Bursting,Bursting,Fulminant
+Pestilent,Pestilent,Pestilentiel
+Poisons on hit. Releases a warned toxic burst after death.,Poisons on hit. Releases a warned toxic burst after death.,Empoisonne à l’impact. Libère une bouffée toxique annoncée après sa mort.
 Thorned,Thorned,Épineux
 The altar drinks. A relic rises from the stone.,The altar drinks. A relic rises from the stone.,L'autel boit. Une relique s'élève de la pierre.
 Offer your blood,Offer your blood,Offrir ton sang
@@ -2974,6 +2976,7 @@ grammar:feminine:Vampiric,grammar:feminine:Vampiric,Vampirique
 grammar:feminine:Venomous,grammar:feminine:Venomous,Venimeuse
 grammar:feminine:Ironclad,grammar:feminine:Ironclad,Cuirassée
 grammar:feminine:Bursting,grammar:feminine:Bursting,Fulminante
+grammar:feminine:Pestilent,grammar:feminine:Pestilent,Pestilentielle
 grammar:feminine:Thorned,grammar:feminine:Thorned,Épineuse
 grammar:gender:Chain Mail,grammar:gender:Chain Mail,f
 grammar:gender:Iron Helm,grammar:gender:Iron Helm,m

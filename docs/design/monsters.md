@@ -104,6 +104,36 @@ Ironclad)** has its affixes' perks, more HP, better loot and one more relic to c
 other colors and one more relic. The boss bar shows the rank's color and the affixes. The debug
 panel spawns any rank and can make the next boss one.
 
+### Composable affixes
+
+An `EliteAffixDef` may grant its legacy `perk`, an ordered list of `MonsterTrait` resources, or
+both. `MonsterTraits` composes native behaviours first, then each accepted affix's behaviours
+in saved order. The same resource activates once per monster, with separate state from
+`monster.trait_state()`. Hooks (damage, attacks, skills, movement, hits, death and drawing) use
+that cached list; shared `MonsterDef`, affix and trait resources are never changed. Ranking
+applies once per monster lifetime, so a repeated application cannot multiply stats/rewards.
+
+Eligibility lives in data: inherited minimum depth and spawn weight, optional maximum depth,
+boss permission, required/excluded monster tags, excluded species ids and excluded affix ids.
+Affix exclusions are symmetric even when declared on one side. Both random selection and
+manual/restored application check eligibility; the rank's affix count is the limit. Random
+selection retains the bounded retry loop; if no compatible choice remains it gives fewer
+affixes, never an incompatible combination. Existing affixes still grant their original perks.
+
+**Pestilent / Pestilentiel** (`data/elites/pestilent.tres`), from floor 4, weight 5 (ordinary
+affixes 10), no bosses, x0.9 Health on top of its rank: poison on a direct hit (2 damage per
+second for 4 s), then a toxic burst after death (52 px, 0.8 s warning, dungeon-scaled damage 4
+and the same poison). A green affix aura and the existing poison nova use the original sprite.
+It cannot combine with Venomous or Bursting; down a hole it releases nothing. Its two modules
+are `OnHitStatusTrait` and `DeathBurstTrait`. Secondary hits/ticks never trigger the status
+payload again. Poison is refreshed, not stacked, by the existing StatusSet rules.
+
+Saved later monsters keep affix ids, rank, definition and Health share; resuming reconstructs
+the same modules and fresh temporary state, as other short-lived combat state already does.
+The new weighted pool changes floors from depth four: `FLOOR_FORMAT` is 2 so an older saved
+floor is rebuilt under the existing stamp rule, with the hero and run retained. Recorded floor
+fingerprints for the five affected cases were updated intentionally; all other cases agree.
+
 ## Bosses
 
 The last floor of each act is a start room and one big arena. The boss sleeps

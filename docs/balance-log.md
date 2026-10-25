@@ -3,6 +3,30 @@
 Dated entries, newest first: what was measured, what changed and why, before/after numbers, open
 questions. How to measure: [balance.md](balance.md).
 
+## 2026-10-25 - Composable monster modifiers and Pestilent
+
+Pestilent is a new weighted affix from depth 4 (weight 5 versus 10 for the original affixes),
+regular monsters only. Rank Health x0.9; direct-hit poison 2/s for 4 s. Death: a warned burst
+of radius 52 after 0.8 s, dungeon-scaled base damage 4 and the same poison. No burst down a
+hole; no combination with Venomous or Bursting. Existing affix values are unchanged.
+
+Real engine pack probe, seed 347348, Keeper, act II depth 5, expected_a2, one ranked skeleton
+and two commons; two workers, no cache. Both kite and face_tank cleared every measured ranked
+variant. Pestilent ranked TTK: 6.02 s kite / 4.88 s face_tank, versus Venomous 6.60 / 4.28 s
+and Bursting 5.03 / 4.58 s. Total damage taken: 0 / 13 Health (hero maximum 210), versus
+Venomous 0 / 9 and Bursting 0 / 3. Command:
+
+```
+godot --headless --fixed-fps 60 res://tools/balance/balance.tscn -- --mode=pack --only=act2,expected_a2 --difficulty=normal --bot=face_tank,kite --jobs=2 --seed=347348 --no-cache
+```
+
+Limits: one seed/build/difficulty, not a broad balance verdict. Room timing stops at the last
+kill, so a delayed final burst can land after the measure; its warning/payload and fall rules
+are covered by game.modifiers separately. The report has no errors and one warning: plain bat
+TTK 0.0 s against the 0.5-2.5 s target. Follow-up: distinguish instant kills and settle pending
+death effects in pack tools. Phone readability, crowd cost and wider balance need play-testing.
+The new pool intentionally changes five recorded floor fingerprints; FLOOR_FORMAT bumped to 2.
+
 ## 2026-10-24 - A ranged Nameless Keeper: measured, and his shots made a boss' (bow, wand)
 
 **The tool first.** A Keeper with a bow or a wand (`ranged_keep_distance` 170) was a standoff:

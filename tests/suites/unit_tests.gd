@@ -10,6 +10,7 @@ const PLAYER: PackedScene = preload("res://src/entities/player/player.tscn")
 ## Each part alone (tests/run_tests.gd runs them one by one, timed: --test=unit.<name>).
 func test_cases() -> Array:
 	return [
+		["modifiers", func() -> void: await _part(ModifierTests.new(), func(suite: ModifierTests) -> void: suite.run_unit())],
 		["architecture", func() -> void: await _part(ArchitectureTests.new(), func(suite: ArchitectureTests) -> void: suite.run_unit())],
 		["stat_block", _test_stat_block],
 		["combat_rules", _test_combat_rules],
@@ -463,7 +464,7 @@ func _test_content() -> void:
 	check(hazards.any(func(h: HazardDef) -> bool: return h is PitDef and h.is_crumbling()), "there is crumbling floor")
 	check(CONTENT.elite_affixes.size() >= 5, "elite affixes listed")
 	for affix in CONTENT.elite_affixes:
-		check(affix.perk != null and not affix.display_name.is_empty(), "%s elite affix has a perk" % affix.id)
+		check((affix.perk != null or not affix.traits.is_empty()) and not affix.display_name.is_empty(), "%s elite affix supplies a perk or behaviours" % affix.id)
 	check(CONTENT.dungeon.chest != null and CONTENT.dungeon.chest.trapped_chance > 0.0 and CONTENT.dungeon.ambush_chest != null, "chests and ambush rewards set")
 	check(CONTENT.all_monsters().any(func(m: MonsterDef) -> bool: return m.flies), "some monsters fly")
 	check(CONTENT.sounds.fall != null and CONTENT.sounds.ambush != null and CONTENT.sounds.soul != null, "falls, ambushes and souls have sounds")

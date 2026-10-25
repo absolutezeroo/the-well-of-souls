@@ -194,12 +194,14 @@ func make_elite(monster: Monster) -> void:
 
 
 func make_ranked(monster: Monster, rank: MonsterRankDef) -> void:
+	if monster.rank != null:
+		return
 	var picked: Array[EliteAffixDef] = []
 	for attempt in rank.affixes * 6:
 		if picked.size() >= rank.affixes:
 			break
 		var affix := _world.content_db().pick_affix(_world.depth, _world.rng)
-		if affix and not picked.has(affix):
+		if affix and affix.fits(monster.def, _world.depth, picked):
 			picked.append(affix)
 	monster.make_ranked(rank, picked)
 

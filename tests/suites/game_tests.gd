@@ -27,6 +27,7 @@ var _borrowed: Array[Node] = []
 
 func test_cases() -> Array:
 	return [
+		["modifiers", _on_sturdy_game(func(game: Game) -> void: await (_borrow(ModifierTests.new()) as ModifierTests).run_game(game))],
 		["spawn", _on_game(_test_spawn)],
 		["projectiles", _on_game(func(game: Game) -> void: await combat._test_projectiles(game.world, game.player))],
 		["perks", _on_game(func(game: Game) -> void: await combat._test_perks_in_game(game, game.world, game.player))],

@@ -32,6 +32,8 @@ extends ContentDef
 ## Special ways it fights: a shield, stealing gold, bursting or splitting when it dies...
 ## (see src/definitions/monster_traits/).
 @export var traits: Array[MonsterTrait] = []
+## Affix compatibility labels, independent of the sprite and the monster's stable id.
+@export var tags: Array[StringName] = []
 
 @export_group("Behaviour")
 ## Distance at which the monster notices the player (needs line of sight).

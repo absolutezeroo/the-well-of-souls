@@ -65,7 +65,7 @@ func _draw() -> void:
 	if layer == Layer.UNDER:
 		if monster.rank:
 			_draw_elite_aura()
-		for monster_trait in monster.def.traits:
+		for monster_trait in monster.behaviors.active:
 			monster_trait.draw_under(monster, self)
 	else:
 		if monster.ward > 0:
@@ -84,12 +84,12 @@ func _needs_redraw() -> bool:
 	var gone := monster.is_dead or monster.is_falling
 	if not _drawn_once:
 		_drawn_once = true
-		_animated_under = monster.def.traits.any(func(t: MonsterTrait) -> bool: return t != null and t.draws_under())
+		_animated_under = monster.behaviors.draws_under
 		return true
 	if gone != _drawn_gone:
 		return true
 	if layer == Layer.UNDER:
-		return not gone and (_animated_under or monster.rank != null)  # (a rank may come after the spawn)
+		return not gone and (_animated_under or monster.behaviors.draws_under or monster.rank != null)  # (a rank may come after the spawn)
 	# A ward shimmers (every frame while it holds); an elite's name is redrawn with it (few of them).
 	return monster.hp != _drawn_hp or monster.get_max_hp() != _drawn_max_hp or monster.ward != _drawn_ward \
 		or monster.ward > 0 or (monster.rank != null and not monster.is_boss())

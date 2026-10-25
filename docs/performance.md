@@ -179,3 +179,13 @@ grounds (`FloorDresser._lay_ground`, dictionaries per cell), the ceiling's chunk
 emitters (`CeilingLayer._make_chunks`), the walls' bodies (`WallBuilder`) and the light field's
 bake; in a fight the engine's own physics (`move_and_slide` for each body) is most of the
 physics part.
+
+## Composed monster behaviours
+
+MonsterTraits builds its native/affix list only at spawn and ranking, deduplicating shared
+resource instances. Every frame reads that same list; per-monster states are cached by resource.
+Under-drawing capability is cached as a boolean, including traits added after the overlay was
+created. New trait hooks run only with their owner (sleeping monsters keep the existing sleep
+policy). The example status/death modules allocate no frame state and reuse the existing poison
+visuals. More behaviours still mean more work: validate large crowds and the warning readability
+on S23; a headless regression is not a GPU measurement.

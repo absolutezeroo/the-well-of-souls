@@ -235,6 +235,8 @@
 [ext_resource type="Resource" path="res://data/cosmetics/auras/dark.tres" id="952_aura_dark"]
 [ext_resource type="Resource" path="res://data/cosmetics/auras/demonic.tres" id="953_aura_demonic"]
 
+[ext_resource type="Resource" path="res://data/elites/pestilent.tres" id="affix_pestilent"]
+
 [resource]
 script = ExtResource("34_tx8pl")
 player = ExtResource("33_bx8nx")
@@ -252,7 +254,7 @@ upgrades = Array[ExtResource("73_0tw7m")]([ExtResource("74_pgsf5"), ExtResource(
 soul_tree = ExtResource("st_tree")
 locked_items = Array[ExtResource("2_cewcx")]([ExtResource("23_dianq"), ExtResource("10_ng0jj"), ExtResource("37_gyds2"), ExtResource("38_1b8ag"), ExtResource("16_h0egv"), ExtResource("15_rjx6h")])
 props = Array[ExtResource("52_yjg1c")]([ExtResource("53_dianq"), ExtResource("54_kqkbc"), ExtResource("55_xx7nh"), ExtResource("56_6esje")])
-elite_affixes = Array[ExtResource("7_s1peu")]([ExtResource("8_du3p3"), ExtResource("9_to1jy"), ExtResource("10_8pk3k"), ExtResource("11_v6cij"), ExtResource("12_til0v"), ExtResource("13_mym40")])
+elite_affixes = Array[ExtResource("7_s1peu")]([ExtResource("8_du3p3"), ExtResource("9_to1jy"), ExtResource("10_8pk3k"), ExtResource("11_v6cij"), ExtResource("12_til0v"), ExtResource("13_mym40"), ExtResource("affix_pestilent")])
 floor_events = Array[ExtResource("50_by7se")]([ExtResource("51_hml5q"), ExtResource("52_5x320"), ExtResource("53_1ai64"), ExtResource("54_bubnr"), ExtResource("55_ivytu"), ExtResource("56_fk2lo")])
 curses = Array[ExtResource("32_bubnr")]([ExtResource("33_ivytu"), ExtResource("34_fk2lo"), ExtResource("35_sfjbe")])
 ascensions = Array[ExtResource("21_15tjo")]([ExtResource("22_q5atc"), ExtResource("23_80whv"), ExtResource("24_ftpue"), ExtResource("25_th6df"), ExtResource("26_vi73k"), ExtResource("27_byg44"), ExtResource("28_by7se"), ExtResource("29_hml5q"), ExtResource("30_5x320"), ExtResource("31_1ai64")])

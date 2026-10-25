@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="EliteAffixDef" load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://src/definitions/elite_affix_def.gd" id="affix"]
+[ext_resource type="Script" path="res://src/definitions/monster_traits/monster_trait.gd" id="trait"]
+[ext_resource type="Script" path="res://src/definitions/monster_traits/on_hit_status_trait.gd" id="on_hit"]
+[ext_resource type="Script" path="res://src/definitions/monster_traits/death_burst_trait.gd" id="burst"]
+[ext_resource type="Script" path="res://src/definitions/effects/on_hit_status.gd" id="status"]
+[ext_resource type="Resource" path="res://data/vfx/elements/poison.tres" id="poison"]
+
+[sub_resource type="Resource" id="Poison"]
+script = ExtResource("status")
+poison_damage = 2
+poison_duration = 4.0
+
+[sub_resource type="Resource" id="PoisonHits"]
+script = ExtResource("on_hit")
+status = SubResource("Poison")
+
+[sub_resource type="Resource" id="ToxicBreath"]
+script = ExtResource("burst")
+radius = 52.0
+damage = 4
+fuse = 0.8
+status = SubResource("Poison")
+element = ExtResource("poison")
+
+[resource]
+script = ExtResource("affix")
+id = &"pestilent"
+display_name = "Pestilent"
+description = "Poisons on hit. Releases a warned toxic burst after death."
+glyph = "P"
+color = Color(0.607843, 0.839216, 0.290196, 1)
+min_depth = 4
+spawn_weight = 5
+hp_multiplier = 0.9
+traits = Array[ExtResource("trait")]([SubResource("PoisonHits"), SubResource("ToxicBreath")])
+allow_bosses = false
+excludes = Array[StringName]([&"venomous", &"explosive"])

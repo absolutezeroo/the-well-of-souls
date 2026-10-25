@@ -361,3 +361,13 @@ service. Autoload facades and the existing consent gates retain their roles.
 the class dependency graph does not preload content recursively. Version 3 migrates references
 in older runs; resource-file references inside `.tres` and `.tscn` remain ordinary paths.
 See progression.md and adding-content.md for migration and registration rules.
+
+## Monster modifier ownership
+
+`EliteAffixDef` declares compatibility and reusable traits; `WorldSpawner` samples compatible
+choices and `Monster.make_ranked()` validates saved/manual lists and the rank limit again.
+`MonsterTraits` owns one monster's cached active list and private typed states, while the
+Resource definitions stay shared and immutable. Native hooks precede affix hooks in data order.
+Monster dispatches the existing hooks through that list, and MonsterOverlay reads its cached
+under-drawing flag. No per-frame merge or trait-array allocation is introduced. Affix ids remain
+the persistence boundary, so changing a filename does not change a saved modifier.

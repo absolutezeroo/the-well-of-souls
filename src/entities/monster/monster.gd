@@ -49,8 +49,8 @@ var summoned := false
 ## A rim warning on (MonsterDef.CastWarning.RIM), and the rim it had before.
 var _warning_rim := false
 var _rim_before := Color.TRANSPARENT
-## Per-monster values of the def's traits (see trait_state()).
-var _trait_state: Dictionary[MonsterTrait, RefCounted] = {}
+## Native and affix behaviours, composed once; active is a read-only cached view for hooks.
+var behaviors := MonsterTraits.new(self)
 var _under: MonsterOverlay
 var _over: MonsterOverlay
 ## Fell into a hole: no loot, no burst, nothing comes out.
@@ -101,8 +101,7 @@ func setup(monster_def: MonsterDef, depth: int, config: DungeonConfig) -> void:
 	skills.set_skills(def.skills)
 	invalidate_stats()
 	hp = get_max_hp()
-	for monster_trait in def.traits:
-		monster_trait.on_spawn(self)
+	behaviors.setup(def.traits)
 
 
 func _ready() -> void:
@@ -130,10 +129,16 @@ func make_elite(affix: EliteAffixDef, config: DungeonConfig) -> void:
 ## Raises the monster to `new_rank` with `new_affixes` (their perks): more HP, bigger, more XP,
 ## better loot, its aura and name. A boss keeps its size and gets its rank's boss HP.
 func make_ranked(new_rank: MonsterRankDef, new_affixes: Array[EliteAffixDef]) -> void:
-	if new_rank == null:
-		return
+	if new_rank == null or rank != null:
+		return  # ranking is a spawn-time operation; repeated calls must not stack rewards/stats
+	var accepted: Array[EliteAffixDef] = []
+	for affix in new_affixes:
+		if accepted.size() >= new_rank.affixes:
+			break
+		if affix and affix.fits(def, _depth, accepted):
+			accepted.append(affix)
 	rank = new_rank
-	affixes = new_affixes.duplicate()
+	affixes = accepted
 	elite = affixes[0] if not affixes.is_empty() else null
 	var hp_factor := rank.boss_hp_multiplier if is_boss() else rank.hp_multiplier_at(_depth)
 	if not is_boss():
@@ -141,6 +146,7 @@ func make_ranked(new_rank: MonsterRankDef, new_affixes: Array[EliteAffixDef]) ->
 	for affix in affixes:
 		if affix.perk:
 			perks.add(affix.perk)
+		behaviors.add(affix.traits)
 		if not is_boss():
 			hp_factor *= affix.hp_multiplier
 	if rank.show_in_name:
@@ -196,20 +202,20 @@ func get_knockback_resistance() -> float:
 func can_attack() -> bool:
 	if _in_intro():
 		return false
-	for monster_trait in def.traits:
+	for monster_trait in behaviors.active:
 		if not monster_trait.can_attack(self):
 			return false
 	return super.can_attack()
 
 
 ## The monster's attack or skill hurt the hero (thieves grab gold...).
-func on_hit_player(player: Player) -> void:
-	for monster_trait in def.traits:
-		monster_trait.on_hit_player(self, player)
+func on_hit_player(player: Player, hit: HitInfo = null) -> void:
+	for monster_trait in behaviors.active:
+		monster_trait.on_hit_player(self, player, hit)
 
 
 func _incoming_damage(hit: HitInfo, damage: int) -> int:
-	for monster_trait in def.traits:
+	for monster_trait in behaviors.active:
 		damage = monster_trait.incoming_damage(self, hit, damage)
 	# A kind the hero has mastered in the bestiary takes a bit more from them.
 	var rules := world.bestiary_rules() if world else null
@@ -220,20 +226,13 @@ func _incoming_damage(hit: HitInfo, damage: int) -> int:
 
 ## The first trait of type `kind` (a GuardTrait, a ThiefTrait...), or null.
 func get_trait(kind: Script) -> MonsterTrait:
-	for monster_trait in def.traits:
-		if is_instance_of(monster_trait, kind):
-			return monster_trait
-	return null
+	return behaviors.first(kind)
 
 
 ## Per-monster values of a trait (a trait resource is shared by every monster of its kind): the
 ## trait's own State, made the first time it is asked (MonsterTrait.make_state()).
 func trait_state(source_trait: MonsterTrait) -> RefCounted:
-	var state: RefCounted = _trait_state.get(source_trait)
-	if state == null:
-		state = source_trait.make_state()
-		_trait_state[source_trait] = state
-	return state
+	return behaviors.state(source_trait)
 
 
 ## Went down a hole (rather than being slain).
@@ -342,7 +341,7 @@ func set_awake(awake: bool) -> void:
 func take_hit(hit: HitInfo) -> void:
 	set_awake(true)
 	if not is_dead:
-		for monster_trait in def.traits:
+		for monster_trait in behaviors.active:
 			if monster_trait.deflects(self, hit):
 				return  # turned away whole (a closed maw): the trait shows it
 	super.take_hit(hit)
@@ -377,7 +376,7 @@ func attack_range(other: Actor) -> float:
 func pick_skill(distance: float) -> int:
 	if _in_intro():
 		return -1
-	for monster_trait in def.traits:
+	for monster_trait in behaviors.active:
 		if not monster_trait.can_cast(self):
 			return -1
 	for i in skills.skills.size():
@@ -427,7 +426,7 @@ func _get_desired_velocity() -> Vector2:
 	_update_heavy_steps()
 	var direction := move_direction if not _in_intro() else Vector2.ZERO
 	var delta := get_physics_process_delta_time()
-	for monster_trait in def.traits:
+	for monster_trait in behaviors.active:
 		monster_trait.update(self, delta)
 		direction = monster_trait.steer(self, direction)
 	if direction != Vector2.ZERO and not is_boss():
@@ -520,7 +519,7 @@ func _on_died(killer: Actor) -> void:
 	Events.monster_killed.emit(self)
 	_free_souls()
 	var fell := _fell or is_falling
-	for monster_trait in def.traits:
+	for monster_trait in behaviors.active:
 		monster_trait.on_died(self, killer, fell, not summoned)
 	if fell:
 		if not summoned:  # summons pay nothing, even pushed into a hole

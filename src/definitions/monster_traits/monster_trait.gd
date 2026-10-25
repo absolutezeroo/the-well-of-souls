@@ -50,7 +50,7 @@ func incoming_damage(_monster: Monster, _hit: HitInfo, damage: int) -> int:
 
 
 ## The monster just hurt the hero.
-func on_hit_player(_monster: Monster, _player: Player) -> void:
+func on_hit_player(_monster: Monster, _player: Player, _hit: HitInfo = null) -> void:
 	pass
 
 

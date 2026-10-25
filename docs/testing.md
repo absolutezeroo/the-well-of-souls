@@ -341,3 +341,13 @@ Game suites exercise the same public offer and spawning entry points after their
 `python3 tools/saves/build_catalog.py --check` checks shipped registration. Host tests
 (`python3 -m unittest discover -s tools/tests -v`) also verify alias preservation after moves,
 rejection of historical-path reuse and duplicate ids, and separation of root/subresource ids.
+
+## Monster modifiers
+
+`unit.modifiers` checks ordered composition, resource deduplication, independent states,
+immutable definitions, repeat ranking, tag/depth/species eligibility and symmetric exclusions.
+`game.modifiers` applies Pestilent, verifies poison and expiry (ticks must not refresh their own
+payload), saves/restores its id/modules/remaining Health, and checks the delayed death warning
+and the absence of a burst after a fall. Existing combat/rank and save suites cover legacy
+perks. Floor fingerprints intentionally change only for cases affected by the new pool from
+floor 4; FLOOR_FORMAT 2 protects older floor ledgers. Device checks remain in the roadmap.

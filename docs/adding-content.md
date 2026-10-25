@@ -262,3 +262,30 @@ the monster resources have explicit `SkillDef.save_id` values (`monster/blink`, 
 without changing their gameplay ids. Leave `save_id` empty normally; once released, keep it
 stable along with the id. The runtime writes only registered references. Missing catalog
 entries warn rather than silently writing a path that would break on the next move.
+
+## Compose a monster modifier
+
+1. Create an `EliteAffixDef` in `data/elites/` with a permanent id, translated name and plain
+   description, color, minimum depth, weight and compatibility rules.
+2. Set its `traits` to reusable MonsterTrait resources. Optional `perk` retains normal bonuses
+   and passives; it may be empty when behaviours supply the whole modifier. See Pestilent for
+   a shared OnHitStatus payload used by both its direct-hit and death behaviours.
+3. Register it in `content_db.tres` > Elite Affixes. Rank limits already bound how many modifiers
+   a monster receives. Use `spawn_weight = 0` while authoring a manual-only modifier; manual
+   application still obeys its depth, boss/tag/species and affix exclusions.
+4. A new combination requires only data. A new behaviour is one MonsterTrait subclass with
+   relevant hooks, never an affix-id branch in Monster. Keep resources immutable; implement
+   make_state() with a typed RefCounted for each monster's counters via trait_state(self).
+   on_spawn() runs at setup for native traits and after the rig is ready for ranked affixes:
+   support both timings if decorating a rig (ShadeTrait demonstrates it). Never await on the
+   shared Resource. Hit hooks receive optional HitInfo; proc effects must skip secondary hits.
+5. Compatibility uses `MonsterDef.tags`, optional required/excluded tags and excluded species
+   ids. Affix `excludes` stores stable affix ids and is checked in both directions. A repeated
+   resource in native/affix lists activates once; distinct resources are distinct behaviours.
+6. Translate names/descriptions (including feminine adjective forms), run tests and catalog
+   checks, and measure real engine fights. Check clear warnings on the phone. Any pool/order
+   change that lays floors differently must bump RunSave.FLOOR_FORMAT before shipping.
+
+Hooks read MonsterTraits.active as a read-only view. Do not append during a damage/update
+callback: composition belongs to spawn/ranking. Put appearance in a trait or the affix's color;
+no new sprites or per-frame texture generation are required for the provided example.
