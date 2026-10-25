@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 272,
+  "next_id": 278,
   "tags": [
     "pc",
     "test",
@@ -518,7 +518,7 @@
     {
       "id": "task_36",
       "title": "Reliques qui brisent les règles",
-      "description": "Idée proposée : reliques rares qui changent une règle du jeu.",
+      "description": "Idée proposée : reliques rares qui changent une règle du jeu.\nÉtude SPD du 25/10 : babioles changeant fréquences de butin/terrain, avec compromis. Pistes propres au Puits : meilleure qualité contre moins de soins, davantage de secrets contre davantage d’élites (chiffres à définir). Réemploi OathDef/RunBoons/FloorRules ; nouveaux points nécessaires pour chances de salles/élites/catégories. Serment au départ plus simple que relique acquise pendant la partie. État sauvegardé, effets de génération sur futurs étages, règles du quotidien. Voir docs/shattered-pixel-dungeon-study.md.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_7",
@@ -527,7 +527,7 @@
         "idée"
       ],
       "created_at": 1792685000,
-      "updated_at": 1792685000
+      "updated_at": 1792965288
     },
     {
       "id": "task_37",
@@ -1551,7 +1551,7 @@
     {
       "id": "task_108",
       "title": "Formes de salles : pièges propres aux formes",
-      "description": "Des passerelles qui s'effritent au-dessus des gouffres (sol craquelé), des piliers qui s'écroulent sous une explosion et bloquent un passage, un bassin qui déborde (eau peu profonde qui ralentit), des ponts-levis dans les salles signatures.",
+      "description": "Des passerelles qui s'effritent au-dessus des gouffres (sol craquelé), des piliers qui s'écroulent sous une explosion et bloquent un passage, un bassin qui déborde (eau peu profonde qui ralentit), des ponts-levis dans les salles signatures.\nÉtude SPD du 25/10 : salle de brasier optionnelle avec fiole de givre accessible avant, ou danger neutralisé par un consommable. Prévoir moyen de résolution et repli, jamais bloquer les escaliers sur du butin aléatoire. Réactions fonctionnelles à créer : les éléments VFX ne suffisent pas. Sauver obstacle résolu, vérifier nav/visibilité et charge des zones. Eau profonde actuelle infranchissable : ne pas la réutiliser telle quelle comme bassin d’extinction. Voir docs/shattered-pixel-dungeon-study.md.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_80",
@@ -1562,7 +1562,7 @@
         "idée"
       ],
       "created_at": 1792720836,
-      "updated_at": 1792720836
+      "updated_at": 1792965288
     },
     {
       "id": "task_109",
@@ -4069,6 +4069,96 @@
       ],
       "created_at": 1792952798,
       "updated_at": 1792952798,
+      "due_date": null
+    },
+    {
+      "id": "task_272",
+      "title": "Étudier Shattered Pixel Dungeon et sélectionner des inspirations modulaires",
+      "description": "Étude de sources publiques SPD révision 57a4e06, comparée au Puits e6d5270. Rapport docs/shattered-pixel-dungeon-study.md : six pistes, réemploi concret, limites temps réel/sauvegarde, besoin artistique et ordre conseillé. Cartes task_273 à task_277 ajoutées en idées ; task_36 et task_108 enrichies sans doublon. Aucun gameplay modifié, aucune mécanique activée ; lecture directe du code, sans REA ni exécution de SPD. Validation documentaire et JSON ; suites moteur non relancées car seuls rapport/roadmap changent.",
+      "status": "done",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "tags": [
+        "qualité",
+        "contenu"
+      ],
+      "created_at": 1792965054,
+      "updated_at": 1792965288,
+      "due_date": null
+    },
+    {
+      "id": "task_273",
+      "title": "Idée SPD : consommables tactiques pour la ceinture",
+      "description": "Premier lot conseillé : fiole de givre, purification brûlure/poison, déplacement court sûr. Réutiliser ConsumableDef/Effect/OnHitStatus et les icônes/VFX existants. Purification et déplacement nécessitent de nouveaux Effect ; ce ne sont pas des fonctionnalités présentes. Conserver trois emplacements et commandes tactiles. Vérifier terrain, destination, consommation unique et sauvegarde. Effort petit à moyen. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_7",
+      "tags": [
+        "idée",
+        "contenu"
+      ],
+      "created_at": 1792965288,
+      "updated_at": 1792965288,
+      "due_date": null
+    },
+    {
+      "id": "task_274",
+      "title": "Idée SPD : une offrande à récompense exclusive",
+      "description": "Rencontre initiale à trois choix garantis : soins, rune ou équipement. Choisir épuise la rencontre et le choix est sauvegardé. Utiliser EncounterDef/Choice/Outcome et le panneau actuel. Variante future : plusieurs coffres liés par un propriétaire commun. Sac plein, double interaction et reprise ne doivent ni perdre ni dupliquer une récompense. Peu de dessin ; effort faible pour la rencontre. Liée à task_107. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_7",
+      "tags": [
+        "idée",
+        "contenu"
+      ],
+      "created_at": 1792965288,
+      "updated_at": 1792965288,
+      "due_date": null
+    },
+    {
+      "id": "task_275",
+      "title": "Idée SPD : enchantements de placement et armure à dette",
+      "description": "Commencer par un affixe de recul renforcé via Passive.modify_outgoing_hit, avec déclencheur/exclusions en données et résistance des boss. Presque aucun art. Plus tard seulement : reporter une partie des dégâts après armure dans le temps ; le hook actuel on_damaged ne suffit pas, il faut une interception avant perte de Santé et une dette visible/persistante à travers reprise et étages. Séparer les deux réalisations ; ne pas glisser la dette dans le petit lot de recul. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "tags": [
+        "idée",
+        "contenu"
+      ],
+      "created_at": 1792965288,
+      "updated_at": 1792965288,
+      "due_date": null
+    },
+    {
+      "id": "task_276",
+      "title": "Idée SPD : alchimie courte avec les consommables existants",
+      "description": "Trois ou quatre recettes au repos, coût d’or, aperçu et validation des ingrédients en données. Exemples propres au Puits : fusion de soins ou bombe + consommable froid ; valeurs à mesurer. Réutiliser les fenêtres du sac/forge, ajouter RecipeDef et service dédiés (n’existent pas encore). Contrôler sac/ceinture, piles, place avant retrait, annulation, reprise et arbitrage fabrication/revente. Effort moyen, peu de dessin. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "tags": [
+        "idée",
+        "contenu"
+      ],
+      "created_at": 1792965288,
+      "updated_at": 1792965288,
+      "due_date": null
+    },
+    {
+      "id": "task_277",
+      "title": "Idée SPD : mémoire de partie pour limiter les répétitions de salles et récompenses",
+      "description": "Favoriser la variété entre étages avec historique borné ou paquets pondérés, état de partie sauvegardé par ids stables. Shattered remet ses salles utilisées en fin de file et décrémente certains poids de butin. Dans le Puits, limites actuelles par étage, flux propre à SecretRoom et rattrapage de forge existent déjà ; les préserver. Filtrer biome/profondeur, assainir contenus retirés, garder flux RNG isolé et déterminisme du quotidien. Aucun dessin ; effort moyen. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_7",
+      "tags": [
+        "idée",
+        "contenu"
+      ],
+      "created_at": 1792965288,
+      "updated_at": 1792965288,
       "due_date": null
     }
   ]
