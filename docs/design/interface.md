@@ -208,6 +208,16 @@ player decides when the fight stops.
 
 The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
 
+- **The Well's account** (`AccountDialog`, Options > Privacy > Account, with a server in the
+  build): signed out, what an account is for and what it sends, then **Sign in** or **Create an
+  account** (name, password, optional email, "Stay signed in on this device") and **Forgot your
+  password?** (a code by email, then a new password). Signed in: the name, the recovery email,
+  the online save's state, **Sync now**, **Change password**, **Sign out**, **Delete the account**
+  (the password asked). Refusals in plain words under the form; it fits 1280x720 to 2548x1296 in
+  French. **Two paths in the Well** (`CloudConflictDialog`, over the title or the account
+  window): this device's progress and the online one side by side, **Keep this device's** or
+  **Take the online one**, no Back out.
+
 - **The statistics' questions** (`ConsentDialog`, over the title screen the first time it shows,
   and from the Options' switch): first **Before you go down**, "How old are you?" with **Under 16**
   and **16 or older** (only that answer is kept); under 16 it closes and is never asked again by

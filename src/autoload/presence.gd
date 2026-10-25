@@ -12,8 +12,12 @@ extends Node
 ## "v1.players.identify.success": live. The app put in the background (a phone) or closed: the
 ## connection is closed, so the session ends there; back: a new one. A failure or a connection
 ## lost tries again after PresenceDef.retry_seconds, doubled per failure. Consent taken back, the
-## online data deleted or the kill switch: closed within check_seconds. Nothing else goes on it:
-## no gameplay is sent, and the game never waits for it.
+## online data deleted or the kill switch: closed within check_seconds. Nothing else goes on it,
+## and the game never waits for it.
+##
+## While live, a **custom status** says where the player is (PresenceDef: "In the menus", "Floor
+## 7", "Dawn Knell, floor 3"; PUT /v1/players/presence), sent when it changes, at most every
+## status_min_seconds (only the last change goes).
 
 ## The player is shown online (a session started).
 signal went_live
@@ -32,6 +36,11 @@ var phase := Phase.OFF
 var in_background := false
 ## Sessions started since launch (the tests count them).
 var sessions := 0
+## Where the player is now (the status to show) and the last one the server took.
+var status := ""
+var sent_status := ""
+## Statuses the server took (the tests count them).
+var statuses_sent := 0
 
 var _link: LiveLink
 var _token := ""
@@ -44,6 +53,11 @@ var _check := 0.0
 var _failures := 0
 ## Bumped when it stops: a step answered after that is dropped.
 var _generation := 0
+## Seconds before a status may be sent again.
+var _status_wait := 0.0
+var _sending_status := false
+## The run being played is a Dawn Knell.
+var _daily := false
 
 
 func _init() -> void:
@@ -54,6 +68,13 @@ func _init() -> void:
 func _ready() -> void:
 	OnlineSession.register(self)
 	OnlineSession.identity_forgotten.connect(_on_identity_forgotten)
+	Events.run_started.connect(func(run: RunState, _player: Player) -> void: _daily = run.daily_day >= 0)
+	Events.floor_entered.connect(_on_floor_entered)
+	Events.run_ended.connect(func(_summary: RunSummary) -> void: show_menus())
+	Events.run_left.connect(func(_summary: RunSummary, for_good: bool) -> void:
+		if for_good:
+			show_menus())
+	show_menus()
 
 
 ## The tests: closed, nothing counted, nothing waited for, in the foreground.
@@ -64,6 +85,11 @@ func use_for_tests() -> void:
 	_wait = 0.0
 	_check = 0.0
 	in_background = false
+	statuses_sent = 0
+	sent_status = ""
+	_status_wait = 0.0
+	_daily = false
+	show_menus()
 
 
 ## A connection should be open now.
@@ -75,9 +101,27 @@ func is_live() -> bool:
 	return phase == Phase.LIVE
 
 
+## The player is out of a run.
+func show_menus() -> void:
+	set_status(config.menus_status if config else "")
+
+
+func _on_floor_entered(world: World) -> void:
+	if config and world:
+		set_status((config.daily_status if _daily else config.floor_status).format({ "depth": world.depth }))
+
+
+## Where the player is now: sent when live (now or once the wait is over).
+func set_status(text: String) -> void:
+	status = text
+
+
 func _process(delta: float) -> void:
 	if _link:
 		_poll(delta)
+	_status_wait -= delta
+	if phase == Phase.LIVE and status != sent_status and _status_wait <= 0.0 and not _sending_status and config.send_status:
+		_send_status()
 	_wait -= delta
 	_check -= delta
 	if _check > 0.0:
@@ -98,10 +142,10 @@ func start() -> void:
 	phase = Phase.ASKING
 	_since = 0.0
 	var generation := _generation
-	var status: BoardBackend.Status = await OnlineSession.identity()
+	var identified: BoardBackend.Status = await OnlineSession.identity()
 	if generation != _generation:
 		return
-	if status != BoardBackend.Status.OK:
+	if identified != BoardBackend.Status.OK:
 		_failed()
 		return
 	var backend := OnlineSession.backend
@@ -130,6 +174,8 @@ func stop() -> void:
 		_link.close()
 	_link = null
 	_token = ""
+	sent_status = ""  # (a new session: its status sent again)
+	_sending_status = false
 	phase = Phase.OFF
 	if was_live:
 		went_off.emit()
@@ -147,10 +193,10 @@ func _poll(delta: float) -> void:
 	_link.poll()
 	_since += delta
 	var state := _link.state()
-	if state == LiveLink.State.CLOSED or state == LiveLink.State.CLOSING:
+	if state == LiveLink.LinkState.CLOSED or state == LiveLink.LinkState.CLOSING:
 		_lost()
 		return
-	if state == LiveLink.State.OPEN:
+	if state == LiveLink.LinkState.OPEN:
 		while _link:
 			var text := _link.receive()
 			if text.is_empty():
@@ -183,6 +229,22 @@ func _on_message(text: String) -> void:
 		"v1.error":
 			if phase != Phase.LIVE:
 				_failed()  # (a token refused: asked again at the next try)
+
+
+func _send_status() -> void:
+	var text := status
+	var generation := _generation
+	_sending_status = true
+	_status_wait = config.status_min_seconds
+	@warning_ignore("redundant_await")  # a coroutine in TaloBackend; the offline BoardBackend answers at once
+	var answer: BoardBackend.Status = await OnlineSession.backend.set_presence_status(text)
+	_sending_status = false
+	if generation != _generation:
+		return
+	if answer == BoardBackend.Status.OK:
+		statuses_sent += 1
+	if answer == BoardBackend.Status.OK or answer == BoardBackend.Status.REJECTED:
+		sent_status = text  # (refused for good, e.g. the key's scope missing: not asked again for it)
 
 
 ## A try failed: again after retry_seconds, doubled per failure up to the session's max backoff.

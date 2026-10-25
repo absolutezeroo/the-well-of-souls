@@ -5,7 +5,9 @@ extends HBoxContainer
 ## online") and the player's data on the right (the gameplay statistics' switch: ConsentDialog;
 ## the device's online ID; "Delete my online data": DeleteDataDialog); always, the privacy
 ## policy and the credits (InfoPanels). Its dialogs open over the whole window (`window`, the
-## OptionsPanel, which also owns every %Name). Built by build(), after it is in the window.
+## OptionsPanel, which also owns every %Name). With accounts in the build, the Well's account
+## too (who is signed in, the online save's state; Account opens AccountDialog). Built by build(),
+## after it is in the window.
 
 var window: Control
 var _boards_name: Label
@@ -17,6 +19,8 @@ var _online_id: Label
 var _policy: PrivacyPolicyPanel
 var _credits: CreditsPanel
 var _delete: DeleteDataDialog
+var _account_text: Label
+var _account: AccountDialog
 
 
 func _init() -> void:
@@ -29,7 +33,10 @@ func build(options: Control) -> void:
 	var left := OptionRows.column(self)
 	if Leaderboards.is_available():
 		_build_boards(OptionRows.section(left, tr("Leaderboards")))
-		_build_analytics(OptionRows.section(OptionRows.column(self), tr("Your data")))
+		var right := OptionRows.column(self)
+		if Account.is_available():
+			_build_account(OptionRows.section(right, tr("Account")))
+		_build_analytics(OptionRows.section(right, tr("Your data")))
 	var about := OptionRows.section(left, tr("Policy and credits"))
 	about.add_child(UiSkin.label(tr("What is sent, to whom and why; who made the game and its licenses."), Fonts.BODY, UiSkin.DIM, true))
 	var row := HBoxContainer.new()
@@ -64,6 +71,8 @@ func refresh() -> void:
 		_boards_show.set_pressed_no_signal(Leaderboards.shown)
 	if _analytics:
 		_analytics.set_pressed_no_signal(Privacy.analytics_allowed())
+	if _account_text:
+		_account_text.text = (tr("Signed in as %s") % Account.account_name()) + "\n" + AccountDialog.save_state_words() if Account.is_signed_in() else tr("Not signed in: your progress stays on this device.")
 	if _online_id:
 		_online_id.text = OnlineSession.device_id if not OnlineSession.device_id.is_empty() else tr("None yet (nothing was sent)")
 
@@ -78,6 +87,9 @@ func back() -> bool:
 		return true
 	if _delete and _delete.visible:
 		_delete.back()
+		return true
+	if _account and _account.visible:
+		_account.back()
 		return true
 	for info: InfoPanel in [_policy, _credits]:
 		if info and info.back():
@@ -131,6 +143,34 @@ func _build_analytics(section: VBoxContainer) -> void:
 	delete.pressed.connect(func() -> void:
 		Sfx.play_ui(Sfx.bank.ui_open)
 		_delete.open())
+
+
+## The Well's account: who is signed in and the online save's state, and the button that opens
+## AccountDialog (sign in, create, the account's page).
+func _build_account(section: VBoxContainer) -> void:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	section.add_child(row)
+	var words := OptionRows.words(tr("Online save"), "")
+	_account_text = OptionRows.note_of(words)
+	_account_text.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED  # (holds a name; tr() in refresh())
+	row.add_child(words)
+	MenuWindow.expose(_account_text, "AccountStateText", window)
+	var open := MenuWindow.button(tr("Account"), Fonts.BODY, 44)
+	open.custom_minimum_size.x = 150
+	open.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	row.add_child(open)
+	MenuWindow.expose(open, "AccountButton", window)
+	_account = AccountDialog.new()
+	_overlay(_account, "AccountDialog")
+	_account.finished.connect(func() -> void:
+		refresh()
+		_refocus(open))
+	Account.changed.connect(refresh)
+	CloudSave.changed.connect(refresh)
+	open.pressed.connect(func() -> void:
+		Sfx.play_ui(Sfx.bank.ui_open)
+		_account.open())
 
 
 ## The online leaderboards: the name shown (Change opens PseudonymDialog), and the switch that

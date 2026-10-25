@@ -640,13 +640,75 @@ connection open while it runs:
   buffers like Talo's plugin); `BoardBackend.open_live()` makes it, the offline backend asks no
   ticket. The numbers are data: `data/online/presence.tres` (`PresenceDef`: `enabled`,
   `check_seconds` 2, `retry_seconds` 30, `connect_timeout` 20).
-- **Not done (yet)**: a custom presence status ("Étage 7", `PUT /v1/players/presence`); the
-  dashboard's online count only needs the session.
+- **The custom status** (Talo's `customStatus`, shown with the player online in the dashboard's
+  player page): where the player is, from `PresenceDef`'s plain English words (the dashboard's,
+  never shown in the game): "In the menus" (at launch, a run over or left for good), "Floor 7"
+  (`Events.floor_entered`), "Dawn Knell, floor 3" (a daily run). `PUT /v1/players/presence`
+  with `{customStatus}` alone, only while live, when it changes, at most every
+  `status_min_seconds` (5; a quicker change waits and only the last goes), again for each new
+  session. Needs the key's scope **Player presence write**; refused (403), the status is not
+  asked again until it changes. `send_status` off: none sent.
 
 Smoke test (25 October 2026, a throwaway scene, dev data): the dev player `smoke-presence-dev`
 (alias 666909) identified, ticket and token taken, `v1.connected` then
 `v1.players.identify.success` answered, the connection closed cleanly. The numbers show in the
 dashboard with dev data turned on; from a release build they count as live data.
+
+## Accounts and the online save (Talo player auth and game saves)
+
+An optional account so the profile follows the player from a phone to a PC. Only when the player
+asks: **Options > Privacy > Account** (`AccountDialog`); nothing is sent before.
+
+- **`Account`** (autoload, `src/autoload/account.gd`): register (a name, a password, an optional
+  recovery email), sign in, sign out, "Forgot your password?" (Talo emails a 6-digit code, then
+  `reset_password`), change the password, delete the account. Talo's routes under
+  `/v1/players/auth/*` (`TaloBackend.account_*`). The name: 3 to 24 letters, digits and `- _ .`,
+  never an email (`@` refused: Talo's player search finds alias identifiers). Talo's reasons
+  (`errorCode`: `IDENTIFIER_TAKEN`, `EMAIL_TAKEN`, `INVALID_CREDENTIALS`,
+  `PASSWORD_RESET_CODE_INVALID`, `NEW_PASSWORD_MATCHES_CURRENT_PASSWORD`, `INVALID_SESSION`...)
+  become `Account.Result`s with their words (`explain()`). Data: `data/online/account.tres`
+  (`AccountDef`).
+- **The account is its own Talo player** (service `talo`), not the device's: the leaderboards, the
+  statistics, the world counters, the feedback and the presence stay on the device's player. Talo
+  can't merge a player with auth into another, nor migrate a device alias to `talo`; keeping them
+  apart also keeps the account out of the public boards. (Idea, not done: scores tied to the
+  account.)
+- **One session per account** (Talo's rule, read in its code: each sign-in makes a new
+  `sessionKey`, so the other device's token is refused with `INVALID_SESSION`; refresh tokens are
+  tied to it too). The game asks for no refresh token: the session token lasts until the next
+  sign-in elsewhere or a sign-out. Decided with Clayton (25 October 2026): **"Stay signed in on
+  this device"**, off by default: on, the password is kept in `user://account.json` and the game
+  signs in again by itself when another device took the session (`Account.session_refused()`);
+  off, it signs out and says so ("You signed in on another device"). A kept password that no
+  longer works is forgotten.
+- **Deleting the account**: the password checked by signing in with it (a wrong one deletes
+  nothing), then every game save deleted, then `DELETE /v1/players/auth` (Talo deletes the auth
+  and the alias; the player row, empty, goes with the 730-day purge). The profile on the device
+  stays. In the game, so Google Play's account-deletion rule is met in the app; the policy says
+  how to ask by email too.
+- **`CloudSave`** (autoload, `src/autoload/cloud_save.gd`): one Talo game save named `profile`
+  per account, content `{rev, saved_at, platform, version, profile}` where `profile` is
+  `Profile.to_data()` (souls, the Tree, upgrades, records, the bestiary, the codex, achievements,
+  quests, looks; never a run in progress nor the settings). Each device keeps `base_rev` (the
+  revision it last matched) and `dirty` (`Profile.saved` since) in `user://cloud_save.json`. A
+  sync lists the account's saves and: same revision: this device's changes go up as `rev + 1`;
+  newer and nothing changed here: it replaces the profile (`Profile.from_data()`, out of a run
+  only: in a run it waits, `WAITING`, until `Events.run_ended`/`run_left`); newer and changed here,
+  or a first sign-in with two different progressions: **a conflict**, the player chooses
+  (`CloudConflictDialog`: runs, souls, deepest floor, victories; the online one with its date and
+  system; no Back out). A fresh profile takes the online one without asking; the same profile on
+  both sides (compared as this game reads it) is no conflict. When: at sign-in, 3 s after launch,
+  `upload_delay` (20 s) after a profile write, when the app goes to the background or comes back,
+  Sync now; failures retry with the backoff. Over `max_bytes` (900 kB; Talo's body limit is 1 MB):
+  `TOO_BIG`, not sent. Two devices writing the same second: the last one wins (Talo has no
+  compare-and-set on saves).
+- **Key scopes to add in Talo** (they were missing on 25 October 2026: the smoke test was
+  refused with 403): **Game saves read and write**, and **Player presence write** for the custom
+  status.
+
+Smoke test (25 October 2026, a throwaway scene, dev data): the dev account `smoke_account_dev`
+registered and signed in; a new sign-in made the old token `INVALID_SESSION` (one session per
+account, confirmed); the game saves and the presence status answered 403 (the scopes above).
 
 ## Privacy
 
@@ -656,7 +718,10 @@ counters (their totals per counter, and Talo's snapshot of each update). The rem
 read sends no id (Talo sees the device's IP address, as with any request), only once an online
 feature is on. Feedback: only the messages the player sends, with what they left ticked, linked
 to the same id. With the statistics' consent too: the play sessions (when each starts and ends)
-and the online presence, over the live connection above, linked to the same id. No email, no account, no hardware device id
+and the online presence with where the player is (menus or floor), over the live connection
+above, linked to the same id. An account (only if the player makes one): its name, its password
+(hashed by Talo; on the device too with "Stay signed in"), the email if given, and the profile as
+its online save; a separate Talo player. No email, no account, no hardware device id
 (the id is random, never `OS.get_unique_id()`), no location. Both are off until chosen and can be
 turned off in Options > Privacy, which also shows the id and prepares a deletion request. The
 policy is `docs/privacy.html` (FR and EN) and, short, in the game (`data/online/privacy.tres`);

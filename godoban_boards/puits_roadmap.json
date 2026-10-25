@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 252,
+  "next_id": 256,
   "tags": [
     "pc",
     "test",
@@ -2063,8 +2063,8 @@
     {
       "id": "task_141",
       "title": "Sauvegarde en ligne entre téléphone et PC (Talo Game Saves + comptes)",
-      "description": "Plus tard. Demande un compte (Player Auth : identifiant/email = vraies données personnelles) pour reconnaître le même joueur sur deux appareils. Gros chantier à part.",
-      "status": "backlog",
+      "description": "Plus tard. Demande un compte (Player Auth : identifiant/email = vraies données personnelles) pour reconnaître le même joueur sur deux appareils. Gros chantier à part.\n\nFait (25/10) : comptes Talo (inscription, connexion, mot de passe oublié par code e-mail, changement, suppression dans le jeu) et sauvegarde en ligne du profil (révisions, envoi 20 s après chaque écriture, copie plus récente prise hors partie, choix en cas de conflit « Deux chemins dans le Puits »). Talo n'autorise qu'une session par compte : case « Rester connecté » (choix de Clayton). Le compte est un joueur Talo à part (classements et stats restent sur l'appareil). Tests : unit.accounts, title.accounts, unit.talo_contract. À faire par Clayton : ajouter les portées Game Saves lecture/écriture à la clé, puis tester téléphone ↔ PC.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_80",
       "due_date": null,
@@ -2073,7 +2073,7 @@
         "données"
       ],
       "created_at": 1792768111,
-      "updated_at": 1792768111
+      "updated_at": 1792893512
     },
     {
       "id": "task_146",
@@ -3741,8 +3741,8 @@
     {
       "id": "task_250",
       "title": "Présence : statut personnalisé (écran titre, étage, Glas de l'Aube)",
-      "description": "Idée : PUT /v1/players/presence avec un customStatus (« Sur l'écran titre », « Étage 7 », « Glas de l'Aube ») pour voir dans le tableau de bord où sont les joueurs en ligne. Pas fait : le compteur de joueurs en ligne n'en a pas besoin. À décider par Clayton (et c'est une donnée de plus dans la politique).",
-      "status": "backlog",
+      "description": "Idée : PUT /v1/players/presence avec un customStatus (« Sur l'écran titre », « Étage 7 », « Glas de l'Aube ») pour voir dans le tableau de bord où sont les joueurs en ligne. Pas fait : le compteur de joueurs en ligne n'en a pas besoin. À décider par Clayton (et c'est une donnée de plus dans la politique).\n\nFait (25/10) : « In the menus », « Floor 7 », « Dawn Knell, floor 3 » (données PresenceDef), envoyé quand ça change, au plus toutes les 5 s. À faire : ajouter la portée Player Presence écriture à la clé Talo.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "tags": [
@@ -3750,7 +3750,7 @@
         "idée"
       ],
       "created_at": 1792888065,
-      "updated_at": 1792888065,
+      "updated_at": 1792893512,
       "due_date": null
     },
     {
@@ -3766,6 +3766,66 @@
       ],
       "created_at": 1792888065,
       "updated_at": 1792888065,
+      "due_date": null
+    },
+    {
+      "id": "task_252",
+      "title": "Talo : ajouter les portées Game Saves et Player Presence à la clé",
+      "description": "Sur dashboard.trytalo.com, clé d'accès du jeu : cocher Game saves lecture + écriture (sauvegarde en ligne des comptes) et Player presence écriture (statut « Étage 7 »). Sans elles, le test réel du 25/10 répond 403. Rien à changer dans le jeu ensuite.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "en ligne"
+      ],
+      "created_at": 1792893512,
+      "updated_at": 1792893512,
+      "due_date": null
+    },
+    {
+      "id": "task_253",
+      "title": "Idée : connexion Google Play Jeux sur Android",
+      "description": "Talo sait identifier un joueur Google Play Games (service google_play_games). Demande un compte développeur Google Play (25 $ une fois, nécessaire de toute façon pour publier sur le Play Store), le plugin Godot Play Games Services et la configuration dans la Play Console. Avantage : connexion sans mot de passe sur Android. Ne remplace pas le compte du Puits pour le PC.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "tags": [
+        "en ligne",
+        "android",
+        "idée"
+      ],
+      "created_at": 1792893512,
+      "updated_at": 1792893512,
+      "due_date": null
+    },
+    {
+      "id": "task_254",
+      "title": "Idée : scores du Glas liés au compte",
+      "description": "Aujourd'hui les classements restent sur le joueur de l'appareil (deux appareils = deux tags). Lier les scores au compte demanderait de publier avec le joueur du compte (son nom serait public sur les classements). À décider.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "tags": [
+        "en ligne",
+        "idée"
+      ],
+      "created_at": 1792893512,
+      "updated_at": 1792893512,
+      "due_date": null
+    },
+    {
+      "id": "task_255",
+      "title": "Vérifier la synchro téléphone ↔ PC en vrai",
+      "description": "Une fois les portées ajoutées : créer un compte sur le S23, jouer, se connecter sur le PC (la progression arrive), jouer sur le PC, revenir au téléphone (avec et sans « Rester connecté »), provoquer un conflit. Regarder aussi la fenêtre du compte avec le clavier du téléphone ouvert.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "tags": [
+        "en ligne",
+        "playtest"
+      ],
+      "created_at": 1792893512,
+      "updated_at": 1792893512,
       "due_date": null
     }
   ]

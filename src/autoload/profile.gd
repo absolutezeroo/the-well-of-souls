@@ -4,6 +4,8 @@ extends Node
 ## Saved as JSON in user://profile.json (works on phones too).
 
 signal changed
+## Written to its file (CloudSave follows it: the online copy is out of date).
+signal saved
 
 const SAVE_PATH := "user://profile.json"
 
@@ -593,7 +595,13 @@ func reach_depth(depth: int) -> void:
 func save_profile() -> void:
 	if save_path.is_empty() or held:
 		return
-	SafeFile.write_json(save_path, {
+	SafeFile.write_json(save_path, to_data())
+	saved.emit()
+
+
+## Everything kept, as the file holds it (the online save carries it too: CloudSave).
+func to_data() -> Dictionary:
+	return {
 		"souls": souls, "levels": levels, "runs": runs, "victories": victories, "best_depth": best_depth,
 		"difficulty": String(difficulty), "wins": wins, "seen_intro": seen_intro,
 		"ascension": ascension, "ascension_unlocked": ascension_unlocked,
@@ -610,7 +618,7 @@ func save_profile() -> void:
 		"chronicle_told": chronicle_told, "fragments_found": fragments_found, "deeds_done": deeds_done,
 		"boss_meetings": boss_meetings, "deepest": deepest,
 		"lines_told": lines_told, "lines_order": lines_order, "deaths_by": deaths_by,
-	})
+	}
 
 
 func load_profile() -> void:
@@ -622,6 +630,28 @@ func load_profile() -> void:
 	if not data is Dictionary:
 		push_warning("Profile file is damaged, starting fresh.")
 		return
+	_read(data)
+
+
+## The profile replaced by `data` (to_data()'s form, from another device: CloudSave), checked as
+## the file is, then written. False (nothing changed) when it isn't a profile.
+func from_data(data: Variant) -> bool:
+	if not data is Dictionary or not (data as Dictionary).has("souls") or not (data as Dictionary).has("runs"):
+		return false
+	reset()
+	_read(data)
+	save_profile()
+	changed.emit()
+	return true
+
+
+## Anything to lose: a run counted, souls, upgrades or the intro seen (a fresh profile takes an
+## online save without asking).
+func has_progress() -> bool:
+	return runs > 0 or souls > 0 or not levels.is_empty() or seen_intro or not achievements.is_empty()
+
+
+func _read(data: Dictionary) -> void:
 	souls = int(data.get("souls", 0))
 	levels = _ints(data.get("levels", {}))
 	runs = int(data.get("runs", 0))

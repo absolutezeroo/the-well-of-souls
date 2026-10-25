@@ -22,6 +22,7 @@ func test_cases() -> Array:
 		["world_stats", func() -> void: await _part(WorldStatsTests.new(), func(suite: WorldStatsTests) -> void: await suite.run_title())],
 		["remote_config", func() -> void: await _part(RemoteConfigTests.new(), func(suite: RemoteConfigTests) -> void: await suite.run_title())],
 		["feedback", func() -> void: await _part(FeedbackTests.new(), func(suite: FeedbackTests) -> void: await suite.run_title())],
+		["accounts", func() -> void: await _part(AccountTests.new(), func(suite: AccountTests) -> void: await suite.run_title())],
 		["soft_keyboard", func() -> void: await _part(SoftKeyboardTests.new(), func(suite: SoftKeyboardTests) -> void: await suite.run_title())],
 		["tap", func() -> void: await _part(TapTests.new(), func(suite: TapTests) -> void: await suite.run_title())],
 		["dialogue", func() -> void: await _part(DialogueTests.new(), func(suite: DialogueTests) -> void: await suite.run_title())],
@@ -581,6 +582,8 @@ func _test_options_tabs(options: OptionsPanel) -> void:
 		(where[OptionsPanel.Tab.GRAPHICS] as Array).append("FullscreenCheck")
 	if Leaderboards.is_available():
 		(where[OptionsPanel.Tab.PRIVACY] as Array).append_array(["BoardsNameButton", "BoardsShowCheck", "AnalyticsCheck", "DeleteDataButton"])
+	if Account.is_available():
+		(where[OptionsPanel.Tab.PRIVACY] as Array).append("AccountButton")
 	check(OptionsPanel.Tab.size() == 5 and options.current_tab() == OptionsPanel.Tab.GAMEPLAY, "options: five tabs, opening on Gameplay")
 	check(options.get_node("%GameplayTab").get_parent() is TabRow, "options: the tabs are a TabRow, like every window's")
 	# Boss stories' line names a control: it follows the device in hand.

@@ -109,6 +109,21 @@ legal advice.** Where the report was unsure, the safer choice was taken and is m
   nothing runs there. The consent question has a line for it, the in-game policy's statistics
   section and `docs/privacy.html` section 4 (both languages, with a retention row: sessions go
   with the player, deletion or the 730-day purge) say it. Same processor (Talo), same id.
+- **Accounts and the online save (25 October 2026, policy 1.5, no consent version):** an
+  account is made only when the player asks, for the service they ask for (their progress on
+  another device): GDPR 6(1)(b), and keeping its session (and, if they tick "Stay signed in",
+  its password) on the device is strictly necessary to it (LIL art. 82 exemption), so **no
+  consent question and `consent_version` stays 3**. What Talo keeps: the name (findable through
+  the game API's player search: the form refuses an `@` and says never your real name), the
+  password (bcrypt), the email only if given (only for the reset code, sent by Talo), the
+  profile as a game save, and Talo's own auth log (sign-ins with IP and user agent). A separate
+  Talo player: nothing links it to the device's id. **Deletion in the game** (Options > Privacy >
+  Account > Delete the account: its saves, then its auth and alias), which is what Google Play
+  requires of an app with accounts; the Play Console also asks for a **web link** explaining how
+  to delete an account: the policy's section 11 (Your rights) says it (in the game, or by email
+  with the account's name). An emailed request: delete the account player in the dashboard
+  (Players, search the name). Not age-gated (contract basis; the game is 13+). Retention: until
+  deleted, or the 730-day purge of inactive players.
 - **The rule for a new purpose**, made explicit: a new purpose that runs **on consent** (or by
   itself in the background) raises `consent_version`; a new feature that only sends when the
   player explicitly asks for it, each time, and says what it sends, only changes the policy
@@ -135,7 +150,8 @@ my online data" shows the address placeholder instead of opening an email. Then 
 
 The game's key needs these scopes (already set): Players read/write, Leaderboards read/write,
 **Events write** (the statistics), **Game Stats read/write** (the world counters), **Game Feedback
-write** (player feedback). Then, on [dashboard.trytalo.com](https://dashboard.trytalo.com):
+write** (player feedback), and **to add (25 October 2026): Game Saves read/write** (the online
+save) and **Player Presence write** (the custom status). Then, on [dashboard.trytalo.com](https://dashboard.trytalo.com):
 
 0. **Feedback > Categories**: create `bug`, `idea` and `other`, **Anonymised** on (online.md,
    "The categories"). Until they exist, messages wait on the players' devices (Talo answers 404).
@@ -170,7 +186,9 @@ Answers from the report (check them again against the build you publish):
   `api.trytalo.com`).
 - Do you provide a way for users to request that their data is deleted? **Yes** (in-game button
   that prepares an email, and the address in the privacy policy).
-- Account creation: **No** accounts (the account-deletion link requirement doesn't apply).
+- Account creation: **Yes, optional** (username and password, made in the app). Account deletion:
+  in the app (Options > Privacy > Account > Delete the account) and a **web link** to the
+  policy's "Your rights" section (how to delete it, in the game or by email).
 - Shared: **No** for every type (Talo processes on your behalf: a service provider, not sharing).
 
 | Data type | Collected | Purposes | Optional | Ephemeral |
@@ -178,7 +196,10 @@ Answers from the report (check them again against the build you publish):
 | Personal info > **Name** (the pseudonym: Google's "name" includes nicknames) | Yes | App functionality | Optional | No |
 | **Device or other IDs** (the random install id) | Yes | App functionality, Analytics | Optional | No |
 | App activity > **Other actions** (gameplay: scores, run summaries, builds, deaths, perks...) | Yes | App functionality, Analytics | Optional | No |
-| App activity > **App interactions** (the input device type; play sessions: when the game is open, their length, online presence) | Yes | Analytics | Optional | No |
+| App activity > **App interactions** (the input device type; play sessions: when the game is open, their length, online presence and where in the game) | Yes | Analytics | Optional | No |
+| Personal info > **Email address** (an account's recovery email, if given) | Yes | Account management | Optional | No |
+| Personal info > **User IDs** (an account's name) | Yes | Account management, App functionality | Optional | No |
+| App activity > **Other actions** (the profile as the account's online save) | Yes | App functionality | Optional | No |
 | App info and performance > **Other app performance data** (game version, OS name, screen size; with feedback also the OS version and device model) | Yes | Analytics, App functionality | Optional | No |
 | App activity > **Other user-generated content** (a feedback message's words) | Yes | App functionality | Optional | No |
 | App info and performance > **Diagnostics** (the last lines of the game's log, sent with feedback if ticked; Android keeps no log file by default, so in practice desktop only) | Yes | App functionality | Optional | No |

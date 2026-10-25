@@ -72,6 +72,7 @@ func test_cases() -> Array:
 		["trials", func() -> void: await _part(TrialTests.new(), func(suite: TrialTests) -> void: suite.run_unit())],
 		["online_session", func() -> void: await _part(OnlineSessionTests.new(), func(suite: OnlineSessionTests) -> void: await suite.run_unit())],
 		["presence", func() -> void: await _part(PresenceTests.new(), func(suite: PresenceTests) -> void: await suite.run_unit())],
+		["accounts", func() -> void: await _part(AccountTests.new(), func(suite: AccountTests) -> void: await suite.run_unit())],
 		["talo_contract", func() -> void: await _part(TaloContractTests.new(), func(suite: TaloContractTests) -> void: await suite.run_unit())],
 		["gear_look", func() -> void: await _part(GearLookTests.new(), func(suite: GearLookTests) -> void: suite.run())],
 		["story", func() -> void: await _part(StoryTests.new(), func(suite: StoryTests) -> void: await suite.run_unit())],

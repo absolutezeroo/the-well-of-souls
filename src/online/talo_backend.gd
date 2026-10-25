@@ -211,6 +211,13 @@ func live_access() -> BoardBackend.LiveAccess:
 	return access
 
 
+func set_presence_status(text: String) -> Status:
+	if _alias_id <= 0:
+		return Status.REJECTED
+	var answer := await _request(HTTPClient.METHOD_PUT, "/v1/players/presence", { "customStatus": text })
+	return answer.status
+
+
 ## The live connection's server: the API's address on WebSocket (https -> wss).
 func socket_url() -> String:
 	if _url.begins_with("https://"):
@@ -311,7 +318,7 @@ static func _entry(data: Dictionary) -> BoardBackend.Entry:
 
 ## One request: {status, code, body (parsed JSON or null)}. `anonymous`: without the identified
 ## player's headers (the remote settings' read).
-func _request(method: HTTPClient.Method, path: String, body: Variant = null, anonymous: bool = false) -> Dictionary:
+func _request(method: HTTPClient.Method, path: String, body: Variant = null, anonymous: bool = false, account: BoardBackend.AccountAuth = null) -> Dictionary:
 	var headers := PackedStringArray([
 		"Authorization: Bearer %s" % _key,
 		"Content-Type: application/json",
@@ -321,7 +328,12 @@ func _request(method: HTTPClient.Method, path: String, body: Variant = null, ano
 		"X-Talo-Dev-Build: %s" % ("1" if dev_build else "0"),
 		"X-Talo-Include-Dev-Data: %s" % ("1" if dev_build else "0"),
 	])
-	if _alias_id > 0 and not anonymous:
+	if account:
+		# An account's call: its own player, with its session (never the device's player).
+		headers.append("X-Talo-Alias: %d" % account.alias_id)
+		headers.append("X-Talo-Player: %s" % account.player_id)
+		headers.append("X-Talo-Session: %s" % account.token)
+	elif _alias_id > 0 and not anonymous:
 		headers.append("X-Talo-Alias: %d" % _alias_id)
 		headers.append("X-Talo-Player: %s" % _player_id)
 	var result: Array = await _send(method, _url + path, headers, JSON.stringify(body) if body != null else "")
@@ -365,3 +377,138 @@ static func parse_body(bytes: PackedByteArray) -> Variant:
 	if json.parse(bytes.get_string_from_utf8()) != OK:
 		return null
 	return json.data
+
+
+# --- Accounts and their online saves -------------------------------------------------------
+
+## Signing in or up answers {alias, sessionToken}: the account, with its email (alias.player.auth).
+func _account_of(answer: Dictionary) -> BoardBackend.AccountAnswer:
+	var result := BoardBackend.AccountAnswer.new()
+	result.status = answer.status
+	result.error = error_of(answer.body)
+	if answer.status != Status.OK:
+		return result
+	var body: Variant = answer.body
+	var alias: Variant = (body as Dictionary).get("alias") if body is Dictionary else null
+	var token := str((body as Dictionary).get("sessionToken", "")) if body is Dictionary else ""
+	if not alias is Dictionary or not (alias as Dictionary).get("player") is Dictionary or token.is_empty():
+		result.status = Status.REJECTED
+		return result
+	var player: Dictionary = (alias as Dictionary).player
+	var auth := BoardBackend.AccountAuth.new()
+	auth.alias_id = int((alias as Dictionary).get("id", 0))
+	auth.player_id = str(player.get("id", ""))
+	auth.identifier = str((alias as Dictionary).get("identifier", ""))
+	auth.token = token
+	var player_auth: Variant = player.get("auth")
+	if player_auth is Dictionary and (player_auth as Dictionary).get("email") is String:
+		auth.email = str((player_auth as Dictionary).email)
+	if not auth.is_valid():
+		result.status = Status.REJECTED
+		return result
+	result.auth = auth
+	return result
+
+
+## Talo's reason for a refusal ({errorCode} in its body), "" none.
+static func error_of(body: Variant) -> String:
+	return str((body as Dictionary).get("errorCode", "")) if body is Dictionary and (body as Dictionary).get("errorCode") is String else ""
+
+
+func account_register(identifier: String, password: String, email: String) -> BoardBackend.AccountAnswer:
+	var body := { "identifier": identifier, "password": password }
+	if not email.is_empty():
+		body["email"] = email
+	return _account_of(await _request(HTTPClient.METHOD_POST, "/v1/players/auth/register", body, true))
+
+
+func account_login(identifier: String, password: String) -> BoardBackend.AccountAnswer:
+	var answer := _account_of(await _request(HTTPClient.METHOD_POST, "/v1/players/auth/login", { "identifier": identifier, "password": password }, true))
+	if answer.status == Status.OK and answer.auth == null:
+		answer.status = Status.REJECTED  # (a login asking for an emailed code: verification is never turned on by this game)
+	return answer
+
+
+func account_logout(auth: BoardBackend.AccountAuth) -> Status:
+	return (await _request(HTTPClient.METHOD_POST, "/v1/players/auth/logout", {}, true, auth)).status
+
+
+func account_forgot_password(email: String) -> Status:
+	return (await _request(HTTPClient.METHOD_POST, "/v1/players/auth/forgot_password", { "email": email }, true)).status
+
+
+func account_reset_password(code: String, password: String) -> BoardBackend.AccountAnswer:
+	var answer := await _request(HTTPClient.METHOD_POST, "/v1/players/auth/reset_password", { "code": code, "password": password }, true)
+	var result := BoardBackend.AccountAnswer.new()
+	result.status = answer.status
+	result.error = error_of(answer.body)
+	return result
+
+
+func account_change_password(auth: BoardBackend.AccountAuth, current: String, new_password: String) -> BoardBackend.AccountAnswer:
+	var answer := await _request(HTTPClient.METHOD_POST, "/v1/players/auth/change_password", { "currentPassword": current, "newPassword": new_password }, true, auth)
+	var result := BoardBackend.AccountAnswer.new()
+	result.status = answer.status
+	result.error = error_of(answer.body)
+	return result
+
+
+func account_delete(auth: BoardBackend.AccountAuth, password: String) -> BoardBackend.AccountAnswer:
+	var answer := await _request(HTTPClient.METHOD_DELETE, "/v1/players/auth", { "currentPassword": password }, true, auth)
+	var result := BoardBackend.AccountAnswer.new()
+	result.status = answer.status
+	result.error = error_of(answer.body)
+	return result
+
+
+static func _slot_of(data: Variant) -> BoardBackend.CloudSlot:
+	if not data is Dictionary:
+		return null
+	var slot := BoardBackend.CloudSlot.new()
+	slot.id = int((data as Dictionary).get("id", 0))
+	slot.name = str((data as Dictionary).get("name", ""))
+	var content: Variant = (data as Dictionary).get("content")
+	slot.content = content if content is Dictionary else {}
+	slot.updated_at = str((data as Dictionary).get("updatedAt", ""))
+	return slot if slot.id > 0 else null
+
+
+func saves_list(auth: BoardBackend.AccountAuth) -> BoardBackend.SaveAnswer:
+	var answer := await _request(HTTPClient.METHOD_GET, "/v1/game-saves", null, true, auth)
+	var result := BoardBackend.SaveAnswer.new()
+	result.status = answer.status
+	result.error = error_of(answer.body)
+	if answer.status != Status.OK:
+		return result
+	var list: Variant = (answer.body as Dictionary).get("saves") if answer.body is Dictionary else null
+	if not list is Array:
+		result.status = Status.REJECTED
+		return result
+	for item: Variant in list:
+		var slot := _slot_of(item)
+		if slot:
+			result.saves.append(slot)
+	return result
+
+
+func _save_answer(answer: Dictionary) -> BoardBackend.SaveAnswer:
+	var result := BoardBackend.SaveAnswer.new()
+	result.status = answer.status
+	result.error = error_of(answer.body)
+	if answer.status == Status.OK:
+		result.slot = _slot_of((answer.body as Dictionary).get("save") if answer.body is Dictionary else null)
+		if result.slot == null:
+			result.status = Status.REJECTED
+	return result
+
+
+func save_create(auth: BoardBackend.AccountAuth, save_name: String, content: Dictionary) -> BoardBackend.SaveAnswer:
+	return _save_answer(await _request(HTTPClient.METHOD_POST, "/v1/game-saves", { "name": save_name, "content": content }, true, auth))
+
+
+func save_update(auth: BoardBackend.AccountAuth, id: int, content: Dictionary) -> BoardBackend.SaveAnswer:
+	return _save_answer(await _request(HTTPClient.METHOD_PATCH, "/v1/game-saves/%d" % id, { "content": content }, true, auth))
+
+
+func save_delete(auth: BoardBackend.AccountAuth, id: int) -> Status:
+	return (await _request(HTTPClient.METHOD_DELETE, "/v1/game-saves/%d" % id, null, true, auth)).status

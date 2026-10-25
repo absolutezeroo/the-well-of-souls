@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AccountDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/online/account_def.gd" id="1_account"]
+
+[resource]
+script = ExtResource("1_account")
+enabled = true
+name_min = 3
+name_max = 24
+password_min = 8
+password_max = 128
+reset_code_digits = 6
+save_name = "profile"
+upload_delay = 20.0
+retry_seconds = 60.0
+max_bytes = 900000

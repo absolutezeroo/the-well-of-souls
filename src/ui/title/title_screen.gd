@@ -50,6 +50,8 @@ var hero_aura: AuraVfx
 var feedback: FeedbackDialog
 ## The gameplay statistics' questions (age, then consent).
 var consent: ConsentDialog
+## The online save's conflict (CloudSave): which progress to keep.
+var cloud_conflict: CloudConflictDialog
 ## The tutorial's title-screen hints (the Tree of Souls, the oaths), over everything.
 var hint_box: HintBox
 ## Who keeps vigil at the shrine (NarrativeDef.shrine_speaker), and her words when she speaks.
@@ -145,6 +147,7 @@ func _ready() -> void:
 	_build_credits()
 	_build_wardrobe()
 	_build_consent()
+	_build_cloud_conflict()
 	_build_world_line()
 	_build_remote_notes()
 	%DailyButton.pressed.connect(func() -> void:
@@ -397,6 +400,29 @@ func _build_consent() -> void:
 		get_tree().create_timer(PRIVACY_DELAY).timeout.connect(ask_privacy)
 
 
+## The online save's conflict (CloudSave): asked here, unless the account dialog is open (it asks
+## itself).
+func _build_cloud_conflict() -> void:
+	cloud_conflict = CloudConflictDialog.new()
+	cloud_conflict.name = "CloudConflict"
+	add_child(cloud_conflict)
+	cloud_conflict.finished.connect(func() -> void:
+		if InputDevice.uses_buttons():
+			(%PlayButton as Button).grab_focus())
+	CloudSave.conflict_found.connect(ask_cloud_conflict)
+	if CloudSave.state == CloudSave.Step.CONFLICT:
+		ask_cloud_conflict.call_deferred()
+
+
+func ask_cloud_conflict() -> void:
+	if not is_inside_tree() or cloud_conflict.visible:
+		return
+	for dialog in get_tree().get_nodes_in_group(AccountDialog.GROUP):
+		if (dialog as Control).is_visible_in_tree():
+			return
+	cloud_conflict.open()
+
+
 ## Asks the statistics' questions now, unless a panel is already open over the title.
 func ask_privacy() -> void:
 	if not is_inside_tree() or consent.visible or not Privacy.should_ask():
@@ -622,6 +648,8 @@ func back() -> bool:
 	if talk and talk.visible:
 		talk.close()
 		return true
+	if cloud_conflict and cloud_conflict.visible:
+		return true  # (a choice must be made)
 	var options: OptionsPanel = %OptionsPanel
 	if consent and consent.visible:
 		consent.back()

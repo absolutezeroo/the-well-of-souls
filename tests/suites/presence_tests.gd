@@ -18,6 +18,7 @@ func run_unit() -> void:
 	await _test_lost()
 	await _test_backoff()
 	await _test_withdrawn()
+	await _test_status()
 	_restore()
 
 
@@ -139,3 +140,43 @@ func _test_withdrawn() -> void:
 	await _run(Presence.config.check_seconds + 0.5)
 	check(not Presence.is_live() and fake.live_ended == 1, "the remote kill switch: closed")
 	RemoteConfig.use_for_tests()
+
+
+## Where the player is: sent once live, again when it changes, at most every status_min_seconds
+## (only the last change goes), again for a new session; none without consent.
+func _test_status() -> void:
+	var fake := _use_fake(true)
+	var config := Presence.config
+	await _run(3.0)
+	check(fake.live_statuses == PackedStringArray([config.menus_status]), "live: the status says the menus (%s)" % [fake.live_statuses])
+	await _run(config.status_min_seconds + 1.0)
+	Presence.set_status(config.floor_status.format({ "depth": 3 }))
+	Presence.set_status(config.floor_status.format({ "depth": 4 }))
+	await _run(1.0)
+	check(fake.live_statuses.size() == 2 and fake.live_statuses[1] == "Floor 4", "a change sent once, the last one (%s)" % [fake.live_statuses])
+	Presence.set_status(config.floor_status.format({ "depth": 5 }))
+	await _run(1.0)
+	check(fake.live_statuses.size() == 2, "not again before %.0f s" % config.status_min_seconds)
+	await _run(config.status_min_seconds)
+	check(fake.live_statuses.size() == 3 and fake.live_statuses[2] == "Floor 5", "then the last one goes")
+	await _run(config.status_min_seconds + 1.0)
+	check(fake.live_statuses.size() == 3, "nothing sent while it doesn't change")
+	Presence._notification(Node.NOTIFICATION_APPLICATION_PAUSED)
+	Presence._notification(Node.NOTIFICATION_APPLICATION_RESUMED)
+	await _run(config.status_min_seconds + 1.0)
+	check(fake.live_statuses.size() == 4 and fake.live_statuses[3] == "Floor 5", "a new session: its status sent again")
+	check(config.daily_status.format({ "depth": 2 }) == "Dawn Knell, floor 2" and not config.menus_status.is_empty(), "the statuses' words (plain English, the dashboard's)")
+	var world := World.new()
+	world.depth = 6
+	Presence._on_floor_entered(world)
+	var plain := Presence.status
+	Presence._daily = true
+	Presence._on_floor_entered(world)
+	check(plain == "Floor 6" and Presence.status == "Dawn Knell, floor 6", "a floor entered names it, a Dawn Knell's too (%s / %s)" % [plain, Presence.status])
+	world.free()
+	Events.run_ended.emit(RunSummary.new())
+	check(Presence.status == config.menus_status, "a run over: back to the menus")
+	fake = _use_fake(false)
+	Presence.set_status("Floor 9")
+	await _run(10.0)
+	check(fake.live_statuses.is_empty(), "without consent: no status")

@@ -83,6 +83,51 @@ class ConfigValues:
 	var values := {}
 
 
+## A signed-in account (Account; docs/online.md "Accounts"): its own player on the server (not
+## the device's), the session token that proves it, its name and the email the server holds.
+class AccountAuth:
+	extends RefCounted
+	var alias_id := 0
+	var player_id := ""
+	var token := ""
+	var identifier := ""
+	## The recovery email the server holds ("" none: the password can't be reset).
+	var email := ""
+
+	func is_valid() -> bool:
+		return alias_id > 0 and not player_id.is_empty() and not token.is_empty()
+
+
+## An account call's answer: its status, the server's reason when refused (Talo's errorCode:
+## "IDENTIFIER_TAKEN", "INVALID_CREDENTIALS", "EMAIL_TAKEN"...; "" none), and the account signed
+## in (register, login).
+class AccountAnswer:
+	extends RefCounted
+	var status: BoardBackend.Status = BoardBackend.Status.UNAVAILABLE
+	var error := ""
+	var auth: AccountAuth
+
+
+## One online save of an account (Talo's game save): its id, name, content (a Dictionary) and
+## when the server last changed it (ISO text).
+class CloudSlot:
+	extends RefCounted
+	var id := 0
+	var name := ""
+	var content := {}
+	var updated_at := ""
+
+
+## The account's online saves (saves_list()), or the one made or changed (`slot`).
+class SaveAnswer:
+	extends RefCounted
+	var status: BoardBackend.Status = BoardBackend.Status.UNAVAILABLE
+	## The server's reason when refused (Talo's errorCode: "INVALID_SESSION"...; "" none).
+	var error := ""
+	var saves: Array[CloudSlot] = []
+	var slot: CloudSlot
+
+
 ## What opening a live session needs (Presence): the connection's address with its one-use
 ## ticket, and the player's socket token (the proof, on that connection, that it is them).
 class LiveAccess:
@@ -181,6 +226,68 @@ func live_access() -> LiveAccess:
 	return LiveAccess.new()
 
 
+## Shows `text` as the identified player's custom status with their presence (Talo's
+## customStatus: where they are in the game).
+func set_presence_status(_text: String) -> Status:
+	return Status.UNAVAILABLE
+
+
 ## A new live connection, not opened yet (the tests' fake server gives its own).
 func open_live() -> LiveLink:
 	return LiveLink.new()
+
+
+# --- Accounts (Talo player auth) and their online saves ----------------------------------
+# Every call answers at once here (no server); TaloBackend talks to /v1/players/auth and
+# /v1/game-saves for the account's own player, never the device's.
+
+## A new account named `identifier` (its password, an optional recovery `email`: "" none),
+## signed in.
+func account_register(_identifier: String, _password: String, _email: String) -> AccountAnswer:
+	return AccountAnswer.new()
+
+
+func account_login(_identifier: String, _password: String) -> AccountAnswer:
+	return AccountAnswer.new()
+
+
+## Signed out on the server (its session token no longer valid).
+func account_logout(_auth: AccountAuth) -> Status:
+	return Status.UNAVAILABLE
+
+
+## A reset code sent to `email` (answered OK whether an account has it or not: the server
+## never says).
+func account_forgot_password(_email: String) -> Status:
+	return Status.UNAVAILABLE
+
+
+## The password set to `password` with the code from the email.
+func account_reset_password(_code: String, _password: String) -> AccountAnswer:
+	return AccountAnswer.new()
+
+
+func account_change_password(_auth: AccountAuth, _current: String, _new_password: String) -> AccountAnswer:
+	return AccountAnswer.new()
+
+
+## The account deleted on the server (its name, password and email; its saves are deleted
+## first by the caller: Account.delete_account()).
+func account_delete(_auth: AccountAuth, _password: String) -> AccountAnswer:
+	return AccountAnswer.new()
+
+
+func saves_list(_auth: AccountAuth) -> SaveAnswer:
+	return SaveAnswer.new()
+
+
+func save_create(_auth: AccountAuth, _save_name: String, _content: Dictionary) -> SaveAnswer:
+	return SaveAnswer.new()
+
+
+func save_update(_auth: AccountAuth, _id: int, _content: Dictionary) -> SaveAnswer:
+	return SaveAnswer.new()
+
+
+func save_delete(_auth: AccountAuth, _id: int) -> Status:
+	return Status.UNAVAILABLE

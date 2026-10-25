@@ -15,3 +15,16 @@ extends Resource
 ## Seconds a connection may take to open and to be answered (the player identified) before it
 ## counts as failed.
 @export_range(5.0, 120.0) var connect_timeout := 20.0
+
+@export_group("Status")
+## The custom status shown with the player online in the dashboard (Talo's customStatus), where
+## they are in the game. Plain English (the dashboard's, never shown in the game). Off: none sent.
+@export var send_status := true
+## Out of a run (the title, the menus).
+@export var menus_status := "In the menus"
+## In a run, on a floor ({depth}: the floor's number).
+@export var floor_status := "Floor {depth}"
+## In a Dawn Knell (the daily run), on a floor.
+@export var daily_status := "Dawn Knell, floor {depth}"
+## Seconds between two statuses sent (a quicker change waits, only the last one goes).
+@export_range(1.0, 120.0) var status_min_seconds := 5.0

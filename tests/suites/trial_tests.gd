@@ -82,12 +82,18 @@ func _lay(game: Game, kind: Script) -> RoomTrial:
 	# it can't, and the resumed floor must roll the same.)
 	CONTENT.dungeon.trials = [def] as Array[TrialDef]
 	var found: RoomTrial = null
-	for depth in [3, 4, 6, 7, 8, 9, 3, 4, 6, 7, 8, 9]:
-		await _floor(game, depth)
-		var world: World = game.world
-		if world.room_trial and world.room_trial.def == def:
-			found = world.room_trial
-			break
+	# Floors of a few runs (another run seed: other floors; after the first run only the depths
+	# whose floors are generated, not drawn by hand), until one holds it (the Seal needs a
+	# dead-end room, which some seeds' floors lack).
+	var kept_seed: int = game.run.run_seed
+	for attempt in 8:
+		for depth in ([3, 4, 6, 7, 8, 9] if attempt == 0 else [4, 7, 8]):
+			await _floor(game, depth)
+			var world: World = game.world
+			if world.room_trial and world.room_trial.def == def:
+				return world.room_trial
+		game.run.run_seed = hash("%d-trial-test-%d" % [kept_seed, attempt])
+	game.run.run_seed = kept_seed
 	return found
 
 

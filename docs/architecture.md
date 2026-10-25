@@ -70,7 +70,8 @@ src/
                        Telemetry (the gameplay statistics, with consent), WorldStats (the world counters),
                        RemoteConfig (the remote settings: Talo's game config, checked against the allow-list),
                        Feedback (the player's feedback messages and their queue),
-                       Presence (Talo's live connection: play sessions and online presence, with consent)
+                       Presence (Talo's live connection: play sessions and online presence, with consent),
+                       Account (the optional Talo account), CloudSave (the profile saved online for it)
   online/              The online pieces: RunSummary (a run that ended), PlayerName (the pseudonym's
                        filter), BoardBackend (offline) > TaloBackend (Talo's REST API), LiveLink (the live WebSocket), RunTelemetry (what
                        the statistics learn of a run), RemoteTuning (what the remote settings change in a run, saved with it),
@@ -297,6 +298,8 @@ shared session"):
 | `WorldStats` | `src/autoload/world_stats.gd` | The world counters (the Well's Toll): the player's share of each, sent with consent from release builds, and the world's numbers read for the title and the page. `user://world_stats.json` |
 | `RemoteConfig` | `src/autoload/remote_config.gd` | The remote settings: Talo's game config checked against the allow-list, applied at safe points, the kill switches. `user://remote_config.json` |
 | `Feedback` | `src/autoload/feedback.gd` | The player's feedback messages, queued and sent to Talo's game feedback. `user://feedback.json` |
+| `Account` | `src/autoload/account.gd` | The optional account (Talo player auth): register, sign in and out, reset and change the password, delete; one session per account, "Stay signed in". `user://account.json` |
+| `CloudSave` | `src/autoload/cloud_save.gd` | The profile as the account's online save (Talo game saves): revisions, uploads after writes, a newer copy taken out of a run, the conflict choice. `user://cloud_save.json` |
 | `Presence` | `src/autoload/presence.gd` | Talo's live connection (`LiveLink`, a WebSocket) while the statistics are allowed: a play session and the player shown online; closed in the background (docs/online.md "Sessions and presence"). No file |
 
 **Start-up order.** Godot makes every autoload (`_init()`) before any `_ready()`. The online ones

@@ -9,7 +9,7 @@ var url := ""
 ## Every text the game sent.
 var sent: Array[String] = []
 
-var _state: LiveLink.State = LiveLink.State.CLOSED
+var _state: LiveLink.LinkState = LiveLink.LinkState.CLOSED
 var _inbox: Array[String] = []
 var _live := false
 
@@ -20,17 +20,17 @@ func _init(on: FakeBoardBackend) -> void:
 
 func open(to_url: String) -> Error:
 	url = to_url
-	_state = State.CONNECTING
+	_state = LiveLink.LinkState.CONNECTING
 	return OK
 
 
 func poll() -> void:
-	if _state == State.CONNECTING and server.online and server.live_answers:
-		_state = State.OPEN
+	if _state == LiveLink.LinkState.CONNECTING and server.online and server.live_answers:
+		_state = LiveLink.LinkState.OPEN
 		_inbox.append(JSON.stringify({ "res": "v1.connected", "data": {} }))
 
 
-func state() -> LiveLink.State:
+func state() -> LiveLink.LinkState:
 	return _state
 
 
@@ -60,9 +60,9 @@ func close() -> void:
 
 ## The connection gone (closed by the game, or lost: the network): the session ends on the server.
 func drop() -> void:
-	if _state == State.CLOSED:
+	if _state == LiveLink.LinkState.CLOSED:
 		return
-	_state = State.CLOSED
+	_state = LiveLink.LinkState.CLOSED
 	if _live:
 		_live = false
 		server.live_ended += 1

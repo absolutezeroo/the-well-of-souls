@@ -53,6 +53,8 @@ WorldStats="*res://src/autoload/world_stats.gd"
 RemoteConfig="*res://src/autoload/remote_config.gd"
 Feedback="*res://src/autoload/feedback.gd"
 Presence="*res://src/autoload/presence.gd"
+Account="*res://src/autoload/account.gd"
+CloudSave="*res://src/autoload/cloud_save.gd"
 
 [display]
 

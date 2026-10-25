@@ -41,6 +41,7 @@ func run_unit() -> void:
 	await _test_config()
 	await _test_boards()
 	await _test_live()
+	await _test_accounts()
 	_test_key_file()
 
 
@@ -232,9 +233,47 @@ func _test_live() -> void:
 	check((await talo.live_access()).status == BoardBackend.Status.OFFLINE, "live: the server down is OFFLINE")
 	talo.answer("/v1/socket-tickets", 200, "<html>portal</html>")
 	check((await talo.live_access()).status == BoardBackend.Status.REJECTED, "live: a ticket that isn't Talo's answer is refused")
+	talo.answer("/v1/players/presence", 200, JSON.stringify({ "presence": { "online": true, "customStatus": "Floor 3" } }))
+	var before := talo.requests.size()
+	check(await talo.set_presence_status("Floor 3") == BoardBackend.Status.OK, "presence: the status taken")
+	var put: Dictionary = talo.requests[before]
+	check(put.method == HTTPClient.METHOD_PUT and str(put.url).ends_with("/v1/players/presence") and JSON.parse_string(put.body) == { "customStatus": "Floor 3" } and _header(put, "X-Talo-Alias:") == "X-Talo-Alias: 7", "presence: PUT the customStatus alone, for that player")
 	talo.free()
 	var local := TaloBackend.new("k", "http://localhost:3000/")
 	var hosted := TaloBackend.new("k")
 	check(local.socket_url() == "ws://localhost:3000" and hosted.socket_url() == "wss://api.trytalo.com", "live: https goes wss, http goes ws")
 	local.free()
 	hosted.free()
+
+
+## Accounts (player auth) and their game saves: what is sent, read and refused, always as the
+## account's own player with its session, never the device's.
+func _test_accounts() -> void:
+	var talo := _identified()
+	await talo.identify("dev")
+	var signed := JSON.stringify({ "alias": { "id": 31, "identifier": "Kagari", "player": { "id": "acc-1", "auth": { "email": "k@mail.fr" } } }, "sessionToken": "jwt-1", "socketToken": "s" })
+	talo.answer("/v1/players/auth/register", 200, signed)
+	var made: BoardBackend.AccountAnswer = await talo.account_register("Kagari", "a long password", "k@mail.fr")
+	var sent: Dictionary = talo.requests.back()
+	check(made.status == BoardBackend.Status.OK and made.auth.alias_id == 31 and made.auth.player_id == "acc-1" and made.auth.token == "jwt-1" and made.auth.email == "k@mail.fr" and made.auth.identifier == "Kagari", "register: the account, its session and email read")
+	check(JSON.parse_string(sent.body) == { "identifier": "Kagari", "password": "a long password", "email": "k@mail.fr" } and _header(sent, "X-Talo-Alias:").is_empty(), "register: name, password, email; not as the device's player")
+	talo.answer("/v1/players/auth/register", 400, JSON.stringify({ "message": "taken", "errorCode": "IDENTIFIER_TAKEN" }))
+	var taken: BoardBackend.AccountAnswer = await talo.account_register("Kagari", "a long password", "")
+	check(taken.status == BoardBackend.Status.REJECTED and taken.error == "IDENTIFIER_TAKEN" and not JSON.parse_string(talo.requests.back().body).has("email"), "register: Talo's reason read; no email field without one")
+	talo.answer("/v1/players/auth/login", 200, JSON.stringify({ "aliasId": 31, "verificationRequired": true }))
+	check((await talo.account_login("Kagari", "x")).status == BoardBackend.Status.REJECTED, "login: a verification step (never turned on here) is not a sign-in")
+	var auth := made.auth
+	talo.answer("/v1/game-saves", 200, JSON.stringify({ "saves": [{ "id": 5, "name": "profile", "content": { "rev": 2, "profile": { "souls": 3 } }, "updatedAt": "2026-10-25T01:00:00.000Z" }] }))
+	var listed: BoardBackend.SaveAnswer = await talo.saves_list(auth)
+	var asked: Dictionary = talo.requests.back()
+	check(listed.status == BoardBackend.Status.OK and listed.saves.size() == 1 and listed.saves[0].id == 5 and int(listed.saves[0].content.rev) == 2, "saves: the account's list read")
+	check(_header(asked, "X-Talo-Alias:") == "X-Talo-Alias: 31" and _header(asked, "X-Talo-Player:") == "X-Talo-Player: acc-1" and _header(asked, "X-Talo-Session:") == "X-Talo-Session: jwt-1", "saves: as the account's player, with its session (not the device's)")
+	talo.answer("/v1/game-saves/5", 200, JSON.stringify({ "save": { "id": 5, "name": "profile", "content": { "rev": 3 } } }))
+	var changed: BoardBackend.SaveAnswer = await talo.save_update(auth, 5, { "rev": 3 })
+	check(changed.status == BoardBackend.Status.OK and changed.slot.id == 5 and talo.requests.back().method == HTTPClient.METHOD_PATCH and str(talo.requests.back().url).ends_with("/v1/game-saves/5"), "saves: one changed by PATCH")
+	talo.answer("/v1/game-saves", 401, JSON.stringify({ "message": "invalid", "errorCode": "INVALID_SESSION" }))
+	var refused: BoardBackend.SaveAnswer = await talo.saves_list(auth)
+	check(refused.status == BoardBackend.Status.REJECTED and refused.error == "INVALID_SESSION", "saves: a session taken elsewhere is said so")
+	talo.answer("/v1/players/auth", 204, "")
+	check((await talo.account_delete(auth, "a long password")).status == BoardBackend.Status.OK and talo.requests.back().method == HTTPClient.METHOD_DELETE and JSON.parse_string(talo.requests.back().body) == { "currentPassword": "a long password" }, "delete: DELETE with the password")
+	talo.free()

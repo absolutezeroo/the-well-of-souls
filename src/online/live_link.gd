@@ -5,7 +5,7 @@ extends RefCounted
 ## server's pings there). BoardBackend.open_live() makes it; the tests use a server in memory
 ## instead (FakeLiveLink), never the network.
 
-enum State { CONNECTING, OPEN, CLOSING, CLOSED }
+enum LinkState { CONNECTING, OPEN, CLOSING, CLOSED }
 
 ## Room for a message each way (the size Talo's own Godot plugin uses; its messages are small).
 const BUFFER := 256 * 1024
@@ -25,15 +25,15 @@ func poll() -> void:
 	_peer.poll()
 
 
-func state() -> LiveLink.State:
+func state() -> LiveLink.LinkState:
 	match _peer.get_ready_state():
 		WebSocketPeer.STATE_CONNECTING:
-			return State.CONNECTING
+			return LinkState.CONNECTING
 		WebSocketPeer.STATE_OPEN:
-			return State.OPEN
+			return LinkState.OPEN
 		WebSocketPeer.STATE_CLOSING:
-			return State.CLOSING
-	return State.CLOSED
+			return LinkState.CLOSING
+	return LinkState.CLOSED
 
 
 ## The next message that came, oldest first ("" none waiting).
