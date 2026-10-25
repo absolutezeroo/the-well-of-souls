@@ -73,9 +73,14 @@ is `MonsterOverlay`.
 How every monster looks: it spots the hero within its reach (`detect_radius`, further while it
 chases) when nothing on the world's layer is between them. The line of sight is looked at again
 every 0.1 s, or as soon as either of them moved 4 px (`MonsterSteering.can_see`): a monster may notice the
-hero, or lose him behind a wall, a few frames late, never more. A pack spreads around the hero by
-stepping away from the monsters it bumps into (`MonsterSteering.keep_spacing`, asked of the nearby cells only:
-docs/performance.md).
+hero, or lose him behind a wall, a few frames late, never more. Monsters **don't collide with
+each other** (walls, water and the hero stop them; decided with Clayton, 25 October 2026: a crowd's
+heaviest cost, and a roguelike's packs flow better): a pack spreads around the hero by stepping
+away from the monsters it overlaps while walking (`MonsterSteering.keep_spacing`) and, standing
+(waiting, striking), by easing out of a heap at up to 60 % of its speed (`stand_apart`), both asked
+of the nearby cells only (docs/performance.md). Idle and chase think every second frame, each
+monster on its own beat (`StateMachine.THINK_EVERY`); a strike's wind-up, a cast and bosses every
+frame.
 
 ## Monster ranks: Elite, Fell, Legendary, Celestial
 

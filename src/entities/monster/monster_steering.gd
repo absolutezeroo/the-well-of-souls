@@ -11,7 +11,7 @@ const STUCK_AFTER := 0.3
 ## Moving slower than this share of its speed counts as not getting anywhere.
 const STUCK_PROGRESS := 0.3
 ## Monsters keep this many pixels between their bodies when they walk (no crowding into a pile).
-const SPACING := 4.0
+const SPACING := 6.0
 ## A straight walk to a point is checked again after this long (see has_clear_walk()).
 const WALK_CHECK_INTERVAL := 0.2
 ## The walks remembered at most (the targets' cells): more, and they are all forgotten.
@@ -25,6 +25,8 @@ const HOLE_TURNS: Array[float] = [0.0, 0.6, -0.6, 1.3, -1.3]
 ## own beat) and kept between: a crowd moves a pixel or two a frame, the push barely changes, and
 ## a crowd of 100 summed every frame cost ~2 ms (docs/performance.md, "A crowd").
 const SPACING_EVERY := 3
+## A standing monster eases out of a heap at most this share of its speed (stand_apart()).
+const STAND_APART := 0.6
 
 
 ## A straight walk checked toward one cell: when, and whether it was clear.
@@ -156,13 +158,26 @@ func can_see(other: Actor, max_distance: float) -> bool:
 ## Steps aside from the monsters it bumps into, so a pack spreads around the hero instead of
 ## pushing in a line through a door.
 func keep_spacing(direction: Vector2) -> Vector2:
+	_refresh_push()
+	if _push == Vector2.ZERO:
+		return direction
+	return (direction + _push * 1.2).limit_length(direction.length())
+
+
+## Standing still, the way out of the monsters it overlaps, at most STAND_APART of its speed (none
+## when it overlaps nobody): monsters don't collide with each other, so a pack that stopped round
+## the hero spreads out by itself instead of standing in one heap.
+func stand_apart() -> Vector2:
+	_refresh_push()
+	return _push.limit_length(STAND_APART)
+
+
+## The push away from the others, summed again on this monster's beat (SPACING_EVERY).
+func _refresh_push() -> void:
 	var frame := Engine.get_physics_frames()
 	if frame - _push_frame >= SPACING_EVERY or (frame + _monster.get_instance_id()) % SPACING_EVERY == 0:
 		_push = _spacing_push()
 		_push_frame = frame
-	if _push == Vector2.ZERO:
-		return direction
-	return (direction + _push * 0.8).limit_length(direction.length())
 
 
 ## The push away from the monsters it overlaps (with SPACING), summed now.

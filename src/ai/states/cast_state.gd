@@ -7,6 +7,10 @@ var _cast_time := 0.0
 var _aim := Vector2.RIGHT
 
 
+func _init() -> void:
+	every_frame = true
+
+
 func enter() -> void:
 	var skill := actor.casting_skill()
 	if skill == null or actor.target == null:

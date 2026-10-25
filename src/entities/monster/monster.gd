@@ -81,7 +81,10 @@ func setup(monster_def: MonsterDef, depth: int, config: DungeonConfig) -> void:
 	flies = def.flies or def is BossDef
 	set_body_radius(def.radius)
 	collision_layer = Layers.MONSTERS
-	collision_mask = Layers.WORLD | Layers.PLAYER | Layers.MONSTERS | (0 if def.flies else Layers.WATER)
+	# Walls, water and the hero stop it; other monsters don't (no body-to-body physics: a crowd's
+	# heaviest cost, docs/performance.md "A crowd"). They keep apart by steering instead
+	# (MonsterSteering: the spacing push, walking or standing).
+	collision_mask = Layers.WORLD | Layers.PLAYER | (0 if def.flies else Layers.WATER)
 	add_to_group("monsters")
 
 	# Depth, difficulty and the floor's event (see FloorRules).
@@ -429,6 +432,9 @@ func _get_desired_velocity() -> Vector2:
 		direction = monster_trait.steer(self, direction)
 	if direction != Vector2.ZERO and not is_boss():
 		direction = steering.keep_spacing(direction)
+	elif direction == Vector2.ZERO and not is_boss():
+		# Standing (waiting, striking): it eases out of the others it overlaps, slowly.
+		direction = steering.stand_apart()
 	if direction != Vector2.ZERO and not flies:
 		direction = steering.avoid_holes(direction)
 	return direction * get_move_speed()

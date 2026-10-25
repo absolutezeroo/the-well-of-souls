@@ -9,6 +9,10 @@ var _timer := 0.0
 var _aim := Vector2.RIGHT
 
 
+func _init() -> void:
+	every_frame = true
+
+
 func enter() -> void:
 	actor.move_direction = Vector2.ZERO
 	_aim = actor.global_position.direction_to(actor.target.global_position)

@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 258,
+  "next_id": 259,
   "tags": [
     "pc",
     "test",
@@ -3597,8 +3597,8 @@
     {
       "id": "task_241",
       "title": "Perf : décider pour les grosses foules",
-      "description": "Le reste du coût d'une foule de 100+ monstres est la physique du moteur. Pistes à décider par Clayton : limiter le nombre de monstres réveillés en même temps ; monstres qui ne se bloquent plus entre eux (seulement l'écartement doux, comme les survivors-like) ; physique à 30 ticks avec interpolation ; IA des monstres loin du héros à mi-cadence.\n\n25/10 : mesuré une foule de 175-210 monstres (IA coupée) : ~1 appel de dessin par monstre (matériau propre à chaque corps + ombre dessinée entre deux sprites). Corrigé sans toucher au jeu : matériau partagé au repos et ombres sur leur propre couche (même espèce : 284 -> 137 appels ; 4 espèces mélangées : 441 -> 226). Côté processeur (VM, 158 éveillés, IA active) : ~13 ms/image dont IA 2,6, déplacement + physique du moteur ~5,4, rig 1,5, espacement 1,2. Options proposées à Clayton (non faites) : IA moins fréquente hors de l'écran ; pas de collision monstre-monstre (séparation douce) ; physique à 30 Hz interpolée ; pour un mode vagues, des monstres « de horde » légers (sans corps physique, dessinés en lot).",
-      "status": "todo",
+      "description": "Le reste du coût d'une foule de 100+ monstres est la physique du moteur. Pistes à décider par Clayton : limiter le nombre de monstres réveillés en même temps ; monstres qui ne se bloquent plus entre eux (seulement l'écartement doux, comme les survivors-like) ; physique à 30 ticks avec interpolation ; IA des monstres loin du héros à mi-cadence.\n\n25/10 : mesuré une foule de 175-210 monstres (IA coupée) : ~1 appel de dessin par monstre (matériau propre à chaque corps + ombre dessinée entre deux sprites). Corrigé sans toucher au jeu : matériau partagé au repos et ombres sur leur propre couche (même espèce : 284 -> 137 appels ; 4 espèces mélangées : 441 -> 226). Côté processeur (VM, 158 éveillés, IA active) : ~13 ms/image dont IA 2,6, déplacement + physique du moteur ~5,4, rig 1,5, espacement 1,2. Options proposées à Clayton (non faites) : IA moins fréquente hors de l'écran ; pas de collision monstre-monstre (séparation douce) ; physique à 30 Hz interpolée ; pour un mode vagues, des monstres « de horde » légers (sans corps physique, dessinés en lot).\n\nDécidé par Clayton (25/10) : plus de collision entre monstres, seulement avec le joueur (et les murs, l'eau). Fait : masque de collision sans les monstres ; écartement en marchant (poussée 1,2, 6 px) et à l'arrêt (stand_apart, jusqu'à 60 % de la vitesse) ; repos et poursuite réfléchissent une image sur deux (frappes, sorts, boss chaque image). Mesuré (175 qui poursuivent, VM) : physique 17,4 -> 14,5 ms par image. À ressentir sur le S23 (densité des meutes, lisibilité autour du héros).",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_5",
       "tags": [
@@ -3606,7 +3606,7 @@
         "idée"
       ],
       "created_at": 1792860189,
-      "updated_at": 1792901891,
+      "updated_at": 1792905652,
       "due_date": null
     },
     {
@@ -3857,6 +3857,21 @@
       ],
       "created_at": 1792901891,
       "updated_at": 1792901891,
+      "due_date": null
+    },
+    {
+      "id": "task_258",
+      "title": "Idée : monstres « de horde » légers pour un mode vagues",
+      "description": "Pour défendre le village / des vagues de centaines d'ennemis : des monstres sans corps physique ni nœuds par monstre, déplacés par un champ de flux, dessinés en lot (MultiMesh ou RenderingServer), touchés par une grille. C'est ainsi que les jeux à hordes tiennent. Gros chantier, à décider.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "tags": [
+        "perf",
+        "idée"
+      ],
+      "created_at": 1792905652,
+      "updated_at": 1792905652,
       "due_date": null
     }
   ]

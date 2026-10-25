@@ -4,6 +4,10 @@ extends Node
 
 var machine: StateMachine
 var actor: Monster
+## Thinks every physics frame (a strike's wind-up, a cast: their timing is felt). The others
+## (idle, chase: deciding where to go) think every StateMachine.THINK_EVERY frames, with the time
+## gone since, and the body keeps walking the way chosen meanwhile.
+var every_frame := false
 
 
 func enter() -> void:

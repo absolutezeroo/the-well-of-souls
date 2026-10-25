@@ -62,9 +62,16 @@ pushing each other: monsters collide with monsters). What was cut:
 - A body out of view (`Actor._in_view()`, `Monster.VIEW_MARGIN` past `World.view_rect()`)
   keeps only its timers: no pose, tint or statuses (`ActorRig.on_view`), until it comes back.
 
-Not cut (the engine's): the physics step and `move_and_slide` (~5 ms for 120 in a crowd). A
-crowd that size needs a decision of design (fewer awake at once, or monsters that don't collide
-with each other, or physics at 30 ticks with interpolation): the roadmap has the card.
+- **Monsters don't collide with each other** (decided with Clayton, 25 October 2026): their
+  collision mask has walls, water and the hero only. The engine no longer solves bodies pushing
+  bodies in a heap (175 chasing the hero, the development VM: physics part 17.4 -> 14.5 ms a
+  frame); they keep apart by steering, walking (`keep_spacing`) and standing
+  (`MonsterSteering.stand_apart`, at most 60 % of their speed, out of a heap; `SPACING` 6 px).
+- **Idle and chase think every second frame** (`StateMachine.THINK_EVERY`, each monster on its
+  own beat, with the time gone since); strikes, casts and bosses every frame (`State.every_frame`):
+  where to walk decided 1/30 s later is not felt.
+Measured then (175 chasing, VM, per frame): the monsters' own physics scripts ~6 ms (their
+`move_and_slide` ~2 ms, the rig's pose and tint ~1.5 ms, the spacing ~1.2 ms), the AI ~2 ms.
 Measure the PC and the phone on an exported build: a run from the editor is a debug build, its
 scripts slower and its debugger listening.
 
