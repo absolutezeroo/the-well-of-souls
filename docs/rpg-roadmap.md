@@ -12,10 +12,19 @@ explique les choix, l’ordre et les critères ; les cartes portent leur état. 
 n’est ni une fonctionnalité existante ni une promesse de date. Les valeurs de progression,
 la taille du monde et le nombre de joueurs seront fixés par décisions et mesures.
 
+## Mise en route — premier lot technique
+
+Le [contrat du premier prototype](rpg-foundation-contract.md) précise les hypothèses proposées
+pour R0 et ce qui est effectivement implémenté : producteurs de commandes indépendants,
+contexte runtime GameSession et protection des continuations/fondus après redémarrage.
+La carte task_356 suit ce lot. R0.1/R0.2 sont en revue ; R0.3/R0.4 et R1.1/R1.2/R1.3 restent
+partielles, avec les schémas durables, identités persistantes et autres commandes encore à
+réaliser. La preuve à deux acteurs ne vaut pas validation de R1.6 ni ajout de multijoueur.
+
 ## Ce qui est décidé et ce qui doit l’être
 
 **Demandé :** monde ouvert, évolution durable du jeu vers le RPG, préparation d’un multijoueur
-plus tard. **Livrable de cette étape :** roadmap, inventaire des transformations et cartes de
+plus tard. **Livrable de planification initiale :** roadmap, inventaire des transformations et cartes de
 réalisation. Aucune conversion du gameplay, migration de sauvegarde ou infrastructure déployée.
 
 **Hypothèses proposées pour travailler, à valider en R0 :**
@@ -890,4 +899,4 @@ Les liens officiels suivants ont été consultés le 26 octobre 2026. Ce sont de
 
 ## Validation du livrable de planification
 
-Document, liens locaux, graphe de dépendances, ids/epics/tags de Godoban et correspondance des 64 cartes contrôlés. Seuls la documentation, ses index et la roadmap sont modifiés. Aucune suite moteur relancée pour cette rédaction : aucune fonctionnalité RPG/multijoueur, donnée de gameplay, sauvegarde joueur ni export n’a été modifié. La carte task_278 termine la planification ; les 64 cartes de réalisation restent todo/backlog.
+Lors du lot de planification initial, les liens locaux, le graphe de dépendances, les ids/epics/tags de Godoban et la correspondance des 64 cartes ont été contrôlés. Ce lot ne modifiait que la documentation, ses index et la roadmap, sans changement moteur ni relance de sa suite de tests. La carte task_278 clôt cette planification ; les statuts actuels et les sous-lots de réalisation sont suivis dans Godoban. Le premier lot de code et ses validations sont décrits dans le [contrat du prototype](rpg-foundation-contract.md).

@@ -197,3 +197,12 @@ A warning node and its VFX allocate once per triggered pulse, bounded by one pen
 per behaviour and its data cooldown/interval. Frenzy emits one existing pop on entering the
 threshold, not on every low-Health frame. These are implementation bounds, not an S23 frame-time
 measurement; crowd checks remain task_269.
+
+
+## Per-character command sampling
+
+PlayerCommandSource and PlayerControls keep their frame buffers. Local input fills scalar
+fields and slot bit masks; buffered producers copy into existing buffers and consume edges.
+There are no per-step arrays, dictionaries, formatted names or new command objects. Source
+replacement and session tickets allocate only at lifecycle boundaries. The extra calls/copies
+are covered functionally, not a new S23 frame-time measurement.

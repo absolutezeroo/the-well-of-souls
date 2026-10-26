@@ -376,3 +376,17 @@ The `move_speed_multiplier` hook derives transient movement changes without edit
 stats. The post-damage `on_damaged` hook lets a trait react to actual damage; reactions reject
 lethal and secondary hits themselves. `FrenzyTrait` uses the first; `WarnedPulseTrait` uses the
 second plus update, with per-owner counters and a GroundStrike owning the warning lifetime.
+
+
+## RPG foundations: runtime session and command producers
+
+GameSession now holds the live expedition, hero and World references. Game.run/player remain
+compatibility views; this is runtime ownership, not the future character/world save schema.
+Opaque session tickets guard Game continuations and fades across restarts. They do not replace
+per-region lifetime guards or make the legacy Game work without an expedition yet.
+
+PlayerControls consumes one reused PlayerCommand snapshot each physics step. LocalPlayerInput
+reads the same shared actions as before; BufferedPlayerInput supplies independent intentions
+for tools and tests, consuming edges once. Costs, cooldowns and inventory remain validated by
+the existing components. Commands are not authenticated network packets. See
+[rpg-foundation-contract.md](rpg-foundation-contract.md) for prototype assumptions and limits.

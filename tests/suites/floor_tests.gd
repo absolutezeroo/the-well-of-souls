@@ -966,7 +966,7 @@ func _test_hazards(game: Game, world: World, player: Player) -> void:
 func _test_act_card(game: Game) -> void:
 	game.show_act_cards = true
 	game.depth = 3  # _descend goes one floor down: the first floor of act II
-	game._descend()
+	game._descend(game.session.capture())
 	await _frames(int(game.FADE_TIME * 60.0) + 40)
 	var card: ActCard = game.act_card
 	var act: ActDef = CONTENT.dungeon.act_for_depth(4)

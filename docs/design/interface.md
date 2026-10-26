@@ -520,3 +520,15 @@ stones lit in their runes' colors. The selected slot pulses gold.
   720-line screen), and the outcome takes its place when a choice is made.
 - **Codex, Voices** (*Paroles*): what each speaker said and is kept, by speaker, and how many
   lines are still to hear.
+
+
+## Per-character command sources (RPG foundation)
+
+The implemented local controls still use the existing actions and pause rules. LocalPlayerInput
+now reads movement/combat actions into a reused PlayerCommand; PlayerControls consumes that
+hero's snapshot. Tools can give another hero a BufferedPlayerInput without reading the same
+keyboard. Presses are consumed once, held movement/attack persist until updated or reset, and
+changing source cancels charging instead of releasing an old attack. The menu-close press guard
+still applies. Interactions, pause and inventory commands are not migrated to this contract yet.
+This is not multiplayer support or a new open-world game mode; the next steps are in the
+[RPG roadmap](../rpg-roadmap.md).

@@ -147,6 +147,7 @@ func xp_to_next_level() -> int:
 # --- Input (PlayerControls) ----------------------------------------------------
 
 func _think(delta: float) -> void:
+	controls.sample()
 	controls.read_move(delta)
 	_update_footsteps(delta)
 	controls.act(delta)

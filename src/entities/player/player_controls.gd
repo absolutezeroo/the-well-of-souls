@@ -1,16 +1,17 @@
 class_name PlayerControls
 extends RefCounted
-## The hero's hands on the controls (Player.controls): reads the input actions every frame
-## (keyboard, gamepad and the touch controls press the same ones), walks, aims at the closest
+## Executes a hero's intentions (Player.controls): samples its own command source each step,
+## walks, aims at the closest
 ## enemy in sight, turns the attack button into swings, a charge and its unleashing
 ## (AttackCharge, Player.unleash()), and presses the skill and belt buttons. The Player acts;
-## this decides when and toward where.
+## this decides when and toward where. LocalPlayerInput is the Input adapter; other producers
+## do not read global actions. Skill costs and cooldowns still belong to gameplay components.
 
 ## Keep facing the aim direction this long after attacking.
 const AIM_HOLD_TIME := 0.35
 ## The skill and belt buttons' input actions, by slot (read every frame: no name formatted).
-const SKILL_ACTIONS: Array[StringName] = [&"skill_1", &"skill_2", &"skill_3", &"skill_4"]
-const BELT_ACTIONS: Array[StringName] = [&"belt_1", &"belt_2", &"belt_3"]
+const SKILL_ACTIONS: Array[StringName] = PlayerCommand.SKILL_ACTIONS
+const BELT_ACTIONS: Array[StringName] = PlayerCommand.BELT_ACTIONS
 
 ## Where the stick or the keys push him this frame (length 0..1).
 var move_direction := Vector2.ZERO
@@ -18,6 +19,9 @@ var move_direction := Vector2.ZERO
 var aim_hold := 0.0
 
 var _player: Player
+var _source: PlayerCommandSource = LocalPlayerInput.new()
+## Controller-owned snapshot; neither a source nor another hero can edit it during execution.
+var _command := PlayerCommand.new()
 ## A press of the attack button not yet turned into a swing (PlayerDef.attack_buffer).
 var _attack_buffer := 0.0
 ## The game just came out of a pause: the press that closed the menu (a gamepad's B closes and
@@ -27,6 +31,21 @@ var _presses_muted := false
 
 func _init(player: Player) -> void:
 	_player = player
+
+
+## One source per controller. Changing it cancels buffered attacks, never unleashes a charge.
+func set_source(source: PlayerCommandSource) -> void:
+	_source = source if source else PlayerCommandSource.new()
+	_command.clear()
+	move_direction = Vector2.ZERO
+	aim_hold = 0.0
+	_attack_buffer = 0.0
+	_player.charge.cancel()
+
+
+## Once per physics step, before movement and actions consume the same snapshot.
+func sample() -> void:
+	_command.copy_from(_source.sample())
 
 
 ## The next frame reads no new press (the game was just unpaused: see _presses_muted).
@@ -42,7 +61,7 @@ func hold_aim() -> void:
 ## The stick or the keys: where he walks, and faces when no aim holds him.
 func read_move(delta: float) -> void:
 	aim_hold = maxf(aim_hold - delta, 0.0)
-	move_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	move_direction = _command.movement
 	if move_direction != Vector2.ZERO and aim_hold <= 0.0:
 		_player.facing = move_direction.normalized()
 
@@ -55,13 +74,13 @@ func act(delta: float) -> void:
 	update_attack(delta, fresh)
 
 	for i in mini(player.skills.skills.size(), SKILL_ACTIONS.size()):  # (one per skill slot: Player.SKILL_COUNT)
-		if fresh and player.skills.skills[i] and Input.is_action_just_pressed(SKILL_ACTIONS[i]):
+		if fresh and player.skills.skills[i] and (_command.skills_pressed & (1 << i)) != 0:
 			use_skill(i)
 
-	if fresh and Input.is_action_just_pressed("quick_item"):
+	if fresh and _command.quick_item_pressed:
 		player.pack.use_quick_item()
 	for i in range(1, Belt.SLOTS):
-		if fresh and Input.is_action_just_pressed(BELT_ACTIONS[i]):
+		if fresh and (_command.belt_pressed & (1 << i)) != 0:
 			player.pack.use_belt(i)
 
 
@@ -75,12 +94,12 @@ func update_attack(delta: float, fresh: bool = true) -> void:
 	var weapon := player.get_weapon()
 	var charged := weapon.charged if weapon else null
 	_attack_buffer = maxf(_attack_buffer - delta, 0.0)
-	if fresh and Input.is_action_just_pressed("attack"):
+	if fresh and _command.attack_pressed:
 		_attack_buffer = player.tuning().attack_buffer
 		charge.press()
 	if player.is_falling:
 		charge.cancel()  # a fall loses the charge (a roll or a dash: start_dash)
-	if Input.is_action_pressed("attack"):
+	if _command.attack_held:
 		if charged:
 			match charge.hold(delta, player.def.charge_delay, charged.charge_time):
 				AttackCharge.State.CHARGING:

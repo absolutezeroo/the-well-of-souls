@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 356,
+  "next_id": 359,
   "tags": [
     "pc",
     "test",
@@ -4251,8 +4251,8 @@
     {
       "id": "task_292",
       "title": "R0.1 · Définir le périmètre du RPG et la première région",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : Aucune dépendance technique ; cadrage demandé.\nÀ réaliser : Fixer la boucle explorer → combattre → accomplir une quête → améliorer le personnage ; préciser étendue, donjons, intérieur/extérieur, solo hors ligne et priorités. La cible initiale proposée est une région, un lieu sûr et deux donjons ; classes, artisanat et taille du futur groupe restent des choix.\nFini quand : Un document de périmètre accepté distingue minimum jouable, extension et hors périmètre ; aucun MMO ni multijoueur massif promis.\nPoints de départ existants : README.md; docs/lore.md.",
-      "status": "todo",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : Aucune dépendance technique ; cadrage demandé.\nÀ réaliser : Fixer la boucle explorer → combattre → accomplir une quête → améliorer le personnage ; préciser étendue, donjons, intérieur/extérieur, solo hors ligne et priorités. La cible initiale proposée est une région, un lieu sûr et deux donjons ; classes, artisanat et taille du futur groupe restent des choix.\nFini quand : Un document de périmètre accepté distingue minimum jouable, extension et hors périmètre ; aucun MMO ni multijoueur massif promis.\nPoints de départ existants : README.md; docs/lore.md.\nAvancement du premier lot (26 octobre 2026) : Proposition rédigée dans docs/rpg-foundation-contract.md (R0.1) : une région, un lieu sûr, deux donjons et boucle de référence. À relire : périmètre produit ; aucune activation du RPG dans ce lot.",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_279",
       "tags": [
@@ -4261,14 +4261,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792975625,
       "due_date": null
     },
     {
       "id": "task_293",
       "title": "R0.2 · Décider mort, réapparition et renouvellement du monde",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Choisir coût de mort, lieu sûr, récupération éventuelle, permanence des boss, respawn des monstres/ressources et réinitialisation des donjons. Distinguer temps de jeu, temps hors ligne et temps serveur futur.\nFini quand : Chaque type d’entité a une politique de persistance et de renouvellement ; mourir, quitter ou changer l’horloge ne crée pas une ferme de récompenses.\nPoints de départ existants : src/game/game.gd; src/world/floor_save.gd.",
-      "status": "todo",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Choisir coût de mort, lieu sûr, récupération éventuelle, permanence des boss, respawn des monstres/ressources et réinitialisation des donjons. Distinguer temps de jeu, temps hors ligne et temps serveur futur.\nFini quand : Chaque type d’entité a une politique de persistance et de renouvellement ; mourir, quitter ou changer l’horloge ne crée pas une ferme de récompenses.\nPoints de départ existants : src/game/game.gd; src/world/floor_save.gd.\nAvancement du premier lot (26 octobre 2026) : Proposition rédigée dans docs/rpg-foundation-contract.md (R0.2) : retour au lieu sûr, conservation du personnage, politiques par type et renouvellement explicite. À relire avant implémentation ; aucune règle de mort actuelle changée.",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_279",
       "tags": [
@@ -4277,14 +4277,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792975625,
       "due_date": null
     },
     {
       "id": "task_294",
       "title": "R0.3 · Définir propriété du personnage, du monde et du futur groupe",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Décider nombre de personnages/mondes, progression personnelle ou partagée, hôte ou serveur, départ d’un joueur, reprise à plusieurs et cible de joueurs simultanés. Hypothèse à valider : petite coopération avant monde partagé permanent.\nFini quand : Table de propriété et règles d’import/export : héros solo modifiable non importable comme richesse fiable dans une économie en ligne officielle ; autorité et limites d’un hôte particulier explicites.\nPoints de départ existants : src/autoload/account.gd; src/autoload/cloud_save.gd; docs/online.md.",
-      "status": "todo",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Décider nombre de personnages/mondes, progression personnelle ou partagée, hôte ou serveur, départ d’un joueur, reprise à plusieurs et cible de joueurs simultanés. Hypothèse à valider : petite coopération avant monde partagé permanent.\nFini quand : Table de propriété et règles d’import/export : héros solo modifiable non importable comme richesse fiable dans une économie en ligne officielle ; autorité et limites d’un hôte particulier explicites.\nPoints de départ existants : src/autoload/account.gd; src/autoload/cloud_save.gd; docs/online.md.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : table de propriété proposée dans docs/rpg-foundation-contract.md. Restent les décisions détaillées de groupe, hébergement/autorité, droits personnels/partagés et cas de départ/import ; aucune session réseau livrée.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_279",
       "tags": [
@@ -4293,14 +4293,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792975625,
       "due_date": null
     },
     {
       "id": "task_295",
       "title": "R0.4 · Établir le canon de surface et le devenir du roguelike",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Adapter Kagari, sanctuaire, âmes endormies, régions de surface et révélations à un monde ouvert. Décider si l’ancienne descente reste un mode séparé, devient un donjon ou est conservée seulement comme version précédente ; traiter fins, Seuil, Tréfonds et Gardien Sans Nom. Trier tout l’ancien backlog entre prérequis transversal, adaptation RPG, ancien mode à conserver et idée reportée ; conserver les correctifs et l’historique.\nFini quand : Carte narrative sans spoiler prématuré ; décision explicite sur mode historique, succès et classements ; aucune suppression d’anciens ids ou fichiers de joueur.\nPoints de départ existants : docs/lore.md; docs/design/progression.md; src/game/daily_run.gd.",
-      "status": "todo",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Adapter Kagari, sanctuaire, âmes endormies, régions de surface et révélations à un monde ouvert. Décider si l’ancienne descente reste un mode séparé, devient un donjon ou est conservée seulement comme version précédente ; traiter fins, Seuil, Tréfonds et Gardien Sans Nom. Trier tout l’ancien backlog entre prérequis transversal, adaptation RPG, ancien mode à conserver et idée reportée ; conserver les correctifs et l’historique.\nFini quand : Carte narrative sans spoiler prématuré ; décision explicite sur mode historique, succès et classements ; aucune suppression d’anciens ids ou fichiers de joueur.\nPoints de départ existants : docs/lore.md; docs/design/progression.md; src/game/daily_run.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : contraintes du canon de Kagari/Solhar et transition préservant les anciennes sauvegardes documentées dans docs/rpg-foundation-contract.md. Restent carte narrative, décision produit finale sur le mode historique et tri exhaustif de l’ancien backlog.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_279",
       "tags": [
@@ -4309,14 +4309,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792975625,
       "due_date": null
     },
     {
       "id": "task_296",
       "title": "R1.1 · Séparer session, personnage, monde et expédition",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R0.2 (task_293), R0.3 (task_294)\nÀ réaliser : Faire évoluer Game/RunState vers des propriétaires explicites : session active, état du personnage, état du monde, contexte d’un donjon. Garder les façades existantes tant qu’elles servent ; ne pas faire grossir Game/World ni déplacer tous les fichiers.\nFini quand : Quitter un donjon ou mourir ne recrée pas le personnage ; le mode historique reste testable si retenu. Les nouveaux noms/classes sont proposés, pas déjà implémentés.\nPoints de départ existants : src/game/game.gd; src/game/run_state.gd; src/world/world.gd.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R0.2 (task_293), R0.3 (task_294)\nÀ réaliser : Faire évoluer Game/RunState vers des propriétaires explicites : session active, état du personnage, état du monde, contexte d’un donjon. Garder les façades existantes tant qu’elles servent ; ne pas faire grossir Game/World ni déplacer tous les fichiers.\nFini quand : Quitter un donjon ou mourir ne recrée pas le personnage ; le mode historique reste testable si retenu. Les nouveaux noms/classes sont proposés, pas déjà implémentés.\nPoints de départ existants : src/game/game.gd; src/game/run_state.gd; src/world/world.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : GameSession branché dans Game ; vues run/player compatibles ; contexte runtime distinct de l’expédition avec conservation possible de la référence du héros. Restent CharacterState/WorldState durables, sortie vers un hub et règles RPG de mort/persistance. Le flux historique remplace encore le héros à Nouvelle partie.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_280",
       "tags": [
@@ -4325,14 +4325,14 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792975625,
       "due_date": null
     },
     {
       "id": "task_297",
       "title": "R1.2 · Définir les identifiants stables et les contextes d’exécution",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.1 (task_296)\nÀ réaliser : Distinguer id de définition, instance d’objet, personnage, monde, région/secteur, apparition persistante et entité de simulation ; ajouter révision et génération de contexte aux effets différés.\nFini quand : Un objet conserve son identité entre chargements ; un effet de région déchargée ne touche pas la nouvelle génération. Aucun NodePath, RID ou get_instance_id persisté comme identité durable.\nPoints de départ existants : src/game/content_catalog.gd; src/definitions/loot/loot_roller.gd; src/combat/ground_strike.gd.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.1 (task_296)\nÀ réaliser : Distinguer id de définition, instance d’objet, personnage, monde, région/secteur, apparition persistante et entité de simulation ; ajouter révision et génération de contexte aux effets différés.\nFini quand : Un objet conserve son identité entre chargements ; un effet de région déchargée ne touche pas la nouvelle génération. Aucun NodePath, RID ou get_instance_id persisté comme identité durable.\nPoints de départ existants : src/game/content_catalog.gd; src/definitions/loot/loot_roller.gd; src/combat/ground_strike.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : tickets opaques d’expédition et gardes des reprises/fondus de Game ; un ancien contexte ne peut plus ouvrir l’écran de mort ou descendre après redémarrage. Restent identités persistantes d’objets/personnages/régions et contextes par région ; aucun id runtime sérialisé.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_280",
       "tags": [
@@ -4341,14 +4341,14 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792975625,
       "due_date": null
     },
     {
       "id": "task_298",
       "title": "R1.3 · Faire passer les actions par des commandes validées",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.1 (task_296), R1.2 (task_297)\nÀ réaliser : Séparer lecture Input, intention de déplacement/attaque/compétence/objet et application des règles. Le solo applique localement le même contrat que pourra appliquer une autorité distante ; validation portée, coût et état.\nFini quand : Deux contrôleurs de test dirigent deux héros sans partager les touches ; l’UI ne fabrique ni dégâts ni récompenses ; les triches de debug restent identifiées.\nPoints de départ existants : src/entities/player/player_controls.gd; src/entities/player/player.gd; src/combat/combat.gd.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.1 (task_296), R1.2 (task_297)\nÀ réaliser : Séparer lecture Input, intention de déplacement/attaque/compétence/objet et application des règles. Le solo applique localement le même contrat que pourra appliquer une autorité distante ; validation portée, coût et état.\nFini quand : Deux contrôleurs de test dirigent deux héros sans partager les touches ; l’UI ne fabrique ni dégâts ni récompenses ; les triches de debug restent identifiées.\nPoints de départ existants : src/entities/player/player_controls.gd; src/entities/player/player.gd; src/combat/combat.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : PlayerCommand, LocalPlayerInput et BufferedPlayerInput ; copie bornée réutilisée par PlayerControls, pressions consommées, règles existantes de compétences/objets conservées. Deux héros de test isolés et cooldown vérifié. Restent interactions/inventaire/pause, contrat d’autorité et validation serveur ; pas de transport réseau.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_280",
       "tags": [
@@ -4357,7 +4357,7 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792975625,
       "due_date": null
     },
     {
@@ -5270,6 +5270,56 @@
       ],
       "created_at": 1792973386,
       "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_356",
+      "title": "RPG lot 1 : commandes de personnage et contexte de session",
+      "description": "Premier lot de mise en œuvre : cadrage R0 proposé, séparation Input/commandes avec source locale et source tamponnée par personnage, contexte de session branché dans Game et gardes après attente. Tests d’isolation à deux acteurs et de reprise après redémarrage. Réalise des parties de R1.1/R1.2/R1.3 ; ne prétend pas terminer la persistance de campagne ni les commandes réseau.\nValidation : suite complète 19 659 vérifications, 0 échec (seed 347348) ; nouvelles régressions 25/25 ; tests rapides 16 719/16 719 ; 639 scripts, 0 diagnostic ; 7 tests outils ; traductions et catalogue valides. Essais appareil suivis séparément dans task_358.",
+      "status": "done",
+      "priority": "high",
+      "epic_id": "epic_280",
+      "tags": [
+        "rpg",
+        "architecture",
+        "tests"
+      ],
+      "created_at": 1792974675,
+      "updated_at": 1792975651,
+      "due_date": null
+    },
+    {
+      "title": "Empêcher les continuations d’une ancienne partie de toucher la suivante",
+      "description": "Déclencheur : mourir ou lancer une descente, puis redémarrer Game avant la reprise de l’attente ou pendant le fondu. L’ancien écran de mort, la descente différée ou le tween pouvaient affecter la nouvelle expédition. Correction du lot RPG 1 : tickets opaques et garde des reprises et écritures de fondu. Régressions unit.rpg_foundations et game.rpg_foundations ajoutées.\nValidation : suite complète 19 659 vérifications, 0 échec (seed 347348) ; nouvelles régressions 25/25 ; tests rapides 16 719/16 719 ; 639 scripts, 0 diagnostic ; 7 tests outils ; traductions et catalogue valides. Essais appareil suivis séparément dans task_358.",
+      "status": "done",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "bug",
+        "tests",
+        "architecture"
+      ],
+      "id": "task_357",
+      "created_at": 1792975625,
+      "updated_at": 1792975651,
+      "due_date": null
+    },
+    {
+      "title": "Valider les commandes et fondus du lot RPG 1 sur S23 et Windows",
+      "description": "Contrôle appareil après le lot de commandes/session : clavier, manette et tactile, mouvement, attaque maintenue/chargée, compétences, ceinture et reprise après menu. Redémarrer pendant une mort ou une descente ; vérifier fondus et absence d’ancien écran de fin. Les tests headless couvrent les règles et 2 producteurs mais ne valident ni le ressenti tactile ni la fluidité/rendu sur appareil. Mesurer aussi le coût du prélèvement des commandes. Références : docs/rpg-foundation-contract.md, task_356.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "tags": [
+        "rpg",
+        "android",
+        "pc",
+        "playtest",
+        "perf"
+      ],
+      "id": "task_358",
+      "created_at": 1792975625,
+      "updated_at": 1792975625,
       "due_date": null
     }
   ]

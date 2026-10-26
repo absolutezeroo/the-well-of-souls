@@ -355,3 +355,13 @@ and cooldown, rejection of secondary/lethal blows, dormant periodic clocks, fixe
 fall/floor cancellation and save/restore of all four ids/modules with fresh transient state.
 Floor fingerprints intentionally change only for cases affected by the expanded pool from
 floor 3; FLOOR_FORMAT 3 protects older floor ledgers. Device checks remain in the roadmap.
+
+
+## RPG foundation regressions
+
+`unit.rpg_foundations` checks per-producer buffers, copied/bounded intentions, one-shot edges,
+local input compatibility and opaque session lifetimes. `game.rpg_foundations` runs two live
+heroes with independent producers (movement, attacks and skill cooldowns), checks mute/detach,
+and restarts a Game while old death/descent/fade work is pending. An old context must not show
+a game-over screen, advance the new floor or darken the new session. It does not yet validate
+multi-player UI, rewards, separate regions or networking.

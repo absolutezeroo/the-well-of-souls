@@ -32,8 +32,14 @@ static var _run_seeds: RandomNumberGenerator = null
 ## Title cards on black (a new act, a curse). Tests turn them off to save time.
 @export var show_act_cards := true
 
-var run: RunState
-var player: Player
+## Session lifetime is distinct from its current expedition and live hero.
+var session := GameSession.new()
+## Compatibility view for existing run systems while the RPG ownership is introduced.
+var run: RunState:
+	get: return session.expedition
+var player: Player:
+	get: return session.character
+	set(value): session.character = value
 ## The facts of the run that just ended (the Vigil-Keeper's tale), null while it goes on.
 var end_facts: RunFacts
 var offers := OfferQueue.new()
@@ -246,6 +252,7 @@ func _begin_run(saved: Dictionary, daily: bool = false) -> void:
 	if player:
 		player.get_parent().remove_child(player)
 		player.queue_free()
+	player = null
 	world.player = null  # (the new floor is built before the new hero is placed: nobody on it)
 
 	if _run_seeds:
@@ -256,7 +263,8 @@ func _begin_run(saved: Dictionary, daily: bool = false) -> void:
 	if day >= 0:
 		world.rng.seed = DailyRun.seed_of(day)  # the same bosses all day
 	RemoteTuning.run_starting()  # (a safe point: the remote settings read meanwhile apply now, then wait)
-	run = RunState.create(content, saved, world.rng, day)
+	session.enter_expedition(RunState.create(content, saved, world.rng, day), world)
+	var ticket := session.capture()
 	world.tuning = run.tuning
 	if day >= 0:
 		run.daily_official = not Profile.daily_played(day)
@@ -316,7 +324,9 @@ func _begin_run(saved: Dictionary, daily: bool = false) -> void:
 		_fade.color.a = 1.0
 		_set_paused(true)
 		await transition_to_floor(not saved.is_empty(), false)  # (the offers left open: below)
-		create_tween().tween_property(_fade, "color:a", 0.0, FADE_TIME * 1.5)
+		if not session.is_current(ticket):
+			return
+		create_tween().tween_method(_set_session_fade.bind(ticket), _fade.color.a, 0.0, FADE_TIME * 1.5)
 	else:
 		_enter_floor(not saved.is_empty())
 	if RunSave.floor_outdated(saved):
@@ -482,9 +492,9 @@ func _on_pact_ended(pact: PactRoom) -> void:
 	if pact.outcome != PactRoom.Outcome.KEPT:
 		return
 	offers.add(PerkDef.Rarity.RARE, pact.def.relic_choices, "Relic", "The pact is kept. Choose a relic.")  # i18n
-	var keeper := player
+	var ticket := session.capture()
 	await get_tree().create_timer(RELIC_DELAY, false).timeout
-	if player == keeper and not player.is_dead:
+	if session.is_current(ticket) and is_instance_valid(player) and not player.is_dead:
 		_show_next_offer()
 
 
@@ -500,9 +510,9 @@ func _on_trial_completed(trial: RoomTrial) -> void:
 	if def.relic_choices <= 0:
 		return
 	offers.add(PerkDef.Rarity.RARE, def.relic_choices, "Relic", "The trial is done. Choose a relic.")  # i18n
-	var keeper := player
+	var ticket := session.capture()
 	await get_tree().create_timer(RELIC_DELAY, false).timeout
-	if player == keeper and not player.is_dead:
+	if session.is_current(ticket) and is_instance_valid(player) and not player.is_dead:
 		_show_next_offer()
 
 
@@ -696,14 +706,18 @@ func _on_stairs_reached(route: int = 0) -> void:
 	_transitioning = true
 	# Fade to black, build the next floor, fade back in.
 	# (Deferred: we are inside a physics callback, where the level can't be rebuilt.)
-	_descend.call_deferred()
+	_descend.call_deferred(session.capture())
 
 
-func _descend() -> void:
+func _descend(ticket: GameSession.Ticket) -> void:
+	if not session.is_current(ticket):
+		return
 	_set_paused(true)
 	var fade_out := create_tween()
-	fade_out.tween_property(_fade, "color:a", 1.0, FADE_TIME)
+	fade_out.tween_method(_set_session_fade.bind(ticket), _fade.color.a, 1.0, FADE_TIME)
 	await fade_out.finished
+	if not session.is_current(ticket):
+		return
 	if run.finish_time < 0.0 and not run.hidden_floor:
 		_split(run.split_depth())  # (the hidden floor's time goes to the next floor's split)
 	# The hidden floor and the bottom of the Well keep the depth of the boss before them
@@ -715,7 +729,15 @@ func _descend() -> void:
 	if not run.hidden_floor and not run.finale:
 		depth += 1  # only now: a save during the fade still points at the floor being left
 	await transition_to_floor()
-	create_tween().tween_property(_fade, "color:a", 0.0, FADE_TIME * 1.5)
+	if not session.is_current(ticket):
+		return
+	create_tween().tween_method(_set_session_fade.bind(ticket), _fade.color.a, 0.0, FADE_TIME * 1.5)
+
+
+## A tween may finish normally after a restart, but must no longer paint over the new session.
+func _set_session_fade(alpha: float, ticket: GameSession.Ticket) -> void:
+	if session.is_current(ticket):
+		_fade.color.a = alpha
 
 
 ## The one way onto a floor (the stairs, a run's first floor under its cards, the debug panel's):
@@ -724,9 +746,12 @@ func _descend() -> void:
 ## then the game goes on: unpaused unless a menu is open, and the perk choice that is due shown
 ## (`show_offers` false: the caller shows them itself).
 func transition_to_floor(resumed: bool = false, show_offers: bool = true) -> void:
+	var ticket := session.capture()
 	_transitioning = true
 	_enter_floor(resumed)
 	await _show_cards()
+	if not session.is_current(ticket):
+		return
 	_transitioning = false
 	_set_paused(is_menu_open())
 	if show_offers:
@@ -738,6 +763,7 @@ func transition_to_floor(resumed: bool = false, show_offers: bool = true) -> voi
 func _show_cards() -> void:
 	if not show_act_cards:
 		return
+	var ticket := session.capture()
 	var act := content.dungeon.act_for_depth(depth)
 	if world.hidden_floor:
 		await act_card.play(world.hidden_floor.as_act())
@@ -745,6 +771,8 @@ func _show_cards() -> void:
 		await act_card.play(world.finale.as_act())
 	elif act and content.dungeon.floor_in_act(depth) == 1:
 		await act_card.play(act)
+	if not session.is_current(ticket):
+		return
 	if world.curse:
 		await curse_card.play(world.curse)
 
@@ -767,9 +795,10 @@ func _on_boss_rising(_fallen: Monster, risen: Monster, seconds: float) -> void:
 	if def and player:
 		player.camera.lean_toward(risen, def.camera_lean, risen.head_height * 0.45)
 	var darken := create_tween()
-	darken.tween_property(_fade, "color:a", 0.55, seconds * 0.3)
+	var ticket := session.capture()
+	darken.tween_method(_set_session_fade.bind(ticket), _fade.color.a, 0.55, seconds * 0.3)
 	darken.tween_interval(seconds * 0.3)
-	darken.tween_property(_fade, "color:a", 0.0, seconds * 0.35)
+	darken.tween_method(_set_session_fade.bind(ticket), 0.55, 0.0, seconds * 0.35)
 
 
 func _on_boss_defeated(boss: Monster) -> void:
@@ -784,7 +813,7 @@ func _on_boss_defeated(boss: Monster) -> void:
 	Sfx.play_music(Soundtrack.floor_music(world.theme), Sfx.mix.sting_gap)
 	var def := boss.def as BossDef
 	run.last_boss = def
-	var winner := player
+	var ticket := session.capture()
 	# Decided now, not after the pause: the stairs are already there, and a save (app put away)
 	# in between must keep the win or the relic.
 	var won_now := run.wins_with(def)
@@ -806,7 +835,7 @@ func _on_boss_defeated(boss: Monster) -> void:
 		offers.add_relic(def, boss.rank.extra_relics if boss.rank else 0)
 	_save_run()
 	await get_tree().create_timer(ENDING_DELAY if run.ending_due and won_now else RELIC_DELAY, false).timeout
-	if player != winner or player.is_dead:
+	if not session.is_current(ticket) or not is_instance_valid(player) or player.is_dead:
 		return  # the run ended in the meantime
 	if won_now and run.ending_due:
 		_offer_ending(earned, new_record)
@@ -920,6 +949,7 @@ func _show_next_offer() -> void:
 # --- End of the run -------------------------------------------------------------
 
 func _on_player_died(_actor: Actor) -> void:
+	var ticket := session.capture()
 	# What the Vigil-Keeper will tell (read now: the floor may change during the pause).
 	end_facts = RunFacts.of_death(run, player, content, world, abyss.holds(player))
 	RunSave.erase()
@@ -930,6 +960,8 @@ func _on_player_died(_actor: Actor) -> void:
 	Profile.save_profile()
 	Sfx.stop_music(1.0)  # the floor falls silent; the sting, then the end screen's music
 	await get_tree().create_timer(1.2).timeout
+	if not session.is_current(ticket):
+		return
 	Sfx.play_ui(Sfx.bank.game_over)
 	menus.show_on_top(game_over_panel)
 	_show_end(false, earned)
@@ -964,6 +996,7 @@ func _save_run() -> void:
 ## Leaving the game (to the title): the debug panel's cheats end with it, and a debug run's
 ## profile is read back (DebugCheats).
 func _exit_tree() -> void:
+	session.close()
 	var slowed := DebugCheats.time_step > 0
 	DebugCheats.reset()
 	Events.run_closed.emit()
