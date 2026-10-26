@@ -93,3 +93,10 @@ descent: runs, procedural floors, perk choices, souls/shrine, death and restart,
 records. The RPG experiment is archived for a future **separate project**, not another mode
 in this repository. See [the archive reference](docs/rpg-archive.md). Existing run/profile saves
 and the optional online/privacy settings remain unchanged; campaign files are left untouched.
+
+### Kagari entre les descentes
+
+Depuis le titre, **Entrer dans Kagari** ouvre une petite place jouable. Approche la Veilleuse
+pour sa première quête, puis le puits pour descendre ou reprendre une partie. Le village
+garde les maisons réveillées, les lanternes restaurées et les statues des héros devenus
+Gardiens. Voir [le village](docs/design/village.md). Le jeu reste un roguelike.

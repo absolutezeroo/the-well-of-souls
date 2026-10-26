@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="VillageResidentDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_resident_def.gd" id="script"]
+[ext_resource type="Resource" path="res://data/story/dialogue/speakers/wanderer.tres" id="speaker"]
+[ext_resource type="Resource" path="res://data/village/ember_box.tres" id="quest"]
+[resource]
+script = ExtResource("script")
+id = &"wanderer"
+speaker = ExtResource("speaker")
+position = Vector2(225, 445)
+role = 2
+quest = ExtResource("quest")
+echo = false
+text = "No buyers behind these shutters. Help one wake, and I will light the square."
+used_text = "Your souls go to the lamps. I charge for the ladder."

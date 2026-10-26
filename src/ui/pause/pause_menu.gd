@@ -87,7 +87,7 @@ func _build() -> void:
 		Sfx.play_ui(Sfx.bank.ui_open)
 		feedback.run_info = run_info
 		feedback.open())
-	_row(tr("Save and quit"), "QuitButton", tr("Your run is saved: pick Continue on the title screen."), func() -> void:
+	_row(tr("Return to village"), "QuitButton", tr("Your run is saved. Resume it at the village well."), func() -> void:
 		Sfx.play_ui(Sfx.bank.ui_click)
 		quit_requested.emit())
 	# Giving up takes two taps, so it never happens by accident.

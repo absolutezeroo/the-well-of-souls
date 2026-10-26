@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="VillageServiceDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_service_def.gd" id="script"]
+[ext_resource type="Resource" path="res://data/village/ember_box.tres" id="quest"]
+[resource]
+script = ExtResource("script")
+id = &"memorial_lamps"
+display_name = "Lights for the Nameless"
+description = "Light the memorial court permanently. Your fallen Keepers will have their vigil."
+cost = 8
+requires_quest = ExtResource("quest")

@@ -215,6 +215,7 @@ Seen,Seen,Vu
 Unknown,Unknown,Inconnu
 +%d souls for the descent.,+%d souls for the descent.,+%d âmes pour la descente.
 New record: %s!,New record: %s!,Nouveau record : %s !
+Could not save village progress. Try again.,Could not save village progress. Try again.,La progression du village n’a pas pu être sauvegardée. Réessaie.
 "Endless mode: the dungeon goes on, harder and harder.","Endless mode: the dungeon goes on, harder and harder.","Mode sans fin : le donjon continue, de plus en plus dur."
 New record!,New record!,Nouveau record !
 (record %s),(record %s),(record %s)
@@ -259,6 +260,7 @@ Dungeon,Dungeon,Donjon
 The knell falls silent. The Well lets you go.,The knell falls silent. The Well lets you go.,Le glas se tait. Le Puits te laisse partir.
 The knell has tolled. The Threshold keeps you.,The knell has tolled. The Threshold keeps you.,Le glas a sonné. Le Seuil te garde.
 The dark,The dark,L'obscurité
+Recover,Recover,Récupérer
 At least %d characters.,At least %d characters.,Au moins %d caractères.
 At most %d characters.,At most %d characters.,Au plus %d caractères.
 "Only letters, digits, spaces and - _ . '","Only letters, digits, spaces and - _ . '","Seulement des lettres, des chiffres, des espaces et - _ . '"
@@ -520,8 +522,7 @@ A new page for its chronicle: %s.,A new page for its chronicle: %s.,Une page de 
 From its chronicle: %s.,From its chronicle: %s.,Tiré de sa chronique : %s.
 The Well claims you,The Well claims you,Le Puits te réclame
 You now have %d souls.,You now have %d souls.,Tu as maintenant %d âmes.
-New run,New run,Nouvelle partie
-Try again,Try again,Réessayer
+Return to village,Return to village,Revenir au village
 This run,This run,Cette partie
 Leaderboards,Leaderboards,Classements
 Souls,Souls,Âmes
@@ -646,6 +647,7 @@ All souls,All souls,Toutes les âmes
 Yours,Yours,Ta part
 The Roll of Souls,The Roll of Souls,Le Registre des âmes
 The Well's Toll,The Well's Toll,Le Tribut du Puits
+Try again,Try again,Réessayer
 Your place,Your place,Ta place
 Rules,Rules,Règles
 Scores no hero could make are removed.,Scores no hero could make are removed.,Les scores qu'aucun héros ne peut faire sont effacés.
@@ -771,8 +773,7 @@ Back to the fight.,Back to the fight.,Retour au combat.
 "Sound, music, button size, effects.","Sound, music, button size, effects.","Son, musique, taille des boutons, effets."
 The monsters you have met: how they attack and how to beat them.,The monsters you have met: how they attack and how to beat them.,Les monstres rencontrés : comment ils attaquent et comment les vaincre.
 "A bug, an idea? Tell the game's maker.","A bug, an idea? Tell the game's maker.","Un bug, une idée ? Dis-le à l'auteur du jeu."
-Save and quit,Save and quit,Sauvegarder et quitter
-Your run is saved: pick Continue on the title screen.,Your run is saved: pick Continue on the title screen.,Ta partie est sauvegardée : choisis Continuer sur l'écran titre.
+Your run is saved. Resume it at the village well.,Your run is saved. Resume it at the village well.,Ta descente est sauvegardée. Reprends-la au puits du village.
 Gold and souls,Gold and souls,Or et âmes
 Gold: only for this run. Spend it at the merchant and the forge; it is lost when the run ends.,Gold: only for this run. Spend it at the merchant and the forge; it is lost when the run ends.,Or : seulement pour cette partie. Dépense-le chez le marchand et à la forge ; il est perdu à la fin de la partie.
 Souls: kept between runs. Spend them at the Shrine (title screen) on upgrades for every run.,Souls: kept between runs. Spend them at the Shrine (title screen) on upgrades for every run.,Âmes : conservées d'une partie à l'autre. Dépense-les au Sanctuaire (écran titre) en améliorations pour toutes tes parties.
@@ -930,6 +931,7 @@ The Shrine: Tree of Souls,The Shrine: Tree of Souls,Le Sanctuaire : l'Arbre des 
 The node,The node,Le nœud
 "Gold ring: bought. Glowing: you can buy it. Dark: buy a node above it first. ""or"": pick one of the two. ?: a feat opens it.","Gold ring: bought. Glowing: you can buy it. Dark: buy a node above it first. ""or"": pick one of the two. ?: a feat opens it.",Anneau doré : acheté. Lumineux : tu peux l'acheter. Sombre : achète d'abord un nœud au-dessus. « ou » : choisis l'un des deux. ? : un exploit l'ouvre.
 or,or,ou
+Enter Kagari,Enter Kagari,Entrer dans Kagari
 Resume the descent,Resume the descent,Reprendre la descente
 "Floor %d, level %d","Floor %d, level %d","Étage %d, niveau %d"
 Feedback,Feedback,Avis
@@ -994,6 +996,31 @@ No aura,No aura,Aucune aura
 Locked: %s,Locked: %s,Verrouillée : %s
 Worn,Worn,Portée
 Wear,Wear,Porter
+The Well,The Well,Le Puits
+Shrine,Shrine,Sanctuaire
+Court of the Nameless,Court of the Nameless,La Cour des Sans-Nom
+Menu,Menu,Menu
+The daily descent awaits at the Well.,The daily descent awaits at the Well.,La descente quotidienne t’attend au Puits.
+A voice caught in the lantern's light.,A voice caught in the lantern's light.,Une voix retenue dans la lumière de la lanterne.
+Reward: %d souls and a waking home.,Reward: %d souls and a waking home.,Récompense : %d âmes et un foyer qui se réveille.
+%s — %d souls,%s — %d souls,%s — %d âmes
+%s — restored,%s — restored,%s — restauré
+%s — complete %s first,%s — complete %s first,%s — termine d’abord %s
+Choose a descent here. Your village and its memories remain when a run ends.,Choose a descent here. Your village and its memories remain when a run ends.,Choisis ta descente ici. Ton village et ses souvenirs restent lorsque la tentative s’achève.
+Descend,Descend,Descendre
+Daily Descent,Daily Descent,Descente quotidienne
+A descent is already saved,A descent is already saved,Une descente est déjà sauvegardée
+Starting another descent replaces the saved run. You can resume it instead.,Starting another descent replaces the saved run. You can resume it instead.,Commencer une autre descente remplace la partie sauvegardée. Tu peux aussi la reprendre.
+Replace the saved descent,Replace the saved descent,Remplacer la descente sauvegardée
+This stone waits for a hero who chooses to hold the seal. Each such sacrifice will be remembered here.,This stone waits for a hero who chooses to hold the seal. Each such sacrifice will be remembered here.,Cette pierre attend un héros qui choisira de garder le sceau. Chacun de ces sacrifices sera commémoré ici.
+Memorial %d of %d,Memorial %d of %d,Souvenir %d sur %d
+A hero held the seal. Level %d · %s,A hero held the seal. Level %d · %s,Un héros a gardé le sceau. Niveau %d · %s
+Older memorial,Older memorial,Souvenir plus ancien
+Newer memorial,Newer memorial,Souvenir plus récent
+Kagari,Kagari,Kagari
+"Village progress is saved after each discovery, purchase and quest. Options and records are on the title screen.","Village progress is saved after each discovery, purchase and quest. Options and records are on the title screen.","La progression du village est sauvegardée après chaque découverte, achat et quête. Les options et les records sont sur l’écran titre."
+Tap Interact: %s,Tap Interact: %s,Touche Interagir : %s
+{interact}: %s,{interact}: %s,{interact} : %s
 The depths,The depths,Les profondeurs
 %s - better loot,%s - better loot,%s - meilleur butin
 %s (cursed: %s),%s (cursed: %s),%s (maudit : %s)
@@ -1024,8 +1051,6 @@ Seal 0 / 0,Seal 0 / 0,Sceau 0 / 0
 Skip,Skip,Passer
 Descend. Bring back the stolen souls. Become what the dark demands.,Descend. Bring back the stolen souls. Become what the dark demands.,Descends. Ramène les âmes volées. Deviens ce que l'ombre exige.
 > The chronicle of Kagari,> The chronicle of Kagari,> La chronique de Kagari
-Descend,Descend,Descendre
-Shrine,Shrine,Sanctuaire
 "Under the Well there is more Well. Down here the dark has teeth, and what it has chewed still wanders.","Under the Well there is more Well. Down here the dark has teeth, and what it has chewed still wanders.","Sous le Puits, il y a encore le Puits. Ici, l'obscurité a des dents, et ce qu'elle a mâché erre encore."
 Ascendant,Ascendant,Ascendant
 Win a run on Nightmare +3.,Win a run on Nightmare +3.,Gagne une partie en Cauchemar +3.
@@ -2973,6 +2998,33 @@ Iron Skin,Iron Skin,Peau de Fer
 Spoils of the Fallen,Spoils of the Fallen,Dépouilles des Vaincus
 "Elites, Fell and Legendary monsters always drop a Magic (or better) piece of equipment.","Elites, Fell and Legendary monsters always drop a Magic (or better) piece of equipment.","Les monstres d'élite, Funestes et Légendaires lâchent toujours une pièce d'équipement Magique (ou mieux)."
 More max health at the start of every run.,More max health at the start of every run.,Plus de Vie max au début de chaque partie.
+A Hearth Without a Flame,A Hearth Without a Flame,Un Foyer Sans Flamme
+"Ren tended our lanterns. His ember-box fell below the roots; bring it back, and his soul may find its door.","Ren tended our lanterns. His ember-box fell below the roots; bring it back, and his soul may find its door.","Ren entretenait nos lanternes. Sa boîte à braises est tombée sous les racines ; rapporte-la, et son âme retrouvera peut-être sa porte."
+"Find the ember-box on floor 2, then return to the Vigil-Keeper.","Find the ember-box on floor 2, then return to the Vigil-Keeper.","Retrouve la boîte à braises à l’étage 2, puis rapporte-la à la Veilleuse."
+"One window burns again. Listen: behind it, someone breathes.","One window burns again. Listen: behind it, someone breathes.","Une fenêtre brûle de nouveau. Écoute : derrière elle, quelqu’un respire."
+Ren's Ember-Box,Ren's Ember-Box,La Boîte à Braises de Ren
+The ember-box is safe in your lantern. Return to the Vigil-Keeper; even death will not take it.,The ember-box is safe in your lantern. Return to the Vigil-Keeper; even death will not take it.,La boîte à braises est à l’abri dans ta lanterne. Rapporte-la à la Veilleuse ; même la mort ne te la prendra pas.
+Seek the ember-box,Seek the ember-box,Chercher la boîte à braises
+Return the ember-box,Return the ember-box,Rapporter la boîte à braises
+The ember-box is still below.,The ember-box is still below.,La boîte à braises est encore en bas.
+Return the ember-box to the Vigil-Keeper.,Return the ember-box to the Vigil-Keeper.,Rapporte la boîte à braises à la Veilleuse.
+The village sleeps. The Well does not.,The village sleeps. The Well does not.,Le village dort. Le Puits veille.
+The roots climb toward the sleepers. A lantern remembers the way home.,The roots climb toward the sleepers. A lantern remembers the way home.,Les racines remontent vers les dormeurs. Une lanterne se souvient du chemin du retour.
+Ren has opened his eyes. There are still so many closed doors.,Ren has opened his eyes. There are still so many closed doors.,Ren a ouvert les yeux. Il reste tant de portes closes.
+Market Lanterns,Market Lanterns,Les Lanternes du Marché
+Light the market lamps permanently. A village restoration; no combat bonus.,Light the market lamps permanently. A village restoration; no combat bonus.,"Rallume définitivement les lanternes du marché. Une restauration du village, sans bonus de combat."
+Lights for the Nameless,Lights for the Nameless,Des Lumières pour les Sans-Nom
+Light the memorial court permanently. Your fallen Keepers will have their vigil.,Light the memorial court permanently. Your fallen Keepers will have their vigil.,Rallume définitivement la cour du souvenir. Tes Gardiens auront leur veille.
+The wick is dry. I cannot find my hands.,The wick is dry. I cannot find my hands.,La mèche est sèche. Je ne retrouve plus mes mains.
+You kept an ember for me. I shall keep a lamp for you.,You kept an ember for me. I shall keep a lamp for you.,Tu as gardé une braise pour moi. Je garderai une lampe pour toi.
+Ren,Ren,Ren
+The Lantern-Mender,The Lantern-Mender,Le Réparateur de Lanternes
+"I used to sing for those who left. Tonight, no one knows the last verse.","I used to sing for those who left. Tonight, no one knows the last verse.","Je chantais pour ceux qui partaient. Cette nuit, personne ne connaît le dernier couplet."
+A light at his window. Perhaps the song has not ended.,A light at his window. Perhaps the song has not ended.,Une lumière à sa fenêtre. Le chant n’est peut-être pas terminé.
+Sayo,Sayo,Sayo
+The Sleeping Mourner,The Sleeping Mourner,La Pleureuse Endormie
+"No buyers behind these shutters. Help one wake, and I will light the square.","No buyers behind these shutters. Help one wake, and I will light the square.","Aucun acheteur derrière ces volets. Aide quelqu’un à se réveiller, et j’éclairerai la place."
+Your souls go to the lamps. I charge for the ladder.,Your souls go to the lamps. I charge for the ladder.,"Tes âmes vont aux lanternes. Moi, je fais payer l’échelle."
 grammar:feminine:Brutal,grammar:feminine:Brutal,Brutale
 grammar:feminine:Burning,grammar:feminine:Burning,Ardente
 grammar:feminine:Ironbound,grammar:feminine:Ironbound,Cerclée de Fer

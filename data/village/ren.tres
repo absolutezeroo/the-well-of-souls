@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="VillageResidentDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_resident_def.gd" id="script"]
+[ext_resource type="Resource" path="res://data/village/ren_speaker.tres" id="speaker"]
+[ext_resource type="Resource" path="res://data/village/ember_box.tres" id="quest"]
+[resource]
+script = ExtResource("script")
+id = &"ren"
+speaker = ExtResource("speaker")
+position = Vector2(740, 230)
+role = 0
+quest = ExtResource("quest")
+wakes_after = ExtResource("quest")
+echo = true
+text = "The wick is dry. I cannot find my hands."
+used_text = "You kept an ember for me. I shall keep a lamp for you."

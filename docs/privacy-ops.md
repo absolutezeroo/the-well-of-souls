@@ -286,3 +286,10 @@ date each setting was made in the dashboard, and Talo's answer to the email abov
   exemption for anonymous first-party statistics. Nothing adopted on 23 October 2026.
 - Check what Talo's leaderboard responses really contain in a release build (the policy says the
   technical ID is readable by anyone querying a board).
+
+## Village progress and memorials
+
+Kagari's quest stages, restoration purchases and Keeper memorial snapshots are local Profile
+progress. Existing opt-in private cloud saves include them like the active Keeper; they add no
+public player props or new statistics events. Their opaque journey ids are local receipt keys,
+not device identifiers. The existing cloud-size refusal keeps the local history intact.

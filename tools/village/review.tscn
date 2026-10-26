@@ -1,0 +1,4 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://tools/village/review.gd" id="script"]
+[node name="VillageReview" type="Node"]
+script = ExtResource("script")

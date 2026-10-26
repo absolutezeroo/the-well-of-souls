@@ -449,3 +449,11 @@ with the run, so quitting and coming back doesn't reset it.
 - **Where it shows**: the end screens (the time, then "New record!" or the record to beat), the
   log, and the Codex > Runs (each run's time; the fastest wins, then the fastest to the Well's
   Bottom on their own line).
+
+## Kagari's lasting changes
+
+The [playable village](village.md) now sits between descents. Its first request is accepted from
+the Veilleuse, recovered on floor 2 and returned to her: Ren wakes, roots recede and 15 souls
+are awarded once. The Wanderer sells two one-time lamp restorations for 5 and 8 souls; neither
+changes a run's kit. Every Take his place ending leaves a permanent equipped statue in the
+village's memorial register, independent of the active Keeper and the capped codex/run history.

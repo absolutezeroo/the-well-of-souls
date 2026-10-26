@@ -207,3 +207,13 @@ allocate only at lifecycle/spawn boundaries. Pickup transfer guards use booleans
 insertion validates the floor id. BodyLook's one-time shader warm-up callback uses a weak sprite
 reference, so closing/rejecting a world before placement produces no stale-node callback.
 These are implementation bounds; no new S23 frame-time measurement is claimed.
+
+## Village surface
+
+VillageWalker samples movement and updates one existing rig. VillageHub scans a fixed typed
+interaction registry; neither allocates arrays/dictionaries per physics step. Ground/path draw
+commands and props change only with profile progress. Memorials have no combat bodies or AI;
+the court renders one, the paged register at most one additional static rig. Its stone shader
+uses the fragment COLOR directly (never squares a texture sample). Profile history grows only
+when an ending is chosen. Device frame pacing and long-history cloud limits remain play-test
+items; software desktop rendering is not an Android measurement.

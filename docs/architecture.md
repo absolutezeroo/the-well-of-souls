@@ -389,3 +389,12 @@ the shared keyboard/gamepad/touch actions; BufferedPlayerInput provides independ
 for tools/tests. Existing components still validate costs, cooldowns and inventory. The
 [separate RPG experiment](rpg-archive.md) has been removed from the active product; none of its
 campaign stores, fixed-region coordinators or launch screens are kept on main.
+
+## The playable surface
+
+The title now enters [Kagari](design/village.md), a small persistent village between procedural
+descents. VillageHub/VillageWalker own peaceful movement and modal requests; VillageProgress
+commits its quests/services in Profile, and VillageExpedition adds recoverable evidence to
+ordinary floors through Events. VillageMemorial reuses the equipped hero rig in a static stone
+pose. RunState's opaque journey_id makes ending receipts and statues idempotent across crashes;
+it does not consume gameplay dice. The archived RPG remains a separate project.

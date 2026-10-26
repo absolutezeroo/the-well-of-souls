@@ -11,6 +11,7 @@ extends Node
 ## points are GameDebug's (`debug`). Every floor is reached through transition_to_floor().
 
 const PLAYER_SCENE := preload("res://src/entities/player/player.tscn")
+const VILLAGE_SCENE := "res://src/village/village_hub.tscn"
 const TITLE_SCENE := "res://src/ui/title/title_screen.tscn"
 ## Pause between the boss' death and the relic choice, to enjoy the explosions.
 const RELIC_DELAY := 1.6
@@ -153,6 +154,9 @@ func _ready() -> void:
 	choices.bind_panel()
 	_connect_menus()
 	_connect_events()
+	var village := VillageExpedition.new()
+	village.game = self
+	add_child(village)
 	var saved := RunSave.read() if resume_requested else {}
 	var daily := daily_requested
 	resume_requested = false
@@ -174,7 +178,7 @@ func _connect_menus() -> void:
 		_save_run()
 		_records.report_left(true)
 		_set_paused(false)
-		Loader.go(TITLE_SCENE))
+		Loader.go(VILLAGE_SCENE))
 	pause_menu.abandon_requested.connect(func() -> void:
 		pause_menu.hide()
 		_set_paused(false)
@@ -185,7 +189,7 @@ func _connect_menus() -> void:
 	menus.pact.closed.connect(_on_menu_closed)
 	menus.fragment.closed.connect(_on_menu_closed)
 	encounter_panel.closed.connect(_on_menu_closed)
-	game_over_panel.restart_requested.connect(start_run)
+	game_over_panel.restart_requested.connect(return_to_village)
 	game_over_panel.continue_requested.connect(_on_continue_endless)
 	game_over_panel.title_requested.connect(func() -> void:
 		_records.record_history()
@@ -859,27 +863,50 @@ func _offer_ending(earned: int, new_record: bool) -> void:
 	_ending_earned = earned
 	_ending_record = new_record
 	_set_paused(true)
+	# A profile write may have succeeded just before the old run file stopped. Recover the
+	# recorded ending directly instead of offering two choices and then ignoring one.
+	var journey := run.journey_id
+	if Profile.ending_receipts.has(journey):
+		for prior in bottom.endings:
+			if String(prior.id) == String(Profile.ending_receipts[journey]):
+				_on_ending_chosen(prior)
+				return
 	menus.show_on_top(menus.ending)
 	menus.ending.open(bottom, run.meets_keeper())
 
 
 func _on_ending_chosen(ending: EndingDef) -> void:
-	run.ending_due = false
 	var feats := run.difficulty == null or run.difficulty.counts_feats
-	Profile.choose_ending(ending.id, ending.stat, feats)
-	# The Nameless Keeper: the hero becomes him (he waits at the bottom of the next runs, instead
-	# of whoever waited), or the bell frees the one waiting.
-	match ending.keeper_change:
-		EndingDef.KeeperChange.TAKE:
-			Profile.take_keeper(KeeperSnapshot.take(player, run, Leaderboards.pseudonym if Leaderboards.name_chosen else ""))
-		EndingDef.KeeperChange.FREE:
-			Profile.free_keeper()
-	Events.ending_chosen.emit(ending)  # (the world counters: WorldStats)
+	var journey := run.journey_id
+	var chosen := ending
+	var already_recorded := Profile.ending_receipts.has(journey)
+	# If the profile committed before a crash, replay its original choice, never a second one.
+	if Profile.ending_receipts.has(journey):
+		for prior in content.dungeon.finale.endings:
+			if String(prior.id) == String(Profile.ending_receipts[journey]):
+				chosen = prior
+	var snapshot := KeeperSnapshot.take(player, run, Leaderboards.pseudonym if Leaderboards.name_chosen else "")
+	if not Profile.finish_ending(chosen, snapshot, journey, feats):
+		Events.log_message(tr("Could not save village progress. Try again."), Palette.DANGER)
+		menus.ending.open(content.dungeon.finale, run.meets_keeper())
+		return
+	run.ending_due = false
+	ending = chosen
+	if not already_recorded:
+		Events.ending_chosen.emit(ending)  # (the world counters: WorldStats)
 	_records.check_achievements()
 	_save_run()
 	Sfx.play_ui(Sfx.bank.stairs)
 	menus.show_on_top(game_over_panel)
 	_show_end(true, _ending_earned, _ending_record, ending)
+
+
+## The run ends at its village, where another descent can be chosen at the well.
+func return_to_village() -> void:
+	_records.record_history()
+	RunSave.erase()
+	_set_paused(false)
+	Loader.go(VILLAGE_SCENE)
 
 
 func _on_continue_endless() -> void:

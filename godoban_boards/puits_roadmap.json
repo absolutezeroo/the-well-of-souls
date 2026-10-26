@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 374,
+  "next_id": 379,
   "tags": [
     "pc",
     "test",
@@ -5576,7 +5576,7 @@
     {
       "id": "task_373",
       "title": "Essayer le retour au roguelike sur S23 et Windows",
-      "description": "Après task_372 et git pull, F5/export doit ouvrir le titre roguelike : Nouvelle partie/Reprendre, difficulté, descente procédurale, perks, âmes/sanctuaire, quotidien/records, mort puis nouvelle run et sauvegarde/reprise habituelles. Essayer clavier/manette/tactile et vérifier fondus, ramassage, enfants de monstres et coffres piégés après transition. Aucun fichier utilisateur n’est modifié par le retour ; campaign.json RPG reste à part. Le prototype est archivé pour un autre projet. Les tests headless et linter ne remplacent pas ce contrôle appareil.",
+      "description": "Après task_372 et git pull, F5/export doit ouvrir le titre roguelike : Nouvelle partie/Reprendre, difficulté, descente procédurale, perks, âmes/sanctuaire, quotidien/records, mort puis nouvelle run et sauvegarde/reprise habituelles. Essayer clavier/manette/tactile et vérifier fondus, ramassage, enfants de monstres et coffres piégés après transition. Aucun fichier utilisateur n’est modifié par le retour ; campaign.json RPG reste à part. Le prototype est archivé pour un autre projet. Les tests headless et linter ne remplacent pas ce contrôle appareil. Mise à jour village : après task_374, Entrer dans Kagari mène à la place ; les choix de nouvelle descente/reprise/difficulté se font désormais au puits. Compléter avec task_376.",
       "priority": "high",
       "status": "review",
       "epic_id": "epic_6",
@@ -5588,7 +5588,95 @@
         "sauvegarde"
       ],
       "created_at": 1792992297,
-      "updated_at": 1792992297,
+      "updated_at": 1793032681,
+      "due_date": null
+    },
+    {
+      "id": "task_374",
+      "title": "Construire Kagari comme village jouable entre les descentes",
+      "description": "Première version jouable : place du puits, Veilleuse/Sayo/Ren et marchand, entrée/reprise physique des descentes, sanctuaire et contrôles communs clavier/manette/tactile. Quête Un Foyer Sans Flamme : accepter, récupérer la boîte à braises à l’étage 2, rapporter ; Ren se réveille, racines retirées, fenêtre éclairée, 15 âmes une seule fois. Deux restaurations marchandes permanentes (5 et 8 âmes). Ressources data/village, transactions atomiques, donjon et règles roguelike conservés. Infestation : premier front scénarisé, pas de propagation temporelle. Validation : 19 726 vérifications, 0 échec, seed 347348 ; 654 scripts sans diagnostic ; traductions FR et catalogue valides. Rendu Compatibility vérifié FR/EN en 1540×720 et 2340×1080. Attente du playtest appareil (task_376). Voir docs/design/village.md.",
+      "priority": "high",
+      "status": "review",
+      "epic_id": "epic_1",
+      "tags": [
+        "pnj",
+        "lore",
+        "architecture",
+        "ui",
+        "sauvegarde"
+      ],
+      "created_at": 1793030448,
+      "updated_at": 1793032681,
+      "due_date": null
+    },
+    {
+      "id": "task_375",
+      "title": "Ériger les statues des héros devenus Gardiens",
+      "description": "Chaque fin Prendre sa place conserve le héros et son équipement dans un mémorial durable. Dernière statue dans la cour, registre paginé de toutes les précédentes sans limite de 20 entrées, teinte de pierre et pose figée via le rig existant. Les libérations/remplacements ne suppriment pas les souvenirs ; migration du Gardien courant des anciens profils. Identité propre à chaque descente et transaction atomique fin/statistique/Gardien/statue/reçu : une interruption entre profil et run reprend la fin enregistrée, en pause, sans doublon ni changement de choix. Tests de rechargement, équipements, échec d’écriture et deux fins validés dans les 19 726 vérifications ; playtest appareil task_376.",
+      "priority": "high",
+      "status": "review",
+      "epic_id": "epic_1",
+      "tags": [
+        "lore",
+        "sauvegarde",
+        "visuel"
+      ],
+      "created_at": 1793030448,
+      "updated_at": 1793032681,
+      "due_date": null
+    },
+    {
+      "id": "task_376",
+      "title": "Essayer Kagari et les mémoriaux sur S23 et Windows",
+      "description": "F5 → Entrer dans Kagari ; rejoindre la Veilleuse, accepter la quête, partir au puits, récupérer la boîte à l’étage 2 et revenir (pause ou mort). Vérifier récompense unique, réveil de Ren, retrait des racines, fenêtres/lampes et achats uniques. Reprendre une descente sans changement de héros ; annuler le remplacement ne doit rien perdre. Essayer clavier, manette et tactile, menus et mise en arrière-plan, textes FR/EN et fluidité sur S23. Gagner puis Prendre sa place : statue avec équipement ; autre héros puis Libérer : anciens mémoriaux conservés. Rendu logiciel et tests automatiques faits ; exports Windows/Android et sensations sur appareil restent à vérifier.",
+      "priority": "high",
+      "status": "review",
+      "epic_id": "epic_6",
+      "tags": [
+        "android",
+        "pc",
+        "playtest",
+        "ui",
+        "sauvegarde",
+        "perf"
+      ],
+      "created_at": 1793032681,
+      "updated_at": 1793032681,
+      "due_date": null
+    },
+    {
+      "id": "task_377",
+      "title": "Étendre les quêtes et les fronts d’infestation de Kagari",
+      "description": "Suite de contenu à concevoir après le playtest de la première quête : autres habitants à réveiller, plusieurs fronts visuels de racines et conséquences selon les quêtes, dialogues réactifs, services marchands supplémentaires et décors dédiés. Garder les ressources modulaires et le cœur roguelike. Le premier lot implémenté est statique jusqu’à la remise de quête ; ni simulation de propagation autonome ni économie d’équipement du village ne sont livrées.",
+      "priority": "medium",
+      "status": "backlog",
+      "epic_id": "epic_7",
+      "tags": [
+        "idée",
+        "pnj",
+        "lore",
+        "contenu",
+        "économie"
+      ],
+      "created_at": 1793032681,
+      "updated_at": 1793032681,
+      "due_date": null
+    },
+    {
+      "id": "task_378",
+      "title": "Mesurer les très grands registres de mémoriaux et leur synchronisation",
+      "description": "Les mémoriaux locaux ne sont jamais tronqués. Un historique de longue durée peut dépasser la limite actuelle du payload cloud (900 ko) ; le refus TOO_LARGE conserve le profil local. Mesurer une grande collection sur S23 et prévoir si nécessaire une synchronisation paginée compatible avec le consentement, sans supprimer les statues. Seules la statue courante et une prévisualisation de registre sont rendues.",
+      "priority": "low",
+      "status": "backlog",
+      "epic_id": "epic_7",
+      "tags": [
+        "idée",
+        "perf",
+        "sauvegarde",
+        "en ligne"
+      ],
+      "created_at": 1793032681,
+      "updated_at": 1793032681,
       "due_date": null
     }
   ]

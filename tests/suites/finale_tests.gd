@@ -265,8 +265,16 @@ func _test_finale(game: Game) -> void:
 	# A run won at the bottom and picked up before the choice: the choice first.
 	game.resume_run(won_save)
 	await _frames(5)
-	check(game.run.has_won and game.menus.ending.visible, "a run won at the bottom and quit before the choice asks for it again")
+	check(game.run.has_won and game.game_over_panel.visible and not game.menus.ending.visible and get_tree().paused, "a profile-committed ending is recovered directly even when the old run file still says a choice is due")
 	check(game.run.last_boss == maw_def, "the last boss slain comes back with the run (%s)" % [game.run.last_boss])
+	check(Profile.ending == ending.id and Profile.village_memorials.size() == 1 and Profile.stat_value(ending.stat) == 1,
+		"an old run save cannot change a committed ending or duplicate its memorial and statistic")
+	# Exercise the other ending as a distinct completed expedition. Replaying the SAME old
+	# file is now an idempotent recovery, not a second victory with a different choice.
+	var other_win := won_save.duplicate(true)
+	other_win["journey_id"] = "test/independent-bell-ending"
+	game.resume_run(other_win)
+	await _frames(5)
 	game.menus.ending.choose(0)
 	await _frames(3)
 	check(Profile.ending == finale.endings[0].id and Profile.is_achieved(&"the_last_knell"), "the other ending, its achievement")

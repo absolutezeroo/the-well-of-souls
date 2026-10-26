@@ -283,3 +283,29 @@ Decided:
 - **The arena:** the Bottom of the Well, a round floor of grey stone (an oval arena, no pillars)
   in near-total dark (ambient light 3 of 15, no lamps): the hero's lantern and the Maw's own
   golden glow light it. Tôma kneels below its middle; the Maw rises at its top.
+
+
+## Kagari between descents
+
+The village square is playable. The Well stands at its centre; the Vigil-Keeper keeps the
+shrine beside it. Black roots follow the cracks toward the sleeping houses. This first
+chapter has a fixed infestation front, pushed back by the player's actions, never an
+offline timer or a punishment for dying.
+
+Sayo, who once taught the mourners, and Ren, a village lantern-mender, still sleep. What
+stands at their doors is an echo caught in the lantern's light, not a third survivor of
+the moonless night. Their faint words reveal daily life, never the culprit. Recovering
+Ren's ember-box from the second floor and returning it to the Vigil-Keeper lets his
+soul find its door: he wakes, the eastern roots wither and a window lights. Other houses
+remain asleep. This small rescue does not resolve the village's fate or replace the endings.
+
+The Old Wanderer can cross the Well's rim as he crosses its floors. At the surface he
+barters work for souls that are released into Kagari's lamps, never eaten or imprisoned:
+he sells the lighting of the market and the memorial court, once each. These services
+change the village, not the starting kit or the fairness of the daily descent.
+
+Each hero who chooses to hold the seal is remembered in stone, with the arms he carried.
+The court shows the latest memorial; its register recalls every recorded predecessor.
+The Well's repeating night does not erase these stones. A release frees the Keeper below
+but leaves his memorial above. Existing saves can remember the current Keeper; missing
+old full appearances cannot be invented from the codex's abbreviated freed records.

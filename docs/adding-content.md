@@ -297,3 +297,12 @@ pulses, hits_required to 0 to disable ripostes. A pulse's cooldown starts after 
 periodic interval counts from warning start and pauses without an engaged target. Pulse counters
 are fresh on resume, while Frenzy derives its speed immediately from restored Health. Set both
 triggers only when that combined behaviour is intended: they share cooldown and pending strike.
+
+## Village quests, residents and restorations
+
+See [Kagari](design/village.md). Register VillageQuestDef/VillageResidentDef/VillageServiceDef
+resources in data/village/kagari.tres. Quest text includes its accepted/return objectives and
+button labels; floor_depth determines where evidence is placed on an ordinary floor. A resident
+with wakes_after and props with cleared_by react to its returned stage. A service's cost and
+requires_quest gate a one-time restoration; props with lit_by show it. Ids are permanent save
+keys. Extend the relevant component for new kinds of objectives, never add ids to Actor/World.

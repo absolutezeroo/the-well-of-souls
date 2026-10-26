@@ -45,7 +45,7 @@ const SHAPE := {
 	"banished": "array",
 	"daily_day": "number",
 	"daily_official": "bool",
-	"seed": "number",
+	"seed": "number", "journey_id": "string",
 	"time": "number",
 	"splits": ["number"],
 	"finish_time": "number",

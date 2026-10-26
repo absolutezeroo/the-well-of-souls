@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/village/village_hub.gd" id="script"]
+[ext_resource type="Resource" path="res://data/content_db.tres" id="content"]
+[ext_resource type="Resource" path="res://data/village/kagari.tres" id="village"]
+
+[node name="Kagari" type="Node2D"]
+texture_filter = 1
+script = ExtResource("script")
+content = ExtResource("content")
+def = ExtResource("village")

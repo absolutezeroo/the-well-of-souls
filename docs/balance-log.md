@@ -1926,3 +1926,10 @@ Listed for phase 2 (need measuring, not clear-cut from reading):
 9. Burning Thorns and Frost Armor against swarms (Swarm floors) and act IV damage.
 10. The level-up full heal: can a fight be turned by XP mid-boss? (summons give none; adds that
    are not summoned do: check BossDef summons all set `summoned`.)
+
+## 2026-10-26 — Kagari's first restoration
+
+A one-time story quest awards 15 souls on manual return of floor-two evidence to the Veilleuse.
+The village merchant's market and memorial lamps cost 5 and 8 souls once. These purchases have
+no combat effect, and village objectives are absent from daily descents. Ordinary dungeon loot,
+starting kit, shrine prices and death rules are unchanged.

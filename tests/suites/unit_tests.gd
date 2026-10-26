@@ -10,6 +10,7 @@ const PLAYER: PackedScene = preload("res://src/entities/player/player.tscn")
 ## Each part alone (tests/run_tests.gd runs them one by one, timed: --test=unit.<name>).
 func test_cases() -> Array:
 	return [
+		["village", func() -> void: await _part(VillageTests.new(), func(suite: VillageTests) -> void: suite.run_unit())],
 		["roguelike_entry", func() -> void: check(ProjectSettings.get_setting("application/run/main_scene") == "res://src/ui/title/title_screen.tscn", "F5 and exports launch the roguelike title and descent flow")],
 		["rpg_foundations", func() -> void: await _part(RpgFoundationTests.new(), func(suite: RpgFoundationTests) -> void: suite.run_unit())],
 		["modifiers", func() -> void: await _part(ModifierTests.new(), func(suite: ModifierTests) -> void: suite.run_unit())],

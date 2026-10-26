@@ -37,6 +37,8 @@ var daily_day := -1
 var daily_official := false
 ## Every floor of the run is built from this (and its depth): a resumed run finds the same floor.
 var run_seed := 0
+## Local receipt identity, independent of gameplay dice; survives resume and repeated daily seeds.
+var journey_id := ""
 ## In-game time, seconds (RunTimer): counts while playing, menus included, but not in the pause
 ## menu nor while a floor loads.
 var time := 0.0
@@ -123,6 +125,12 @@ static func create(content: ContentDB, saved: Dictionary, rng: RandomNumberGener
 		run.tuning = run.tuning.daily_only()  # (a Dawn Knell is the same race for all: its omen only)
 	run.difficulty = run.tuning.apply_to(run.difficulty)
 	run.run_seed = int(saved["seed"]) if saved.has("seed") else rng.randi()
+	run.journey_id = str(saved.get("journey_id", ""))
+	if run.journey_id.is_empty():
+		if saved.is_empty():
+			run.journey_id = Crypto.new().generate_random_bytes(16).hex_encode()
+		else:
+			run.journey_id = "legacy/" + JSON.stringify(saved, "", true).sha256_text()
 	run.depth = int(saved.get("depth", 1))
 	run.hidden_floor = bool(saved.get("hidden_floor", false))
 	run.hidden_done = bool(saved.get("hidden_done", false))
@@ -255,6 +263,7 @@ func to_data() -> Dictionary:
 		"daily_day": daily_day,
 		"daily_official": daily_official,
 		"seed": run_seed,
+		"journey_id": journey_id,
 		"time": time,
 		"splits": splits,
 		"finish_time": finish_time,
@@ -435,4 +444,3 @@ func summary_rows(content: ContentDB, level: int, time_note: String = "") -> Arr
 		var note := tr("(best %d)") % Profile.daily_best if daily_official else tr("(practice)")
 		rows.append([tr("Daily score"), "%d  %s" % [DailyRun.score(self), note]])
 	return rows
-

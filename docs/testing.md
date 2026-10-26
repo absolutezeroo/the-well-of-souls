@@ -67,6 +67,11 @@ Game about 1 s. The slowest tests are the floor sweeps (`game.levels`, `game.pac
 the checks that need the same ones (`LevelTests._note_ceiling()`) rather than build them again.
 
 The suites (`tests/suites/`, each a `TestSuite`):
+- **village** (`VillageTests`, registered as `unit.village`, `title.village`, `game.village`):
+  ordered quests and atomic purchases, failed-write rollback, persistent memorials and ending
+  receipts, the real hub's movement/dialogues and saved-run protection, and quest evidence on
+  procedural floors. `game.finale` also recovers an already committed ending while paused.
+  The isolated rendered review is described in [Kagari](design/village.md#validation).
 - **unit**: the rules, the content database, 100 generated maps (and their walls), 40 boss arenas,
   inventory, equipment, perks, bosses, the profile, the online leaderboards' queue and filter
   (`LeaderboardTests`, on `FakeBoardBackend`: a server in memory), the privacy rules, the gameplay

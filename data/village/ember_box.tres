@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="VillageQuestDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_quest_def.gd" id="script"]
+[ext_resource type="Texture2D" path="res://assets/props/lantern.png" id="icon"]
+[resource]
+script = ExtResource("script")
+id = &"ren_ember_box"
+title = "A Hearth Without a Flame"
+description = "Ren tended our lanterns. His ember-box fell below the roots; bring it back, and his soul may find its door."
+objective = "Find the ember-box on floor 2, then return to the Vigil-Keeper."
+done_line = "One window burns again. Listen: behind it, someone breathes."
+evidence_name = "Ren's Ember-Box"
+evidence_text = "The ember-box is safe in your lantern. Return to the Vigil-Keeper; even death will not take it."
+evidence_icon = ExtResource("icon")
+floor_depth = 2
+reward_souls = 15
+accept_label = "Seek the ember-box"
+hand_in_label = "Return the ember-box"
+pending_text = "The ember-box is still below."
+return_text = "Return the ember-box to the Vigil-Keeper."

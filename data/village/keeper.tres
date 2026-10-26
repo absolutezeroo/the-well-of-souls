@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="VillageResidentDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_resident_def.gd" id="script"]
+[ext_resource type="Resource" path="res://data/story/dialogue/speakers/vigil_keeper.tres" id="speaker"]
+[ext_resource type="Resource" path="res://data/village/ember_box.tres" id="quest"]
+[resource]
+script = ExtResource("script")
+id = &"keeper"
+speaker = ExtResource("speaker")
+position = Vector2(540, 280)
+role = 1
+quest = ExtResource("quest")
+echo = false
+text = "The roots climb toward the sleepers. A lantern remembers the way home."
+used_text = "Ren has opened his eyes. There are still so many closed doors."

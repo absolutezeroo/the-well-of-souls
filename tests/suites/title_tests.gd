@@ -9,6 +9,7 @@ const SettingsScript := preload("res://src/autoload/settings.gd")
 ## Each part alone (tests/run_tests.gd runs them one by one, timed: --test=title.<name>).
 func test_cases() -> Array:
 	return [
+		["village", func() -> void: await _part(VillageTests.new(), func(suite: VillageTests) -> void: await suite.run_title())],
 		["title_screen", _test_title_screen],
 		["quests_paid_by_gameplay", _test_quests_paid_by_gameplay],
 		["stat_bar_color", _test_stat_bar_color],
@@ -280,10 +281,11 @@ func _test_title_screen() -> void:
 	await _frames(2)
 	check(title.get_node("%PlayButton").visible, "the title screen has a Play button")
 	check((title.get_node("%Title") as Label).text == CONTENT.story.title and title.get_node("%StoryButton").visible, "the title screen shows the name and the story")
-	(title.get_node("%PlayButton") as Button).pressed.emit()
+	check((title.get_node("%PlayButton") as Button).pressed.is_connected(title.play) and TitleScreen.VILLAGE_SCENE == VillageHub.SCENE, "Play enters the village instead of starting a run")
+	(title.get_node("%DifficultyPanel") as DifficultyPanel).open(CONTENT.difficulties, CONTENT.ascensions)
 	await _frames(2)
 	var cards: HBoxContainer = title.get_node("%DifficultyCards")
-	check(title.get_node("%DifficultyPanel").visible and cards.get_child_count() == 4, "Play asks for a difficulty")
+	check(title.get_node("%DifficultyPanel").visible and cards.get_child_count() == 4, "the shared difficulty panel offers the four ordeals")
 	check((cards.get_child(3) as Button).disabled and not (cards.get_child(2) as Button).disabled, "Nightmare locked, Hard open")
 	check(not title.get_node("%AscensionRow").visible, "no ascension before a Nightmare win")
 	Profile.ascension_unlocked = 2

@@ -524,7 +524,7 @@ stones lit in their runes' colors. The selected slot pulses gold.
 
 ## Active product and input ownership
 
-The active F5/export path is TitleScreen → story/descent or resumed Game. Shrine, daily runs,
+The active F5/export path is TitleScreen → story/Kagari → the Well → new or resumed Game. Shrine, daily runs,
 perk choices, end of run, records and options keep their normal roles. The standalone RPG
 campaign/menu is [archived for a separate project](../rpg-archive.md).
 
@@ -533,3 +533,11 @@ existing bindings. Replacing/detaching a producer stops held movement/charging, 
 menu still mutes the first press. Old death/descent/fade work checks its session ticket before
 showing panels, advancing or tinting a new run. The inventory checks that its previously bound
 hero is still valid before disconnecting signals.
+
+## Village interaction
+
+[Kagari](village.md) replaces direct run launch with walking to the central well. Approach an
+inhabitant, shrine or statue and press the normal Interact action; touch uses the existing stick
+and ActionButton. Conversations, restoration purchases and memorials use a scrollable RpgWindow
+and stop walking. New descents explicitly ask before replacing a saved run. Pause and end-of-run
+Return to village buttons lead back to the square; the pause path keeps the active save.

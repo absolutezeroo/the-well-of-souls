@@ -566,11 +566,22 @@ func _test_title_keys(title: TitleScreen) -> void:
 	# Escape on the title itself does nothing (a computer's player never quits by accident).
 	await _tap_key(KEY_ESCAPE)
 	check(is_instance_valid(title) and title.is_inside_tree(), "Escape on the bare title quits nothing")
-	(title.get_node("%PlayButton") as Button).grab_focus()
+	# Play now leaves this scene for Kagari; exercise its keyboard activation with a captured
+	# callback, then test the shared difficulty menu independently (it lives at the well).
+	var play := title.get_node("%PlayButton") as Button
+	play.pressed.disconnect(title.play)
+	var entered := [false]
+	var capture := func() -> void: entered[0] = true
+	play.pressed.connect(capture)
+	play.grab_focus()
 	await _tap_key(KEY_ENTER)
+	check(entered[0] and TitleScreen.VILLAGE_SCENE == VillageHub.SCENE, "Enter activates the village entry button")
+	play.pressed.disconnect(capture)
+	play.pressed.connect(title.play)
+	var difficulty := title.get_node("%DifficultyPanel") as DifficultyPanel
+	difficulty.open(CONTENT.difficulties, CONTENT.ascensions)
 	await _frames(2)
-	var difficulty := title.get_node("%DifficultyPanel") as Control
-	check(difficulty.visible, "Enter on Descend opens the difficulties")
+	check(difficulty.visible, "the well's shared difficulty panel opens")
 	await _check_keys_reach(difficulty, "the difficulties")
 	await _tap_key(KEY_ESCAPE)
 	check(not difficulty.visible, "Escape closes them")

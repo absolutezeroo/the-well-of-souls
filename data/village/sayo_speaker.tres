@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SpeakerDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/dialogue/speaker_def.gd" id="script"]
+[ext_resource type="Texture2D" path="res://assets/characters/npc/vigil_keeper.png" id="figure"]
+[ext_resource type="Texture2D" path="res://assets/characters/npc/vigil_keeper_face.png" id="portrait"]
+[resource]
+script = ExtResource("script")
+id = &"village_sayo"
+display_name = "Sayo"
+title = "The Sleeping Mourner"
+figure = ExtResource("figure")
+portrait = ExtResource("portrait")

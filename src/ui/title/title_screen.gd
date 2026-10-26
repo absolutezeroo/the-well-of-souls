@@ -17,6 +17,7 @@ extends Control
 ## the message of the day; the title is a safe point where read values start to apply.
 
 const GAME_SCENE := "res://src/game/game.tscn"
+const VILLAGE_SCENE := "res://src/village/village_hub.tscn"
 const STORY_SCENE := "res://src/ui/story/story_screen.tscn"
 ## Seconds before the shrine's bell tolls (the music first).
 const TITLE_BELL_DELAY := 1.4
@@ -112,9 +113,8 @@ func _ready() -> void:
 	(%RecordsPlaque as PanelContainer).add_theme_stylebox_override("panel", plaque_style)
 	(%RecordsPlaque as PanelContainer).custom_minimum_size.x = 250
 	_setup_continue()
-	%PlayButton.pressed.connect(func() -> void:
-		Sfx.play_ui(Sfx.bank.ui_open)
-		(%DifficultyPanel as DifficultyPanel).open(content.difficulties, content.ascensions))
+	(%PlayButton as Button).text = tr("Enter Kagari")
+	%PlayButton.pressed.connect(play)
 	# Once the tree opened an oath or the Armory: "At the Well's Edge" between the two.
 	oath_panel = OathPanel.new()
 	add_child(oath_panel)
@@ -141,7 +141,7 @@ func _ready() -> void:
 	daily_dialog.hide()
 	add_child(daily_dialog)
 	daily_dialog.accepted.connect(func() -> void:
-		Game.daily_requested = true
+		VillageHub.daily_requested = true
 		play())
 	_build_leaderboards()
 	_build_credits()
@@ -177,9 +177,9 @@ func _ready() -> void:
 func play() -> void:
 	Sfx.play_ui(Sfx.bank.ui_click)
 	if not Profile.seen_intro and content.story and not content.story.intro_pages.is_empty():
-		tell_story(GAME_SCENE)
+		tell_story(VILLAGE_SCENE)
 	else:
-		Loader.go(GAME_SCENE)
+		Loader.go(VILLAGE_SCENE)
 
 
 ## The run in progress, if the app was closed during one.
@@ -196,8 +196,7 @@ func _setup_continue() -> void:
 	lines[1].text = tr("Floor %d, level %d") % [int(saved.get("depth", 1)), int(player.get("level", 1))]
 	button.pressed.connect(func() -> void:
 		Sfx.play_ui(Sfx.bank.ui_click)
-		Game.resume_requested = true
-		Loader.go(GAME_SCENE))
+		Loader.go(VILLAGE_SCENE))
 	button.grab_focus.call_deferred()
 
 

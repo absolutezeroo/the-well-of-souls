@@ -23,6 +23,14 @@ const SAVE_SHAPE := {
 	"fragments_found": {"*": "number"}, "deeds_done": {"*": "number"}, "boss_meetings": {"*": "number"},
 	"lines_told": {"*": "number"}, "lines_order": {"*": "number"}, "deaths_by": {"*": "number"},
 	"worn": {"*": "string"}, "best_splits": {"*": ["number"]}, "period_stats": {"*": {"*": "number"}},
+	"village_quests": {"*": "number"}, "village_services": {"*": "number"},
+	"village_memorials": [{
+		"version": "number", "date": "number", "level": "number", "ascension": "number",
+		"max_health": "number", "power": "number", "armor": "number",
+		"pseudonym": "string", "difficulty": "string", "aura": "string", "memorial_id": "string",
+		"gear": [{"id": "string", "rarity": "number", "level": "number", "affixes": ["string"], "runes": ["string"]}],
+		"skills": ["string"], "perks": [{"id": "string", "stacks": "number"}]
+	}], "ending_receipts": {"*": "string"},
 	"quests_claimed": {"*": ["string"]}, "keeper": "dict", "keepers_freed": ["dict"], "history": ["dict"],
 }
 
@@ -90,6 +98,13 @@ var keeper := {}
 ## The Nameless Keepers beaten, newest first (their weapon, level, pseudonym; `date`: when they
 ## were freed), for his page in the codex. At most KEEPERS_KEPT.
 var keepers_freed: Array = []
+## Surface quest stages, paid restorations and every hero who chose to hold the seal.
+## Memorials have no rolling-history cap: replacing/freeing the current keeper never erases one.
+var village_quests := {}
+var village_services := {}
+var village_memorials: Array = []
+## Journey -> chosen ending, for idempotence across the profile/run-file crash boundary.
+var ending_receipts := {}
 ## The story (written through Narrative only): chapters and waking words of the wardens'
 ## chronicles already told ("boss_id/chapter_id" -> 1), fragments found (id -> 1), deeds done
 ## ("boss_id/deed_id" -> 1), and how many times each warden was met (id -> count).
@@ -264,10 +279,55 @@ func choose_ending(ending_id: StringName, stat: String, feats: bool = true) -> v
 
 ## The hero just took the keeper's place: `snapshot` (KeeperSnapshot.take()) waits at the bottom
 ## of the next runs, instead of the one waiting before (if any).
-func take_keeper(snapshot: Dictionary) -> void:
+func take_keeper(snapshot: Dictionary) -> bool:
+	if held or not KeeperSnapshot.is_valid(snapshot):
+		return false
+	var before := to_data().duplicate(true)
 	keeper = snapshot.duplicate(true)
-	save_profile()
+	_remember_keeper(snapshot)
+	if not save_profile():
+		_read(before)
+		return false
 	changed.emit()
+	return true
+
+
+## A single write publishes the ending, its statistic, the keeper and his memorial together.
+## The receipt survives a crash before RunSave can mark ending_due false.
+func finish_ending(choice: EndingDef, snapshot: Dictionary, journey: String, feats: bool) -> bool:
+	if held or choice == null or journey.is_empty():
+		return false
+	if ending_receipts.has(journey):
+		return String(ending_receipts[journey]) == String(choice.id)
+	var before := to_data().duplicate(true)
+	ending = choice.id
+	if not choice.stat.is_empty():
+		add_stat(choice.stat, 1, feats)
+	if choice.keeper_change == EndingDef.KeeperChange.TAKE:
+		if not KeeperSnapshot.is_valid(snapshot):
+			_read(before)
+			return false
+		keeper = snapshot.duplicate(true)
+		keeper["memorial_id"] = journey
+		_remember_keeper(keeper)
+	elif choice.keeper_change == EndingDef.KeeperChange.FREE:
+		keeper = {}
+	ending_receipts[journey] = String(choice.id)
+	if not save_profile():
+		_read(before)
+		return false
+	changed.emit()
+	return true
+
+
+func _remember_keeper(snapshot: Dictionary) -> void:
+	var memorial_id := str(snapshot.get("memorial_id", "legacy/%s" % JSON.stringify(snapshot).sha256_text()))
+	for entry: Dictionary in village_memorials:
+		if str(entry.get("memorial_id", "")) == memorial_id:
+			return
+	var copy := snapshot.duplicate(true)
+	copy["memorial_id"] = memorial_id
+	village_memorials.push_front(copy)
 
 
 ## The bell was rung: no Nameless Keeper waits any more.
@@ -593,6 +653,10 @@ func reset() -> void:
 	ending = &""
 	keeper = {}
 	keepers_freed = []
+	village_quests = {}
+	village_services = {}
+	village_memorials = []
+	ending_receipts = {}
 	chronicle_told = {}
 	fragments_found = {}
 	deeds_done = {}
@@ -636,6 +700,8 @@ func to_data() -> Dictionary:
 		"runs_since_reset": runs_since_reset,
 		"ending": String(ending),
 		"keeper": keeper, "keepers_freed": keepers_freed,
+		"village_quests": village_quests, "village_services": village_services,
+		"village_memorials": village_memorials, "ending_receipts": ending_receipts,
 		"chronicle_told": chronicle_told, "fragments_found": fragments_found, "deeds_done": deeds_done,
 		"boss_meetings": boss_meetings, "deepest": deepest,
 		"lines_told": lines_told, "lines_order": lines_order, "deaths_by": deaths_by,
@@ -673,14 +739,22 @@ func from_data(data: Variant) -> bool:
 
 ## A profile the reader can consume completely, without resetting progress on an error.
 static func is_valid_data(data: Variant, require_progress: bool = true) -> bool:
-	return data is Dictionary and (not require_progress or (data.has("souls") and data.has("runs"))) \
-		and RunSave.sanitized(data, SAVE_SHAPE, "profile") == data
+	if not data is Dictionary or (require_progress and (not data.has("souls") or not data.has("runs"))) \
+			or RunSave.sanitized(data, SAVE_SHAPE, "profile") != data:
+		return false
+	for value: Variant in (data.get("village_quests", {}) as Dictionary).values():
+		if float(value) != int(value) or int(value) < 0 or int(value) > VillageProgress.Step.RETURNED:
+			return false
+	for snapshot: Dictionary in data.get("village_memorials", []):
+		if not KeeperSnapshot.is_valid(snapshot):
+			return false
+	return true
 
 
 ## Anything to lose: a run counted, souls, upgrades or the intro seen (a fresh profile takes an
 ## online save without asking).
 func has_progress() -> bool:
-	return runs > 0 or souls > 0 or not levels.is_empty() or seen_intro or not achievements.is_empty()
+	return runs > 0 or souls > 0 or not levels.is_empty() or seen_intro or not achievements.is_empty() or not village_quests.is_empty() or not village_memorials.is_empty()
 
 
 func _read(data: Dictionary) -> void:
@@ -719,6 +793,13 @@ func _read(data: Dictionary) -> void:
 	# A snapshot of a version this game can't read (or a damaged one) waits no more.
 	var saved_keeper: Variant = data.get("keeper", {})
 	keeper = (saved_keeper as Dictionary) if KeeperSnapshot.is_valid(saved_keeper) else {}
+	village_quests = _ints(data.get("village_quests", {}))
+	village_services = _ints(data.get("village_services", {}))
+	ending_receipts = (data.get("ending_receipts", {}) as Dictionary).duplicate()
+	village_memorials = (data.get("village_memorials", []) as Array).duplicate(true)
+	# Read-only migration in memory: the next normal save keeps the existing keeper's statue.
+	if not data.has("village_memorials") and not keeper.is_empty():
+		_remember_keeper(keeper)
 	var saved_freed: Variant = data.get("keepers_freed", [])
 	keepers_freed = saved_freed.filter(func(entry: Variant) -> bool: return entry is Dictionary) if saved_freed is Array else []
 	chronicle_told = _ints(data.get("chronicle_told", {}))

@@ -105,7 +105,7 @@ func _show(title: String, color: Color, summary: String, can_continue: bool) -> 
 	_summary.visible = not summary.is_empty()
 	_continue_button.visible = can_continue
 	_continue_note.visible = can_continue
-	_restart_button.text = tr("New run") if can_continue else tr("Try again")
+	_restart_button.text = tr("Return to village")
 	show()
 
 
@@ -179,7 +179,7 @@ func _build() -> void:
 	_continue_button.name = "ContinueButton"
 	_named.add(_continue_button)
 	buttons.add_child(_continue_button)
-	_restart_button = UiParts.button(tr("Try again"), func() -> void:
+	_restart_button = UiParts.button(tr("Return to village"), func() -> void:
 		Sfx.play_ui(Sfx.bank.ui_click)
 		restart_requested.emit(), Vector2(240, 58), Fonts.BODY)
 	_restart_button.name = "RestartButton"
@@ -206,4 +206,3 @@ func _build() -> void:
 ## Back over the end screen: closes the leaderboards' page if it is open (true), else nothing.
 func back() -> bool:
 	return leaderboards != null and leaderboards.back()
-
