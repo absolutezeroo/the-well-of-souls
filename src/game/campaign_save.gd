@@ -8,7 +8,7 @@ enum Failure { NONE, DISABLED, MISSING, IO, CORRUPT, INCOMPATIBLE, INVALID_STATE
 enum CommitStep { BEFORE_BACKUP, AFTER_BACKUP, BEFORE_PUBLISH, AFTER_PUBLISH }
 
 const FORMAT := "well.campaign"
-const VERSION := 2
+const VERSION := 3
 const OLDEST_VERSION := 1
 ## Prototype storage bound, not a gameplay limit. Sector files/journals need a later codec.
 const MAX_BYTES := 16 * 1024 * 1024
@@ -164,9 +164,10 @@ func _inspect(candidate: String) -> Inspection:
 	return result
 
 
-## Version 1 had region facts only. Add empty object ledgers without clearing any old fact.
+## v1 gains loose-item ledgers; v2 gains explicit population/currency ledgers. Preserve old
+## facts and geometry, and leave initialization to the region coordinator, never a read side effect.
 static func _migrate(value: Variant, version: int) -> Variant:
-	if version != 1:
+	if version >= 3:
 		return value
 	if not value is Dictionary or not value.get("world") is Dictionary \
 			or not value.world.get("regions") is Dictionary:
@@ -174,9 +175,17 @@ static func _migrate(value: Variant, version: int) -> Variant:
 	var migrated: Dictionary = value.duplicate(true)
 	for key: Variant in migrated.world.regions:
 		var region: Variant = migrated.world.regions[key]
-		if not CampaignFormat.keys(region, ["id", "layout_version", "facts"]):
+		if version == 1:
+			if not CampaignFormat.keys(region, ["id", "layout_version", "facts"]):
+				return null
+			region["initialized"] = false
+			region["layout_stamp"] = ""
+			region["objects"] = {}
+		if not CampaignFormat.keys(region, ["id", "layout_version", "facts", "initialized", "layout_stamp", "objects"]):
 			return null
-		region["initialized"] = false
-		region["layout_stamp"] = ""
-		region["objects"] = {}
+		region["gold"] = {}
+		region["monsters"] = {}
+		region["chests"] = {}
+		region["population_initialized"] = false
+		region["population_stamp"] = ""
 	return migrated

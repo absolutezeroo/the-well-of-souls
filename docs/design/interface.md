@@ -542,3 +542,12 @@ and the existing TouchJoystick, so keyboard/gamepad/touch actions still share th
 This proof has no inventory, quest UI, tactical minimap or touch combat buttons yet, and adds
 no title-screen mode. Its default storage path is empty (memory only). See
 [the proof instructions](../rpg-regions.md).
+
+
+## Populated proof controls
+
+The standalone regional proof now shows an event-driven Health label and reuses ActionButton
+for touch attack/innate roll. Its actions still pass through LocalPlayerInput. Keyboard/gamepad
+keep the existing bindings. A dead hero is told to restart the development scene; no new RPG
+respawn, save menu, inventory or public title mode is implied. See
+[the populated scene](../rpg-population.md).

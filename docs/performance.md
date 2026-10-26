@@ -224,3 +224,13 @@ registers pickups on creation/take, with no added per-frame registry scan. The p
 loads one bounded authored map at a time, synchronously; destination preparation and full
 campaign checkpoint can stall a frame and are not a measured mobile streaming solution.
 Device profiling and the background sector lifecycle remain required before public adoption.
+
+
+## Regional population capture
+
+Monster/chest/coin tracking uses creation, death/open and collection signals. Durable snapshots
+validate/copy at checkpoint/transition boundaries, including off-tree native setup for a first
+population. There is no added per-monster per-frame allocation or group scan. Reward settlement
+counters run only around transfers/deaths/openings and queued spawn batches. Runtime dead
+minions are removed from records, preventing an unbounded dead-summon history. Capture remains
+synchronous; its peak memory and latency still require S23/Windows measurements.

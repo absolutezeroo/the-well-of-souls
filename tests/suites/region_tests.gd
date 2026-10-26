@@ -167,6 +167,8 @@ func _test_old_schema(proof: RegionProof, path: String) -> void:
 		region.erase("initialized")
 		region.erase("layout_stamp")
 		region.erase("objects")
+		for field in ["population_initialized", "population_stamp", "gold", "monsters", "chests"]:
+			region.erase(field)
 	(data.world.facts as Dictionary)["old:quest"] = true
 	var payload := JSON.stringify(data)
 	SafeFile.write_json(path, { "format": CampaignSave.FORMAT, "version": 1,
@@ -178,8 +180,8 @@ func _test_old_schema(proof: RegionProof, path: String) -> void:
 		and not restored.world_state.regions["proof:courtyard"].initialized,
 		"campaign v1 gains empty object ledgers while retaining all old world facts")
 	check(FileAccess.get_file_as_bytes(path) == original, "migration on read never overwrites the original checkpoint")
-	check(store.commit(restored) and int((SafeFile.read_json(path) as Dictionary).version) == 2,
-		"the next explicit commit publishes schema 2")
+	check(store.commit(restored) and int((SafeFile.read_json(path) as Dictionary).version) == CampaignSave.VERSION,
+		"the next explicit commit publishes the current campaign schema")
 	_clean(path)
 
 

@@ -35,6 +35,13 @@ un coordinateur conservant le héros, les objets au sol persistants et la migrat
 v1 → v2. La carte task_362 suit ce lot. R2.3/R3.1/R3.2 restent partiels : aucune population
 complète ni streaming continu. La scène de développement se lance indépendamment du menu.
 
+## Quatrième lot — population et récompenses persistantes
+
+Le [contrat de population](rpg-population.md) ajoute coffres, ennemis, blessures, morts, or au
+sol et mémoire durable, avec une frontière de récompense avant les checkpoints. La preuve F6
+est maintenant peuplée. CampaignSave v3 lit v1/v2 ; la carte task_365 suit ce lot. R2.3 reste
+partiel : PNJ, portes, exploration et activités demandent encore leurs propres états.
+
 ## Ce qui est décidé et ce qui doit l’être
 
 **Demandé :** monde ouvert, évolution durable du jeu vers le RPG, préparation d’un multijoueur

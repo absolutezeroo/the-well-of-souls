@@ -12,8 +12,8 @@ La cour et la salle réutilisent les biomes Grotte moussue/Crypte et les escalie
 sans nouveau pixel art. Ce sont des lieux de preuve sans statut canonique, pas Kagari ou Solhar.
 Marcher sur l’escalier change de lieu ; une entrée distincte évite un retour immédiat.
 Le clavier et la manette utilisent les actions habituelles ; le joystick tactile existant
-permet de marcher. La scène n’ajoute pas encore l’inventaire, les boutons tactiles de combat,
-les quêtes ni un menu de sauvegarde. Les potions posées utilisent le ramassage existant.
+permet de marcher. Le quatrième lot ajoute Santé et boutons tactiles de combat ; inventaire, quêtes et menu de
+sauvegarde restent à intégrer. Les potions posées utilisent le ramassage existant.
 
 Par défaut checkpoint_path est vide : **mémoire uniquement**, sans lecture/écriture de campagne
 sur disque par la scène. Le code ne convertit, n’efface et ne sauvegarde ni RunSave ni Profile.
@@ -39,6 +39,8 @@ ne demande aucune branche dans Game ou World : créer un RegionDef et l’inscri
 | entries | Noms d’entrées → cellules praticables ; distinctes des déclencheurs de sortie. |
 | RegionLinkDef | id local, cellule d’escalier, destination et entrée cible explicites. |
 | RegionItemDef | id local stable, cellule, ItemDef ; apparition initiale unique. |
+| RegionMonsterDef | id local stable, cellule, MonsterDef, rang/affixes optionnels ; apparition unique jusqu’à un renouvellement explicite futur. |
+| RegionChestDef | id local stable, cellule, ChestDef et piège explicite ; l’état ouvert est durable. |
 
 La validation vérifie aussi que les entrées, sorties et objets sont accessibles depuis une
 entrée. RegionFloorKind produit un DungeonMap de ces données. World utilise son pipeline
@@ -73,14 +75,14 @@ est chargé à la fois, de façon synchrone. Ce n’est pas le chargement asynch
 Les corps entrant dans un escalier demandent un déplacement différé avec un ticket opaque.
 Deux demandes d’un lieu quitté ne peuvent pas se transformer en deux déplacements. L’arrivée
 reste hors des déclencheurs ; une position de reprise dans un mur ou une sortie revient à une
-entrée sûre. Les objets persistants à une position incompatible bloquent la transition : ils
-ne sont pas effacés ou déplacés silencieusement.
+entrée sûre. Une disposition incompatible bloque la transition. Le quatrième lot replace un objet ou une
+pile dont le saut a fini dans un mur sur le sol proche, en conservant identité et valeur.
 
 Un checkpoint sur place actualise les records sans reconstruire le lieu et sans créer un
 second exemplaire des pickups. Quitter la scène ne déclenche pas une écriture automatique :
 les points d’autosave/arrière-plan du futur RPG restent à définir et tester.
 
-## Objets persistants et schéma 2
+## Objets persistants (introduits au schéma 2)
 
 RegionState contient maintenant facts, initialized, layout_stamp et objects, en plus de id et
 layout_version. RegionObjectState conserve id, position et le résultat exact de LootRoller,
@@ -101,7 +103,8 @@ ancien est libéré ; son record reste dans la région quittée et sera recréé
 protège aussi les redémarrages de floors historiques. Les connexions du suivi sont débranchées
 avant déchargement ou sortie du coordinateur.
 
-CampaignSave écrit désormais **version 2** et lit encore la version 1. La migration ajoute des
+Le troisième lot écrivait **version 2** et lisait la version 1. Le
+[quatrième lot](rpg-population.md) écrit v3 et conserve la lecture de v1/v2. La migration ajoute des
 ledgers d’objets vides et un état non initialisé aux anciennes régions, en conservant tous leurs
 faits. Elle ne réécrit pas le fichier à la lecture ; le prochain commit explicite publie v2.
 Une forme v1 contenant des champs non reconnus reste refusée. RunSave v3 et FLOOR_FORMAT 3
@@ -110,8 +113,9 @@ sont inchangés : aucune modification de la génération historique ou de ses r�
 ## Limites et validations à poursuivre
 
 Le scénario A → B → A et le redémarrage passent maintenant par deux cartes réellement chargées.
-La preuve ne persiste pas encore monstres, or au sol, PNJ, coffres, portes destructibles, météo,
-exploration FogOfWar ou état des activités. Ces entités ne sont donc pas peuplées dans la preuve.
+Le quatrième lot peuple et persiste monstres, coffres et or au sol. Restent PNJ, portes
+destructibles, météo, exploration FogOfWar et état des activités ; ces types ne sont pas peuplés
+par cette preuve.
 Les objets passent par World.spawn_item ; le dépôt d’inventaire existant emprunte ce chemin.
 Les autres fabriques ou un ajout direct de pickup devront rejoindre ce contrat avant adoption.
 
@@ -125,7 +129,7 @@ la scène, prend un objet, traverse, garde le même héros blessé, dépose un o
 affixe/rune, revient, redémarre, éprouve un verrou de sauvegarde et un changement de disposition,
 une double demande, un dépôt différé, un vrai passage physique et la migration v1 → v2.
 
-Validation sous Godot 4.7 headless, seed 347348 : **19 761 vérifications, 0 échec** ;
+Validation historique du troisième lot sous Godot 4.7 headless, seed 347348 : **19 761 vérifications, 0 échec** ;
 16 782 rapides passent. Les nouveaux cas régions totalisent 39 vérifications ; la sélection
 régions + campagnes en totalise 102. Linter : 657 scripts, 0 diagnostic ; 7 tests Python,
 3 010 clés traduites et catalogue de 303 références valides. Aucun export ni essai visuel ou

@@ -1,7 +1,7 @@
 class_name RegionFloorKind
 extends FloorKind
 ## An authored place uses the existing rendering/collision pipeline, without random population
-## or run-depth stairs. Its coordinator owns persistent items and destination links.
+## or run-depth stairs. Its coordinator owns persistent entities and destination links.
 
 var definition: RegionDef
 var entry_id: String

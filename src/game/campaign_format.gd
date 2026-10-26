@@ -110,6 +110,10 @@ static func item_data(value: Variant) -> bool:
 	return plain(value) and _item(value) != null
 
 
+static func content_ref(value: Variant) -> Resource:
+	return _reference(value)
+
+
 static func _item(value: Variant) -> ItemDef:
 	if value is String:
 		return _reference(value) as ItemDef

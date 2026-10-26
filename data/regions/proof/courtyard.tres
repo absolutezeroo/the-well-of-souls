@@ -1,10 +1,16 @@
-[gd_resource type="Resource" script_class="RegionDef" load_steps=8 format=3]
+[gd_resource type="Resource" script_class="RegionDef" load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://src/definitions/regions/region_def.gd" id="1"]
 [ext_resource type="Resource" path="res://data/biomes/mossy_cave.tres" id="2"]
 [ext_resource type="Script" path="res://src/definitions/regions/region_link_def.gd" id="3"]
 [ext_resource type="Script" path="res://src/definitions/regions/region_item_def.gd" id="4"]
 [ext_resource type="Resource" path="res://data/items/consumables/health_potion.tres" id="5"]
+
+[ext_resource type="Script" path="res://src/definitions/regions/region_monster_def.gd" id="6"]
+[ext_resource type="Script" path="res://src/definitions/regions/region_chest_def.gd" id="7"]
+[ext_resource type="Resource" path="res://data/chests/chest.tres" id="8"]
+[ext_resource type="Resource" path="res://data/monsters/slime.tres" id="9"]
+[ext_resource type="Resource" path="res://data/monsters/skeleton.tres" id="10"]
 
 [sub_resource type="Resource" id="Link"]
 script = ExtResource("3")
@@ -18,6 +24,25 @@ script = ExtResource("4")
 id = "medicine"
 cell = Vector2i(7, 6)
 item = ExtResource("5")
+
+[sub_resource type="Resource" id="Monster0"]
+script = ExtResource("6")
+id = "sentinel"
+cell = Vector2i(4, 4)
+monster = ExtResource("9")
+
+[sub_resource type="Resource" id="Monster1"]
+script = ExtResource("6")
+id = "watcher"
+cell = Vector2i(5, 11)
+monster = ExtResource("10")
+
+[sub_resource type="Resource" id="Chest"]
+script = ExtResource("7")
+id = "cache"
+cell = Vector2i(7, 11)
+chest = ExtResource("8")
+trapped = false
 
 [resource]
 script = ExtResource("1")
@@ -34,3 +59,5 @@ entries = Dictionary[String, Vector2i]({
 })
 links = Array[ExtResource("3")]([SubResource("Link")])
 items = Array[ExtResource("4")]([SubResource("Item")])
+monsters = Array[ExtResource("6")]([SubResource("Monster0"), SubResource("Monster1")])
+chests = Array[ExtResource("7")]([SubResource("Chest")])

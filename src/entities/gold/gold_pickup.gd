@@ -19,6 +19,7 @@ var _height := 0.0
 var _height_speed := 0.0
 var _attracted := false
 var _time := 0.0
+var _collected := false
 
 
 static func create(at: Vector2, coins: int, world: World) -> GoldPickup:
@@ -58,10 +59,28 @@ func _physics_process(delta: float) -> void:
 
 
 func _collect(player: Player) -> void:
+	take(player)
+
+
+func is_collected() -> bool:
+	return _collected
+
+
+## One successful transfer, even if called twice before the queued node is freed.
+func take(player: Player) -> bool:
+	if _collected or player == null or player.is_dead:
+		return false
+	_collected = true
+	var settlement := _world.spawns if is_instance_valid(_world) else null
+	if settlement:
+		settlement.begin_settlement()
 	player.add_gold(amount)
 	collected.emit(self)
 	Sfx.play_world(Sfx.bank.coin, global_position, -6.0)
 	queue_free()
+	if settlement:
+		settlement.end_settlement()
+	return true
 
 
 func _draw() -> void:

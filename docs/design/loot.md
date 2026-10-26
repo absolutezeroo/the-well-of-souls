@@ -148,3 +148,13 @@ consumables between the two ("To belt" / "To bag"). The merchant buys from the b
   in the bag), set runes from the bag into its free sockets for free, or pick a socket and take
   its rune back out, intact, for gold (`removal_price` + `removal_price_per_depth`). A plain
   weapon becomes its own copy the first time a rune goes in. Debug panel: "Forge here", "Every rune".
+
+
+## Regional chest and currency persistence
+
+The regional proof keeps chest open/trap state and exact loose items/piles in the same snapshot
+as the hero. Loading never reopens a chest, pays a kill or applies FloorRules to stored coins
+again. Native reward notifications are not safe checkpoint boundaries until WorldSpawner is
+settled, including queued death offspring. Pickups refuse duplicate transfers. Pending and
+finished trap fuses survive loading without distributing another reward. See
+[the regional population contract](../rpg-population.md).

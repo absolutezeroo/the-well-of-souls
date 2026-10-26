@@ -259,6 +259,8 @@ Dungeon,Dungeon,Donjon
 The knell falls silent. The Well lets you go.,The knell falls silent. The Well lets you go.,Le glas se tait. Le Puits te laisse partir.
 The knell has tolled. The Threshold keeps you.,The knell has tolled. The Threshold keeps you.,Le glas a sonné. Le Seuil te garde.
 Walk onto the stairs to change region.,Walk onto the stairs to change region.,Marchez sur les escaliers pour changer de région.
+Health: %d / %d,Health: %d / %d,Santé : %d / %d
+You fell. Restart the proof scene to try again.,You fell. Restart the proof scene to try again.,Vous êtes tombé. Relancez la scène de prototype pour réessayer.
 The region proof could not start.,The region proof could not start.,Le prototype de régions n’a pas pu démarrer.
 The dark,The dark,L'obscurité
 At least %d characters.,At least %d characters.,Au moins %d caractères.

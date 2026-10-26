@@ -14,6 +14,10 @@ var started := false
 @onready var _title: Label = $Overlay/Title
 @onready var _hint: Label = $Overlay/Hint
 @onready var _joystick: TouchJoystick = $Overlay/Joystick
+@onready var _health: Label = $Overlay/Health
+@onready var _actions: Control = $Overlay/Actions
+@onready var _attack: ActionButton = $Overlay/Actions/Attack
+@onready var _roll: ActionButton = $Overlay/Actions/Roll
 
 
 func _ready() -> void:
@@ -45,6 +49,12 @@ func _ready() -> void:
 		if hero.get_parent() == null:
 			hero.free()
 		_failed()
+	else:
+		hero.health_changed.connect(_health_changed)
+		hero.died.connect(_hero_died)
+		_health_changed(hero.hp, hero.get_max_hp())
+		_attack.icon = hero.get_weapon().icon if hero.get_weapon() else null
+		_roll.icon = hero.skills.skills[0].icon if not hero.skills.skills.is_empty() and hero.skills.skills[0] else null
 
 
 func _region_changed(region: RegionDef) -> void:
@@ -53,8 +63,17 @@ func _region_changed(region: RegionDef) -> void:
 
 func _input_changed() -> void:
 	_joystick.visible = InputDevice.uses_touch()
+	_actions.visible = InputDevice.uses_touch()
 	_joystick.fixed = Settings.fixed_joystick
 	_joystick.max_distance = TouchJoystick.BASE_DISTANCE * Settings.controls_scale
+
+
+func _health_changed(current: int, maximum: int) -> void:
+	_health.text = tr("Health: %d / %d") % [current, maximum]
+
+
+func _hero_died(_actor: Actor) -> void:
+	_hint.text = tr("You fell. Restart the proof scene to try again.")
 
 
 func _failed() -> void:

@@ -7,6 +7,25 @@ extends Resource
 ## inner state class (`ThiefState`...: typed fields, no dictionary keys to mistype) and makes it in make_state().
 
 
+## Durable counters only. Combat windups and frame timers may restart on a region revisit.
+## A behaviour owning currency or limited charges must override this persistence contract.
+func persistent_data(_monster: Monster) -> Dictionary:
+	return {}
+
+
+func accepts_persistent_data(data: Dictionary) -> bool:
+	return data.is_empty()
+
+
+func restore_persistent_data(_monster: Monster, _data: Dictionary) -> void:
+	pass
+
+
+## Perks granted during on_spawn, for validating durable memory without creating a live actor.
+func granted_perks() -> Array[PerkDef]:
+	return []
+
+
 ## A new monster's values of this trait (an instance of its inner state class), made the first
 ## time Monster.trait_state() asks for them. The base has none to keep.
 func make_state() -> RefCounted:

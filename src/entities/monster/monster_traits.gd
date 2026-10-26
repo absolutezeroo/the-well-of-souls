@@ -44,3 +44,44 @@ func first(kind: Script) -> MonsterTrait:
 		if is_instance_of(behavior, kind):
 			return behavior
 	return null
+
+
+## Disk records are ordered like the composition; a changed module kind/order is refused,
+## never interpreted as another module's counters. No allocation in frame hooks.
+func persistent_data() -> Array:
+	var result: Array = []
+	for behavior in active:
+		result.append({ "kind": (behavior.get_script() as Script).get_global_name(),
+			"data": behavior.persistent_data(_monster) })
+	return result
+
+
+static func composition(definition: MonsterDef, affixes: Array[EliteAffixDef]) -> Array[MonsterTrait]:
+	var result: Array[MonsterTrait] = []
+	var all: Array[MonsterTrait] = definition.traits.duplicate()
+	for affix in affixes:
+		all.append_array(affix.traits)
+	for behavior in all:
+		if behavior and not result.has(behavior):
+			result.append(behavior)
+	return result
+
+
+static func accepts_data(modules: Array[MonsterTrait], saved: Array) -> bool:
+	if modules.size() != saved.size():
+		return false
+	for i in modules.size():
+		var row: Variant = saved[i]
+		if not row is Dictionary or row.size() != 2 or not row.has("kind") or not row.get("data") is Dictionary \
+				or row.kind != (modules[i].get_script() as Script).get_global_name() \
+				or not modules[i].accepts_persistent_data(row.data):
+			return false
+	return true
+
+
+func restore_persistent_data(saved: Array) -> bool:
+	if not accepts_data(active, saved):
+		return false
+	for i in active.size():
+		active[i].restore_persistent_data(_monster, saved[i].data)
+	return true

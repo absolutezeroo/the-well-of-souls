@@ -14,6 +14,18 @@ var _world: World
 var _entities: Node2D
 var _projectiles: Node2D
 var _effects: Node2D
+var _settlements := 0
+var _pending_spawns := 0
+
+## A typed deferred batch. Holds weak targets, never captured actor nodes in lambdas.
+class SpawnBatch:
+	extends RefCounted
+	var kinds: Array[MonsterDef] = []
+	var count := 0
+	var at := Vector2.ZERO
+	var radius := 0.0
+	var target: WeakRef
+	var generation := 0
 
 
 func _init(world: World, entities: Node2D, projectiles: Node2D, effects: Node2D) -> void:
@@ -29,7 +41,45 @@ func spawn_monster(def: MonsterDef, at: Vector2) -> Monster:
 	monster.setup(def, _world.depth, _world.content_db().dungeon)
 	monster.position = at
 	_entities.add_child(monster)
+	_world.monster_created.emit(monster)
 	return monster
+
+
+## A snapshot cannot observe one half of a synchronous reward or a queued offspring batch.
+func is_settled() -> bool:
+	return _settlements == 0 and _pending_spawns == 0
+
+
+func begin_settlement() -> void:
+	_settlements += 1
+
+
+func end_settlement() -> void:
+	_settlements -= 1
+
+
+func defer_monsters(kinds: Array[MonsterDef], count: int, at: Vector2, radius: float, target: Actor) -> void:
+	var batch := SpawnBatch.new()
+	batch.kinds = kinds.duplicate()
+	batch.count = count
+	batch.at = at
+	batch.radius = radius
+	batch.target = weakref(target)
+	batch.generation = _world.floor_id
+	_pending_spawns += 1
+	_spawn_batch.call_deferred(batch)
+
+
+func _spawn_batch(batch: SpawnBatch) -> void:
+	if is_instance_valid(_world) and _world.floor_id == batch.generation:
+		for i in batch.count:
+			var kind: MonsterDef = batch.kinds.pick_random() if not batch.kinds.is_empty() else _world.pick_monster()
+			if kind == null:
+				break
+			var monster := spawn_monster(kind, _world.find_open_point_near(batch.at, batch.radius, WorldSpace.room_for(kind)))
+			monster.target = batch.target.get_ref() as Actor if batch.target else null
+			Vfx.puff(_world, monster.global_position)
+	_pending_spawns -= 1
 
 
 func spawn_loot(item: ItemDef, at: Vector2, quality: float = 1.0) -> ItemPickup:
@@ -54,10 +104,16 @@ func spawn_gold(at: Vector2, amount: int) -> void:
 		var share := floori(float(amount) / piles) + (1 if i < amount % piles else 0)
 		if share <= 0:
 			continue
-		var coin := GoldPickup.create(at, share, _world)
-		if _world.ledger.lay(FloorLedger.GOLD, coin, str(share)) >= 0:
-			coin.collected.connect(func(pile: GoldPickup) -> void: _world.ledger.spend(FloorLedger.GOLD, pile))
-		_entities.add_child.call_deferred(coin)
+		spawn_gold_pile(at, share)
+
+
+func spawn_gold_pile(at: Vector2, amount: int) -> GoldPickup:
+	var coin := GoldPickup.create(at, amount, _world)
+	if _world.ledger.lay(FloorLedger.GOLD, coin, str(amount)) >= 0:
+		coin.collected.connect(func(pile: GoldPickup) -> void: _world.ledger.spend(FloorLedger.GOLD, pile))
+	_world.gold_created.emit(coin)
+	_add_pickup.call_deferred(coin, _world.floor_id)
+	return coin
 
 
 func spawn_encounter(def: EncounterDef, cell: Vector2i) -> Encounter:
@@ -122,7 +178,7 @@ func spawn_item(item: ItemDef, at: Vector2, armed: bool = true) -> ItemPickup:
 
 
 ## A region/floor may have changed before a deferred drop reaches the tree.
-func _add_pickup(pickup: ItemPickup, generation: int) -> void:
+func _add_pickup(pickup: Node2D, generation: int) -> void:
 	if not is_instance_valid(pickup):
 		return
 	if not is_instance_valid(_world) or not is_instance_valid(_entities) or _world.floor_id != generation:
@@ -222,6 +278,7 @@ func spawn_chest(def: ChestDef, cell: Vector2i, trapped: bool) -> Chest:
 	chest.setup(def, _world, trapped)
 	place_on_cell(chest, cell)
 	chest.opened.connect(func(_chest: Chest) -> void: _world.floor_save.opened_chests.append(cell))
+	_world.chest_created.emit(chest)
 	return chest
 
 

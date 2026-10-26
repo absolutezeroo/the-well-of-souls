@@ -39,6 +39,7 @@ func _physics_process(delta: float) -> void:
 		_fuse -= delta
 		queue_redraw()
 		if _fuse < 0.0:
+			_fuse = -1.0  # a completed fuse has one canonical durable value
 			_explode()
 		return
 	if is_open:
@@ -65,6 +66,7 @@ func set_spent() -> void:
 func open() -> void:
 	if is_open:
 		return
+	world.spawns.begin_settlement()
 	is_open = true
 	queue_redraw()
 	opened.emit(self)
@@ -77,6 +79,18 @@ func open() -> void:
 		Sfx.play_world(def.open_sound, global_position)
 		Vfx.sparkles(world, global_position, Palette.GOLD)
 		_drop_items(world.rng.randi_range(def.items_min, def.items_max))
+	world.spawns.end_settlement()
+
+
+func trap_time_left() -> float:
+	return _fuse if _fuse >= 0.0 else -1.0
+
+
+## Restore an opened chest quietly; its pending fuse resumes but its rewards are not replayed.
+func restore_opened(opened_before: bool, seconds: float) -> void:
+	is_open = opened_before
+	_fuse = seconds
+	queue_redraw()
 
 
 func _spring() -> void:
@@ -89,24 +103,16 @@ func _spring() -> void:
 		_fuse = def.fuse_time
 		world.spawn_vfx(RingVfx.create(global_position, def.explosion_radius, Color(1.0, 0.3, 0.2, 0.8)))
 	elif can_spawn:
-		_release_monsters.call_deferred()
-
-
-func _release_monsters() -> void:
-	for i in def.trap_monsters:
-		var monster_def := world.pick_monster()
-		if monster_def == null:
-			return
-		var monster := world.spawn_monster(monster_def, world.find_open_point_near(global_position, 40.0, WorldSpace.room_for(monster_def)))
-		monster.target = world.player
-		Vfx.puff(world, monster.global_position)
+		world.spawns.defer_monsters([], def.trap_monsters, global_position, 40.0, world.player)
 
 
 func _explode() -> void:
+	world.spawns.begin_settlement()
 	var damage := world.rules.dungeon_damage(def.explosion_damage)
 	# The chest bursts apart (splinters, grit and dust), not a fireball.
 	Vfx.explosion(world, global_position, def.explosion_radius, VfxElementDef.named(&"earth"), false)
 	Combat.blast(world, global_position, def.explosion_radius, damage, 340.0)
+	world.spawns.end_settlement()
 
 
 func _drop_items(count: int) -> void:

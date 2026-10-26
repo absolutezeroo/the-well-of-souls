@@ -390,3 +390,14 @@ usual hunter ranks and challenges (the hole challenge too: the Deeps have holes)
 
 `PerkTrait` (`src/definitions/monster_traits/perk_trait.gd`) is the one new trait: a kind born
 with perks, working as they do on the hero or on an elite. XP: 8 to 13 (the Warden 40).
+
+
+## Regional persistence prototype
+
+Authored ordinary enemies keep remaining Health, position, rank/affixes and durable module/perk
+counters across region revisits. Defeated authored enemies remain tombstones; runtime enemies
+that died are removed because they have no initial spawn to replay. Living summons/offspring
+are preserved, including their rewardless summoned flag. No automatic respawn occurs on load.
+Targets, status effects and AI windups are transient; thief-carried gold has an explicit durable
+hook. Boss phases and explicit rest renewal remain later work. See
+[the population contract](../rpg-population.md); legacy run behavior is unchanged.

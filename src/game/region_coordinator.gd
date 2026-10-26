@@ -6,7 +6,7 @@ extends Node
 
 signal region_changed(region: RegionDef)
 signal travel_failed(reason: Failure)
-enum Failure { NONE, CONFIGURATION, DESTINATION, LAYOUT, STATE, SAVE }
+enum Failure { NONE, CONFIGURATION, DESTINATION, LAYOUT, STATE, SAVE, SETTLING }
 
 const STAIRS := preload("res://src/entities/stairs/stairs.tscn")
 var session: GameSession
@@ -16,6 +16,7 @@ var current_id := ""
 var _content: ContentDB
 var _save: CampaignSave
 var _loot: RegionLoot
+var _population: RegionPopulation
 var _ticket: RefCounted
 var _busy := false
 
@@ -29,11 +30,14 @@ func configure(context: GameSession, places: RegionAtlas, content: ContentDB, st
 		return _fail(Failure.CONFIGURATION)
 	if _loot:
 		_loot.close()
+	if _population:
+		_population.close()
 	session = context
 	atlas = places
 	_content = content
 	_save = storage
 	_loot = RegionLoot.new(context.world)
+	_population = RegionPopulation.new(context.world)
 	_ticket = null
 	current_id = ""
 	return true
@@ -97,6 +101,7 @@ func checkpoint() -> bool:
 	session.campaign.hero = candidate.hero
 	session.campaign.world_state.regions[current_id] = candidate.world_state.regions[current_id]
 	_loot.set_state(session.campaign.world_state.regions[current_id])
+	_population.set_state(session.campaign.world_state.regions[current_id])
 	last_failure = Failure.NONE
 	return true
 
@@ -108,6 +113,11 @@ func request_travel(link_id: String) -> void:
 
 func _requested(link_id: String, ticket: RefCounted) -> void:
 	if ticket == _ticket and is_inside_tree():
+		if not session.world.spawns.is_settled():
+			var retry := _requested.bind(link_id, ticket)
+			if not get_tree().process_frame.is_connected(retry):
+				get_tree().process_frame.connect(retry, CONNECT_ONE_SHOT)
+			return
 		travel(link_id)
 
 
@@ -115,11 +125,16 @@ func _capture() -> CampaignState:
 	if session == null or current_id.is_empty() or session.campaign == null:
 		_fail(Failure.CONFIGURATION)
 		return null
+	if _busy or not session.world.spawns.is_settled():
+		_fail(Failure.SETTLING)
+		return null
 	var candidate := CampaignState.from_data(session.campaign.to_data())
 	if candidate == null or not candidate.hero.capture(session.character) \
-			or not _loot.capture(candidate.world_state.regions[current_id]):
+			or not _loot.capture(candidate.world_state.regions[current_id]) \
+			or not _population.capture(candidate.world_state.regions[current_id]):
 		_fail(Failure.STATE)
 		return null
+	_normalize_loot(candidate.world_state.regions[current_id], atlas.find(current_id))
 	return candidate
 
 
@@ -143,22 +158,74 @@ func _prepare(candidate: CampaignState, definition: RegionDef, entry: String, at
 				(Vector2(spawn.cell) + Vector2(0.5, 0.5)) * definition.tile_size)
 			state.objects[object_state.id] = object_state
 	var map := definition.make_map(entry)
-	for object_state in state.objects.values():
-		if not map.is_ground(map.world_to_cell(object_state.position)):
+	if not state.population_initialized:
+		if not RegionPopulation.initialize(state, definition, _content):
+			return _fail(Failure.STATE)
+	elif state.population_stamp != definition.population_stamp():
+		return _fail(Failure.LAYOUT)
+	_normalize_loot(state, definition)
+	for chest in state.chests.values():
+		if not map.is_ground(chest.cell):
 			return _fail(Failure.LAYOUT)
-	if not definition.safe_position(map, at, session.character.radius):
-		at = map.cell_to_world(map.start_cell)
-	if not definition.safe_position(map, at, session.character.radius):
+	for monster in state.monsters.values():
+		if not monster.dead and not map.is_ground(map.world_to_cell(monster.position)):
+			return _fail(Failure.LAYOUT)
+		var accepted: Array[EliteAffixDef] = []
+		for affix in monster.affixes:
+			if not affix.fits(monster.definition, definition.combat_depth, accepted):
+				return _fail(Failure.STATE)
+			accepted.append(affix)
+	if not _arrival_free(definition, map, state, at):
+		at = _nearest_arrival(definition, map, state, map.cell_to_world(map.start_cell))
+	if not _arrival_free(definition, map, state, at):
 		return _fail(Failure.LAYOUT)
 	candidate.hero.region_id = definition.id
 	candidate.hero.position = at
 	return true
 
 
+func _normalize_loot(state: RegionState, definition: RegionDef) -> void:
+	var map := definition.make_map(definition.entries.keys()[0])
+	for item in state.objects.values():
+		if not map.is_ground(map.world_to_cell(item.position)):
+			item.position = definition.nearest_ground(map, item.position)
+	for coin in state.gold.values():
+		if not map.is_ground(map.world_to_cell(coin.position)):
+			coin.position = definition.nearest_ground(map, coin.position)
+
+
+func _arrival_free(definition: RegionDef, map: DungeonMap, state: RegionState, at: Vector2) -> bool:
+	var radius := session.character.radius
+	if not definition.safe_position(map, at, radius):
+		return false
+	for chest in state.chests.values():
+		if at.distance_to(map.cell_to_world(chest.cell)) < radius + Chest.SIZE:
+			return false
+	for monster in state.monsters.values():
+		# A conservative bound includes any rank's larger collision body.
+		var room: float = monster.definition.radius * (maxf(1.0, monster.rank.scale) if monster.rank else 1.0)
+		if not monster.dead and at.distance_to(monster.position) < radius + room:
+			return false
+	return true
+
+
+func _nearest_arrival(definition: RegionDef, map: DungeonMap, state: RegionState, desired: Vector2) -> Vector2:
+	var best := Vector2.INF
+	var distance := INF
+	for y in map.height:
+		for x in map.width:
+			var candidate := map.cell_to_world(Vector2i(x, y))
+			if _arrival_free(definition, map, state, candidate) and desired.distance_squared_to(candidate) < distance:
+				best = candidate
+				distance = desired.distance_squared_to(candidate)
+	return best
+
+
 func _activate(candidate: CampaignState, definition: RegionDef, entry: String) -> void:
 	_busy = true
 	_ticket = RefCounted.new()
 	_loot.unbind()
+	_population.unbind()
 	session.attach_campaign(candidate)
 	var world := session.world
 	var hero := session.character
@@ -176,6 +243,7 @@ func _activate(candidate: CampaignState, definition: RegionDef, entry: String) -
 	hero.camera.reset_smoothing()
 	current_id = definition.id
 	_loot.bind(candidate.world_state.regions[current_id])
+	_population.bind(candidate.world_state.regions[current_id])
 	for link in definition.links:
 		var stairs := STAIRS.instantiate() as Stairs
 		stairs.texture = definition.biome.theme.stairs_texture()
@@ -202,3 +270,5 @@ func _exit_tree() -> void:
 	_ticket = null
 	if _loot:
 		_loot.close()
+	if _population:
+		_population.close()

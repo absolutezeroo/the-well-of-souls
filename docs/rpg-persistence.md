@@ -6,8 +6,9 @@ fichiers restent inchangés ; ce backend n’active pas encore un mode RPG dans 
 
 ## Propriétaires et schéma courant
 
-Le deuxième lot a livré le schéma 1. Le [troisième lot](rpg-regions.md) écrit le schéma 2,
-ajoute les objets régionaux et conserve la lecture/migration de v1.
+Le deuxième lot a livré le schéma 1, le [troisième](rpg-regions.md) les objets régionaux v2.
+Le [quatrième](rpg-population.md) écrit v3 avec coffres, monstres et or ; lecture/migration de
+v1/v2 conservées.
 
 Les records runtime sont des classes typées. Les dictionnaires du bloc PlayerSave restent
 un format de disque réutilisé, conservé dans une copie privée, sans référence au héros vivant.
@@ -18,7 +19,7 @@ un format de disque réutilisé, conservé dans une copie privée, sans référe
 | CharacterState | id, world_id, region_id, position, claimed_rewards, player | Progression personnelle ; le monde et la région doivent exister dans le même snapshot. |
 | player | level, xp, hp, base_stats, equipment, inventory, belt, gold, perks, learned_skill | Format PlayerSave actuel ; équipement amélioré, affixes, runes et mémoire durable de passifs compris. |
 | CampaignWorldState | id, facts, regions | Faits communs à la campagne ; aucun nœud World sérialisé. |
-| RegionState | id, layout_version, facts, initialized, layout_stamp, objects | Faits indexés par id de région ; la version de disposition est explicite. |
+| RegionState | id, layout_version, facts, initialized, layout_stamp, objects, gold, monsters, chests, population_initialized, population_stamp | Faits indexés par id de région ; la version de disposition est explicite. |
 | GameSession.campaign | Référence runtime optionnelle au CampaignState | Survit à leave_expedition ; jamais incluse dans RunSave automatiquement. |
 
 Les identités de campagne, monde et personnage ont un préfixe de domaine et 128 bits issus de
@@ -69,7 +70,7 @@ ce prototype dans **une même enveloppe atomique**. Il ne s’agit pas de plusie
 personnage/région écrits indépendamment. Ce choix borné évite un manifeste multi-fichiers avant
 le streaming ; les grandes cartes demanderont une autre implémentation transactionnelle.
 
-L’enveloppe porte format=well.campaign, version=2 (lecture de v1 conservée), une chaîne payload JSON et son SHA-256.
+L’enveloppe porte format=well.campaign, version=3 (lecture de v1/v2 conservée), une chaîne payload JSON et son SHA-256.
 Le checksum porte sur les octets logiques exacts de payload, sans dépendre d’une nouvelle
 sérialisation des nombres après lecture. C’est un contrôle d’intégrité, pas une signature.
 
@@ -115,8 +116,8 @@ SafeFile et le remplacement atomique du système cible, à mesurer sur appareils
   sérialisation et la copie peuvent allouer au checkpoint, jamais par image. Latence et mémoire
   sur S23 restent à mesurer avant l’autosave ; le budget n’est pas une preuve de fluidité.
 - RegionState stocke des faits et des objets au sol. Le troisième lot traverse deux cartes
-  fixes chargées, compatibles par stamp. PNJ, monstres et autres états régionaux restent à
-  persister avant de les peupler ; voir le [contrat des régions](rpg-regions.md).
+  fixes chargées, compatibles par stamp. Coffres, monstres et or sont ajoutés par le
+  [lot de population](rpg-population.md). PNJ, portes et activités restent à persister.
 - Aucun import des âmes, arbre, serments, chroniques ou ancienne partie ; aucun transfert vers
   CloudSave. Compte, mot de passe, consentements, préférences et identifiants réseau sont exclus.
 - Aucun nouveau mode public, mort RPG, quête transactionnelle, multi-personnage ou réseau.
@@ -124,7 +125,8 @@ SafeFile et le remplacement atomique du système cible, à mesurer sur appareils
   l’import et la synchronisation. Les droits et identités d’objets doivent être complétés.
 
 Les définitions, le coordinateur et les objets de deux lieux sont livrés dans le troisième
-lot. La population persistante complète et le chargement de secteurs restent à poursuivre.
+lot. Le quatrième ajoute la population de combat et ses récompenses ; PNJ, portes, activités et
+chargement de secteurs restent à poursuivre.
 
 ## Vérification
 

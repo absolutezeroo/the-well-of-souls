@@ -1,7 +1,7 @@
 class_name RegionState
 extends RefCounted
-## Persistent region facts and loose items; no map nodes. Authored geometry has an explicit
-## stamp and revision. Monster, NPC and destructible-state persistence is later work.
+## Persistent region facts, loot, enemies and chests; no map nodes. Geometry and population
+## have explicit stamps. NPC, doors, exploration and activity-state persistence remain later work.
 
 var id := ""
 var layout_version := 1
@@ -10,6 +10,12 @@ var facts: Dictionary[String, bool] = {}
 var initialized := false
 var layout_stamp := ""
 var objects: Dictionary[String, RegionObjectState] = {}
+var gold: Dictionary[String, RegionGoldState] = {}
+var monsters: Dictionary[String, RegionMonsterState] = {}
+var chests: Dictionary[String, RegionChestState] = {}
+## Added separately from geometry so a v2 region can adopt its first population explicitly.
+var population_initialized := false
+var population_stamp := ""
 
 
 func to_data() -> Dictionary:
@@ -18,15 +24,34 @@ func to_data() -> Dictionary:
 		if objects[key] == null:
 			return {}
 		saved_objects[key] = objects[key].to_data()
+	var saved_gold := {}
+	for key in gold:
+		if gold[key] == null:
+			return {}
+		saved_gold[key] = gold[key].to_data()
+	var saved_monsters := {}
+	for key in monsters:
+		if monsters[key] == null:
+			return {}
+		saved_monsters[key] = monsters[key].to_data()
+	var saved_chests := {}
+	for key in chests:
+		if chests[key] == null:
+			return {}
+		saved_chests[key] = chests[key].to_data()
 	return { "id": id, "layout_version": layout_version, "facts": facts.duplicate(),
-		"initialized": initialized, "layout_stamp": layout_stamp, "objects": saved_objects }
+		"initialized": initialized, "layout_stamp": layout_stamp, "objects": saved_objects,
+		"gold": saved_gold, "monsters": saved_monsters, "chests": saved_chests,
+		"population_initialized": population_initialized, "population_stamp": population_stamp }
 
 
 static func from_data(value: Variant) -> RegionState:
-	if not CampaignFormat.keys(value, ["id", "layout_version", "facts", "initialized", "layout_stamp", "objects"]) or not value.id is String \
+	if not CampaignFormat.keys(value, ["id", "layout_version", "facts", "initialized", "layout_stamp", "objects", "gold", "monsters", "chests", "population_initialized", "population_stamp"]) or not value.id is String \
 			or value.id.is_empty() or not CampaignFormat.integer(value.layout_version, 1) \
 			or not CampaignFormat.flag_map(value.facts) or not value.initialized is bool \
-			or not value.layout_stamp is String or not value.objects is Dictionary:
+			or not value.layout_stamp is String or not value.objects is Dictionary \
+			or not value.gold is Dictionary or not value.monsters is Dictionary or not value.chests is Dictionary \
+			or not value.population_initialized is bool or not value.population_stamp is String:
 		return null
 	var result := RegionState.new()
 	result.id = value.id
@@ -42,4 +67,25 @@ static func from_data(value: Variant) -> RegionState:
 		if not key is String or object_state == null or object_state.id != key:
 			return null
 		result.objects[key] = object_state
+	for key: Variant in value.gold:
+		var coin := RegionGoldState.from_data(value.gold[key])
+		if not key is String or coin == null or key != coin.id:
+			return null
+		result.gold[key] = coin
+	for key: Variant in value.monsters:
+		var monster := RegionMonsterState.from_data(value.monsters[key])
+		if not key is String or monster == null or key != monster.id:
+			return null
+		result.monsters[key] = monster
+	for key: Variant in value.chests:
+		var chest := RegionChestState.from_data(value.chests[key])
+		if not key is String or chest == null or key != chest.id:
+			return null
+		result.chests[key] = chest
+	result.population_initialized = value.population_initialized
+	result.population_stamp = value.population_stamp
+	if (result.population_initialized and (not result.initialized or result.population_stamp.length() != 64)) \
+			or (not result.population_initialized and (not result.population_stamp.is_empty() \
+			or not result.monsters.is_empty() or not result.chests.is_empty() or not result.gold.is_empty())):
+		return null
 	return result

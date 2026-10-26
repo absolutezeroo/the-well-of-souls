@@ -11,7 +11,8 @@ import re
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT = ROOT / "data/save/content_catalog.tres"
 KINDS = {"ItemDef": "item", "SkillDef": "skill", "PerkDef": "perk",
-         "MonsterDef": "monster", "ItemAffixDef": "affix", "OathDef": "oath"}
+         "MonsterDef": "monster", "ItemAffixDef": "affix", "OathDef": "oath",
+         "ChestDef": "chest", "MonsterRankDef": "rank", "EliteAffixDef": "elite"}
 
 
 def collect(root):

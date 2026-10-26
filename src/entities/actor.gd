@@ -375,6 +375,9 @@ func can_heal_killer() -> bool:
 func die(killer: Actor) -> void:
 	if is_dead:
 		return
+	var settlement := world.spawns if is_instance_valid(world) else null
+	if settlement:
+		settlement.begin_settlement()
 	is_dead = true
 	if killed_by.is_empty():  # a cause may be set just before (a fall, giving up)
 		killed_by = _death_cause(killer)
@@ -394,6 +397,8 @@ func die(killer: Actor) -> void:
 		valid_killer.perks.on_kill(valid_killer, self)  # still burning, slowed...: perks may care
 	statuses.clear()
 	died.emit(self)
+	if settlement:
+		settlement.end_settlement()
 	if free_on_death:
 		if rig and rig.visible:
 			# In the element of the blow that killed it: ash, shards, a puddle... (DeathFx).

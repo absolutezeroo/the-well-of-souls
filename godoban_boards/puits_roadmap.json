@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 365,
+  "next_id": 369,
   "tags": [
     "pc",
     "test",
@@ -4315,7 +4315,7 @@
     {
       "id": "task_296",
       "title": "R1.1 · Séparer session, personnage, monde et expédition",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R0.2 (task_293), R0.3 (task_294)\nÀ réaliser : Faire évoluer Game/RunState vers des propriétaires explicites : session active, état du personnage, état du monde, contexte d’un donjon. Garder les façades existantes tant qu’elles servent ; ne pas faire grossir Game/World ni déplacer tous les fichiers.\nFini quand : Quitter un donjon ou mourir ne recrée pas le personnage ; le mode historique reste testable si retenu. Les nouveaux noms/classes sont proposés, pas déjà implémentés.\nPoints de départ existants : src/game/game.gd; src/game/run_state.gd; src/world/world.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : GameSession branché dans Game ; vues run/player compatibles ; contexte runtime distinct de l’expédition avec conservation possible de la référence du héros. Restent CharacterState/WorldState durables, sortie vers un hub et règles RPG de mort/persistance. Le flux historique remplace encore le héros à Nouvelle partie.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : CharacterState/CampaignWorldState/RegionState composés par CampaignState ; GameSession peut attacher et capturer une campagne durable, conservée à la sortie d’expédition. Le mode historique détache explicitement la campagne. Restent coordinateur RPG, état durable d’expédition, hub, mort et placement sûr.",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R0.2 (task_293), R0.3 (task_294)\nÀ réaliser : Faire évoluer Game/RunState vers des propriétaires explicites : session active, état du personnage, état du monde, contexte d’un donjon. Garder les façades existantes tant qu’elles servent ; ne pas faire grossir Game/World ni déplacer tous les fichiers.\nFini quand : Quitter un donjon ou mourir ne recrée pas le personnage ; le mode historique reste testable si retenu. Les nouveaux noms/classes sont proposés, pas déjà implémentés.\nPoints de départ existants : src/game/game.gd; src/game/run_state.gd; src/world/world.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : GameSession branché dans Game ; vues run/player compatibles ; contexte runtime distinct de l’expédition avec conservation possible de la référence du héros. Restent CharacterState/WorldState durables, sortie vers un hub et règles RPG de mort/persistance. Le flux historique remplace encore le héros à Nouvelle partie.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : CharacterState/CampaignWorldState/RegionState composés par CampaignState ; GameSession peut attacher et capturer une campagne durable, conservée à la sortie d’expédition. Le mode historique détache explicitement la campagne. Restent coordinateur RPG, état durable d’expédition, hub, mort et placement sûr.\nIntégration future Game/hub : la preuve utilise un World indépendant. Nettoyer explicitement les états propres à la descente (FloorSave en attente, stock marchand, règles) lors du branchement d’un World de donjon vers une campagne ; aucun import implicite dans ce lot.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_280",
@@ -4325,7 +4325,7 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792977005,
+      "updated_at": 1792982255,
       "due_date": null
     },
     {
@@ -4443,7 +4443,7 @@
     {
       "id": "task_304",
       "title": "R2.3 · Persister les régions et les objets qui y restent",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302), R2.2 (task_303)\nÀ réaliser : Étendre le modèle de FloorSave à plusieurs régions : ouvertures, obstacles, PNJ, ressources, monstres selon politique, butin dynamique, objets posés, vagues et instances. Écrire les changements avant déchargement.\nFini quand : Revisiter A après B puis redémarrer conserve les faits décidés ; aucun reset involontaire de coffres ou butin ; taille des fichiers et nettoyage des états sont bornés.\nPoints de départ existants : src/world/floor_save.gd; src/world/floor_ledger.gd; src/world/secret_room.gd.\nAvancement du deuxième lot (26 octobre 2026) : Point de départ ajouté par le lot 2 : RegionState et sauvegarde commune conservent des maps de faits pour plusieurs régions. Aucun chargement de cartes ni conservation de PNJ, monstres, butin dynamique ou carte géographique livré ; la réalisation de cette carte reste à démarrer.\nAvancement du troisième lot (26 octobre 2026) : Lot 3 : RegionState v2 conserve initialisation, compatibilité de disposition et objets au sol avec id/position/item exact. Prises, dépôts différés et objets améliorés survivent à deux vraies cartes puis au redémarrage. Restent PNJ, monstres, or, coffres/obstacles, activités et exploration FogOfWar ; le prototype ne les peuple pas.",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302), R2.2 (task_303)\nÀ réaliser : Étendre le modèle de FloorSave à plusieurs régions : ouvertures, obstacles, PNJ, ressources, monstres selon politique, butin dynamique, objets posés, vagues et instances. Écrire les changements avant déchargement.\nFini quand : Revisiter A après B puis redémarrer conserve les faits décidés ; aucun reset involontaire de coffres ou butin ; taille des fichiers et nettoyage des états sont bornés.\nPoints de départ existants : src/world/floor_save.gd; src/world/floor_ledger.gd; src/world/secret_room.gd.\nAvancement du deuxième lot (26 octobre 2026) : Point de départ ajouté par le lot 2 : RegionState et sauvegarde commune conservent des maps de faits pour plusieurs régions. Aucun chargement de cartes ni conservation de PNJ, monstres, butin dynamique ou carte géographique livré ; la réalisation de cette carte reste à démarrer.\nAvancement du troisième lot (26 octobre 2026) : Lot 3 : RegionState v2 conserve initialisation, compatibilité de disposition et objets au sol avec id/position/item exact. Prises, dépôts différés et objets améliorés survivent à deux vraies cartes puis au redémarrage. Restent PNJ, monstres, or, coffres/obstacles, activités et exploration FogOfWar ; le prototype ne les peuple pas.\nLot 4 : coffres (ouverture/piège/fuse), monstres (blessures, mort, rang/affixes, mémoire durable), or au sol et apparitions dynamiques persistants. Snapshots refusés au milieu d’une récompense ; voyages attendent les batches natifs. V3 migre v1/v2 sans effacement. Restent PNJ, portes/obstacles, FogOfWar, activités, boss à phases et nettoyage/renouvellement explicite.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_281",
@@ -4453,7 +4453,7 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792978832,
+      "updated_at": 1792982255,
       "due_date": null
     },
     {
@@ -5412,7 +5412,7 @@
     },
     {
       "title": "Essayer la scène de régions sur S23 et Windows",
-      "description": "Ouvrir tools/rpg/region_proof.tscn et lancer F6 : clavier/manette, joystick tactile, lisibilité des deux biomes/titres, ramassage des potions, passages sans rebond et retour sans respawn des objets pris. Le chemin de checkpoint est vide par défaut (mémoire seule). Mesurer transitions et mémoire avec chemins de test isolés ; ne pas tester sur une campagne réelle. Aucun essai rendu/appareil du lot 3 dans cette session. Les tests headless couvrent cartes, collision, déclencheurs, objets et reprise. Art/biomes existants réemployés ; aucun nouveau canon narratif. Références : docs/rpg-regions.md, task_362, task_361.",
+      "description": "Ouvrir tools/rpg/region_proof.tscn et lancer F6 : clavier/manette, joystick tactile, lisibilité des deux biomes/titres, ramassage des potions, passages sans rebond et retour sans respawn des objets pris. Le chemin de checkpoint est vide par défaut (mémoire seule). Mesurer transitions et mémoire avec chemins de test isolés ; ne pas tester sur une campagne réelle. Aucun essai rendu/appareil du lot 3 dans cette session. Les tests headless couvrent cartes, collision, déclencheurs, objets et reprise. Art/biomes existants réemployés ; aucun nouveau canon narratif. Références : docs/rpg-regions.md, task_362, task_361.\nRetour joueur : aucun souci rencontré pendant son essai des déplacements/passages (plateforme non précisée). Ne valide pas toutes les mesures S23/Windows.",
       "status": "review",
       "priority": "high",
       "epic_id": "epic_287",
@@ -5425,7 +5425,79 @@
       ],
       "id": "task_364",
       "created_at": 1792978832,
-      "updated_at": 1792978832,
+      "updated_at": 1792979758,
+      "due_date": null
+    },
+    {
+      "id": "task_365",
+      "title": "RPG lot 4 : coffres, monstres et récompenses persistants",
+      "description": "Conserver coffres ouverts, blessures/positions/rangs/affixes et ennemis vaincus entre visites et reprise. Inclure or au sol, drops, mémoire durable des passifs/traits et invocations ; ne pas capturer une récompense partiellement appliquée. Ajouter la population en données à la preuve régionale, sans respawn automatique lors d’un chargement. Schéma de campagne migré et tests de non-duplication. R2.3 reste partiel (PNJ/portes/activités/secteurs à suivre).\nValidation : 19 845 vérifications complètes, 0 échec (seed 347348) ; 49 nouvelles vérifications de population ciblées ; 16 812 rapides ; 664 scripts, 0 diagnostic ; 7 tests outils Python, 3 012 traductions et 321 références stables valides. Aucun essai rendu/tactile sur S23/Windows dans ce lot.",
+      "status": "done",
+      "priority": "high",
+      "epic_id": "epic_281",
+      "tags": [
+        "rpg",
+        "sauvegarde",
+        "combat",
+        "tests",
+        "architecture"
+      ],
+      "created_at": 1792979758,
+      "updated_at": 1792982255,
+      "due_date": null
+    },
+    {
+      "title": "Empêcher les snapshots pris pendant une récompense incomplète",
+      "description": "Scénario RPG vérifié : un écouteur de Chest.opened ou Player.gold_changed demande un checkpoint avant la fin de la distribution/retrait au sol. Correction : compteurs de settlement autour des opérations natives, refus SETTLING et capture seulement après résolution des apparitions différées. Les pickups refusent aussi un double transfert avant libération. Régressions game.region_population ; Validation : 19 845 vérifications complètes, 0 échec (seed 347348) ; 49 nouvelles vérifications de population ciblées ; 16 812 rapides ; 664 scripts, 0 diagnostic ; 7 tests outils Python, 3 012 traductions et 321 références stables valides. Aucun essai rendu/tactile sur S23/Windows dans ce lot.",
+      "priority": "high",
+      "status": "done",
+      "epic_id": "epic_5",
+      "tags": [
+        "rpg",
+        "bug",
+        "sauvegarde",
+        "tests"
+      ],
+      "id": "task_366",
+      "created_at": 1792982255,
+      "updated_at": 1792982255,
+      "due_date": null
+    },
+    {
+      "title": "Garder les apparitions de mort et pièges dans leur floor propriétaire",
+      "description": "DeathSpawnTrait capturait World/cible dans une lambda différée, sans garde de génération ; un remplacement de floor pouvait déposer les enfants sur le suivant. Nouvelle file typée WorldSpawner avec floor_id, cible faible et compteur d’attente ; coffres piégés sur le même chemin. Le voyage RPG attend les enfants ; un remplacement forcé historique annule les anciens batches. Régression game.region_population : batch périmé ignoré et enfants conservés lors d’un départ normal. Validation : 19 845 vérifications complètes, 0 échec (seed 347348) ; 49 nouvelles vérifications de population ciblées ; 16 812 rapides ; 664 scripts, 0 diagnostic ; 7 tests outils Python, 3 012 traductions et 321 références stables valides. Aucun essai rendu/tactile sur S23/Windows dans ce lot.",
+      "priority": "high",
+      "status": "done",
+      "epic_id": "epic_5",
+      "tags": [
+        "bug",
+        "combat",
+        "sauvegarde",
+        "tests",
+        "architecture"
+      ],
+      "id": "task_367",
+      "created_at": 1792982255,
+      "updated_at": 1792982255,
+      "due_date": null
+    },
+    {
+      "title": "Essayer la preuve peuplée : coffres, combat et revisites sur S23/Windows",
+      "description": "Ouvrir tools/rpg/region_proof.tscn et lancer F6 après le lot 4. Tester approches de coffres, mort/blessure des ennemis, retours entre cartes, or/butin restant, voleur, Santé et commandes tactiles Attaque/Esquive. Vérifier rendu/lisibilité et mesurer mémoire/latence. Chemin de checkpoint vide = mémoire seule ; reprise sur disque uniquement avec chemin de test isolé. Le retour joueur sans souci de task_364 concernait la preuve avant population. La mort RPG complète, l’inventaire et la reprise publique restent des lots distincts. Référence docs/rpg-population.md, task_365, task_361.",
+      "priority": "high",
+      "status": "review",
+      "epic_id": "epic_287",
+      "tags": [
+        "rpg",
+        "android",
+        "pc",
+        "playtest",
+        "perf",
+        "combat"
+      ],
+      "id": "task_368",
+      "created_at": 1792982255,
+      "updated_at": 1792982255,
       "due_date": null
     }
   ]

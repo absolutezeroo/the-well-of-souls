@@ -410,3 +410,13 @@ Player node and checkpoints before unloading. RegionLoot owns a per-region item 
 tracks World.item_created before deferred insertion; WorldSpawner drops stale insertions by
 floor_id. Campaign schema 2 migrates schema 1 without rewriting on read. The standalone
 [region proof](rpg-regions.md) is separate from legacy Game and continuous sector streaming.
+
+
+## Durable regional population and reward settlement
+
+RegionPopulation owns native monster/chest runtime tracking and typed RegionMonsterState/
+RegionChestState records. RegionLoot also owns RegionGoldState; rewards, tombstones and hero
+share a campaign checkpoint. MonsterTraits delegates lasting module state (including thief
+currency); PerkSet preserves local-id lasting memory. WorldSpawner exposes settlement/batch
+completion so a snapshot cannot split native reward notifications. Campaign v3 migrates v1/v2;
+see [rpg-population.md](rpg-population.md) for composition compatibility and transient limits.

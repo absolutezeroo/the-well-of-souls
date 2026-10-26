@@ -1,7 +1,7 @@
 class_name RegionDef
 extends Resource
 ## Fixed region geometry in data, reusing DungeonMap and biome art. No procedural regeneration
-## on revisits. This first layout supports walls and floor; other ground/actors come later.
+## on revisits. Fixed floor/walls and authored population; other ground types come later.
 
 const MAX_SIDE := 128
 @export var id: String
@@ -16,6 +16,8 @@ const MAX_SIDE := 128
 @export var entries: Dictionary[String, Vector2i] = {}
 @export var links: Array[RegionLinkDef] = []
 @export var items: Array[RegionItemDef] = []
+@export var monsters: Array[RegionMonsterDef] = []
+@export var chests: Array[RegionChestDef] = []
 
 
 func make_map(entry_id: String) -> DungeonMap:
@@ -41,6 +43,15 @@ func stamp() -> String:
 	return JSON.stringify([id, layout_version, tile_size, rows, points, spawns]).sha256_text()
 
 
+func population_stamp() -> String:
+	var spawns: Array = []
+	for enemy in monsters:
+		spawns.append([enemy.id, enemy.cell.x, enemy.cell.y, RunSave.ref(enemy.monster), RunSave.ref(enemy.rank), RunSave.refs(enemy.affixes)])
+	for chest in chests:
+		spawns.append([chest.id, chest.cell.x, chest.cell.y, RunSave.ref(chest.chest), chest.trapped])
+	return JSON.stringify([combat_depth, spawns]).sha256_text()
+
+
 func valid() -> bool:
 	if id.is_empty() or display_name.is_empty() or biome == null or biome.theme == null \
 			or layout_version < 1 or tile_size < 1 or combat_depth < 1 \
@@ -56,11 +67,16 @@ func valid() -> bool:
 			if not rows[y][x] in "#." or ((x == 0 or y == 0 or x == width - 1 or y == rows.size() - 1) and rows[y][x] != "#"):
 				return false
 	var map := make_map(entries.keys()[0])
+	var blocked: Dictionary[Vector2i, bool] = {}
+	for chest in chests:
+		if chest == null or not map.is_ground(chest.cell) or blocked.has(chest.cell):
+			return false
+		blocked[chest.cell] = true
 	var reachable: Dictionary[Vector2i, bool] = {}
 	var pending: Array[Vector2i] = [map.start_cell]
 	while not pending.is_empty():
 		var cell: Vector2i = pending.pop_back()
-		if reachable.has(cell) or not map.is_ground(cell):
+		if reachable.has(cell) or not map.is_ground(cell) or blocked.has(cell):
 			continue
 		reachable[cell] = true
 		for direction in GridDirs.FOUR:
@@ -82,6 +98,36 @@ func valid() -> bool:
 				or item.item == null or not CampaignFormat.item_data(LootRoller.to_data(item.item)):
 			return false
 		identifiers[item.id] = true
+	identifiers.clear()
+	for enemy in monsters:
+		if enemy == null or enemy.id.is_empty() or identifiers.has(enemy.id) or not reachable.has(enemy.cell) \
+				or enemy.monster == null or enemy.monster is BossDef or RunSave.ref(enemy.monster).is_empty() \
+				or (enemy.rank == null and not enemy.affixes.is_empty()) \
+				or (enemy.rank and (RunSave.ref(enemy.rank).is_empty() or enemy.affixes.size() > enemy.rank.affixes)):
+			return false
+		var accepted: Array[EliteAffixDef] = []
+		for affix in enemy.affixes:
+			if affix == null or RunSave.ref(affix).is_empty() or not affix.fits(enemy.monster, combat_depth, accepted):
+				return false
+			accepted.append(affix)
+		identifiers[enemy.id] = true
+	identifiers.clear()
+	for chest in chests:
+		if chest == null or chest.id.is_empty() or identifiers.has(chest.id) or not map.is_ground(chest.cell) \
+				or chest.chest == null or RunSave.ref(chest.chest).is_empty():
+			return false
+		var approachable := false
+		for direction in GridDirs.FOUR:
+			approachable = approachable or reachable.has(chest.cell + direction)
+		if not approachable:
+			return false
+		for cell in entries.values():
+			if Vector2(cell - chest.cell).length() < 2.0:
+				return false
+		for link in links:
+			if link.cell == chest.cell:
+				return false
+		identifiers[chest.id] = true
 	return true
 
 
@@ -97,3 +143,20 @@ func safe_position(map: DungeonMap, point: Vector2, radius: float) -> bool:
 		if point.distance_to(map.cell_to_world(link.cell)) < radius + Stairs.SIZE:
 			return false
 	return true
+
+
+## Pickups/coins have no wall collision during their hop. Preserve their value and choose
+## reachable ground if a saved hop landed in a wall; geometry incompatibility still fails.
+func nearest_ground(map: DungeonMap, point: Vector2) -> Vector2:
+	var best := map.cell_to_world(map.start_cell)
+	var distance := INF
+	for y in map.height:
+		for x in map.width:
+			var cell := Vector2i(x, y)
+			if map.is_ground(cell):
+				var candidate := map.cell_to_world(cell)
+				var score := point.distance_squared_to(candidate)
+				if score < distance:
+					best = candidate
+					distance = score
+	return best

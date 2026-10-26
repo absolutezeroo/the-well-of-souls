@@ -386,3 +386,13 @@ and scene restart, and a failed commit or layout mismatch preserves the loaded s
 It also checks duplicate queued travel, stale deferred pickups, a real physics exit, no
 arrival bounce and non-destructive campaign v1-to-v2 migration. These maps are now real World
 instances reused in sequence; this is not seamless sector streaming or a device render test.
+
+
+## Regional population regressions
+
+`unit.region_population` checks schema/content, durable module/perk validation and chest-blocked
+exit geometry. `game.region_population` uses native reward paths with AI frozen for state
+assertions: wounded/ranked enemies, authored death tombstones, runtime offspring, thief currency,
+chest state, exact wealth, reentrant checkpoint refusal, double pickup, trap fuse completion,
+restart and non-destructive v2 migration. Existing `game.regions` keeps its original assertions;
+its v1 fixture drops the later fields and checks the current CampaignSave.VERSION.

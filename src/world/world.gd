@@ -10,6 +10,12 @@ signal map_reset
 ## Emitted before deferred insertion, so a region can track even a just-dropped item.
 @warning_ignore("unused_signal")  # WorldSpawner emits it; the facade owns the public signal.
 signal item_created(pickup: ItemPickup)
+@warning_ignore("unused_signal")  # Created by WorldSpawner; regional components listen here.
+signal gold_created(pickup: GoldPickup)
+@warning_ignore("unused_signal")  # Created by WorldSpawner, including runtime summons.
+signal monster_created(monster: Monster)
+@warning_ignore("unused_signal")  # Created by WorldSpawner, including runtime rewards.
+signal chest_created(chest: Chest)
 ## Cells the hero discovered, or whose look changed (a floor that gave way...). For the minimap.
 signal cells_changed(cells: Array[Vector2i])
 ## The hero walked into one of the floor's signature rooms for the first time (RoomShapeDef with
@@ -302,6 +308,11 @@ func roll_item(item: ItemDef, quality: float = 1.0) -> ItemDef:
 ## Coins on the floor, split in a few piles that fly to the hero when close.
 func spawn_gold(at: Vector2, amount: int) -> void:
 	spawns.spawn_gold(at, amount)
+
+
+## Restoration of an already-scaled pile: no new floor multiplier or splitting.
+func restore_gold(at: Vector2, amount: int) -> GoldPickup:
+	return spawns.spawn_gold_pile(at, amount)
 
 
 func spawn_encounter(def: EncounterDef, cell: Vector2i) -> Encounter:

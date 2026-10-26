@@ -14,6 +14,7 @@ var item: ItemDef
 ## Dropped items wait until the player walks away before they can be picked up again.
 var _armed := true
 var _taken := false
+var _taking := false
 ## Shown on the HUD (walked over, left on the ground).
 var _offered := false
 var _time := 0.0
@@ -104,12 +105,23 @@ func _on_body_exited(body: Node2D) -> void:
 
 ## Picks it up (walked over, or the Take button). False if the hero has no room for it.
 func take(player: Player) -> bool:
-	if _taken or player == null or player.is_dead or not player.pack.pick_up(item):
+	if _taken or _taking or player == null or player.is_dead:
+		return false
+	_taking = true
+	var settlement := player.world.spawns if is_instance_valid(player.world) else null
+	if settlement:
+		settlement.begin_settlement()
+	if not player.pack.pick_up(item):
+		_taking = false
+		if settlement:
+			settlement.end_settlement()
 		return false
 	_taken = true
 	_left()
 	taken.emit(self)
 	queue_free()
+	if settlement:
+		settlement.end_settlement()
 	return true
 
 
