@@ -5,6 +5,11 @@ what it describes, so it doubles as a map of the code. The rules of thumb for wo
 are in [../architecture.md](../architecture.md); how to add content is in
 [../adding-content.md](../adding-content.md).
 
+## Planned RPG transformation
+
+The [open-world RPG and later multiplayer roadmap](../rpg-roadmap.md) describes future work,
+its dependencies and completion gates. The design below still describes the implemented roguelike.
+
 ## The loop
 
 1. On the **title screen**, pick a difficulty (and, later, an oath), then go down.

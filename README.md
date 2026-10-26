@@ -59,6 +59,7 @@ docs/      Everything else (below)
 
 | Read | To |
 |---|---|
+| [docs/rpg-roadmap.md](docs/rpg-roadmap.md) | plan the transformation into an open-world RPG, then multiplayer (future work; not implemented) |
 | [docs/architecture.md](docs/architecture.md) | find your way in the code: the full layout, how the systems fit, the autoloads |
 | [docs/conventions.md](docs/conventions.md) | write code that fits: typing, naming, data-driven rules, texts, moving files |
 | [docs/adding-content.md](docs/adding-content.md) | add monsters, items, perks, biomes, bosses... |

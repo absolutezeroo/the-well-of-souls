@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 278,
+  "next_id": 356,
   "tags": [
     "pc",
     "test",
@@ -33,7 +33,12 @@
     "contenu",
     "debug",
     "en ligne",
-    "données"
+    "données",
+    "rpg",
+    "monde ouvert",
+    "multijoueur",
+    "architecture",
+    "migration"
   ],
   "epics": [
     {
@@ -80,6 +85,71 @@
       "id": "epic_81",
       "title": "Son & Ambiance",
       "color": "#8e44ad"
+    },
+    {
+      "id": "epic_279",
+      "title": "R0 · Cadrage du RPG",
+      "color": "#3498db"
+    },
+    {
+      "id": "epic_280",
+      "title": "R1 · Socle de session et préparation multijoueur",
+      "color": "#3498db"
+    },
+    {
+      "id": "epic_281",
+      "title": "R2 · Persistance durable et migration",
+      "color": "#3498db"
+    },
+    {
+      "id": "epic_282",
+      "title": "R3 · Monde ouvert et chargement par secteurs",
+      "color": "#3498db"
+    },
+    {
+      "id": "epic_283",
+      "title": "R4 · Personnage, combat et progression RPG",
+      "color": "#3498db"
+    },
+    {
+      "id": "epic_284",
+      "title": "R5 · Quêtes, PNJ et narration persistante",
+      "color": "#3498db"
+    },
+    {
+      "id": "epic_285",
+      "title": "R6 · Inventaire, économie et services",
+      "color": "#3498db"
+    },
+    {
+      "id": "epic_286",
+      "title": "R7 · Régions, contenu et identité du Puits",
+      "color": "#3498db"
+    },
+    {
+      "id": "epic_287",
+      "title": "R8 · Interface, outils et performances",
+      "color": "#3498db"
+    },
+    {
+      "id": "epic_288",
+      "title": "R9 · Validation et livraison du RPG solo",
+      "color": "#3498db"
+    },
+    {
+      "id": "epic_289",
+      "title": "M0 · Preuve multijoueur autoritaire",
+      "color": "#9b59b6"
+    },
+    {
+      "id": "epic_290",
+      "title": "M1 · Coopération jouable et persistance en ligne",
+      "color": "#9b59b6"
+    },
+    {
+      "id": "epic_291",
+      "title": "M2 · Exploitation et extension multijoueur",
+      "color": "#9b59b6"
     }
   ],
   "tasks": [
@@ -504,7 +574,7 @@
     {
       "id": "task_35",
       "title": "Évolutions d'armes",
-      "description": "Idée proposée : une arme qui évolue selon des conditions.",
+      "description": "Idée proposée : une arme qui évolue selon des conditions.\nRoadmap RPG du 26/10/2026 : R6.3 (task_325), docs/rpg-roadmap.md. Évolutions d’armes à requalifier pour une progression durable. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_7",
@@ -513,12 +583,12 @@
         "idée"
       ],
       "created_at": 1792685000,
-      "updated_at": 1792685000
+      "updated_at": 1792973386
     },
     {
       "id": "task_36",
       "title": "Reliques qui brisent les règles",
-      "description": "Idée proposée : reliques rares qui changent une règle du jeu.\nÉtude SPD du 25/10 : babioles changeant fréquences de butin/terrain, avec compromis. Pistes propres au Puits : meilleure qualité contre moins de soins, davantage de secrets contre davantage d’élites (chiffres à définir). Réemploi OathDef/RunBoons/FloorRules ; nouveaux points nécessaires pour chances de salles/élites/catégories. Serment au départ plus simple que relique acquise pendant la partie. État sauvegardé, effets de génération sur futurs étages, règles du quotidien. Voir docs/shattered-pixel-dungeon-study.md.",
+      "description": "Idée proposée : reliques rares qui changent une règle du jeu.\nÉtude SPD du 25/10 : babioles changeant fréquences de butin/terrain, avec compromis. Pistes propres au Puits : meilleure qualité contre moins de soins, davantage de secrets contre davantage d’élites (chiffres à définir). Réemploi OathDef/RunBoons/FloorRules ; nouveaux points nécessaires pour chances de salles/élites/catégories. Serment au départ plus simple que relique acquise pendant la partie. État sauvegardé, effets de génération sur futurs étages, règles du quotidien. Voir docs/shattered-pixel-dungeon-study.md.\nRoadmap RPG du 26/10/2026 : R6.3 (task_325), docs/rpg-roadmap.md. Reliques de descente à adapter au contexte de région et à la persistance. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_7",
@@ -527,12 +597,12 @@
         "idée"
       ],
       "created_at": 1792685000,
-      "updated_at": 1792965288
+      "updated_at": 1792973386
     },
     {
       "id": "task_37",
       "title": "Pacte à la carte",
-      "description": "Idée proposée : choisir son pacte depuis le Gardien.",
+      "description": "Idée proposée : choisir son pacte depuis le Gardien.\nRoadmap RPG du 26/10/2026 : R7.2 (task_328), docs/rpg-roadmap.md. Pactes à requalifier avec répétition et récompenses durables. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_7",
@@ -541,7 +611,7 @@
         "idée"
       ],
       "created_at": 1792685000,
-      "updated_at": 1792685000
+      "updated_at": 1792973386
     },
     {
       "id": "task_38",
@@ -1280,7 +1350,7 @@
     {
       "id": "task_98",
       "title": "Mesurer les performances sur le S23",
-      "description": "Tous les nouveaux effets, shaders et dialogues n'ont jamais été mesurés sur le téléphone (images/s, mémoire, chauffe).",
+      "description": "Tous les nouveaux effets, shaders et dialogues n'ont jamais été mesurés sur le téléphone (images/s, mémoire, chauffe).\nRoadmap RPG du 26/10/2026 : R8.4 (task_334), docs/rpg-roadmap.md. Mesures S23 conservées comme exigence de la transformation. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "high",
       "epic_id": "epic_6",
@@ -1290,7 +1360,7 @@
         "perf"
       ],
       "created_at": 1792720000,
-      "updated_at": 1792720000
+      "updated_at": 1792973386
     },
     {
       "id": "task_99",
@@ -1309,7 +1379,7 @@
     {
       "id": "task_87",
       "title": "Classes de héros",
-      "description": "Plusieurs héros avec leur kit de départ, leurs compétences et leur histoire (lore : disciples du sanctuaire ?). Un des grands moteurs de rejouabilité du genre.",
+      "description": "Plusieurs héros avec leur kit de départ, leurs compétences et leur histoire (lore : disciples du sanctuaire ?). Un des grands moteurs de rejouabilité du genre.\nRoadmap RPG du 26/10/2026 : R4.2 (task_314), docs/rpg-roadmap.md. Les classes restent une décision de conception ; le RPG ne les impose pas. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_80",
@@ -1319,7 +1389,7 @@
         "contenu"
       ],
       "created_at": 1792720000,
-      "updated_at": 1792720000
+      "updated_at": 1792973386
     },
     {
       "id": "task_88",
@@ -1339,7 +1409,7 @@
     {
       "id": "task_89",
       "title": "Nouveaux biomes et un acte bonus",
-      "description": "Étendre le Puits : biomes supplémentaires par acte, un acte caché.",
+      "description": "Étendre le Puits : biomes supplémentaires par acte, un acte caché.\nRoadmap RPG du 26/10/2026 : R7.1 (task_327), docs/rpg-roadmap.md. Concevoir des régions et leurs liens ; ne pas ajouter simplement un acte avant cadrage. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_80",
@@ -1349,7 +1419,7 @@
         "contenu"
       ],
       "created_at": 1792720000,
-      "updated_at": 1792720000
+      "updated_at": 1792973386
     },
     {
       "id": "task_90",
@@ -1535,7 +1605,7 @@
     {
       "id": "task_107",
       "title": "Plus de salles signatures",
-      "description": "Une deuxième salle signature par biome, et pour les Tréfonds et le Charnier sans Nom (une crypte du sceau, une gueule de pierre), chacune avec ses scènes, son plafond et son nom.",
+      "description": "Une deuxième salle signature par biome, et pour les Tréfonds et le Charnier sans Nom (une crypte du sceau, une gueule de pierre), chacune avec ses scènes, son plafond et son nom.\nRoadmap RPG du 26/10/2026 : R7.1 (task_327), docs/rpg-roadmap.md. Salles signatures réutilisées dans la région et les donjons. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_80",
@@ -1546,12 +1616,12 @@
         "idée"
       ],
       "created_at": 1792720836,
-      "updated_at": 1792720836
+      "updated_at": 1792973386
     },
     {
       "id": "task_108",
       "title": "Formes de salles : pièges propres aux formes",
-      "description": "Des passerelles qui s'effritent au-dessus des gouffres (sol craquelé), des piliers qui s'écroulent sous une explosion et bloquent un passage, un bassin qui déborde (eau peu profonde qui ralentit), des ponts-levis dans les salles signatures.\nÉtude SPD du 25/10 : salle de brasier optionnelle avec fiole de givre accessible avant, ou danger neutralisé par un consommable. Prévoir moyen de résolution et repli, jamais bloquer les escaliers sur du butin aléatoire. Réactions fonctionnelles à créer : les éléments VFX ne suffisent pas. Sauver obstacle résolu, vérifier nav/visibilité et charge des zones. Eau profonde actuelle infranchissable : ne pas la réutiliser telle quelle comme bassin d’extinction. Voir docs/shattered-pixel-dungeon-study.md.",
+      "description": "Des passerelles qui s'effritent au-dessus des gouffres (sol craquelé), des piliers qui s'écroulent sous une explosion et bloquent un passage, un bassin qui déborde (eau peu profonde qui ralentit), des ponts-levis dans les salles signatures.\nÉtude SPD du 25/10 : salle de brasier optionnelle avec fiole de givre accessible avant, ou danger neutralisé par un consommable. Prévoir moyen de résolution et repli, jamais bloquer les escaliers sur du butin aléatoire. Réactions fonctionnelles à créer : les éléments VFX ne suffisent pas. Sauver obstacle résolu, vérifier nav/visibilité et charge des zones. Eau profonde actuelle infranchissable : ne pas la réutiliser telle quelle comme bassin d’extinction. Voir docs/shattered-pixel-dungeon-study.md.\nRoadmap RPG du 26/10/2026 : R7.2 (task_328), docs/rpg-roadmap.md. Interactions/obstacles à tester avec revisites et sauvegarde. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_80",
@@ -1562,12 +1632,12 @@
         "idée"
       ],
       "created_at": 1792720836,
-      "updated_at": 1792965288
+      "updated_at": 1792973386
     },
     {
       "id": "task_109",
       "title": "Styles d'étage : des parties qui ne se ressemblent pas",
-      "description": "Au-delà des formes de salles : un style d'agencement par étage (cavernes organiques sans couloirs droits, enfilade de salles symétriques d'un temple, labyrinthe de galeries d'archives), tiré par biome ou par route, pour que deux étages du même acte ne se lisent pas pareil.",
+      "description": "Au-delà des formes de salles : un style d'agencement par étage (cavernes organiques sans couloirs droits, enfilade de salles symétriques d'un temple, labyrinthe de galeries d'archives), tiré par biome ou par route, pour que deux étages du même acte ne se lisent pas pareil.\nRoadmap RPG du 26/10/2026 : R3.1 (task_307), docs/rpg-roadmap.md. Styles d’étage à réinterpréter comme géographie de régions et donjons. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_80",
@@ -1577,7 +1647,7 @@
         "idée"
       ],
       "created_at": 1792720836,
-      "updated_at": 1792720836
+      "updated_at": 1792973386
     },
     {
       "id": "task_110",
@@ -1753,7 +1823,7 @@
     {
       "id": "task_121",
       "title": "Mode « La Veille » : tenir le sceau nuit après nuit",
-      "description": "Idée validée par Clayton (après la B).\n\nUn mode à part, ouvert par la fin « Prendre sa place » : on joue le Gardien Sans Nom devant le sceau. Chaque nuit, la Gueule envoie des vagues de plus en plus fortes ; entre deux nuits, un choix de reliques. Score = nombre de nuits tenues (record dans le profil, éventuellement un classement quotidien).\n\nMoteur déjà là en grande partie : les vagues des Abysses (AbyssDef/vagues), l'épreuve du Seuil (arène, compteur, HUD). À définir : l'arène du sceau, la courbe des nuits (data), les monstres par nuit (les gardiens libérés ?), les récompenses en âmes, l'accès depuis le titre.",
+      "description": "Idée validée par Clayton (après la B).\n\nUn mode à part, ouvert par la fin « Prendre sa place » : on joue le Gardien Sans Nom devant le sceau. Chaque nuit, la Gueule envoie des vagues de plus en plus fortes ; entre deux nuits, un choix de reliques. Score = nombre de nuits tenues (record dans le profil, éventuellement un classement quotidien).\n\nMoteur déjà là en grande partie : les vagues des Abysses (AbyssDef/vagues), l'épreuve du Seuil (arène, compteur, HUD). À définir : l'arène du sceau, la courbe des nuits (data), les monstres par nuit (les gardiens libérés ?), les récompenses en âmes, l'accès depuis le titre.\nRoadmap RPG du 26/10/2026 : R7.4 (task_330), docs/rpg-roadmap.md. Mode La Veille à redécider après définition de la campagne. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_80",
@@ -1764,7 +1834,7 @@
         "contenu"
       ],
       "created_at": 1792758694,
-      "updated_at": 1792758694
+      "updated_at": 1792973386
     },
     {
       "id": "task_122",
@@ -1940,7 +2010,7 @@
     {
       "id": "task_130",
       "title": "Plus tard : Google Play Games et Steam",
-      "description": "Comptes et classements des plateformes (connexion Google Play Games sur Android, Steam sur PC) : un nouveau BoardBackend par service, ou l'intégration de Talo (identify_google_play_games, Steamworks) pour garder un seul classement. Seulement si le jeu sort sur ces boutiques.",
+      "description": "Comptes et classements des plateformes (connexion Google Play Games sur Android, Steam sur PC) : un nouveau BoardBackend par service, ou l'intégration de Talo (identify_google_play_games, Steamworks) pour garder un seul classement. Seulement si le jeu sort sur ces boutiques.\nRoadmap RPG du 26/10/2026 : M1.1 (task_346), docs/rpg-roadmap.md. Connexion de plateforme optionnelle, distincte de l’autorité de jeu. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_80",
@@ -1950,7 +2020,7 @@
         "release"
       ],
       "created_at": 1792763662,
-      "updated_at": 1792763662
+      "updated_at": 1792973386
     },
     {
       "id": "task_131",
@@ -2063,7 +2133,7 @@
     {
       "id": "task_141",
       "title": "Sauvegarde en ligne entre téléphone et PC (Talo Game Saves + comptes)",
-      "description": "Plus tard. Demande un compte (Player Auth : identifiant/email = vraies données personnelles) pour reconnaître le même joueur sur deux appareils. Gros chantier à part.\n\nFait (25/10) : comptes Talo (inscription, connexion, mot de passe oublié par code e-mail, changement, suppression dans le jeu) et sauvegarde en ligne du profil (révisions, envoi 20 s après chaque écriture, copie plus récente prise hors partie, choix en cas de conflit « Deux chemins dans le Puits »). Talo n'autorise qu'une session par compte : case « Rester connecté » (choix de Clayton). Le compte est un joueur Talo à part (classements et stats restent sur l'appareil). Tests : unit.accounts, title.accounts, unit.talo_contract. À faire par Clayton : ajouter les portées Game Saves lecture/écriture à la clé, puis tester téléphone ↔ PC.",
+      "description": "Plus tard. Demande un compte (Player Auth : identifiant/email = vraies données personnelles) pour reconnaître le même joueur sur deux appareils. Gros chantier à part.\n\nFait (25/10) : comptes Talo (inscription, connexion, mot de passe oublié par code e-mail, changement, suppression dans le jeu) et sauvegarde en ligne du profil (révisions, envoi 20 s après chaque écriture, copie plus récente prise hors partie, choix en cas de conflit « Deux chemins dans le Puits »). Talo n'autorise qu'une session par compte : case « Rester connecté » (choix de Clayton). Le compte est un joueur Talo à part (classements et stats restent sur l'appareil). Tests : unit.accounts, title.accounts, unit.talo_contract. À faire par Clayton : ajouter les portées Game Saves lecture/écriture à la clé, puis tester téléphone ↔ PC.\nRoadmap RPG du 26/10/2026 : R2.5 (task_306), docs/rpg-roadmap.md. La synchronisation actuelle du profil ne couvre pas le personnage et toutes ses régions. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "review",
       "priority": "low",
       "epic_id": "epic_80",
@@ -2073,7 +2143,7 @@
         "données"
       ],
       "created_at": 1792768111,
-      "updated_at": 1792893512
+      "updated_at": 1792973386
     },
     {
       "id": "task_146",
@@ -2961,7 +3031,7 @@
     {
       "id": "task_199",
       "title": "Reprise : le butin tombé (monstres, coffres, caisses) et pas ramassé est perdu",
-      "description": "Trouvé pendant l'audit sauvegarde (24/10). Ce qui tombe pendant la partie n'a pas de numéro (FloorLedger) et n'est pas sauvé : à la reprise il a disparu. Pas de duplication possible, mais une perte si l'appli est tuée juste après un coffre. Idée : sauver les objets au sol sans numéro (objet + position) avec l'étage.\nRevue 2 : vaut aussi pour ce que le héros pose lui-même au sol (PlayerPack.drop_item → World.spawn_item hors de la pose : sans numéro, perdu à la reprise).",
+      "description": "Trouvé pendant l'audit sauvegarde (24/10). Ce qui tombe pendant la partie n'a pas de numéro (FloorLedger) et n'est pas sauvé : à la reprise il a disparu. Pas de duplication possible, mais une perte si l'appli est tuée juste après un coffre. Idée : sauver les objets au sol sans numéro (objet + position) avec l'étage.\nRevue 2 : vaut aussi pour ce que le héros pose lui-même au sol (PlayerPack.drop_item → World.spawn_item hors de la pose : sans numéro, perdu à la reprise).\nRoadmap RPG du 26/10/2026 : R2.3 (task_304), docs/rpg-roadmap.md. Étendre/valider le contrat de butin au sol dans toutes les régions, sans déduire un état de bug du seul ancien texte de carte. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_5",
@@ -2970,7 +3040,7 @@
         "sauvegarde"
       ],
       "created_at": 1792815301,
-      "updated_at": 1792828483
+      "updated_at": 1792973386
     },
     {
       "id": "task_200",
@@ -3282,7 +3352,7 @@
     {
       "id": "task_220",
       "title": "Génération des étages : réduire les points chauds mesurés",
-      "description": "Profil de la sonde (tools/perf, docs/performance.md) : par étage, ~65 ms dans FloorDresser (les sols : _lay_ground, dictionnaires par cellule), ~50 ms dans CeilingLayer._make_chunks (émetteurs de poussière instanciés par pièce), ~45 ms dans LightField.setup (murs lus, réduit par task_203 ; reste la cuisson), ~40 ms la génération de la carte, ~25 ms WallBuilder. Les empreintes des étages (sonde, FloorDeterminismTests) doivent rester les mêmes.",
+      "description": "Profil de la sonde (tools/perf, docs/performance.md) : par étage, ~65 ms dans FloorDresser (les sols : _lay_ground, dictionnaires par cellule), ~50 ms dans CeilingLayer._make_chunks (émetteurs de poussière instanciés par pièce), ~45 ms dans LightField.setup (murs lus, réduit par task_203 ; reste la cuisson), ~40 ms la génération de la carte, ~25 ms WallBuilder. Les empreintes des étages (sonde, FloorDeterminismTests) doivent rester les mêmes.\nRoadmap RPG du 26/10/2026 : R3.2 (task_308), docs/rpg-roadmap.md. Points chauds du générateur à intégrer au budget de streaming. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_5",
@@ -3292,7 +3362,7 @@
         "niveaux"
       ],
       "created_at": 1792823411,
-      "updated_at": 1792823411
+      "updated_at": 1792973386
     },
     {
       "id": "task_221",
@@ -3416,7 +3486,7 @@
     {
       "id": "task_229",
       "title": "Seuil et Tréfonds : un socle commun (voile, états, of(), abort, retour) ; calques et sous-graines rassemblés",
-      "description": "Laissé par l'audit (world.md 2.4, 4) et vu à la revue 2 : threshold.gd et abyss.gd ont toujours chacun VEIL_LAYER = 9, leur enum State, of(), abort(), le voile qui entre et sort. Une base PocketPassage (ou un composant) éviterait de corriger deux fois. Les numéros de CanvasLayer restent épars (6 dans game.gd, 7 boss_meeting, 9 ces deux-là, 10 menus, 120-128 autoloads) : une table dans core/layers.gd. Les sous-graines hash(\"...-%d\") sont écrites dans une dizaine de fichiers : un SeedStreams.of(base, &\"pact\") les rendrait cherchables. SinkingSoul (classe interne de threshold.gd) irait dans src/vfx/.",
+      "description": "Laissé par l'audit (world.md 2.4, 4) et vu à la revue 2 : threshold.gd et abyss.gd ont toujours chacun VEIL_LAYER = 9, leur enum State, of(), abort(), le voile qui entre et sort. Une base PocketPassage (ou un composant) éviterait de corriger deux fois. Les numéros de CanvasLayer restent épars (6 dans game.gd, 7 boss_meeting, 9 ces deux-là, 10 menus, 120-128 autoloads) : une table dans core/layers.gd. Les sous-graines hash(\"...-%d\") sont écrites dans une dizaine de fichiers : un SeedStreams.of(base, &\"pact\") les rendrait cherchables. SinkingSoul (classe interne de threshold.gd) irait dans src/vfx/.\nRoadmap RPG du 26/10/2026 : R1.1 (task_296), docs/rpg-roadmap.md. Seuil et Tréfonds à replacer dans le cycle de vie session/expédition. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_5",
@@ -3425,12 +3495,12 @@
         "qualité"
       ],
       "created_at": 1792828483,
-      "updated_at": 1792828483
+      "updated_at": 1792973386
     },
     {
       "id": "task_230",
       "title": "Rôles encore testés par « is Player » (Vfx.swing, SkillDef.effects_for, couches de tir)",
-      "description": "Revue 2 : conventions.md demande un rôle (Actor.strikes_in_carried_elements()) plutôt que `attacker is Player`. Restent : Vfx.swing (l'élément porté et le coup écrasé du héros), SkillDef.effects_for (`user.get_weapon() if user is Player`), Projectile et ChainLightningEffect (VfxLayer.goes_behind seulement pour le héros), Monster (bonus du bestiaire, gel à l'impact), MonsterDrops (butin du tueur). Les tests d'identité (« est-ce le héros de cette partie ? » : Stairs, ItemPickup, Threshold, Abyss, HuntTracker) sont légitimes.",
+      "description": "Revue 2 : conventions.md demande un rôle (Actor.strikes_in_carried_elements()) plutôt que `attacker is Player`. Restent : Vfx.swing (l'élément porté et le coup écrasé du héros), SkillDef.effects_for (`user.get_weapon() if user is Player`), Projectile et ChainLightningEffect (VfxLayer.goes_behind seulement pour le héros), Monster (bonus du bestiaire, gel à l'impact), MonsterDrops (butin du tueur). Les tests d'identité (« est-ce le héros de cette partie ? » : Stairs, ItemPickup, Threshold, Abyss, HuntTracker) sont légitimes.\nRoadmap RPG du 26/10/2026 : R1.4 (task_299), docs/rpg-roadmap.md. Examiner les rôles locaux, de groupe et d’autorité sans bannir tous les tests de type. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_5",
@@ -3439,7 +3509,7 @@
         "qualité"
       ],
       "created_at": 1792828483,
-      "updated_at": 1792828483
+      "updated_at": 1792973386
     },
     {
       "id": "task_231",
@@ -3629,7 +3699,7 @@
     {
       "id": "task_243",
       "title": "Épreuves de salle : objectifs dans certaines salles (idée de Clayton)",
-      "description": "Idée du 24/10. Des salles avec un objectif, dans le lore : 1) Âmes captives : libérer X âmes de Kagari prises dans le goudron ou les chaînes (rester près de chacune quelques secondes, des vagues arrivent). 2) Le Sceau : rallumer les X lanternes aux pointes d'un pentagramme pour défaire le sceau qui ferme une porte. 3) Clés de niche : trouver X clés d'os (tombées d'élites ou cachées) pour ouvrir des niches de l'Ossuaire. 4) La Veille : garder une lanterne allumée pendant des vagues ; si les monstres l'atteignent, elle faiblit. Tout en données (RoomTrialDef comme PactDef/EncounterDef), une ligne d'objectif au HUD, gardé dans la sauvegarde de l'étage, récompenses (âmes, relique, fragment). À décider : obligatoire ou optionnel, fréquence, récompenses, lesquels d'abord. Précision de Clayton (24/10) : un seul événement par étage, jamais mélangé (une épreuve OU le froid / la nuit / la chaleur…). Les mélanges seraient réservés à un mode Cauchemar à modificateurs (les ascensions : héros plus faible, monstres plus forts, plusieurs règles d'étage à la fois). Fait (24/10) : les Âmes de Kagari (libérer 3-4 âmes en restant près d'elles, des ennemis à chacune, +6 % de vie par âme, 25 âmes) et le Sceau Défait (allumer 5 lanternes dans l'étage, un pentagramme devant une porte scellée, son trésor derrière les barreaux, 15 âmes). Un seul événement par étage (jamais avec une malédiction, un événement d'étage ni une porte de pacte), ligne d'objectif au HUD, marques sur la minicarte, gardé dans la sauvegarde, bouton de débug. À tester sur le S23 : lisibilité, durée, difficulté des vagues. Fait (24/10) : les Âmes de Kagari (libérer 3-4 âmes en restant près d'elles, des ennemis à chacune, +6 % de vie par âme, 25 âmes) et le Sceau Défait (allumer 5 lanternes dans l'étage, un pentagramme devant une porte scellée, son trésor derrière les barreaux, 15 âmes). Un seul événement par étage (jamais avec une malédiction, un événement d'étage ni une porte de pacte), ligne d'objectif au HUD, marques sur la minicarte, gardé dans la sauvegarde, bouton de débug. À tester sur le S23 : lisibilité, durée, difficulté des vagues.",
+      "description": "Idée du 24/10. Des salles avec un objectif, dans le lore : 1) Âmes captives : libérer X âmes de Kagari prises dans le goudron ou les chaînes (rester près de chacune quelques secondes, des vagues arrivent). 2) Le Sceau : rallumer les X lanternes aux pointes d'un pentagramme pour défaire le sceau qui ferme une porte. 3) Clés de niche : trouver X clés d'os (tombées d'élites ou cachées) pour ouvrir des niches de l'Ossuaire. 4) La Veille : garder une lanterne allumée pendant des vagues ; si les monstres l'atteignent, elle faiblit. Tout en données (RoomTrialDef comme PactDef/EncounterDef), une ligne d'objectif au HUD, gardé dans la sauvegarde de l'étage, récompenses (âmes, relique, fragment). À décider : obligatoire ou optionnel, fréquence, récompenses, lesquels d'abord. Précision de Clayton (24/10) : un seul événement par étage, jamais mélangé (une épreuve OU le froid / la nuit / la chaleur…). Les mélanges seraient réservés à un mode Cauchemar à modificateurs (les ascensions : héros plus faible, monstres plus forts, plusieurs règles d'étage à la fois). Fait (24/10) : les Âmes de Kagari (libérer 3-4 âmes en restant près d'elles, des ennemis à chacune, +6 % de vie par âme, 25 âmes) et le Sceau Défait (allumer 5 lanternes dans l'étage, un pentagramme devant une porte scellée, son trésor derrière les barreaux, 15 âmes). Un seul événement par étage (jamais avec une malédiction, un événement d'étage ni une porte de pacte), ligne d'objectif au HUD, marques sur la minicarte, gardé dans la sauvegarde, bouton de débug. À tester sur le S23 : lisibilité, durée, difficulté des vagues. Fait (24/10) : les Âmes de Kagari (libérer 3-4 âmes en restant près d'elles, des ennemis à chacune, +6 % de vie par âme, 25 âmes) et le Sceau Défait (allumer 5 lanternes dans l'étage, un pentagramme devant une porte scellée, son trésor derrière les barreaux, 15 âmes). Un seul événement par étage (jamais avec une malédiction, un événement d'étage ni une porte de pacte), ligne d'objectif au HUD, marques sur la minicarte, gardé dans la sauvegarde, bouton de débug. À tester sur le S23 : lisibilité, durée, difficulté des vagues.\nRoadmap RPG du 26/10/2026 : R7.2 (task_328), docs/rpg-roadmap.md. Épreuves existantes à réutiliser avec renouvellement et récompenses définis. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "review",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -3640,13 +3710,13 @@
         "niveaux"
       ],
       "created_at": 1792865111,
-      "updated_at": 1792868405,
+      "updated_at": 1792973386,
       "due_date": null
     },
     {
       "id": "task_244",
       "title": "Cauchemar : cartes de difficulté choisies avant la descente (idée de Clayton)",
-      "description": "Idée du 24/10. Pas imposé d'office : en Cauchemar, avant de descendre, le joueur choisit des cartes qui durcissent la descente (héros plus faible, monstres plus forts, deux règles d'étage à la fois, moins de soins…), chacune avec un poids ; le total donne plus d'âmes, des succès uniques, un classement à part. Piste de lore : « les Nœuds du Sceau » (Tôma a défait les nœuds ; le héros choisit d'en reporter, chacun pèse sur sa descente). À décider : à côté des ascensions actuelles (Cauchemar +1, +2…) ou à leur place ; lesquelles ; récompenses. Décidé (24/10) : optionnels, le Cauchemar se joue aussi sans aucun nœud.",
+      "description": "Idée du 24/10. Pas imposé d'office : en Cauchemar, avant de descendre, le joueur choisit des cartes qui durcissent la descente (héros plus faible, monstres plus forts, deux règles d'étage à la fois, moins de soins…), chacune avec un poids ; le total donne plus d'âmes, des succès uniques, un classement à part. Piste de lore : « les Nœuds du Sceau » (Tôma a défait les nœuds ; le héros choisit d'en reporter, chacun pèse sur sa descente). À décider : à côté des ascensions actuelles (Cauchemar +1, +2…) ou à leur place ; lesquelles ; récompenses. Décidé (24/10) : optionnels, le Cauchemar se joue aussi sans aucun nœud.\nRoadmap RPG du 26/10/2026 : R7.4 (task_330), docs/rpg-roadmap.md. Les cartes Cauchemar restent une activité optionnelle ; place à décider dans le RPG. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -3656,7 +3726,7 @@
         "lore"
       ],
       "created_at": 1792865544,
-      "updated_at": 1792865632,
+      "updated_at": 1792973386,
       "due_date": null
     },
     {
@@ -3862,7 +3932,7 @@
     {
       "id": "task_258",
       "title": "Idée : monstres « de horde » légers pour un mode vagues",
-      "description": "Pour défendre le village / des vagues de centaines d'ennemis : des monstres sans corps physique ni nœuds par monstre, déplacés par un champ de flux, dessinés en lot (MultiMesh ou RenderingServer), touchés par une grille. C'est ainsi que les jeux à hordes tiennent. Gros chantier, à décider.",
+      "description": "Pour défendre le village / des vagues de centaines d'ennemis : des monstres sans corps physique ni nœuds par monstre, déplacés par un champ de flux, dessinés en lot (MultiMesh ou RenderingServer), touchés par une grille. C'est ainsi que les jeux à hordes tiennent. Gros chantier, à décider.\nRoadmap RPG du 26/10/2026 : R3.6 (task_312), docs/rpg-roadmap.md. Le mode de horde reste optionnel ; ne pas remplacer tous les monstres pour préparer le RPG. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_5",
@@ -3871,7 +3941,7 @@
         "idée"
       ],
       "created_at": 1792905652,
-      "updated_at": 1792905652,
+      "updated_at": 1792973386,
       "due_date": null
     },
     {
@@ -3934,7 +4004,7 @@
     {
       "id": "task_263",
       "title": "Vérifier les correctifs de l’audit sur S23 et Windows",
-      "description": "Après task_262 : jouer une foule sous plafond avec brûlure, poison et gel ; contrôler les éclats de glace et les matériaux partagés, le temps de chargement, la mémoire et les pointes de temps par image. Export Compatibility Android (S23) et Windows. Vérifier aussi la reprise après fermeture/mise en arrière-plan et le remplacement atomique des fichiers sur ces systèmes. Les tests Linux headless ne valident ni le rendu ni les performances GPU sur appareils. Mesurer avant/après ; aucune amélioration chiffrée sur téléphone annoncée sans mesure. Vérifier aussi le refactoring (task_200, task_265, task_266) : reprise d’une sauvegarde v2 sur Android/Windows, choix/report/reroll d’atouts et retour au titre, retrait du consentement puis reconnexion du compte ; observer le chargement/mémoire du catalogue de contenu.",
+      "description": "Après task_262 : jouer une foule sous plafond avec brûlure, poison et gel ; contrôler les éclats de glace et les matériaux partagés, le temps de chargement, la mémoire et les pointes de temps par image. Export Compatibility Android (S23) et Windows. Vérifier aussi la reprise après fermeture/mise en arrière-plan et le remplacement atomique des fichiers sur ces systèmes. Les tests Linux headless ne valident ni le rendu ni les performances GPU sur appareils. Mesurer avant/après ; aucune amélioration chiffrée sur téléphone annoncée sans mesure. Vérifier aussi le refactoring (task_200, task_265, task_266) : reprise d’une sauvegarde v2 sur Android/Windows, choix/report/reroll d’atouts et retour au titre, retrait du consentement puis reconnexion du compte ; observer le chargement/mémoire du catalogue de contenu.\nRoadmap RPG du 26/10/2026 : R9.3 (task_338), docs/rpg-roadmap.md. Vérifications des correctifs historiques conservées ; roadmap non assimilée à une validation appareils. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -3946,7 +4016,7 @@
         "sauvegarde"
       ],
       "created_at": 1792944992,
-      "updated_at": 1792947444,
+      "updated_at": 1792973386,
       "due_date": null
     },
     {
@@ -4025,7 +4095,7 @@
     {
       "id": "task_269",
       "title": "Tester les modificateurs composables sur S23 et Windows",
-      "description": "Après task_267 : lisibilité de l’aura verte, de l’annonce de 0,8 s et de la bouffée toxique Pestilentielle ; foule avec plusieurs comportements actifs, retrait après mort/chute, reprise d’une sauvegarde et charge mémoire/temps par image. Vérifier le ressenti des combinaisons aux étages 4–12 et aux difficultés supérieures. Les tests headless et la mesure limitée acte II ne valident ni le rendu ni un équilibrage global. Étendre le passage aux quatre affixes de task_270 : Glacial, Frénétique, Vengeur, Instable ; avertissement fixé au sol, distinction aura/effet, seuil de frénésie et difficulté supérieure. La mesure acte II graine unique donne zéro dégât pris face à Vengeur/Instable : vérifier leur pression en jeu sans raccourcir une annonce pour forcer un résultat.",
+      "description": "Après task_267 : lisibilité de l’aura verte, de l’annonce de 0,8 s et de la bouffée toxique Pestilentielle ; foule avec plusieurs comportements actifs, retrait après mort/chute, reprise d’une sauvegarde et charge mémoire/temps par image. Vérifier le ressenti des combinaisons aux étages 4–12 et aux difficultés supérieures. Les tests headless et la mesure limitée acte II ne valident ni le rendu ni un équilibrage global. Étendre le passage aux quatre affixes de task_270 : Glacial, Frénétique, Vengeur, Instable ; avertissement fixé au sol, distinction aura/effet, seuil de frénésie et difficulté supérieure. La mesure acte II graine unique donne zéro dégât pris face à Vengeur/Instable : vérifier leur pression en jeu sans raccourcir une annonce pour forcer un résultat.\nRoadmap RPG du 26/10/2026 : R4.4 (task_316), docs/rpg-roadmap.md. Garder le playtest des affixes et le reprendre dans l’équilibrage RPG. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -4036,7 +4106,7 @@
         "pc"
       ],
       "created_at": 1792950041,
-      "updated_at": 1792952798,
+      "updated_at": 1792973386,
       "due_date": null
     },
     {
@@ -4089,7 +4159,7 @@
     {
       "id": "task_273",
       "title": "Idée SPD : consommables tactiques pour la ceinture",
-      "description": "Premier lot conseillé : fiole de givre, purification brûlure/poison, déplacement court sûr. Réutiliser ConsumableDef/Effect/OnHitStatus et les icônes/VFX existants. Purification et déplacement nécessitent de nouveaux Effect ; ce ne sont pas des fonctionnalités présentes. Conserver trois emplacements et commandes tactiles. Vérifier terrain, destination, consommation unique et sauvegarde. Effort petit à moyen. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.",
+      "description": "Premier lot conseillé : fiole de givre, purification brûlure/poison, déplacement court sûr. Réutiliser ConsumableDef/Effect/OnHitStatus et les icônes/VFX existants. Purification et déplacement nécessitent de nouveaux Effect ; ce ne sont pas des fonctionnalités présentes. Conserver trois emplacements et commandes tactiles. Vérifier terrain, destination, consommation unique et sauvegarde. Effort petit à moyen. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.\nRoadmap RPG du 26/10/2026 : R6.3 (task_325), docs/rpg-roadmap.md. Consommables tactiques réévalués pour le premier lot RPG. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -4098,13 +4168,13 @@
         "contenu"
       ],
       "created_at": 1792965288,
-      "updated_at": 1792965288,
+      "updated_at": 1792973386,
       "due_date": null
     },
     {
       "id": "task_274",
       "title": "Idée SPD : une offrande à récompense exclusive",
-      "description": "Rencontre initiale à trois choix garantis : soins, rune ou équipement. Choisir épuise la rencontre et le choix est sauvegardé. Utiliser EncounterDef/Choice/Outcome et le panneau actuel. Variante future : plusieurs coffres liés par un propriétaire commun. Sac plein, double interaction et reprise ne doivent ni perdre ni dupliquer une récompense. Peu de dessin ; effort faible pour la rencontre. Liée à task_107. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.",
+      "description": "Rencontre initiale à trois choix garantis : soins, rune ou équipement. Choisir épuise la rencontre et le choix est sauvegardé. Utiliser EncounterDef/Choice/Outcome et le panneau actuel. Variante future : plusieurs coffres liés par un propriétaire commun. Sac plein, double interaction et reprise ne doivent ni perdre ni dupliquer une récompense. Peu de dessin ; effort faible pour la rencontre. Liée à task_107. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.\nRoadmap RPG du 26/10/2026 : R7.2 (task_328), docs/rpg-roadmap.md. Récompenses exclusives à lier aux faits persistants de la région. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -4113,13 +4183,13 @@
         "contenu"
       ],
       "created_at": 1792965288,
-      "updated_at": 1792965288,
+      "updated_at": 1792973386,
       "due_date": null
     },
     {
       "id": "task_275",
       "title": "Idée SPD : enchantements de placement et armure à dette",
-      "description": "Commencer par un affixe de recul renforcé via Passive.modify_outgoing_hit, avec déclencheur/exclusions en données et résistance des boss. Presque aucun art. Plus tard seulement : reporter une partie des dégâts après armure dans le temps ; le hook actuel on_damaged ne suffit pas, il faut une interception avant perte de Santé et une dette visible/persistante à travers reprise et étages. Séparer les deux réalisations ; ne pas glisser la dette dans le petit lot de recul. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.",
+      "description": "Commencer par un affixe de recul renforcé via Passive.modify_outgoing_hit, avec déclencheur/exclusions en données et résistance des boss. Presque aucun art. Plus tard seulement : reporter une partie des dégâts après armure dans le temps ; le hook actuel on_damaged ne suffit pas, il faut une interception avant perte de Santé et une dette visible/persistante à travers reprise et étages. Séparer les deux réalisations ; ne pas glisser la dette dans le petit lot de recul. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.\nRoadmap RPG du 26/10/2026 : R6.3 (task_325), docs/rpg-roadmap.md. Recul et éventuelle dette de dégâts restent deux lots distincts. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_7",
@@ -4128,13 +4198,13 @@
         "contenu"
       ],
       "created_at": 1792965288,
-      "updated_at": 1792965288,
+      "updated_at": 1792973386,
       "due_date": null
     },
     {
       "id": "task_276",
       "title": "Idée SPD : alchimie courte avec les consommables existants",
-      "description": "Trois ou quatre recettes au repos, coût d’or, aperçu et validation des ingrédients en données. Exemples propres au Puits : fusion de soins ou bombe + consommable froid ; valeurs à mesurer. Réutiliser les fenêtres du sac/forge, ajouter RecipeDef et service dédiés (n’existent pas encore). Contrôler sac/ceinture, piles, place avant retrait, annulation, reprise et arbitrage fabrication/revente. Effort moyen, peu de dessin. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.",
+      "description": "Trois ou quatre recettes au repos, coût d’or, aperçu et validation des ingrédients en données. Exemples propres au Puits : fusion de soins ou bombe + consommable froid ; valeurs à mesurer. Réutiliser les fenêtres du sac/forge, ajouter RecipeDef et service dédiés (n’existent pas encore). Contrôler sac/ceinture, piles, place avant retrait, annulation, reprise et arbitrage fabrication/revente. Effort moyen, peu de dessin. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.\nRoadmap RPG du 26/10/2026 : R6.3 (task_325), docs/rpg-roadmap.md. L’alchimie courte reste une option, pas une condition de tout le RPG. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "low",
       "epic_id": "epic_7",
@@ -4143,13 +4213,13 @@
         "contenu"
       ],
       "created_at": 1792965288,
-      "updated_at": 1792965288,
+      "updated_at": 1792973386,
       "due_date": null
     },
     {
       "id": "task_277",
       "title": "Idée SPD : mémoire de partie pour limiter les répétitions de salles et récompenses",
-      "description": "Favoriser la variété entre étages avec historique borné ou paquets pondérés, état de partie sauvegardé par ids stables. Shattered remet ses salles utilisées en fin de file et décrémente certains poids de butin. Dans le Puits, limites actuelles par étage, flux propre à SecretRoom et rattrapage de forge existent déjà ; les préserver. Filtrer biome/profondeur, assainir contenus retirés, garder flux RNG isolé et déterminisme du quotidien. Aucun dessin ; effort moyen. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.",
+      "description": "Favoriser la variété entre étages avec historique borné ou paquets pondérés, état de partie sauvegardé par ids stables. Shattered remet ses salles utilisées en fin de file et décrémente certains poids de butin. Dans le Puits, limites actuelles par étage, flux propre à SecretRoom et rattrapage de forge existent déjà ; les préserver. Filtrer biome/profondeur, assainir contenus retirés, garder flux RNG isolé et déterminisme du quotidien. Aucun dessin ; effort moyen. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.\nRoadmap RPG du 26/10/2026 : R3.6 (task_312), docs/rpg-roadmap.md. La mémoire de tirage concerne surtout les donjons renouvelables ; conserver la géographie permanente. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -4158,7 +4228,1048 @@
         "contenu"
       ],
       "created_at": 1792965288,
-      "updated_at": 1792965288,
+      "updated_at": 1792973386,
+      "due_date": null
+    },
+    {
+      "id": "task_278",
+      "title": "Planifier la transformation en RPG monde ouvert puis multijoueur",
+      "description": "Roadmap complète livrée dans docs/rpg-roadmap.md, fondée sur le code à 308e410 : inventaire conserver/transformer/créer, contrats d’identité/propriété/temps/sauvegarde, 13 phases et 64 cartes avec dépendances et définition de fini (task_292 à task_355). 26 cartes historiques reliées sans changer leur statut ; 13 epics dédiées ajoutées. Jalons : tranche RPG (région, lieu sûr, 2 donjons), RPG solo livrable, coopération autoritaire puis éventuel monde partagé. Choix non tranchés explicitement distingués : mort, classes, ancien mode, nombre de joueurs, hôte/serveur et import des personnages. Sources Godot officielles consultées ; index README et design mis à jour. Validation : graphe sans cycle, liens/chemins, ids/epics/tags et correspondance cartes/document contrôlés ; git diff --check. Documentation uniquement, aucune suite moteur relancée et aucun gameplay, sauvegarde ou infrastructure modifié.",
+      "status": "done",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "qualité",
+        "contenu",
+        "sauvegarde",
+        "en ligne"
+      ],
+      "created_at": 1792972973,
+      "updated_at": 1792973720,
+      "due_date": null
+    },
+    {
+      "id": "task_292",
+      "title": "R0.1 · Définir le périmètre du RPG et la première région",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : Aucune dépendance technique ; cadrage demandé.\nÀ réaliser : Fixer la boucle explorer → combattre → accomplir une quête → améliorer le personnage ; préciser étendue, donjons, intérieur/extérieur, solo hors ligne et priorités. La cible initiale proposée est une région, un lieu sûr et deux donjons ; classes, artisanat et taille du futur groupe restent des choix.\nFini quand : Un document de périmètre accepté distingue minimum jouable, extension et hors périmètre ; aucun MMO ni multijoueur massif promis.\nPoints de départ existants : README.md; docs/lore.md.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_279",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_293",
+      "title": "R0.2 · Décider mort, réapparition et renouvellement du monde",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Choisir coût de mort, lieu sûr, récupération éventuelle, permanence des boss, respawn des monstres/ressources et réinitialisation des donjons. Distinguer temps de jeu, temps hors ligne et temps serveur futur.\nFini quand : Chaque type d’entité a une politique de persistance et de renouvellement ; mourir, quitter ou changer l’horloge ne crée pas une ferme de récompenses.\nPoints de départ existants : src/game/game.gd; src/world/floor_save.gd.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_279",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_294",
+      "title": "R0.3 · Définir propriété du personnage, du monde et du futur groupe",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Décider nombre de personnages/mondes, progression personnelle ou partagée, hôte ou serveur, départ d’un joueur, reprise à plusieurs et cible de joueurs simultanés. Hypothèse à valider : petite coopération avant monde partagé permanent.\nFini quand : Table de propriété et règles d’import/export : héros solo modifiable non importable comme richesse fiable dans une économie en ligne officielle ; autorité et limites d’un hôte particulier explicites.\nPoints de départ existants : src/autoload/account.gd; src/autoload/cloud_save.gd; docs/online.md.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_279",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_295",
+      "title": "R0.4 · Établir le canon de surface et le devenir du roguelike",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Adapter Kagari, sanctuaire, âmes endormies, régions de surface et révélations à un monde ouvert. Décider si l’ancienne descente reste un mode séparé, devient un donjon ou est conservée seulement comme version précédente ; traiter fins, Seuil, Tréfonds et Gardien Sans Nom. Trier tout l’ancien backlog entre prérequis transversal, adaptation RPG, ancien mode à conserver et idée reportée ; conserver les correctifs et l’historique.\nFini quand : Carte narrative sans spoiler prématuré ; décision explicite sur mode historique, succès et classements ; aucune suppression d’anciens ids ou fichiers de joueur.\nPoints de départ existants : docs/lore.md; docs/design/progression.md; src/game/daily_run.gd.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_279",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_296",
+      "title": "R1.1 · Séparer session, personnage, monde et expédition",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R0.2 (task_293), R0.3 (task_294)\nÀ réaliser : Faire évoluer Game/RunState vers des propriétaires explicites : session active, état du personnage, état du monde, contexte d’un donjon. Garder les façades existantes tant qu’elles servent ; ne pas faire grossir Game/World ni déplacer tous les fichiers.\nFini quand : Quitter un donjon ou mourir ne recrée pas le personnage ; le mode historique reste testable si retenu. Les nouveaux noms/classes sont proposés, pas déjà implémentés.\nPoints de départ existants : src/game/game.gd; src/game/run_state.gd; src/world/world.gd.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_280",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_297",
+      "title": "R1.2 · Définir les identifiants stables et les contextes d’exécution",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.1 (task_296)\nÀ réaliser : Distinguer id de définition, instance d’objet, personnage, monde, région/secteur, apparition persistante et entité de simulation ; ajouter révision et génération de contexte aux effets différés.\nFini quand : Un objet conserve son identité entre chargements ; un effet de région déchargée ne touche pas la nouvelle génération. Aucun NodePath, RID ou get_instance_id persisté comme identité durable.\nPoints de départ existants : src/game/content_catalog.gd; src/definitions/loot/loot_roller.gd; src/combat/ground_strike.gd.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_280",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_298",
+      "title": "R1.3 · Faire passer les actions par des commandes validées",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.1 (task_296), R1.2 (task_297)\nÀ réaliser : Séparer lecture Input, intention de déplacement/attaque/compétence/objet et application des règles. Le solo applique localement le même contrat que pourra appliquer une autorité distante ; validation portée, coût et état.\nFini quand : Deux contrôleurs de test dirigent deux héros sans partager les touches ; l’UI ne fabrique ni dégâts ni récompenses ; les triches de debug restent identifiées.\nPoints de départ existants : src/entities/player/player_controls.gd; src/entities/player/player.gd; src/combat/combat.gd.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_280",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_299",
+      "title": "R1.4 · Remplacer les dépendances au joueur et à la caméra uniques",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.1 (task_296), R1.2 (task_297)\nÀ réaliser : Rendre explicites acteur concerné, contrôleur local, équipe et zone. Examiner World.player, AI, interactor, boss, bestiaire, drops et Events ; conserver les tests de type légitimes au lieu de les remplacer par des appels dynamiques.\nFini quand : Scénario à deux acteurs : cibles, XP, interactions, HUD, quêtes et récompenses vont au bon propriétaire ; aucune caméra ne décide de l’activité de simulation serveur.\nPoints de départ existants : src/world/world.gd; src/world/activity_manager.gd; src/entities/monster/monster.gd; src/game/bestiary.gd.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_280",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_300",
+      "title": "R1.5 · Isoler temps de simulation, pause et présentation",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.3 (task_298), R1.4 (task_299)\nÀ réaliser : Séparer menus/cinématiques/HitStop du temps partagé ; définir horloge gameplay, horloge de persistance et temps réel. Émettre les effets visuels/sonores par un chemin désactivable en simulation headless.\nFini quand : En test à deux héros, ouvrir un sac ou jouer un retour visuel local ne fige pas l’autre. En solo la pause prévue reste possible. Aucun feedback ne modifie dégâts, cooldowns ou RNG.\nPoints de départ existants : src/game/game.gd; src/autoload/hit_stop.gd; src/game/story/cinematic_director.gd.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_280",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_301",
+      "title": "R1.6 · Prouver le socle avec deux acteurs sans réseau",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.3 (task_298), R1.4 (task_299), R1.5 (task_300)\nÀ réaliser : Ajouter une scène de preuve locale avec deux sources de commandes et une simulation sans interface ; faire combattre, interagir, mourir et changer de zone.\nFini quand : Isolation des contrôleurs/états démontrée, résultat de simulation indépendant de l’affichage ; défauts bloquants corrigés avant le développement massif du monde.\nPoints de départ existants : tests/suites/; tools/.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_280",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_302",
+      "title": "R2.1 · Définir les schémas compte, personnage et monde",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R1.1 (task_296), R1.2 (task_297), R0.3 (task_294)\nÀ réaliser : Séparer préférences/profil de compte, progression d’un personnage, faits du monde et instances de donjon. Définir versions de schéma, version du contenu, ids, révisions et propriété de chaque champ.\nFini quand : Inventaire de champs validé ; les réglages privés ne deviennent pas des données publiques ; un même coffre peut distinguer état du monde et droit individuel.\nPoints de départ existants : src/autoload/profile.gd; src/game/run_save.gd; src/world/floor_save.gd.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_281",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_303",
+      "title": "R2.2 · Garantir les écritures et transactions multi-états",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302)\nÀ réaliser : Réutiliser SafeFile et validation typée ; concevoir commit de génération/manifeste ou journal pour que personnage, inventaire, récompense et région soient cohérents. Une écriture atomique par fichier seule ne constitue pas un commit global.\nFini quand : Coupure simulée à chaque étape : reprise sur une génération complète, aucune monnaie/quête payée deux fois, ancien état récupérable et erreurs visibles.\nPoints de départ existants : src/core/safe_file.gd; src/game/run_save.gd; tests/suites/.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_281",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_304",
+      "title": "R2.3 · Persister les régions et les objets qui y restent",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302), R2.2 (task_303)\nÀ réaliser : Étendre le modèle de FloorSave à plusieurs régions : ouvertures, obstacles, PNJ, ressources, monstres selon politique, butin dynamique, objets posés, vagues et instances. Écrire les changements avant déchargement.\nFini quand : Revisiter A après B puis redémarrer conserve les faits décidés ; aucun reset involontaire de coffres ou butin ; taille des fichiers et nettoyage des états sont bornés.\nPoints de départ existants : src/world/floor_save.gd; src/world/floor_ledger.gd; src/world/secret_room.gd.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_281",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_305",
+      "title": "R2.4 · Migrer les profils et sauvegardes du roguelike",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302), R2.2 (task_303), R0.4 (task_295)\nÀ réaliser : Créer un import versionné conservant sauvegardes originales ; décider conversion ou archivage de la partie en cours, âmes, arbre, serments, chroniques et équipement. Proposer une table de compensation seulement après décision produit.\nFini quand : Fixtures anciennes, partielles, corrompues et plus récentes traitées ; import idempotent sans perte silencieuse. Une mise à jour ne régénère plus un monde durable par simple changement du stamp d’étage.\nPoints de départ existants : src/game/run_save.gd; src/autoload/profile.gd; data/save/content_catalog.tres.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_281",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_306",
+      "title": "R2.5 · Définir la synchronisation solo et les conflits multi-appareils",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302), R2.2 (task_303), R2.4 (task_305)\nÀ réaliser : CloudSave actuel synchronise le profil, pas le personnage en cours ni ses régions. Prévoir lots cohérents, révisions, taille, reprises interrompues, suppression et deux appareils concurrents ; garder identité compte/appareil séparée. Remplacer le blocage in_run par des points de synchronisation cohérents : une campagne durable ne peut pas attendre indéfiniment une fin de descente.\nFini quand : Téléphone et PC produisent un conflit explicite plutôt qu’une fusion d’inventaires ou un écrasement aveugle ; aucune extension du périmètre de collecte sans choix adapté.\nPoints de départ existants : src/autoload/cloud_save.gd; src/autoload/account.gd; docs/privacy-ops.md.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_281",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_307",
+      "title": "R3.1 · Créer le modèle de carte et l’outil d’assemblage des régions",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R0.4 (task_295), R1.2 (task_297), R2.1 (task_302)\nÀ réaliser : Définir régions, secteurs, routes, points remarquables, entrées de bâtiments et liens vers donjons ; géographie reconnaissable et réemploi des biomes. Choisir taille et outils après prototype.\nFini quand : Un créateur place une région sans écrire une branche dans World ; tous les liens et ids se valident ; les limites d’exploration sont compréhensibles.\nPoints de départ existants : src/definitions/biomes/; src/dungeon/; data/biomes/.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_282",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_308",
+      "title": "R3.2 · Implémenter le cycle de vie du chargement de secteurs",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R3.1 (task_307), R2.3 (task_304)\nÀ réaliser : Précharger, charger, appliquer état, activer, suspendre, sauver et décharger selon une machine de cycle de vie ; jobs annulables/générations, files et mémoire bornées. Préparer des données en arrière-plan et intégrer la scène active de façon contrôlée.\nFini quand : Traversées rapides, demi-tour et téléportation ne créent ni doublons ni callbacks tardifs ; aucun état sale perdu ; pas de lecture bloquante forcée avant fin d’un chargement asynchrone.\nPoints de départ existants : src/world/world.gd; src/game/game.gd.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_282",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_309",
+      "title": "R3.3 · Gérer les coutures de collision, navigation et visibilité",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R3.1 (task_307), R3.2 (task_308)\nÀ réaliser : Traiter coordonnées monde/secteur, bords communs, chemins entre secteurs, trous/eau, rayons et migrations d’acteurs. Évaluer flottants/recentrage seulement à la taille mesurée du monde.\nFini quand : Joueur, monstres et projectiles passent une frontière sans mur invisible, chute ni téléportation ; aucun acteur n’est possédé simultanément par deux secteurs.\nPoints de départ existants : src/world/world_space.gd; src/world/nav_grid.gd; src/entities/monster/monster_steering.gd.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_282",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_310",
+      "title": "R3.4 · Adapter rendu, éclairage, décoration et audio au chargement",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R3.2 (task_308), R3.3 (task_309)\nÀ réaliser : Découper lumière, plafonds, sols, minimap locale, occlusion, sons et VFX par secteur ; réchauffer les caches utilement, les libérer avec une politique bornée. Conserver Compatibility et grille pixel.\nFini quand : Lumière et sons restent continus à la frontière ; pas de fuite de texture ni GPU readback en jeu ; budget d’intégration mesuré sur S23 et Windows.\nPoints de départ existants : src/world/; src/vfx/; assets/shaders/; docs/performance.md.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_282",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_311",
+      "title": "R3.5 · Créer les donjons et bâtiments comme lieux persistants ou instances",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R3.1 (task_307), R2.3 (task_304), R0.2 (task_293)\nÀ réaliser : Réutiliser DungeonGenerator/FloorKind derrière un contexte de destination. Gérer entrée/sortie, point de retour, plusieurs donjons actifs ou archivés, renouvellement explicite, boss et récompenses uniques.\nFini quand : Entrer, sortir, mourir et reprendre retrouvent le bon lieu/état ; un renouvellement ne duplique pas une récompense de quête ; le Puits conserve son rôle narratif.\nPoints de départ existants : src/world/floor_kinds/; src/dungeon/dungeon_generator.gd; src/game/game.gd.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_282",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_312",
+      "title": "R3.6 · Adapter population, activité et renouvellement à la région",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R3.2 (task_308), R3.3 (task_309), R0.2 (task_293), R1.4 (task_299)\nÀ réaliser : Spawns par points persistants et budgets, zones sûres, retour à l’origine des monstres, activité par proximité utile, ressources, timers et anti-exploitation chargement/déchargement ; conserver écartement et cadence IA décidés.\nFini quand : Monstre sorti de zone ne bloque pas la quête ; aucun spawn sur un héros ni exploitation du déchargement ; simulation bornée même avec plusieurs acteurs éloignés.\nPoints de départ existants : src/world/floor_populator.gd; src/world/activity_manager.gd; src/entities/monster/.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_282",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_313",
+      "title": "R4.1 · Créer le cycle de vie du personnage persistant",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R4.\nDépendances : R2.1 (task_302), R1.6 (task_301)\nÀ réaliser : Création, sélection, reprise, nom, apparence, emplacement et éventuellement plusieurs emplacements ; portée par personnage des stats, inventaire, ceinture, compétences et exploration. Nombre de personnages à confirmer.\nFini quand : Reprendre un personnage restitue son état sans lancer une nouvelle descente ; supprimer/exporter demande une action explicite et ne touche pas un autre personnage.\nPoints de départ existants : src/game/game.gd; src/ui/title/; src/entities/player/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_283",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_314",
+      "title": "R4.2 · Reconcevoir XP, niveaux et choix de compétences",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R4.\nDépendances : R4.1 (task_313), R0.1 (task_292)\nÀ réaliser : Définir courbe durable, cap, maîtrise ou spécialisation, débloquages, respecialisation et portée des familles/reliques. Décider choix à trois conservés ou système de talents ; les classes restent une option.\nFini quand : Le gain répété d’XP ne produit pas une croissance sans fin accidentelle ; points et choix se sauvegardent ; personnages de référence jouables à plusieurs étapes.\nPoints de départ existants : src/components/; src/game/game_offers.gd; src/definitions/perk_def.gd; data/player/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_283",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_315",
+      "title": "R4.3 · Remplacer les dépendances à la profondeur par des règles de zone",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R4.\nDépendances : R3.1 (task_307), R4.2 (task_314)\nÀ réaliser : Faire évoluer FloorRules et LootRoller pour un contexte de région/donjon, rang, niveau et difficulté. Décider zones fixes, mise à l’échelle bornée ou mélange ; protéger les ids existants.\nFini quand : Revenir dans une région ne relance pas une progression d’étage ; statistiques et rareté annoncées concordent ; les outils d’équilibrage utilisent la même source de règles.\nPoints de départ existants : src/world/floor_rules.gd; src/definitions/loot/loot_roller.gd; data/items/item_levels.tres; tools/balance/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_283",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_316",
+      "title": "R4.4 · Adapter combat, rôles et récompenses à une progression longue",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R4.\nDépendances : R4.2 (task_314), R4.3 (task_315), R1.4 (task_299)\nÀ réaliser : Revoir sustain, soins hors combat, affixes, contrôle, portée, dégâts de chute et rôle de l’équipement ; préparer attribution des kills/assistances et coopération sans rééquilibrer aveuglément pour un MMO.\nFini quand : Builds sans boucle de soin/dégâts illimitée ; compteurs et droits de butin correctement attribués ; boss et foules restent lisibles sur téléphone.\nPoints de départ existants : src/combat/; src/definitions/passives/; src/definitions/monster_traits/; data/combat/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_283",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_317",
+      "title": "R4.5 · Transformer mort, checkpoints, Seuil et progression des âmes",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R4.\nDépendances : R0.2 (task_293), R0.4 (task_295), R2.2 (task_303), R4.1 (task_313)\nÀ réaliser : Implémenter la règle de mort décidée, points de retour et récupération ; adapter l’arbre d’âmes et les serments à la campagne. Définir sort des offres en attente, mort pendant transition et reprise en état mort.\nFini quand : Mort et arrêt d’application ne retirent ni ne rendent deux fois une pénalité ; aucune suppression implicite de personnage ; Seuil/Tréfonds et âmes suivent le canon et les règles choisies.\nPoints de départ existants : src/game/game.gd; src/game/threshold.gd; src/game/abyss.gd; src/game/run_boons.gd; src/definitions/soul_tree/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_283",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_318",
+      "title": "R5.1 · Créer les quêtes narratives en données",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R2.1 (task_302), R1.4 (task_299), R0.4 (task_295)\nÀ réaliser : Le QuestDef actuel est quotidien/hebdomadaire. Ajouter objectifs composables, prérequis, branches, états, annulation et récompenses ; distinguer faits personnels, faits du monde et éventuels faits du groupe.\nFini quand : Une quête parler/explorer/combattre/rapporter se configure sans code par id ; graphes invalides, références manquantes et cycles bloquants détectés.\nPoints de départ existants : src/definitions/quest_def.gd; src/game/quest_board.gd; src/definitions/story/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_284",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_319",
+      "title": "R5.2 · Implémenter le service de progression et les récompenses de quête",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R5.1 (task_318), R2.2 (task_303), R1.3 (task_298)\nÀ réaliser : Traiter événements typés avec contexte et ids, dédoublonnage, objets de quête, inventaire plein et acceptation/rendu. Définir rétroactivité et paiements idempotents.\nFini quand : Reprise à chaque objectif et répétition d’un événement ne donnent qu’un paiement ; aucune quête n’est validée parce qu’un autre acteur a ouvert son interface.\nPoints de départ existants : src/game/quest_board.gd; src/autoload/events.gd; src/components/inventory.gd.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_284",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_320",
+      "title": "R5.3 · Créer les PNJ de monde et leurs services",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R3.1 (task_307), R5.1 (task_318)\nÀ réaliser : Placer PNJ persistants, dialogues conditionnels, services, lieux sûrs et activation après sauvetage ; préparer routines simples sans promettre un calendrier complet.\nFini quand : Un PNJ absent/retrouvé change les dialogues/services conformément aux faits sauvés ; services et déplacements restent dans des données réutilisables.\nPoints de départ existants : src/definitions/dialogue/; src/entities/merchant/; src/entities/forge/; src/entities/interactable.gd.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_284",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_321",
+      "title": "R5.4 · Adapter chroniques, révélations et cinématiques à la campagne",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R0.4 (task_295), R5.1 (task_318), R5.3 (task_320), R1.5 (task_300)\nÀ réaliser : Répartir Profile/Narrative entre compte, personnage et monde ; transformer conditions dépendantes des runs/profondeurs. Préparer scène personnelle ou partagée sans arrêter les autres joueurs futurs.\nFini quand : Aucun nom/révélation hors calendrier du canon ; dialogues vus et quêtes restent cohérents après retour ; cinématique interrompue possède une sortie définie.\nPoints de départ existants : src/game/story/narrative.gd; src/game/story/; data/story/; docs/lore.md.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_284",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_322",
+      "title": "R5.5 · Créer journal, suivi et outils d’écriture de quêtes",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R5.1 (task_318), R5.2 (task_319)\nÀ réaliser : Journal actif/terminé, suivi, objectifs et marqueurs, choix visibles, traduction FR/EN et outils de validation/debug. Le système de nœuds visuel reste une extension à décider après un schéma stable.\nFini quand : Une quête complète se crée et se débogue sans retoucher Game ; textes traduits, interface clavier/manette/tactile et marqueurs désactivables.\nPoints de départ existants : src/ui/codex/; src/ui/hud/; tools/; locale/strings.csv.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_284",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_323",
+      "title": "R6.1 · Rendre les opérations d’inventaire transactionnelles",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R6.\nDépendances : R2.2 (task_303), R1.2 (task_297), R1.3 (task_298)\nÀ réaliser : Modéliser quantités, instances uniques, propriétés liées, équiper/jeter/ramasser/acheter/vendre/sertir comme transactions validées. Préparer concurrence future sur un même objet sans exposer l’état privé.\nFini quand : Deux demandes sur le même objet ne créent pas deux propriétaires ; un échec n’enlève rien ; réessais, arrêt et inventaire plein sont couverts.\nPoints de départ existants : src/components/inventory.gd; src/entities/player/player_pack.gd; src/definitions/loot/loot_roller.gd.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_285",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_324",
+      "title": "R6.2 · Repenser monnaies, stocks et valeur des ressources",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R6.\nDépendances : R4.3 (task_315), R6.1 (task_323), R0.2 (task_293)\nÀ réaliser : Définir sources/dépenses durables, prix par zone, stocks marchands persistants, renouvellement, démantèlement et coût de respecialisation/réparation si retenu. Décider coffre de stockage et portée compte/personnage.\nFini quand : Matrice d’achat/revente/fabrication ne crée pas d’arbitrage infini ; stocks et argent restent corrects après reprise ; outils simulent plusieurs heures et retours de zones.\nPoints de départ existants : src/definitions/items/forge_def.gd; src/entities/merchant/; data/shop/; tools/balance/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_285",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_325",
+      "title": "R6.3 · Étendre forge et consommables selon le lot retenu",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R6.\nDépendances : R6.1 (task_323), R6.2 (task_324), R4.4 (task_316)\nÀ réaliser : Réévaluer les idées SPD dans le RPG : objets tactiques, affixes de placement, recettes courtes, améliorations d’armes et récompenses exclusives. Réutiliser les cartes existantes plutôt que les dupliquer.\nFini quand : Le lot retenu a recettes/effets/conditions en données, aperçu et tests de paiement ; les idées non retenues restent en backlog avec décision de périmètre.\nPoints de départ existants : docs/shattered-pixel-dungeon-study.md; src/definitions/effects/; data/runes/; data/affixes/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_285",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_326",
+      "title": "R6.4 · Définir le contrat de butin pour coopération future",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R6.\nDépendances : R0.3 (task_294), R6.1 (task_323), R5.2 (task_319)\nÀ réaliser : Trancher butin personnel/partagé, crédit des assistances, droits de coffre et objets de quête ; fixer portée XP et comportement d’un joueur absent. Échanges seulement si retenus et après transactions sûres.\nFini quand : Les scénarios deux joueurs/mort/déconnexion sont spécifiés ; un coffre unique ou une quête unique n’est jamais payé deux fois par ambiguïté.\nPoints de départ existants : src/entities/monster/monster_drops.gd; src/world/floor_save.gd; src/definitions/loot/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_285",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_327",
+      "title": "R7.1 · Assembler la première région et ses points remarquables",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R7.\nDépendances : R3.1 (task_307), R0.4 (task_295)\nÀ réaliser : Concevoir sanctuaire/Kagari selon le canon, chemins alternatifs, repères, zones de danger, raccourcis et accès aux deux donjons de preuve. Réutiliser les biomes et assets avant d’agrandir la bibliothèque.\nFini quand : La région se parcourt avec orientation lisible et continuité du terrain ; chaque embranchement utile a une raison d’exister et un état de sauvegarde clair.\nPoints de départ existants : data/biomes/; assets/; docs/lore.md.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_286",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_328",
+      "title": "R7.2 · Adapter monstres, boss, secrets et épreuves aux régions",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R7.\nDépendances : R3.5 (task_311), R3.6 (task_312), R4.4 (task_316), R5.2 (task_319)\nÀ réaliser : Affecter populations, niveaux, compatibilités d’affixes, boss et récompenses ; transformer pactes/épreuves et secrets selon retour et renouvellement. Éviter de transférer les nombres d’étage sans mesure.\nFini quand : Les deux donjons sont complets, le boss et les récompenses scénarisées suivent leur politique de répétition ; aucun verrou de progression dépend d’un drop aléatoire manquant.\nPoints de départ existants : data/monsters/; data/elites/; data/trials/; src/world/secret_room.gd.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_286",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_329",
+      "title": "R7.3 · Préparer la chaîne d’assets, d’animation et de son",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R7.\nDépendances : R7.1 (task_327)\nÀ réaliser : Inventorier décors, bâtiments, PNJ, monstres, armes et icônes réutilisables ; lister précisément les manques. Conserver équipements/animations modulaires, silhouettes et ambiances par lieu.\nFini quand : Table d’assets avec source/licence, variantes, directions et coût ; pas de promesse de centaines d’apparences sans budget ; aucune nouvelle pièce chargée à chaque image.\nPoints de départ existants : assets/; data/visuals/; data/audio/; docs/vfx.md.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_286",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_330",
+      "title": "R7.4 · Réinterpréter défis, fins, succès et contenu après campagne",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R7.\nDépendances : R0.4 (task_295), R4.5 (task_317), R5.4 (task_321)\nÀ réaliser : Décider avenir des difficultés, ascensions, quotidien, records et gardien issu d’un héros ; distinguer campagne, défis isolés et activités répétables. Préserver les anciennes traces de profil.\nFini quand : Chaque ancien système a un devenir explicite ; scores de campagne et ancien quotidien ne sont pas mélangés ; fin d’histoire ne supprime pas le monde par accident.\nPoints de départ existants : src/game/daily_run.gd; src/game/run_records.gd; src/online/run_summary.gd; docs/design/progression.md.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_286",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_331",
+      "title": "R8.1 · Créer carte du monde, exploration et déplacements",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R8.\nDépendances : R3.1 (task_307), R2.3 (task_304)\nÀ réaliser : Faire évoluer minimap vers carte région/monde, découverte persistante, repères, destinations et retours. Décider voyage rapide et ses conditions sans supprimer l’intérêt de l’exploration.\nFini quand : Carte exacte après aller-retour et reprise ; destination sûre disponible ; transition échouée ne perd ni monnaie ni position de retour.\nPoints de départ existants : src/ui/hud/; src/world/world_space.gd; src/game/game.gd.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_287",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_332",
+      "title": "R8.2 · Adapter HUD, menus et progression aux appareils",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R8.\nDépendances : R4.1 (task_313), R5.5 (task_322), R1.5 (task_300)\nÀ réaliser : Ajouter personnage, quêtes et équipement durable ; taille téléphone, navigation manette/clavier, paramètres d’accessibilité. Prévoir mode menu local en multijoueur sans ralentir le monde.\nFini quand : Texte FR/EN lisible et parcours complet sans souris ; aucun toucher déclenché deux fois ; monde solo et session partagée suivent leurs règles de pause distinctes.\nPoints de départ existants : src/ui/; locale/strings.csv; docs/design/interface.md.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_287",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_333",
+      "title": "R8.3 · Adapter tutoriel, aides et retours de combat",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R8.\nDépendances : R4.5 (task_317), R5.5 (task_322), R8.2 (task_332)\nÀ réaliser : Remplacer onboarding centré sur la descente par exploration, quêtes, sauvegarde, mort et retours ; retours visuels/audio lisibles sans déduire l’état partagé d’un effet local.\nFini quand : Nouvelle partie et reprise ne bloquent pas ; apprentissage par étapes et aide à la demande ; cinématiques et annonces n’écrasent pas les télégraphes.\nPoints de départ existants : src/game/tutorial.gd; src/ui/hud/; data/ui/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_287",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_334",
+      "title": "R8.4 · Mesurer streaming, foules et mémoire sur appareils",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R8.\nDépendances : R3.4 (task_310), R3.6 (task_312), R7.1 (task_327)\nÀ réaliser : Définir et mesurer budgets de secteurs, acteurs actifs, nav, lumière, textures, temps d’intégration, percentiles de frame et mémoire. Cible 60 fps à valider, pas garantie headless ; session prolongée et chauffe sur S23.\nFini quand : Rapports exportés S23/Windows : traversées, combat aux frontières, butin au sol et retour après arrière-plan ; pas de croissance mémoire non bornée ni pauses de chargement non traitées.\nPoints de départ existants : tools/perf/; docs/performance.md; docs/android.md.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_287",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_335",
+      "title": "R8.5 · Créer les outils de validation de contenu et de sauvegarde",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R8.\nDépendances : R2.1 (task_302), R3.1 (task_307), R5.1 (task_318)\nÀ réaliser : Valider liens de régions, ids, quêtes, apparitions, tables de butin et catalogues ; inspecter/importer des fixtures de sauvegarde, téléporter en debug et visualiser secteurs/autorité.\nFini quand : Une erreur de contenu est détectée avant export et nomme la ressource ; le debug ne rend pas un personnage admissible à une économie officielle future.\nPoints de départ existants : tools/; tests/suites/; tools/saves/build_catalog.py.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_287",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_336",
+      "title": "R9.1 · Valider une tranche RPG complète",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R9.\nDépendances : R2.4 (task_305), R3.5 (task_311), R3.6 (task_312), R4.5 (task_317), R5.4 (task_321), R6.2 (task_324), R7.2 (task_328), R8.1 (task_331), R8.3 (task_333), R8.4 (task_334)\nÀ réaliser : Scénario bout en bout : créer, explorer, accepter une chaîne, combattre, obtenir un objet, commercer, mourir, revenir, finir un donjon, revisiter, quitter et reprendre. Tester sauvegardes de chaque étape.\nFini quand : Scénario reproductible sans commandes de debug, progression expliquée, migration et récompenses exactes ; retours jouabilité consignés avant ajout de plusieurs régions.\nPoints de départ existants : tests/suites/; docs/testing.md.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_288",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_337",
+      "title": "R9.2 · Adapter les tests et la mesure à la campagne",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R9.\nDépendances : R9.1 (task_336), R8.5 (task_335)\nÀ réaliser : Conserver tests utiles et fixtures historiques, ajouter parcours/revisites/migrations/transactions ; remplacer les hypothèses invalidées d’étage par des règles explicites sans affaiblir des contrôles. Refaire bots et mesures longues.\nFini quand : Suites complètes, zéro erreur moteur inattendue/avertissement GDScript ; fixtures compatibles ; les instables connus ont un suivi sans être masqués par le changement de genre.\nPoints de départ existants : tools/run_tests.py; tests/suites/; tools/balance/.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_288",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_338",
+      "title": "R9.3 · Préparer la livraison solo et sa politique de données",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R9.\nDépendances : R9.2 (task_337), R8.4 (task_334), R2.5 (task_306)\nÀ réaliser : Exports Android/Windows, taille, signature, mise à jour/reprise, options, crédits et documentation. Requalifier télémétrie, présence, compte/cloud et classements pour la campagne ; services inutiles restent arrêtés.\nFini quand : Tests manuels sur S23 et Windows ; aucune collecte nouvelle avant règles/choix correspondants ; fiches de distribution cohérentes avec ce qui est réellement publié.\nPoints de départ existants : docs/android.md; docs/privacy-ops.md; src/autoload/privacy.gd; src/online/.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_288",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_339",
+      "title": "R9.4 · Étendre la campagne et mesurer la durée de progression",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R9.\nDépendances : R9.1 (task_336), R9.2 (task_337)\nÀ réaliser : Ajouter régions/quêtes/donjons par lots avec la chaîne de données validée ; mesurer rythme XP, ressources, répétitions et temps perdu en trajet. Ne pas fixer une taille totale avant validation.\nFini quand : Chaque lot livre contenu complet, traductions et reprise ; métriques et retours guident l’extension plutôt qu’une carte immense vide.\nPoints de départ existants : data/; docs/design/; tools/balance/.",
+      "status": "backlog",
+      "priority": "high",
+      "epic_id": "epic_288",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_340",
+      "title": "M0.1 · Choisir la topologie et la frontière de confiance",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M0.\nDépendances : R0.3 (task_294), R1.6 (task_301), R9.1 (task_336)\nÀ réaliser : Prototyper une petite coopération puis trancher hôte joueur, serveur dédié, LAN/internet, nombre de joueurs et budget. ENet/MultiplayerAPI sont des candidats à mesurer ; un protocole high-level Godot n’est pas supposé compatible avec un serveur écrit ailleurs.\nFini quand : Décision documentée avec essais de connectivité Windows/Android et confiance d’un hôte ; Talo REST/presence n’est pas assimilé à un serveur de simulation temps réel.\nPoints de départ existants : docs/online.md; project.godot; src/online/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_289",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_341",
+      "title": "M0.2 · Créer la simulation autoritaire et le démarrage serveur",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M0.\nDépendances : M0.1 (task_340), R1.5 (task_300), R8.5 (task_335)\nÀ réaliser : Démarrer session headless sans caméra/UI/audio obligatoire ; serveur décide positions valides, combats, IA, morts, loot et quêtes. Le client transmet des intentions, pas des résultats de récompense. Vérifier l’export aux visuels retirés : la simulation ne doit pas analyser des pixels de textures pour exister.\nFini quand : Deux clients et un serveur distincts ; requête impossible refusée ; même logique métier que solo ; build dédié charge les ressources nécessaires sans rendu.\nPoints de départ existants : src/game/; src/combat/; src/world/; export_presets.cfg.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_289",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_342",
+      "title": "M0.3 · Définir protocole, version et sécurité des commandes",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M0.\nDépendances : M0.2 (task_341), R1.2 (task_297), R1.3 (task_298)\nÀ réaliser : Messages typés et bornés, identités de connexion, numéros de séquence, délais, permissions et budgets ; compatibilité versions/contenu. RPC ne prouve pas la validité d’une action. Choisir la protection des données en transit et valider les contenus par liste blanche, jamais par chargement d’un chemin reçu.\nFini quand : Paquets malformés, rejoués, hors portée, trop fréquents ou pour un autre acteur refusés ; aucune Resource, Node, clé privée ou donnée inutile transmise.\nPoints de départ existants : src/online/; tests/suites/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_289",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973720,
+      "due_date": null
+    },
+    {
+      "id": "task_343",
+      "title": "M0.4 · Répliquer entités et zones d’intérêt",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M0.\nDépendances : M0.2 (task_341), M0.3 (task_342), R3.3 (task_309)\nÀ réaliser : Apparition/disparition, état initial, deltas, propriété et ids ; étudier Spawner/Synchronizer et leur visibilité plutôt que tout synchroniser. Serveur active l’union utile des zones des joueurs, indépendante des caméras.\nFini quand : Joueurs éloignés ne figent pas leurs ennemis respectifs ; arrivée tardive reçoit état cohérent ; aucun inventaire privé envoyé aux autres ni tableau d’objets Godot sérialisé.\nPoints de départ existants : src/world/activity_manager.gd; src/world/world_spawner.gd; src/world/world_space.gd.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_289",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_344",
+      "title": "M0.5 · Préserver la sensation du combat malgré la latence",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M0.\nDépendances : M0.3 (task_342), M0.4 (task_343)\nÀ réaliser : Tick de simulation, interpolation distante, prédiction locale/réconciliation et politique de validation des impacts à mesurer ; annonces, projectiles et effets idempotents. Aucun lockstep déterministe interplateforme supposé.\nFini quand : Scénarios latence/perte/réordonnancement : mouvement jouable, dégâts appliqués une fois, télégraphes utiles et divergences bornées ; valeurs de fréquence déterminées par mesure.\nPoints de départ existants : src/combat/; src/entities/player/; src/entities/monster/; tools/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_289",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_345",
+      "title": "M0.6 · Tester pause, déconnexion et changement de région à plusieurs",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M0.\nDépendances : M0.4 (task_343), M0.5 (task_344), R1.5 (task_300)\nÀ réaliser : Menus locaux, cinéma, mort, région, arrière-plan Android, perte réseau, retour et départ de l’hôte. Choisir reprise/arrêt contrôlé au lieu de promettre migration d’hôte immédiate.\nFini quand : Débrancher n’annule ni dégâts ni transaction ; aucun joueur ne pause les autres ; transitions et reconnexions retrouvent l’état autoritaire et ne dupliquent pas un personnage.\nPoints de départ existants : src/game/; src/autoload/hit_stop.gd; tests/suites/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_289",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "architecture"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_346",
+      "title": "M1.1 · Authentifier les joueurs et gérer les sessions de jeu",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M1.\nDépendances : M0.3 (task_342), R0.3 (task_294)\nÀ réaliser : Relier identité de compte et personnage aux connexions de jeu par un service adapté ; tickets courts, expiration/révocation et reprise. Réexaminer intégration Talo sans changer silencieusement le compte séparé de l’appareil ni sa règle de session unique.\nFini quand : Un joueur ne choisit pas l’id d’un autre ; deux joueurs de test utilisent deux identités ; un token de compte n’est pas diffusé aux pairs ; solo hors ligne reste défini.\nPoints de départ existants : src/autoload/account.gd; src/online/talo_backend.gd; src/autoload/online_session.gd.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_290",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_347",
+      "title": "M1.2 · Définir l’admission des personnages et les sauvegardes autoritaires",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M1.\nDépendances : M1.1 (task_346), R2.2 (task_303), M0.2 (task_341)\nÀ réaliser : Séparer personnages solo libres et personnages en ligne officiels ; décider import privé coopératif et limites. Sessions/écritures exclusives par personnage, révisions et reprise après crash ; adapter cloud sans écraser l’état serveur.\nFini quand : Un fichier local modifié ou une ancienne sauvegarde cloud ne fabrique pas de richesse officielle ; deux serveurs ne possèdent pas le même personnage ; restauration testée.\nPoints de départ existants : src/autoload/cloud_save.gd; src/autoload/profile.gd; src/game/run_save.gd.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_290",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_348",
+      "title": "M1.3 · Implémenter groupes, quêtes et progression coopérative",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M1.\nDépendances : M1.2 (task_347), R6.4 (task_326), R5.2 (task_319), M0.6 (task_345)\nÀ réaliser : Groupe, invitations, départ, chef si utile, partage d’objectifs et progression de monde ; choix narratifs, boss, cinématiques et joueurs de niveaux différents selon contrat produit.\nFini quand : Chaîne de quête jouable ensemble avec arrivée tardive et départ ; récompenses uniques et choix personnels cohérents ; aucun blocage par un joueur absent.\nPoints de départ existants : src/game/; src/ui/; src/definitions/story/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_290",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_349",
+      "title": "M1.4 · Sécuriser butin, services et échanges retenus",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M1.\nDépendances : M1.2 (task_347), R6.1 (task_323), R6.4 (task_326)\nÀ réaliser : Transactions côté autorité pour ramassage concurrent, boutique, forge et fabrication ; échanges seulement si décidés, avec confirmation des deux états, verrouillage et commit atomique.\nFini quand : Deux ramassages simultanés, achat rejoué et déconnexion au paiement ne dupliquent ni monnaie ni objet ; audit d’événements borné et restauration vérifiée.\nPoints de départ existants : src/components/inventory.gd; src/entities/player/player_pack.gd; src/entities/merchant/.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_290",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_350",
+      "title": "M1.5 · Créer l’interface et les règles sociales du groupe",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M1.\nDépendances : M1.1 (task_346), M1.3 (task_348)\nÀ réaliser : Liste d’amis/groupe ou code d’invitation selon cible, état réseau, marqueurs/pings et réanimation si retenue. Chat texte, blocage et signalement sont une décision de périmètre avec modération avant activation.\nFini quand : Entrer/rejoindre/quitter fonctionne clavier/manette/tactile ; échecs expliqués ; aucune publication forcée d’identité ou de présence.\nPoints de départ existants : src/ui/; src/autoload/presence.gd; docs/privacy-ops.md.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_290",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_351",
+      "title": "M1.6 · Livrer et tester une première version coopérative",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M1.\nDépendances : M1.3 (task_348), M1.4 (task_349), M1.5 (task_350), M0.6 (task_345)\nÀ réaliser : Matrice Windows↔Windows, Windows↔S23 et S23↔S23, LAN/internet, latence, pertes, plusieurs régions et reprise après crash ; tests multi-processus et jeu réel. Version d’essai privée ; données de test ou traitement déjà couvert. La publication publique attend les validations M2.1 à M2.3.\nFini quand : Cible de groupe fixée et mesurée, progression stable sur sessions longues, protocole/version maîtrisés ; pas d’extension de population avant ces résultats.\nPoints de départ existants : tests/; tools/; docs/android.md.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_290",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_352",
+      "title": "M2.1 · Préparer hébergement, accès internet et exploitation",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M2.\nDépendances : M0.1 (task_340), M1.2 (task_347)\nÀ réaliser : Choisir hébergement/transport, ports/NAT/relay si nécessaire, régions d’hébergement et coûts mesurés. Déploiement reproductible, secrets hors client, limites, supervision, sauvegardes et maintenance.\nFini quand : Serveur démarre/repart, une sauvegarde est réellement restaurée, panne/maintenance et compatibilité versions ont une procédure ; aucun abonnement engagé par la roadmap seule.\nPoints de départ existants : docs/online.md; docs/android.md; export_presets.cfg.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_291",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_353",
+      "title": "M2.2 · Revoir confidentialité, abus et observabilité",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M2.\nDépendances : M1.1 (task_346), M1.5 (task_350), M2.1 (task_352)\nÀ réaliser : Définir données nécessaires au jeu partagé, consentements optionnels distincts, champs publics/privés, rétention, suppression/export et logs expurgés ; rate limits, signalements/sanctions si social activé.\nFini quand : Inventaires/tokens/adresses ne se retrouvent pas dans props publics ou logs ; refus des statistiques optionnelles ne bloque pas le jeu partagé ; documentation et fiches de distribution révisées avant publication.\nPoints de départ existants : docs/privacy-ops.md; src/autoload/privacy.gd; src/autoload/telemetry.gd.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_291",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_354",
+      "title": "M2.3 · Qualifier la version en ligne et sa publication",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M2.\nDépendances : M1.6 (task_351), M2.1 (task_352), M2.2 (task_353)\nÀ réaliser : Tests de charge à la population décidée : zones éloignées, combats denses, bande passante par joueur, tick serveur, latence, mémoire, déconnexions et reprise ; sauvegardes, mises à jour et rollback de protocole. Vérifier aussi exports clients, fiches de distribution et procédure de publication de la version en ligne.\nFini quand : Rapports et seuils de service acceptés ; procédure de récupération testée ; aucune revendication MMO ou support d’une population non mesurée. Publication publique uniquement après ce jalon et les contrôles M2.2.\nPoints de départ existants : tools/; tests/; docs/performance.md.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_291",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
+      "due_date": null
+    },
+    {
+      "id": "task_355",
+      "title": "M2.4 · Décider l’étape monde partagé permanent et ses limites",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase M2.\nDépendances : M2.3 (task_354), R0.3 (task_294)\nÀ réaliser : Si souhaité après coopération : monde qui vit sans hôte joueur, comptes/personnages serveur, ownership des instances, conflits de quêtes, économie et passages entre serveurs. Guildes, PvP, marché, logement et population massive restent des projets optionnels.\nFini quand : Nouvelle décision de produit avec population/budget/risques et preuve de charge ; architecture distribuée seulement si besoin mesuré, sans supposer que le RPG multijoueur impose un MMO.\nPoints de départ existants : docs/rpg-roadmap.md.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_291",
+      "tags": [
+        "rpg",
+        "multijoueur",
+        "qualité"
+      ],
+      "created_at": 1792973386,
+      "updated_at": 1792973630,
       "due_date": null
     }
   ]
