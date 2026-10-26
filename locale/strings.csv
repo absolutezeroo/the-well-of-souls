@@ -258,6 +258,8 @@ Dungeon,Dungeon,Donjon
 %s: slay %d spectres in %d seconds to come back where you fell.,%s: slay %d spectres in %d seconds to come back where you fell.,%s : abats %d spectres en %d secondes pour revenir là où tu es tombé.
 The knell falls silent. The Well lets you go.,The knell falls silent. The Well lets you go.,Le glas se tait. Le Puits te laisse partir.
 The knell has tolled. The Threshold keeps you.,The knell has tolled. The Threshold keeps you.,Le glas a sonné. Le Seuil te garde.
+Walk onto the stairs to change region.,Walk onto the stairs to change region.,Marchez sur les escaliers pour changer de région.
+The region proof could not start.,The region proof could not start.,Le prototype de régions n’a pas pu démarrer.
 The dark,The dark,L'obscurité
 At least %d characters.,At least %d characters.,Au moins %d caractères.
 At most %d characters.,At most %d characters.,Au plus %d caractères.
@@ -1751,6 +1753,8 @@ Pick up 1500 gold,Pick up 1500 gold,Ramasse 1500 or
 Slay 400 monsters,Slay 400 monsters,Abats 400 monstres
 Win %d run,Win %d run,Gagne %d partie
 Win 1 run,Win 1 run,Gagne 1 partie
+Outer Courtyard,Outer Courtyard,Cour extérieure
+Silent Hall,Silent Hall,Salle silencieuse
 Echo Rune,Echo Rune,Rune d'Écho
 Ember Rune,Ember Rune,Rune de Braise
 Hits have a 50% chance to set enemies on fire.,Hits have a 50% chance to set enemies on fire.,Les coups ont 50 % de chances d'enflammer les ennemis.

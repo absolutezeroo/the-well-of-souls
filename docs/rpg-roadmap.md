@@ -28,6 +28,13 @@ les identités durables et le checkpoint commun avec révision, backup validé e
 conflits. La carte task_359 suit ce lot. R1.1/R1.2/R2.1/R2.2 restent partiels ; les faits de
 région ne sont pas encore des cartes persistantes et aucun mode RPG n’est ajouté au menu.
 
+## Troisième lot — deux lieux réellement chargés
+
+La [preuve de régions](rpg-regions.md) ajoute des définitions de lieux et passages en données,
+un coordinateur conservant le héros, les objets au sol persistants et la migration campagne
+v1 → v2. La carte task_362 suit ce lot. R2.3/R3.1/R3.2 restent partiels : aucune population
+complète ni streaming continu. La scène de développement se lance indépendamment du menu.
+
 ## Ce qui est décidé et ce qui doit l’être
 
 **Demandé :** monde ouvert, évolution durable du jeu vers le RPG, préparation d’un multijoueur

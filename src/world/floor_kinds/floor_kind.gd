@@ -14,7 +14,9 @@ extends RefCounted
 
 ## The kind of the floor being built at `world.depth` (the World's hidden_floor and finale are set
 ## by the Game before). `taken`: the way down the hero chose to get here, or null.
-static func choose(world: World, content: ContentDB, taken: FloorRoute) -> FloorKind:
+static func choose(world: World, content: ContentDB, taken: FloorRoute, place: FloorKind = null) -> FloorKind:
+	if place:
+		return place
 	var kind: FloorKind
 	var act_boss := content.dungeon.boss_for_depth(world.depth)
 	if world.finale:

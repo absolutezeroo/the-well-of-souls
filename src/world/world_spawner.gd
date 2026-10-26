@@ -116,8 +116,19 @@ func spawn_item(item: ItemDef, at: Vector2, armed: bool = true) -> ItemPickup:
 	pickup.position = at
 	if _world.ledger.lay(FloorLedger.ITEM, pickup, String(item.id)) >= 0:
 		pickup.taken.connect(func(gone: ItemPickup) -> void: _world.ledger.spend(FloorLedger.ITEM, gone))
-	_entities.add_child.call_deferred(pickup)  # may be called from physics callbacks
+	_world.item_created.emit(pickup)
+	_add_pickup.call_deferred(pickup, _world.floor_id)  # may be called from physics callbacks
 	return pickup
+
+
+## A region/floor may have changed before a deferred drop reaches the tree.
+func _add_pickup(pickup: ItemPickup, generation: int) -> void:
+	if not is_instance_valid(pickup):
+		return
+	if not is_instance_valid(_world) or not is_instance_valid(_entities) or _world.floor_id != generation:
+		pickup.free()
+		return
+	_entities.add_child(pickup)
 
 
 func fire_projectiles(shooter: Actor, direction: Vector2, spec: ProjectileSpec, from: Vector2 = Vector2.INF) -> void:

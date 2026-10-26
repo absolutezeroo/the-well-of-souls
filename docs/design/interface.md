@@ -532,3 +532,13 @@ changing source cancels charging instead of releasing an old attack. The menu-cl
 still applies. Interactions, pause and inventory commands are not migrated to this contract yet.
 This is not multiplayer support or a new open-world game mode; the next steps are in the
 [RPG roadmap](../rpg-roadmap.md).
+
+
+## Regional proof scene
+
+`tools/rpg/region_proof.tscn` is a standalone development scene. Its labels listen to regional
+notifications; stairs request a deferred validated transition. Movement uses LocalPlayerInput
+and the existing TouchJoystick, so keyboard/gamepad/touch actions still share the same path.
+This proof has no inventory, quest UI, tactical minimap or touch combat buttons yet, and adds
+no title-screen mode. Its default storage path is empty (memory only). See
+[the proof instructions](../rpg-regions.md).

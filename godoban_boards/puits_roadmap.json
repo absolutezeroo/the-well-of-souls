@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 362,
+  "next_id": 365,
   "tags": [
     "pc",
     "test",
@@ -4331,7 +4331,7 @@
     {
       "id": "task_297",
       "title": "R1.2 · Définir les identifiants stables et les contextes d’exécution",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.1 (task_296)\nÀ réaliser : Distinguer id de définition, instance d’objet, personnage, monde, région/secteur, apparition persistante et entité de simulation ; ajouter révision et génération de contexte aux effets différés.\nFini quand : Un objet conserve son identité entre chargements ; un effet de région déchargée ne touche pas la nouvelle génération. Aucun NodePath, RID ou get_instance_id persisté comme identité durable.\nPoints de départ existants : src/game/content_catalog.gd; src/definitions/loot/loot_roller.gd; src/combat/ground_strike.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : tickets opaques d’expédition et gardes des reprises/fondus de Game ; un ancien contexte ne peut plus ouvrir l’écran de mort ou descendre après redémarrage. Restent identités persistantes d’objets/personnages/régions et contextes par région ; aucun id runtime sérialisé.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : identités campagne/monde/personnage à 128 bits via Crypto (indépendantes du RNG du donjon), liens de propriété validés au chargement ; révision commune de campagne. Restent ids d’instances d’objets, apparitions persistantes et contextes de secteurs.",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.1 (task_296)\nÀ réaliser : Distinguer id de définition, instance d’objet, personnage, monde, région/secteur, apparition persistante et entité de simulation ; ajouter révision et génération de contexte aux effets différés.\nFini quand : Un objet conserve son identité entre chargements ; un effet de région déchargée ne touche pas la nouvelle génération. Aucun NodePath, RID ou get_instance_id persisté comme identité durable.\nPoints de départ existants : src/game/content_catalog.gd; src/definitions/loot/loot_roller.gd; src/combat/ground_strike.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : tickets opaques d’expédition et gardes des reprises/fondus de Game ; un ancien contexte ne peut plus ouvrir l’écran de mort ou descendre après redémarrage. Restent identités persistantes d’objets/personnages/régions et contextes par région ; aucun id runtime sérialisé.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : identités campagne/monde/personnage à 128 bits via Crypto (indépendantes du RNG du donjon), liens de propriété validés au chargement ; révision commune de campagne. Restent ids d’instances d’objets, apparitions persistantes et contextes de secteurs.\nAvancement du troisième lot (26 octobre 2026) : Lot 3 : pickups au sol identifiés par apparition régionale namespacée ou id objet à 128 bits ; tickets régionaux et floor_id protègent callbacks/dépôts différés. L’identité des objets portés en inventaire et les autres entités restent à compléter.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_280",
@@ -4341,7 +4341,7 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792977005,
+      "updated_at": 1792978832,
       "due_date": null
     },
     {
@@ -4443,8 +4443,8 @@
     {
       "id": "task_304",
       "title": "R2.3 · Persister les régions et les objets qui y restent",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302), R2.2 (task_303)\nÀ réaliser : Étendre le modèle de FloorSave à plusieurs régions : ouvertures, obstacles, PNJ, ressources, monstres selon politique, butin dynamique, objets posés, vagues et instances. Écrire les changements avant déchargement.\nFini quand : Revisiter A après B puis redémarrer conserve les faits décidés ; aucun reset involontaire de coffres ou butin ; taille des fichiers et nettoyage des états sont bornés.\nPoints de départ existants : src/world/floor_save.gd; src/world/floor_ledger.gd; src/world/secret_room.gd.\nAvancement du deuxième lot (26 octobre 2026) : Point de départ ajouté par le lot 2 : RegionState et sauvegarde commune conservent des maps de faits pour plusieurs régions. Aucun chargement de cartes ni conservation de PNJ, monstres, butin dynamique ou carte géographique livré ; la réalisation de cette carte reste à démarrer.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302), R2.2 (task_303)\nÀ réaliser : Étendre le modèle de FloorSave à plusieurs régions : ouvertures, obstacles, PNJ, ressources, monstres selon politique, butin dynamique, objets posés, vagues et instances. Écrire les changements avant déchargement.\nFini quand : Revisiter A après B puis redémarrer conserve les faits décidés ; aucun reset involontaire de coffres ou butin ; taille des fichiers et nettoyage des états sont bornés.\nPoints de départ existants : src/world/floor_save.gd; src/world/floor_ledger.gd; src/world/secret_room.gd.\nAvancement du deuxième lot (26 octobre 2026) : Point de départ ajouté par le lot 2 : RegionState et sauvegarde commune conservent des maps de faits pour plusieurs régions. Aucun chargement de cartes ni conservation de PNJ, monstres, butin dynamique ou carte géographique livré ; la réalisation de cette carte reste à démarrer.\nAvancement du troisième lot (26 octobre 2026) : Lot 3 : RegionState v2 conserve initialisation, compatibilité de disposition et objets au sol avec id/position/item exact. Prises, dépôts différés et objets améliorés survivent à deux vraies cartes puis au redémarrage. Restent PNJ, monstres, or, coffres/obstacles, activités et exploration FogOfWar ; le prototype ne les peuple pas.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_281",
       "tags": [
@@ -4453,7 +4453,7 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792977005,
+      "updated_at": 1792978832,
       "due_date": null
     },
     {
@@ -4491,8 +4491,8 @@
     {
       "id": "task_307",
       "title": "R3.1 · Créer le modèle de carte et l’outil d’assemblage des régions",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R0.4 (task_295), R1.2 (task_297), R2.1 (task_302)\nÀ réaliser : Définir régions, secteurs, routes, points remarquables, entrées de bâtiments et liens vers donjons ; géographie reconnaissable et réemploi des biomes. Choisir taille et outils après prototype.\nFini quand : Un créateur place une région sans écrire une branche dans World ; tous les liens et ids se valident ; les limites d’exploration sont compréhensibles.\nPoints de départ existants : src/definitions/biomes/; src/dungeon/; data/biomes/.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R0.4 (task_295), R1.2 (task_297), R2.1 (task_302)\nÀ réaliser : Définir régions, secteurs, routes, points remarquables, entrées de bâtiments et liens vers donjons ; géographie reconnaissable et réemploi des biomes. Choisir taille et outils après prototype.\nFini quand : Un créateur place une région sans écrire une branche dans World ; tous les liens et ids se valident ; les limites d’exploration sont compréhensibles.\nPoints de départ existants : src/definitions/biomes/; src/dungeon/; data/biomes/.\nAvancement du troisième lot (26 octobre 2026) : Lot 3 : RegionAtlas/RegionDef/RegionLinkDef/RegionItemDef et deux lieux de preuve en data/regions/proof ; validation du graphe, des entrées et des points accessibles. Une région s’ajoute par ressources, sans branche dans World. Restent assemblage visuel, secteurs, carte narrative/points remarquables et échelle finale.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_282",
       "tags": [
@@ -4501,14 +4501,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792978832,
       "due_date": null
     },
     {
       "id": "task_308",
       "title": "R3.2 · Implémenter le cycle de vie du chargement de secteurs",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R3.1 (task_307), R2.3 (task_304)\nÀ réaliser : Précharger, charger, appliquer état, activer, suspendre, sauver et décharger selon une machine de cycle de vie ; jobs annulables/générations, files et mémoire bornées. Préparer des données en arrière-plan et intégrer la scène active de façon contrôlée.\nFini quand : Traversées rapides, demi-tour et téléportation ne créent ni doublons ni callbacks tardifs ; aucun état sale perdu ; pas de lecture bloquante forcée avant fin d’un chargement asynchrone.\nPoints de départ existants : src/world/world.gd; src/game/game.gd.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R3.1 (task_307), R2.3 (task_304)\nÀ réaliser : Précharger, charger, appliquer état, activer, suspendre, sauver et décharger selon une machine de cycle de vie ; jobs annulables/générations, files et mémoire bornées. Préparer des données en arrière-plan et intégrer la scène active de façon contrôlée.\nFini quand : Traversées rapides, demi-tour et téléportation ne créent ni doublons ni callbacks tardifs ; aucun état sale perdu ; pas de lecture bloquante forcée avant fin d’un chargement asynchrone.\nPoints de départ existants : src/world/world.gd; src/game/game.gd.\nAvancement du troisième lot (26 octobre 2026) : Lot 3 : RegionCoordinator synchrone à un lieu actif, conservation du même Player, préparation/commit avant déchargement, tickets de demandes, garde des dépôts différés et refus de migration implicite. Scène tools/rpg/region_proof.tscn indépendante du mode historique. Restent préchargement/jobs asynchrones, budget d’intégration, streaming continu et points d’autosave/arrière-plan ; ce lot ne termine pas R3.2.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_282",
       "tags": [
@@ -4517,7 +4517,7 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792978832,
       "due_date": null
     },
     {
@@ -5373,6 +5373,59 @@
       "status": "backlog",
       "created_at": 1792977005,
       "updated_at": 1792977005,
+      "due_date": null
+    },
+    {
+      "id": "task_362",
+      "title": "RPG lot 3 : deux lieux chargés et objets persistants",
+      "description": "Définitions de régions et liens en données, coordinateur gardant le même héros lors d’un aller-retour, sauvegarde commune avant déchargement et objets au sol persistants avec identité stable. Scène de preuve indépendante réutilisant le rendu et les assets actuels ; tests A/B/A et reprise sur disque. Lot partiel de R2.3/R3.1/R3.2, sans streaming continu ni mode RPG public.\nValidation : suite complète 19 761 vérifications, 0 échec (seed 347348) ; rapides 16 782/16 782 ; 39 nouvelles vérifications régions (102 ciblées avec les campagnes du lot 2) ; 657 scripts, 0 diagnostic ; 7 tests Python, 3 010 traductions et 303 références de contenu valides. Aucun essai visuel ou tactile sur appareils ; task_364 suit la scène concrète.",
+      "status": "done",
+      "priority": "high",
+      "epic_id": "epic_282",
+      "tags": [
+        "rpg",
+        "monde ouvert",
+        "architecture",
+        "sauvegarde",
+        "tests"
+      ],
+      "created_at": 1792977652,
+      "updated_at": 1792978832,
+      "due_date": null
+    },
+    {
+      "title": "Empêcher un pickup différé de rejoindre l’étage suivant",
+      "description": "Un World.spawn_item programmé avant un changement de floor pouvait être ajouté ensuite à Entities du nouveau floor. Correction dans WorldSpawner : vérifier floor_id et la validité du World avant insertion différée ; libérer le nœud périmé. RegionLoot capture le record avant départ et le restitue dans son lieu propriétaire. Régression game.regions : dépôt avant départ, absence dans la destination, présence dans le bon lieu après redémarrage. Validation : suite complète 19 761 vérifications, 0 échec (seed 347348) ; rapides 16 782/16 782 ; 39 nouvelles vérifications régions (102 ciblées avec les campagnes du lot 2) ; 657 scripts, 0 diagnostic ; 7 tests Python, 3 010 traductions et 303 références de contenu valides. Aucun essai visuel ou tactile sur appareils ; task_364 suit la scène concrète.",
+      "status": "done",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "bug",
+        "sauvegarde",
+        "tests",
+        "architecture"
+      ],
+      "id": "task_363",
+      "created_at": 1792978832,
+      "updated_at": 1792978832,
+      "due_date": null
+    },
+    {
+      "title": "Essayer la scène de régions sur S23 et Windows",
+      "description": "Ouvrir tools/rpg/region_proof.tscn et lancer F6 : clavier/manette, joystick tactile, lisibilité des deux biomes/titres, ramassage des potions, passages sans rebond et retour sans respawn des objets pris. Le chemin de checkpoint est vide par défaut (mémoire seule). Mesurer transitions et mémoire avec chemins de test isolés ; ne pas tester sur une campagne réelle. Aucun essai rendu/appareil du lot 3 dans cette session. Les tests headless couvrent cartes, collision, déclencheurs, objets et reprise. Art/biomes existants réemployés ; aucun nouveau canon narratif. Références : docs/rpg-regions.md, task_362, task_361.",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_287",
+      "tags": [
+        "rpg",
+        "android",
+        "pc",
+        "playtest",
+        "perf"
+      ],
+      "id": "task_364",
+      "created_at": 1792978832,
+      "updated_at": 1792978832,
       "due_date": null
     }
   ]

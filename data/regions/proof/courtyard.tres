@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="RegionDef" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://src/definitions/regions/region_def.gd" id="1"]
+[ext_resource type="Resource" path="res://data/biomes/mossy_cave.tres" id="2"]
+[ext_resource type="Script" path="res://src/definitions/regions/region_link_def.gd" id="3"]
+[ext_resource type="Script" path="res://src/definitions/regions/region_item_def.gd" id="4"]
+[ext_resource type="Resource" path="res://data/items/consumables/health_potion.tres" id="5"]
+
+[sub_resource type="Resource" id="Link"]
+script = ExtResource("3")
+id = "to_hall"
+cell = Vector2i(17, 7)
+destination = "proof:hall"
+entry = "from_courtyard"
+
+[sub_resource type="Resource" id="Item"]
+script = ExtResource("4")
+id = "medicine"
+cell = Vector2i(7, 6)
+item = ExtResource("5")
+
+[resource]
+script = ExtResource("1")
+id = "proof:courtyard"
+display_name = "Outer Courtyard"
+layout_version = 1
+biome = ExtResource("2")
+tile_size = 32
+combat_depth = 1
+visual_seed = 4201
+rows = PackedStringArray("#####################", "#...................#", "#...................#", "#.........###.......#", "#.........###.......#", "#.........###.......#", "#...................#", "#...................#", "#...................#", "#...................#", "#...................#", "#...................#", "#...................#", "#...................#", "#####################")
+entries = Dictionary[String, Vector2i]({
+"from_hall": Vector2i(14, 7)
+})
+links = Array[ExtResource("3")]([SubResource("Link")])
+items = Array[ExtResource("4")]([SubResource("Item")])

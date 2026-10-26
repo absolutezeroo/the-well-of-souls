@@ -8,7 +8,8 @@ enum Failure { NONE, DISABLED, MISSING, IO, CORRUPT, INCOMPATIBLE, INVALID_STATE
 enum CommitStep { BEFORE_BACKUP, AFTER_BACKUP, BEFORE_PUBLISH, AFTER_PUBLISH }
 
 const FORMAT := "well.campaign"
-const VERSION := 1
+const VERSION := 2
+const OLDEST_VERSION := 1
 ## Prototype storage bound, not a gameplay limit. Sector files/journals need a later codec.
 const MAX_BYTES := 16 * 1024 * 1024
 
@@ -141,7 +142,7 @@ func _inspect(candidate: String) -> Inspection:
 		return result
 	var data: Dictionary = json.data
 	if data.get("format") != FORMAT or not CampaignFormat.integer(data.get("version"), 1) \
-			or int(data.version) != VERSION:
+			or int(data.version) < OLDEST_VERSION or int(data.version) > VERSION:
 		result.failure = Failure.INCOMPATIBLE
 		return result
 	if not CampaignFormat.keys(data, ["format", "version", "payload", "sha256"]) \
@@ -152,7 +153,7 @@ func _inspect(candidate: String) -> Inspection:
 		return result
 	if json.parse(data.payload) != OK:
 		return result
-	result.state = CampaignState.from_data(json.data)
+	result.state = CampaignState.from_data(_migrate(json.data, int(data.version)))
 	if result.state == null:
 		# This may be unavailable content, new fields, or an invalid ownership relation.
 		# Never drop a player's objects or roll back just to make this build load it.
@@ -161,3 +162,21 @@ func _inspect(candidate: String) -> Inspection:
 	result.envelope = data
 	result.failure = Failure.NONE
 	return result
+
+
+## Version 1 had region facts only. Add empty object ledgers without clearing any old fact.
+static func _migrate(value: Variant, version: int) -> Variant:
+	if version != 1:
+		return value
+	if not value is Dictionary or not value.get("world") is Dictionary \
+			or not value.world.get("regions") is Dictionary:
+		return null
+	var migrated: Dictionary = value.duplicate(true)
+	for key: Variant in migrated.world.regions:
+		var region: Variant = migrated.world.regions[key]
+		if not CampaignFormat.keys(region, ["id", "layout_version", "facts"]):
+			return null
+		region["initialized"] = false
+		region["layout_stamp"] = ""
+		region["objects"] = {}
+	return migrated

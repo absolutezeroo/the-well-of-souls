@@ -375,3 +375,14 @@ and publication interruptions on first/update checkpoints. `game.campaign` round
 hero including rolled gear, runes and durable passive memory, and keeps two region-fact maps.
 The maps are data records, not two loaded regions. A logical interrupted commit is not a real
 power-loss test; SafeFile short-write coverage also runs through the Python tool tests.
+
+
+## Loaded-region regressions
+
+`unit.regions` validates authored maps, link destinations, safe separated entries and the item
+codec. `game.regions` loads the standalone proof with an isolated campaign path: A/B/A keeps
+the same wounded actor, collected items stay absent, an exact rolled drop survives revisit
+and scene restart, and a failed commit or layout mismatch preserves the loaded source.
+It also checks duplicate queued travel, stale deferred pickups, a real physics exit, no
+arrival bounce and non-destructive campaign v1-to-v2 migration. These maps are now real World
+instances reused in sequence; this is not seamless sector streaming or a device render test.

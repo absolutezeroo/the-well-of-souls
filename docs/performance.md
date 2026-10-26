@@ -215,3 +215,12 @@ prototype envelope is limited to 16 MiB; this bounds file intake, not peak heap 
 The backend is synchronous and is not scheduled as an autosave yet. Profile checkpoint
 latency and memory on S23 before activating it; larger streamed worlds need a journal or
 sector-generation implementation while keeping a common transaction boundary.
+
+
+## Authored region transitions
+
+Region validation, map building and item capture run only at lifecycle boundaries. RegionLoot
+registers pickups on creation/take, with no added per-frame registry scan. The prototype
+loads one bounded authored map at a time, synchronously; destination preparation and full
+campaign checkpoint can stall a frame and are not a measured mobile streaming solution.
+Device profiling and the background sector lifecycle remain required before public adoption.

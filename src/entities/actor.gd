@@ -270,6 +270,14 @@ func is_dashing() -> bool:
 	return _dash_time > 0.0
 
 
+## Relocation ends motion from the place left behind, without healing or clearing statuses.
+func stop_motion() -> void:
+	velocity = Vector2.ZERO
+	_knockback = Vector2.ZERO
+	_dash_velocity = Vector2.ZERO
+	_dash_time = 0.0
+
+
 ## Direction the actor is currently trying to move in (zero when standing still).
 func get_move_direction() -> Vector2:
 	return Vector2.ZERO

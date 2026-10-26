@@ -400,3 +400,13 @@ leaving an expedition. The legacy new-run flow explicitly detaches it and keeps 
 CampaignSave atomically publishes one bounded hero/world envelope with a validated previous
 checkpoint, revision checks and an exclusive writer lock. It has no default path or automatic
 cloud hook. See [rpg-persistence.md](rpg-persistence.md) for the schema, recovery and limits.
+
+
+## Authored regional places
+
+RegionAtlas/RegionDef resources describe fixed maps, entries, exits and one-time item spawns.
+RegionCoordinator injects RegionFloorKind into the existing World build pipeline, retains the
+Player node and checkpoints before unloading. RegionLoot owns a per-region item ledger and
+tracks World.item_created before deferred insertion; WorldSpawner drops stale insertions by
+floor_id. Campaign schema 2 migrates schema 1 without rewriting on read. The standalone
+[region proof](rpg-regions.md) is separate from legacy Game and continuous sector streaming.

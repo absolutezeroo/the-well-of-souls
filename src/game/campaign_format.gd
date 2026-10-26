@@ -106,6 +106,10 @@ static func _reference(value: Variant) -> Resource:
 	return RunSave.load_ref(value) if value is String and value.begins_with("@") else null
 
 
+static func item_data(value: Variant) -> bool:
+	return plain(value) and _item(value) != null
+
+
 static func _item(value: Variant) -> ItemDef:
 	if value is String:
 		return _reference(value) as ItemDef

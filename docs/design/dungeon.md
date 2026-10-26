@@ -581,3 +581,13 @@ loot and their ranks/placement. Public World methods delegate to it. Floor gener
 activity, saving and geometry remain their existing components; no spawn ordering or floor
 dice change. The twelve recorded floor fingerprints stay unchanged after normalizing only
 the save-reference spelling (version 3 ids back to the recorded legacy paths).
+
+
+## Authored-place RPG proof
+
+The standalone region proof uses RegionAtlas and RegionDef resources for fixed walls/floor,
+entries, stairs destinations and one-time items. RegionFloorKind reuses the World build
+pipeline without random population or depth advancement. RegionCoordinator keeps the hero
+and publishes source/destination state before unloading; revisits restore uncollected item
+instances. Existing procedural runs keep their selection and generation unchanged. See
+[the authored region contract](../rpg-regions.md) for the scene, schema and remaining work.

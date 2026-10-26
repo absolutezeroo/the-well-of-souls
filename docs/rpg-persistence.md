@@ -4,7 +4,10 @@ Deuxième lot de fondations, 26 octobre 2026. Voir la [roadmap](rpg-roadmap.md) 
 [contrat du prototype](rpg-foundation-contract.md). Les règles actuelles du roguelike et ses
 fichiers restent inchangés ; ce backend n’active pas encore un mode RPG dans le menu.
 
-## Propriétaires et schéma 1
+## Propriétaires et schéma courant
+
+Le deuxième lot a livré le schéma 1. Le [troisième lot](rpg-regions.md) écrit le schéma 2,
+ajoute les objets régionaux et conserve la lecture/migration de v1.
 
 Les records runtime sont des classes typées. Les dictionnaires du bloc PlayerSave restent
 un format de disque réutilisé, conservé dans une copie privée, sans référence au héros vivant.
@@ -15,7 +18,7 @@ un format de disque réutilisé, conservé dans une copie privée, sans référe
 | CharacterState | id, world_id, region_id, position, claimed_rewards, player | Progression personnelle ; le monde et la région doivent exister dans le même snapshot. |
 | player | level, xp, hp, base_stats, equipment, inventory, belt, gold, perks, learned_skill | Format PlayerSave actuel ; équipement amélioré, affixes, runes et mémoire durable de passifs compris. |
 | CampaignWorldState | id, facts, regions | Faits communs à la campagne ; aucun nœud World sérialisé. |
-| RegionState | id, layout_version, facts | Faits indexés par id de région ; la version de disposition est explicite. |
+| RegionState | id, layout_version, facts, initialized, layout_stamp, objects | Faits indexés par id de région ; la version de disposition est explicite. |
 | GameSession.campaign | Référence runtime optionnelle au CampaignState | Survit à leave_expedition ; jamais incluse dans RunSave automatiquement. |
 
 Les identités de campagne, monde et personnage ont un préfixe de domaine et 128 bits issus de
@@ -42,7 +45,8 @@ faits avant de demander un commit commun.
 
 CharacterState.restore applique le bloc PlayerSave à un héros déjà initialisé. Le chargement de
 la bonne région, le placement sûr, les caméras et la restauration du contexte d’expédition sont
-à la charge du futur coordinateur RPG. La position est conservée mais pas appliquée avant que
+à la charge du coordinateur RPG. RegionCoordinator les assure pour la preuve de lieux. La
+position est conservée mais pas appliquée avant que
 la région soit chargée. Les captures de héros morts ou avec Santé nulle sont refusées : la
 mort, le retour au lieu sûr et les sauvegardes pendant ces transitions restent à implémenter.
 
@@ -65,7 +69,7 @@ ce prototype dans **une même enveloppe atomique**. Il ne s’agit pas de plusie
 personnage/région écrits indépendamment. Ce choix borné évite un manifeste multi-fichiers avant
 le streaming ; les grandes cartes demanderont une autre implémentation transactionnelle.
 
-L’enveloppe porte format=well.campaign, version=1, une chaîne payload JSON et son SHA-256.
+L’enveloppe porte format=well.campaign, version=2 (lecture de v1 conservée), une chaîne payload JSON et son SHA-256.
 Le checksum porte sur les octets logiques exacts de payload, sans dépendre d’une nouvelle
 sérialisation des nombres après lecture. C’est un contrôle d’intégrité, pas une signature.
 
@@ -110,17 +114,17 @@ SafeFile et le remplacement atomique du système cible, à mesurer sur appareils
 - Enveloppe limitée à 16 MiB avant écriture/lecture ; valeurs JSON à imbrication bornée. La
   sérialisation et la copie peuvent allouer au checkpoint, jamais par image. Latence et mémoire
   sur S23 restent à mesurer avant l’autosave ; le budget n’est pas une preuve de fluidité.
-- RegionState stocke des faits, pas encore une géographie, des PNJ, monstres ou objets au sol.
-  Le scénario A → B → A des tests porte sur ces records ; il ne traverse pas des cartes chargées.
+- RegionState stocke des faits et des objets au sol. Le troisième lot traverse deux cartes
+  fixes chargées, compatibles par stamp. PNJ, monstres et autres états régionaux restent à
+  persister avant de les peupler ; voir le [contrat des régions](rpg-regions.md).
 - Aucun import des âmes, arbre, serments, chroniques ou ancienne partie ; aucun transfert vers
   CloudSave. Compte, mot de passe, consentements, préférences et identifiants réseau sont exclus.
 - Aucun nouveau mode public, mort RPG, quête transactionnelle, multi-personnage ou réseau.
 - R1.1/R1.2/R2.1/R2.2 restent partiels ; R2.3, R2.4 et R2.5 suivent le chargement des régions,
   l’import et la synchronisation. Les droits et identités d’objets doivent être complétés.
 
-Prochain lot : une définition de région en données et un coordinateur capable de charger,
-quitter et revisiter deux lieux en conservant le même personnage, puis relier ces snapshots
-aux cartes et aux objets qui y restent.
+Les définitions, le coordinateur et les objets de deux lieux sont livrés dans le troisième
+lot. La population persistante complète et le chargement de secteurs restent à poursuivre.
 
 ## Vérification
 
@@ -134,7 +138,7 @@ Les tests de frontières injectent un arrêt logique ; ils ne coupent pas réell
 Le test Python de short write vérifie séparément SafeFile avec une limite de fichier imposée
 par Linux. Les essais S23/Windows et l’interface de récupération restent requis.
 
-Validation du lot sous Godot 4.7 headless, seed 347348 : **19 736 vérifications, 0 échec**
+Validation historique du deuxième lot sous Godot 4.7 headless, seed 347348 : **19 736 vérifications, 0 échec**
 dans la suite complète ; 63 ciblées et 16 773 rapides passent. Le linter rapporte
 647 scripts et 0 diagnostic. Les 7 tests Python, traductions et 303 références de contenu
 sont valides. Aucun export ni essai appareil réalisé ; récupération publique et mesures
