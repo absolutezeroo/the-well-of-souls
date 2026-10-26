@@ -1,5 +1,11 @@
 # Architecture
 
+The product now starts in **CampaignScreen** (`src/ui/campaign/campaign_screen.tscn`).
+CampaignRuntime owns the persistent solo lifecycle and RegionCoordinator loads authored places;
+CampaignProgress handles permanent talents and transactionally claimed quests/supplies.
+See [the current RPG contract](rpg-classic.md). The Game/RunState flow described below is retained
+legacy implementation and regression coverage, outside the default player path.
+
 How the code is laid out and how the pieces talk to each other. Code rules are in
 [conventions.md](conventions.md); what each system does for the player is in [design/](design/).
 

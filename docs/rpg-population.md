@@ -1,5 +1,10 @@
 # RPG : coffres, monstres et récompenses persistants
 
+**Current extension:** [the classic RPG](rpg-classic.md) is the default entry point. It adds
+explicit rest renewal for dead common spawns, persistent exploration (CampaignSave v4) and
+death recovery without losing character progress. The no-public-mode/rest/death statements
+below describe the fourth foundation lot, not the current product.
+
 Quatrième lot de fondations. Il complète la [preuve de régions](rpg-regions.md) et le
 [checkpoint commun de campagne](rpg-persistence.md), sans ajouter de mode au menu principal.
 

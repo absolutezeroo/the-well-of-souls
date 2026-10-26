@@ -1,5 +1,10 @@
 # RPG : contrat du premier prototype et premier lot technique
 
+**Current direction:** the user has now requested removal of the roguelike player loop.
+[The classic RPG contract](rpg-classic.md) supersedes the provisional death/rest/entry-point
+choices below: campaign as default, permanent progress, safe return and explicit renewal.
+This page records the earlier foundation lot; its implementation limits are historical.
+
 Date : 26 octobre 2026. Lié à [la roadmap](rpg-roadmap.md), R0 et R1.
 
 ## Statut

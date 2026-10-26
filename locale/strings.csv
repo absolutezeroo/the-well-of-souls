@@ -213,6 +213,8 @@ The light takes you back up.,The light takes you back up.,La lumière te ramène
 Out before the dark closed in: the dawn leaves you a gift.,Out before the dark closed in: the dawn leaves you a gift.,Sorti avant que l'ombre ne se referme : l'aube te laisse un présent.
 Seen,Seen,Vu
 Unknown,Unknown,Inconnu
+Speak,Speak,Parler
+Rest,Rest,Se reposer
 +%d souls for the descent.,+%d souls for the descent.,+%d âmes pour la descente.
 New record: %s!,New record: %s!,Nouveau record : %s !
 "Endless mode: the dungeon goes on, harder and harder.","Endless mode: the dungeon goes on, harder and harder.","Mode sans fin : le donjon continue, de plus en plus dur."
@@ -332,6 +334,51 @@ Deepest floor: %d,Deepest floor: %d,Étage le plus profond : %d
 Victories: %d,Victories: %d,Victoires : %d
 Saved %s,Saved %s,Sauvegardée le %s
 From: %s,From: %s,Depuis : %s
+Campaign,Campaign,Campagne
+Le Puits des Âmes,Le Puits des Âmes,Le Puits des Âmes
+"A persistent adventure. Your character, equipment and progress survive death.","A persistent adventure. Your character, equipment and progress survive death.","Une aventure persistante. Votre personnage, votre équipement et votre progression sont conservés après la mort."
+Resume the campaign,Resume the campaign,Reprendre la campagne
+Level %d,Level %d,Niveau %d
+The last save is damaged. Resume will recover the previous valid checkpoint.,The last save is damaged. Resume will recover the previous valid checkpoint.,La dernière sauvegarde est endommagée. Reprendre restaurera le précédent point de sauvegarde valide.
+Begin the adventure,Begin the adventure,Commencer l’aventure
+Retry,Retry,Réessayer
+Recover an abandoned save lock,Recover an abandoned save lock,Récupérer un verrou de sauvegarde abandonné
+Options,Options,Options
+Credits,Credits,Crédits
+Quit,Quit,Quitter
+You awaken at the refuge. Your possessions and progress are safe.,You awaken at the refuge. Your possessions and progress are safe.,Vous vous réveillez au refuge. Vos possessions et votre progression sont conservées.
+Continue,Continue,Continuer
+Journal,Journal,Journal
+Refuge supplies,Refuge supplies,Provisions du refuge
+Talents (%d),Talents (%d),Talents (%d)
+Rest at the refuge,Rest at the refuge,Se reposer au refuge
+Rest restores Health and renews defeated common enemies. Unique guardians and chests stay completed.,Rest restores Health and renews defeated common enemies. Unique guardians and chests stay completed.,Le repos restaure la Santé et fait réapparaître les ennemis communs vaincus. Les gardiens uniques restent vaincus et les coffres ouverts.
+Save,Save,Sauvegarder
+Save and return to title,Save and return to title,Sauvegarder et revenir au titre
+Completed,Completed,Terminé
+Accept the Vigil-Keeper's request,Accept the Vigil-Keeper's request,Accepter la demande de la Veilleuse
+Report to the Vigil-Keeper: %d gold,Report to the Vigil-Keeper: %d gold,Faire son rapport à la Veilleuse : %d or
+In progress,In progress,En cours
+Accept requests and report your discoveries at the refuge.,Accept requests and report your discoveries at the refuge.,Acceptez les demandes et rapportez vos découvertes au refuge.
+Talents,Talents,Talents
+Unspent talent points: %d,Unspent talent points: %d,Points de talent disponibles : %d
+Learn: %d / %d,Learn: %d / %d,Apprendre : %d / %d
+Gold %d,Gold %d,Or %d
+Buy for %d gold,Buy for %d gold,Acheter pour %d or
+Each supply is available once per campaign. Rest and death do not refill this stock.,Each supply is available once per campaign. Rest and death do not refill this stock.,Chaque provision est disponible une seule fois par campagne. Le repos et la mort ne renouvellent pas ce stock.
+You rest. The common creatures stir again in the depths.,You rest. The common creatures stir again in the depths.,Vous vous reposez. Les créatures communes s’agitent de nouveau dans les profondeurs.
+Campaign saved.,Campaign saved.,Campagne sauvegardée.
+Return to the refuge,Return to the refuge,Retourner au refuge
+Your progress is still in memory. Retry saving to return safely.,Your progress is still in memory. Retry saving to return safely.,Votre progression est toujours en mémoire. Réessayez de sauvegarder pour revenir au refuge.
+This passage could not be loaded. Your current place has been kept.,This passage could not be loaded. Your current place has been kept.,Ce passage n’a pas pu être chargé. Vous restez dans le lieu actuel.
+The campaign is locked by another writer. Close other game instances and retry. A stale lock requires explicit recovery.,The campaign is locked by another writer. Close other game instances and retry. A stale lock requires explicit recovery.,La campagne est verrouillée par une autre instance. Fermez les autres instances du jeu et réessayez. Un verrou abandonné nécessite une récupération explicite.
+This campaign needs a compatible game version. No progress has been replaced.,This campaign needs a compatible game version. No progress has been replaced.,Cette campagne nécessite une version compatible du jeu. Aucune progression n’a été remplacée.
+The campaign changed in another instance. This instance cannot overwrite it.,The campaign changed in another instance. This instance cannot overwrite it.,La campagne a changé dans une autre instance. Celle-ci ne peut pas l’écraser.
+The campaign and its backup could not be read. The files have been kept for recovery.,The campaign and its backup could not be read. The files have been kept for recovery.,La campagne et sa copie de secours sont illisibles. Les fichiers sont conservés pour leur récupération.
+The campaign could not be saved or loaded. Check the available storage and retry.,The campaign could not be saved or loaded. Check the available storage and retry.,La campagne n’a pas pu être sauvegardée ou chargée. Vérifiez l’espace de stockage disponible et réessayez.
+Close every other instance of the game first. Removing a lock while another instance is saving can damage progress.,Close every other instance of the game first. Removing a lock while another instance is saving can damage progress.,Fermez d’abord toutes les autres instances du jeu. Retirer un verrou pendant une autre sauvegarde peut endommager la progression.
+All other instances are closed: release the lock,All other instances are closed: release the lock,Toutes les autres instances sont fermées : retirer le verrou
+Cancel,Cancel,Annuler
 New,New,Nouveau
 Tap to skip,Tap to skip,Touche pour passer
 Press {ui_accept} to skip,Press {ui_accept} to skip,Appuie sur {ui_accept} pour passer
@@ -477,7 +524,6 @@ Nothing on your body yet. It adds:,Nothing on your body yet. It adds:,Rien sur t
 %+.1f hits per second,%+.1f hits per second,%+.1f coups par seconde
 skills recharge %d%% slower,skills recharge %d%% slower,compétences rechargées %d %% moins vite
 Lv %d,Lv %d,Nv %d
-Continue,Continue,Continuer
 Always:,Always:,À coup sûr :
 What can happen:,What can happen:,Ce qui peut arriver :
 Nothing happens. You can come back later.,Nothing happens. You can come back later.,Il ne se passe rien. Tu peux revenir plus tard.
@@ -494,12 +540,10 @@ Pick a kind of message.,Pick a kind of message.,Choisis le type de message.
 "Speak, and your words will rise out of the Well. A bug, an idea, a thought: those who watch over it read them all.","Speak, and your words will rise out of the Well. A bug, an idea, a thought: those who watch over it read them all.","Parle, et tes mots remonteront du Puits. Un bug, une idée, une pensée : ceux qui veillent sur lui les lisent tous."
 Include game info,Include game info,Joindre les infos du jeu
 "Sent to Talo (the game's online service), linked to this device's random ID; your name only if you sign. More in the privacy policy.","Sent to Talo (the game's online service), linked to this device's random ID; your name only if you sign. More in the privacy policy.","Envoyé à Talo (service en ligne du jeu), lié à l'identifiant aléatoire de l'appareil ; ton nom seulement si tu signes. Détails : politique de confidentialité."
-Cancel,Cancel,Annuler
 Send,Send,Envoyer
 Only your words and their kind are sent.,Only your words and their kind are sent.,Seuls tes mots et leur type sont envoyés.
 "Adds the version, system, device, screen, controls, language, this run (floor, act, difficulty, build, time) and the last lines of the log.","Adds the version, system, device, screen, controls, language, this run (floor, act, difficulty, build, time) and the last lines of the log.","Ajoute version, système, appareil, écran, contrôles, langue, la partie (étage, acte, difficulté, équipement, temps) et la fin du journal."
 "Adds the version, system, device, screen, controls, language and the last lines of the log.","Adds the version, system, device, screen, controls, language and the last lines of the log.","Ajoute version, système, appareil, écran, contrôles, langue et les dernières lignes du journal."
-Gold %d,Gold %d,Or %d
 Worn: %s,Worn: %s,Porté : %s
 No weapon to work on,No weapon to work on,Aucune arme à travailler
 %d rune sockets,%d rune sockets,%d emplacements de rune
@@ -555,6 +599,7 @@ Hot,Hot,Chaud
 Bare hands,Bare hands,Mains nues
 {difficulty}   Depth {depth}   Damage {damage}   Armor {armor}   {weapon},{difficulty}   Depth {depth}   Damage {damage}   Armor {armor}   {weapon},{difficulty}   Étage {depth}   Dégâts {damage}   Armure {armor}   {weapon}
 Depth {depth}   Damage {damage}   Armor {armor}   {weapon},Depth {depth}   Damage {damage}   Armor {armor}   {weapon},Étage {depth}   Dégâts {damage}   Armure {armor}   {weapon}
+{place}   Damage {damage}   Armor {armor}   {weapon},{place}   Damage {damage}   Armor {armor}   {weapon},{place}   Dégâts {damage}   Armure {armor}   {weapon}
 %s awakens,%s awakens,%s s'éveille
 %s awakens: %s,%s awakens: %s,%s s'éveille : %s
 Floor %d  %s,Floor %d  %s,Étage %d  %s
@@ -566,7 +611,6 @@ Take,Take,Prendre
 Open the bag,Open the bag,Ouvrir le sac
 Nothing worn there yet.,Nothing worn there yet.,Tu ne portes rien à cet emplacement.
 The same as what you wear.,The same as what you wear.,Identique à ce que tu portes.
-Perks,Perks,Atouts
 Pact broken,Pact broken,Pacte rompu
 -%d max Health for the rest of the run,-%d max Health for the rest of the run,-%d Vie max pour le reste de la partie
 Pact kept,Pact kept,Pacte tenu
@@ -606,6 +650,7 @@ Choose a slot to see what it does.,Choose a slot to see what it does.,Choisis un
 Runes,Runes,Runes
 An empty socket: a forge sets runes in it.,An empty socket: a forge sets runes in it.,Un emplacement vide : une forge peut y sertir une rune.
 Inventory,Inventory,Inventaire
+Perks,Perks,Atouts
 Belt,Belt,Ceinture
 Bag,Bag,Sac
 More than it has room for: make room before anything new goes in.,More than it has room for: make room before anything new goes in.,Trop plein : rien de nouveau n'y entre tant que tu ne fais pas de place.
@@ -676,7 +721,6 @@ A new chapter of its story when there is one; otherwise two seconds.,A new chapt
 Walking over an item takes it.,Walking over an item takes it.,Marcher sur un objet le ramasse.
 "Gear stays on the ground: walk over it, then Take.","Gear stays on the ground: walk over it, then Take.","L'équipement reste au sol : marche dessus, puis Prendre."
 Gear only if it beats what you wear; the rest stays on the ground.,Gear only if it beats what you wear; the rest stays on the ground.,L'équipement seulement s'il bat ce que tu portes ; le reste demeure au sol.
-Options,Options,Options
 Language changed: some menus follow from the next run.,Language changed: some menus follow from the next run.,Langue changée : certains menus suivront à la prochaine partie.
 Every change is saved right away.,Every change is saved right away.,Chaque changement est enregistré aussitôt.
 Language,Language,Langue
@@ -745,7 +789,6 @@ Account,Account,Compte
 Your data,Your data,Tes données
 Policy and credits,Policy and credits,Confidentialité et crédits
 "What is sent, to whom and why; who made the game and its licenses.","What is sent, to whom and why; who made the game and its licenses.","Ce qui est envoyé, à qui et pourquoi ; qui a fait le jeu et ses licences."
-Credits,Credits,Crédits
 Not signed in: your progress stays on this device.,Not signed in: your progress stays on this device.,Pas connecté : ta progression reste sur cet appareil.
 None yet (nothing was sent),None yet (nothing was sent),Aucun pour l'instant (rien n'a été envoyé)
 Gameplay statistics,Gameplay statistics,Statistiques de jeu
@@ -837,7 +880,6 @@ Sell for %d gold,Sell for %d gold,Vendre pour %d or
 Can't be sold,Can't be sold,Invendable
 Price: %d gold,Price: %d gold,Prix : %d or
 {room}: sell something first,{room}: sell something first,{room} : vends d'abord quelque chose
-Buy for %d gold,Buy for %d gold,Acheter pour %d or
 Unlock,Unlock,Déverrouiller
 Lock,Lock,Verrouiller
 "Locked: it stays when you reroll, and if you don't buy it, the next merchant sells it to you at this price.","Locked: it stays when you reroll, and if you don't buy it, the next merchant sells it to you at this price.","Verrouillé : il reste quand tu relances, et si tu ne l'achètes pas, le prochain marchand te le vend à ce prix."
@@ -1173,6 +1215,10 @@ The Sunken Stacks,The Sunken Stacks,Les Rayonnages Engloutis
 The Collapsed Throne Hall,The Collapsed Throne Hall,La Salle du Trône Effondrée
 "Water drips from the stone overhead, as if the Well itself were weeping.","Water drips from the stone overhead, as if the Well itself were weeping.","L'eau goutte de la pierre, là-haut, comme si le Puits lui-même pleurait."
 The Weeping Hollow,The Weeping Hollow,Le Creux qui Pleure
+Silence beneath the roots,Silence beneath the roots,Le silence sous les racines
+"The Vigil-Keeper asks you to defeat the guardian of the Root Hollow, then return to the refuge.","The Vigil-Keeper asks you to defeat the guardian of the Root Hollow, then return to the refuge.","La Veilleuse vous demande de vaincre le gardien du Creux des Racines, puis de revenir au refuge."
+The forgotten watch,The forgotten watch,La garde oubliée
+"Reach the Forgotten Vault, defeat its guardian and report to the Vigil-Keeper.","Reach the Forgotten Vault, defeat its guardian and report to the Vigil-Keeper.","Rejoignez le Caveau Oublié, terrassez son gardien et faites votre rapport à la Veilleuse."
 Shroud of the Deep,Shroud of the Deep,Linceul des Profondeurs
 The dark of the lower floors clings to those who keep coming back.,The dark of the lower floors clings to those who keep coming back.,L'ombre des étages d'en bas colle à ceux qui reviennent sans cesse.
 Brand of the Pit,Brand of the Pit,Marque de l'Abîme
@@ -1755,6 +1801,10 @@ Pick up 1500 gold,Pick up 1500 gold,Ramasse 1500 or
 Slay 400 monsters,Slay 400 monsters,Abats 400 monstres
 Win %d run,Win %d run,Gagne %d partie
 Win 1 run,Win 1 run,Gagne 1 partie
+The Root Hollow,The Root Hollow,Le Creux des Racines
+The Forgotten Vault,The Forgotten Vault,Le Caveau Oublié
+The Lower Passage,The Lower Passage,Le Passage Inférieur
+The Vigil Refuge,The Vigil Refuge,Le Refuge de la Veille
 Outer Courtyard,Outer Courtyard,Cour extérieure
 Silent Hall,Silent Hall,Salle silencieuse
 Echo Rune,Echo Rune,Rune d'Écho

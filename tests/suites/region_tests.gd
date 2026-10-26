@@ -167,7 +167,7 @@ func _test_old_schema(proof: RegionProof, path: String) -> void:
 		region.erase("initialized")
 		region.erase("layout_stamp")
 		region.erase("objects")
-		for field in ["population_initialized", "population_stamp", "gold", "monsters", "chests"]:
+		for field in ["population_initialized", "population_stamp", "gold", "monsters", "chests", "explored"]:
 			region.erase(field)
 	(data.world.facts as Dictionary)["old:quest"] = true
 	var payload := JSON.stringify(data)

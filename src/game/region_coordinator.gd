@@ -8,6 +8,7 @@ signal region_changed(region: RegionDef)
 signal travel_failed(reason: Failure)
 enum Failure { NONE, CONFIGURATION, DESTINATION, LAYOUT, STATE, SAVE, SETTLING }
 
+const PLAYER := preload("res://src/entities/player/player.tscn")
 const STAIRS := preload("res://src/entities/stairs/stairs.tscn")
 var session: GameSession
 var atlas: RegionAtlas
@@ -121,7 +122,102 @@ func _requested(link_id: String, ticket: RefCounted) -> void:
 		travel(link_id)
 
 
-func _capture() -> CampaignState:
+## Copy the settled live state for an explicit campaign transaction. Callbacks edit only
+## this copy; a failed save leaves the live world and the previous snapshot untouched.
+func snapshot() -> CampaignState:
+	return _capture()
+
+
+func commit_snapshot(candidate: CampaignState) -> bool:
+	if candidate == null or session == null or _busy or not session.world.spawns.is_settled() \
+			or candidate.id != session.campaign.id or candidate.revision != session.campaign.revision \
+			or candidate.hero == null or candidate.world_state == null \
+			or candidate.hero.id != session.campaign.hero.id or candidate.world_state.id != session.campaign.world_state.id \
+			or candidate.hero.region_id != current_id or CampaignState.from_data(candidate.to_data()) == null:
+		return _fail(Failure.STATE)
+	if _save and not _save.commit(candidate):
+		return _fail(Failure.SAVE)
+	session.attach_campaign(candidate)
+	_loot.set_state(candidate.world_state.regions[current_id])
+	_population.set_state(candidate.world_state.regions[current_id])
+	last_failure = Failure.NONE
+	return true
+
+
+## A refuge rest heals the living hero and renews only dead eligible authored enemies in
+## other places. Ground loot, chests, living thieves, unique guardians and quest facts survive.
+func rest(region_id: String, entry: String) -> bool:
+	if session == null or session.character.is_dead or current_id != region_id:
+		return _fail(Failure.CONFIGURATION)
+	return _return_to_refuge(region_id, entry, false)
+
+
+## Called after the death settlement, never from the middle of Actor.die().
+func recover(region_id: String, entry: String) -> bool:
+	if session == null or not session.character.is_dead:
+		return _fail(Failure.CONFIGURATION)
+	return _return_to_refuge(region_id, entry, true)
+
+
+func _return_to_refuge(region_id: String, entry: String, from_death: bool) -> bool:
+	var definition := atlas.find(region_id)
+	if definition == null or not definition.monsters.is_empty() or not definition.entries.has(entry):
+		return _fail(Failure.DESTINATION)
+	var candidate := _capture(from_death)
+	if candidate == null:
+		return false
+	if not from_death:
+		for saved_region in candidate.world_state.regions.values():
+			if saved_region.id == current_id or not saved_region.population_initialized:
+				continue
+			var region_def := atlas.find(saved_region.id)
+			if region_def == null or saved_region.population_stamp != region_def.population_stamp():
+				return _fail(Failure.LAYOUT)
+			var initial := RegionState.new()
+			if not RegionPopulation.initialize(initial, region_def, _content):
+				return _fail(Failure.STATE)
+			for spawn in region_def.monsters:
+				var key := "monster:" + region_def.id + "/" + spawn.id
+				if spawn.renew_on_rest and saved_region.monsters.has(key) and saved_region.monsters[key].dead:
+					saved_region.monsters[key] = initial.monsters[key]
+	var map := definition.make_map(entry)
+	if not _prepare(candidate, definition, entry, map.cell_to_world(map.start_cell)):
+		return false
+	var data := candidate.hero.to_data()
+	data.player.hp = session.character.get_max_hp()
+	candidate.hero = CharacterState.from_data(data)
+	var replacement: Player
+	if candidate.hero == null:
+		return _fail(Failure.STATE)
+	if from_death:
+		replacement = PLAYER.instantiate() as Player
+		replacement.world = session.world
+		replacement.setup(_content.player)
+		candidate.hero.restore(replacement)
+		replacement.hp = replacement.get_max_hp()
+		replacement.position = candidate.hero.position
+		candidate.hero.capture(replacement)
+	if _save and not _save.commit(candidate):
+		if replacement:
+			replacement.free()
+		return _fail(Failure.SAVE)
+	if from_death:
+		# Keep the old node alive until listeners bind the replacement. World.clear_floor()
+		# must not free it before the HUD has disconnected its old signal subscriptions.
+		var previous := session.character
+		previous.get_parent().remove_child(previous)
+		add_child(previous)
+		session.character = replacement
+		_activate(candidate, definition, entry)
+		previous.queue_free()
+	else:
+		_activate(candidate, definition, entry)
+		session.character.hp = session.character.get_max_hp()
+		session.character.health_changed.emit(session.character.hp, session.character.get_max_hp())
+	return true
+
+
+func _capture(from_death: bool = false) -> CampaignState:
 	if session == null or current_id.is_empty() or session.campaign == null:
 		_fail(Failure.CONFIGURATION)
 		return null
@@ -129,11 +225,12 @@ func _capture() -> CampaignState:
 		_fail(Failure.SETTLING)
 		return null
 	var candidate := CampaignState.from_data(session.campaign.to_data())
-	if candidate == null or not candidate.hero.capture(session.character) \
+	if candidate == null or not (candidate.hero.capture_recovery(session.character) if from_death else candidate.hero.capture(session.character)) \
 			or not _loot.capture(candidate.world_state.regions[current_id]) \
 			or not _population.capture(candidate.world_state.regions[current_id]):
 		_fail(Failure.STATE)
 		return null
+	candidate.world_state.regions[current_id].explored = session.world.fog.explored.duplicate()
 	_normalize_loot(candidate.world_state.regions[current_id], atlas.find(current_id))
 	return candidate
 
@@ -158,6 +255,8 @@ func _prepare(candidate: CampaignState, definition: RegionDef, entry: String, at
 				(Vector2(spawn.cell) + Vector2(0.5, 0.5)) * definition.tile_size)
 			state.objects[object_state.id] = object_state
 	var map := definition.make_map(entry)
+	if not state.explored.is_empty() and state.explored.size() != map.width * map.height:
+		return _fail(Failure.LAYOUT)
 	if not state.population_initialized:
 		if not RegionPopulation.initialize(state, definition, _content):
 			return _fail(Failure.STATE)
@@ -240,16 +339,21 @@ func _activate(candidate: CampaignState, definition: RegionDef, entry: String) -
 	hero.controls.mute_presses()
 	hero.global_position = candidate.hero.position
 	hero.reset_safe_position()
+	hero.camera.make_current()
 	hero.camera.reset_smoothing()
 	current_id = definition.id
 	_loot.bind(candidate.world_state.regions[current_id])
 	_population.bind(candidate.world_state.regions[current_id])
+	var seen := candidate.world_state.regions[current_id].explored
+	if not seen.is_empty():
+		world.fog.explored = seen.duplicate()
 	for link in definition.links:
 		var stairs := STAIRS.instantiate() as Stairs
 		stairs.texture = definition.biome.theme.stairs_texture()
 		stairs.position = world.map.cell_to_world(link.cell)
 		stairs.reached.connect(_portal_reached.bind(link.id, _ticket))
 		world.add_entity(stairs)
+	world.map_reset.emit()  # exploration and persistent entities now match the rebuilt map
 	last_failure = Failure.NONE
 	_busy = false
 	region_changed.emit(definition)

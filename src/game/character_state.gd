@@ -23,6 +23,20 @@ func capture(player: Player) -> bool:
 	return true
 
 
+## Death recovery captures the current inventory/XP, never an older living checkpoint.
+## Only the dedicated recovery path may normalize zero Health into a living saved record.
+func capture_recovery(player: Player) -> bool:
+	if not is_instance_valid(player) or not player.is_dead or not player.global_position.is_finite():
+		return false
+	var data := player.save_state()
+	data.hp = player.get_max_hp()
+	if not CampaignFormat.player_data(data):
+		return false
+	_player_data = data.duplicate(true)
+	position = player.global_position
+	return true
+
+
 ## Caller owns region loading and safe placement; this restores the hero's gameplay data only.
 func restore(player: Player) -> bool:
 	if not is_instance_valid(player) or player.is_dead or not CampaignFormat.player_data(_player_data):

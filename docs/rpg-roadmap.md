@@ -2,8 +2,9 @@
 
 **Date : 26 octobre 2026. Base examinée : `308e410`.**
 
-Le jeu livré par le code actuel reste un roguelike d’action. Ce document planifie sa
-transformation ; il ne décrit pas des fonctionnalités déjà réalisées. La cible demandée est
+Le parcours principal est désormais un RPG solo à campagne persistante sur quatre lieux fixes
+([contrat actuel](rpg-classic.md)). La boucle de runs reste hors du parcours joueur. Ce document
+conserve le plan initial et les lots successifs ; les anciennes limites de chaque lot sont historiques. La cible demandée est
 un **RPG en monde ouvert**, avec un **RPG multijoueur ultérieur**. Godot 4.7, GDScript typé,
 Compatibility, Android Samsung S23 et Windows restent les contraintes de départ.
 
@@ -42,11 +43,23 @@ sol et mémoire durable, avec une frontière de récompense avant les checkpoint
 est maintenant peuplée. CampaignSave v3 lit v1/v2 ; la carte task_365 suit ce lot. R2.3 reste
 partiel : PNJ, portes, exploration et activités demandent encore leurs propres états.
 
+## Cinquième lot — la campagne devient le parcours principal
+
+La demande de retirer le roguelike autorise le basculement F5/export vers CampaignScreen.
+[Le contrat RPG classique](rpg-classic.md) décrit création/reprise, quatre lieux, progression
+conservée après la mort, repos explicite, talents choisis, journal et paiements uniques,
+provisions et exploration persistantes, schéma 4 et récupération visible. task_369 suit le lot.
+Les anciennes sauvegardes sont préservées, hors parcours ; aucun import ou cloud implicite.
+La tranche reste à essayer sur appareils avant validation J1/R9.1. Une campagne étendue,
+le streaming, les boss narratifs et le réseau ne sont pas déclarés finis.
+
 ## Ce qui est décidé et ce qui doit l’être
 
 **Demandé :** monde ouvert, évolution durable du jeu vers le RPG, préparation d’un multijoueur
 plus tard. **Livrable de planification initiale :** roadmap, inventaire des transformations et cartes de
-réalisation. Aucune conversion du gameplay, migration de sauvegarde ou infrastructure déployée.
+réalisation. Le parcours de campagne, la mort sans perte, le repos, les talents, les premiers objectifs/services
+et la migration de schéma de campagne sont livrés. L’import des sauvegardes roguelike, le grand
+monde et l’infrastructure multijoueur restent à construire.
 
 **Hypothèses proposées pour travailler, à valider en R0 :**
 

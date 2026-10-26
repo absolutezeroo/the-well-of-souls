@@ -102,7 +102,7 @@ func _ready() -> void:
 
 func open(player: Player) -> void:
 	if _player != player:
-		if _player:
+		if is_instance_valid(_player):
 			_player.dismantled.disconnect(_on_dismantled)
 		player.dismantled.connect(_on_dismantled)
 	_player = player

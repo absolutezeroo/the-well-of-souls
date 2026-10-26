@@ -4,30 +4,34 @@
 villagers' souls. Only the ninja keeping watch at the shrine was spared. Take the lantern, go down,
 bring the souls back.*
 
-A real-time action roguelike for phones and desktop, made with Godot 4.7 (GDScript, Compatibility
-renderer). It plays with touch controls, keyboard or gamepad, in English and French.
+A persistent solo action RPG for phones and desktop, made with Godot 4.7 (typed GDScript,
+Compatibility renderer), with touch, keyboard/mouse and gamepad controls in English and French.
 
-- **Runs** of 4 acts, 3 floors each, the last one a boss with three phases. Procedural floors in
-  nine biomes, lit tile by tile by torches and lanterns, with traps, holes, quicksand, ambushes,
-  trapped chests, curses and floor events, and two ways down to choose from.
-- **No classes**: what you hold and what you learn decides how you play. Weapons bring two skills,
-  tomes teach a spell, and each level up offers 1 perk out of 3. Collect 3 perks of a family
-  (Inferno, Frost, Blood, Storm, Arcane) and it wakes a new way to fight. Gear has rarity, affixes,
-  item levels and rune sockets.
-- **Monsters** telegraph their attacks and come as Elites, Fell, Legendaries or rare Celestials.
-- **Between runs**, souls buy the Tree of Souls, then come oaths, Nightmare and ten ascension
-  levels. There are also a daily run with its online leaderboard (Talo, under a pseudonym; the
-  rest of the game is offline), daily and weekly quests, a bestiary with challenges,
-  achievements and a speedrun timer.
+- **A lasting character**: equipment, inventory, gold, XP, learned skills and chosen talents
+  survive death. The hero returns to the safe refuge; no new run or shrine grind is required.
+- **Fixed places**: the Vigil Refuge, Lower Passage and two underground combat destinations.
+  Enemies, wounds, loot, opened chests, unique guardians and discovered maps stay as saved.
+- **Explicit rest** renews defeated common enemies while preserving unique objectives/rewards.
+  Requests from the Vigil-Keeper, journal, permanent talents and limited refuge supplies form
+  the first playable campaign loop.
+- **Separate local campaign saves** with atomic checkpoints and explicit recovery. No account
+  is required. The former run/profile files are preserved and are never silently imported.
+
+The RPG is an initial four-place campaign, not a finished large open world. See
+[the current gameplay contract](docs/rpg-classic.md) and [remaining roadmap](docs/rpg-roadmap.md).
+The former roguelike scenes and their regression tests remain as compatibility/reference code;
+they are outside the normal player flow. Their procedural acts, daily races, ascensions and
+meta-progression are not active campaign features.
 
 Version 0.2.0 (`export_presets.cfg`), in testing on Android.
 
 ## Quick start
 
 1. Install [Godot 4.7](https://godotengine.org/download) (the standard build, not .NET).
-2. Open `project.godot` in it, then press Play (F5). The game starts on the title screen.
-3. In a debug build, the **DBG** button (or F1) opens the debug panel: jump to any floor, cheats
-   (god mode, invisible, damage, no AI), a gallery of every biome and monster ([docs/testing.md](docs/testing.md#debug-tools)).
+2. Open `project.godot` in it, then press Play (F5). The game opens the campaign title. Begin an adventure or resume the saved character.
+3. Speak to the Vigil-Keeper at the refuge, explore through the stairs, and use Pause for the
+   journal, talents, supplies and saves. Legacy developer scenes remain documented in
+   [testing.md](docs/testing.md#debug-tools).
 
 Tests run headless from the project root:
 
@@ -59,7 +63,8 @@ docs/      Everything else (below)
 
 | Read | To |
 |---|---|
-| [docs/rpg-roadmap.md](docs/rpg-roadmap.md) | plan the transformation into an open-world RPG, then multiplayer (future work; not implemented) |
+| [docs/rpg-roadmap.md](docs/rpg-roadmap.md) | track the remaining open-world campaign and multiplayer work |
+| [docs/rpg-classic.md](docs/rpg-classic.md) | play and extend the current persistent RPG |
 | [docs/architecture.md](docs/architecture.md) | find your way in the code: the full layout, how the systems fit, the autoloads |
 | [docs/conventions.md](docs/conventions.md) | write code that fits: typing, naming, data-driven rules, texts, moving files |
 | [docs/adding-content.md](docs/adding-content.md) | add monsters, items, perks, biomes, bosses... |

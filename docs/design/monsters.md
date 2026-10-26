@@ -1,5 +1,9 @@
 # Acts, monsters and bosses
 
+The [classic RPG campaign](../rpg-classic.md) persists enemies and their durable trait state.
+RegionMonsterDef.renew_on_rest controls explicit renewal of dead common spawns; unique quest
+guardians stay dead. Loading and death never respawn them. Shared combat rules below still apply.
+
 ## Acts and their monsters
 
 A run is **4 acts of 3 floors** (`data/dungeon/acts/`, listed in `dungeon_config.tres`). Each act has

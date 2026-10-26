@@ -134,10 +134,14 @@ static func warm_up(parent: Node2D) -> void:
 	sprite.z_index = RenderingServer.CANVAS_ITEM_Z_MIN
 	parent.add_child(sprite)
 	# In view (a culled item is never drawn, never compiled), then gone.
+	var sprite_ref: WeakRef = weakref(sprite)
 	var place := func() -> void:
-		var camera := sprite.get_viewport().get_camera_2d() if sprite.is_inside_tree() else null
+		var live := sprite_ref.get_ref() as Sprite2D
+		if not is_instance_valid(live) or not live.is_inside_tree():
+			return
+		var camera := live.get_viewport().get_camera_2d()
 		if camera:
-			sprite.global_position = camera.get_screen_center_position()
+			live.global_position = camera.get_screen_center_position()
 	place.call_deferred()
 	parent.get_tree().create_timer(0.2, true, false, true).timeout.connect(sprite.queue_free)
 

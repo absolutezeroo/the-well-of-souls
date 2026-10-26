@@ -234,3 +234,17 @@ population. There is no added per-monster per-frame allocation or group scan. Re
 counters run only around transfers/deaths/openings and queued spawn batches. Runtime dead
 minions are removed from records, preventing an unbounded dead-summon history. Capture remains
 synchronous; its peak memory and latency still require S23/Windows measurements.
+
+
+## Public classic RPG
+
+CampaignRuntime counts down a scalar autosave timer; no entity scans or string/dictionary
+construction were added to per-frame campaign paths. New UI rows are built on explicit menu
+changes. Map discovery uses a bounded byte array and hex encoding only at checkpoint boundaries.
+Refuge services reuse Interactor's registry. Death prepares a replacement hero before commit;
+rest seeds temporary native monster records only at that explicit boundary. Campaign checkpoints
+remain synchronous and bounded to 16 MiB; 30-second active-play autosave is data, not proof of a
+mobile latency budget. Device checkpoint/recovery timings and repeated-travel memory remain
+required. The main scene reuses the full combat HUD and calls its regional rebinding on changes,
+not every frame. BodyLook's deferred warm-up uses a weak reference so a rejected/freed scene
+cannot retain a stale sprite callback.

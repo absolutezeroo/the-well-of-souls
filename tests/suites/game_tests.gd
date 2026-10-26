@@ -27,6 +27,7 @@ var _borrowed: Array[Node] = []
 
 func test_cases() -> Array:
 	return [
+		["classic_rpg", _test_classic_rpg],
 		["region_population", _test_region_population],
 		["regions", _test_region_places],
 		["campaign", _on_sturdy_game(func(game: Game) -> void: (_borrow(CampaignTests.new()) as CampaignTests).run_game(game))],
@@ -148,6 +149,13 @@ func _on_game(body: Callable, texts_on_grid: bool = false) -> Callable:
 
 
 ## Independent authored-place scene: no legacy Game world shares its collision space.
+func _test_classic_rpg() -> void:
+	var suite := ClassicRpgTests.new()
+	add_child(suite)
+	await suite.run_world()
+	suite.free()
+
+
 func _test_region_population() -> void:
 	var suite := RegionPopulationTests.new()
 	add_child(suite)

@@ -1,5 +1,9 @@
 # Dungeon
 
+**Current campaign:** [four fixed persistent places](../rpg-classic.md), linked through authored
+region exits. Traversal does not generate a new run floor. The renderer, collision, combat and
+loot machinery below are shared; procedural run/act rules are legacy-only.
+
 ## Floors
 
 - **Walls** are cliffs drawn from a 16x16 tileset (`DungeonView`): plateau edges, inner corners,

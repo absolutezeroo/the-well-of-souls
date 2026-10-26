@@ -249,7 +249,7 @@ func _test_v2(path: String) -> void:
 	_clean(path)
 	var data := _proof.session.campaign.to_data()
 	for region: Dictionary in data.world.regions.values():
-		for field in ["gold", "monsters", "chests", "population_initialized", "population_stamp"]:
+		for field in ["gold", "monsters", "chests", "population_initialized", "population_stamp", "explored"]:
 			region.erase(field)
 	var payload := JSON.stringify(data)
 	SafeFile.write_json(path, { "format": CampaignSave.FORMAT, "version": 2, "payload": payload, "sha256": payload.sha256_text() })

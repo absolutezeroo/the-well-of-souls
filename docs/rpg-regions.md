@@ -1,5 +1,9 @@
 # RPG : deux lieux chargés et objets persistants
 
+The [classic RPG](rpg-classic.md) now uses a separate authored campaign atlas from F5;
+the two-place scene below remains a developer proof. Exploration, death and explicit rest
+are implemented by the current campaign; older scope statements here are historical.
+
 Troisième lot de fondations. Voir la [roadmap](rpg-roadmap.md) et le
 [checkpoint de campagne](rpg-persistence.md). Cette preuve charge de vraies cartes avec le
 rendu, la collision, la navigation et le joueur existants. Elle reste distincte du menu et du

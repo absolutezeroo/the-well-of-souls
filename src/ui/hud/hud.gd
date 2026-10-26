@@ -19,6 +19,8 @@ const BANNER_MARGIN := 40.0
 ## the left and the map on the right.
 const BANNER_WIDTH := 1000.0
 
+## Empty in legacy runs; authored campaign places replace depth/difficulty in the info line.
+var campaign_place := ""
 var _player: Player
 var _world: World
 var _banner_tween: Tween
@@ -349,6 +351,9 @@ func _show_floor_widgets(shown: bool, who: StringName) -> void:
 
 
 func _refresh_seal() -> void:
+	if not campaign_place.is_empty():
+		_seal_label.hide()
+		return
 	var seal := _world.seal
 	_seal_label.visible = seal.needed > 0 or _world.arena == null
 	if seal.is_sealed():
@@ -495,6 +500,17 @@ func _on_xp_changed(xp: int, needed: int, level: int) -> void:
 	_xp_bar.set_values(xp, needed, tr("Lv %d") % level)
 
 
+## Campaign presentation has no run timer, souls balance, stair seal or debug run controls.
+func show_campaign_place(place: String) -> void:
+	campaign_place = place
+	offers_button.caption_key = "Talents"  # i18n
+	_souls_label.hide()
+	_seal_label.hide()
+	if has_node("DebugButton"):
+		get_node("DebugButton").hide()
+	_refresh_info()
+
+
 func _refresh_info() -> void:
 	if _player == null:
 		return
@@ -511,7 +527,9 @@ func _refresh_info() -> void:
 	}
 	var template := tr("{difficulty}   Depth {depth}   Damage {damage}   Armor {armor}   {weapon}") if difficulty \
 		else tr("Depth {depth}   Damage {damage}   Armor {armor}   {weapon}")
-	var line := template.format(facts)
+	var line := tr("{place}   Damage {damage}   Armor {armor}   {weapon}").format({
+		"place": campaign_place, "damage": facts.damage, "armor": facts.armor, "weapon": facts.weapon,
+	}) if not campaign_place.is_empty() else template.format(facts)
 	# When the line wraps, a stat keeps its number ("Armor" never ends a line, its 0 on the next).
 	_info_label.text = _word_and_number.sub(line, "$1\u00a0$2", true)
 

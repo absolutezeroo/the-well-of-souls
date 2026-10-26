@@ -1,5 +1,10 @@
 # Difficulty and progression between runs
 
+**Current product:** [persistent RPG progression](../rpg-classic.md): permanent level/talent
+points, same character after death, explicit refuge rest, one-time quest and supply claims.
+The difficulty, shrine, daily-run and ascension rules below describe the archived descent;
+they are not the campaign progression loop.
+
 ## Difficulty
 
 Pressing Descend asks for a difficulty (`data/difficulties/`, `DifficultyDef`). Every value multiplies

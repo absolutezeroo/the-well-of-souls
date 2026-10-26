@@ -17,6 +17,7 @@ var count := 0:
 			_pop()
 		queue_redraw()
 
+var caption_key := "Perks"
 var _time := 0.0
 var _tween: Tween
 
@@ -65,7 +66,7 @@ func _draw() -> void:
 	var words := str(count)
 	Fonts.draw(self, badge + Vector2(0, Fonts.half_cap(Fonts.BODY)), words, Fonts.BODY, Color.WHITE, 0.5, Color.TRANSPARENT)
 	# What it is, under it.
-	var caption := tr("Perks")
+	var caption := tr(caption_key)
 	Fonts.draw(self, Vector2(center.x, size.y + Fonts.cap_height(Fonts.BODY)), caption, Fonts.BODY, GOLD, 0.5, Color.BLACK)
 
 

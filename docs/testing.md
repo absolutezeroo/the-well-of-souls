@@ -396,3 +396,14 @@ assertions: wounded/ranked enemies, authored death tombstones, runtime offspring
 chest state, exact wealth, reentrant checkpoint refusal, double pickup, trap fuse completion,
 restart and non-destructive v2 migration. Existing `game.regions` keeps its original assertions;
 its v1 fixture drops the later fields and checks the current CampaignSave.VERSION.
+
+
+## Classic RPG campaign
+
+The default F5/export scene is `src/ui/campaign/campaign_screen.tscn`. The former title and
+Game scenes remain explicit developer/regression entry points, outside the campaign UI.
+`unit.classic_rpg` / `game.classic_rpg` exercise the actual campaign runtime and launcher with
+isolated save paths, including failed transactions, death retry and schema migration. They
+are part of the normal full test command; historical combat/online/save assertions remain.
+See [the gameplay and manual-device checklist](rpg-classic.md). The two-region proof remains
+available for targeted debugging but does not launch the product menu.

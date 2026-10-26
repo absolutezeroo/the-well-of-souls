@@ -8,7 +8,7 @@ enum Failure { NONE, DISABLED, MISSING, IO, CORRUPT, INCOMPATIBLE, INVALID_STATE
 enum CommitStep { BEFORE_BACKUP, AFTER_BACKUP, BEFORE_PUBLISH, AFTER_PUBLISH }
 
 const FORMAT := "well.campaign"
-const VERSION := 3
+const VERSION := 4
 const OLDEST_VERSION := 1
 ## Prototype storage bound, not a gameplay limit. Sector files/journals need a later codec.
 const MAX_BYTES := 16 * 1024 * 1024
@@ -54,7 +54,7 @@ func load_state() -> CampaignState:
 
 
 ## Synchronous and single-writer. A crashed writer leaves a lock and produces BUSY; do not
-## guess that another process is dead or delete its lock automatically. Recovery UI is later.
+## guess that another process is dead or delete its lock automatically. The title offers explicit recovery.
 func commit(state: CampaignState) -> bool:
 	last_failure = Failure.NONE
 	recovered = false
@@ -112,6 +112,20 @@ func _commit_locked(original: CampaignState, snapshot: CampaignState) -> bool:
 	return true
 
 
+## Explicit maintenance only. The UI must first explain that all other game instances must
+## be closed and obtain a deliberate confirmation. Nonempty/changed locks are never removed.
+func release_abandoned_lock() -> bool:
+	if path.is_empty():
+		return _fail(Failure.DISABLED)
+	var lock_path := ProjectSettings.globalize_path(path + ".lock")
+	if not DirAccess.dir_exists_absolute(lock_path):
+		return true
+	if DirAccess.remove_absolute(lock_path) != OK:
+		return _fail(Failure.BUSY)
+	last_failure = Failure.NONE
+	return true
+
+
 ## A test backend can stop at publication boundaries; production always continues.
 func _checkpoint(_step: CommitStep) -> bool:
 	return true
@@ -164,10 +178,10 @@ func _inspect(candidate: String) -> Inspection:
 	return result
 
 
-## v1 gains loose-item ledgers; v2 gains explicit population/currency ledgers. Preserve old
+## v1 gains loose-item ledgers; v2 population/currency; v3 persistent exploration. Preserve old
 ## facts and geometry, and leave initialization to the region coordinator, never a read side effect.
 static func _migrate(value: Variant, version: int) -> Variant:
-	if version >= 3:
+	if version >= 4:
 		return value
 	if not value is Dictionary or not value.get("world") is Dictionary \
 			or not value.world.get("regions") is Dictionary:
@@ -175,6 +189,11 @@ static func _migrate(value: Variant, version: int) -> Variant:
 	var migrated: Dictionary = value.duplicate(true)
 	for key: Variant in migrated.world.regions:
 		var region: Variant = migrated.world.regions[key]
+		if version == 3:
+			if not CampaignFormat.keys(region, ["id", "layout_version", "facts", "initialized", "layout_stamp", "objects", "gold", "monsters", "chests", "population_initialized", "population_stamp"]):
+				return null
+			region["explored"] = ""
+			continue
 		if version == 1:
 			if not CampaignFormat.keys(region, ["id", "layout_version", "facts"]):
 				return null
@@ -188,4 +207,5 @@ static func _migrate(value: Variant, version: int) -> Variant:
 		region["chests"] = {}
 		region["population_initialized"] = false
 		region["population_stamp"] = ""
+		region["explored"] = ""
 	return migrated

@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 369,
+  "next_id": 372,
   "tags": [
     "pc",
     "test",
@@ -4267,8 +4267,8 @@
     {
       "id": "task_293",
       "title": "R0.2 · Décider mort, réapparition et renouvellement du monde",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Choisir coût de mort, lieu sûr, récupération éventuelle, permanence des boss, respawn des monstres/ressources et réinitialisation des donjons. Distinguer temps de jeu, temps hors ligne et temps serveur futur.\nFini quand : Chaque type d’entité a une politique de persistance et de renouvellement ; mourir, quitter ou changer l’horloge ne crée pas une ferme de récompenses.\nPoints de départ existants : src/game/game.gd; src/world/floor_save.gd.\nAvancement du premier lot (26 octobre 2026) : Proposition rédigée dans docs/rpg-foundation-contract.md (R0.2) : retour au lieu sûr, conservation du personnage, politiques par type et renouvellement explicite. À relire avant implémentation ; aucune règle de mort actuelle changée.",
-      "status": "review",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Choisir coût de mort, lieu sûr, récupération éventuelle, permanence des boss, respawn des monstres/ressources et réinitialisation des donjons. Distinguer temps de jeu, temps hors ligne et temps serveur futur.\nFini quand : Chaque type d’entité a une politique de persistance et de renouvellement ; mourir, quitter ou changer l’horloge ne crée pas une ferme de récompenses.\nPoints de départ existants : src/game/game.gd; src/world/floor_save.gd.\nAvancement du premier lot (26 octobre 2026) : Proposition rédigée dans docs/rpg-foundation-contract.md (R0.2) : retour au lieu sûr, conservation du personnage, politiques par type et renouvellement explicite. À relire avant implémentation ; aucune règle de mort actuelle changée.\n\nLot RPG classique (26/10/2026) : Règles du parcours RPG implémentées : identité/XP/or/équipement conservés après mort, retour au refuge, pleine Santé, aucun respawn au chargement. Seul le repos explicite renouvelle les ennemis initiaux morts éligibles des lieux inactifs ; les gardiens uniques, coffres, droits, objets et voleurs vivants restent acquis. docs/rpg-classic.md. Ajustements d’équilibrage après essai appareil.",
+      "status": "done",
       "priority": "high",
       "epic_id": "epic_279",
       "tags": [
@@ -4277,7 +4277,7 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792975625,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
@@ -4299,7 +4299,7 @@
     {
       "id": "task_295",
       "title": "R0.4 · Établir le canon de surface et le devenir du roguelike",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Adapter Kagari, sanctuaire, âmes endormies, régions de surface et révélations à un monde ouvert. Décider si l’ancienne descente reste un mode séparé, devient un donjon ou est conservée seulement comme version précédente ; traiter fins, Seuil, Tréfonds et Gardien Sans Nom. Trier tout l’ancien backlog entre prérequis transversal, adaptation RPG, ancien mode à conserver et idée reportée ; conserver les correctifs et l’historique.\nFini quand : Carte narrative sans spoiler prématuré ; décision explicite sur mode historique, succès et classements ; aucune suppression d’anciens ids ou fichiers de joueur.\nPoints de départ existants : docs/lore.md; docs/design/progression.md; src/game/daily_run.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : contraintes du canon de Kagari/Solhar et transition préservant les anciennes sauvegardes documentées dans docs/rpg-foundation-contract.md. Restent carte narrative, décision produit finale sur le mode historique et tri exhaustif de l’ancien backlog.",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R0.\nDépendances : R0.1 (task_292)\nÀ réaliser : Adapter Kagari, sanctuaire, âmes endormies, régions de surface et révélations à un monde ouvert. Décider si l’ancienne descente reste un mode séparé, devient un donjon ou est conservée seulement comme version précédente ; traiter fins, Seuil, Tréfonds et Gardien Sans Nom. Trier tout l’ancien backlog entre prérequis transversal, adaptation RPG, ancien mode à conserver et idée reportée ; conserver les correctifs et l’historique.\nFini quand : Carte narrative sans spoiler prématuré ; décision explicite sur mode historique, succès et classements ; aucune suppression d’anciens ids ou fichiers de joueur.\nPoints de départ existants : docs/lore.md; docs/design/progression.md; src/game/daily_run.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : contraintes du canon de Kagari/Solhar et transition préservant les anciennes sauvegardes documentées dans docs/rpg-foundation-contract.md. Restent carte narrative, décision produit finale sur le mode historique et tri exhaustif de l’ancien backlog.\n\nLot RPG classique (26/10/2026) : Le parcours par défaut est CampaignScreen. Les menus de runs, quotidien, sanctuaire et game-over ne sont plus proposés. Code/scènes historiques conservés hors parcours pour sauvegardes et régressions ; aucun import silencieux. Premiers lieux souterrains sans révélation de Tôma ni déplacement de Brann. Adaptation exhaustive du canon et ancien backlog encore ouverte.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_279",
@@ -4309,13 +4309,13 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792975625,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_296",
       "title": "R1.1 · Séparer session, personnage, monde et expédition",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R0.2 (task_293), R0.3 (task_294)\nÀ réaliser : Faire évoluer Game/RunState vers des propriétaires explicites : session active, état du personnage, état du monde, contexte d’un donjon. Garder les façades existantes tant qu’elles servent ; ne pas faire grossir Game/World ni déplacer tous les fichiers.\nFini quand : Quitter un donjon ou mourir ne recrée pas le personnage ; le mode historique reste testable si retenu. Les nouveaux noms/classes sont proposés, pas déjà implémentés.\nPoints de départ existants : src/game/game.gd; src/game/run_state.gd; src/world/world.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : GameSession branché dans Game ; vues run/player compatibles ; contexte runtime distinct de l’expédition avec conservation possible de la référence du héros. Restent CharacterState/WorldState durables, sortie vers un hub et règles RPG de mort/persistance. Le flux historique remplace encore le héros à Nouvelle partie.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : CharacterState/CampaignWorldState/RegionState composés par CampaignState ; GameSession peut attacher et capturer une campagne durable, conservée à la sortie d’expédition. Le mode historique détache explicitement la campagne. Restent coordinateur RPG, état durable d’expédition, hub, mort et placement sûr.\nIntégration future Game/hub : la preuve utilise un World indépendant. Nettoyer explicitement les états propres à la descente (FloorSave en attente, stock marchand, règles) lors du branchement d’un World de donjon vers une campagne ; aucun import implicite dans ce lot.",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R0.2 (task_293), R0.3 (task_294)\nÀ réaliser : Faire évoluer Game/RunState vers des propriétaires explicites : session active, état du personnage, état du monde, contexte d’un donjon. Garder les façades existantes tant qu’elles servent ; ne pas faire grossir Game/World ni déplacer tous les fichiers.\nFini quand : Quitter un donjon ou mourir ne recrée pas le personnage ; le mode historique reste testable si retenu. Les nouveaux noms/classes sont proposés, pas déjà implémentés.\nPoints de départ existants : src/game/game.gd; src/game/run_state.gd; src/world/world.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : GameSession branché dans Game ; vues run/player compatibles ; contexte runtime distinct de l’expédition avec conservation possible de la référence du héros. Restent CharacterState/WorldState durables, sortie vers un hub et règles RPG de mort/persistance. Le flux historique remplace encore le héros à Nouvelle partie.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : CharacterState/CampaignWorldState/RegionState composés par CampaignState ; GameSession peut attacher et capturer une campagne durable, conservée à la sortie d’expédition. Le mode historique détache explicitement la campagne. Restent coordinateur RPG, état durable d’expédition, hub, mort et placement sûr.\nIntégration future Game/hub : la preuve utilise un World indépendant. Nettoyer explicitement les états propres à la descente (FloorSave en attente, stock marchand, règles) lors du branchement d’un World de donjon vers une campagne ; aucun import implicite dans ce lot.\n\nLot RPG classique (26/10/2026) : CampaignRuntime et CampaignProgress ont leur session/stockage/progression propres sans RunState ni Profile. Un personnage par campagne et quatre lieux fixes ; mort remplace seulement le nœud vivant après checkpoint, identités durables conservées. Séparation de tous les usages historiques/multi-acteurs encore ouverte.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_280",
@@ -4325,7 +4325,7 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792982255,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
@@ -4411,7 +4411,7 @@
     {
       "id": "task_302",
       "title": "R2.1 · Définir les schémas compte, personnage et monde",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R1.1 (task_296), R1.2 (task_297), R0.3 (task_294)\nÀ réaliser : Séparer préférences/profil de compte, progression d’un personnage, faits du monde et instances de donjon. Définir versions de schéma, version du contenu, ids, révisions et propriété de chaque champ.\nFini quand : Inventaire de champs validé ; les réglages privés ne deviennent pas des données publiques ; un même coffre peut distinguer état du monde et droit individuel.\nPoints de départ existants : src/autoload/profile.gd; src/game/run_save.gd; src/world/floor_save.gd.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : schéma de campagne 1 et inventaire de champs dans docs/rpg-persistence.md ; personnage, faits du monde et droits personnels distincts, réglages privés exclus. Références stables connues obligatoires, snapshots inconnus refusés entiers. Restent schémas d’expédition/objets persistants, mort/lieux sûrs et politiques détaillées de groupe.",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R1.1 (task_296), R1.2 (task_297), R0.3 (task_294)\nÀ réaliser : Séparer préférences/profil de compte, progression d’un personnage, faits du monde et instances de donjon. Définir versions de schéma, version du contenu, ids, révisions et propriété de chaque champ.\nFini quand : Inventaire de champs validé ; les réglages privés ne deviennent pas des données publiques ; un même coffre peut distinguer état du monde et droit individuel.\nPoints de départ existants : src/autoload/profile.gd; src/game/run_save.gd; src/world/floor_save.gd.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : schéma de campagne 1 et inventaire de champs dans docs/rpg-persistence.md ; personnage, faits du monde et droits personnels distincts, réglages privés exclus. Références stables connues obligatoires, snapshots inconnus refusés entiers. Restent schémas d’expédition/objets persistants, mort/lieux sûrs et politiques détaillées de groupe.\n\nLot RPG classique (26/10/2026) : CampaignSave v4 ajoute exploration bornée par région ; lecture 1/2/3 non destructive. Les gains de mort, talents, quêtes et provisions sont publiés avec leurs droits. Identités d’instances d’inventaire et activité/boss/PNJ complets encore ouverts.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_281",
@@ -4421,13 +4421,13 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792977005,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_303",
       "title": "R2.2 · Garantir les écritures et transactions multi-états",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302)\nÀ réaliser : Réutiliser SafeFile et validation typée ; concevoir commit de génération/manifeste ou journal pour que personnage, inventaire, récompense et région soient cohérents. Une écriture atomique par fichier seule ne constitue pas un commit global.\nFini quand : Coupure simulée à chaque étape : reprise sur une génération complète, aucune monnaie/quête payée deux fois, ancien état récupérable et erreurs visibles.\nPoints de départ existants : src/core/safe_file.gd; src/game/run_save.gd; tests/suites/.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : CampaignSave publie un snapshot commun borné personnage/monde/régions avec révision, backup validé, intégrité et verrou exclusif ; interruptions avant/après publication et réponse perdue testées. Restent récupération exploitable des verrous abandonnés/erreurs (task_360), validation appareils (task_361) et évolution vers secteurs/journal avant grandes cartes. Pas de service de paiement de quête implémenté.",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302)\nÀ réaliser : Réutiliser SafeFile et validation typée ; concevoir commit de génération/manifeste ou journal pour que personnage, inventaire, récompense et région soient cohérents. Une écriture atomique par fichier seule ne constitue pas un commit global.\nFini quand : Coupure simulée à chaque étape : reprise sur une génération complète, aucune monnaie/quête payée deux fois, ancien état récupérable et erreurs visibles.\nPoints de départ existants : src/core/safe_file.gd; src/game/run_save.gd; tests/suites/.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : CampaignSave publie un snapshot commun borné personnage/monde/régions avec révision, backup validé, intégrité et verrou exclusif ; interruptions avant/après publication et réponse perdue testées. Restent récupération exploitable des verrous abandonnés/erreurs (task_360), validation appareils (task_361) et évolution vers secteurs/journal avant grandes cartes. Pas de service de paiement de quête implémenté.\n\nLot RPG classique (26/10/2026) : Le parcours public affiche échecs, récupération de backup et conflits ; verrous abandonnés par action explicite après fermeture des autres instances. Talents/achats/paiements/retour au refuge committés avant application, tests refus d’écriture et reprise mort. Journaux/secteurs multiples et I/O appareils toujours ouverts.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_281",
@@ -4437,13 +4437,13 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792977005,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_304",
       "title": "R2.3 · Persister les régions et les objets qui y restent",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302), R2.2 (task_303)\nÀ réaliser : Étendre le modèle de FloorSave à plusieurs régions : ouvertures, obstacles, PNJ, ressources, monstres selon politique, butin dynamique, objets posés, vagues et instances. Écrire les changements avant déchargement.\nFini quand : Revisiter A après B puis redémarrer conserve les faits décidés ; aucun reset involontaire de coffres ou butin ; taille des fichiers et nettoyage des états sont bornés.\nPoints de départ existants : src/world/floor_save.gd; src/world/floor_ledger.gd; src/world/secret_room.gd.\nAvancement du deuxième lot (26 octobre 2026) : Point de départ ajouté par le lot 2 : RegionState et sauvegarde commune conservent des maps de faits pour plusieurs régions. Aucun chargement de cartes ni conservation de PNJ, monstres, butin dynamique ou carte géographique livré ; la réalisation de cette carte reste à démarrer.\nAvancement du troisième lot (26 octobre 2026) : Lot 3 : RegionState v2 conserve initialisation, compatibilité de disposition et objets au sol avec id/position/item exact. Prises, dépôts différés et objets améliorés survivent à deux vraies cartes puis au redémarrage. Restent PNJ, monstres, or, coffres/obstacles, activités et exploration FogOfWar ; le prototype ne les peuple pas.\nLot 4 : coffres (ouverture/piège/fuse), monstres (blessures, mort, rang/affixes, mémoire durable), or au sol et apparitions dynamiques persistants. Snapshots refusés au milieu d’une récompense ; voyages attendent les batches natifs. V3 migre v1/v2 sans effacement. Restent PNJ, portes/obstacles, FogOfWar, activités, boss à phases et nettoyage/renouvellement explicite.",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302), R2.2 (task_303)\nÀ réaliser : Étendre le modèle de FloorSave à plusieurs régions : ouvertures, obstacles, PNJ, ressources, monstres selon politique, butin dynamique, objets posés, vagues et instances. Écrire les changements avant déchargement.\nFini quand : Revisiter A après B puis redémarrer conserve les faits décidés ; aucun reset involontaire de coffres ou butin ; taille des fichiers et nettoyage des états sont bornés.\nPoints de départ existants : src/world/floor_save.gd; src/world/floor_ledger.gd; src/world/secret_room.gd.\nAvancement du deuxième lot (26 octobre 2026) : Point de départ ajouté par le lot 2 : RegionState et sauvegarde commune conservent des maps de faits pour plusieurs régions. Aucun chargement de cartes ni conservation de PNJ, monstres, butin dynamique ou carte géographique livré ; la réalisation de cette carte reste à démarrer.\nAvancement du troisième lot (26 octobre 2026) : Lot 3 : RegionState v2 conserve initialisation, compatibilité de disposition et objets au sol avec id/position/item exact. Prises, dépôts différés et objets améliorés survivent à deux vraies cartes puis au redémarrage. Restent PNJ, monstres, or, coffres/obstacles, activités et exploration FogOfWar ; le prototype ne les peuple pas.\nLot 4 : coffres (ouverture/piège/fuse), monstres (blessures, mort, rang/affixes, mémoire durable), or au sol et apparitions dynamiques persistants. Snapshots refusés au milieu d’une récompense ; voyages attendent les batches natifs. V3 migre v1/v2 sans effacement. Restent PNJ, portes/obstacles, FogOfWar, activités, boss à phases et nettoyage/renouvellement explicite.\n\nLot RPG classique (26/10/2026) : Exploration persistante ajoutée aux items/or/coffres/monstres. Repos conserve récompenses uniques et renouvelle seulement les morts éligibles. PNJ évolutifs, portes, activités et boss narratifs restent à persister.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_281",
@@ -4453,7 +4453,7 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792982255,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
@@ -4555,8 +4555,8 @@
     {
       "id": "task_311",
       "title": "R3.5 · Créer les donjons et bâtiments comme lieux persistants ou instances",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R3.1 (task_307), R2.3 (task_304), R0.2 (task_293)\nÀ réaliser : Réutiliser DungeonGenerator/FloorKind derrière un contexte de destination. Gérer entrée/sortie, point de retour, plusieurs donjons actifs ou archivés, renouvellement explicite, boss et récompenses uniques.\nFini quand : Entrer, sortir, mourir et reprendre retrouvent le bon lieu/état ; un renouvellement ne duplique pas une récompense de quête ; le Puits conserve son rôle narratif.\nPoints de départ existants : src/world/floor_kinds/; src/dungeon/dungeon_generator.gd; src/game/game.gd.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R3.1 (task_307), R2.3 (task_304), R0.2 (task_293)\nÀ réaliser : Réutiliser DungeonGenerator/FloorKind derrière un contexte de destination. Gérer entrée/sortie, point de retour, plusieurs donjons actifs ou archivés, renouvellement explicite, boss et récompenses uniques.\nFini quand : Entrer, sortir, mourir et reprendre retrouvent le bon lieu/état ; un renouvellement ne duplique pas une récompense de quête ; le Puits conserve son rôle narratif.\nPoints de départ existants : src/world/floor_kinds/; src/dungeon/dungeon_generator.gd; src/game/game.gd.\n\nLot RPG classique (26/10/2026) : Deux lieux de combat souterrains fixes accessibles depuis le passage de campagne, avec gardiens uniques et coffre durable. Pas de génération à chaque visite. Instances répétables et bâtiments à étendre.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_282",
       "tags": [
@@ -4565,14 +4565,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_312",
       "title": "R3.6 · Adapter population, activité et renouvellement à la région",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R3.2 (task_308), R3.3 (task_309), R0.2 (task_293), R1.4 (task_299)\nÀ réaliser : Spawns par points persistants et budgets, zones sûres, retour à l’origine des monstres, activité par proximité utile, ressources, timers et anti-exploitation chargement/déchargement ; conserver écartement et cadence IA décidés.\nFini quand : Monstre sorti de zone ne bloque pas la quête ; aucun spawn sur un héros ni exploitation du déchargement ; simulation bornée même avec plusieurs acteurs éloignés.\nPoints de départ existants : src/world/floor_populator.gd; src/world/activity_manager.gd; src/entities/monster/.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R3.\nDépendances : R3.2 (task_308), R3.3 (task_309), R0.2 (task_293), R1.4 (task_299)\nÀ réaliser : Spawns par points persistants et budgets, zones sûres, retour à l’origine des monstres, activité par proximité utile, ressources, timers et anti-exploitation chargement/déchargement ; conserver écartement et cadence IA décidés.\nFini quand : Monstre sorti de zone ne bloque pas la quête ; aucun spawn sur un héros ni exploitation du déchargement ; simulation bornée même avec plusieurs acteurs éloignés.\nPoints de départ existants : src/world/floor_populator.gd; src/world/activity_manager.gd; src/entities/monster/.\n\nLot RPG classique (26/10/2026) : Renouvellement explicite des spawns morts via repos au refuge. renew_on_rest=false pour uniques ; pas de reset des voleurs vivants, coffre ou butin. Activités et populations de secteurs continus restent à adapter.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_282",
       "tags": [
@@ -4581,14 +4581,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_313",
       "title": "R4.1 · Créer le cycle de vie du personnage persistant",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R4.\nDépendances : R2.1 (task_302), R1.6 (task_301)\nÀ réaliser : Création, sélection, reprise, nom, apparence, emplacement et éventuellement plusieurs emplacements ; portée par personnage des stats, inventaire, ceinture, compétences et exploration. Nombre de personnages à confirmer.\nFini quand : Reprendre un personnage restitue son état sans lancer une nouvelle descente ; supprimer/exporter demande une action explicite et ne touche pas un autre personnage.\nPoints de départ existants : src/game/game.gd; src/ui/title/; src/entities/player/.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R4.\nDépendances : R2.1 (task_302), R1.6 (task_301)\nÀ réaliser : Création, sélection, reprise, nom, apparence, emplacement et éventuellement plusieurs emplacements ; portée par personnage des stats, inventaire, ceinture, compétences et exploration. Nombre de personnages à confirmer.\nFini quand : Reprendre un personnage restitue son état sans lancer une nouvelle descente ; supprimer/exporter demande une action explicite et ne touche pas un autre personnage.\nPoints de départ existants : src/game/game.gd; src/ui/title/; src/entities/player/.\n\nLot RPG classique (26/10/2026) : Le héros reprend ses données courantes après mort et redémarrage, avec le même id durable. Retour au refuge sur nouveau nœud vivant et gestion d’échec de publication sans rollback de richesse. Un seul personnage/emplacement pour cette tranche ; extensions de création/choix à poursuivre.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_283",
       "tags": [
@@ -4597,14 +4597,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_314",
       "title": "R4.2 · Reconcevoir XP, niveaux et choix de compétences",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R4.\nDépendances : R4.1 (task_313), R0.1 (task_292)\nÀ réaliser : Définir courbe durable, cap, maîtrise ou spécialisation, débloquages, respecialisation et portée des familles/reliques. Décider choix à trois conservés ou système de talents ; les classes restent une option.\nFini quand : Le gain répété d’XP ne produit pas une croissance sans fin accidentelle ; points et choix se sauvegardent ; personnages de référence jouables à plusieurs étapes.\nPoints de départ existants : src/components/; src/game/game_offers.gd; src/definitions/perk_def.gd; data/player/.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R4.\nDépendances : R4.1 (task_313), R0.1 (task_292)\nÀ réaliser : Définir courbe durable, cap, maîtrise ou spécialisation, débloquages, respecialisation et portée des familles/reliques. Décider choix à trois conservés ou système de talents ; les classes restent une option.\nFini quand : Le gain répété d’XP ne produit pas une croissance sans fin accidentelle ; points et choix se sauvegardent ; personnages de référence jouables à plusieurs étapes.\nPoints de départ existants : src/components/; src/game/game_offers.gd; src/definitions/perk_def.gd; data/player/.\n\nLot RPG classique (26/10/2026) : Un point permanent par niveau après le premier ; catalogue de talents choisi sans cartes aléatoires, reroll ou currency de run. Dépense et gain atomiques. Courbe RPG longue, spécialisation et davantage de talents à équilibrer/étendre.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_283",
       "tags": [
@@ -4613,7 +4613,7 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
@@ -4651,8 +4651,8 @@
     {
       "id": "task_317",
       "title": "R4.5 · Transformer mort, checkpoints, Seuil et progression des âmes",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R4.\nDépendances : R0.2 (task_293), R0.4 (task_295), R2.2 (task_303), R4.1 (task_313)\nÀ réaliser : Implémenter la règle de mort décidée, points de retour et récupération ; adapter l’arbre d’âmes et les serments à la campagne. Définir sort des offres en attente, mort pendant transition et reprise en état mort.\nFini quand : Mort et arrêt d’application ne retirent ni ne rendent deux fois une pénalité ; aucune suppression implicite de personnage ; Seuil/Tréfonds et âmes suivent le canon et les règles choisies.\nPoints de départ existants : src/game/game.gd; src/game/threshold.gd; src/game/abyss.gd; src/game/run_boons.gd; src/definitions/soul_tree/.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R4.\nDépendances : R0.2 (task_293), R0.4 (task_295), R2.2 (task_303), R4.1 (task_313)\nÀ réaliser : Implémenter la règle de mort décidée, points de retour et récupération ; adapter l’arbre d’âmes et les serments à la campagne. Définir sort des offres en attente, mort pendant transition et reprise en état mort.\nFini quand : Mort et arrêt d’application ne retirent ni ne rendent deux fois une pénalité ; aucune suppression implicite de personnage ; Seuil/Tréfonds et âmes suivent le canon et les règles choisies.\nPoints de départ existants : src/game/game.gd; src/game/threshold.gd; src/game/abyss.gd; src/game/run_boons.gd; src/definitions/soul_tree/.\n\nLot RPG classique (26/10/2026) : Mort RPG et retour sûr sans perte livrés. Seuil, âme de run et game-over exclus du parcours principal, pas rejoués à la mort. Un refuge fixe initial ; autres points sûrs, progression narrative et retours spéciaux à construire.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_283",
       "tags": [
@@ -4661,14 +4661,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_318",
       "title": "R5.1 · Créer les quêtes narratives en données",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R2.1 (task_302), R1.4 (task_299), R0.4 (task_295)\nÀ réaliser : Le QuestDef actuel est quotidien/hebdomadaire. Ajouter objectifs composables, prérequis, branches, états, annulation et récompenses ; distinguer faits personnels, faits du monde et éventuels faits du groupe.\nFini quand : Une quête parler/explorer/combattre/rapporter se configure sans code par id ; graphes invalides, références manquantes et cycles bloquants détectés.\nPoints de départ existants : src/definitions/quest_def.gd; src/game/quest_board.gd; src/definitions/story/.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R2.1 (task_302), R1.4 (task_299), R0.4 (task_295)\nÀ réaliser : Le QuestDef actuel est quotidien/hebdomadaire. Ajouter objectifs composables, prérequis, branches, états, annulation et récompenses ; distinguer faits personnels, faits du monde et éventuels faits du groupe.\nFini quand : Une quête parler/explorer/combattre/rapporter se configure sans code par id ; graphes invalides, références manquantes et cycles bloquants détectés.\nPoints de départ existants : src/definitions/quest_def.gd; src/game/quest_board.gd; src/definitions/story/.\n\nLot RPG classique (26/10/2026) : CampaignQuestDef extensible avec completed(), deux demandes en données : gardien du Creux des Racines et du Caveau Oublié. Acceptation explicite au refuge et retour à la Veilleuse. Chaînes/prérequis/embranchements et narration étendue encore ouverts.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_284",
       "tags": [
@@ -4677,14 +4677,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_319",
       "title": "R5.2 · Implémenter le service de progression et les récompenses de quête",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R5.1 (task_318), R2.2 (task_303), R1.3 (task_298)\nÀ réaliser : Traiter événements typés avec contexte et ids, dédoublonnage, objets de quête, inventaire plein et acceptation/rendu. Définir rétroactivité et paiements idempotents.\nFini quand : Reprise à chaque objectif et répétition d’un événement ne donnent qu’un paiement ; aucune quête n’est validée parce qu’un autre acteur a ouvert son interface.\nPoints de départ existants : src/game/quest_board.gd; src/autoload/events.gd; src/components/inventory.gd.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R5.1 (task_318), R2.2 (task_303), R1.3 (task_298)\nÀ réaliser : Traiter événements typés avec contexte et ids, dédoublonnage, objets de quête, inventaire plein et acceptation/rendu. Définir rétroactivité et paiements idempotents.\nFini quand : Reprise à chaque objectif et répétition d’un événement ne donnent qu’un paiement ; aucune quête n’est validée parce qu’un autre acteur a ouvert son interface.\nPoints de départ existants : src/game/quest_board.gd; src/autoload/events.gd; src/components/inventory.gd.\n\nLot RPG classique (26/10/2026) : CampaignProgress publie droits personnels et or dans le même checkpoint, refuse paiement répété ou écriture invalide. Tests de paiement unique/reprise. Autres types de récompenses et commandes de quête à étendre.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_284",
       "tags": [
@@ -4693,14 +4693,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_320",
       "title": "R5.3 · Créer les PNJ de monde et leurs services",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R3.1 (task_307), R5.1 (task_318)\nÀ réaliser : Placer PNJ persistants, dialogues conditionnels, services, lieux sûrs et activation après sauvetage ; préparer routines simples sans promettre un calendrier complet.\nFini quand : Un PNJ absent/retrouvé change les dialogues/services conformément aux faits sauvés ; services et déplacements restent dans des données réutilisables.\nPoints de départ existants : src/definitions/dialogue/; src/entities/merchant/; src/entities/forge/; src/entities/interactable.gd.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R3.1 (task_307), R5.1 (task_318)\nÀ réaliser : Placer PNJ persistants, dialogues conditionnels, services, lieux sûrs et activation après sauvetage ; préparer routines simples sans promettre un calendrier complet.\nFini quand : Un PNJ absent/retrouvé change les dialogues/services conformément aux faits sauvés ; services et déplacements restent dans des données réutilisables.\nPoints de départ existants : src/definitions/dialogue/; src/entities/merchant/; src/entities/forge/; src/entities/interactable.gd.\n\nLot RPG classique (26/10/2026) : Veilleuse et lanterne au refuge via Interactable/Interactor ; Parler ouvre le journal, Repos demande l’action explicite. Services disponibles dans Pause, provisions en données. Pas de PNJ sauvé/simulation/dialogues à états persistants dans ce lot.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_284",
       "tags": [
@@ -4709,7 +4709,7 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
@@ -4731,8 +4731,8 @@
     {
       "id": "task_322",
       "title": "R5.5 · Créer journal, suivi et outils d’écriture de quêtes",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R5.1 (task_318), R5.2 (task_319)\nÀ réaliser : Journal actif/terminé, suivi, objectifs et marqueurs, choix visibles, traduction FR/EN et outils de validation/debug. Le système de nœuds visuel reste une extension à décider après un schéma stable.\nFini quand : Une quête complète se crée et se débogue sans retoucher Game ; textes traduits, interface clavier/manette/tactile et marqueurs désactivables.\nPoints de départ existants : src/ui/codex/; src/ui/hud/; tools/; locale/strings.csv.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R5.\nDépendances : R5.1 (task_318), R5.2 (task_319)\nÀ réaliser : Journal actif/terminé, suivi, objectifs et marqueurs, choix visibles, traduction FR/EN et outils de validation/debug. Le système de nœuds visuel reste une extension à décider après un schéma stable.\nFini quand : Une quête complète se crée et se débogue sans retoucher Game ; textes traduits, interface clavier/manette/tactile et marqueurs désactivables.\nPoints de départ existants : src/ui/codex/; src/ui/hud/; tools/; locale/strings.csv.\n\nLot RPG classique (26/10/2026) : Journal public avec demandes, état, acceptation et remise au refuge ; toutes chaînes traduites. Outils d’écriture avancés et suivi HUD de chaînes à étendre.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_284",
       "tags": [
@@ -4741,14 +4741,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_323",
       "title": "R6.1 · Rendre les opérations d’inventaire transactionnelles",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R6.\nDépendances : R2.2 (task_303), R1.2 (task_297), R1.3 (task_298)\nÀ réaliser : Modéliser quantités, instances uniques, propriétés liées, équiper/jeter/ramasser/acheter/vendre/sertir comme transactions validées. Préparer concurrence future sur un même objet sans exposer l’état privé.\nFini quand : Deux demandes sur le même objet ne créent pas deux propriétaires ; un échec n’enlève rien ; réessais, arrêt et inventaire plein sont couverts.\nPoints de départ existants : src/components/inventory.gd; src/entities/player/player_pack.gd; src/definitions/loot/loot_roller.gd.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R6.\nDépendances : R2.2 (task_303), R1.2 (task_297), R1.3 (task_298)\nÀ réaliser : Modéliser quantités, instances uniques, propriétés liées, équiper/jeter/ramasser/acheter/vendre/sertir comme transactions validées. Préparer concurrence future sur un même objet sans exposer l’état privé.\nFini quand : Deux demandes sur le même objet ne créent pas deux propriétaires ; un échec n’enlève rien ; réessais, arrêt et inventaire plein sont couverts.\nPoints de départ existants : src/components/inventory.gd; src/entities/player/player_pack.gd; src/definitions/loot/loot_roller.gd.\n\nLot RPG classique (26/10/2026) : Achat de provision atomique : modèle détaché du vrai PlayerPack, prix/objet/claim committés puis transfert vivant protégé contre capture réentrante. Inventaire/ceinture/équipement persistants. Identités d’instances et transactions réseau/échanges restent ouvertes.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_285",
       "tags": [
@@ -4757,14 +4757,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_324",
       "title": "R6.2 · Repenser monnaies, stocks et valeur des ressources",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R6.\nDépendances : R4.3 (task_315), R6.1 (task_323), R0.2 (task_293)\nÀ réaliser : Définir sources/dépenses durables, prix par zone, stocks marchands persistants, renouvellement, démantèlement et coût de respecialisation/réparation si retenu. Décider coffre de stockage et portée compte/personnage.\nFini quand : Matrice d’achat/revente/fabrication ne crée pas d’arbitrage infini ; stocks et argent restent corrects après reprise ; outils simulent plusieurs heures et retours de zones.\nPoints de départ existants : src/definitions/items/forge_def.gd; src/entities/merchant/; data/shop/; tools/balance/.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R6.\nDépendances : R4.3 (task_315), R6.1 (task_323), R0.2 (task_293)\nÀ réaliser : Définir sources/dépenses durables, prix par zone, stocks marchands persistants, renouvellement, démantèlement et coût de respecialisation/réparation si retenu. Décider coffre de stockage et portée compte/personnage.\nFini quand : Matrice d’achat/revente/fabrication ne crée pas d’arbitrage infini ; stocks et argent restent corrects après reprise ; outils simulent plusieurs heures et retours de zones.\nPoints de départ existants : src/definitions/items/forge_def.gd; src/entities/merchant/; data/shop/; tools/balance/.\n\nLot RPG classique (26/10/2026) : Or personnel conservé après mort. Premier stock fixe de refuge à prix en ressources, une acquisition par entrée/campagne, sans refill au repos. Politique marchands/stock renouvelable, ressources et courbe économique longue à poursuivre.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_285",
       "tags": [
@@ -4773,7 +4773,7 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
@@ -4811,8 +4811,8 @@
     {
       "id": "task_327",
       "title": "R7.1 · Assembler la première région et ses points remarquables",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R7.\nDépendances : R3.1 (task_307), R0.4 (task_295)\nÀ réaliser : Concevoir sanctuaire/Kagari selon le canon, chemins alternatifs, repères, zones de danger, raccourcis et accès aux deux donjons de preuve. Réutiliser les biomes et assets avant d’agrandir la bibliothèque.\nFini quand : La région se parcourt avec orientation lisible et continuité du terrain ; chaque embranchement utile a une raison d’exister et un état de sauvegarde clair.\nPoints de départ existants : data/biomes/; assets/; docs/lore.md.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R7.\nDépendances : R3.1 (task_307), R0.4 (task_295)\nÀ réaliser : Concevoir sanctuaire/Kagari selon le canon, chemins alternatifs, repères, zones de danger, raccourcis et accès aux deux donjons de preuve. Réutiliser les biomes et assets avant d’agrandir la bibliothèque.\nFini quand : La région se parcourt avec orientation lisible et continuité du terrain ; chaque embranchement utile a une raison d’exister et un état de sauvegarde clair.\nPoints de départ existants : data/biomes/; assets/; docs/lore.md.\n\nLot RPG classique (26/10/2026) : Atlas de campagne de quatre lieux fixes et distincts : refuge, passage et deux destinations de combat. Géométrie/connectivité validées. Ce n’est pas encore le grand monde ouvert continu ni sa décoration finale.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_286",
       "tags": [
@@ -4821,7 +4821,7 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
@@ -4875,8 +4875,8 @@
     {
       "id": "task_331",
       "title": "R8.1 · Créer carte du monde, exploration et déplacements",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R8.\nDépendances : R3.1 (task_307), R2.3 (task_304)\nÀ réaliser : Faire évoluer minimap vers carte région/monde, découverte persistante, repères, destinations et retours. Décider voyage rapide et ses conditions sans supprimer l’intérêt de l’exploration.\nFini quand : Carte exacte après aller-retour et reprise ; destination sûre disponible ; transition échouée ne perd ni monnaie ni position de retour.\nPoints de départ existants : src/ui/hud/; src/world/world_space.gd; src/game/game.gd.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R8.\nDépendances : R3.1 (task_307), R2.3 (task_304)\nÀ réaliser : Faire évoluer minimap vers carte région/monde, découverte persistante, repères, destinations et retours. Décider voyage rapide et ses conditions sans supprimer l’intérêt de l’exploration.\nFini quand : Carte exacte après aller-retour et reprise ; destination sûre disponible ; transition échouée ne perd ni monnaie ni position de retour.\nPoints de départ existants : src/ui/hud/; src/world/world_space.gd; src/game/game.gd.\n\nLot RPG classique (26/10/2026) : Cellules explorées conservées à la revisite et redémarrage via byte map bornée. Minimap/carte locale réutilisées. Carte globale de régions, voyages rapides et streaming restent ouverts.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_287",
       "tags": [
@@ -4885,14 +4885,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_332",
       "title": "R8.2 · Adapter HUD, menus et progression aux appareils",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R8.\nDépendances : R4.1 (task_313), R5.5 (task_322), R1.5 (task_300)\nÀ réaliser : Ajouter personnage, quêtes et équipement durable ; taille téléphone, navigation manette/clavier, paramètres d’accessibilité. Prévoir mode menu local en multijoueur sans ralentir le monde.\nFini quand : Texte FR/EN lisible et parcours complet sans souris ; aucun toucher déclenché deux fois ; monde solo et session partagée suivent leurs règles de pause distinctes.\nPoints de départ existants : src/ui/; locale/strings.csv; docs/design/interface.md.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R8.\nDépendances : R4.1 (task_313), R5.5 (task_322), R1.5 (task_300)\nÀ réaliser : Ajouter personnage, quêtes et équipement durable ; taille téléphone, navigation manette/clavier, paramètres d’accessibilité. Prévoir mode menu local en multijoueur sans ralentir le monde.\nFini quand : Texte FR/EN lisible et parcours complet sans souris ; aucun toucher déclenché deux fois ; monde solo et session partagée suivent leurs règles de pause distinctes.\nPoints de départ existants : src/ui/; locale/strings.csv; docs/design/interface.md.\n\nLot RPG classique (26/10/2026) : Menu produit RPG, HUD complet de combat/inventaire, talents/journal/provisions/repos/sauvegarde et erreurs. Profondeur/âmes/sceau/debug run masqués ; options legacy retirées du RPG. Rendu et ergonomie d’exports à vérifier sur S23/Windows : task_371.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_287",
       "tags": [
@@ -4901,7 +4901,7 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
@@ -4955,8 +4955,8 @@
     {
       "id": "task_336",
       "title": "R9.1 · Valider une tranche RPG complète",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R9.\nDépendances : R2.4 (task_305), R3.5 (task_311), R3.6 (task_312), R4.5 (task_317), R5.4 (task_321), R6.2 (task_324), R7.2 (task_328), R8.1 (task_331), R8.3 (task_333), R8.4 (task_334)\nÀ réaliser : Scénario bout en bout : créer, explorer, accepter une chaîne, combattre, obtenir un objet, commercer, mourir, revenir, finir un donjon, revisiter, quitter et reprendre. Tester sauvegardes de chaque étape.\nFini quand : Scénario reproductible sans commandes de debug, progression expliquée, migration et récompenses exactes ; retours jouabilité consignés avant ajout de plusieurs régions.\nPoints de départ existants : tests/suites/; docs/testing.md.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R9.\nDépendances : R2.4 (task_305), R3.5 (task_311), R3.6 (task_312), R4.5 (task_317), R5.4 (task_321), R6.2 (task_324), R7.2 (task_328), R8.1 (task_331), R8.3 (task_333), R8.4 (task_334)\nÀ réaliser : Scénario bout en bout : créer, explorer, accepter une chaîne, combattre, obtenir un objet, commercer, mourir, revenir, finir un donjon, revisiter, quitter et reprendre. Tester sauvegardes de chaque étape.\nFini quand : Scénario reproductible sans commandes de debug, progression expliquée, migration et récompenses exactes ; retours jouabilité consignés avant ajout de plusieurs régions.\nPoints de départ existants : tests/suites/; docs/testing.md.\n\nLot RPG classique (26/10/2026) : Boucle principale jouable par défaut avec tests création/reprise, combat, objectifs, achat, mort/repos et sauvegardes. Validation headless réussie, mais durée/contenu/chaîne de quête étendue, monde continu et essais appareils restent requis pour J1.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_288",
       "tags": [
@@ -4965,14 +4965,14 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
       "id": "task_337",
       "title": "R9.2 · Adapter les tests et la mesure à la campagne",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R9.\nDépendances : R9.1 (task_336), R8.5 (task_335)\nÀ réaliser : Conserver tests utiles et fixtures historiques, ajouter parcours/revisites/migrations/transactions ; remplacer les hypothèses invalidées d’étage par des règles explicites sans affaiblir des contrôles. Refaire bots et mesures longues.\nFini quand : Suites complètes, zéro erreur moteur inattendue/avertissement GDScript ; fixtures compatibles ; les instables connus ont un suivi sans être masqués par le changement de genre.\nPoints de départ existants : tools/run_tests.py; tests/suites/; tools/balance/.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R9.\nDépendances : R9.1 (task_336), R8.5 (task_335)\nÀ réaliser : Conserver tests utiles et fixtures historiques, ajouter parcours/revisites/migrations/transactions ; remplacer les hypothèses invalidées d’étage par des règles explicites sans affaiblir des contrôles. Refaire bots et mesures longues.\nFini quand : Suites complètes, zéro erreur moteur inattendue/avertissement GDScript ; fixtures compatibles ; les instables connus ont un suivi sans être masqués par le changement de genre.\nPoints de départ existants : tools/run_tests.py; tests/suites/; tools/balance/.\n\nLot RPG classique (26/10/2026) : unit.classic_rpg/game.classic_rpg ajoutés à la commande normale, avec chemins isolés et vrai lanceur. 19 884 vérifications complètes réussies seed 347348, aucun nouveau diagnostic ; tests historiques conservés. Mesures export/Appareils restent ouvertes.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_288",
       "tags": [
@@ -4981,7 +4981,7 @@
         "qualité"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
@@ -5341,7 +5341,7 @@
     },
     {
       "title": "RPG : rendre explicite la récupération de campagne et des verrous abandonnés",
-      "description": "Avant branchement public de CampaignSave : présenter erreurs/recovered et concevoir une reprise d’écriture après arrêt du processus, sans supprimer le verrou d’un écrivain encore actif ni écraser un format/contenu inconnu. Le backend actuel expose BUSY et permet la lecture mais ne récupère pas un verrou abandonné automatiquement. Ajouter tests avec arrêt réel du processus, disque plein/refus de remplacement et confirmation adaptée de restauration d’un checkpoint précédent. Références : docs/rpg-persistence.md, task_303, task_359.",
+      "description": "Avant branchement public de CampaignSave : présenter erreurs/recovered et concevoir une reprise d’écriture après arrêt du processus, sans supprimer le verrou d’un écrivain encore actif ni écraser un format/contenu inconnu. Le backend actuel expose BUSY et permet la lecture mais ne récupère pas un verrou abandonné automatiquement. Ajouter tests avec arrêt réel du processus, disque plein/refus de remplacement et confirmation adaptée de restauration d’un checkpoint précédent. Références : docs/rpg-persistence.md, task_303, task_359.\n\nLot RPG classique (26/10/2026) : Titre public distingue absence/backup récupéré/incompatibilité/corruption/conflit/verrou. Créer n’écrase pas une campagne existante ; reprise backup explicitement annoncée. Verrou abandonné seulement par bouton et confirmation de fermeture des autres instances, jamais automatique ; verrou non vide refusé. Mort non committée conserve l’état vivant en mémoire, pause et bouton Réessayer. Tests inclus, docs/rpg-classic.md.",
       "priority": "high",
       "epic_id": "epic_281",
       "tags": [
@@ -5351,9 +5351,9 @@
         "tests"
       ],
       "id": "task_360",
-      "status": "backlog",
+      "status": "done",
       "created_at": 1792977005,
-      "updated_at": 1792977005,
+      "updated_at": 1792990903,
       "due_date": null
     },
     {
@@ -5498,6 +5498,62 @@
       "id": "task_368",
       "created_at": 1792982255,
       "updated_at": 1792982255,
+      "due_date": null
+    },
+    {
+      "id": "task_369",
+      "title": "Remplacer le parcours roguelike par une campagne RPG classique",
+      "description": "Demande joueur : retirer la boucle de runs du parcours principal. Livrer lancement/reprise de campagne séparée, refuge, progression durable et talents choisis, mort sans perte de personnage, repos explicite, régions et premier objectif persistant. Préserver les anciennes sauvegardes et garder leurs tests de non-régression. Valider les transactions, erreurs et reprise sur disque avant publication sur main.\n\nLot RPG classique (26/10/2026) : Parcours F5/export basculé vers le RPG classique : campagne locale créée/reprise, refuge + passage + deux lieux, mort sans perte du personnage courant, repos explicite, talents permanents choisis, journal/demandes uniques, provisions atomiques, exploration persistante, schéma v4 lisant 1/2/3 et récupération visible. Ancienne boucle hors menus, anciens fichiers conservés. 19 884 checks / 0 échec, 16 821 rapides, 672 scripts / 0 diagnostic, 7 tests Python, 3 062 clés FR, catalogue 321 valide. Contrat docs/rpg-classic.md. Grand monde, campagne longue et réseau restent leurs lots ; essais appareils task_371.",
+      "priority": "critical",
+      "status": "done",
+      "epic_id": "epic_288",
+      "tags": [
+        "rpg",
+        "architecture",
+        "sauvegarde",
+        "ui",
+        "combat",
+        "migration"
+      ],
+      "created_at": 1792989482,
+      "updated_at": 1792990903,
+      "due_date": null
+    },
+    {
+      "id": "task_370",
+      "title": "Éviter le callback de shader sur une scène de campagne refusée/libérée",
+      "description": "BodyLook.warm_up capturait son Sprite2D dans un callback différé. Un lancement refusé puis libéré la même image déclenchait « Lambda capture was freed ». Le callback porte maintenant WeakRef et vérifie le sprite en vie/dans l’arbre. La création refusée d’une seconde campagne et la reprise du vrai lanceur sont couvertes sans erreur moteur par game.classic_rpg.",
+      "priority": "medium",
+      "status": "done",
+      "epic_id": "epic_288",
+      "tags": [
+        "bug",
+        "rpg",
+        "qualité",
+        "tests"
+      ],
+      "created_at": 1792990903,
+      "updated_at": 1792990903,
+      "due_date": null
+    },
+    {
+      "id": "task_371",
+      "title": "Essayer le parcours RPG principal complet sur S23 et Windows",
+      "description": "F5/export : Commencer/Reprendre, déplacement/attaque/compétences/ceinture/inventaire, Veilleuse et repos, objectifs des deux gardiens puis récompense unique, achat, talents, mort avec gains récents, redémarrage, exploration, erreurs/backup et verrou abandonné explicite. Vérifier lisibilité en FR, clavier/manette/tactile, audio, pause/retour Android, performances et latence/mémoire des checkpoints. user://campaign.json séparé de run/profile, ne pas effacer les anciennes parties. 19 884 vérifications headless et linter propres ne remplacent pas ces essais. Voir docs/rpg-classic.md.",
+      "priority": "high",
+      "status": "review",
+      "epic_id": "epic_288",
+      "tags": [
+        "rpg",
+        "android",
+        "pc",
+        "playtest",
+        "perf",
+        "ui",
+        "sauvegarde"
+      ],
+      "created_at": 1792990903,
+      "updated_at": 1792990903,
       "due_date": null
     }
   ]

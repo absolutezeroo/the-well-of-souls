@@ -1,5 +1,9 @@
 # Loot, the belt, the merchant and the forge
 
+The [classic RPG campaign](../rpg-classic.md) retains equipment and ground loot after death.
+Refuge supplies have explicit prices and one-per-campaign claims; failed publication never
+spends gold or grants the object. Rest never refills stock or opened chests.
+
 ## Loot, gold and the merchant
 
 - **Item level**: every weapon and armor is as strong as the floor it was found or bought on

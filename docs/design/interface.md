@@ -1,5 +1,9 @@
 # Interface
 
+**Current entry point:** [CampaignScreen](../rpg-classic.md) presents Begin/Resume, persistent
+Journal/Talents/Supplies/Rest/Save and error recovery. It reuses the complete combat HUD and bag.
+Legacy Daily Descent, shrine and game-over controls below are outside the campaign player flow.
+
 ## Controls
 
 Every scrolling list (codex, shrine, bag, shop) scrolls by dragging a finger over it, from

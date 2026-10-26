@@ -1,5 +1,10 @@
 # RPG : état durable et checkpoints de campagne
 
+**Current:** [the public RPG](rpg-classic.md) now supplies user://campaign.json explicitly,
+writes schema **4** (reads 1–3), retains exploration and offers visible error/backup/lock
+recovery. Death recovery captures current progress before safe return. Earlier “future UI”,
+“no public RPG” and dead-hero limitations below describe the second foundation lot.
+
 Deuxième lot de fondations, 26 octobre 2026. Voir la [roadmap](rpg-roadmap.md) et le
 [contrat du prototype](rpg-foundation-contract.md). Les règles actuelles du roguelike et ses
 fichiers restent inchangés ; ce backend n’active pas encore un mode RPG dans le menu.
