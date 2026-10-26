@@ -1,9 +1,5 @@
 # Acts, monsters and bosses
 
-The [classic RPG campaign](../rpg-classic.md) persists enemies and their durable trait state.
-RegionMonsterDef.renew_on_rest controls explicit renewal of dead common spawns; unique quest
-guardians stay dead. Loading and death never respawn them. Shared combat rules below still apply.
-
 ## Acts and their monsters
 
 A run is **4 acts of 3 floors** (`data/dungeon/acts/`, listed in `dungeon_config.tres`). Each act has
@@ -396,12 +392,9 @@ usual hunter ranks and challenges (the hole challenge too: the Deeps have holes)
 with perks, working as they do on the hero or on an elite. XP: 8 to 13 (the Warden 40).
 
 
-## Regional persistence prototype
+## Deferred offspring ownership
 
-Authored ordinary enemies keep remaining Health, position, rank/affixes and durable module/perk
-counters across region revisits. Defeated authored enemies remain tombstones; runtime enemies
-that died are removed because they have no initial spawn to replay. Living summons/offspring
-are preserved, including their rewardless summoned flag. No automatic respawn occurs on load.
-Targets, status effects and AI windups are transient; thief-carried gold has an explicit durable
-hook. Boss phases and explicit rest renewal remain later work. See
-[the population contract](../rpg-population.md); legacy run behavior is unchanged.
+DeathSpawnTrait and trapped chests queue a typed WorldSpawner batch with its floor generation
+and a weak target. A replaced floor cancels the whole old batch; a freed target becomes null,
+without a captured-node lambda. Existing kind selection/scatter and random order stay the same.
+This protects normal runs without adding a region, respawn or campaign system.

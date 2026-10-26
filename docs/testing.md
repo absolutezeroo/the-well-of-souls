@@ -357,53 +357,12 @@ Floor fingerprints intentionally change only for cases affected by the expanded 
 floor 3; FLOOR_FORMAT 3 protects older floor ledgers. Device checks remain in the roadmap.
 
 
-## RPG foundation regressions
+## Roguelike entry and retained lifetime regressions
 
-`unit.rpg_foundations` checks per-producer buffers, copied/bounded intentions, one-shot edges,
-local input compatibility and opaque session lifetimes. `game.rpg_foundations` runs two live
-heroes with independent producers (movement, attacks and skill cooldowns), checks mute/detach,
-and restarts a Game while old death/descent/fade work is pending. An old context must not show
-a game-over screen, advance the new floor or darken the new session. It does not yet validate
-multi-player UI, rewards, separate regions or networking.
-
-
-## Campaign persistence regressions
-
-`unit.campaign` checks durable ids, copied snapshots, strict content/ownership validation,
-checksum recovery, incompatible versions, stale revisions, writer locks, a failed backup write
-and publication interruptions on first/update checkpoints. `game.campaign` round-trips a live
-hero including rolled gear, runes and durable passive memory, and keeps two region-fact maps.
-The maps are data records, not two loaded regions. A logical interrupted commit is not a real
-power-loss test; SafeFile short-write coverage also runs through the Python tool tests.
-
-
-## Loaded-region regressions
-
-`unit.regions` validates authored maps, link destinations, safe separated entries and the item
-codec. `game.regions` loads the standalone proof with an isolated campaign path: A/B/A keeps
-the same wounded actor, collected items stay absent, an exact rolled drop survives revisit
-and scene restart, and a failed commit or layout mismatch preserves the loaded source.
-It also checks duplicate queued travel, stale deferred pickups, a real physics exit, no
-arrival bounce and non-destructive campaign v1-to-v2 migration. These maps are now real World
-instances reused in sequence; this is not seamless sector streaming or a device render test.
-
-
-## Regional population regressions
-
-`unit.region_population` checks schema/content, durable module/perk validation and chest-blocked
-exit geometry. `game.region_population` uses native reward paths with AI frozen for state
-assertions: wounded/ranked enemies, authored death tombstones, runtime offspring, thief currency,
-chest state, exact wealth, reentrant checkpoint refusal, double pickup, trap fuse completion,
-restart and non-destructive v2 migration. Existing `game.regions` keeps its original assertions;
-its v1 fixture drops the later fields and checks the current CampaignSave.VERSION.
-
-
-## Classic RPG campaign
-
-The default F5/export scene is `src/ui/campaign/campaign_screen.tscn`. The former title and
-Game scenes remain explicit developer/regression entry points, outside the campaign UI.
-`unit.classic_rpg` / `game.classic_rpg` exercise the actual campaign runtime and launcher with
-isolated save paths, including failed transactions, death retry and schema migration. They
-are part of the normal full test command; historical combat/online/save assertions remain.
-See [the gameplay and manual-device checklist](rpg-classic.md). The two-region proof remains
-available for targeted debugging but does not launch the product menu.
+unit.roguelike_entry asserts the actual project main scene is the roguelike title. The historical
+unit.rpg_foundations/game.rpg_foundations names now cover shared command/session regressions:
+independent/reused inputs, mute/detach and stale death/descent/fade continuations after restart.
+The game checks also cover reentrant item/gold pickup, weak targets and generation-bound deferred
+spawns/items/coins, and immediate world teardown before shader warm-up. No RPG campaign mode is
+loaded by these tests. Product-specific campaign tests/documents remain in the
+[separate-project archive](rpg-archive.md). Existing roguelike assertions are retained.

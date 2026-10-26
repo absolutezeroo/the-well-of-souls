@@ -1,9 +1,5 @@
 # Loot, the belt, the merchant and the forge
 
-The [classic RPG campaign](../rpg-classic.md) retains equipment and ground loot after death.
-Refuge supplies have explicit prices and one-per-campaign claims; failed publication never
-spends gold or grants the object. Rest never refills stock or opened chests.
-
 ## Loot, gold and the merchant
 
 - **Item level**: every weapon and armor is as strong as the floor it was found or bought on
@@ -154,11 +150,10 @@ consumables between the two ("To belt" / "To bag"). The merchant buys from the b
   weapon becomes its own copy the first time a rune goes in. Debug panel: "Forge here", "Every rune".
 
 
-## Regional chest and currency persistence
+## Exactly-once ground transfers
 
-The regional proof keeps chest open/trap state and exact loose items/piles in the same snapshot
-as the hero. Loading never reopens a chest, pays a kill or applies FloorRules to stored coins
-again. Native reward notifications are not safe checkpoint boundaries until WorldSpawner is
-settled, including queued death offspring. Pickups refuse duplicate transfers. Pending and
-finished trap fuses survive loading without distributing another reward. See
-[the regional population contract](../rpg-population.md).
+ItemPickup refuses reentrant take() calls while PlayerPack is transferring the item. GoldPickup
+marks a pile collected before add_gold() emits, so a listener cannot take the same pile again
+before queue_free(). Failed item storage still leaves the pickup available. Deferred item/coin
+insertion carries its floor generation and discards old-floor nodes after a transition. These
+are roguelike correctness guards, independent of the archived campaign experiment.

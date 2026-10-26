@@ -39,7 +39,7 @@ func _physics_process(delta: float) -> void:
 		_fuse -= delta
 		queue_redraw()
 		if _fuse < 0.0:
-			_fuse = -1.0  # a completed fuse has one canonical durable value
+			_fuse = -1.0  # a completed fuse must never fire again
 			_explode()
 		return
 	if is_open:
@@ -66,7 +66,6 @@ func set_spent() -> void:
 func open() -> void:
 	if is_open:
 		return
-	world.spawns.begin_settlement()
 	is_open = true
 	queue_redraw()
 	opened.emit(self)
@@ -79,18 +78,6 @@ func open() -> void:
 		Sfx.play_world(def.open_sound, global_position)
 		Vfx.sparkles(world, global_position, Palette.GOLD)
 		_drop_items(world.rng.randi_range(def.items_min, def.items_max))
-	world.spawns.end_settlement()
-
-
-func trap_time_left() -> float:
-	return _fuse if _fuse >= 0.0 else -1.0
-
-
-## Restore an opened chest quietly; its pending fuse resumes but its rewards are not replayed.
-func restore_opened(opened_before: bool, seconds: float) -> void:
-	is_open = opened_before
-	_fuse = seconds
-	queue_redraw()
 
 
 func _spring() -> void:
@@ -107,12 +94,10 @@ func _spring() -> void:
 
 
 func _explode() -> void:
-	world.spawns.begin_settlement()
 	var damage := world.rules.dungeon_damage(def.explosion_damage)
 	# The chest bursts apart (splinters, grit and dust), not a fireball.
 	Vfx.explosion(world, global_position, def.explosion_radius, VfxElementDef.named(&"earth"), false)
 	Combat.blast(world, global_position, def.explosion_radius, damage, 340.0)
-	world.spawns.end_settlement()
 
 
 func _drop_items(count: int) -> void:

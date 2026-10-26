@@ -36,11 +36,6 @@ func _init(player: Player) -> void:
 ## One source per controller. Changing it cancels buffered attacks, never unleashes a charge.
 func set_source(source: PlayerCommandSource) -> void:
 	_source = source if source else PlayerCommandSource.new()
-	cancel_actions()
-
-
-## Region relocation cancels pending attacks while retaining this controller's producer.
-func cancel_actions() -> void:
 	_command.clear()
 	move_direction = Vector2.ZERO
 	aim_hold = 0.0

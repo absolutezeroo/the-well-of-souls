@@ -204,29 +204,6 @@ static func _lasting(memory: Dictionary) -> Dictionary:
 	return result
 
 
-## Monster-native/affix perks may be subresources. Their local ids, scoped by the saved monster
-## composition, identify lasting memory without pretending they are independent catalog items.
-func persistent_memory() -> Dictionary:
-	var result := {}
-	for entry in entries:
-		var lasting := _lasting(entry.memory)
-		if not lasting.is_empty():
-			result[String(entry.perk.id)] = lasting.duplicate(true)
-	return result
-
-
-func restore_memory(data: Dictionary) -> bool:
-	for key: String in data:
-		var found := false
-		for entry in entries:
-			if String(entry.perk.id) == key:
-				entry.memory = (data[key] as Dictionary).duplicate(true)
-				found = true
-		if not found:
-			return false
-	return true
-
-
 func load_data(data: Array) -> void:
 	entries.clear()
 	for saved: Dictionary in data:

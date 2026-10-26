@@ -1,14 +1,11 @@
 class_name GameSession
 extends RefCounted
-## Runtime ownership separate from one expedition. Game exposes compatibility getters for
-## the existing run and hero. Character persistence and multi-region state are later RPG work;
-## these live node references are deliberately never serialized or sent over the network.
+## One run's runtime ownership. Opaque tickets prevent an old death, descent or fade from
+## acting on a restarted run; references here are never serialized or sent online.
 
 var expedition: RunState
 var character: Player
 var world: World
-## Optional durable campaign, separate from runtime nodes and the legacy run's save format.
-var campaign: CampaignState
 ## A new expedition or a closed session invalidates continuations of the previous one.
 var generation := 0
 var _open := false
@@ -42,23 +39,6 @@ func capture() -> Ticket:
 
 func is_current(ticket: Ticket) -> bool:
 	return _open and expedition != null and ticket != null and ticket == _ticket
-
-
-## Explicit prototype binding; callers keep ownership of the already loaded snapshot.
-func attach_campaign(snapshot: CampaignState) -> bool:
-	if snapshot == null or CampaignState.from_data(snapshot.to_data()) == null:
-		return false
-	campaign = snapshot
-	return true
-
-
-## Capture only the hero; region coordinators update their own facts before a common commit.
-func capture_character() -> bool:
-	return campaign != null and campaign.hero.capture(character)
-
-
-func detach_campaign() -> void:
-	campaign = null
 
 
 ## Invalidate async work before scene teardown; retain references for existing exit listeners.

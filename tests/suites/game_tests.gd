@@ -27,10 +27,6 @@ var _borrowed: Array[Node] = []
 
 func test_cases() -> Array:
 	return [
-		["classic_rpg", _test_classic_rpg],
-		["region_population", _test_region_population],
-		["regions", _test_region_places],
-		["campaign", _on_sturdy_game(func(game: Game) -> void: (_borrow(CampaignTests.new()) as CampaignTests).run_game(game))],
 		["rpg_foundations", _on_sturdy_game(func(game: Game) -> void: await (_borrow(RpgFoundationTests.new()) as RpgFoundationTests).run_game(game))],
 		["modifiers", _on_sturdy_game(func(game: Game) -> void: await (_borrow(ModifierTests.new()) as ModifierTests).run_game(game))],
 		["spawn", _on_game(_test_spawn)],
@@ -148,30 +144,9 @@ func _on_game(body: Callable, texts_on_grid: bool = false) -> Callable:
 		await _drop_game(game)
 
 
-## Independent authored-place scene: no legacy Game world shares its collision space.
-func _test_classic_rpg() -> void:
-	var suite := ClassicRpgTests.new()
-	add_child(suite)
-	await suite.run_world()
-	suite.free()
-
-
-func _test_region_population() -> void:
-	var suite := RegionPopulationTests.new()
-	add_child(suite)
-	await suite.run_world()
-	suite.free()
-
-
-func _test_region_places() -> void:
-	var suite := RegionTests.new()
-	add_child(suite)
-	await suite.run_world()
-	suite.free()
-
-
 ## A test on a fresh Game whose hero shrugs off the floor's blows (Armor 999): the floors' and
-## the weapons' tests, which a stray blow, a trap or a fire must not end.
+## the weapons' tests, which a stray blow, a trap or a fire must not end (they ran after a
+## god-mode bot run when the suite was one game, and some of them need it).
 func _on_sturdy_game(body: Callable) -> Callable:
 	return _on_game(func(game: Game) -> void:
 		game.player.base_stats.defense = 999

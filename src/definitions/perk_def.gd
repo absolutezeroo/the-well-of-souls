@@ -1,6 +1,6 @@
 class_name PerkDef
 extends Resource
-## A permanent upgrade: chosen campaign talent, or a legacy run perk/relic.
+## A permanent upgrade for the run, picked on level up (common perks) or after a boss (rare relics).
 ## Stat bonuses and passives both stack: taking a perk twice doubles its effect.
 ## Most belong to a family or two (SynergyDef): three of a family wake its bonus.
 

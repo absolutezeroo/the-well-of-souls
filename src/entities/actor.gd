@@ -270,14 +270,6 @@ func is_dashing() -> bool:
 	return _dash_time > 0.0
 
 
-## Relocation ends motion from the place left behind, without healing or clearing statuses.
-func stop_motion() -> void:
-	velocity = Vector2.ZERO
-	_knockback = Vector2.ZERO
-	_dash_velocity = Vector2.ZERO
-	_dash_time = 0.0
-
-
 ## Direction the actor is currently trying to move in (zero when standing still).
 func get_move_direction() -> Vector2:
 	return Vector2.ZERO
@@ -375,9 +367,6 @@ func can_heal_killer() -> bool:
 func die(killer: Actor) -> void:
 	if is_dead:
 		return
-	var settlement := world.spawns if is_instance_valid(world) else null
-	if settlement:
-		settlement.begin_settlement()
 	is_dead = true
 	if killed_by.is_empty():  # a cause may be set just before (a fall, giving up)
 		killed_by = _death_cause(killer)
@@ -397,8 +386,6 @@ func die(killer: Actor) -> void:
 		valid_killer.perks.on_kill(valid_killer, self)  # still burning, slowed...: perks may care
 	statuses.clear()
 	died.emit(self)
-	if settlement:
-		settlement.end_settlement()
 	if free_on_death:
 		if rig and rig.visible:
 			# In the element of the blow that killed it: ash, shards, a puddle... (DeathFx).

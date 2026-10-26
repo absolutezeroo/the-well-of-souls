@@ -71,15 +71,10 @@ func take(player: Player) -> bool:
 	if _collected or player == null or player.is_dead:
 		return false
 	_collected = true
-	var settlement := _world.spawns if is_instance_valid(_world) else null
-	if settlement:
-		settlement.begin_settlement()
 	player.add_gold(amount)
 	collected.emit(self)
 	Sfx.play_world(Sfx.bank.coin, global_position, -6.0)
 	queue_free()
-	if settlement:
-		settlement.end_settlement()
 	return true
 
 

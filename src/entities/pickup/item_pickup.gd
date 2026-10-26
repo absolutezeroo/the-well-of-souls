@@ -108,20 +108,13 @@ func take(player: Player) -> bool:
 	if _taken or _taking or player == null or player.is_dead:
 		return false
 	_taking = true
-	var settlement := player.world.spawns if is_instance_valid(player.world) else null
-	if settlement:
-		settlement.begin_settlement()
 	if not player.pack.pick_up(item):
 		_taking = false
-		if settlement:
-			settlement.end_settlement()
 		return false
 	_taken = true
 	_left()
 	taken.emit(self)
 	queue_free()
-	if settlement:
-		settlement.end_settlement()
 	return true
 
 

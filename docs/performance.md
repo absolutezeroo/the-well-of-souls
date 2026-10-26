@@ -199,52 +199,11 @@ threshold, not on every low-Health frame. These are implementation bounds, not a
 measurement; crowd checks remain task_269.
 
 
-## Per-character command sampling
+## Command and transition guards
 
-PlayerCommandSource and PlayerControls keep their frame buffers. Local input fills scalar
-fields and slot bit masks; buffered producers copy into existing buffers and consume edges.
-There are no per-step arrays, dictionaries, formatted names or new command objects. Source
-replacement and session tickets allocate only at lifecycle boundaries. The extra calls/copies
-are covered functionally, not a new S23 frame-time measurement.
-
-
-## Campaign checkpoint costs
-
-Campaign captures and commits copy/validate/serialize outside the physics hot path. The
-prototype envelope is limited to 16 MiB; this bounds file intake, not peak heap or stall time.
-The backend is synchronous and is not scheduled as an autosave yet. Profile checkpoint
-latency and memory on S23 before activating it; larger streamed worlds need a journal or
-sector-generation implementation while keeping a common transaction boundary.
-
-
-## Authored region transitions
-
-Region validation, map building and item capture run only at lifecycle boundaries. RegionLoot
-registers pickups on creation/take, with no added per-frame registry scan. The prototype
-loads one bounded authored map at a time, synchronously; destination preparation and full
-campaign checkpoint can stall a frame and are not a measured mobile streaming solution.
-Device profiling and the background sector lifecycle remain required before public adoption.
-
-
-## Regional population capture
-
-Monster/chest/coin tracking uses creation, death/open and collection signals. Durable snapshots
-validate/copy at checkpoint/transition boundaries, including off-tree native setup for a first
-population. There is no added per-monster per-frame allocation or group scan. Reward settlement
-counters run only around transfers/deaths/openings and queued spawn batches. Runtime dead
-minions are removed from records, preventing an unbounded dead-summon history. Capture remains
-synchronous; its peak memory and latency still require S23/Windows measurements.
-
-
-## Public classic RPG
-
-CampaignRuntime counts down a scalar autosave timer; no entity scans or string/dictionary
-construction were added to per-frame campaign paths. New UI rows are built on explicit menu
-changes. Map discovery uses a bounded byte array and hex encoding only at checkpoint boundaries.
-Refuge services reuse Interactor's registry. Death prepares a replacement hero before commit;
-rest seeds temporary native monster records only at that explicit boundary. Campaign checkpoints
-remain synchronous and bounded to 16 MiB; 30-second active-play autosave is data, not proof of a
-mobile latency budget. Device checkpoint/recovery timings and repeated-travel memory remain
-required. The main scene reuses the full combat HUD and calls its regional rebinding on changes,
-not every frame. BodyLook's deferred warm-up uses a weak reference so a rejected/freed scene
-cannot retain a stale sprite callback.
+Local input and PlayerControls reuse their PlayerCommand buffers; no arrays/dictionaries or
+formatted action names are added per frame. Session tickets and typed deferred spawn batches
+allocate only at lifecycle/spawn boundaries. Pickup transfer guards use booleans; deferred
+insertion validates the floor id. BodyLook's one-time shader warm-up callback uses a weak sprite
+reference, so closing/rejecting a world before placement produces no stale-node callback.
+These are implementation bounds; no new S23 frame-time measurement is claimed.

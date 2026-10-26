@@ -35,23 +35,6 @@ func stolen(monster: Monster) -> int:
 	return _state(monster).stolen
 
 
-func persistent_data(monster: Monster) -> Dictionary:
-	return { "stolen": stolen(monster), "flee": _state(monster).flee }
-
-
-func accepts_persistent_data(data: Dictionary) -> bool:
-	var amount: Variant = data.get("stolen")
-	var seconds: Variant = data.get("flee")
-	return data.size() == 2 and (amount is int or amount is float) and is_finite(float(amount)) \
-		and float(amount) >= 0.0 and float(amount) <= 9007199254740991.0 and floorf(float(amount)) == float(amount) \
-		and (seconds is int or seconds is float) and is_finite(float(seconds)) and float(seconds) >= 0.0
-
-
-func restore_persistent_data(monster: Monster, data: Dictionary) -> void:
-	_state(monster).stolen = int(data.stolen)
-	_state(monster).flee = float(data.flee)
-
-
 func is_fleeing(monster: Monster) -> bool:
 	return _state(monster).flee > 0.0
 

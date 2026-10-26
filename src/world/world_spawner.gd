@@ -14,8 +14,6 @@ var _world: World
 var _entities: Node2D
 var _projectiles: Node2D
 var _effects: Node2D
-var _settlements := 0
-var _pending_spawns := 0
 
 ## A typed deferred batch. Holds weak targets, never captured actor nodes in lambdas.
 class SpawnBatch:
@@ -41,21 +39,7 @@ func spawn_monster(def: MonsterDef, at: Vector2) -> Monster:
 	monster.setup(def, _world.depth, _world.content_db().dungeon)
 	monster.position = at
 	_entities.add_child(monster)
-	_world.monster_created.emit(monster)
 	return monster
-
-
-## A snapshot cannot observe one half of a synchronous reward or a queued offspring batch.
-func is_settled() -> bool:
-	return _settlements == 0 and _pending_spawns == 0
-
-
-func begin_settlement() -> void:
-	_settlements += 1
-
-
-func end_settlement() -> void:
-	_settlements -= 1
 
 
 func defer_monsters(kinds: Array[MonsterDef], count: int, at: Vector2, radius: float, target: Actor) -> void:
@@ -66,7 +50,6 @@ func defer_monsters(kinds: Array[MonsterDef], count: int, at: Vector2, radius: f
 	batch.radius = radius
 	batch.target = weakref(target)
 	batch.generation = _world.floor_id
-	_pending_spawns += 1
 	_spawn_batch.call_deferred(batch)
 
 
@@ -79,7 +62,6 @@ func _spawn_batch(batch: SpawnBatch) -> void:
 			var monster := spawn_monster(kind, _world.find_open_point_near(batch.at, batch.radius, WorldSpace.room_for(kind)))
 			monster.target = batch.target.get_ref() as Actor if batch.target else null
 			Vfx.puff(_world, monster.global_position)
-	_pending_spawns -= 1
 
 
 func spawn_loot(item: ItemDef, at: Vector2, quality: float = 1.0) -> ItemPickup:
@@ -111,7 +93,6 @@ func spawn_gold_pile(at: Vector2, amount: int) -> GoldPickup:
 	var coin := GoldPickup.create(at, amount, _world)
 	if _world.ledger.lay(FloorLedger.GOLD, coin, str(amount)) >= 0:
 		coin.collected.connect(func(pile: GoldPickup) -> void: _world.ledger.spend(FloorLedger.GOLD, pile))
-	_world.gold_created.emit(coin)
 	_add_pickup.call_deferred(coin, _world.floor_id)
 	return coin
 
@@ -172,12 +153,11 @@ func spawn_item(item: ItemDef, at: Vector2, armed: bool = true) -> ItemPickup:
 	pickup.position = at
 	if _world.ledger.lay(FloorLedger.ITEM, pickup, String(item.id)) >= 0:
 		pickup.taken.connect(func(gone: ItemPickup) -> void: _world.ledger.spend(FloorLedger.ITEM, gone))
-	_world.item_created.emit(pickup)
 	_add_pickup.call_deferred(pickup, _world.floor_id)  # may be called from physics callbacks
 	return pickup
 
 
-## A region/floor may have changed before a deferred drop reaches the tree.
+## A floor may have changed before a deferred drop reaches the tree.
 func _add_pickup(pickup: Node2D, generation: int) -> void:
 	if not is_instance_valid(pickup):
 		return
@@ -278,7 +258,6 @@ func spawn_chest(def: ChestDef, cell: Vector2i, trapped: bool) -> Chest:
 	chest.setup(def, _world, trapped)
 	place_on_cell(chest, cell)
 	chest.opened.connect(func(_chest: Chest) -> void: _world.floor_save.opened_chests.append(cell))
-	_world.chest_created.emit(chest)
 	return chest
 
 

@@ -1,11 +1,5 @@
 # Architecture
 
-The product now starts in **CampaignScreen** (`src/ui/campaign/campaign_screen.tscn`).
-CampaignRuntime owns the persistent solo lifecycle and RegionCoordinator loads authored places;
-CampaignProgress handles permanent talents and transactionally claimed quests/supplies.
-See [the current RPG contract](rpg-classic.md). The Game/RunState flow described below is retained
-legacy implementation and regression coverage, outside the default player path.
-
 How the code is laid out and how the pieces talk to each other. Code rules are in
 [conventions.md](conventions.md); what each system does for the player is in [design/](design/).
 
@@ -384,45 +378,14 @@ lethal and secondary hits themselves. `FrenzyTrait` uses the first; `WarnedPulse
 second plus update, with per-owner counters and a GroundStrike owning the warning lifetime.
 
 
-## RPG foundations: runtime session and command producers
+## Run lifetime and command producers
 
-GameSession now holds the live expedition, hero and World references. Game.run/player remain
-compatibility views; this is runtime ownership, not the future character/world save schema.
-Opaque session tickets guard Game continuations and fades across restarts. They do not replace
-per-region lifetime guards or make the legacy Game work without an expedition yet.
+GameSession holds the current RunState, live hero and World. Game.run/player are compatibility
+views. Opaque session tickets prevent a previous death timer, descent request or fade from
+acting on a restarted run. Session ownership is runtime-only, not a persistent RPG campaign.
 
-PlayerControls consumes one reused PlayerCommand snapshot each physics step. LocalPlayerInput
-reads the same shared actions as before; BufferedPlayerInput supplies independent intentions
-for tools and tests, consuming edges once. Costs, cooldowns and inventory remain validated by
-the existing components. Commands are not authenticated network packets. See
-[rpg-foundation-contract.md](rpg-foundation-contract.md) for prototype assumptions and limits.
-
-
-## Durable campaign snapshots
-
-CampaignState owns CharacterState and CampaignWorldState, whose RegionState records hold
-explicit facts. Runtime nodes remain in GameSession; its optional campaign reference survives
-leaving an expedition. The legacy new-run flow explicitly detaches it and keeps RunSave v3.
-CampaignSave atomically publishes one bounded hero/world envelope with a validated previous
-checkpoint, revision checks and an exclusive writer lock. It has no default path or automatic
-cloud hook. See [rpg-persistence.md](rpg-persistence.md) for the schema, recovery and limits.
-
-
-## Authored regional places
-
-RegionAtlas/RegionDef resources describe fixed maps, entries, exits and one-time item spawns.
-RegionCoordinator injects RegionFloorKind into the existing World build pipeline, retains the
-Player node and checkpoints before unloading. RegionLoot owns a per-region item ledger and
-tracks World.item_created before deferred insertion; WorldSpawner drops stale insertions by
-floor_id. Campaign schema 2 migrates schema 1 without rewriting on read. The standalone
-[region proof](rpg-regions.md) is separate from legacy Game and continuous sector streaming.
-
-
-## Durable regional population and reward settlement
-
-RegionPopulation owns native monster/chest runtime tracking and typed RegionMonsterState/
-RegionChestState records. RegionLoot also owns RegionGoldState; rewards, tombstones and hero
-share a campaign checkpoint. MonsterTraits delegates lasting module state (including thief
-currency); PerkSet preserves local-id lasting memory. WorldSpawner exposes settlement/batch
-completion so a snapshot cannot split native reward notifications. Campaign v3 migrates v1/v2;
-see [rpg-population.md](rpg-population.md) for composition compatibility and transient limits.
+PlayerControls samples a reused PlayerCommand once each physics step. LocalPlayerInput reads
+the shared keyboard/gamepad/touch actions; BufferedPlayerInput provides independent intentions
+for tools/tests. Existing components still validate costs, cooldowns and inventory. The
+[separate RPG experiment](rpg-archive.md) has been removed from the active product; none of its
+campaign stores, fixed-region coordinators or launch screens are kept on main.

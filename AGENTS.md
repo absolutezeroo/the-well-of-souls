@@ -1,8 +1,8 @@
 # Agent guide: Le Puits des Âmes
 
-Persistent solo action RPG in Godot 4.7, GDScript (statically typed), Compatibility renderer,
-for Android and desktop. The main scene is CampaignScreen; legacy run scenes remain for archive
-compatibility and regression tests, outside the player flow. See docs/rpg-classic.md.
+Real-time action roguelike in Godot 4.7, GDScript (statically typed), Compatibility renderer,
+for Android and desktop. Keep this repository a roguelike; a future RPG is a separate project.
+The former prototype is archived (docs/rpg-archive.md), not an active mode to restore.
 Humans start at README.md; the reference is in docs/. Read the docs page
 for a system before changing it.
 

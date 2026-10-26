@@ -30,9 +30,6 @@ extends Control
 ## Picking a language rebuilds the window in it at once; the title screen behind is rebuilt when
 ## the window closes (other screens pick it up the next time they open).
 
-## The public RPG hides obsolete run/tutorial entry points; legacy scenes keep their settings.
-var campaign_mode := false
-
 signal closed
 ## The player picked another language (Settings.language is already set).
 signal language_changed
@@ -338,11 +335,8 @@ func _build_gameplay(body: VBoxContainer) -> Control:
 	var right := OptionRows.column(page_node)
 	_build_languages(OptionRows.section(left, tr("Language")))
 	_build_loot(OptionRows.section(left, tr("Loot")))
-	var story_section := OptionRows.section(left, tr("Story"))
-	_build_stories(story_section)
-	if campaign_mode:
-		(story_section.get_parent() as Control).hide()
-	var in_run := OptionRows.section(right, tr("Gameplay") if campaign_mode else tr("In a run"))
+	_build_stories(OptionRows.section(left, tr("Story")))
+	var in_run := OptionRows.section(right, tr("In a run"))
 	_checks[OptionRows.check(self, in_run, tr("Run timer"), tr("The run's time, under the map."), "RunTimerCheck")] = &"run_timer"
 	_shake = OptionRows.slider(self, in_run, tr("Screen shake"), tr("On big hits."), 0.0, 1.5, 0.1, "ShakeSlider")
 	_vibrations = OptionRows.check(self, in_run, tr("Vibrations"), tr("The phone buzzes on big hits and critical hits."), "VibrationsCheck")
@@ -358,9 +352,6 @@ func _build_gameplay(body: VBoxContainer) -> Control:
 	_replay.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	replay_row.add_child(_replay)
 	MenuWindow.expose(_replay, "ReplayTutorialButton", self)
-	if campaign_mode:
-		(tutorial.get_parent() as Control).hide()
-		(get_node("%RunTimerCheck").get_parent() as Control).hide()
 	return page_node
 
 

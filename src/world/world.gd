@@ -7,15 +7,6 @@ extends Node2D
 signal stairs_reached(route: int)
 ## A new floor was built (the explored map starts over).
 signal map_reset
-## Emitted before deferred insertion, so a region can track even a just-dropped item.
-@warning_ignore("unused_signal")  # WorldSpawner emits it; the facade owns the public signal.
-signal item_created(pickup: ItemPickup)
-@warning_ignore("unused_signal")  # Created by WorldSpawner; regional components listen here.
-signal gold_created(pickup: GoldPickup)
-@warning_ignore("unused_signal")  # Created by WorldSpawner, including runtime summons.
-signal monster_created(monster: Monster)
-@warning_ignore("unused_signal")  # Created by WorldSpawner, including runtime rewards.
-signal chest_created(chest: Chest)
 ## Cells the hero discovered, or whose look changed (a floor that gave way...). For the minimap.
 signal cells_changed(cells: Array[Vector2i])
 ## The hero walked into one of the floor's signature rooms for the first time (RoomShapeDef with
@@ -172,9 +163,8 @@ func _ready() -> void:
 ## Builds floor `new_depth` on the floor's dice (`rng`, seeded by the Game): what every floor
 ## shares here, always in this order; what its kind does (its boss, twist, world, arena, map, what
 ## lies on it) by its FloorKind, chosen from the run's state. `taken`: the way down the hero chose
-## to get here (its world, curse or event), or null. `place` injects an authored RegionFloorKind
-## through the same pipeline, without changing how legacy floors are selected.
-func build_floor(new_depth: int, content: ContentDB, taken: FloorRoute = null, place: FloorKind = null) -> void:
+## to get here (its world, curse or event), or null.
+func build_floor(new_depth: int, content: ContentDB, taken: FloorRoute = null) -> void:
 	clear_floor()
 	route = taken
 	floor_id += 1
@@ -187,7 +177,7 @@ func build_floor(new_depth: int, content: ContentDB, taken: FloorRoute = null, p
 	forge_drought_at_start = floors_without_forge
 	_content = content
 	DeathPiecesVfx.warm_content(content)
-	var kind := FloorKind.choose(self, content, taken, place)
+	var kind := FloorKind.choose(self, content, taken)
 	var twist := kind.twist(self, content)
 	curse = twist.curse if twist else null
 	floor_event = twist.floor_event if twist else null
@@ -262,22 +252,18 @@ func clear_floor() -> void:
 
 
 func place_player(new_player: Player) -> void:
-	attach_player(new_player)
-	# Legacy floor entry grants its floor-start passives. Region travel uses attach_player.
+	player = new_player
+	player.world = self
+	if player.get_parent() == null:
+		_entities.add_child(player)
+	# A fall begun on the last floor ends here: its hole is gone (it would slide him toward it,
+	# then drop him into the Deeps from this floor).
 	player.stand_up()
 	player.global_position = map.cell_to_world(map.start_cell)
 	player.temperature.reset()
 	player.reset_safe_position()
 	player.perks.on_floor_started(player)
 	player.camera.reset_smoothing()
-
-
-## Runtime attachment alone does not heal, grant floor-entry passives or move the hero.
-func attach_player(new_player: Player) -> void:
-	player = new_player
-	player.world = self
-	if player.get_parent() == null:
-		_entities.add_child(player)
 
 
 # --- Spawning ----------------------------------------------------------------
@@ -308,11 +294,6 @@ func roll_item(item: ItemDef, quality: float = 1.0) -> ItemDef:
 ## Coins on the floor, split in a few piles that fly to the hero when close.
 func spawn_gold(at: Vector2, amount: int) -> void:
 	spawns.spawn_gold(at, amount)
-
-
-## Restoration of an already-scaled pile: no new floor multiplier or splitting.
-func restore_gold(at: Vector2, amount: int) -> GoldPickup:
-	return spawns.spawn_gold_pile(at, amount)
 
 
 func spawn_encounter(def: EncounterDef, cell: Vector2i) -> Encounter:

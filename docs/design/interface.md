@@ -1,9 +1,5 @@
 # Interface
 
-**Current entry point:** [CampaignScreen](../rpg-classic.md) presents Begin/Resume, persistent
-Journal/Talents/Supplies/Rest/Save and error recovery. It reuses the complete combat HUD and bag.
-Legacy Daily Descent, shrine and game-over controls below are outside the campaign player flow.
-
 ## Controls
 
 Every scrolling list (codex, shrine, bag, shop) scrolls by dragging a finger over it, from
@@ -526,32 +522,14 @@ stones lit in their runes' colors. The selected slot pulses gold.
   lines are still to hear.
 
 
-## Per-character command sources (RPG foundation)
+## Active product and input ownership
 
-The implemented local controls still use the existing actions and pause rules. LocalPlayerInput
-now reads movement/combat actions into a reused PlayerCommand; PlayerControls consumes that
-hero's snapshot. Tools can give another hero a BufferedPlayerInput without reading the same
-keyboard. Presses are consumed once, held movement/attack persist until updated or reset, and
-changing source cancels charging instead of releasing an old attack. The menu-close press guard
-still applies. Interactions, pause and inventory commands are not migrated to this contract yet.
-This is not multiplayer support or a new open-world game mode; the next steps are in the
-[RPG roadmap](../rpg-roadmap.md).
+The active F5/export path is TitleScreen → story/descent or resumed Game. Shrine, daily runs,
+perk choices, end of run, records and options keep their normal roles. The standalone RPG
+campaign/menu is [archived for a separate project](../rpg-archive.md).
 
-
-## Regional proof scene
-
-`tools/rpg/region_proof.tscn` is a standalone development scene. Its labels listen to regional
-notifications; stairs request a deferred validated transition. Movement uses LocalPlayerInput
-and the existing TouchJoystick, so keyboard/gamepad/touch actions still share the same path.
-This proof has no inventory, quest UI, tactical minimap or touch combat buttons yet, and adds
-no title-screen mode. Its default storage path is empty (memory only). See
-[the proof instructions](../rpg-regions.md).
-
-
-## Populated proof controls
-
-The standalone regional proof now shows an event-driven Health label and reuses ActionButton
-for touch attack/innate roll. Its actions still pass through LocalPlayerInput. Keyboard/gamepad
-keep the existing bindings. A dead hero is told to restart the development scene; no new RPG
-respawn, save menu, inventory or public title mode is implied. See
-[the populated scene](../rpg-population.md).
+PlayerControls consumes one reused command from its own producer; local input still uses all
+existing bindings. Replacing/detaching a producer stops held movement/charging, and closing a
+menu still mutes the first press. Old death/descent/fade work checks its session ticket before
+showing panels, advancing or tinting a new run. The inventory checks that its previously bound
+hero is still valid before disconnecting signals.

@@ -15,9 +15,5 @@ func on_spawn(monster: Monster) -> void:
 			monster.perks.add(perk)
 
 
-func granted_perks() -> Array[PerkDef]:
-	return perks
-
-
 func describe() -> String:
 	return tr(text) if not text.is_empty() else ""

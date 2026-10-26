@@ -1,7 +1,7 @@
 class_name RpgFoundationTests
 extends TestSuite
-## First RPG foundations exercised through the existing game: independent command producers
-## and session lifetime. The world, rewards and persistence still follow the legacy run mode.
+## Shared run regressions: independent command producers and session lifetime. Historical
+## class/test names stay stable; this suite adds no campaign, region or RPG mode.
 
 
 func run_unit() -> void:
@@ -161,6 +161,8 @@ func run_game(game: Game) -> void:
 	first.controls.set_source(LocalPlayerInput.new())
 	first.process_mode = Node.PROCESS_MODE_INHERIT
 	await _test_stale_continuations(game)
+	await _test_pickup_guards(game)
+	await _test_deferred_floor_guards(game)
 
 
 func _test_stale_continuations(game: Game) -> void:
@@ -190,3 +192,71 @@ func _test_stale_continuations(game: Game) -> void:
 	var fade := game.get_node("Fade/Black") as ColorRect
 	check(game.depth == 1 and is_zero_approx(fade.color.a) and not game.is_menu_open(),
 		"an in-progress old fade cannot darken or pause the restarted expedition")
+
+
+## Reentrant change signals must not hand the same ground object to the bag twice.
+func _test_pickup_guards(game: Game) -> void:
+	var world := game.world
+	var hero := game.player
+	var item := load("res://data/items/weapons/bow.tres") as ItemDef
+	var pickup := world.spawn_item(item, hero.global_position + Vector2(200, 0))
+	pickup.process_mode = Node.PROCESS_MODE_DISABLED
+	await _frames(2)
+	var repeated: Array[bool] = []
+	hero.inventory.changed.connect(_repeat_item.bind(weakref(pickup), weakref(hero), repeated), CONNECT_ONE_SHOT)
+	var before := hero.inventory.items.count(item)
+	check(pickup.take(hero) and not pickup.take(hero) and repeated == [false]
+		and hero.inventory.items.count(item) == before + 1,
+		"reentrant inventory changes cannot collect the same dropped item twice")
+	var coin := world.spawns.spawn_gold_pile(hero.global_position + Vector2(200, 0), 7)
+	coin.process_mode = Node.PROCESS_MODE_DISABLED
+	await _frames(2)
+	var gold_before := hero.gold
+	var gold_repeat: Array[bool] = []
+	hero.gold_changed.connect(_repeat_gold.bind(weakref(coin), weakref(hero), gold_repeat), CONNECT_ONE_SHOT)
+	check(coin.take(hero) and not coin.take(hero) and coin.is_collected() and gold_repeat == [false]
+		and hero.gold == gold_before + 7,
+		"reentrant currency changes cannot collect the same pile twice before it is freed")
+	await _frames(2)
+
+
+func _repeat_item(pickup_ref: WeakRef, hero_ref: WeakRef, observations: Array[bool]) -> void:
+	var pickup := pickup_ref.get_ref() as ItemPickup
+	var hero := hero_ref.get_ref() as Player
+	observations.append(pickup.take(hero))
+
+
+func _repeat_gold(_gold: int, coin_ref: WeakRef, hero_ref: WeakRef, observations: Array[bool]) -> void:
+	var coin := coin_ref.get_ref() as GoldPickup
+	var hero := hero_ref.get_ref() as Player
+	observations.append(coin.take(hero))
+
+
+func _test_deferred_floor_guards(game: Game) -> void:
+	var world := game.world
+	world.process_mode = Node.PROCESS_MODE_DISABLED
+	var slime := load("res://data/monsters/slime.tres") as MonsterDef
+	var kinds: Array[MonsterDef] = [slime]
+	var target := (load("res://src/entities/player/player.tscn") as PackedScene).instantiate() as Player
+	var before := world.monster_count()
+	world.spawns.defer_monsters(kinds, 1, game.player.global_position, 24.0, target)
+	target.free()
+	await _frames(2)
+	check(world.monster_count() == before + 1,
+		"deferred offspring survive a freed target without a captured-node error")
+	var item := load("res://data/items/weapons/bow.tres") as ItemDef
+	var old_item: WeakRef = weakref(world.spawn_item(item, game.player.global_position))
+	var old_coin: WeakRef = weakref(world.spawns.spawn_gold_pile(game.player.global_position, 7))
+	world.spawns.defer_monsters(kinds, 2, game.player.global_position, 24.0, game.player)
+	world.build_floor(game.depth, CONTENT)
+	world.place_player(game.player)
+	var expected := world.monster_count()
+	await _frames(3)
+	check(world.monster_count() == expected and old_item.get_ref() == null and old_coin.get_ref() == null,
+		"queued offspring, items and coins from a replaced floor never land in the new floor")
+	world.process_mode = Node.PROCESS_MODE_INHERIT
+	# A rejected/closed scene can disappear before its shader warm-up placement executes.
+	var discarded := (load("res://src/world/world.tscn") as PackedScene).instantiate() as World
+	add_child(discarded)
+	discarded.free()
+	await _frames(2)
