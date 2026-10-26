@@ -1,0 +1,11 @@
+Craftpix.net — Free Ruined Temple Top-Down Location Pixel Art
+User-supplied pack: craftpix-net-160005-free-ruined-temple-top-down-location-pixel-art.zip
+Source: https://craftpix.net/freebies/free-ruined-temple-top-down-location-pixel-art/
+License: https://craftpix.net/file-licenses/ (FREEBIE PRODUCTS section, checked 2026-10-26)
+
+Used in this game: PNG/Exterior_objects.png, PNG/Walls_floor.png,
+PNG/Objects_interior.png, copied without changing their pixels.
+Atlas regions and the playable Kagari room layout are authored in data/village/temple.tres.
+The archive's PSD/Aseprite sources, demo maps, characters and unrelated assets are not bundled.
+These textures remain under the Craftpix license; they are not CC0/Ninja Adventure assets.
+Personal/commercial game use is permitted. Do not resell or redistribute them as an asset pack.

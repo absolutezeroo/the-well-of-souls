@@ -37,4 +37,6 @@ static func fill(parent: VBoxContainer, village: VillageDef) -> void:
 				var activity := resident.activity_at(VillageClock.hour(village.clock))
 				var echo := resident.echo and (resident.wakes_after == null or VillageProgress.stage(resident.wakes_after) != VillageProgress.Step.RETURNED)
 				if activity and not echo:
+					if activity.room:
+						column.add_child(UiSkin.label(TranslationServer.tr("Location: %s") % TranslationServer.tr(activity.room.display_name), Fonts.BODY, UiSkin.TEXT, true))
 					column.add_child(UiSkin.label(TranslationServer.tr("Schedule: %s") % TranslationServer.tr(activity.display_name), Fonts.BODY, UiSkin.DIM, true))

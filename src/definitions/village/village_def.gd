@@ -8,14 +8,13 @@ extends Resource
 @export var bounds: Rect2
 @export var spawn: Vector2
 @export var well: Vector2
-@export var shrine: Vector2
+@export var interiors: Array[VillageInteriorDef] = []
 @export var noticeboard: Vector2
 @export var clock: VillageClockDef
 @export var memorial: Vector2
 @export var move_speed: float = 160.0
 @export var interaction_reach: float = 65.0
 @export var well_icon: Texture2D
-@export var shrine_icon: Texture2D
 @export var path_texture: Texture2D
 @export var path_region: Rect2
 @export var paths: Array[Rect2] = []

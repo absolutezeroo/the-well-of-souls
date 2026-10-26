@@ -2,7 +2,8 @@
 [ext_resource type="Script" path="res://src/definitions/village/village_def.gd" id="script"]
 [ext_resource type="Script" path="res://src/definitions/village/village_prop_def.gd" id="prop_script"]
 [ext_resource type="Texture2D" path="res://assets/tiles/interior_floor.png" id="paving"]
-[ext_resource type="Texture2D" path="res://assets/props/altar.png" id="altar"]
+[ext_resource type="Texture2D" path="res://assets/village/temple/exterior.png" id="temple_art"]
+[ext_resource type="Resource" path="res://data/village/temple.tres" id="temple"]
 [ext_resource type="Texture2D" path="res://assets/tiles/floor.png" id="ground"]
 [ext_resource type="Resource" path="res://data/village/ember_box.tres" id="quest"]
 [ext_resource type="Resource" path="res://data/village/last_verse.tres" id="sayo_quest"]
@@ -37,11 +38,11 @@ collision = Rect2(-50, -55, 100, 55)
 
 [sub_resource type="Resource" id="prop_2"]
 script = ExtResource("prop_script")
-texture = ExtResource("ruins")
-position = Vector2(470, 110)
+texture = ExtResource("temple_art")
+position = Vector2(470, 240)
 art_scale = 2.0
-region = Rect2(224, 0, 48, 80)
-collision = Rect2(-38, -55, 76, 55)
+region = Rect2(0, 224, 112, 128)
+collision = Rect2(-100, -200, 200, 190)
 
 [sub_resource type="Resource" id="prop_3"]
 script = ExtResource("prop_script")
@@ -230,7 +231,6 @@ region = Rect2(0, 48, 32, 32)
 [resource]
 script = ExtResource("script")
 well_icon = SubResource("well_icon")
-shrine_icon = ExtResource("altar")
 path_texture = ExtResource("paving")
 path_region = Rect2(192, 208, 16, 16)
 display_name = "Kagari"
@@ -239,7 +239,7 @@ restored_text = "Two windows burn. Beyond the square, Kagari still sleeps."
 bounds = Rect2(0, 0, 960, 640)
 spawn = Vector2(480, 470)
 well = Vector2(480, 330)
-shrine = Vector2(470, 175)
+interiors = [ExtResource("temple")]
 memorial = Vector2(720, 470)
 noticeboard = Vector2(345, 430)
 clock = ExtResource("clock")

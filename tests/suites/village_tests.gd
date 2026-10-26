@@ -157,15 +157,34 @@ func _test_calendar() -> void:
 				VillageProgress.hand_in(quest)
 		var navigation := VillageNavigation.new()
 		navigation.rebuild(VILLAGE)
+		for room in VILLAGE.interiors:
+			check(not room.id.is_empty() and not room.world_bounds().intersects(VILLAGE.bounds), "an interior has an identity and its own separate world space")
+			check(room.walk_bounds.has_point(room.spawn) and room.walk_bounds.has_point(room.exit), "a room's entrance and exit lie inside its movement bounds")
+			check(not navigation.path(room.offset + room.spawn, room.offset + room.exit, room).is_empty(), "the room spawn has a walkable route to its exit")
+			if room.has_shrine:
+				check(not navigation.path(room.offset + room.spawn, room.offset + room.shrine, room).is_empty(), "the indoor shrine is reachable from the entrance")
+			for patch in room.tiles:
+				var step := patch.region.size * patch.art_scale
+				check(step.x > 0.0 and step.y > 0.0 and is_zero_approx(fmod(patch.area.size.x, step.x)) and is_zero_approx(fmod(patch.area.size.y, step.y)), "static tile patches fit an exact number of whole scaled atlas cells")
 		for person in VILLAGE.residents:
 			check(not person.schedule.is_empty() and person.schedule[0].start_hour == 0.0, "every resident's schedule covers midnight")
 			var previous_hour := -1.0
 			var previous_point := person.position
+			var previous_room: VillageInteriorDef = null
 			for appointment in person.schedule:
 				check(appointment.start_hour > previous_hour and appointment.start_hour < 24.0, "appointments are strictly ordered within a day")
-				check(not navigation.path(previous_point, appointment.destination).is_empty(), "%s %s to %s: each appointment has a walkable route (restored=%s)" % [person.speaker.display_name, previous_point, appointment.destination, restored])
+				if previous_room != appointment.room:
+					if previous_room:
+						check(not navigation.path(previous_point, previous_room.offset + previous_room.exit, previous_room).is_empty(), "an indoor appointment can reach the exit")
+						previous_point = previous_room.return_position
+					if appointment.room:
+						check(not navigation.path(previous_point, appointment.room.door).is_empty(), "an outdoor appointment can reach its next building's doorway")
+						previous_point = appointment.room.offset + appointment.room.spawn
+				var target := appointment.destination + (appointment.room.offset if appointment.room else Vector2.ZERO)
+				check(not navigation.path(previous_point, target, appointment.room).is_empty(), "%s: each appointment has a walkable route (restored=%s)" % [person.speaker.display_name, restored])
 				previous_hour = appointment.start_hour
-				previous_point = appointment.destination
+				previous_point = target
+				previous_room = appointment.room
 			check(person.activity_at(23.99) == person.schedule.back() and person.activity_at(0.0) == person.schedule[0], "schedules choose the correct activity on either side of midnight")
 	Profile.reset()
 
@@ -211,7 +230,8 @@ func run_title() -> void:
 	var hub := HUB.instantiate() as VillageHub
 	add_child(hub)
 	await _frames(3)
-	check(hub.spots.size() == 8 and hub.walker != null and not hub.walker.blocked, "Kagari opens with a controllable hero, four places and four residents")
+	check(hub.spots.size() == 10 and hub.walker != null and not hub.walker.blocked, "Kagari opens with a controllable hero, surface/temple places and four residents")
+	await _test_temple(hub)
 	var sleeper := hub.view.actor_for(VILLAGE.residents[2])
 	var sleeper_position := sleeper.position
 	await _frames(300)
@@ -238,6 +258,7 @@ func run_title() -> void:
 	var locked_choice := _choice(hub, VILLAGE.quests[1].locked_text)
 	check(locked_choice != null and locked_choice.disabled, "Sayo explains her prerequisite with a disabled choice before Ren wakes")
 	hub.panel.hide()
+	check(hub.enter_room(VILLAGE.interiors[0]), "the keeper can be visited in the temple on her morning schedule")
 	hub.walker.position = hub.view.actor_for(VILLAGE.residents[0]).position + Vector2(0, 25)
 	await _frames(3)
 	check(hub.interact() and hub.panel.visible, "standing near a resident offers an explicit conversation")
@@ -254,6 +275,7 @@ func run_title() -> void:
 	check(roots > 0 and hub.view.dressing.get_child_count() == VILLAGE.props.size() - roots + VILLAGE.residents.size() + 5, "returning the quest removes its root props and their collisions")
 	var first_count := hub.view.dressing.get_child_count()
 	hub.panel.hide()
+	check(hub.leave_room(), "the temple returns the existing hero to its exterior doorway")
 	hub.walker.position = hub.view.actor_for(VILLAGE.residents[1]).position + Vector2(0, 25)
 	await _frames(3)
 	hub.interact()
@@ -328,10 +350,10 @@ func run_title() -> void:
 			var actor := night.view.actor_for(person)
 			actor.paused = false
 			actor.apply_hour(hour)
-		await _frames(1200)
+		await _frames(1800)
 		for person in VILLAGE.residents:
 			var actor := night.view.actor_for(person)
-			check(actor.position.distance_to(actor.activity.destination) <= 3.0, "%s reaches the %.0f h appointment through real collisions" % [person.speaker.display_name, hour])
+			check(actor.room == actor.activity.room and actor.position.distance_to(actor.destination()) <= 3.0, "%s reaches the %.0f h appointment through real collisions" % [person.speaker.display_name, hour])
 			check(actor.indoors == actor.activity.indoors, "arriving at a doorway applies that appointment's indoor state")
 	var older := Profile.to_data().duplicate(true)
 	older.village_quests = {}
@@ -342,6 +364,52 @@ func run_title() -> void:
 	await _frames(2)
 	RunSave.erase()
 	Profile.reset()
+
+
+func _test_temple(hub: VillageHub) -> void:
+	var room := VILLAGE.interiors[0]
+	var hero := hub.walker
+	var saved_profile := Profile.to_data().duplicate(true)
+	var run_before := FileAccess.get_file_as_string(RunSave.path) if FileAccess.file_exists(RunSave.path) else ""
+	hub.walker.position = room.door + Vector2(0, 16)
+	await _frames(3)
+	check(hub.focus != null and hub.focus.action == &"enter" and hub.interact(), "the temple's exterior door is reachable through the normal interaction")
+	check(hub.walker == hero and hero.room == room and room.world_walk_bounds().has_point(hero.position), "entering keeps the same peaceful hero and uses the room's movement bounds")
+	check(hub.view.active_room == room and hub.view.daylight.color == room.light, "the interior has its own readable lighting while the shared clock continues")
+	var time_before := Profile.village_seconds
+	Input.action_press(&"interact")
+	await _frames(5)
+	Input.action_release(&"interact")
+	check(hero.room == room, "holding the entry action cannot bounce the hero straight back outside")
+	check(Profile.village_seconds > time_before, "walking inside a room advances the same village clock")
+	hero.position = room.offset + room.shrine + Vector2(0, 20)
+	await _frames(3)
+	check(hub.focus != null and hub.focus.action == &"shrine" and hub.interact() and hub.shrine.visible, "the skills shrine is a real indoor interaction")
+	time_before = Profile.village_seconds
+	await _frames(5)
+	check(Profile.village_seconds == time_before and not hub.leave_room(), "reading the shrine pauses time and cannot cross the doorway underneath the modal")
+	hub.shrine.hide()
+	# Test actual collision at the altar, then the wall. The shrine is not a picture to walk through.
+	hero.position = room.offset + Vector2(480, 260)
+	Input.action_press(&"move_up")
+	await _frames(45)
+	Input.action_release(&"move_up")
+	check(hero.position.y >= room.offset.y + 230, "the temple altar stops the walking hero")
+	hero.position = room.offset + Vector2(128, 192)
+	Input.action_press(&"move_left")
+	await _frames(35)
+	Input.action_release(&"move_left")
+	check(room.world_walk_bounds().has_point(hero.position), "room walls keep the hero inside the playable interior")
+	check(hero.camera.global_position == room.offset + room.camera_center, "the interior camera stays centred while its hero moves")
+	hero.position = room.offset + room.exit
+	await _frames(3)
+	check(hub.focus != null and hub.focus.action == &"exit" and hub.interact(), "the room's exit uses the same keyboard/touch interaction")
+	check(hero.room == null and hero.position == room.return_position and hero.movement_bounds == VILLAGE.bounds and not hero.camera.top_level and hero.camera.zoom == Vector2(2, 2), "leaving restores the exterior camera and bounds at the matching doorway")
+	var after := Profile.to_data().duplicate(true)
+	after.village_seconds = saved_profile.village_seconds
+	check(after == saved_profile, "a temple visit cannot pay, spend, accept quests or change persistent upgrades")
+	check((FileAccess.get_file_as_string(RunSave.path) if FileAccess.file_exists(RunSave.path) else "") == run_before, "temple entry and exit never rewrite a suspended run")
+	hero.position = VILLAGE.spawn
 
 
 func run_game(game: Game) -> void:

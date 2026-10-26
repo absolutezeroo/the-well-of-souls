@@ -324,8 +324,17 @@ An idle_frames/walk_frames atlas list, walk_speed and schedule author a resident
 Each VillageActivityDef has start_hour, a translated display_name, destination and indoors.
 Order appointments strictly from midnight (0) to before 24. Destinations must lie on clear
 navigation cells before and after restoration; unit.village checks each leg. The grid includes
-body clearance, so leave space beside props. Echoes never walk. The indoors flag currently
-hides a resident at a doorway; it does not create an interior. clock.tres sets day duration,
+body clearance, so leave space beside props. Echoes never walk. The indoors flag hides ordinary rest behind a doorway. For an enterable building, set
+room to its VillageInteriorDef and use a room-local destination; residents route through the
+building door and exit automatically. clock.tres sets day duration,
 starting hour and the world-only daylight gradient. ambient_before/ambient_after are PackedStringArray values (so the extractor finds
 them), each short enough for a proximity bubble. No additional per-frame gameplay polling is
 needed for new content. An optional appearance material is shared by the figure and portrait.
+
+For a new enterable building, register VillageInteriorDef in VillageDef.interiors. Author an
+exterior prop/door, return_position, separate non-overlapping world offset, camera bounds/centre,
+walk bounds, spawn/exit and optional shrine. Tiles are VillageTilePatchDef atlas rectangles
+repeated at art_scale; areas must be exact multiples of the scaled region size. Walls and
+props supply both physics collisions and cached NPC navigation obstacles. Keep door, spawn,
+exit and appointment positions clear with body/grid clearance. Room artwork has its own credits;
+do not mark Craftpix resources as CC0. Houses should use residential art, not duplicate temples.

@@ -9,6 +9,9 @@ var blocked := false
 var rig: ActorRig
 var facing := Vector2.UP
 var equipment := Equipment.new()
+var room: VillageInteriorDef
+var movement_bounds: Rect2
+var camera := Camera2D.new()
 
 
 func _ready() -> void:
@@ -26,13 +29,27 @@ func _ready() -> void:
 	for item in hero.starting_equipment:
 		equipment.equip(item)
 	rig.wear(equipment)
-	var camera := Camera2D.new()
 	camera.zoom = Vector2(2, 2)
-	camera.limit_left = int(def.bounds.position.x)
-	camera.limit_top = int(def.bounds.position.y)
-	camera.limit_right = int(def.bounds.end.x)
-	camera.limit_bottom = int(def.bounds.end.y)
 	add_child(camera)
+	set_place(null, position)
+
+
+## A doorway moves the existing hero/rig and camera together without recreating equipment.
+func set_place(next_room: VillageInteriorDef, at: Vector2) -> void:
+	room = next_room
+	movement_bounds = room.world_walk_bounds() if room else def.bounds
+	var camera_bounds := room.world_bounds() if room else def.bounds
+	position = at
+	velocity = Vector2.ZERO
+	camera.top_level = room != null
+	camera.zoom = Vector2.ONE * room.camera_zoom if room else Vector2(2, 2)
+	camera.position = room.offset + room.camera_center if room else Vector2.ZERO
+	camera.limit_left = int(camera_bounds.position.x)
+	camera.limit_top = int(camera_bounds.position.y)
+	camera.limit_right = int(camera_bounds.end.x)
+	camera.limit_bottom = int(camera_bounds.end.y)
+	camera.reset_smoothing()
+	camera.force_update_scroll()
 
 
 func _physics_process(delta: float) -> void:
@@ -41,5 +58,5 @@ func _physics_process(delta: float) -> void:
 	if movement != Vector2.ZERO:
 		facing = movement
 	move_and_slide()
-	position = position.clamp(def.bounds.position + Vector2.ONE * hero.radius, def.bounds.end - Vector2.ONE * hero.radius)
+	position = position.clamp(movement_bounds.position + Vector2.ONE * hero.radius, movement_bounds.end - Vector2.ONE * hero.radius)
 	rig.update_state(facing, velocity.length(), false, delta)

@@ -999,6 +999,7 @@ In progress,In progress,En cours
 Ready to return,Ready to return,À rapporter
 Completed — reward received,Completed — reward received,Terminée — récompense reçue
 Speak to %s in Kagari.,Speak to %s in Kagari.,Parle à %s dans Kagari.
+Location: %s,Location: %s,Lieu : %s
 Schedule: %s,Schedule: %s,À cette heure : %s
 Auras,Auras,Auras
 No aura,No aura,Aucune aura
@@ -1006,6 +1007,8 @@ Locked: %s,Locked: %s,Verrouillée : %s
 Worn,Worn,Portée
 Wear,Wear,Porter
 The Well,The Well,Le Puits
+Enter %s,Enter %s,Entrer : %s
+Return to Kagari,Return to Kagari,Retourner dans Kagari
 Shrine,Shrine,Sanctuaire
 Court of the Nameless,Court of the Nameless,La Cour des Sans-Nom
 Menu,Menu,Menu
@@ -3017,7 +3020,7 @@ I will look for his ember-box.,I will look for his ember-box.,Je vais chercher s
 Here is Ren's ember-box.,Here is Ren's ember-box.,Voilà la boîte de Ren.
 The ember-box is still below.,The ember-box is still below.,La boîte à braises est encore en bas.
 Return the ember-box to the Vigil-Keeper.,Return the ember-box to the Vigil-Keeper.,Rapporte la boîte à braises à la Veilleuse.
-Speak to the Vigil-Keeper beside the Well.,Speak to the Vigil-Keeper beside the Well.,Parle à la Veilleuse près du Puits.
+Find the Vigil-Keeper at the Well or in the temple.,Find the Vigil-Keeper at the Well or in the temple.,Retrouve la Veilleuse près du puits ou dans le temple.
 Reward: %d souls and a waking home.,Reward: %d souls and a waking home.,Récompense : %d âmes et un foyer qui se réveille.
 The village sleeps. The Well does not.,The village sleeps. The Well does not.,Le village dort. Le Puits veille.
 "Two windows burn. Beyond the square, Kagari still sleeps.","Two windows burn. Beyond the square, Kagari still sleeps.","Deux fenêtres brillent. Au-delà de la place, Kagari dort encore."
@@ -3074,6 +3077,7 @@ How did that song end...,How did that song end...,Comment finissait cette chanso
 "You can stop for a moment, you know.","You can stop for a moment, you know.","Tu peux t'arrêter un instant, tu sais."
 Sayo,Sayo,Sayo
 Mourning Singer,Mourning Singer,Chanteuse de Deuil
+Temple of the Last Flame,Temple of the Last Flame,Temple de la Dernière Flamme
 Resting behind the stall,Resting behind the stall,Se repose derrière son étal
 Opening the market stall,Opening the market stall,Installe son étal
 Visiting the lantern-mender,Visiting the lantern-mender,Rend visite au réparateur de lanternes

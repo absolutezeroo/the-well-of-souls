@@ -331,3 +331,9 @@ Its daylight returns independently of the Well's repeating night below. Rescued 
 resume work, visits and ordinary sleep; unrecovered echoes remain bound to their doors. The
 Veilleuse keeps watch at the shrine and Well through the night. Ordinary night rest must never
 be confused with the soul-loss that the rescue quests resolve.
+
+The Temple of the Last Flame stands north of the square. Its inhabited shrine remains a
+place of care: the Veilleuse tends it morning and evening; Sayo comes to pray once restored.
+It is not another dungeon or a temple of Solhar. The current facade, stonework and furnishings
+use the least ruined pieces of the supplied temple pack. The living village's residential
+houses still await their own art. No new survivor or revelation is added by entering the temple.

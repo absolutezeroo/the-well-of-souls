@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 384,
+  "next_id": 385,
   "tags": [
     "pc",
     "test",
@@ -5628,7 +5628,7 @@
     {
       "id": "task_376",
       "title": "Essayer Kagari et les mémoriaux sur S23 et Windows",
-      "description": "F5 → Entrer dans Kagari ; rejoindre la Veilleuse, accepter la quête, partir au puits, récupérer la boîte à l’étage 2 et revenir (pause ou mort). Vérifier récompense unique, réveil de Ren, retrait des racines, fenêtres/lampes et achats uniques. Reprendre une descente sans changement de héros ; annuler le remplacement ne doit rien perdre. Essayer clavier, manette et tactile, menus et mise en arrière-plan, textes FR/EN et fluidité sur S23. Gagner puis Prendre sa place : statue avec équipement ; autre héros puis Libérer : anciens mémoriaux conservés. Rendu logiciel et tests automatiques faits ; exports Windows/Android et sensations sur appareil restent à vérifier. Suite task_379/380 : essayer Le Dernier Verset après Ren, les questions et leurs réactions, les deux fronts de racines, la lisibilité des bulles et leur cadence. Vérifier les routines des PNJ réveillés, leur arrêt en dialogue et leur interaction après déplacement ; un achat ne doit pas les téléporter. Confirmer le ton des dialogues et le confort tactile sur S23. Suite task_381/382 : laisser passer matin, midi, soir et nuit ; suivre les habitants réveillés entre marché, maisons, sanctuaire et mémorial, frapper à leur porte la nuit. Vérifier journal HUD, tableau et pause, objectifs à rendre, défilement/manette et lisibilité nocturne. Vérifier heure conservée après fermeture/reprise et figée pendant les menus ; aucune attente imposée pour rendre une quête. Maisons/temple intérieurs encore en attente du pack (task_383).",
+      "description": "F5 → Entrer dans Kagari ; rejoindre la Veilleuse, accepter la quête, partir au puits, récupérer la boîte à l’étage 2 et revenir (pause ou mort). Vérifier récompense unique, réveil de Ren, retrait des racines, fenêtres/lampes et achats uniques. Reprendre une descente sans changement de héros ; annuler le remplacement ne doit rien perdre. Essayer clavier, manette et tactile, menus et mise en arrière-plan, textes FR/EN et fluidité sur S23. Gagner puis Prendre sa place : statue avec équipement ; autre héros puis Libérer : anciens mémoriaux conservés. Rendu logiciel et tests automatiques faits ; exports Windows/Android et sensations sur appareil restent à vérifier. Suite task_379/380 : essayer Le Dernier Verset après Ren, les questions et leurs réactions, les deux fronts de racines, la lisibilité des bulles et leur cadence. Vérifier les routines des PNJ réveillés, leur arrêt en dialogue et leur interaction après déplacement ; un achat ne doit pas les téléporter. Confirmer le ton des dialogues et le confort tactile sur S23. Suite task_381/382 : laisser passer matin, midi, soir et nuit ; suivre les habitants réveillés entre marché, maisons, sanctuaire et mémorial, frapper à leur porte la nuit. Vérifier journal HUD, tableau et pause, objectifs à rendre, défilement/manette et lisibilité nocturne. Vérifier heure conservée après fermeture/reprise et figée pendant les menus ; aucune attente imposée pour rendre une quête. Les maisons attendent un pack résidentiel (task_383). Temple (task_384) : entrer au nord du puits, marcher jusqu’au sanctuaire, ouvrir les compétences puis sortir par le seuil sud ; vérifier clavier/manette/tactile, Interact maintenu sans rebond et retour caméra. Observer Veilleuse à 08/12/18/22 h et Sayo à midi après réveil : déplacement via la porte et arrivée dans la bonne salle. Contrôler lumière intérieure de nuit, journal avec lieu, mise en arrière-plan et reprise de descente préservée.",
       "priority": "high",
       "status": "review",
       "epic_id": "epic_6",
@@ -5641,7 +5641,7 @@
         "perf"
       ],
       "created_at": 1793032681,
-      "updated_at": 1793041115,
+      "updated_at": 1793048483,
       "due_date": null
     },
     {
@@ -5719,7 +5719,7 @@
     {
       "id": "task_381",
       "title": "Donner des horaires et un cycle jour/nuit à Kagari",
-      "description": "Remplacer les petits circuits par activités selon l’heure, déplacement réel entre destinations, repos nocturne et sauvegarde du temps joué. Les échos dont l’âme manque ne suivent pas une journée normale ; les survivants et habitants réveillés le font. Préparer les destinations pour les futurs intérieurs sans inventer les assets. Implémenté : journée de 16 minutes de jeu actif, 08 h initialement, temps privé dans Profile, pauses/fermeture respectées, teinte du monde et affichage heure/jour. Quatre plannings modulaires, trajets AStar autour des collisions, Veilleuse de garde la nuit ; repos derrière les portes provisoires avec réponse quand on frappe. Vérifié : tous les trajets avant/après restauration, journée complète en physique, sauvegarde/ancien profil, gel cloud, menus et pause du donjon. Aucun effet sur primes UTC, infestation ou graines. Les vrais intérieurs restent task_383. Suite complète : 19 990 vérifications sans échec ; régression supplémentaire de remplacement cloud : 108 vérifications sans échec ; 662 scripts sans diagnostic. Rendu FR/EN 1540×720 et 2340×1080 vérifié ; essais appareil task_376.",
+      "description": "Remplacer les petits circuits par activités selon l’heure, déplacement réel entre destinations, repos nocturne et sauvegarde du temps joué. Les échos dont l’âme manque ne suivent pas une journée normale ; les survivants et habitants réveillés le font. Préparer les destinations pour les futurs intérieurs sans inventer les assets. Implémenté : journée de 16 minutes de jeu actif, 08 h initialement, temps privé dans Profile, pauses/fermeture respectées, teinte du monde et affichage heure/jour. Quatre plannings modulaires, trajets AStar autour des collisions, Veilleuse de garde la nuit ; repos derrière les portes provisoires avec réponse quand on frappe. Vérifié : tous les trajets avant/après restauration, journée complète en physique, sauvegarde/ancien profil, gel cloud, menus et pause du donjon. Aucun effet sur primes UTC, infestation ou graines. Le temple jouable est intégré dans task_384 ; les maisons restent task_383. Suite complète : 19 990 vérifications sans échec ; régression supplémentaire de remplacement cloud : 108 vérifications sans échec ; 662 scripts sans diagnostic. Rendu FR/EN 1540×720 et 2340×1080 vérifié ; essais appareil task_376.",
       "status": "review",
       "priority": "high",
       "epic_id": "epic_1",
@@ -5732,7 +5732,7 @@
         "tests"
       ],
       "created_at": 1793039913,
-      "updated_at": 1793041115,
+      "updated_at": 1793048483,
       "due_date": null
     },
     {
@@ -5756,8 +5756,8 @@
     },
     {
       "id": "task_383",
-      "title": "Construire les vraies maisons et le temple de Kagari avec les assets du joueur",
-      "description": "En attente du pack fourni par le joueur : assembler bâtiments et intérieurs cohérents, portes/accès, temple contenant le sanctuaire des compétences, lieux de travail et de repos reliés aux horaires. Kagari est un village dont les âmes sont aspirées par le puits, pas une suite de décors de ruines. Garder déplacements/interactions mobiles et sauvegardes compatibles.",
+      "title": "Construire les vraies maisons habitées de Kagari avec un pack résidentiel",
+      "description": "Le pack Craftpix du temple a été reçu et intégré : façade, salle jouable, sanctuaire des compétences intérieur et horaires des PNJ (voir task_384). Ce pack ne contient pas de maisons de village. En attente d’assets résidentiels : remplacer les façades provisoires, assembler les vrais intérieurs et relier portes, travail et repos aux horaires. Réutiliser VillageInteriorDef et les transitions/navigation du temple. Kagari est un village dont les âmes sont aspirées par le puits, pas une suite de ruines ; conserver mobile, sauvegardes et boucle roguelike.",
       "status": "todo",
       "priority": "high",
       "epic_id": "epic_1",
@@ -5770,7 +5770,25 @@
         "tests"
       ],
       "created_at": 1793039913,
-      "updated_at": 1793039913,
+      "updated_at": 1793048483,
+      "due_date": null
+    },
+    {
+      "id": "task_384",
+      "title": "Intégrer le temple Craftpix, son sanctuaire intérieur et les passages des PNJ",
+      "description": "Implémenté : façade au nord du puits, intérieur jouable avec sol, murs, allée, mobilier et sanctuaire existant ; portes explicites aller/retour, même héros et horloge, cadre/lumière/portée des interactions selon la salle. VillageInteriorDef et VillageTilePatchDef modulaires, rendu de props partagé, navigation par salle. Veilleuse et Sayo traversent réellement les portes selon leurs activités ; journal avec lieu. Aucun changement de descente sauvegardée, de récompense ou de coût des compétences. Trois PNG originaux du pack fourni, crédits Craftpix conservés ; ni PSD/Aseprite, ni cartes démo, ennemis ou pièges importés. Validé Godot 4.7 : 20 044 vérifications, zéro échec ; 667 scripts, zéro diagnostic ; traductions et catalogue valides. Rendus Compatibility FR/EN à 1540×720 et 2340×1080 inspectés. Essais S23/Windows restent task_376 ; les maisons attendent un pack adapté (task_383).",
+      "priority": "high",
+      "status": "review",
+      "epic_id": "epic_1",
+      "tags": [
+        "pnj",
+        "lore",
+        "architecture",
+        "ui",
+        "tests"
+      ],
+      "created_at": 1793048483,
+      "updated_at": 1793048483,
       "due_date": null
     }
   ]

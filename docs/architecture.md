@@ -410,3 +410,11 @@ VillageExpedition node (Game itself processes while paused). VillageClockDef own
 daylight; VillageActivityDef owns individual appointments. VillageNavigation shares a surface
 AStarGrid2D between residents; no dungeon AI/pathfinding depends on it. VillageQuestRows adds
 read-only village cards to the existing codex, shared by the HUD, world noticeboard and pause.
+
+VillageInteriorDef registers peaceful rooms on the hub manifest. The same VillageWalker moves
+between exterior and interior coordinates, updating camera/interaction scope atomically.
+VillageInteriorView/Floor draw the authored room, and VillagePropView shares prop rendering
+and collision with the square. Residents route through a doorway before changing their room;
+VillageNavigation caches per-room grids. No Loader transition, new autoload, RunState mutation
+or additional persistent store is involved. Interactions require the walker and target to be
+in the same room, even if a stale focus survived a previous frame.

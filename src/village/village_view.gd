@@ -10,6 +10,7 @@ var residents: Array[VillageResident] = []
 var _resident_by_def: Dictionary[VillageResidentDef, VillageResident] = {}
 var navigation := VillageNavigation.new()
 var daylight := CanvasModulate.new()
+var active_room: VillageInteriorDef
 
 
 func _ready() -> void:
@@ -29,22 +30,13 @@ func refresh() -> void:
 	for prop in def.props:
 		if prop.cleared_by and VillageProgress.stage(prop.cleared_by) == VillageProgress.Step.RETURNED:
 			continue
-		var body := Node2D.new()
-		body.position = prop.position
+		var body := VillagePropView.new()
+		body.def = prop
 		dressing.add_child(body)
-		var sprite := Sprite2D.new()
-		sprite.texture = prop.texture
-		sprite.region_enabled = prop.region.has_area()
-		sprite.region_rect = prop.region
-		sprite.scale = Vector2.ONE * prop.art_scale
-		var picture_size := prop.region.size if prop.region.has_area() else prop.texture.get_size()
-		sprite.offset.y = -picture_size.y * 0.5
-		sprite.modulate = prop.tint
-		if prop.lit_by:
-			sprite.modulate = Color(1.3, 1.15, 0.75) if VillageProgress.restored(prop.lit_by) else Color(0.3, 0.35, 0.4)
-		body.add_child(sprite)
-		if prop.collision.has_area():
-			_add_collision(body, prop.collision)
+	for interior in def.interiors:
+		var room_view := VillageInteriorView.new()
+		room_view.def = interior
+		dressing.add_child(room_view)
 	for resident in def.residents:
 		if _resident_by_def.has(resident):
 			_resident_by_def[resident].refresh_progress()
@@ -67,46 +59,28 @@ func refresh() -> void:
 	var well_body := Node2D.new()
 	well_body.position = def.well
 	dressing.add_child(well_body)
-	_add_collision(well_body, Rect2(-34, -22, 68, 44))
+	VillagePropView.add_collision(well_body, Rect2(-34, -22, 68, 44))
 	var well_sprite := Sprite2D.new()
 	well_sprite.texture = def.well_icon
 	well_sprite.scale = Vector2(3, 3)
 	well_sprite.position.y = -12
 	well_sprite.modulate = Color(0.55, 0.65, 0.72)
 	well_body.add_child(well_sprite)
-	var altar := Sprite2D.new()
-	altar.texture = def.shrine_icon
-	altar.scale = Vector2(2, 2)
-	altar.position = def.shrine
-	dressing.add_child(altar)
 	var board := VillageNoticeboard.new()
 	board.position = def.noticeboard
 	dressing.add_child(board)
-	_add_collision(board, Rect2(-24, -12, 48, 12))
+	VillagePropView.add_collision(board, Rect2(-24, -12, 48, 12))
 	queue_redraw()
 
 
 func apply_hour(hour: float) -> void:
-	daylight.color = def.clock.daylight.sample(hour / 24.0)
+	daylight.color = active_room.light if active_room else def.clock.daylight.sample(hour / 24.0)
 	for resident in residents:
 		resident.apply_hour(hour)
 
 
 func actor_for(resident: VillageResidentDef) -> VillageResident:
 	return _resident_by_def.get(resident)
-
-
-func _add_collision(parent: Node2D, rectangle: Rect2) -> void:
-	var body := StaticBody2D.new()
-	body.collision_layer = 1
-	body.collision_mask = 0
-	var collider := CollisionShape2D.new()
-	var shape := RectangleShape2D.new()
-	shape.size = rectangle.size
-	collider.shape = shape
-	collider.position = rectangle.get_center()
-	body.add_child(collider)
-	parent.add_child(body)
 
 
 func _draw() -> void:

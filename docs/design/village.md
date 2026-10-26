@@ -14,9 +14,11 @@ A village visit does not heal, equip or otherwise mutate a suspended dungeon her
 
 ## The first chapter
 
-The Well is central, the shrine north, the market southwest and the memorial court southeast.
+The Well is central, the temple north, the market southwest and the memorial court southeast.
+The skills shrine is inside the temple, reached through its southern doorway.
 The Veilleuse, Sayo and Ren make three inhabitants; the Old Wanderer is the merchant. Their
-positions, figures and words are resources, using the existing CC0 art. Sayo and Ren begin as
+positions, figures and words are resources. Existing residents retain the CC0 Ninja Adventure
+figures; the temple uses the user-supplied Craftpix Free Ruined Temple pack (its own license). Sayo and Ren begin as
 faint echoes of sleeping villagers, consistent with [the lore](../lore.md). The player must
 approach and interact; walking by never launches a run or opens a conversation automatically.
 
@@ -149,13 +151,46 @@ schedule, followed by daily/weekly bounties. Found requests come first and compl
 Reading a board never accepts or pays a request: return to the resident for those actions.
 Bounties continue to use real-world dates, independently of the village clock.
 
-Night rest currently hides a resident behind the authored home/stall doorway. Interacting
+Ordinary night rest still hides Ren, Sayo or the Wanderer behind home/stall doors; interacting
 there knocks and opens the normal conversation, so a quest or service is not time-locked.
-**Actual enterable houses and the temple interior are not implemented yet**: they await the
-user's building/interior tileset. The shrine remains accessible outdoors until that integration.
-This is a real inhabited village whose souls were taken, not a settlement to rebuild from ruins;
-the current reused building art is temporary. The next art pass must add home/temple rooms,
-door transitions and place the existing skills shrine inside the temple.
+Their actual home interiors await a residential asset pack. Kagari is an inhabited village
+whose souls were taken; its houses are not a settlement of ruins to rebuild.
+
+## The temple interior
+
+The **Temple of the Last Flame**, north of the Well, now has a facade from the supplied
+Craftpix pack and a playable interior. Approach its door and use Interact. The same peaceful
+hero enters a room with stone paving, an aisle, banners, offering tables, lamps and the existing
+skills shrine. Approach the altar to open the normal ShrinePanel with its unchanged prices,
+prerequisites and permanent upgrades. The southern threshold returns to the matching exterior
+door. Entry/exit is explicit, works with keyboard/gamepad/touch and requires a fresh action
+press; holding Interact cannot bounce through the door. Modals prevent transitions.
+
+The Veilleuse tends the shrine inside at 08:00 and 18:00, and returns to the Well at 12:00
+and 22:00. Sayo visits the temple at noon after her rescue. Residents walk to each door, cross
+its threshold, and walk to their appointment inside; they then retrace the exit when their
+next activity is outside. The journal names their scheduled room. A purchase or profile
+refresh preserves the existing walker, residents and their current rooms. Replacing progress
+with an older profile returns a newly unrecovered echo to its original home doorway.
+
+Rooms occupy separate world coordinates in the same VillageHub. There is no scene reload,
+second clock, combat actor, additional profile file or RunState change. A new launch returns
+to the village spawn as before; the hero's room is session state, not new saved progression.
+Time continues while walking inside and freezes in menus. The room has steady warm lighting,
+while outside still follows the day/night gradient. Its fixed camera shows the whole room;
+2× atlas art at a 1.5× camera zoom keeps source pixels on a 3× grid. Exterior camera framing
+and bounds return when leaving. A room visit never overwrites a suspended dungeon save.
+
+`VillageInteriorDef` owns doorway/return position, world offset, camera and walk bounds,
+spawn/exit, shrine interaction, light, tiles, wall collisions and props. `VillageTilePatchDef`
+records repeated atlas patches; `VillageInteriorFloor` draws them only on change. The shared
+`VillagePropView` renders props inside and outside. `VillageNavigation` caches one grid per
+registered room, and `VillageActivityDef.room` makes an appointment's destination room-local.
+Register more interiors in `VillageDef.interiors`; future houses can reuse this mechanism.
+
+Only three original PNG atlases from the archive are used. Editable PSD/Aseprite files,
+demo levels, enemies and traps are not imported. Credits and the Craftpix license reference
+are in `assets/village/temple/CREDITS.txt`. The residential houses remain a separate next step.
 
 Sayo's figure and portrait share a teal palette material, distinguishing her from the Veilleuse
 without duplicating or regenerating sprite textures. Static props remain separate from these
@@ -172,7 +207,9 @@ on both real procedural floors, its absence before acceptance and on a daily run
 after collection. Calendar checks cover old saves, midnight, cloud holds, UTC independence,
 all authored paths before/after restoration, a full day of real resident physics, pause/resume
 in village and dungeon, night entry, read-only journal access and a cloud rollback returning
-a formerly rescued resident's echo to its original doorway.
+a formerly rescued resident's echo to its original doorway. Temple checks exercise real
+entry/exit, shrine interaction and modal blocking, altar/wall collisions, warm lighting, the
+shared clock, unchanged progression/run file and full NPC door-to-appointment journeys.
 The existing finale test now checks both recovery of the same ending and the other ending on
 an independent expedition, with its original achievement/keeper-release assertions retained.
 

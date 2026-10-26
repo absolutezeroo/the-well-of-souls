@@ -18,6 +18,8 @@ class Spot extends RefCounted:
 	var action: StringName
 	var label: String
 	var resident: VillageResidentDef
+	var room: VillageInteriorDef
+	var target_room: VillageInteriorDef
 
 var walker: VillageWalker
 var view: VillageView
@@ -35,6 +37,7 @@ var _joystick: TouchJoystick
 var _touch: ActionButton
 var _prompt: Label
 var _objective: Label
+var _place_label: Label
 var _time_label: Label
 var _clock_minute := -1
 var _hud: Control
@@ -64,7 +67,11 @@ func _ready() -> void:
 	view.walker = walker
 	view.dressing.add_child(walker)
 	_add_spot(def.well + Vector2(0, 34), &"well", tr("The Well"))
-	_add_spot(def.shrine, &"shrine", tr("Shrine"))
+	for room in def.interiors:
+		_add_spot(room.door, &"enter", tr("Enter %s") % tr(room.display_name), null, null, room)
+		_add_spot(room.offset + room.exit, &"exit", tr("Return to Kagari"), null, room)
+		if room.has_shrine:
+			_add_spot(room.offset + room.shrine, &"shrine", tr("Shrine"), null, room)
 	_add_spot(def.memorial, &"memorial", tr("Court of the Nameless"))
 	_add_spot(def.noticeboard + Vector2(0, 24), &"journal", tr("Bounty board"))
 	for resident in def.residents:
@@ -79,12 +86,14 @@ func _ready() -> void:
 	_device_changed()
 
 
-func _add_spot(at: Vector2, action: StringName, label_text: String, resident: VillageResidentDef = null) -> void:
+func _add_spot(at: Vector2, action: StringName, label_text: String, resident: VillageResidentDef = null, room: VillageInteriorDef = null, target_room: VillageInteriorDef = null) -> void:
 	var spot := Spot.new()
 	spot.at = at
 	spot.action = action
 	spot.label = label_text
 	spot.resident = resident
+	spot.room = room
+	spot.target_room = target_room
 	spots.append(spot)
 
 
@@ -99,7 +108,8 @@ func _build_ui() -> void:
 	header.position = Vector2(24, 20)
 	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hud.add_child(header)
-	header.add_child(UiSkin.label(tr(def.display_name), Fonts.TITLE, UiSkin.GOLD))
+	_place_label = UiSkin.label(tr(def.display_name), Fonts.TITLE, UiSkin.GOLD)
+	header.add_child(_place_label)
 	_objective = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
 	_objective.custom_minimum_size.x = 580
 	header.add_child(_objective)
@@ -185,7 +195,10 @@ func _physics_process(delta: float) -> void:
 	if not blocked:
 		for spot in spots:
 			if spot.resident:
-				spot.at = view.actor_for(spot.resident).position
+				var actor := view.actor_for(spot.resident)
+				spot.at = actor.position
+				spot.room = actor.room
+			if spot.room != walker.room: continue
 			var candidate := walker.position.distance_squared_to(spot.at)
 			if candidate <= distance:
 				nearest = spot
@@ -200,7 +213,7 @@ func _physics_process(delta: float) -> void:
 
 
 func interact() -> bool:
-	if focus == null or _leaving or walker.position.distance_to(focus.at) > def.interaction_reach:
+	if focus == null or _leaving or focus.room != walker.room or walker.position.distance_to(focus.at) > def.interaction_reach:
 		return false
 	for modal in _modals:
 		if modal.visible:
@@ -208,6 +221,8 @@ func interact() -> bool:
 	match focus.action:
 		&"well": open_well()
 		&"shrine": shrine.open(content.soul_tree, content)
+		&"enter": enter_room(focus.target_room)
+		&"exit": leave_room()
 		&"memorial": _open_memorial()
 		&"journal": open_journal()
 		&"resident":
@@ -215,6 +230,37 @@ func interact() -> bool:
 			if focus.resident.speaker.voice:
 				Sfx.play_ui(focus.resident.speaker.voice, focus.resident.speaker.voice_db)
 	return true
+
+
+func enter_room(room: VillageInteriorDef) -> bool:
+	if room == null or not def.interiors.has(room) or walker.room != null or not _can_cross():
+		return false
+	_set_place(room, room.offset + room.spawn)
+	return true
+
+
+func leave_room() -> bool:
+	if walker.room == null or not _can_cross(): return false
+	_set_place(null, walker.room.return_position)
+	return true
+
+
+func _can_cross() -> bool:
+	if _leaving: return false
+	for modal in _modals:
+		if modal.visible: return false
+	return true
+
+
+func _set_place(room: VillageInteriorDef, at: Vector2) -> void:
+	walker.set_place(room, at)
+	view.active_room = room
+	_place_label.text = tr(room.display_name if room else def.display_name)
+	focus = null
+	_was_down = true  # A held touch/key cannot immediately interact with the other doorway.
+	_clock_minute = -1
+	refresh_time()
+	_show_prompt()
 
 
 func _device_changed() -> void:

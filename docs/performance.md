@@ -230,3 +230,9 @@ the court renders one, the paged register at most one additional static rig. Its
 uses the fragment COLOR directly (never squares a texture sample). Profile history grows only
 when an ending is chosen. Device frame pacing and long-history cloud limits remain play-test
 items; software desktop rendering is not an Android measurement.
+
+The temple adds one cached 48×20 navigation grid and static room drawing. Only doorway changes
+or new appointments allocate a route; room entry reuses the walker/rig and does not import
+assets, regenerate a level or reload a scene. VillagePropView shares existing prop rendering.
+One CanvasModulate switches between exterior daylight and the active room's authored lighting;
+HUD/modals stay on their own CanvasLayer. No shadow-casting lights or runtime textures are added.

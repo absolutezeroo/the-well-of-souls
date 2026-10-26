@@ -7,6 +7,8 @@
 [ext_resource type="Resource" path="res://data/village/topics/keeper_two_homes.tres" id="reaction"]
 [ext_resource type="Script" path="res://src/definitions/village/village_activity_def.gd" id="activity_script"]
 
+[ext_resource type="Resource" path="res://data/village/temple.tres" id="temple"]
+
 [sub_resource type="Resource" id="activity_0"]
 script = ExtResource("activity_script")
 start_hour = 0.0
@@ -18,8 +20,9 @@ indoors = false
 script = ExtResource("activity_script")
 start_hour = 8.0
 display_name = "Tending the shrine"
-destination = Vector2(470, 175)
+destination = Vector2(420, 256)
 indoors = false
+room = ExtResource("temple")
 
 [sub_resource type="Resource" id="activity_2"]
 script = ExtResource("activity_script")
@@ -32,8 +35,9 @@ indoors = false
 script = ExtResource("activity_script")
 start_hour = 18.0
 display_name = "Tending the shrine"
-destination = Vector2(470, 175)
+destination = Vector2(420, 256)
 indoors = false
+room = ExtResource("temple")
 
 [sub_resource type="Resource" id="activity_4"]
 script = ExtResource("activity_script")

@@ -23,6 +23,10 @@ func _ready() -> void:
 		await get_tree().process_frame
 	hub.walker.position = Vector2(480, 325)
 	await _capture("square_" + language)
+	hub.walker.position = hub.def.interiors[0].door + Vector2(0, 30)
+	await _capture("temple_door_" + language)
+	hub.enter_room(hub.def.interiors[0])
+	await _capture("temple_" + language)
 	hub.walker.position = hub.view.actor_for(hub.def.residents[0]).position + Vector2(0, 25)
 	for i in 3:
 		await get_tree().physics_frame
@@ -30,6 +34,7 @@ func _ready() -> void:
 	await _capture("quest_" + language)
 	hub.panel.picked.emit(&"accept", hub.def.quests[0])
 	hub.panel.hide()
+	hub.leave_room()
 	VillageProgress.discover(hub.def.quests[0])
 	VillageProgress.hand_in(hub.def.quests[0])
 	VillageProgress.buy(hub.def.services[0])

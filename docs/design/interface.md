@@ -546,5 +546,6 @@ The village HUD shows day/time and a **Quests** button. The wooden noticeboard o
 journal, also available through **Quest journal** in the dungeon pause menu. Village requests
 show status, objective, reward and contact/schedule above the existing real-date bounties.
 Reading freezes village time and movement. Nighttime residents can still answer a knock at
-their doorway. World tint leaves HUD and modal text unchanged. Houses/temple interiors await
-the supplied assets; the existing shrine remains outside in this stage.
+their doorway. World tint leaves HUD and modal text unchanged. The temple door leads to a walkable interior with the skills shrine. Houses still await
+residential art. A fresh Interact press enters/leaves; opening a modal blocks door crossings.
+The camera, HUD place name, lighting and interaction scope follow the current room.

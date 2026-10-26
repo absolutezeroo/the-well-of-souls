@@ -73,6 +73,10 @@ docs/      Everything else (below)
 
 ## Credits
 
+- Village temple: **Craftpix.net — Free Ruined Temple Top-Down Location Pixel Art**, supplied
+  by the project owner, under the Craftpix Freebie license (not CC0). Used atlases and source
+  links: [temple credits](assets/village/temple/CREDITS.txt).
+
 - Art, sound effects and music: **[Ninja Adventure](https://pixel-boy.itch.io/ninja-adventure-asset-pack)**
   by Pixel-boy and AAA, CC0 (`assets/LICENSE_NinjaAdventure.txt`).
 - Font: **Pixel Operator** (Pixel Operator 8) by Jayvee
@@ -101,7 +105,9 @@ pour sa première quête, puis le puits pour descendre ou reprendre une partie. 
 garde les maisons réveillées, les lanternes restaurées et les statues des héros devenus
 Gardiens. Le bouton **Quêtes**, le tableau près du puits et le journal du menu pause
 permettent de suivre les demandes. Les habitants réveillés suivent des horaires avec un cycle
-jour/nuit de 16 minutes de jeu actif. Les vrais intérieurs attendent encore les assets.
+jour/nuit de 16 minutes de jeu actif. Au nord du puits, entre dans le **Temple de la Dernière
+Flamme** : son sanctuaire donne accès aux compétences et améliorations permanentes. Les
+intérieurs des maisons attendent encore un pack résidentiel.
 Voir [le village](docs/design/village.md). Le jeu reste un roguelike.
 
 Après le réveil de Ren, Sayo propose **Le Dernier Verset**. Les habitants ont leurs propres

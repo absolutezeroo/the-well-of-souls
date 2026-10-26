@@ -8,6 +8,8 @@
 [ext_resource type="Material" path="res://data/village/sayo_palette.tres" id="appearance"]
 [ext_resource type="Script" path="res://src/definitions/village/village_activity_def.gd" id="activity_script"]
 
+[ext_resource type="Resource" path="res://data/village/temple.tres" id="temple"]
+
 [sub_resource type="Resource" id="activity_0"]
 script = ExtResource("activity_script")
 start_hour = 0.0
@@ -33,8 +35,9 @@ indoors = false
 script = ExtResource("activity_script")
 start_hour = 12.0
 display_name = "Praying at the shrine"
-destination = Vector2(420, 190)
+destination = Vector2(560, 312)
 indoors = false
+room = ExtResource("temple")
 
 [sub_resource type="Resource" id="activity_4"]
 script = ExtResource("activity_script")

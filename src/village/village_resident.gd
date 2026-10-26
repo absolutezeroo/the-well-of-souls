@@ -9,6 +9,9 @@ var paused := false
 var asleep := false
 var indoors := false
 var activity: VillageActivityDef
+var room: VillageInteriorDef
+enum Crossing { NONE, ENTER, EXIT }
+var _crossing := Crossing.NONE
 var navigation: VillageNavigation
 var sprite := Sprite2D.new()
 var bubble := PanelContainer.new()
@@ -71,11 +74,12 @@ func refresh_progress() -> void:
 	bubble.hide()
 
 
-## A new appointment changes the route, never teleports a resident already in the village.
+## A new appointment changes the route. Residents cross rooms only after reaching a doorway.
 ## On scene entry only, offscreen residents are placed at their current activity.
 func apply_hour(hour: float, initial: bool = false, reroute: bool = false) -> void:
 	if asleep:
-		# An older cloud profile can undo a rescue while this resident is away from home.
+		# Replacing the profile can undo a rescue while the resident is inside a building.
+		room = null
 		position = def.position
 		activity = null
 		indoors = false
@@ -91,17 +95,49 @@ func apply_hour(hour: float, initial: bool = false, reroute: bool = false) -> vo
 	show()
 	if activity == null: return
 	if initial:
-		position = activity.destination
-	elif navigation:
-		_path = navigation.path(position, activity.destination)
-		_waypoint = 1 if _path.size() > 1 else 0
-	if position.distance_squared_to(activity.destination) <= 4.0:
+		_crossing = Crossing.NONE
+		room = activity.room
+		position = destination()
+		_arrive()
+	else:
+		_plan_path()
+
+
+## The current appointment in world coordinates, also useful for checking authored schedules.
+func destination() -> Vector2:
+	return activity.destination + (activity.room.offset if activity.room else Vector2.ZERO)
+
+
+func _plan_path() -> void:
+	_crossing = Crossing.NONE
+	var target := destination()
+	if room != activity.room:
+		if room:
+			_crossing = Crossing.EXIT
+			target = room.offset + room.exit
+		else:
+			_crossing = Crossing.ENTER
+			target = activity.room.door
+	_path = navigation.path(position, target, room)
+	_waypoint = 1 if _path.size() > 1 else 0
+	if position.distance_squared_to(target) <= 4.0:
+		_path.clear()
 		_arrive()
 
 
 func _arrive() -> void:
-	indoors = activity != null and activity.indoors
-	visible = not indoors
+	match _crossing:
+		Crossing.EXIT:
+			position = room.return_position
+			room = null
+			_plan_path()
+		Crossing.ENTER:
+			room = activity.room
+			position = room.offset + room.spawn
+			_plan_path()
+		Crossing.NONE:
+			indoors = activity != null and activity.indoors
+			visible = not indoors
 
 
 func _physics_process(delta: float) -> void:
