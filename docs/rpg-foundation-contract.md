@@ -151,7 +151,8 @@ outils, le contrôle des traductions et le catalogue de 303 références sont va
 export ni essai visuel/tactile ou mesure de fluidité sur S23/Windows réalisé ici ; task_358
 suit ces contrôles appareil.
 
-Prochaine étape : terminer la séparation de l’état durable personnage/monde/expédition, avec
-schémas et politique d’import versionnés, puis une première région persistante. Les hypothèses
+Le [deuxième lot](rpg-persistence.md) ajoute des snapshots durables personnage/monde/régions
+et un checkpoint cohérent. La séparation complète, le contexte d’expédition durable, la
+politique d’import versionnée et une première région persistante restent à terminer. Les hypothèses
 R0 seront ajustées si la direction de conception évolue ; aucun paramètre de mort n’est figé
 par le code livré ici.

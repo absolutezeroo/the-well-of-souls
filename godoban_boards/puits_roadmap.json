@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 359,
+  "next_id": 362,
   "tags": [
     "pc",
     "test",
@@ -4315,7 +4315,7 @@
     {
       "id": "task_296",
       "title": "R1.1 · Séparer session, personnage, monde et expédition",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R0.2 (task_293), R0.3 (task_294)\nÀ réaliser : Faire évoluer Game/RunState vers des propriétaires explicites : session active, état du personnage, état du monde, contexte d’un donjon. Garder les façades existantes tant qu’elles servent ; ne pas faire grossir Game/World ni déplacer tous les fichiers.\nFini quand : Quitter un donjon ou mourir ne recrée pas le personnage ; le mode historique reste testable si retenu. Les nouveaux noms/classes sont proposés, pas déjà implémentés.\nPoints de départ existants : src/game/game.gd; src/game/run_state.gd; src/world/world.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : GameSession branché dans Game ; vues run/player compatibles ; contexte runtime distinct de l’expédition avec conservation possible de la référence du héros. Restent CharacterState/WorldState durables, sortie vers un hub et règles RPG de mort/persistance. Le flux historique remplace encore le héros à Nouvelle partie.",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R0.2 (task_293), R0.3 (task_294)\nÀ réaliser : Faire évoluer Game/RunState vers des propriétaires explicites : session active, état du personnage, état du monde, contexte d’un donjon. Garder les façades existantes tant qu’elles servent ; ne pas faire grossir Game/World ni déplacer tous les fichiers.\nFini quand : Quitter un donjon ou mourir ne recrée pas le personnage ; le mode historique reste testable si retenu. Les nouveaux noms/classes sont proposés, pas déjà implémentés.\nPoints de départ existants : src/game/game.gd; src/game/run_state.gd; src/world/world.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : GameSession branché dans Game ; vues run/player compatibles ; contexte runtime distinct de l’expédition avec conservation possible de la référence du héros. Restent CharacterState/WorldState durables, sortie vers un hub et règles RPG de mort/persistance. Le flux historique remplace encore le héros à Nouvelle partie.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : CharacterState/CampaignWorldState/RegionState composés par CampaignState ; GameSession peut attacher et capturer une campagne durable, conservée à la sortie d’expédition. Le mode historique détache explicitement la campagne. Restent coordinateur RPG, état durable d’expédition, hub, mort et placement sûr.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_280",
@@ -4325,13 +4325,13 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792975625,
+      "updated_at": 1792977005,
       "due_date": null
     },
     {
       "id": "task_297",
       "title": "R1.2 · Définir les identifiants stables et les contextes d’exécution",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.1 (task_296)\nÀ réaliser : Distinguer id de définition, instance d’objet, personnage, monde, région/secteur, apparition persistante et entité de simulation ; ajouter révision et génération de contexte aux effets différés.\nFini quand : Un objet conserve son identité entre chargements ; un effet de région déchargée ne touche pas la nouvelle génération. Aucun NodePath, RID ou get_instance_id persisté comme identité durable.\nPoints de départ existants : src/game/content_catalog.gd; src/definitions/loot/loot_roller.gd; src/combat/ground_strike.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : tickets opaques d’expédition et gardes des reprises/fondus de Game ; un ancien contexte ne peut plus ouvrir l’écran de mort ou descendre après redémarrage. Restent identités persistantes d’objets/personnages/régions et contextes par région ; aucun id runtime sérialisé.",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R1.\nDépendances : R1.1 (task_296)\nÀ réaliser : Distinguer id de définition, instance d’objet, personnage, monde, région/secteur, apparition persistante et entité de simulation ; ajouter révision et génération de contexte aux effets différés.\nFini quand : Un objet conserve son identité entre chargements ; un effet de région déchargée ne touche pas la nouvelle génération. Aucun NodePath, RID ou get_instance_id persisté comme identité durable.\nPoints de départ existants : src/game/content_catalog.gd; src/definitions/loot/loot_roller.gd; src/combat/ground_strike.gd.\nAvancement du premier lot (26 octobre 2026) : Lot 1 : tickets opaques d’expédition et gardes des reprises/fondus de Game ; un ancien contexte ne peut plus ouvrir l’écran de mort ou descendre après redémarrage. Restent identités persistantes d’objets/personnages/régions et contextes par région ; aucun id runtime sérialisé.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : identités campagne/monde/personnage à 128 bits via Crypto (indépendantes du RNG du donjon), liens de propriété validés au chargement ; révision commune de campagne. Restent ids d’instances d’objets, apparitions persistantes et contextes de secteurs.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_280",
@@ -4341,7 +4341,7 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792975625,
+      "updated_at": 1792977005,
       "due_date": null
     },
     {
@@ -4411,8 +4411,8 @@
     {
       "id": "task_302",
       "title": "R2.1 · Définir les schémas compte, personnage et monde",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R1.1 (task_296), R1.2 (task_297), R0.3 (task_294)\nÀ réaliser : Séparer préférences/profil de compte, progression d’un personnage, faits du monde et instances de donjon. Définir versions de schéma, version du contenu, ids, révisions et propriété de chaque champ.\nFini quand : Inventaire de champs validé ; les réglages privés ne deviennent pas des données publiques ; un même coffre peut distinguer état du monde et droit individuel.\nPoints de départ existants : src/autoload/profile.gd; src/game/run_save.gd; src/world/floor_save.gd.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R1.1 (task_296), R1.2 (task_297), R0.3 (task_294)\nÀ réaliser : Séparer préférences/profil de compte, progression d’un personnage, faits du monde et instances de donjon. Définir versions de schéma, version du contenu, ids, révisions et propriété de chaque champ.\nFini quand : Inventaire de champs validé ; les réglages privés ne deviennent pas des données publiques ; un même coffre peut distinguer état du monde et droit individuel.\nPoints de départ existants : src/autoload/profile.gd; src/game/run_save.gd; src/world/floor_save.gd.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : schéma de campagne 1 et inventaire de champs dans docs/rpg-persistence.md ; personnage, faits du monde et droits personnels distincts, réglages privés exclus. Références stables connues obligatoires, snapshots inconnus refusés entiers. Restent schémas d’expédition/objets persistants, mort/lieux sûrs et politiques détaillées de groupe.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_281",
       "tags": [
@@ -4421,14 +4421,14 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792977005,
       "due_date": null
     },
     {
       "id": "task_303",
       "title": "R2.2 · Garantir les écritures et transactions multi-états",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302)\nÀ réaliser : Réutiliser SafeFile et validation typée ; concevoir commit de génération/manifeste ou journal pour que personnage, inventaire, récompense et région soient cohérents. Une écriture atomique par fichier seule ne constitue pas un commit global.\nFini quand : Coupure simulée à chaque étape : reprise sur une génération complète, aucune monnaie/quête payée deux fois, ancien état récupérable et erreurs visibles.\nPoints de départ existants : src/core/safe_file.gd; src/game/run_save.gd; tests/suites/.",
-      "status": "backlog",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302)\nÀ réaliser : Réutiliser SafeFile et validation typée ; concevoir commit de génération/manifeste ou journal pour que personnage, inventaire, récompense et région soient cohérents. Une écriture atomique par fichier seule ne constitue pas un commit global.\nFini quand : Coupure simulée à chaque étape : reprise sur une génération complète, aucune monnaie/quête payée deux fois, ancien état récupérable et erreurs visibles.\nPoints de départ existants : src/core/safe_file.gd; src/game/run_save.gd; tests/suites/.\nAvancement du deuxième lot (26 octobre 2026) : Lot 2 : CampaignSave publie un snapshot commun borné personnage/monde/régions avec révision, backup validé, intégrité et verrou exclusif ; interruptions avant/après publication et réponse perdue testées. Restent récupération exploitable des verrous abandonnés/erreurs (task_360), validation appareils (task_361) et évolution vers secteurs/journal avant grandes cartes. Pas de service de paiement de quête implémenté.",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_281",
       "tags": [
@@ -4437,13 +4437,13 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792977005,
       "due_date": null
     },
     {
       "id": "task_304",
       "title": "R2.3 · Persister les régions et les objets qui y restent",
-      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302), R2.2 (task_303)\nÀ réaliser : Étendre le modèle de FloorSave à plusieurs régions : ouvertures, obstacles, PNJ, ressources, monstres selon politique, butin dynamique, objets posés, vagues et instances. Écrire les changements avant déchargement.\nFini quand : Revisiter A après B puis redémarrer conserve les faits décidés ; aucun reset involontaire de coffres ou butin ; taille des fichiers et nettoyage des états sont bornés.\nPoints de départ existants : src/world/floor_save.gd; src/world/floor_ledger.gd; src/world/secret_room.gd.",
+      "description": "Roadmap RPG : docs/rpg-roadmap.md, phase R2.\nDépendances : R2.1 (task_302), R2.2 (task_303)\nÀ réaliser : Étendre le modèle de FloorSave à plusieurs régions : ouvertures, obstacles, PNJ, ressources, monstres selon politique, butin dynamique, objets posés, vagues et instances. Écrire les changements avant déchargement.\nFini quand : Revisiter A après B puis redémarrer conserve les faits décidés ; aucun reset involontaire de coffres ou butin ; taille des fichiers et nettoyage des états sont bornés.\nPoints de départ existants : src/world/floor_save.gd; src/world/floor_ledger.gd; src/world/secret_room.gd.\nAvancement du deuxième lot (26 octobre 2026) : Point de départ ajouté par le lot 2 : RegionState et sauvegarde commune conservent des maps de faits pour plusieurs régions. Aucun chargement de cartes ni conservation de PNJ, monstres, butin dynamique ou carte géographique livré ; la réalisation de cette carte reste à démarrer.",
       "status": "backlog",
       "priority": "high",
       "epic_id": "epic_281",
@@ -4453,7 +4453,7 @@
         "architecture"
       ],
       "created_at": 1792973386,
-      "updated_at": 1792973630,
+      "updated_at": 1792977005,
       "due_date": null
     },
     {
@@ -5320,6 +5320,59 @@
       "id": "task_358",
       "created_at": 1792975625,
       "updated_at": 1792975625,
+      "due_date": null
+    },
+    {
+      "id": "task_359",
+      "title": "RPG lot 2 : états durables et commit cohérent de campagne",
+      "description": "Créer identités stables, snapshots typés personnage/monde/régions et format de campagne séparé du roguelike. Sauver personnage et faits du monde dans un même commit borné avec révision, copie précédente et refus des conflits/versions inconnues. Tester interruptions, corruption et capture/restauration du vrai héros. Aucun import automatique, cloud ou nouveau mode public dans ce lot. Parties de R1.1/R1.2/R2.1/R2.2.\nValidation du lot : 19 736 vérifications complètes, 0 échec (seed 347348) ; 63 nouvelles vérifications ciblées et 16 773 rapides passent ; 647 scripts, 0 diagnostic ; 7 tests Python, traductions et catalogue de 303 références valides. Essais appareils/récupération publique non réalisés, suivis dans task_360 et task_361.",
+      "status": "done",
+      "priority": "high",
+      "epic_id": "epic_281",
+      "tags": [
+        "rpg",
+        "sauvegarde",
+        "architecture",
+        "tests"
+      ],
+      "created_at": 1792976235,
+      "updated_at": 1792977050,
+      "due_date": null
+    },
+    {
+      "title": "RPG : rendre explicite la récupération de campagne et des verrous abandonnés",
+      "description": "Avant branchement public de CampaignSave : présenter erreurs/recovered et concevoir une reprise d’écriture après arrêt du processus, sans supprimer le verrou d’un écrivain encore actif ni écraser un format/contenu inconnu. Le backend actuel expose BUSY et permet la lecture mais ne récupère pas un verrou abandonné automatiquement. Ajouter tests avec arrêt réel du processus, disque plein/refus de remplacement et confirmation adaptée de restauration d’un checkpoint précédent. Références : docs/rpg-persistence.md, task_303, task_359.",
+      "priority": "high",
+      "epic_id": "epic_281",
+      "tags": [
+        "rpg",
+        "sauvegarde",
+        "qualité",
+        "tests"
+      ],
+      "id": "task_360",
+      "status": "backlog",
+      "created_at": 1792977005,
+      "updated_at": 1792977005,
+      "due_date": null
+    },
+    {
+      "title": "RPG : mesurer et éprouver les checkpoints sur S23 et Windows",
+      "description": "Préparer une sonde à chemins de test isolés avant toute autosauvegarde publique : capture/restauration avec équipement amélioré et mémoire de passif, latence et mémoire de sérialisation, remplacement atomique, arrière-plan/arrêt processus et reprise. L’enveloppe 16 MiB borne le fichier, pas le pic mémoire ni le temps de blocage. Aucun essai appareil du backend dans le lot 2 ; ne pas annoncer la survie à toute panne électrique. Références : docs/rpg-persistence.md, task_303, task_359.",
+      "priority": "high",
+      "epic_id": "epic_287",
+      "tags": [
+        "rpg",
+        "android",
+        "pc",
+        "sauvegarde",
+        "perf",
+        "tests"
+      ],
+      "id": "task_361",
+      "status": "backlog",
+      "created_at": 1792977005,
+      "updated_at": 1792977005,
       "due_date": null
     }
   ]

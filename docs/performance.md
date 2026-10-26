@@ -206,3 +206,12 @@ fields and slot bit masks; buffered producers copy into existing buffers and con
 There are no per-step arrays, dictionaries, formatted names or new command objects. Source
 replacement and session tickets allocate only at lifecycle boundaries. The extra calls/copies
 are covered functionally, not a new S23 frame-time measurement.
+
+
+## Campaign checkpoint costs
+
+Campaign captures and commits copy/validate/serialize outside the physics hot path. The
+prototype envelope is limited to 16 MiB; this bounds file intake, not peak heap or stall time.
+The backend is synchronous and is not scheduled as an autosave yet. Profile checkpoint
+latency and memory on S23 before activating it; larger streamed worlds need a journal or
+sector-generation implementation while keeping a common transaction boundary.

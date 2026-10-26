@@ -365,3 +365,13 @@ heroes with independent producers (movement, attacks and skill cooldowns), check
 and restarts a Game while old death/descent/fade work is pending. An old context must not show
 a game-over screen, advance the new floor or darken the new session. It does not yet validate
 multi-player UI, rewards, separate regions or networking.
+
+
+## Campaign persistence regressions
+
+`unit.campaign` checks durable ids, copied snapshots, strict content/ownership validation,
+checksum recovery, incompatible versions, stale revisions, writer locks, a failed backup write
+and publication interruptions on first/update checkpoints. `game.campaign` round-trips a live
+hero including rolled gear, runes and durable passive memory, and keeps two region-fact maps.
+The maps are data records, not two loaded regions. A logical interrupted commit is not a real
+power-loss test; SafeFile short-write coverage also runs through the Python tool tests.

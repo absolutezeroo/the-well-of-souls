@@ -10,6 +10,7 @@ const PLAYER: PackedScene = preload("res://src/entities/player/player.tscn")
 ## Each part alone (tests/run_tests.gd runs them one by one, timed: --test=unit.<name>).
 func test_cases() -> Array:
 	return [
+		["campaign", func() -> void: await _part(CampaignTests.new(), func(suite: CampaignTests) -> void: suite.run_unit())],
 		["rpg_foundations", func() -> void: await _part(RpgFoundationTests.new(), func(suite: RpgFoundationTests) -> void: suite.run_unit())],
 		["modifiers", func() -> void: await _part(ModifierTests.new(), func(suite: ModifierTests) -> void: suite.run_unit())],
 		["architecture", func() -> void: await _part(ArchitectureTests.new(), func(suite: ArchitectureTests) -> void: suite.run_unit())],

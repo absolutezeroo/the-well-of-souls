@@ -263,6 +263,7 @@ func _begin_run(saved: Dictionary, daily: bool = false) -> void:
 	if day >= 0:
 		world.rng.seed = DailyRun.seed_of(day)  # the same bosses all day
 	RemoteTuning.run_starting()  # (a safe point: the remote settings read meanwhile apply now, then wait)
+	session.detach_campaign()  # starting the legacy mode is never an implicit campaign import
 	session.enter_expedition(RunState.create(content, saved, world.rng, day), world)
 	var ticket := session.capture()
 	world.tuning = run.tuning

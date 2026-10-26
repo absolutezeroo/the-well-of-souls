@@ -390,3 +390,13 @@ reads the same shared actions as before; BufferedPlayerInput supplies independen
 for tools and tests, consuming edges once. Costs, cooldowns and inventory remain validated by
 the existing components. Commands are not authenticated network packets. See
 [rpg-foundation-contract.md](rpg-foundation-contract.md) for prototype assumptions and limits.
+
+
+## Durable campaign snapshots
+
+CampaignState owns CharacterState and CampaignWorldState, whose RegionState records hold
+explicit facts. Runtime nodes remain in GameSession; its optional campaign reference survives
+leaving an expedition. The legacy new-run flow explicitly detaches it and keeps RunSave v3.
+CampaignSave atomically publishes one bounded hero/world envelope with a validated previous
+checkpoint, revision checks and an exclusive writer lock. It has no default path or automatic
+cloud hook. See [rpg-persistence.md](rpg-persistence.md) for the schema, recovery and limits.

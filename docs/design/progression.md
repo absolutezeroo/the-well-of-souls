@@ -449,3 +449,13 @@ with the run, so quitting and coming back doesn't reset it.
 - **Where it shows**: the end screens (the time, then "New record!" or the record to beat), the
   log, and the Codex > Runs (each run's time; the fastest wins, then the fastest to the Well's
   Bottom on their own line).
+
+
+## RPG campaign persistence foundation
+
+The current run and profile progression still use their existing formats and rules. The new
+CampaignState is an explicit prototype snapshot with durable hero/world identities, personal
+reward rights and region facts. CampaignSave publishes them together; it does not convert
+souls, restart the hero at a checkpoint, implement quest payments or enable a new title mode.
+A dead hero cannot be captured by this first adapter. Region loading and safe placement are
+not part of CharacterState.restore. See [the persistence contract](../rpg-persistence.md).

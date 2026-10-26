@@ -21,6 +21,13 @@ La carte task_356 suit ce lot. R0.1/R0.2 sont en revue ; R0.3/R0.4 et R1.1/R1.2/
 partielles, avec les schémas durables, identités persistantes et autres commandes encore à
 réaliser. La preuve à deux acteurs ne vaut pas validation de R1.6 ni ajout de multijoueur.
 
+## Deuxième lot — état durable et sauvegarde cohérente
+
+Le [contrat de persistance](rpg-persistence.md) décrit les records personnage/monde/régions,
+les identités durables et le checkpoint commun avec révision, backup validé et refus des
+conflits. La carte task_359 suit ce lot. R1.1/R1.2/R2.1/R2.2 restent partiels ; les faits de
+région ne sont pas encore des cartes persistantes et aucun mode RPG n’est ajouté au menu.
+
 ## Ce qui est décidé et ce qui doit l’être
 
 **Demandé :** monde ouvert, évolution durable du jeu vers le RPG, préparation d’un multijoueur
