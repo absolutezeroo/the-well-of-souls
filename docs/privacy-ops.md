@@ -293,3 +293,7 @@ Kagari's quest stages, restoration purchases and Keeper memorial snapshots are l
 progress. Existing opt-in private cloud saves include them like the active Keeper; they add no
 public player props or new statistics events. Their opaque journey ids are local receipt keys,
 not device identifiers. The existing cloud-size refusal keeps the local history intact.
+
+The optional `village_seconds` profile field records fictional elapsed play for NPC schedules.
+It is not a wall-clock timestamp or an offline activity log. It remains private profile data,
+including the existing opt-in cloud backup, with no public prop or statistics event added.

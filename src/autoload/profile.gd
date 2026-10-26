@@ -23,7 +23,7 @@ const SAVE_SHAPE := {
 	"fragments_found": {"*": "number"}, "deeds_done": {"*": "number"}, "boss_meetings": {"*": "number"},
 	"lines_told": {"*": "number"}, "lines_order": {"*": "number"}, "deaths_by": {"*": "number"},
 	"worn": {"*": "string"}, "best_splits": {"*": ["number"]}, "period_stats": {"*": {"*": "number"}},
-	"village_quests": {"*": "number"}, "village_services": {"*": "number"},
+	"village_quests": {"*": "number"}, "village_services": {"*": "number"}, "village_seconds": "number",
 	"village_memorials": [{
 		"version": "number", "date": "number", "level": "number", "ascension": "number",
 		"max_health": "number", "power": "number", "armor": "number",
@@ -102,6 +102,8 @@ var keepers_freed: Array = []
 ## Memorials have no rolling-history cap: replacing/freeing the current keeper never erases one.
 var village_quests := {}
 var village_services := {}
+## Active play time since Kagari's first morning; offline time never moves the village.
+var village_seconds := 0.0
 var village_memorials: Array = []
 ## Journey -> chosen ending, for idempotence across the profile/run-file crash boundary.
 var ending_receipts := {}
@@ -655,6 +657,7 @@ func reset() -> void:
 	keepers_freed = []
 	village_quests = {}
 	village_services = {}
+	village_seconds = 0.0
 	village_memorials = []
 	ending_receipts = {}
 	chronicle_told = {}
@@ -701,6 +704,7 @@ func to_data() -> Dictionary:
 		"ending": String(ending),
 		"keeper": keeper, "keepers_freed": keepers_freed,
 		"village_quests": village_quests, "village_services": village_services,
+		"village_seconds": village_seconds,
 		"village_memorials": village_memorials, "ending_receipts": ending_receipts,
 		"chronicle_told": chronicle_told, "fragments_found": fragments_found, "deeds_done": deeds_done,
 		"boss_meetings": boss_meetings, "deepest": deepest,
@@ -745,6 +749,8 @@ static func is_valid_data(data: Variant, require_progress: bool = true) -> bool:
 	for value: Variant in (data.get("village_quests", {}) as Dictionary).values():
 		if float(value) != int(value) or int(value) < 0 or int(value) > VillageProgress.Step.RETURNED:
 			return false
+	if float(data.get("village_seconds", 0.0)) < 0.0:
+		return false
 	for snapshot: Dictionary in data.get("village_memorials", []):
 		if not KeeperSnapshot.is_valid(snapshot):
 			return false
@@ -795,6 +801,7 @@ func _read(data: Dictionary) -> void:
 	keeper = (saved_keeper as Dictionary) if KeeperSnapshot.is_valid(saved_keeper) else {}
 	village_quests = _ints(data.get("village_quests", {}))
 	village_services = _ints(data.get("village_services", {}))
+	village_seconds = maxf(0.0, float(data.get("village_seconds", 0.0)))
 	ending_receipts = (data.get("ending_receipts", {}) as Dictionary).duplicate()
 	village_memorials = (data.get("village_memorials", []) as Array).duplicate(true)
 	# Read-only migration in memory: the next normal save keeps the existing keeper's statue.

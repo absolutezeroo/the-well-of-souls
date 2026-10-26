@@ -83,6 +83,9 @@ func _build() -> void:
 		Sfx.play_ui(Sfx.bank.ui_open)
 		if content:
 			_codex.open(content, CodexPanel.Tab.BESTIARY))
+	_row(tr("Quest journal"), "QuestsButton", tr("Village requests, current objectives and bounties."), func() -> void:
+		if content:
+			_codex.open(content, CodexPanel.Tab.QUESTS))
 	_row(tr("Send feedback"), "FeedbackButton", tr("A bug, an idea? Tell the game's maker."), func() -> void:
 		Sfx.play_ui(Sfx.bank.ui_open)
 		feedback.run_info = run_info
@@ -95,11 +98,8 @@ func _build() -> void:
 	for state in ["font_color", "font_hover_color", "font_pressed_color"]:
 		give_up.add_theme_color_override(state, Color(0.55, 0.06, 0.06))
 
-	# What the two currencies are for.
-	var money: Dictionary = RpgWindow.section(tr("Gold and souls"))
-	money.column.add_child(UiParts.text(tr("Gold: only for this run. Spend it at the merchant and the forge; it is lost when the run ends."), Fonts.BODY, UiSkin.TEXT, BUTTON_SIZE.x + NOTE_WIDTH))
-	money.column.add_child(UiParts.text(tr("Souls: kept between runs. Spend them at the Shrine (title screen) on upgrades for every run."), Fonts.BODY, UiSkin.TEXT, BUTTON_SIZE.x + NOTE_WIDTH))
-	_dialog.body.add_child(money.box)
+	# Keep this help compact so seven touch-sized actions also fit a 720-pixel screen.
+	_dialog.body.add_child(UiParts.text(tr("Gold lasts for one descent: spend it at the merchant or forge. Souls are kept; spend them at the village Shrine on permanent upgrades."), Fonts.BODY, UiSkin.DIM, BUTTON_SIZE.x + NOTE_WIDTH))
 	_named.expose_to(self)
 	feedback = FeedbackDialog.new()
 	feedback.name = "FeedbackDialog"

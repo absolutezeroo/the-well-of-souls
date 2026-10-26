@@ -27,6 +27,7 @@ var oath_panel: OathPanel
 var shrine: ShrinePanel
 var daily_dialog: DailyDialog
 var cloud_conflict: CloudConflictDialog
+var journal: CodexPanel
 var spots: Array[Spot] = []
 var focus: Spot
 var _modals: Array[Control] = []
@@ -34,6 +35,8 @@ var _joystick: TouchJoystick
 var _touch: ActionButton
 var _prompt: Label
 var _objective: Label
+var _time_label: Label
+var _clock_minute := -1
 var _hud: Control
 var _was_down := true
 var _blocked := false
@@ -63,6 +66,7 @@ func _ready() -> void:
 	_add_spot(def.well + Vector2(0, 34), &"well", tr("The Well"))
 	_add_spot(def.shrine, &"shrine", tr("Shrine"))
 	_add_spot(def.memorial, &"memorial", tr("Court of the Nameless"))
+	_add_spot(def.noticeboard + Vector2(0, 24), &"journal", tr("Bounty board"))
 	for resident in def.residents:
 		_add_spot(resident.position, &"resident", tr(resident.speaker.display_name), resident)
 	_build_ui()
@@ -99,6 +103,8 @@ func _build_ui() -> void:
 	_objective = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
 	_objective.custom_minimum_size.x = 580
 	header.add_child(_objective)
+	_time_label = UiSkin.label("", Fonts.BODY, UiSkin.DIM)
+	header.add_child(_time_label)
 	var menu := MenuWindow.button(tr("Menu"), Fonts.BODY, 52)
 	menu.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	menu.offset_left = -180
@@ -106,6 +112,13 @@ func _build_ui() -> void:
 	menu.offset_top = 24
 	menu.pressed.connect(_open_menu)
 	_hud.add_child(menu)
+	var quests := MenuWindow.button(tr("Quests"), Fonts.BODY, 52)
+	quests.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	quests.offset_left = -370
+	quests.offset_right = -196
+	quests.offset_top = 24
+	quests.pressed.connect(open_journal)
+	_hud.add_child(quests)
 	_joystick = TouchJoystick.new()
 	_joystick.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_hud.add_child(_joystick)
@@ -144,16 +157,22 @@ func _build_ui() -> void:
 	cloud_conflict = CloudConflictDialog.new()
 	layer.add_child(cloud_conflict)
 	_modals.append(cloud_conflict)
+	journal = preload("res://src/ui/codex/codex_panel.tscn").instantiate() as CodexPanel
+	layer.add_child(journal)
+	_modals.append(journal)
 
 
 func _layout() -> void:
 	_touch.position = _hud.size - Vector2(115, 135)
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	var blocked := _leaving
 	for modal in _modals:
 		blocked = blocked or modal.visible
+	if not blocked:
+		VillageClock.advance(delta)
+	refresh_time()
 	walker.blocked = blocked
 	for resident in view.residents:
 		resident.paused = blocked
@@ -190,6 +209,7 @@ func interact() -> bool:
 		&"well": open_well()
 		&"shrine": shrine.open(content.soul_tree, content)
 		&"memorial": _open_memorial()
+		&"journal": open_journal()
 		&"resident":
 			_talk(focus.resident)
 			if focus.resident.speaker.voice:
@@ -209,6 +229,8 @@ func _show_prompt() -> void:
 
 
 func _refresh() -> void:
+	_clock_minute = -1
+	refresh_time()
 	var lines := PackedStringArray()
 	var all_returned := not def.quests.is_empty()
 	for quest in def.quests:
@@ -228,6 +250,23 @@ func _refresh() -> void:
 	# A cloud replacement or a transaction refreshes an open resident's choices as well.
 	if panel.visible and _resident:
 		_talk(_resident)
+	if journal.visible:
+		journal.open(content, CodexPanel.Tab.QUESTS)
+
+
+func refresh_time() -> void:
+	var minute := floori(Profile.village_seconds * 1440.0 / def.clock.day_seconds)
+	if minute == _clock_minute: return
+	_clock_minute = minute
+	_time_label.text = VillageClock.text(def.clock)
+	view.apply_hour(VillageClock.hour(def.clock))
+
+
+func open_journal() -> void:
+	if _leaving: return
+	_resident = null
+	panel.hide()
+	journal.open(content, CodexPanel.Tab.QUESTS)
 
 
 func _talk(resident: VillageResidentDef, topic: VillageTopicDef = null) -> void:
@@ -244,6 +283,11 @@ func _talk(resident: VillageResidentDef, topic: VillageTopicDef = null) -> void:
 	var details := VBoxContainer.new()
 	portrait_row.add_child(details)
 	details.add_child(UiSkin.label(tr(resident.speaker.title), Fonts.BODY, UiSkin.GOLD))
+	var actor := view.actor_for(resident)
+	if actor.activity:
+		details.add_child(UiSkin.label(tr(actor.activity.display_name), Fonts.BODY, UiSkin.DIM))
+	if actor.indoors:
+		panel.words.text = tr("You knock at the door. A sleepy voice answers.") + "\n" + panel.words.text
 	if resident.echo and (resident.wakes_after == null or VillageProgress.stage(resident.wakes_after) != VillageProgress.Step.RETURNED):
 		details.add_child(UiSkin.label(tr("A voice caught in the lantern's light."), Fonts.BODY, UiSkin.DIM))
 	if resident.role == VillageResidentDef.Role.QUEST and resident.quest:
@@ -313,6 +357,7 @@ func _choose(action: StringName, payload: Resource) -> void:
 			_memorial_index -= 1
 			_open_memorial()
 		&"title":
+			Profile.save_profile()
 			_leaving = true
 			Loader.go(TITLE_SCENE)
 
@@ -341,6 +386,7 @@ func _prepare_launch() -> void:
 func _launch(resume: bool) -> void:
 	if _leaving:
 		return
+	Profile.save_profile()
 	_leaving = true
 	daily_requested = false
 	Game.resume_requested = resume
@@ -394,6 +440,8 @@ func _back() -> void:
 				return
 			if _modals[index] == daily_dialog:
 				daily_dialog.back()
+			elif _modals[index] == journal:
+				journal.back()
 			else:
 				_modals[index].hide()
 			return
@@ -409,5 +457,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
 		_back()
-	elif what == NOTIFICATION_APPLICATION_PAUSED and is_node_ready():
-		_open_menu()
+	elif is_node_ready() and what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_WM_CLOSE_REQUEST]:
+		Profile.save_profile()
+		if what == NOTIFICATION_APPLICATION_PAUSED or (what == NOTIFICATION_APPLICATION_FOCUS_OUT and OS.has_feature("mobile")):
+			_open_menu()

@@ -3,6 +3,15 @@
 Dated entries, newest first: what was measured, what changed and why, before/after numbers, open
 questions. How to measure: [balance.md](balance.md).
 
+## 2026-10-26 - Kagari's fictional day
+
+The previously timeless hub now starts at 08:00 and advances one full day per 960 seconds
+(16 minutes) of active play, including descents. Residents walk at 42 world units/second
+between authored appointments. Menus and offline time add nothing; the clock changes neither
+infestation, combat, rewards nor UTC bounty rotation. Night services remain reachable by
+knocking, so the schedule imposes no waiting gate. This duration is an initial presentation
+tuning, not measured player preference; S23/Windows play-testing remains on the roadmap.
+
 ## 2026-10-25 - Glacial, Frenzied, Vengeful and Unstable
 
 Four additional modular affixes, each weight 5, no bosses: Glacial and Frenzied from floor 3,

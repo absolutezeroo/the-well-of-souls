@@ -5,6 +5,43 @@
 [ext_resource type="Resource" path="res://data/village/topics/keeper_box.tres" id="topic_0"]
 [ext_resource type="Resource" path="res://data/village/topics/keeper_return.tres" id="topic_1"]
 [ext_resource type="Resource" path="res://data/village/topics/keeper_two_homes.tres" id="reaction"]
+[ext_resource type="Script" path="res://src/definitions/village/village_activity_def.gd" id="activity_script"]
+
+[sub_resource type="Resource" id="activity_0"]
+script = ExtResource("activity_script")
+start_hour = 0.0
+display_name = "Keeping watch at the Well"
+destination = Vector2(540, 280)
+indoors = false
+
+[sub_resource type="Resource" id="activity_1"]
+script = ExtResource("activity_script")
+start_hour = 8.0
+display_name = "Tending the shrine"
+destination = Vector2(470, 175)
+indoors = false
+
+[sub_resource type="Resource" id="activity_2"]
+script = ExtResource("activity_script")
+start_hour = 12.0
+display_name = "Receiving visitors at the Well"
+destination = Vector2(540, 280)
+indoors = false
+
+[sub_resource type="Resource" id="activity_3"]
+script = ExtResource("activity_script")
+start_hour = 18.0
+display_name = "Tending the shrine"
+destination = Vector2(470, 175)
+indoors = false
+
+[sub_resource type="Resource" id="activity_4"]
+script = ExtResource("activity_script")
+start_hour = 22.0
+display_name = "Keeping watch at the Well"
+destination = Vector2(540, 280)
+indoors = false
+
 [resource]
 script = ExtResource("script")
 id = &"keeper"
@@ -22,3 +59,5 @@ ambient_after = PackedStringArray("Ren is up already... That man cannot sit stil
 topics = [ExtResource("topic_0"), ExtResource("topic_1")]
 idle_frames = [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16)]
 reactions = [ExtResource("reaction")]
+schedule = [SubResource("activity_0"), SubResource("activity_1"), SubResource("activity_2"), SubResource("activity_3"), SubResource("activity_4")]
+walk_speed = 42.0

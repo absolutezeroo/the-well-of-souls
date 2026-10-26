@@ -36,6 +36,7 @@ func run_unit() -> void:
 	check(not VillageProgress.buy(service), "a restored lamp cannot be sold twice")
 	_test_sequence()
 	_test_conversations()
+	_test_calendar()
 	_test_memorials()
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 79
@@ -128,6 +129,47 @@ func _test_conversations() -> void:
 	Profile.reset()
 
 
+func _test_calendar() -> void:
+	Profile.reset()
+	check(is_equal_approx(VillageClock.hour(VILLAGE.clock), 8.0) and VillageClock.day(VILLAGE.clock) == 1, "an old profile starts on Kagari's first morning")
+	var daily := QuestBoard.current(CONTENT.quests, QuestDef.Period.DAILY, 1700000000)
+	VillageClock.advance(VILLAGE.clock.day_seconds)
+	check(is_equal_approx(VillageClock.hour(VILLAGE.clock), 8.0) and VillageClock.day(VILLAGE.clock) == 2, "one authored day rolls the clock and increments the day")
+	check(QuestBoard.current(CONTENT.quests, QuestDef.Period.DAILY, 1700000000) == daily, "fictional days never reroll real daily bounties")
+	var saved := JSON.parse_string(JSON.stringify(Profile.to_data())) as Dictionary
+	Profile.reset()
+	check(Profile.from_data(saved) and VillageClock.day(VILLAGE.clock) == 2, "village time survives the existing profile round trip")
+	Profile.held = true
+	var before := Profile.village_seconds
+	VillageClock.advance(40.0)
+	check(Profile.village_seconds == before, "a held cloud profile cannot advance village time")
+	Profile.held = false
+	VillageClock.advance(-1.0)
+	check(Profile.village_seconds == before, "negative time cannot rewind a day")
+	saved.village_seconds = -1
+	check(not ProfileScript.is_valid_data(saved), "negative saved village time is rejected before profile replacement")
+	for restored in [false, true]:
+		Profile.reset()
+		if restored:
+			for quest in VILLAGE.quests:
+				VillageProgress.accept(quest)
+				VillageProgress.discover(quest)
+				VillageProgress.hand_in(quest)
+		var navigation := VillageNavigation.new()
+		navigation.rebuild(VILLAGE)
+		for person in VILLAGE.residents:
+			check(not person.schedule.is_empty() and person.schedule[0].start_hour == 0.0, "every resident's schedule covers midnight")
+			var previous_hour := -1.0
+			var previous_point := person.position
+			for appointment in person.schedule:
+				check(appointment.start_hour > previous_hour and appointment.start_hour < 24.0, "appointments are strictly ordered within a day")
+				check(not navigation.path(previous_point, appointment.destination).is_empty(), "%s %s to %s: each appointment has a walkable route (restored=%s)" % [person.speaker.display_name, previous_point, appointment.destination, restored])
+				previous_hour = appointment.start_hour
+				previous_point = appointment.destination
+			check(person.activity_at(23.99) == person.schedule.back() and person.activity_at(0.0) == person.schedule[0], "schedules choose the correct activity on either side of midnight")
+	Profile.reset()
+
+
 func _test_memorials() -> void:
 	var take: EndingDef
 	var release: EndingDef
@@ -169,7 +211,7 @@ func run_title() -> void:
 	var hub := HUB.instantiate() as VillageHub
 	add_child(hub)
 	await _frames(3)
-	check(hub.spots.size() == 7 and hub.walker != null and not hub.walker.blocked, "Kagari opens with a controllable hero, three places and four residents")
+	check(hub.spots.size() == 8 and hub.walker != null and not hub.walker.blocked, "Kagari opens with a controllable hero, four places and four residents")
 	var sleeper := hub.view.actor_for(VILLAGE.residents[2])
 	var sleeper_position := sleeper.position
 	await _frames(300)
@@ -186,14 +228,17 @@ func run_title() -> void:
 	await _frames(8)
 	Input.action_release(&"move_right")
 	check(hub.walker.position == from and hub.walker.blocked, "a village panel stops movement")
+	var menu_time := Profile.village_seconds
+	await _frames(5)
+	check(Profile.village_seconds == menu_time, "reading a village menu pauses its day/night clock")
 	hub.panel.hide()
-	hub.walker.position = VILLAGE.residents[1].position + Vector2(0, 25)
+	hub.walker.position = hub.view.actor_for(VILLAGE.residents[1]).position + Vector2(0, 25)
 	await _frames(3)
 	hub.interact()
 	var locked_choice := _choice(hub, VILLAGE.quests[1].locked_text)
 	check(locked_choice != null and locked_choice.disabled, "Sayo explains her prerequisite with a disabled choice before Ren wakes")
 	hub.panel.hide()
-	hub.walker.position = VILLAGE.residents[0].position + Vector2(0, 25)
+	hub.walker.position = hub.view.actor_for(VILLAGE.residents[0]).position + Vector2(0, 25)
 	await _frames(3)
 	check(hub.interact() and hub.panel.visible, "standing near a resident offers an explicit conversation")
 	hub.panel.picked.emit(&"accept", VILLAGE.quests[0])
@@ -206,10 +251,10 @@ func run_title() -> void:
 	var roots := 0
 	for prop in VILLAGE.props:
 		if prop.cleared_by == VILLAGE.quests[0]: roots += 1
-	check(roots > 0 and hub.view.dressing.get_child_count() == VILLAGE.props.size() - roots + VILLAGE.residents.size() + 4, "returning the quest removes its root props and their collisions")
+	check(roots > 0 and hub.view.dressing.get_child_count() == VILLAGE.props.size() - roots + VILLAGE.residents.size() + 5, "returning the quest removes its root props and their collisions")
 	var first_count := hub.view.dressing.get_child_count()
 	hub.panel.hide()
-	hub.walker.position = VILLAGE.residents[1].position + Vector2(0, 25)
+	hub.walker.position = hub.view.actor_for(VILLAGE.residents[1]).position + Vector2(0, 25)
 	await _frames(3)
 	hub.interact()
 	var next_choice := _choice(hub, VILLAGE.quests[1].accept_label)
@@ -245,6 +290,19 @@ func run_title() -> void:
 	check(ren.position == start and not ren.bubble.visible, "a conversation stops the routine and hides overlapping ambient speech")
 	check(VillageProgress.buy(VILLAGE.services[0]) and hub.view.actor_for(ren.def) == ren and ren.position == start, "buying a lamp refreshes the village without replacing or teleporting its people")
 	hub.panel.hide()
+	hub.open_journal()
+	var journal_profile := Profile.to_data().duplicate(true)
+	await _frames(3)
+	check(hub.journal.visible and hub.walker.blocked and Profile.to_data() == journal_profile, "the journal is directly accessible and reading it neither accepts nor rewards quests")
+	hub.journal.hide()
+	# The clock changes the appointment, not the resident's position. Travel remains physical.
+	start = ren.position
+	Profile.village_seconds = VILLAGE.clock.day_seconds * (20.0 - VILLAGE.clock.start_hour) / 24.0
+	hub.refresh_time()
+	check(ren.activity.indoors and ren.position == start, "evening assigns home rest without teleporting a travelling resident")
+	check(hub.view.daylight.color != Color.WHITE, "the village's world tint follows the time of day")
+
+	hub.panel.hide()
 	await _frames(2)
 	var file := FileAccess.open(RunSave.path, FileAccess.WRITE)
 	file.store_string(JSON.stringify({"version": RunSave.VERSION, "depth": 2, "player": {"level": 2}}))
@@ -257,11 +315,43 @@ func run_title() -> void:
 	hub.queue_free()
 	await _frames(2)
 	check(FileAccess.get_file_as_string(RunSave.path) == kept, "leaving the village during confirmation keeps the saved descent")
+	# A scene loaded at night derives its offscreen routine from the saved clock.
+	var night := HUB.instantiate() as VillageHub
+	add_child(night)
+	await _frames(2)
+	check(night.view.actor_for(VILLAGE.residents[2]).indoors and not night.view.actor_for(VILLAGE.residents[2]).visible, "a loaded nighttime village places Ren behind his home doorway")
+	# Exercise real physics along a whole restored day, including the long market/home trips.
+	# Hold the clock only, so the authored appointments cannot change during each journey.
+	night.set_physics_process(false)
+	for hour: float in [0.0, 6.0, 8.0, 9.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0]:
+		for person in VILLAGE.residents:
+			var actor := night.view.actor_for(person)
+			actor.paused = false
+			actor.apply_hour(hour)
+		await _frames(1200)
+		for person in VILLAGE.residents:
+			var actor := night.view.actor_for(person)
+			check(actor.position.distance_to(actor.activity.destination) <= 3.0, "%s reaches the %.0f h appointment through real collisions" % [person.speaker.display_name, hour])
+			check(actor.indoors == actor.activity.indoors, "arriving at a doorway applies that appointment's indoor state")
+	var older := Profile.to_data().duplicate(true)
+	older.village_quests = {}
+	var returning_echo := night.view.actor_for(VILLAGE.residents[2])
+	returning_echo.position = Vector2(285, 465)
+	check(Profile.from_data(older) and returning_echo.asleep and returning_echo.position == returning_echo.def.position, "loading an older profile returns a travelling resident's echo to its original doorway")
+	night.queue_free()
+	await _frames(2)
 	RunSave.erase()
 	Profile.reset()
 
 
 func run_game(game: Game) -> void:
+	game.open_pause_menu()
+	var paused_time := Profile.village_seconds
+	await _frames(5)
+	check(Profile.village_seconds == paused_time, "the dungeon pause freezes village time despite Game processing while paused")
+	game.menus.pause.back()
+	await _frames(5)
+	check(Profile.village_seconds > paused_time, "active dungeon play advances the shared village clock")
 	var quest := VILLAGE.quests[0]
 	var second := VILLAGE.quests[1]
 	await game.debug.enter_floor(second.floor_depth)

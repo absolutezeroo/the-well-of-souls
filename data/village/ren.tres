@@ -6,6 +6,50 @@
 [ext_resource type="Resource" path="res://data/village/topics/ren_sayo_wait.tres" id="topic_1"]
 [ext_resource type="Resource" path="res://data/village/topics/ren_sayo_home.tres" id="topic_2"]
 [ext_resource type="Resource" path="res://data/village/topics/ren_two_homes.tres" id="reaction"]
+[ext_resource type="Script" path="res://src/definitions/village/village_activity_def.gd" id="activity_script"]
+
+[sub_resource type="Resource" id="activity_0"]
+script = ExtResource("activity_script")
+start_hour = 0.0
+display_name = "Resting at home"
+destination = Vector2(740, 230)
+indoors = true
+
+[sub_resource type="Resource" id="activity_1"]
+script = ExtResource("activity_script")
+start_hour = 6.0
+display_name = "Mending lanterns at home"
+destination = Vector2(740, 230)
+indoors = false
+
+[sub_resource type="Resource" id="activity_2"]
+script = ExtResource("activity_script")
+start_hour = 8.0
+display_name = "Checking the market lamps"
+destination = Vector2(285, 465)
+indoors = false
+
+[sub_resource type="Resource" id="activity_3"]
+script = ExtResource("activity_script")
+start_hour = 12.0
+display_name = "Mending lanterns at home"
+destination = Vector2(740, 230)
+indoors = false
+
+[sub_resource type="Resource" id="activity_4"]
+script = ExtResource("activity_script")
+start_hour = 16.0
+display_name = "Lighting the memorial court"
+destination = Vector2(770, 495)
+indoors = false
+
+[sub_resource type="Resource" id="activity_5"]
+script = ExtResource("activity_script")
+start_hour = 20.0
+display_name = "Resting at home"
+destination = Vector2(740, 230)
+indoors = true
+
 [resource]
 script = ExtResource("script")
 id = &"ren"
@@ -22,5 +66,6 @@ ambient_after = PackedStringArray("There. This one will last until you return.",
 topics = [ExtResource("topic_0"), ExtResource("topic_1"), ExtResource("topic_2")]
 idle_frames = [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16)]
 walk_frames = [Rect2(0, 32, 16, 16), Rect2(0, 48, 16, 16), Rect2(0, 64, 16, 16), Rect2(0, 80, 16, 16)]
-route = [Vector2(740, 285), Vector2(740, 345), Vector2(740, 230)]
 reactions = [ExtResource("reaction")]
+schedule = [SubResource("activity_0"), SubResource("activity_1"), SubResource("activity_2"), SubResource("activity_3"), SubResource("activity_4"), SubResource("activity_5")]
+walk_speed = 42.0

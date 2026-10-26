@@ -320,8 +320,12 @@ VillageTopicDef questions in topics; a topic's quest/min_stage/max_stage gates b
 and its reply. Conditional replies without prompts belong in reactions (first match wins over
 the stage greeting). Do not place later revelations in unconditional village topics.
 
-An idle_frames/walk_frames atlas list, route points, speed and stop_seconds author a resident's
-routine. Routes must remain on clear ground after that resident's wakes_after quest; echoes
-never walk. ambient_before/ambient_after are PackedStringArray values (so the extractor finds
+An idle_frames/walk_frames atlas list, walk_speed and schedule author a resident's routine.
+Each VillageActivityDef has start_hour, a translated display_name, destination and indoors.
+Order appointments strictly from midnight (0) to before 24. Destinations must lie on clear
+navigation cells before and after restoration; unit.village checks each leg. The grid includes
+body clearance, so leave space beside props. Echoes never walk. The indoors flag currently
+hides a resident at a doorway; it does not create an interior. clock.tres sets day duration,
+starting hour and the world-only daylight gradient. ambient_before/ambient_after are PackedStringArray values (so the extractor finds
 them), each short enough for a proximity bubble. No additional per-frame gameplay polling is
 needed for new content. An optional appearance material is shared by the figure and portrait.

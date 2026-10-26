@@ -324,3 +324,10 @@ The court shows the latest memorial; its register recalls every recorded predece
 The Well's repeating night does not erase these stones. A release frees the Keeper below
 but leaves his memorial above. Existing saves can remember the current Keeper; missing
 old full appearances cannot be invented from the codex's abbreviated freed records.
+
+Kagari is an inhabited village whose souls were drawn into the Well; its houses and temple
+are not the ruins of Solhar. Reused exterior art is temporary until the village asset pass.
+Its daylight returns independently of the Well's repeating night below. Rescued neighbours
+resume work, visits and ordinary sleep; unrecovered echoes remain bound to their doors. The
+Veilleuse keeps watch at the shrine and Well through the night. Ordinary night rest must never
+be confused with the soul-loss that the rescue quests resolve.

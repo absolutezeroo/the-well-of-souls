@@ -94,7 +94,7 @@ Keeper, memorial and receipt together. If the application stops before RunSave c
   without consuming generation/combat dice. No village evidence appears in daily, hidden,
   finale or debug descents. Profile state makes reconstruction idempotent. Existing floor
   ledger/stamp and run save version remain compatible.
-- Profile owns `village_quests`, `village_services`, `village_memorials`, `ending_receipts`.
+- Profile owns `village_quests`, `village_services`, `village_memorials`, `ending_receipts`, `village_seconds`.
   They share its atomic file, rather than a second independently committed village file.
   No existing user file is edited by deployment. Cloud synchronization uses its existing
   explicit account/consent gates; there are no new public props, telemetry fields or requests.
@@ -119,13 +119,43 @@ are questions; its reactions use the same conditional reply without a prompt (fi
 cannot disclose a topic made unavailable by a profile replacement. All words, including short
 ambient lines, live under `data/village/` and are translated.
 
-`VillageResident` animates the existing idle cells. Awake residents follow small authored
-routes: Ren tends his lamps, the Wanderer moves around the stall, Sayo steps out by her door.
-Echoes stay at their doors. People stop near the hero and while any village modal is open;
-the interaction registry follows their actual positions. A new approach can show one short
-speech bubble, with a cooldown, without opening a conversation or making a sound. Opening a
-conversation uses the speaker's existing voice cue when available. Resident instances survive
-profile refreshes, so buying a lamp does not send everyone back to their starting positions.
+`VillageResident` animates the existing idle/walk cells and follows a daily schedule of
+`VillageActivityDef` appointments. Ren repairs his doorway, tends market lamps, visits the
+memorial and goes home; Sayo visits the market and shrine; the Wanderer trades and visits Ren.
+The Veilleuse alternates between the shrine and Well, keeping watch through the night.
+Unrecovered echoes stay at their doors. People walk around static collisions using a shared
+navigation grid. An appointment changes their destination without teleporting them. Scene
+entry alone places residents at the current appointment after an offscreen absence.
+
+Passing nearby no longer stops a routine. Opening any village modal pauses both routines and
+time; the interaction registry follows residents' actual positions. A new approach can show
+one short speech bubble, with a cooldown. Conversations use the speaker's existing voice cue.
+Residents survive profile refreshes, so buying a lamp does not reset their positions.
+
+## Day, night and the quest board
+
+The first visit starts at 08:00. One fictional day lasts **16 minutes of active play**, authored
+in `data/village/clock.tres`. Time advances in the village and during descents, stops in menus
+and in the mobile background, and does not advance while the app is closed. Day number and
+hour appear on the village HUD; a Gradient tints only the world at dawn, day, dusk and night.
+It never changes dungeon seeds, real UTC bounty dates or infestation. There is no missed-day
+penalty. `Profile.village_seconds` is optional for old saves and joins normal atomic profile
+writes, including leaving the village and application close/background notifications.
+
+The **Quests** HUD button, the physical noticeboard southwest of the Well, and **Quest journal**
+in the dungeon pause menu all open the same read-only codex tab. It lists village requests,
+their prerequisites/status, current search or return objective, rewards, contact and current
+schedule, followed by daily/weekly bounties. Found requests come first and completed ones last.
+Reading a board never accepts or pays a request: return to the resident for those actions.
+Bounties continue to use real-world dates, independently of the village clock.
+
+Night rest currently hides a resident behind the authored home/stall doorway. Interacting
+there knocks and opens the normal conversation, so a quest or service is not time-locked.
+**Actual enterable houses and the temple interior are not implemented yet**: they await the
+user's building/interior tileset. The shrine remains accessible outdoors until that integration.
+This is a real inhabited village whose souls were taken, not a settlement to rebuild from ruins;
+the current reused building art is temporary. The next art pass must add home/temple rooms,
+door transitions and place the existing skills shrine inside the temple.
 
 Sayo's figure and portrait share a teal palette material, distinguishing her from the Veilleuse
 without duplicating or regenerating sprite textures. Static props remain separate from these
@@ -139,7 +169,10 @@ unique quest ids and acyclic registered prerequisites, ordered acceptance, cloud
 failed hand-in rollback. `title.village` checks the real hub, movement, locked/unlocked Sayo
 conversations, independent root removal and saved-run protection. `game.village` checks evidence
 on both real procedural floors, its absence before acceptance and on a daily run, and no respawn
-after collection.
+after collection. Calendar checks cover old saves, midnight, cloud holds, UTC independence,
+all authored paths before/after restoration, a full day of real resident physics, pause/resume
+in village and dungeon, night entry, read-only journal access and a cloud rollback returning
+a formerly rescued resident's echo to its original doorway.
 The existing finale test now checks both recovery of the same ending and the other ending on
 an independent expedition, with its original achievement/keeper-release assertions retained.
 

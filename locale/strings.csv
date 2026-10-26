@@ -260,6 +260,7 @@ Dungeon,Dungeon,Donjon
 The knell falls silent. The Well lets you go.,The knell falls silent. The Well lets you go.,Le glas se tait. Le Puits te laisse partir.
 The knell has tolled. The Threshold keeps you.,The knell has tolled. The Threshold keeps you.,Le glas a sonné. Le Seuil te garde.
 The dark,The dark,L'obscurité
+Day %d · %02d:%02d,Day %d · %02d:%02d,Jour %d · %02d:%02d
 Recover,Recover,Récupérer
 At least %d characters.,At least %d characters.,Au moins %d caractères.
 At most %d characters.,At most %d characters.,Au plus %d caractères.
@@ -347,11 +348,12 @@ not slain yet,not slain yet,pas encore abattu
 Boss,Boss,Boss
 Celestial,Celestial,Céleste
 Souls %d,Souls %d,Âmes %d
+Bounty board,Bounty board,Tableau de primes
 Daily quests,Daily quests,Quêtes du jour
 Weekly quests,Weekly quests,Quêtes de la semaine
 New ones in %s. Counts every run today.,New ones in %s. Counts every run today.,Nouvelles dans %s. Toutes les parties d'aujourd'hui comptent.
 New ones in %s. Counts every run this week (from Monday).,New ones in %s. Counts every run this week (from Monday).,Nouvelles dans %s. Toutes les parties de la semaine comptent (depuis lundi).
-Quests done: %d of %d,Quests done: %d of %d,Quêtes accomplies : %d sur %d
+Bounties done: %d of %d,Bounties done: %d of %d,Primes accomplies : %d sur %d
 Slain: %d of %d kinds     Mastered: %d     Celestial found: %d,Slain: %d of %d kinds     Mastered: %d     Celestial found: %d,Abattus : %d espèces sur %d     Maîtrisés : %d     Célestes trouvés : %d
 floor %d,floor %d,étage %d
 floors %d to %d,floors %d to %d,étages %d à %d
@@ -372,7 +374,7 @@ Bestiary,Bestiary,Bestiaire
 Achievements,Achievements,Succès
 Runs,Runs,Parties
 Voices,Voices,Paroles
-"Quests change every day and every week. Everything you do in any run counts toward them, and a finished quest pays its souls at once. Souls are kept between runs: spend them at the Shrine on lasting upgrades.","Quests change every day and every week. Everything you do in any run counts toward them, and a finished quest pays its souls at once. Souls are kept between runs: spend them at the Shrine on lasting upgrades.","Les quêtes changent chaque jour et chaque semaine. Tout ce que tu fais dans n'importe quelle partie compte, et une quête accomplie rapporte ses âmes aussitôt. Les âmes sont conservées d'une partie à l'autre : dépense-les au Sanctuaire en améliorations durables."
+Track your village requests and bounties here. Return recovered items to the resident who asked for them. Spend your souls at the village Shrine. Daily and weekly bounties follow real-world dates.,Track your village requests and bounties here. Return recovered items to the resident who asked for them. Spend your souls at the village Shrine. Daily and weekly bounties follow real-world dates.,Retrouve ici les demandes du village et les primes. Rapporte les objets à leur propriétaire. Dépense tes âmes au sanctuaire du village. Les primes quotidiennes et hebdomadaires suivent les dates réelles.
 "Every monster you meet goes in here. Slay more of a kind to raise your hunter rank with it: each rank pays souls, and Mastered also gives +%d%% damage against that kind for good. Choose a monster for its attacks and challenges.","Every monster you meet goes in here. Slay more of a kind to raise your hunter rank with it: each rank pays souls, and Mastered also gives +%d%% damage against that kind for good. Choose a monster for its attacks and challenges.","Chaque monstre rencontré est consigné ici. Abats-en d'une même espèce pour monter ton rang de chasseur : chaque rang rapporte des âmes, et Maîtrisé donne aussi +%d %% de Dégâts contre cette espèce, pour toujours. Choisis un monstre pour voir ses attaques et ses défis."
 Big goals across all your runs. Reaching one pays its souls at once.,Big goals across all your runs. Reaching one pays its souls at once.,"De grands objectifs, sur toutes tes parties. En atteindre un rapporte ses âmes aussitôt."
 "Your last runs, newest first. Gold is lost when a run ends; souls are kept.","Your last runs, newest first. Gold is lost when a run ends; souls are kept.","Tes dernières parties, les plus récentes d'abord. L'or est perdu à la fin d'une partie ; les âmes sont conservées."
@@ -772,11 +774,11 @@ Resume,Resume,Reprendre
 Back to the fight.,Back to the fight.,Retour au combat.
 "Sound, music, button size, effects.","Sound, music, button size, effects.","Son, musique, taille des boutons, effets."
 The monsters you have met: how they attack and how to beat them.,The monsters you have met: how they attack and how to beat them.,Les monstres rencontrés : comment ils attaquent et comment les vaincre.
+Quest journal,Quest journal,Journal de quêtes
+"Village requests, current objectives and bounties.","Village requests, current objectives and bounties.","Demandes du village, objectifs en cours et primes."
 "A bug, an idea? Tell the game's maker.","A bug, an idea? Tell the game's maker.","Un bug, une idée ? Dis-le à l'auteur du jeu."
 Your run is saved. Resume it at the village well.,Your run is saved. Resume it at the village well.,Ta descente est sauvegardée. Reprends-la au puits du village.
-Gold and souls,Gold and souls,Or et âmes
-Gold: only for this run. Spend it at the merchant and the forge; it is lost when the run ends.,Gold: only for this run. Spend it at the merchant and the forge; it is lost when the run ends.,Or : seulement pour cette partie. Dépense-le chez le marchand et à la forge ; il est perdu à la fin de la partie.
-Souls: kept between runs. Spend them at the Shrine (title screen) on upgrades for every run.,Souls: kept between runs. Spend them at the Shrine (title screen) on upgrades for every run.,Âmes : conservées d'une partie à l'autre. Dépense-les au Sanctuaire (écran titre) en améliorations pour toutes tes parties.
+Gold lasts for one descent: spend it at the merchant or forge. Souls are kept; spend them at the village Shrine on permanent upgrades.,Gold lasts for one descent: spend it at the merchant or forge. Souls are kept; spend them at the village Shrine on permanent upgrades.,"L’or dure une descente : dépense-le chez le marchand ou à la forge. Les âmes restent ; au sanctuaire du village, elles offrent des améliorations permanentes."
 Give up the run,Give up the run,Abandonner la partie
 Really? Tap again,Really? Tap again,Vraiment ? Touche encore
 Really? Press again,Really? Press again,Vraiment ? Appuie encore
@@ -991,6 +993,13 @@ Level 1 gives: pick your starting weapon among %d: %s,Level 1 gives: pick your s
 Now: %d starting weapons  (maxed),Now: %d starting weapons  (maxed),Actuel : %d armes de départ  (au maximum)
 Now: %d starting weapons   >   Next: +%d weapons: %s,Now: %d starting weapons   >   Next: +%d weapons: %s,Actuel : %d armes de départ   >   Suivant : +%d armes : %s
 %s (locked),%s (locked),%s (à débloquer)
+Kagari's requests,Kagari's requests,Demandes de Kagari
+Available — speak to the resident,Available — speak to the resident,Disponible — parle à cet habitant
+In progress,In progress,En cours
+Ready to return,Ready to return,À rapporter
+Completed — reward received,Completed — reward received,Terminée — récompense reçue
+Speak to %s in Kagari.,Speak to %s in Kagari.,Parle à %s dans Kagari.
+Schedule: %s,Schedule: %s,À cette heure : %s
 Auras,Auras,Auras
 No aura,No aura,Aucune aura
 Locked: %s,Locked: %s,Verrouillée : %s
@@ -1001,6 +1010,7 @@ Shrine,Shrine,Sanctuaire
 Court of the Nameless,Court of the Nameless,La Cour des Sans-Nom
 Menu,Menu,Menu
 The daily descent awaits at the Well.,The daily descent awaits at the Well.,La descente quotidienne t’attend au Puits.
+You knock at the door. A sleepy voice answers.,You knock at the door. A sleepy voice answers.,Tu frappes à la porte. Une voix ensommeillée te répond.
 A voice caught in the lantern's light.,A voice caught in the lantern's light.,Une voix retenue dans la lumière de la lanterne.
 %s — %d souls,%s — %d souls,%s — %d âmes
 %s — restored,%s — restored,%s — restauré
@@ -3011,6 +3021,9 @@ Speak to the Vigil-Keeper beside the Well.,Speak to the Vigil-Keeper beside the 
 Reward: %d souls and a waking home.,Reward: %d souls and a waking home.,Récompense : %d âmes et un foyer qui se réveille.
 The village sleeps. The Well does not.,The village sleeps. The Well does not.,Le village dort. Le Puits veille.
 "Two windows burn. Beyond the square, Kagari still sleeps.","Two windows burn. Beyond the square, Kagari still sleeps.","Deux fenêtres brillent. Au-delà de la place, Kagari dort encore."
+Keeping watch at the Well,Keeping watch at the Well,Veille près du Puits
+Tending the shrine,Tending the shrine,Entretient le sanctuaire
+Receiving visitors at the Well,Receiving visitors at the Well,Accueille les visiteurs près du Puits
 "There you are, child. Ren will not wake; I would like to try giving him back the ember-box he carried everywhere.","There you are, child. Ren will not wake; I would like to try giving him back the ember-box he carried everywhere.","Te voilà, petit. Ren ne se réveille pas ; je voudrais essayer de lui rendre la boîte à braises qu'il emportait partout."
 "It fell to the second floor. If things go badly, come back; I would rather see you empty-handed.","It fell to the second floor. If things go badly, come back; I would rather see you empty-handed.","Elle est tombée au deuxième étage. Si les choses tournent mal, remonte ; je préfère te revoir les mains vides."
 "You found it, child. Give it to me; let us try to bring Ren back.","You found it, child. Give it to me; let us try to bring Ren back.","Tu l'as trouvée, petit. Confie-la-moi ; on va essayer de ramener Ren."
@@ -3036,6 +3049,10 @@ Market Lanterns,Market Lanterns,Les Lanternes du Marché
 Light the market lamps permanently. A village restoration; no combat bonus.,Light the market lamps permanently. A village restoration; no combat bonus.,"Rallume définitivement les lanternes du marché. Une restauration du village, sans bonus de combat."
 Lights for the Nameless,Lights for the Nameless,Des Lumières pour les Sans-Nom
 Light the memorial court permanently. Your fallen Keepers will have their vigil.,Light the memorial court permanently. Your fallen Keepers will have their vigil.,Rallume définitivement la cour du souvenir. Tes Gardiens auront leur veille.
+Resting at home,Resting at home,Se repose chez soi
+Mending lanterns at home,Mending lanterns at home,Répare les lanternes chez lui
+Checking the market lamps,Checking the market lamps,Vérifie les lampes du marché
+Lighting the memorial court,Lighting the memorial court,Allume les lanternes de la cour
 "The lanterns need lighting. I try to get up, but my hands pass straight through the workbench.","The lanterns need lighting. I try to get up, but my hands pass straight through the workbench.","Il faut rallumer les lanternes. J'essaie de me lever, mais mes mains passent à travers l'établi."
 "I wanted to get straight back to work. The Vigil-Keeper scolded me, so I started with just one lantern.","I wanted to get straight back to work. The Vigil-Keeper scolded me, so I started with just one lantern.",J'ai voulu me remettre au travail tout de suite. La Veilleuse m'a grondé ; j'ai donc commencé par une seule lanterne.
 Where did I leave that box...,Where did I leave that box...,Où ai-je posé cette boîte...
@@ -3043,6 +3060,10 @@ There. This one will last until you return.,There. This one will last until you 
 "Careful, the oil is hot.","Careful, the oil is hot.","Ne touche pas, l'huile est chaude."
 Ren,Ren,Ren
 The Lantern-Mender,The Lantern-Mender,Le Réparateur de Lanternes
+Opening her house,Opening her house,Ouvre sa maison
+Visiting the market,Visiting the market,Se rend au marché
+Praying at the shrine,Praying at the shrine,Prie au sanctuaire
+Welcoming neighbours at home,Welcoming neighbours at home,Accueille les voisins chez elle
 "Can you really hear me? I am trying to finish a song, but the same line keeps slipping away.","Can you really hear me? I am trying to finish a song, but the same line keeps slipping away.","Tu m'entends vraiment ? J'essaie de finir une chanson, mais il me manque toujours la même phrase."
 The last verse is on a sheet that fell to the fourth floor. Bring it to me; I would like to try reading it aloud.,The last verse is on a sheet that fell to the fourth floor. Bring it to me; I would like to try reading it aloud.,Le dernier verset est sur une feuille tombée au quatrième étage. Rapporte-la-moi ; j'aimerais essayer de la lire à voix haute.
 "That sheet... it is my handwriting. Give it to me, I think I remember.","That sheet... it is my handwriting. Give it to me, I think I remember.","Cette feuille... c'est mon écriture. Donne-la-moi, je crois que je me souviens."
@@ -3053,6 +3074,10 @@ How did that song end...,How did that song end...,Comment finissait cette chanso
 "You can stop for a moment, you know.","You can stop for a moment, you know.","Tu peux t'arrêter un instant, tu sais."
 Sayo,Sayo,Sayo
 Mourning Singer,Mourning Singer,Chanteuse de Deuil
+Resting behind the stall,Resting behind the stall,Se repose derrière son étal
+Opening the market stall,Opening the market stall,Installe son étal
+Visiting the lantern-mender,Visiting the lantern-mender,Rend visite au réparateur de lanternes
+Trading at the market,Trading at the market,Vend ses marchandises au marché
 "Four streets, one well, and not a customer on their feet. Bring back one neighbour first; then we can talk about those lanterns.","Four streets, one well, and not a customer on their feet. Bring back one neighbour first; then we can talk about those lanterns.","Quatre rues, un puits et pas un client debout. Ramène-moi au moins un voisin ; on parlera ensuite de ces lanternes."
 Ren has already told me my wicks are too short. It is good to have difficult people back.,Ren has already told me my wicks are too short. It is good to have difficult people back.,Ren m'a déjà expliqué que mes mèches étaient trop courtes. Ça fait du bien de retrouver des gens difficiles.
 I keep the stall open. Out of habit.,I keep the stall open. Out of habit.,Je garde l'étal ouvert. Par habitude.

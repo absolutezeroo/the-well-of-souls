@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="VillageClockDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_clock_def.gd" id="script"]
+[sub_resource type="Gradient" id="light"]
+offsets = PackedFloat32Array(0, 0.208333, 0.291667, 0.666667, 0.75, 0.875, 1)
+colors = PackedColorArray(0.42, 0.5, 0.7, 1, 0.54, 0.55, 0.72, 1, 1, 0.96, 0.88, 1, 1, 0.96, 0.88, 1, 0.95, 0.68, 0.52, 1, 0.42, 0.5, 0.7, 1, 0.42, 0.5, 0.7, 1)
+[resource]
+script = ExtResource("script")
+day_seconds = 960.0
+start_hour = 8.0
+daylight = SubResource("light")

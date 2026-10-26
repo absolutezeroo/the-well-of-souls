@@ -23,7 +23,7 @@ func _ready() -> void:
 		await get_tree().process_frame
 	hub.walker.position = Vector2(480, 325)
 	await _capture("square_" + language)
-	hub.walker.position = hub.def.residents[0].position + Vector2(0, 25)
+	hub.walker.position = hub.view.actor_for(hub.def.residents[0]).position + Vector2(0, 25)
 	for i in 3:
 		await get_tree().physics_frame
 	hub.interact()
@@ -45,7 +45,7 @@ func _ready() -> void:
 	hub.interact()
 	await _capture("memorial_" + language)
 	hub.panel.hide()
-	hub.walker.position = hub.def.residents[1].position + Vector2(0, 25)
+	hub.walker.position = hub.view.actor_for(hub.def.residents[1]).position + Vector2(0, 25)
 	for i in 3:
 		await get_tree().physics_frame
 	hub.interact()
@@ -58,6 +58,13 @@ func _ready() -> void:
 	await _capture("sayo_awake_" + language)
 	hub.panel.hide()
 	await _capture("west_restored_" + language)
+	hub.open_journal()
+	await _capture("journal_" + language)
+	hub.journal.hide()
+	Profile.village_seconds = hub.def.clock.day_seconds * 14.0 / 24.0
+	hub.refresh_time()
+	hub.walker.position = Vector2(480, 420)
+	await _capture("night_" + language)
 	get_tree().quit()
 
 

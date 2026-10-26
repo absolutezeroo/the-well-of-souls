@@ -99,8 +99,11 @@ and the optional online/privacy settings remain unchanged; campaign files are le
 Depuis le titre, **Entrer dans Kagari** ouvre une petite place jouable. Approche la Veilleuse
 pour sa première quête, puis le puits pour descendre ou reprendre une partie. Le village
 garde les maisons réveillées, les lanternes restaurées et les statues des héros devenus
-Gardiens. Voir [le village](docs/design/village.md). Le jeu reste un roguelike.
+Gardiens. Le bouton **Quêtes**, le tableau près du puits et le journal du menu pause
+permettent de suivre les demandes. Les habitants réveillés suivent des horaires avec un cycle
+jour/nuit de 16 minutes de jeu actif. Les vrais intérieurs attendent encore les assets.
+Voir [le village](docs/design/village.md). Le jeu reste un roguelike.
 
 Après le réveil de Ren, Sayo propose **Le Dernier Verset**. Les habitants ont leurs propres
-questions, réagissent aux retours des voisins et reprennent de petites routines une fois
+questions, réagissent aux retours des voisins et reprennent leurs activités au fil de la journée une fois
 réveillés ; leurs brèves répliques de proximité n'interrompent pas le déplacement.

@@ -6,6 +6,50 @@
 [ext_resource type="Resource" path="res://data/village/topics/sayo_night.tres" id="topic_1"]
 [ext_resource type="Resource" path="res://data/village/topics/sayo_awake.tres" id="topic_2"]
 [ext_resource type="Material" path="res://data/village/sayo_palette.tres" id="appearance"]
+[ext_resource type="Script" path="res://src/definitions/village/village_activity_def.gd" id="activity_script"]
+
+[sub_resource type="Resource" id="activity_0"]
+script = ExtResource("activity_script")
+start_hour = 0.0
+display_name = "Resting at home"
+destination = Vector2(190, 210)
+indoors = true
+
+[sub_resource type="Resource" id="activity_1"]
+script = ExtResource("activity_script")
+start_hour = 6.0
+display_name = "Opening her house"
+destination = Vector2(190, 210)
+indoors = false
+
+[sub_resource type="Resource" id="activity_2"]
+script = ExtResource("activity_script")
+start_hour = 9.0
+display_name = "Visiting the market"
+destination = Vector2(280, 465)
+indoors = false
+
+[sub_resource type="Resource" id="activity_3"]
+script = ExtResource("activity_script")
+start_hour = 12.0
+display_name = "Praying at the shrine"
+destination = Vector2(420, 190)
+indoors = false
+
+[sub_resource type="Resource" id="activity_4"]
+script = ExtResource("activity_script")
+start_hour = 16.0
+display_name = "Welcoming neighbours at home"
+destination = Vector2(190, 210)
+indoors = false
+
+[sub_resource type="Resource" id="activity_5"]
+script = ExtResource("activity_script")
+start_hour = 20.0
+display_name = "Resting at home"
+destination = Vector2(190, 210)
+indoors = true
+
 [resource]
 script = ExtResource("script")
 id = &"sayo"
@@ -23,5 +67,6 @@ ambient_before = PackedStringArray("Is someone there?", "How did that song end..
 ambient_after = PackedStringArray("Ren, a little less smoke, please.", "You can stop for a moment, you know.")
 topics = [ExtResource("topic_0"), ExtResource("topic_1"), ExtResource("topic_2")]
 idle_frames = [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16)]
-route = [Vector2(190, 250), Vector2(230, 250), Vector2(190, 210)]
 appearance = ExtResource("appearance")
+schedule = [SubResource("activity_0"), SubResource("activity_1"), SubResource("activity_2"), SubResource("activity_3"), SubResource("activity_4"), SubResource("activity_5")]
+walk_speed = 42.0

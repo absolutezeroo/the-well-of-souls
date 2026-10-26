@@ -9,7 +9,12 @@ var game: Game
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 	Events.floor_entered.connect(_on_floor)
+
+
+func _process(delta: float) -> void:
+	VillageClock.advance(delta)
 
 
 func _on_floor(world: World) -> void:

@@ -5,11 +5,48 @@
 [ext_resource type="Resource" path="res://data/village/topics/merchant_lamps.tres" id="topic_0"]
 [ext_resource type="Resource" path="res://data/village/topics/merchant_well.tres" id="topic_1"]
 [ext_resource type="Resource" path="res://data/village/topics/wanderer_two_homes.tres" id="reaction"]
+[ext_resource type="Script" path="res://src/definitions/village/village_activity_def.gd" id="activity_script"]
+
+[sub_resource type="Resource" id="activity_0"]
+script = ExtResource("activity_script")
+start_hour = 0.0
+display_name = "Resting behind the stall"
+destination = Vector2(225, 465)
+indoors = true
+
+[sub_resource type="Resource" id="activity_1"]
+script = ExtResource("activity_script")
+start_hour = 6.0
+display_name = "Opening the market stall"
+destination = Vector2(225, 455)
+indoors = false
+
+[sub_resource type="Resource" id="activity_2"]
+script = ExtResource("activity_script")
+start_hour = 12.0
+display_name = "Visiting the lantern-mender"
+destination = Vector2(770, 265)
+indoors = false
+
+[sub_resource type="Resource" id="activity_3"]
+script = ExtResource("activity_script")
+start_hour = 14.0
+display_name = "Trading at the market"
+destination = Vector2(225, 455)
+indoors = false
+
+[sub_resource type="Resource" id="activity_4"]
+script = ExtResource("activity_script")
+start_hour = 20.0
+display_name = "Resting behind the stall"
+destination = Vector2(225, 465)
+indoors = true
+
 [resource]
 script = ExtResource("script")
 id = &"wanderer"
 speaker = ExtResource("speaker")
-position = Vector2(225, 445)
+position = Vector2(225, 455)
 role = 2
 quest = ExtResource("quest")
 echo = false
@@ -20,5 +57,6 @@ ambient_after = PackedStringArray("Oil, wicks... I even give ghosts credit.", "M
 topics = [ExtResource("topic_0"), ExtResource("topic_1")]
 idle_frames = [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16)]
 walk_frames = [Rect2(0, 32, 16, 16), Rect2(0, 48, 16, 16), Rect2(0, 64, 16, 16), Rect2(0, 80, 16, 16)]
-route = [Vector2(255, 445), Vector2(225, 445), Vector2(195, 445)]
 reactions = [ExtResource("reaction")]
+schedule = [SubResource("activity_0"), SubResource("activity_1"), SubResource("activity_2"), SubResource("activity_3"), SubResource("activity_4")]
+walk_speed = 42.0

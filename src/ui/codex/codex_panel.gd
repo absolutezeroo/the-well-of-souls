@@ -15,7 +15,7 @@ enum Tab { QUESTS, BESTIARY, ACHIEVEMENTS, RUNS, VOICES }
 const TAB_NAMES := ["Quests", "Bestiary", "Achievements", "Runs", "Voices"]  # i18n
 ## What each tab is for, under its summary.
 const TAB_HELP := [
-	"Quests change every day and every week. Everything you do in any run counts toward them, and a finished quest pays its souls at once. Souls are kept between runs: spend them at the Shrine on lasting upgrades.",  # i18n
+	"Track your village requests and bounties here. Return recovered items to the resident who asked for them. Spend your souls at the village Shrine. Daily and weekly bounties follow real-world dates.",  # i18n
 	"Every monster you meet goes in here. Slay more of a kind to raise your hunter rank with it: each rank pays souls, and Mastered also gives +%d%% damage against that kind for good. Choose a monster for its attacks and challenges.",  # i18n
 	"Big goals across all your runs. Reaching one pays its souls at once.",  # i18n
 	"Your last runs, newest first. Gold is lost when a run ends; souls are kept.",  # i18n
@@ -23,6 +23,7 @@ const TAB_HELP := [
 ]
 ## A speaker's face in the Voices tab (a 38-pixel faceset at x2, a 16-pixel picture at x4).
 const VOICE_FACE := 76.0
+const VILLAGE := preload("res://data/village/kagari.tres")
 
 var _content: ContentDB
 var _tab := Tab.BESTIARY
@@ -92,6 +93,8 @@ func show_tab(tab: int) -> void:
 # --- Quests ---------------------------------------------------------------------
 
 func _fill_quests() -> void:
+	VillageQuestRows.fill(_list, VILLAGE)
+	_list.add_child(UiSkin.label(tr("Bounty board"), Fonts.TITLE, UiSkin.GOLD))
 	# Only shows them: finished quests are paid by gameplay (QuestBoard.pay_finished, from the
 	# run's records and when the title screen comes up), never by looking at this tab.
 	var done := 0
@@ -113,7 +116,7 @@ func _fill_quests() -> void:
 			column.add_child(CodexRows.quest_row(quest))
 			total += 1
 			done += 1 if QuestBoard.is_done(quest) else 0
-	_summary.text = tr("Quests done: %d of %d") % [done, total]
+	_summary.text = tr("Bounties done: %d of %d") % [done, total]
 
 
 # --- Bestiary -------------------------------------------------------------------

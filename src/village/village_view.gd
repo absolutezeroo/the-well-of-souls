@@ -8,16 +8,20 @@ var dressing := Node2D.new()
 var walker: VillageWalker
 var residents: Array[VillageResident] = []
 var _resident_by_def: Dictionary[VillageResidentDef, VillageResident] = {}
+var navigation := VillageNavigation.new()
+var daylight := CanvasModulate.new()
 
 
 func _ready() -> void:
 	add_child(dressing)
+	add_child(daylight)
 	dressing.y_sort_enabled = true
 	Profile.changed.connect(refresh)
 	refresh()
 
 
 func refresh() -> void:
+	navigation.rebuild(def)
 	for child in dressing.get_children():
 		if child != walker and not child is VillageResident:
 			dressing.remove_child(child)
@@ -44,12 +48,15 @@ func refresh() -> void:
 	for resident in def.residents:
 		if _resident_by_def.has(resident):
 			_resident_by_def[resident].refresh_progress()
+			_resident_by_def[resident].apply_hour(VillageClock.hour(def.clock), false, true)
 			continue
 		var actor := VillageResident.new()
 		actor.def = resident
 		actor.position = resident.position
 		actor.hero = walker
+		actor.navigation = navigation
 		dressing.add_child(actor)
+		actor.apply_hour(VillageClock.hour(def.clock), true)
 		residents.append(actor)
 		_resident_by_def[resident] = actor
 	var memorial := VillageMemorial.new()
@@ -72,7 +79,17 @@ func refresh() -> void:
 	altar.scale = Vector2(2, 2)
 	altar.position = def.shrine
 	dressing.add_child(altar)
+	var board := VillageNoticeboard.new()
+	board.position = def.noticeboard
+	dressing.add_child(board)
+	_add_collision(board, Rect2(-24, -12, 48, 12))
 	queue_redraw()
+
+
+func apply_hour(hour: float) -> void:
+	daylight.color = def.clock.daylight.sample(hour / 24.0)
+	for resident in residents:
+		resident.apply_hour(hour)
 
 
 func actor_for(resident: VillageResidentDef) -> VillageResident:

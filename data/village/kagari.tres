@@ -17,6 +17,8 @@
 [ext_resource type="Resource" path="res://data/village/ren.tres" id="ren"]
 [ext_resource type="Resource" path="res://data/village/wanderer.tres" id="wanderer"]
 
+[ext_resource type="Resource" path="res://data/village/clock.tres" id="clock"]
+
 [sub_resource type="Resource" id="prop_0"]
 script = ExtResource("prop_script")
 texture = ExtResource("ruins")
@@ -239,6 +241,8 @@ spawn = Vector2(480, 470)
 well = Vector2(480, 330)
 shrine = Vector2(470, 175)
 memorial = Vector2(720, 470)
+noticeboard = Vector2(345, 430)
+clock = ExtResource("clock")
 move_speed = 160.0
 interaction_reach = 72.0
 paths = [Rect2(130, 285, 700, 95), Rect2(425, 120, 110, 450), Rect2(170, 370, 120, 100), Rect2(640, 365, 155, 145)]

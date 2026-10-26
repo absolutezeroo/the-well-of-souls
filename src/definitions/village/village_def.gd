@@ -9,6 +9,8 @@ extends Resource
 @export var spawn: Vector2
 @export var well: Vector2
 @export var shrine: Vector2
+@export var noticeboard: Vector2
+@export var clock: VillageClockDef
 @export var memorial: Vector2
 @export var move_speed: float = 160.0
 @export var interaction_reach: float = 65.0

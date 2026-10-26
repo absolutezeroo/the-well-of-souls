@@ -404,3 +404,9 @@ actor or dungeon RNG. VillageView preserves residents across profile refreshes. 
 fixed interaction registry follows their actual positions and pauses routines during modals.
 VillageTopicDef carries the questions and stage-gated replies selected by VillageProgress;
 quest prerequisites and the separate infestation fronts are authored in the same village data.
+
+VillageClock advances a Profile-owned elapsed-play scalar in VillageHub and the pausable
+VillageExpedition node (Game itself processes while paused). VillageClockDef owns tuning and
+daylight; VillageActivityDef owns individual appointments. VillageNavigation shares a surface
+AStarGrid2D between residents; no dungeon AI/pathfinding depends on it. VillageQuestRows adds
+read-only village cards to the existing codex, shared by the HUD, world noticeboard and pause.

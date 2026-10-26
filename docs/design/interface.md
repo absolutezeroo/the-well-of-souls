@@ -541,3 +541,10 @@ inhabitant, shrine or statue and press the normal Interact action; touch uses th
 and ActionButton. Conversations, restoration purchases and memorials use a scrollable RpgWindow
 and stop walking. New descents explicitly ask before replacing a saved run. Pause and end-of-run
 Return to village buttons lead back to the square; the pause path keeps the active save.
+
+The village HUD shows day/time and a **Quests** button. The wooden noticeboard opens the same
+journal, also available through **Quest journal** in the dungeon pause menu. Village requests
+show status, objective, reward and contact/schedule above the existing real-date bounties.
+Reading freezes village time and movement. Nighttime residents can still answer a knock at
+their doorway. World tint leaves HUD and modal text unchanged. Houses/temple interiors await
+the supplied assets; the existing shrine remains outside in this stage.
