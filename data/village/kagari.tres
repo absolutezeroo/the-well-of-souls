@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" path="res://assets/props/altar.png" id="altar"]
 [ext_resource type="Texture2D" path="res://assets/tiles/floor.png" id="ground"]
 [ext_resource type="Resource" path="res://data/village/ember_box.tres" id="quest"]
+[ext_resource type="Resource" path="res://data/village/last_verse.tres" id="sayo_quest"]
 [ext_resource type="Resource" path="res://data/village/market_lamps.tres" id="market"]
 [ext_resource type="Resource" path="res://data/village/memorial_lamps.tres" id="memorial"]
 [ext_resource type="Texture2D" path="res://assets/tiles/ruins.png" id="ruins"]
@@ -180,6 +181,46 @@ position = Vector2(790, 470)
 art_scale = 2.0
 lit_by = ExtResource("memorial")
 
+[sub_resource type="Resource" id="west_roots_0"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(310, 220)
+art_scale = 2.0
+region = Rect2(64, 0, 32, 32)
+tint = Color(0.32, 0.2, 0.38, 1)
+collision = Rect2(-14, -15, 28, 30)
+cleared_by = ExtResource("sayo_quest")
+
+[sub_resource type="Resource" id="west_roots_1"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(330, 260)
+art_scale = 2.0
+region = Rect2(64, 0, 32, 32)
+tint = Color(0.32, 0.2, 0.38, 1)
+collision = Rect2(-14, -15, 28, 30)
+cleared_by = ExtResource("sayo_quest")
+
+[sub_resource type="Resource" id="west_roots_2"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(295, 300)
+art_scale = 2.0
+region = Rect2(64, 0, 32, 32)
+tint = Color(0.32, 0.2, 0.38, 1)
+collision = Rect2(-14, -15, 28, 30)
+cleared_by = ExtResource("sayo_quest")
+
+[sub_resource type="Resource" id="west_roots_3"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(260, 315)
+art_scale = 2.0
+region = Rect2(64, 0, 32, 32)
+tint = Color(0.32, 0.2, 0.38, 1)
+collision = Rect2(-14, -15, 28, 30)
+cleared_by = ExtResource("sayo_quest")
+
 [sub_resource type="AtlasTexture" id="well_icon"]
 atlas = ExtResource("desert")
 region = Rect2(0, 48, 32, 32)
@@ -192,6 +233,7 @@ path_texture = ExtResource("paving")
 path_region = Rect2(192, 208, 16, 16)
 display_name = "Kagari"
 description = "The village sleeps. The Well does not."
+restored_text = "Two windows burn. Beyond the square, Kagari still sleeps."
 bounds = Rect2(0, 0, 960, 640)
 spawn = Vector2(480, 470)
 well = Vector2(480, 330)
@@ -202,7 +244,7 @@ interaction_reach = 72.0
 paths = [Rect2(130, 285, 700, 95), Rect2(425, 120, 110, 450), Rect2(170, 370, 120, 100), Rect2(640, 365, 155, 145)]
 ground = ExtResource("ground")
 ground_region = Rect2(80, 176, 16, 16)
-quests = [ExtResource("quest")]
+quests = [ExtResource("quest"), ExtResource("sayo_quest")]
 services = [ExtResource("market"), ExtResource("memorial")]
 residents = [ExtResource("keeper"), ExtResource("sayo"), ExtResource("ren"), ExtResource("wanderer")]
-props = [SubResource("prop_0"), SubResource("prop_1"), SubResource("prop_2"), SubResource("prop_3"), SubResource("prop_4"), SubResource("prop_5"), SubResource("prop_6"), SubResource("prop_7"), SubResource("prop_8"), SubResource("prop_9"), SubResource("prop_10"), SubResource("prop_11"), SubResource("prop_12"), SubResource("prop_13"), SubResource("prop_14"), SubResource("prop_15"), SubResource("prop_16"), SubResource("prop_17"), SubResource("prop_18"), SubResource("prop_19")]
+props = [SubResource("prop_0"), SubResource("prop_1"), SubResource("prop_2"), SubResource("prop_3"), SubResource("prop_4"), SubResource("prop_5"), SubResource("prop_6"), SubResource("prop_7"), SubResource("prop_8"), SubResource("prop_9"), SubResource("prop_10"), SubResource("prop_11"), SubResource("prop_12"), SubResource("prop_13"), SubResource("prop_14"), SubResource("prop_15"), SubResource("prop_16"), SubResource("prop_17"), SubResource("prop_18"), SubResource("prop_19"), SubResource("west_roots_0"), SubResource("west_roots_1"), SubResource("west_roots_2"), SubResource("west_roots_3")]

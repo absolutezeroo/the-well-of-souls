@@ -155,6 +155,9 @@ func _physics_process(_delta: float) -> void:
 	for modal in _modals:
 		blocked = blocked or modal.visible
 	walker.blocked = blocked
+	for resident in view.residents:
+		resident.paused = blocked
+		resident.hero = walker
 	if blocked != _blocked:
 		_blocked = blocked
 		_device_changed()
@@ -162,6 +165,8 @@ func _physics_process(_delta: float) -> void:
 	var distance := def.interaction_reach * def.interaction_reach
 	if not blocked:
 		for spot in spots:
+			if spot.resident:
+				spot.at = view.actor_for(spot.resident).position
 			var candidate := walker.position.distance_squared_to(spot.at)
 			if candidate <= distance:
 				nearest = spot
@@ -185,7 +190,10 @@ func interact() -> bool:
 		&"well": open_well()
 		&"shrine": shrine.open(content.soul_tree, content)
 		&"memorial": _open_memorial()
-		&"resident": _talk(focus.resident)
+		&"resident":
+			_talk(focus.resident)
+			if focus.resident.speaker.voice:
+				Sfx.play_ui(focus.resident.speaker.voice, focus.resident.speaker.voice_db)
 	return true
 
 
@@ -202,12 +210,18 @@ func _show_prompt() -> void:
 
 func _refresh() -> void:
 	var lines := PackedStringArray()
+	var all_returned := not def.quests.is_empty()
 	for quest in def.quests:
+		all_returned = all_returned and VillageProgress.stage(quest) == VillageProgress.Step.RETURNED
 		match VillageProgress.stage(quest):
 			VillageProgress.Step.ACCEPTED: lines.append(tr(quest.objective))
 			VillageProgress.Step.FOUND: lines.append(tr(quest.return_text))
 	if lines.is_empty():
-		lines.append(tr(def.description))
+		for quest in def.quests:
+			if VillageProgress.can_accept(quest):
+				lines.append(tr(quest.offer_text))
+	if lines.is_empty():
+		lines.append(tr(def.restored_text if all_returned else def.description))
 	if daily_requested:
 		lines.append(tr("The daily descent awaits at the Well."))
 	_objective.text = "\n".join(lines)
@@ -216,16 +230,16 @@ func _refresh() -> void:
 		_talk(_resident)
 
 
-func _talk(resident: VillageResidentDef) -> void:
+func _talk(resident: VillageResidentDef, topic: VillageTopicDef = null) -> void:
 	_resident = resident
-	var returned := resident.quest and VillageProgress.stage(resident.quest) == VillageProgress.Step.RETURNED
-	panel.open(tr(resident.speaker.display_name), tr(resident.used_text if returned else resident.text))
+	panel.open(tr(resident.speaker.display_name), tr(topic.reply if topic else VillageProgress.greeting(resident)))
 	var portrait_row := HBoxContainer.new()
 	portrait_row.add_theme_constant_override("separation", 16)
 	panel.list.add_child(portrait_row)
 	panel.list.move_child(portrait_row, 0)
 	var portrait := PixelPortrait.new()
 	portrait.texture = resident.speaker.portrait
+	portrait.material = resident.appearance
 	portrait_row.add_child(portrait)
 	var details := VBoxContainer.new()
 	portrait_row.add_child(details)
@@ -234,15 +248,18 @@ func _talk(resident: VillageResidentDef) -> void:
 		details.add_child(UiSkin.label(tr("A voice caught in the lantern's light."), Fonts.BODY, UiSkin.DIM))
 	if resident.role == VillageResidentDef.Role.QUEST and resident.quest:
 		var quest := resident.quest
-		panel.list.add_child(UiSkin.label(tr(quest.title), Fonts.TITLE, UiSkin.GOLD))
-		panel.list.add_child(UiSkin.label(tr(quest.description), Fonts.BODY, UiSkin.TEXT, true))
-		panel.list.add_child(UiSkin.label(tr(quest.objective), Fonts.BODY, UiSkin.TEXT, true))
-		panel.list.add_child(UiSkin.label(tr("Reward: %d souls and a waking home.") % quest.reward_souls, Fonts.BODY, UiSkin.GOLD, true))
+		if VillageProgress.stage(quest) != VillageProgress.Step.RETURNED:
+			panel.list.add_child(UiSkin.label(tr(quest.title), Fonts.BODY, UiSkin.GOLD))
+			panel.list.add_child(UiSkin.label(tr(quest.objective), Fonts.BODY, UiSkin.DIM, true))
+			panel.list.add_child(UiSkin.label(tr(quest.reward_text) % quest.reward_souls, Fonts.BODY, UiSkin.DIM, true))
 		match VillageProgress.stage(quest):
-			VillageProgress.Step.AVAILABLE: panel.choice(tr(quest.accept_label), &"accept", quest)
+			VillageProgress.Step.AVAILABLE:
+				var available := VillageProgress.can_accept(quest)
+				var locked := quest.requires_quest and VillageProgress.stage(quest.requires_quest) != VillageProgress.Step.RETURNED
+				panel.choice(tr(quest.locked_text if locked else quest.accept_label), &"accept", quest, available)
 			VillageProgress.Step.ACCEPTED: panel.choice(tr(quest.pending_text), &"none", null, false)
 			VillageProgress.Step.FOUND: panel.choice(tr(quest.hand_in_label), &"hand_in", quest)
-			VillageProgress.Step.RETURNED: panel.list.add_child(UiSkin.label(tr(quest.done_line), Fonts.BODY, UiSkin.GOLD, true))
+			VillageProgress.Step.RETURNED: pass
 	elif resident.role == VillageResidentDef.Role.MERCHANT:
 		panel.list.add_child(UiSkin.label(tr("Souls: %d") % Profile.souls, Fonts.TITLE, UiSkin.GOLD))
 		for service in def.services:
@@ -253,6 +270,9 @@ func _talk(resident: VillageResidentDef) -> void:
 			elif service.requires_quest and VillageProgress.stage(service.requires_quest) != VillageProgress.Step.RETURNED:
 				label_text = tr("%s — complete %s first") % [tr(service.display_name), tr(service.requires_quest.title)]
 			panel.choice(label_text, &"buy", service, VillageProgress.can_buy(service))
+	for subject in resident.topics:
+		if VillageProgress.topic_available(subject):
+			panel.choice(tr(subject.prompt), &"topic", subject)
 
 
 func open_well() -> void:
@@ -266,6 +286,10 @@ func open_well() -> void:
 
 func _choose(action: StringName, payload: Resource) -> void:
 	match action:
+		&"topic":
+			var subject := payload as VillageTopicDef
+			if _resident and subject and _resident.topics.has(subject) and VillageProgress.topic_available(subject):
+				_talk(_resident, subject)
 		&"accept", &"hand_in", &"buy":
 			var ok := false
 			if action == &"accept": ok = VillageProgress.accept(payload as VillageQuestDef)

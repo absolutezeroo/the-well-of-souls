@@ -1933,3 +1933,10 @@ A one-time story quest awards 15 souls on manual return of floor-two evidence to
 The village merchant's market and memorial lamps cost 5 and 8 souls once. These purchases have
 no combat effect, and village objectives are absent from daily descents. Ordinary dungeon loot,
 starting kit, shrine prices and death rules are unchanged.
+
+## 2026-10-26 — Sayo's last verse
+
+After Ren's request is returned, Sayo offers a second one-time rescue with evidence on floor 4.
+Manual return awards 20 souls, wakes Sayo and clears the western roots. Both village requests
+together award 35 souls once per profile; neither can be repeated for farming or collected on
+a daily descent. No new combat benefits or shop prices are introduced.

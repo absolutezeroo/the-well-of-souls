@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="VillageQuestDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_quest_def.gd" id="script"]
+[ext_resource type="Texture2D" path="res://assets/items/fragments/letter.png" id="icon"]
+[ext_resource type="Resource" path="res://data/village/ember_box.tres" id="first_quest"]
+[resource]
+script = ExtResource("script")
+id = &"sayo_last_verse"
+title = "The Last Verse"
+description = "Ren's lamp burns again, but Sayo's song still ends in silence. Find the lost verse below the roots, and bring it back to her door."
+objective = "Find the last verse on floor 4, then return to Sayo."
+done_line = "Sayo finishes the song. The roots loosen their hold on the western path."
+evidence_name = "Sayo's Last Verse"
+evidence_text = "The last verse is safe in your lantern. Return to Sayo; even death will not take it."
+evidence_icon = ExtResource("icon")
+requires_quest = ExtResource("first_quest")
+floor_depth = 4
+reward_souls = 20
+accept_label = "I will bring you the verse."
+hand_in_label = "Here, is this your sheet?"
+pending_text = "The last verse is still below."
+return_text = "Return the last verse to Sayo."
+locked_text = "Wake Ren with the Vigil-Keeper's quest first."
+offer_text = "Ren is awake. Speak to Sayo at the western house."
+reward_text = "Reward: %d souls, Sayo's awakening and the western path restored."

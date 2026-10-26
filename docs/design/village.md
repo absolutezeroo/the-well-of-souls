@@ -33,7 +33,27 @@ approach and interact; walking by never launches a run or opens a conversation a
 This is an explicit accepted → evidence found → returned sequence, not an automatically paid
 kill counter. The existing daily/weekly QuestBoard remains separate. The first infestation
 front is authored and static until pushed back by this quest: there is no time-based spread,
-no offline deterioration and no penalty for failed runs. Later fronts/quests are future content.
+no offline deterioration and no penalty for failed runs.
+
+**The Last Verse** continues at Sayo's western house once the ember-box has been **returned**:
+
+1. Speak to Sayo and accept her request. Finding Ren's evidence alone does not unlock it.
+2. Recover her written verse on floor 4 of an ordinary descent; the lantern keeps it through
+   death/restart under the same rules as the ember-box.
+3. Return it to Sayo. She wakes, the western roots and their collisions disappear, her window
+   lights, and 20 souls are paid once. Ren's rescue and the memorials remain intact.
+
+The two fronts are independent: Ren's return removes only the eastern roots. Sayo stays an echo
+until her own quest is returned. The HUD points to the next available quest when none is active,
+then shows its search/return objective. After both rescues it acknowledges the two lit windows;
+the rest of Kagari still sleeps. Further fronts and autonomous propagation are future content.
+
+`VillageQuestDef.requires_quest` declares the predecessor, `VillageProgress.can_accept()` checks
+its returned stage, and the disabled conversation choice explains the prerequisite. Gameplay
+enforces this too, so an outdated panel cannot bypass it. Quests are never auto-accepted.
+Existing profiles with Ren already awake can immediately accept Sayo's request. No save field
+or format changes: the new id is absent/available until accepted. Failed acceptance/hand-in
+leaves all progress and rewards unchanged. The next-objective and reward sentences live in data.
 
 The Wanderer then offers two permanent restorations: **Market Lanterns** (5 souls) and
 **Lights for the Nameless** (8 souls). Both are one-time purchases with visible lamps; neither
@@ -85,12 +105,41 @@ The touch stick and contextual action feed the same movement/interact input acti
 controllers. Modal windows stop movement and release touch input. The shrine is reachable in the
 village; options, privacy, account and records remain reachable through Menu → Title screen.
 
+## Conversations and village life
+
+Residents have different greetings before acceptance, during the search, when the evidence is
+found and after return. Optional questions have their own replies; they spend nothing and do
+not advance a quest. Stage-gated reactions let the Veilleuse, Ren and the Wanderer acknowledge
+Sayo's return. Completed quests no longer fill the conversation with objectives and rewards.
+The dialogue keeps the practical objective separate from what the resident says.
+
+`VillageTopicDef` holds a prompt/reply and an optional quest-stage interval. A resident's topics
+are questions; its reactions use the same conditional reply without a prompt (first match).
+`VillageProgress` selects the greeting and gates topics again when clicked, so an old button
+cannot disclose a topic made unavailable by a profile replacement. All words, including short
+ambient lines, live under `data/village/` and are translated.
+
+`VillageResident` animates the existing idle cells. Awake residents follow small authored
+routes: Ren tends his lamps, the Wanderer moves around the stall, Sayo steps out by her door.
+Echoes stay at their doors. People stop near the hero and while any village modal is open;
+the interaction registry follows their actual positions. A new approach can show one short
+speech bubble, with a cooldown, without opening a conversation or making a sound. Opening a
+conversation uses the speaker's existing voice cue when available. Resident instances survive
+profile refreshes, so buying a lamp does not send everyone back to their starting positions.
+
+Sayo's figure and portrait share a teal palette material, distinguishing her from the Veilleuse
+without duplicating or regenerating sprite textures. Static props remain separate from these
+four moving residents. Routines do not consume dungeon random numbers or alter run state.
+
 ## Validation
 
 `unit.village` checks ordered progression, failed-write rollback, one-time rewards/purchases,
-old-profile migration, all memorials surviving reload and idempotent endings. `title.village`
-checks the real hub, movement, conversations, root removal and saved-run protection.
-`game.village` checks evidence on the real procedural floor and its absence on a daily run.
+old-profile migration, all memorials surviving reload and idempotent endings. It also validates
+unique quest ids and acyclic registered prerequisites, ordered acceptance, cloud holds and
+failed hand-in rollback. `title.village` checks the real hub, movement, locked/unlocked Sayo
+conversations, independent root removal and saved-run protection. `game.village` checks evidence
+on both real procedural floors, its absence before acceptance and on a daily run, and no respawn
+after collection.
 The existing finale test now checks both recovery of the same ending and the other ending on
 an independent expedition, with its original achievement/keeper-release assertions retained.
 

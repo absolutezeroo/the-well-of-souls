@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="VillageTopicDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_topic_def.gd" id="script"]
+[ext_resource type="Resource" path="res://data/village/last_verse.tres" id="gate"]
+[resource]
+script = ExtResource("script")
+prompt = "Do you know Sayo?"
+reply = "She sang so loudly I could hear her from the workshop. Go and talk to her; even if she barely answers, she hates being ignored."
+quest = ExtResource("gate")
+min_stage = 0
+max_stage = 2

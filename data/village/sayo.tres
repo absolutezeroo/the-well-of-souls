@@ -1,14 +1,27 @@
 [gd_resource type="Resource" script_class="VillageResidentDef" format=3]
 [ext_resource type="Script" path="res://src/definitions/village/village_resident_def.gd" id="script"]
 [ext_resource type="Resource" path="res://data/village/sayo_speaker.tres" id="speaker"]
-[ext_resource type="Resource" path="res://data/village/ember_box.tres" id="quest"]
+[ext_resource type="Resource" path="res://data/village/last_verse.tres" id="quest"]
+[ext_resource type="Resource" path="res://data/village/topics/sayo_song.tres" id="topic_0"]
+[ext_resource type="Resource" path="res://data/village/topics/sayo_night.tres" id="topic_1"]
+[ext_resource type="Resource" path="res://data/village/topics/sayo_awake.tres" id="topic_2"]
+[ext_resource type="Material" path="res://data/village/sayo_palette.tres" id="appearance"]
 [resource]
 script = ExtResource("script")
 id = &"sayo"
 speaker = ExtResource("speaker")
 position = Vector2(190, 210)
-role = 0
+role = 1
 quest = ExtResource("quest")
+wakes_after = ExtResource("quest")
 echo = true
-text = "I used to sing for those who left. Tonight, no one knows the last verse."
-used_text = "A light at his window. Perhaps the song has not ended."
+text = "Can you really hear me? I am trying to finish a song, but the same line keeps slipping away."
+accepted_text = "The last verse is on a sheet that fell to the fourth floor. Bring it to me; I would like to try reading it aloud."
+found_text = "That sheet... it is my handwriting. Give it to me, I think I remember."
+used_text = "I had forgotten what it felt like to be cold. Thank you for coming back for me."
+ambient_before = PackedStringArray("Is someone there?", "How did that song end...")
+ambient_after = PackedStringArray("Ren, a little less smoke, please.", "You can stop for a moment, you know.")
+topics = [ExtResource("topic_0"), ExtResource("topic_1"), ExtResource("topic_2")]
+idle_frames = [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16)]
+route = [Vector2(190, 250), Vector2(230, 250), Vector2(190, 210)]
+appearance = ExtResource("appearance")

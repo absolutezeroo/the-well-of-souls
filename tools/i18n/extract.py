@@ -58,8 +58,10 @@ TEXT_FIELDS = {
     # The room trials (TrialDef): the objective's line, the floor's call, the end.
     "objective", "call_line", "done_line", "evidence_name", "evidence_text",
     "accept_label", "hand_in_label", "pending_text", "return_text",
+    "locked_text", "offer_text", "reward_text", "restored_text",
+    "accepted_text", "found_text", "prompt", "reply",
 }
-LIST_FIELDS = {"intro_pages", "death_lines", "greetings", "branches", "branch_texts", "rank_names", "tips", "lines",
+LIST_FIELDS = {"intro_pages", "death_lines", "greetings", "branches", "branch_texts", "rank_names", "tips", "lines", "ambient_before", "ambient_after",
                "key_words", "mouse_glyphs"}
 SCENE_FIELDS = {"text", "tooltip_text", "placeholder_text"}
 

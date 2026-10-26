@@ -299,6 +299,21 @@ Ren's ember-box from the second floor and returning it to the Vigil-Keeper lets 
 soul find its door: he wakes, the eastern roots wither and a window lights. Other houses
 remain asleep. This small rescue does not resolve the village's fate or replace the endings.
 
+Once Ren's lamp burns again, Sayo's echo can remember what is missing: the written last verse
+of the mourning song she taught at Kagari's doors. Its sheet lies on the fourth floor, carried
+down with the village's leavings. Returning it to her lets her finish the song and wake; the
+western roots wither and her window lights. She remembers the mourners, not who put out the
+lamps. The remaining sleepers still wait. This is another local rescue, never the ending's
+awakening of all Kagari.
+
+Their conversations stay close to daily life. Ren returns to his wicks because familiar work
+steadies his hands; Sayo leaves her door open for the next neighbour to return. The Veilleuse
+hears the square becoming inhabited again, and the Wanderer complains fondly about customers
+finding fault with his stock. These are signs of partial recovery, never proof that all Kagari
+is saved. Optional questions and quest choices express the player's intent; the hero remains
+unvoiced. Sayo's teal hair and clothing palette distinguish her from the Veilleuse's silver and
+bell-rope red while reusing the existing figure and portrait art.
+
 The Old Wanderer can cross the Well's rim as he crosses its floors. At the surface he
 barters work for souls that are released into Kagari's lamps, never eaten or imprisoned:
 he sells the lighting of the market and the memorial court, once each. These services

@@ -5,12 +5,37 @@ extends RefCounted
 
 enum Step { AVAILABLE, ACCEPTED, FOUND, RETURNED }
 
+
+static func topic_available(topic: VillageTopicDef) -> bool:
+	return topic.quest == null or (stage(topic.quest) >= topic.min_stage and stage(topic.quest) <= topic.max_stage)
+
+
+static func greeting(resident: VillageResidentDef) -> String:
+	for reaction in resident.reactions:
+		if topic_available(reaction):
+			return reaction.reply
+	if resident.quest:
+		match stage(resident.quest):
+			Step.ACCEPTED:
+				if not resident.accepted_text.is_empty(): return resident.accepted_text
+			Step.FOUND:
+				if not resident.found_text.is_empty(): return resident.found_text
+			Step.RETURNED: return resident.used_text
+	return resident.text
+
 static func stage(quest: VillageQuestDef) -> Step:
 	return int(Profile.village_quests.get(String(quest.id), Step.AVAILABLE)) as Step
 
 
 static func accept(quest: VillageQuestDef) -> bool:
+	if not can_accept(quest):
+		return false
 	return _advance(quest, Step.AVAILABLE, Step.ACCEPTED)
+
+
+static func can_accept(quest: VillageQuestDef) -> bool:
+	return quest != null and not Profile.held and stage(quest) == Step.AVAILABLE \
+		and (quest.requires_quest == null or stage(quest.requires_quest) == Step.RETURNED)
 
 
 static func discover(quest: VillageQuestDef) -> bool:

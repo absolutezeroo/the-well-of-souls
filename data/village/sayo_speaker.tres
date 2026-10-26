@@ -6,6 +6,6 @@
 script = ExtResource("script")
 id = &"village_sayo"
 display_name = "Sayo"
-title = "The Sleeping Mourner"
+title = "Mourning Singer"
 figure = ExtResource("figure")
 portrait = ExtResource("portrait")

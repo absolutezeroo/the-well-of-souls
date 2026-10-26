@@ -1,5 +1,13 @@
 # Performance
 
+Village life uses four persistent `VillageResident` bodies, authored routes and cached frame
+lists. Proximity checks use squared distance to the one walker; there are no group scans or
+per-frame arrays/strings. Sprite regions change only at the authored frame rate. Speech text is
+translated on an actual greeting, with a cooldown, and hidden during modals. Static ground is
+not redrawn for movement. Profile changes refresh residents in place rather than recreating
+them or their timers; only the static dressing is rebuilt. Sayo's shared palette material is
+applied directly to her figure and portrait; no textures are generated while walking.
+
 The game must hold 60 frames a second on a phone (the target is a Samsung S23 Ultra, on the
 Compatibility renderer) in a crowded fight, and lay a floor without a long freeze. GDScript is
 slow next to the engine: what costs is script work repeated every frame for every body, every

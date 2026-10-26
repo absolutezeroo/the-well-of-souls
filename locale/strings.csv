@@ -1002,7 +1002,6 @@ Court of the Nameless,Court of the Nameless,La Cour des Sans-Nom
 Menu,Menu,Menu
 The daily descent awaits at the Well.,The daily descent awaits at the Well.,La descente quotidienne t’attend au Puits.
 A voice caught in the lantern's light.,A voice caught in the lantern's light.,Une voix retenue dans la lumière de la lanterne.
-Reward: %d souls and a waking home.,Reward: %d souls and a waking home.,Récompense : %d âmes et un foyer qui se réveille.
 %s — %d souls,%s — %d souls,%s — %d âmes
 %s — restored,%s — restored,%s — restauré
 %s — complete %s first,%s — complete %s first,%s — termine d’abord %s
@@ -3004,27 +3003,84 @@ A Hearth Without a Flame,A Hearth Without a Flame,Un Foyer Sans Flamme
 "One window burns again. Listen: behind it, someone breathes.","One window burns again. Listen: behind it, someone breathes.","Une fenêtre brûle de nouveau. Écoute : derrière elle, quelqu’un respire."
 Ren's Ember-Box,Ren's Ember-Box,La Boîte à Braises de Ren
 The ember-box is safe in your lantern. Return to the Vigil-Keeper; even death will not take it.,The ember-box is safe in your lantern. Return to the Vigil-Keeper; even death will not take it.,La boîte à braises est à l’abri dans ta lanterne. Rapporte-la à la Veilleuse ; même la mort ne te la prendra pas.
-Seek the ember-box,Seek the ember-box,Chercher la boîte à braises
-Return the ember-box,Return the ember-box,Rapporter la boîte à braises
+I will look for his ember-box.,I will look for his ember-box.,Je vais chercher sa boîte.
+Here is Ren's ember-box.,Here is Ren's ember-box.,Voilà la boîte de Ren.
 The ember-box is still below.,The ember-box is still below.,La boîte à braises est encore en bas.
 Return the ember-box to the Vigil-Keeper.,Return the ember-box to the Vigil-Keeper.,Rapporte la boîte à braises à la Veilleuse.
+Speak to the Vigil-Keeper beside the Well.,Speak to the Vigil-Keeper beside the Well.,Parle à la Veilleuse près du Puits.
+Reward: %d souls and a waking home.,Reward: %d souls and a waking home.,Récompense : %d âmes et un foyer qui se réveille.
 The village sleeps. The Well does not.,The village sleeps. The Well does not.,Le village dort. Le Puits veille.
-The roots climb toward the sleepers. A lantern remembers the way home.,The roots climb toward the sleepers. A lantern remembers the way home.,Les racines remontent vers les dormeurs. Une lanterne se souvient du chemin du retour.
-Ren has opened his eyes. There are still so many closed doors.,Ren has opened his eyes. There are still so many closed doors.,Ren a ouvert les yeux. Il reste tant de portes closes.
+"Two windows burn. Beyond the square, Kagari still sleeps.","Two windows burn. Beyond the square, Kagari still sleeps.","Deux fenêtres brillent. Au-delà de la place, Kagari dort encore."
+"There you are, child. Ren will not wake; I would like to try giving him back the ember-box he carried everywhere.","There you are, child. Ren will not wake; I would like to try giving him back the ember-box he carried everywhere.","Te voilà, petit. Ren ne se réveille pas ; je voudrais essayer de lui rendre la boîte à braises qu'il emportait partout."
+"It fell to the second floor. If things go badly, come back; I would rather see you empty-handed.","It fell to the second floor. If things go badly, come back; I would rather see you empty-handed.","Elle est tombée au deuxième étage. Si les choses tournent mal, remonte ; je préfère te revoir les mains vides."
+"You found it, child. Give it to me; let us try to bring Ren back.","You found it, child. Give it to me; let us try to bring Ren back.","Tu l'as trouvée, petit. Confie-la-moi ; on va essayer de ramener Ren."
+Listen to him grumbling about his wicks: Ren is back indeed. Go and see Sayo by the western house; she may need you.,Listen to him grumbling about his wicks: Ren is back indeed. Go and see Sayo by the western house; she may need you.,Écoute-le râler contre ses mèches : Ren est bien revenu. Va voir Sayo près de la maison à l'ouest ; elle a peut-être besoin de toi.
+"Come closer, child. I need your help.","Come closer, child. I need your help.","Approche, petit. J'ai besoin de toi."
+Take a moment to catch your breath.,Take a moment to catch your breath.,Prends le temps de souffler.
+Ren is up already... That man cannot sit still.,Ren is up already... That man cannot sit still.,Ren est déjà debout... Cet homme ne tient pas en place.
+Is your lantern holding up?,Is your lantern holding up?,Ta lanterne tient bon ?
+The Last Verse,The Last Verse,Le Dernier Verset
+"Ren's lamp burns again, but Sayo's song still ends in silence. Find the lost verse below the roots, and bring it back to her door.","Ren's lamp burns again, but Sayo's song still ends in silence. Find the lost verse below the roots, and bring it back to her door.","La lampe de Ren brûle de nouveau, mais le chant de Sayo s’achève encore dans le silence. Retrouve le verset perdu sous les racines et rapporte-le à sa porte."
+"Find the last verse on floor 4, then return to Sayo.","Find the last verse on floor 4, then return to Sayo.","Retrouve le dernier verset à l’étage 4, puis rapporte-le à Sayo."
+Sayo finishes the song. The roots loosen their hold on the western path.,Sayo finishes the song. The roots loosen their hold on the western path.,Sayo achève son chant. Les racines desserrent leur étreinte sur le chemin occidental.
+Sayo's Last Verse,Sayo's Last Verse,Le Verset de Sayo
+The last verse is safe in your lantern. Return to Sayo; even death will not take it.,The last verse is safe in your lantern. Return to Sayo; even death will not take it.,Le dernier verset repose dans ta lanterne. Retourne voir Sayo ; même la mort ne te le prendra pas.
+I will bring you the verse.,I will bring you the verse.,Je te rapporterai le verset.
+"Here, is this your sheet?","Here, is this your sheet?","Tiens, c'est bien ta feuille ?"
+The last verse is still below.,The last verse is still below.,Le dernier verset est encore en bas.
+Return the last verse to Sayo.,Return the last verse to Sayo.,Rapporte le dernier verset à Sayo.
+Wake Ren with the Vigil-Keeper's quest first.,Wake Ren with the Vigil-Keeper's quest first.,Réveille d’abord Ren grâce à la quête de la Veilleuse.
+Ren is awake. Speak to Sayo at the western house.,Ren is awake. Speak to Sayo at the western house.,Ren est réveillé. Parle à Sayo devant la maison à l’ouest.
+"Reward: %d souls, Sayo's awakening and the western path restored.","Reward: %d souls, Sayo's awakening and the western path restored.","Récompense : %d âmes, le réveil de Sayo et le chemin occidental dégagé."
 Market Lanterns,Market Lanterns,Les Lanternes du Marché
 Light the market lamps permanently. A village restoration; no combat bonus.,Light the market lamps permanently. A village restoration; no combat bonus.,"Rallume définitivement les lanternes du marché. Une restauration du village, sans bonus de combat."
 Lights for the Nameless,Lights for the Nameless,Des Lumières pour les Sans-Nom
 Light the memorial court permanently. Your fallen Keepers will have their vigil.,Light the memorial court permanently. Your fallen Keepers will have their vigil.,Rallume définitivement la cour du souvenir. Tes Gardiens auront leur veille.
-The wick is dry. I cannot find my hands.,The wick is dry. I cannot find my hands.,La mèche est sèche. Je ne retrouve plus mes mains.
-You kept an ember for me. I shall keep a lamp for you.,You kept an ember for me. I shall keep a lamp for you.,Tu as gardé une braise pour moi. Je garderai une lampe pour toi.
+"The lanterns need lighting. I try to get up, but my hands pass straight through the workbench.","The lanterns need lighting. I try to get up, but my hands pass straight through the workbench.","Il faut rallumer les lanternes. J'essaie de me lever, mais mes mains passent à travers l'établi."
+"I wanted to get straight back to work. The Vigil-Keeper scolded me, so I started with just one lantern.","I wanted to get straight back to work. The Vigil-Keeper scolded me, so I started with just one lantern.",J'ai voulu me remettre au travail tout de suite. La Veilleuse m'a grondé ; j'ai donc commencé par une seule lanterne.
+Where did I leave that box...,Where did I leave that box...,Où ai-je posé cette boîte...
+There. This one will last until you return.,There. This one will last until you return.,Voilà. Celle-ci tiendra jusqu'à ton retour.
+"Careful, the oil is hot.","Careful, the oil is hot.","Ne touche pas, l'huile est chaude."
 Ren,Ren,Ren
 The Lantern-Mender,The Lantern-Mender,Le Réparateur de Lanternes
-"I used to sing for those who left. Tonight, no one knows the last verse.","I used to sing for those who left. Tonight, no one knows the last verse.","Je chantais pour ceux qui partaient. Cette nuit, personne ne connaît le dernier couplet."
-A light at his window. Perhaps the song has not ended.,A light at his window. Perhaps the song has not ended.,Une lumière à sa fenêtre. Le chant n’est peut-être pas terminé.
+"Can you really hear me? I am trying to finish a song, but the same line keeps slipping away.","Can you really hear me? I am trying to finish a song, but the same line keeps slipping away.","Tu m'entends vraiment ? J'essaie de finir une chanson, mais il me manque toujours la même phrase."
+The last verse is on a sheet that fell to the fourth floor. Bring it to me; I would like to try reading it aloud.,The last verse is on a sheet that fell to the fourth floor. Bring it to me; I would like to try reading it aloud.,Le dernier verset est sur une feuille tombée au quatrième étage. Rapporte-la-moi ; j'aimerais essayer de la lire à voix haute.
+"That sheet... it is my handwriting. Give it to me, I think I remember.","That sheet... it is my handwriting. Give it to me, I think I remember.","Cette feuille... c'est mon écriture. Donne-la-moi, je crois que je me souviens."
+I had forgotten what it felt like to be cold. Thank you for coming back for me.,I had forgotten what it felt like to be cold. Thank you for coming back for me.,J'avais oublié ce que ça faisait d'avoir froid. Merci d'être revenu me chercher.
+Is someone there?,Is someone there?,Quelqu'un est là ?
+How did that song end...,How did that song end...,Comment finissait cette chanson...
+"Ren, a little less smoke, please.","Ren, a little less smoke, please.","Ren, moins de fumée, je t'en prie."
+"You can stop for a moment, you know.","You can stop for a moment, you know.","Tu peux t'arrêter un instant, tu sais."
 Sayo,Sayo,Sayo
-The Sleeping Mourner,The Sleeping Mourner,La Pleureuse Endormie
-"No buyers behind these shutters. Help one wake, and I will light the square.","No buyers behind these shutters. Help one wake, and I will light the square.","Aucun acheteur derrière ces volets. Aide quelqu’un à se réveiller, et j’éclairerai la place."
-Your souls go to the lamps. I charge for the ladder.,Your souls go to the lamps. I charge for the ladder.,"Tes âmes vont aux lanternes. Moi, je fais payer l’échelle."
+Mourning Singer,Mourning Singer,Chanteuse de Deuil
+"Four streets, one well, and not a customer on their feet. Bring back one neighbour first; then we can talk about those lanterns.","Four streets, one well, and not a customer on their feet. Bring back one neighbour first; then we can talk about those lanterns.","Quatre rues, un puits et pas un client debout. Ramène-moi au moins un voisin ; on parlera ensuite de ces lanternes."
+Ren has already told me my wicks are too short. It is good to have difficult people back.,Ren has already told me my wicks are too short. It is good to have difficult people back.,Ren m'a déjà expliqué que mes mèches étaient trop courtes. Ça fait du bien de retrouver des gens difficiles.
+I keep the stall open. Out of habit.,I keep the stall open. Out of habit.,Je garde l'étal ouvert. Par habitude.
+"Oil, wicks... I even give ghosts credit.","Oil, wicks... I even give ghosts credit.","De l'huile, des mèches... Je fais aussi crédit aux fantômes."
+"Mind your step, I have just tidied up.","Mind your step, I have just tidied up.","Regarde où tu marches, je viens de ranger."
+Why his ember-box?,Why his ember-box?,Pourquoi sa boîte à braises ?
+He kept it close so the embers would last until morning. I want to give him back something he will recognise.,He kept it close so the embers would last until morning. I want to give him back something he will recognise.,Il la gardait contre lui pour que les braises tiennent jusqu'au matin. Je veux lui rendre quelque chose qu'il reconnaîtra.
+What if I do not come back?,What if I do not come back?,Et si je ne reviens pas ?
+"Do not promise me success, child; promise me you will take care. While your lantern burns, I keep a place for you.","Do not promise me success, child; promise me you will take care. While your lantern burns, I keep a place for you.","Ne me promets pas de réussir, petit ; promets-moi de faire attention. Tant que ta lanterne brûle, je garde une place pour toi."
+"Ren mends, Sayo sings... I had almost forgotten the sound of this square. It does me good to hear them.","Ren mends, Sayo sings... I had almost forgotten the sound of this square. It does me good to hear them.","Ren répare, Sayo chante... J'avais presque oublié le bruit de cette place. Ça me fait du bien de les entendre."
+Why pay for lanterns?,Why pay for lanterns?,Pourquoi payer pour des lanternes ?
+"The souls go into the lights, not my pocket. I provide the oil, the wicks and the knees that climb the ladder.","The souls go into the lights, not my pocket. I provide the oil, the wicks and the knees that climb the ladder.","Les âmes vont aux lumières, pas dans ma poche. Moi, je fournis l'huile, les mèches et les genoux qui montent à l'échelle."
+Do you go down the Well too?,Do you go down the Well too?,Tu descends aussi dans le puits ?
+I have to find something to fill this stall. You and I do not always take the same way down.,I have to find something to fill this stall. You and I do not always take the same way down.,"Il faut bien trouver de quoi remplir cet étal. Nous ne prenons pas toujours le même chemin, toi et moi."
+Sayo is back.,Sayo is back.,Sayo est revenue.
+I heard her before I saw her. She asked for a lantern by her door; at this rate we will run out of oil.,I heard her before I saw her. She asked for a lantern by her door; at this rate we will run out of oil.,Je l'ai entendue avant de la voir. Elle m'a demandé une lanterne pour sa porte ; je crois qu'on va finir par manquer d'huile.
+Do you know Sayo?,Do you know Sayo?,Tu connais Sayo ?
+"She sang so loudly I could hear her from the workshop. Go and talk to her; even if she barely answers, she hates being ignored.","She sang so loudly I could hear her from the workshop. Go and talk to her; even if she barely answers, she hates being ignored.","Elle chantait si fort que je l'entendais depuis l'atelier. Va lui parler ; même si elle répond à peine, elle déteste qu'on l'ignore."
+"Sayo has left her door open. I will make her a lantern; she says my smoke makes her cough, but she still wants one.","Sayo has left her door open. I will make her a lantern; she says my smoke makes her cough, but she still wants one.","Sayo a laissé sa porte ouverte. Je vais lui préparer une lanterne ; elle dit que ma fumée lui fait tousser, mais elle en veut une quand même."
+Back to work already?,Back to work already?,Tu te remets déjà au travail ?
+"A wick, a little oil, and I know what to do with my hands. It is easier than thinking about what happened to us.","A wick, a little oil, and I know what to do with my hands. It is easier than thinking about what happened to us.","Une mèche, un peu d'huile, et je sais quoi faire de mes mains. C'est plus facile que de penser à ce qui nous est arrivé."
+What will you do now?,What will you do now?,Que vas-tu faire maintenant ?
+"Leave my door open, for a start. If another neighbour comes back, I do not want them finding an empty street.","Leave my door open, for a start. If another neighbour comes back, I do not want them finding an empty street.","Laisser ma porte ouverte, déjà. Si un autre voisin revient, je ne veux pas qu'il trouve la rue vide."
+Do you remember that night?,Do you remember that night?,Tu te souviens de cette nuit ?
+"I heard a door close, then nothing. I do not even know how long I have been asleep.","I heard a door close, then nothing. I do not even know how long I have been asleep.","J'ai entendu une porte se fermer, puis plus rien. Je ne sais même pas combien de temps j'ai dormi."
+What was the song?,What was the song?,Quel était ce chant ?
+We sang it outside the houses when someone died. I knew every word; now I cannot remember the last verse.,We sang it outside the houses when someone died. I knew every word; now I cannot remember the last verse.,"On le chantait devant les maisons quand quelqu'un mourait. Je connaissais toutes les paroles ; maintenant, le dernier verset m'échappe."
+"Two neighbours awake, and both have complaints about my stall. I am starting to like this village.","Two neighbours awake, and both have complaints about my stall. I am starting to like this village.","Deux voisins réveillés, et tous les deux ont quelque chose à redire sur mon étal. Ce village commence à me plaire."
 grammar:feminine:Brutal,grammar:feminine:Brutal,Brutale
 grammar:feminine:Burning,grammar:feminine:Burning,Ardente
 grammar:feminine:Ironbound,grammar:feminine:Ironbound,Cerclée de Fer

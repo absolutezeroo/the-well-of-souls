@@ -14,5 +14,11 @@ extends Resource
 @export var hand_in_label: String
 @export var pending_text: String
 @export var return_text: String
+## A returned request opens this one; accepting it is still the player's choice.
+@export var requires_quest: VillageQuestDef
+@export var locked_text: String
+@export var offer_text: String
+## Whole translated sentence with one %d for reward_souls; effects belong to content.
+@export var reward_text: String
 @export var floor_depth: int = 2
 @export var reward_souls: int = 0

@@ -454,6 +454,9 @@ with the run, so quitting and coming back doesn't reset it.
 
 The [playable village](village.md) now sits between descents. Its first request is accepted from
 the Veilleuse, recovered on floor 2 and returned to her: Ren wakes, roots recede and 15 souls
-are awarded once. The Wanderer sells two one-time lamp restorations for 5 and 8 souls; neither
+are awarded once. Her completed request unlocks Sayo's Last Verse: accept it, recover the sheet
+on floor 4 and return to Sayo for her awakening, the western path cleared and 20 souls once.
+An older profile with Ren already awake can accept this next request without starting over.
+The Wanderer sells two one-time lamp restorations for 5 and 8 souls; neither
 changes a run's kit. Every Take his place ending leaves a permanent equipped statue in the
 village's memorial register, independent of the active Keeper and the capped codex/run history.

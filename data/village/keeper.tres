@@ -2,6 +2,9 @@
 [ext_resource type="Script" path="res://src/definitions/village/village_resident_def.gd" id="script"]
 [ext_resource type="Resource" path="res://data/story/dialogue/speakers/vigil_keeper.tres" id="speaker"]
 [ext_resource type="Resource" path="res://data/village/ember_box.tres" id="quest"]
+[ext_resource type="Resource" path="res://data/village/topics/keeper_box.tres" id="topic_0"]
+[ext_resource type="Resource" path="res://data/village/topics/keeper_return.tres" id="topic_1"]
+[ext_resource type="Resource" path="res://data/village/topics/keeper_two_homes.tres" id="reaction"]
 [resource]
 script = ExtResource("script")
 id = &"keeper"
@@ -10,5 +13,12 @@ position = Vector2(540, 280)
 role = 1
 quest = ExtResource("quest")
 echo = false
-text = "The roots climb toward the sleepers. A lantern remembers the way home."
-used_text = "Ren has opened his eyes. There are still so many closed doors."
+text = "There you are, child. Ren will not wake; I would like to try giving him back the ember-box he carried everywhere."
+accepted_text = "It fell to the second floor. If things go badly, come back; I would rather see you empty-handed."
+found_text = "You found it, child. Give it to me; let us try to bring Ren back."
+used_text = "Listen to him grumbling about his wicks: Ren is back indeed. Go and see Sayo by the western house; she may need you."
+ambient_before = PackedStringArray("Come closer, child. I need your help.", "Take a moment to catch your breath.")
+ambient_after = PackedStringArray("Ren is up already... That man cannot sit still.", "Is your lantern holding up?")
+topics = [ExtResource("topic_0"), ExtResource("topic_1")]
+idle_frames = [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16)]
+reactions = [ExtResource("reaction")]

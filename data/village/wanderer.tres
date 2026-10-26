@@ -2,6 +2,9 @@
 [ext_resource type="Script" path="res://src/definitions/village/village_resident_def.gd" id="script"]
 [ext_resource type="Resource" path="res://data/story/dialogue/speakers/wanderer.tres" id="speaker"]
 [ext_resource type="Resource" path="res://data/village/ember_box.tres" id="quest"]
+[ext_resource type="Resource" path="res://data/village/topics/merchant_lamps.tres" id="topic_0"]
+[ext_resource type="Resource" path="res://data/village/topics/merchant_well.tres" id="topic_1"]
+[ext_resource type="Resource" path="res://data/village/topics/wanderer_two_homes.tres" id="reaction"]
 [resource]
 script = ExtResource("script")
 id = &"wanderer"
@@ -10,5 +13,12 @@ position = Vector2(225, 445)
 role = 2
 quest = ExtResource("quest")
 echo = false
-text = "No buyers behind these shutters. Help one wake, and I will light the square."
-used_text = "Your souls go to the lamps. I charge for the ladder."
+text = "Four streets, one well, and not a customer on their feet. Bring back one neighbour first; then we can talk about those lanterns."
+used_text = "Ren has already told me my wicks are too short. It is good to have difficult people back."
+ambient_before = PackedStringArray("I keep the stall open. Out of habit.")
+ambient_after = PackedStringArray("Oil, wicks... I even give ghosts credit.", "Mind your step, I have just tidied up.")
+topics = [ExtResource("topic_0"), ExtResource("topic_1")]
+idle_frames = [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16)]
+walk_frames = [Rect2(0, 32, 16, 16), Rect2(0, 48, 16, 16), Rect2(0, 64, 16, 16), Rect2(0, 80, 16, 16)]
+route = [Vector2(255, 445), Vector2(225, 445), Vector2(195, 445)]
+reactions = [ExtResource("reaction")]

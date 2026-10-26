@@ -71,6 +71,9 @@ The suites (`tests/suites/`, each a `TestSuite`):
   ordered quests and atomic purchases, failed-write rollback, persistent memorials and ending
   receipts, the real hub's movement/dialogues and saved-run protection, and quest evidence on
   procedural floors. `game.finale` also recovers an already committed ending while paused.
+  Village checks also cover chained prerequisites, both infestation fronts, optional questions
+  without progression side effects, translated proximity lines, sleeping echoes staying put,
+  awake patrols, moving interaction targets, modal stops and no teleport on purchase.
   The isolated rendered review is described in [Kagari](design/village.md#validation).
 - **unit**: the rules, the content database, 100 generated maps (and their walls), 40 boss arenas,
   inventory, equipment, perks, bosses, the profile, the online leaderboards' queue and filter

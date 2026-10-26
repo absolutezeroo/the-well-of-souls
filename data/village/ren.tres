@@ -2,6 +2,10 @@
 [ext_resource type="Script" path="res://src/definitions/village/village_resident_def.gd" id="script"]
 [ext_resource type="Resource" path="res://data/village/ren_speaker.tres" id="speaker"]
 [ext_resource type="Resource" path="res://data/village/ember_box.tres" id="quest"]
+[ext_resource type="Resource" path="res://data/village/topics/ren_work.tres" id="topic_0"]
+[ext_resource type="Resource" path="res://data/village/topics/ren_sayo_wait.tres" id="topic_1"]
+[ext_resource type="Resource" path="res://data/village/topics/ren_sayo_home.tres" id="topic_2"]
+[ext_resource type="Resource" path="res://data/village/topics/ren_two_homes.tres" id="reaction"]
 [resource]
 script = ExtResource("script")
 id = &"ren"
@@ -11,5 +15,12 @@ role = 0
 quest = ExtResource("quest")
 wakes_after = ExtResource("quest")
 echo = true
-text = "The wick is dry. I cannot find my hands."
-used_text = "You kept an ember for me. I shall keep a lamp for you."
+text = "The lanterns need lighting. I try to get up, but my hands pass straight through the workbench."
+used_text = "I wanted to get straight back to work. The Vigil-Keeper scolded me, so I started with just one lantern."
+ambient_before = PackedStringArray("Where did I leave that box...")
+ambient_after = PackedStringArray("There. This one will last until you return.", "Careful, the oil is hot.")
+topics = [ExtResource("topic_0"), ExtResource("topic_1"), ExtResource("topic_2")]
+idle_frames = [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16)]
+walk_frames = [Rect2(0, 32, 16, 16), Rect2(0, 48, 16, 16), Rect2(0, 64, 16, 16), Rect2(0, 80, 16, 16)]
+route = [Vector2(740, 285), Vector2(740, 345), Vector2(740, 230)]
+reactions = [ExtResource("reaction")]

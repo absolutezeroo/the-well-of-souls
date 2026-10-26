@@ -398,3 +398,9 @@ commits its quests/services in Profile, and VillageExpedition adds recoverable e
 ordinary floors through Events. VillageMemorial reuses the equipped hero rig in a static stone
 pose. RunState's opaque journey_id makes ending receipts and statues idempotent across crashes;
 it does not consume gameplay dice. The archived RPG remains a separate project.
+
+VillageResident owns each surface routine, idle frames and proximity speech, with no combat
+actor or dungeon RNG. VillageView preserves residents across profile refreshes. VillageHub's
+fixed interaction registry follows their actual positions and pauses routines during modals.
+VillageTopicDef carries the questions and stage-gated replies selected by VillageProgress;
+quest prerequisites and the separate infestation fronts are authored in the same village data.

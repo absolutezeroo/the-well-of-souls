@@ -100,3 +100,7 @@ Depuis le titre, **Entrer dans Kagari** ouvre une petite place jouable. Approche
 pour sa première quête, puis le puits pour descendre ou reprendre une partie. Le village
 garde les maisons réveillées, les lanternes restaurées et les statues des héros devenus
 Gardiens. Voir [le village](docs/design/village.md). Le jeu reste un roguelike.
+
+Après le réveil de Ren, Sayo propose **Le Dernier Verset**. Les habitants ont leurs propres
+questions, réagissent aux retours des voisins et reprennent de petites routines une fois
+réveillés ; leurs brèves répliques de proximité n'interrompent pas le déplacement.

@@ -6,6 +6,8 @@ var def: VillageDef
 var content: ContentDB
 var dressing := Node2D.new()
 var walker: VillageWalker
+var residents: Array[VillageResident] = []
+var _resident_by_def: Dictionary[VillageResidentDef, VillageResident] = {}
 
 
 func _ready() -> void:
@@ -17,7 +19,7 @@ func _ready() -> void:
 
 func refresh() -> void:
 	for child in dressing.get_children():
-		if child != walker:
+		if child != walker and not child is VillageResident:
 			dressing.remove_child(child)
 			child.queue_free()
 	for prop in def.props:
@@ -40,16 +42,16 @@ func refresh() -> void:
 		if prop.collision.has_area():
 			_add_collision(body, prop.collision)
 	for resident in def.residents:
-		var sprite := Sprite2D.new()
-		sprite.texture = resident.speaker.figure
-		sprite.region_enabled = true
-		sprite.region_rect = Rect2(0, 0, 16, 16)
-		sprite.scale = Vector2(2, 2)
-		sprite.offset = Vector2(0, -8)
-		sprite.position = resident.position
-		var asleep := resident.echo and (resident.wakes_after == null or VillageProgress.stage(resident.wakes_after) != VillageProgress.Step.RETURNED)
-		sprite.modulate = Color(0.5, 0.8, 1.0, 0.5) if asleep else Color.WHITE
-		dressing.add_child(sprite)
+		if _resident_by_def.has(resident):
+			_resident_by_def[resident].refresh_progress()
+			continue
+		var actor := VillageResident.new()
+		actor.def = resident
+		actor.position = resident.position
+		actor.hero = walker
+		dressing.add_child(actor)
+		residents.append(actor)
+		_resident_by_def[resident] = actor
 	var memorial := VillageMemorial.new()
 	memorial.content = content
 	memorial.snapshot = Profile.village_memorials[0] if not Profile.village_memorials.is_empty() else {}
@@ -71,6 +73,10 @@ func refresh() -> void:
 	altar.position = def.shrine
 	dressing.add_child(altar)
 	queue_redraw()
+
+
+func actor_for(resident: VillageResidentDef) -> VillageResident:
+	return _resident_by_def.get(resident)
 
 
 func _add_collision(parent: Node2D, rectangle: Rect2) -> void:

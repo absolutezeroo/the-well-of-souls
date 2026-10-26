@@ -1,0 +1,6 @@
+[gd_resource type="ShaderMaterial" format=3]
+[ext_resource type="Shader" path="res://assets/shaders/village_palette.gdshader" id="shader"]
+[resource]
+shader = ExtResource("shader")
+shader_parameter/source_colors = PackedColorArray(0.811765, 0.796078, 0.839216, 1, 0.52549, 0.509804, 0.572549, 1, 0.878431, 0.847059, 0.792157, 1)
+shader_parameter/target_colors = PackedColorArray(0.31, 0.49, 0.52, 1, 0.16, 0.27, 0.33, 1, 0.62, 0.75, 0.68, 1)

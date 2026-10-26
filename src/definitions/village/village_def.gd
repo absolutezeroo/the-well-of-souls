@@ -4,6 +4,7 @@ extends Resource
 
 @export var display_name: String
 @export var description: String
+@export var restored_text: String
 @export var bounds: Rect2
 @export var spawn: Vector2
 @export var well: Vector2

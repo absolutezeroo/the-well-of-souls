@@ -44,6 +44,20 @@ func _ready() -> void:
 		await get_tree().physics_frame
 	hub.interact()
 	await _capture("memorial_" + language)
+	hub.panel.hide()
+	hub.walker.position = hub.def.residents[1].position + Vector2(0, 25)
+	for i in 3:
+		await get_tree().physics_frame
+	hub.interact()
+	await _capture("sayo_quest_" + language)
+	hub.panel.picked.emit(&"topic", hub.def.residents[1].topics[0])
+	await _capture("sayo_question_" + language)
+	hub.panel.picked.emit(&"accept", hub.def.quests[1])
+	VillageProgress.discover(hub.def.quests[1])
+	hub.panel.picked.emit(&"hand_in", hub.def.quests[1])
+	await _capture("sayo_awake_" + language)
+	hub.panel.hide()
+	await _capture("west_restored_" + language)
 	get_tree().quit()
 
 

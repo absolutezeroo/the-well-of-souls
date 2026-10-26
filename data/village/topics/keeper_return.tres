@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="VillageTopicDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_topic_def.gd" id="script"]
+[resource]
+script = ExtResource("script")
+prompt = "What if I do not come back?"
+reply = "Do not promise me success, child; promise me you will take care. While your lantern burns, I keep a place for you."

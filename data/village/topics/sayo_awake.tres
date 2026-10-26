@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="VillageTopicDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_topic_def.gd" id="script"]
+[ext_resource type="Resource" path="res://data/village/last_verse.tres" id="gate"]
+[resource]
+script = ExtResource("script")
+prompt = "What will you do now?"
+reply = "Leave my door open, for a start. If another neighbour comes back, I do not want them finding an empty street."
+quest = ExtResource("gate")
+min_stage = 3
+max_stage = 3

@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 379,
+  "next_id": 381,
   "tags": [
     "pc",
     "test",
@@ -5628,7 +5628,7 @@
     {
       "id": "task_376",
       "title": "Essayer Kagari et les mémoriaux sur S23 et Windows",
-      "description": "F5 → Entrer dans Kagari ; rejoindre la Veilleuse, accepter la quête, partir au puits, récupérer la boîte à l’étage 2 et revenir (pause ou mort). Vérifier récompense unique, réveil de Ren, retrait des racines, fenêtres/lampes et achats uniques. Reprendre une descente sans changement de héros ; annuler le remplacement ne doit rien perdre. Essayer clavier, manette et tactile, menus et mise en arrière-plan, textes FR/EN et fluidité sur S23. Gagner puis Prendre sa place : statue avec équipement ; autre héros puis Libérer : anciens mémoriaux conservés. Rendu logiciel et tests automatiques faits ; exports Windows/Android et sensations sur appareil restent à vérifier.",
+      "description": "F5 → Entrer dans Kagari ; rejoindre la Veilleuse, accepter la quête, partir au puits, récupérer la boîte à l’étage 2 et revenir (pause ou mort). Vérifier récompense unique, réveil de Ren, retrait des racines, fenêtres/lampes et achats uniques. Reprendre une descente sans changement de héros ; annuler le remplacement ne doit rien perdre. Essayer clavier, manette et tactile, menus et mise en arrière-plan, textes FR/EN et fluidité sur S23. Gagner puis Prendre sa place : statue avec équipement ; autre héros puis Libérer : anciens mémoriaux conservés. Rendu logiciel et tests automatiques faits ; exports Windows/Android et sensations sur appareil restent à vérifier. Suite task_379/380 : essayer Le Dernier Verset après Ren, les questions et leurs réactions, les deux fronts de racines, la lisibilité des bulles et leur cadence. Vérifier les routines des PNJ réveillés, leur arrêt près du joueur/en dialogue et leur interaction après déplacement ; un achat ne doit pas les téléporter. Confirmer le ton des dialogues et le confort tactile sur S23.",
       "priority": "high",
       "status": "review",
       "epic_id": "epic_6",
@@ -5641,13 +5641,13 @@
         "perf"
       ],
       "created_at": 1793032681,
-      "updated_at": 1793032681,
+      "updated_at": 1793038992,
       "due_date": null
     },
     {
       "id": "task_377",
       "title": "Étendre les quêtes et les fronts d’infestation de Kagari",
-      "description": "Suite de contenu à concevoir après le playtest de la première quête : autres habitants à réveiller, plusieurs fronts visuels de racines et conséquences selon les quêtes, dialogues réactifs, services marchands supplémentaires et décors dédiés. Garder les ressources modulaires et le cœur roguelike. Le premier lot implémenté est statique jusqu’à la remise de quête ; ni simulation de propagation autonome ni économie d’équipement du village ne sont livrées.",
+      "description": "Suite de contenu à concevoir après le playtest de la première quête : autres habitants à réveiller, plusieurs fronts visuels de racines et conséquences selon les quêtes, dialogues réactifs, services marchands supplémentaires et décors dédiés. Garder les ressources modulaires et le cœur roguelike. Le premier lot implémenté est statique jusqu’à la remise de quête ; ni simulation de propagation autonome ni économie d’équipement du village ne sont livrées. Deuxième lot réalisé par task_379/380 : Sayo, second front, questions et routines. Restent d’autres quêtes, habitants, services et décors dédiés ; aucune propagation autonome livrée.",
       "priority": "medium",
       "status": "backlog",
       "epic_id": "epic_7",
@@ -5659,7 +5659,7 @@
         "économie"
       ],
       "created_at": 1793032681,
-      "updated_at": 1793032681,
+      "updated_at": 1793038992,
       "due_date": null
     },
     {
@@ -5677,6 +5677,43 @@
       ],
       "created_at": 1793032681,
       "updated_at": 1793032681,
+      "due_date": null
+    },
+    {
+      "id": "task_379",
+      "title": "Réveiller Sayo et dégager le chemin occidental de Kagari",
+      "description": "Deuxième quête Le Dernier Verset : prérequis Ren rendu, acceptation explicite chez Sayo, feuille à l’étage 4, remise pour 20 âmes uniques, réveil de Sayo et suppression du front occidental. HUD indiquant la prochaine demande, anciens profils compatibles sans migration de format, échec d’écriture sans récompense ni changement partiel. Prérequis et textes dans data/village. Inclus dans les 19 793 vérifications sans échec (seed 347348), 656 scripts sans diagnostic, 3 114 clés traduites, catalogue valide ; rendu Compatibility FR/EN 1540×720 et 2340×1080 vérifié. Playtest appareil task_376.",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_1",
+      "tags": [
+        "pnj",
+        "lore",
+        "contenu",
+        "sauvegarde",
+        "tests"
+      ],
+      "created_at": 1793037620,
+      "updated_at": 1793038992,
+      "due_date": null
+    },
+    {
+      "id": "task_380",
+      "title": "Réécrire les échanges de Kagari et donner vie aux habitants",
+      "description": "Réécriture des quatre habitants : demandes concrètes, voix propres, salutations selon l’étape de quête, dix questions facultatives et trois réactions après le réveil de Sayo. Dialogues terminés débarrassés des objectifs/récompenses. Quatorze répliques de proximité FR/EN avec temporisation ; aucune ouverture automatique. Corps animés, trois routines après réveil, arrêt à proximité et pendant les menus, cible d’interaction suivant la position réelle. Instances conservées après achat pour éviter les téléportations. Palette bleu-vert partagée par le portrait et le corps de Sayo. Contenu entièrement défini par ressources. Validation : 19 793 vérifications, 0 échec ; 656 scripts, 0 diagnostic ; captures FR/EN à deux résolutions. Ressenti et cadence des réactions à essayer sur appareils (task_376).",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_1",
+      "tags": [
+        "pnj",
+        "lore",
+        "ui",
+        "visuel",
+        "perf",
+        "tests"
+      ],
+      "created_at": 1793038175,
+      "updated_at": 1793038992,
       "due_date": null
     }
   ]

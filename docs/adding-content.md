@@ -306,3 +306,22 @@ button labels; floor_depth determines where evidence is placed on an ordinary fl
 with wakes_after and props with cleared_by react to its returned stage. A service's cost and
 requires_quest gate a one-time restoration; props with lit_by show it. Ids are permanent save
 keys. Extend the relevant component for new kinds of objectives, never add ids to Actor/World.
+
+A quest may itself declare requires_quest: its predecessor must be returned before acceptance.
+Keep every predecessor registered and the chain acyclic (unit.village checks both). Give it
+locked_text (why unavailable), offer_text (HUD direction) and reward_text (one %d for souls,
+with its visible effects). No quest is accepted automatically. Assign each infestation front's
+props and each resident's wakes_after to the quest that actually rescues that home, so one
+return never clears another quest's front. Update the village's restored_text when changing
+the authored chapter; it is shown after all registered quests are returned.
+
+For conversations, give residents accepted_text/found_text as well as text/used_text. Register
+VillageTopicDef questions in topics; a topic's quest/min_stage/max_stage gates both its button
+and its reply. Conditional replies without prompts belong in reactions (first match wins over
+the stage greeting). Do not place later revelations in unconditional village topics.
+
+An idle_frames/walk_frames atlas list, route points, speed and stop_seconds author a resident's
+routine. Routes must remain on clear ground after that resident's wakes_after quest; echoes
+never walk. ambient_before/ambient_after are PackedStringArray values (so the extractor finds
+them), each short enough for a proximity bubble. No additional per-frame gameplay polling is
+needed for new content. An optional appearance material is shared by the figure and portrait.
