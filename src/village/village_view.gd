@@ -12,6 +12,7 @@ var navigation := VillageNavigation.new()
 var daylight := CanvasModulate.new()
 var well_vfx := VillageWellVfx.new()
 var active_room: VillageInteriorDef
+var _keep_clear: Array[Rect2] = []
 
 
 func _ready() -> void:
@@ -31,6 +32,7 @@ func refresh() -> void:
 		if prop.lit_by and VillageProgress.restored(prop.lit_by):
 			well_vfx.lamps.append(prop.position - well_vfx.position)
 	navigation.rebuild(def)
+	_keep_clear = _clear_spots()
 	for child in dressing.get_children():
 		if child != walker and not child is VillageResident:
 			dressing.remove_child(child)
@@ -93,18 +95,21 @@ func actor_for(resident: VillageResidentDef) -> VillageResident:
 
 
 func _draw() -> void:
-	draw_rect(def.bounds, Color("19272b"))
-	for y in range(int(def.bounds.position.y), int(def.bounds.end.y), 32):
-		for x in range(int(def.bounds.position.x), int(def.bounds.end.x), 32):
-			draw_texture_rect_region(def.ground, Rect2(x, y, 32, 32), def.ground_region, Color(0.5, 0.58, 0.57))
-	# The worn stone paths meet at the Well. Static drawing stays separate from the walkers.
-	for path in def.paths:
-		for y in range(int(path.position.y), int(path.end.y), 32):
-			for x in range(int(path.position.x), int(path.end.x), 32):
-				draw_texture_rect_region(def.path_texture, Rect2(x, y, 32, 32), def.path_region, Color(0.85, 0.9, 0.95))
+	VillageGround.draw(self, def, _keep_clear)
 	for quest in def.quests:
 		if VillageProgress.stage(quest) == VillageProgress.Step.RETURNED:
 			# The restored house is identified by its resident, not by a quest id in code.
 			for resident in def.residents:
 				if resident.wakes_after == quest:
 					draw_rect(Rect2(resident.position + Vector2(-10, -100), Vector2(20, 24)), Color("eeb65b"))
+
+
+## Flowers stay off the props, the Well, the board and the memorial so nothing grows through them.
+func _clear_spots() -> Array[Rect2]:
+	var spots: Array[Rect2] = []
+	for prop in def.props:
+		var size := (prop.region.size if prop.region.has_area() else Vector2(16, 16)) * prop.art_scale
+		spots.append(Rect2(prop.position - Vector2(size.x * 0.5, size.y), size).grow(4))
+	for spot in [def.well, def.noticeboard, def.memorial, def.spawn]:
+		spots.append(Rect2(spot - Vector2(40, 48), Vector2(80, 64)))
+	return spots

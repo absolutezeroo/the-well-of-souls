@@ -89,7 +89,10 @@ Keeper, memorial and receipt together. If the application stops before RunSave c
 - `VillageHub` owns surface input, modal requests and launch flow. `VillageWalker` is a peaceful
   body with the hero's existing rig; it has no RunState, combat, inventory or online run session.
 - `VillageView` rebuilds dressing only on profile change. Static ground records draw commands
-  only on change. The movement/interaction loops reuse their fixed registry without group scans.
+  only on change. `VillageGround` (shared with the layout editor) draws it from the manifest:
+  Ninja Adventure grass with stable per-cell variants, dirt paths autotiled from the union of
+  `paths` (edges and inner corners), and flowers kept off props, the Well, board and memorial.
+  Every pick is a hash of the cell, so the square never changes between visits. The movement/interaction loops reuse their fixed registry without group scans.
 - `VillagePanel` presents text and emits choices. `VillageProgress` performs the gameplay
   transactions; rejected writes leave money, quest stage and restoration flags unchanged.
 - `VillageExpedition`, owned by Game, listens to `floor_entered`; it places `VillageEvidence`

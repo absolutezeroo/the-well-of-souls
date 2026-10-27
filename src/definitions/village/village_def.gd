@@ -21,6 +21,21 @@ extends Resource
 @export var paths: Array[Rect2] = []
 @export var ground: Texture2D
 @export var ground_region: Rect2
+## Worn grass tiles mixed into the plain one so the square does not read as a repeated stamp.
+@export var ground_variants: Array[Rect2] = []
+@export_range(0.0, 1.0) var ground_variant_chance := 0.25
+## Multiplies the ground and paths; the clock's daylight shades the whole village on top of it.
+@export var ground_tint := Color.WHITE
+## Paths are autotiled from path_texture: the 3x3 patch whose borders fade into the grass
+## (top-left tile at path_edges) and the 2x2 inner corners (grass in the shared middle).
+@export var path_edges := Vector2(-1, -1)
+@export var path_inner_corners := Vector2(-1, -1)
+## Rare marks on the paths' middle (twigs, a stone).
+@export var path_details: Array[Rect2] = []
+## Flat flowers and tufts scattered on the grass, drawn beneath everything that walks.
+@export var decor_texture: Texture2D
+@export var decor_regions: Array[Rect2] = []
+@export_range(0.0, 1.0) var decor_chance := 0.12
 @export var residents: Array[VillageResidentDef] = []
 @export var quests: Array[VillageQuestDef] = []
 @export var services: Array[VillageServiceDef] = []

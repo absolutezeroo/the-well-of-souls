@@ -112,9 +112,7 @@ func save_layout() -> void:
 
 func _draw() -> void:
 	if village == null: return
-	_tiles(village.ground, village.ground_region, village.bounds, Vector2(32, 32), Color(0.5, 0.58, 0.57))
-	for path in village.paths:
-		_tiles(village.path_texture, village.path_region, path, Vector2(32, 32), Color(0.85, 0.9, 0.95))
+	VillageGround.draw(self, village)
 	for room in village.interiors:
 		draw_rect(Rect2(room.offset + room.bounds.position, room.bounds.size), room.backdrop)
 		for patch in room.tiles:

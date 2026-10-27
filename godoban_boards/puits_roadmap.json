@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 388,
+  "next_id": 390,
   "tags": [
     "pc",
     "test",
@@ -5757,7 +5757,7 @@
     {
       "id": "task_383",
       "title": "Construire les vraies maisons habitées de Kagari avec un pack résidentiel",
-      "description": "Le pack Craftpix du temple a été reçu et intégré : façade, salle jouable, sanctuaire des compétences intérieur et horaires des PNJ (voir task_384). Ce pack ne contient pas de maisons de village. En attente d’assets résidentiels : remplacer les façades provisoires, assembler les vrais intérieurs et relier portes, travail et repos aux horaires. Réutiliser VillageInteriorDef et les transitions/navigation du temple. Kagari est un village dont les âmes sont aspirées par le puits, pas une suite de ruines ; conserver mobile, sauvegardes et boucle roguelike.",
+      "description": "Le pack Craftpix du temple a été reçu et intégré : façade, salle jouable, sanctuaire des compétences intérieur et horaires des PNJ (voir task_384). Ce pack ne contient pas de maisons de village. En attente d’assets résidentiels : remplacer les façades provisoires, assembler les vrais intérieurs et relier portes, travail et repos aux horaires. Réutiliser VillageInteriorDef et les transitions/navigation du temple. Kagari est un village dont les âmes sont aspirées par le puits, pas une suite de ruines ; conserver mobile, sauvegardes et boucle roguelike.\n\nNote : les maisons habitées doivent venir du pack Ninja Adventure complet (TilesetHouse), pas d'un autre pack, pour garder un seul style.",
       "status": "todo",
       "priority": "high",
       "epic_id": "epic_1",
@@ -5770,7 +5770,7 @@
         "tests"
       ],
       "created_at": 1793039913,
-      "updated_at": 1793048483,
+      "updated_at": 1793074086,
       "due_date": null
     },
     {
@@ -5838,6 +5838,44 @@
       "created_at": 1793065447,
       "updated_at": 1793066691,
       "due_date": null
+    },
+    {
+      "id": "task_388",
+      "title": "Habiller Kagari avec Ninja Adventure : herbe, chemins et décor",
+      "description": "Fait : l'herbe vient du TilesetFloor de Ninja Adventure (tuile unie + variantes usées, sans le voile sombre qui la rendait brune), les chemins de terre sont auto-tuilés avec bords et coins intérieurs dans l'herbe, des fleurs et touffes sont semées de façon stable hors des accessoires, et une lisière d'arbres, tonneaux, caisses, linge, foin, souches et pierres habillent la place (VillageGround, données dans kagari.tres). À vérifier sur le S23 : lisibilité de jour et de nuit, densité du décor, aucun objet qui bloque un passage.",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_1",
+      "due_date": null,
+      "tags": [
+        "pnj",
+        "lore",
+        "architecture",
+        "ui",
+        "sauvegarde",
+        "tests"
+      ],
+      "created_at": 1793074086,
+      "updated_at": 1793074086
+    },
+    {
+      "id": "task_389",
+      "title": "Remplacer le temple Craftpix par un bâtiment Ninja Adventure",
+      "description": "Le temple de marbre blanc (Craftpix) jure avec le reste du village en Ninja Adventure, et ses PNG bruts sont dans un dépôt public alors que la licence interdit de les redistribuer tels quels. Il faut le pack Ninja Adventure complet (Backgrounds/Tilesets : TilesetHouse, temples et maisons) : l'envoyer à Claude, puis refaire la façade et l'intérieur avec, en gardant la porte et les passages des PNJ.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_1",
+      "due_date": null,
+      "tags": [
+        "pnj",
+        "lore",
+        "architecture",
+        "ui",
+        "sauvegarde",
+        "tests"
+      ],
+      "created_at": 1793074086,
+      "updated_at": 1793074086
     }
   ]
 }
