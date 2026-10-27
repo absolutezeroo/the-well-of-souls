@@ -155,7 +155,7 @@ Before Act III nothing names Solhar (an altar, an archive or a people are "older
 | Autel de Sang / Blood Altar | Solhar's tithe altars. | (the Well's hunger, no voice) |
 | Source des Noyés / Spring of the Drowned | where Hana drowned; a girl's voice sometimes sings in it (the Maw imitating her). | a child's humming, three words at most. |
 | Statue du Gardien / Keeper's Statue (id `warden_statue`) | statues of Kagari's past keepers, a stone lantern in hand; one niche is empty (Tôma's). Kneeling, a keeper lends his strength; or its eyes redden and the Well's dead answer for it. **The empty niche** stands beside every Keeper's Statue (`EncounterDef.niche`): a keeper's niche is cut while he lives, his name and one line on its base; the last keeper's name has been scratched away (by whom, the canon does not say), the line is left: « Il garde la dernière flamme » / "He keeps the last flame". Before the reveal it is only an empty niche and a line no one explains; once the keeper may be named (`keeper_named`), the hero reads the name under the scratches, and the line means the lantern left burning in his hand. | silent; inscriptions. |
-| The oaths (Colossus, Duelist, Heretic, Vulture) | vows sworn at the bell by keepers of old; each was a keeper's way. | solemn, one line each. |
+| The oaths (Colossus, Duelist, Heretic, Vulture) | vows sworn at the bell by keepers of old; each was a keeper's way. Each keeps its vow (`OathDef.lore`, shown at the shrine): Colossus « Je ne recule pas. Que la nuit vienne à moi. », Duelist « Je frappe une fois, et juste. Mon sang répondra du reste. », Heretic « Je reprends les mots que le sanctuaire a tus, et j'en porte le poids. » (the rite's words the shrine kept for its keepers; never says whose), Vulture « Je prends ce que le Puits laisse aux morts, et je paie le prix des vivants. » | solemn, one line each, in the first person, never naming the keeper who swore it. |
 
 ### 6b. What the voices hold (the dialogue: `data/story/dialogue/`)
 
@@ -257,8 +257,7 @@ told at the bottom (their first chapters never name him), their last words as th
   Codex" and the Codex screen; "Warden" in the Guardian Ring / « Anneau du Gardien ».
 - **Small things the canon does not cover yet:** the Phoenix Feather (a phoenix of Kagari, a hô-ô,
   or Solhar's?), the Blood Moon floor event (the Well feels a red moon it cannot see), the thieves
-  being raccoons rather than Kagari's tanuki, the oaths having no lore line of their own (only
-  their rule; canon: "vows sworn at the bell by keepers of old").
+  being raccoons rather than Kagari's tanuki. (The oaths now have their vows: section 6.)
 
 Decided:
 

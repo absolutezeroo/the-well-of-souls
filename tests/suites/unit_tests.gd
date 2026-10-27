@@ -1499,6 +1499,7 @@ func _test_soul_tree() -> void:
 		var gains := oath.effects().filter(func(line: Array) -> bool: return line[1] > 0)
 		var costs := oath.effects().filter(func(line: Array) -> bool: return line[1] < 0)
 		check(not gains.is_empty() and not costs.is_empty(), "%s: its card shows a gain and a cost (%d, %d)" % [oath.id, gains.size(), costs.size()])
+		check(oath.lore.begins_with("\"") and oath.lore.ends_with("\"") and oath.lore.length() <= 120 and not oath.lore.contains("%"), "%s: its vow is one quoted line, never a rule (%s)" % [oath.id, oath.lore])
 
 	var saved_levels := Profile.levels.duplicate()
 	var saved_souls := Profile.souls

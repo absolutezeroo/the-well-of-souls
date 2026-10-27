@@ -6,7 +6,7 @@ extends Control
 ## start a run. Left, the tree (SoulTreeView); right, the picked node: what it does, now and next,
 ## what opens it, and Buy. "Reset the tree" gives every soul back, to try another path, once
 ## earned: every SoulTreeDef.reset_runs runs ("Reset in 2 runs" until then).
-## Built in code; %Souls, %ShrineText, %TreeView, %BuyButton and %ResetButton are reachable from
+## Built in code; %Souls, %ShrineText, %TreeView, %OathLore, %BuyButton and %ResetButton are reachable from
 ## the title screen.
 
 const DETAIL_WIDTH := 360.0
@@ -23,6 +23,8 @@ var _icon: TextureRect
 var _name: Label
 var _branch: Label
 var _level: Label
+## An oath's vow, as a keeper of old swore it (OathDef.lore), above its rule.
+var _lore: Label
 var _text: Label
 var _status: Label
 var _blocker: Label
@@ -137,6 +139,8 @@ func _refresh() -> void:
 	_branch.text = (tr("%s branch  -  pick one of two") if node.partner() else tr("%s branch")) % branch_name
 	_branch.add_theme_color_override("font_color", branch_color.lerp(Color.WHITE, 0.3))
 	_level.text = UpgradeRow.level_text(upgrade, node.level()) if not node.oath else (tr("Oath open") if node.is_owned() else tr("Oath locked"))
+	_lore.text = tr(node.oath.lore) if node.oath and not node.oath.lore.is_empty() else ""
+	_lore.visible = not _lore.text.is_empty()
 	_text.text = (tr("Pick it before a run, after the difficulty.") + "\n" + _oath_lines(node.oath, 0)).strip_edges() if node.oath else UpgradeRow.description_of(upgrade)
 	_status.text = status_of(node, _content) if not node.oath else _oath_lines(node.oath, 1)
 	_status.visible = not _status.text.is_empty()
@@ -240,6 +244,9 @@ func _build() -> void:
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	text.add_theme_constant_override("separation", 8)
 	words.add_child(text)
+	_lore = UiSkin.label("", Fonts.BODY, UiSkin.DIM, true)
+	text.add_child(_lore)
+	MenuWindow.expose(_lore, "OathLore", scene_owner)
 	_text = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
 	text.add_child(_text)
 	_status = UiSkin.label("", Fonts.BODY, UiSkin.GOOD, true)

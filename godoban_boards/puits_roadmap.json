@@ -991,8 +991,8 @@
     {
       "id": "task_64",
       "title": "Une ligne de lore pour chaque serment",
-      "description": "Le canon dit que les serments (Colosse, Duelliste, Hérétique, Vautour) sont des vœux de gardiens d'autrefois, prêtés à la cloche ; aujourd'hui ils n'ont que leur règle. Ajouter un champ lore et l'afficher au sanctuaire.",
-      "status": "backlog",
+      "description": "Le canon dit que les serments (Colosse, Duelliste, Hérétique, Vautour) sont des vœux de gardiens d'autrefois, prêtés à la cloche ; aujourd'hui ils n'ont que leur règle. Ajouter un champ lore et l'afficher au sanctuaire.\n\nFait : champ OathDef.lore (le vœu d'un gardien d'autrefois, une ligne entre guillemets), écrit pour les 4 serments en FR et EN, affiché en gris au-dessus de la règle quand on choisit le nœud du serment à l'arbre des âmes (sanctuaire). Canon : docs/lore.md §6. À vérifier : relire les 4 vœux (ton, sens), et leur place dans la colonne du nœud sur téléphone (1540x720) sans défilement gênant.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_7",
       "due_date": null,
@@ -1002,7 +1002,7 @@
         "ui"
       ],
       "created_at": 1792704041,
-      "updated_at": 1792704041
+      "updated_at": 1793074102
     },
     {
       "id": "task_65",

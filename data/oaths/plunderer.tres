@@ -8,6 +8,7 @@ script = ExtResource("1")
 id = &"plunderer"
 display_name = "Oath of the Vulture"
 description = "35% more gold and better loot, but the merchant charges you 25% more."
+lore = "\"I take what the Well leaves to the dead, and pay the price of the living.\""
 icon = ExtResource("2")
 color = Color(1, 0.85, 0.3, 1)
 gold_scale = 1.35
