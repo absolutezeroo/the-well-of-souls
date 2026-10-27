@@ -3398,8 +3398,8 @@
     {
       "id": "task_223",
       "title": "Tests : _test_biomes construit deux fois le même étage",
-      "description": "Vu en découpant les tests (24/10) : FloorTests._test_biomes fait « for attempt in 2 » mais construit chaque fois first_depth(a) + 1, avec la même graine de partie : le deuxième étage est le même que le premier (au tiroir de la forge près). Le test croit vérifier deux étages par biome et en vérifie un. Faire varier la profondeur (+ attempt, comme LevelTests) ; le nombre de vérifications ne change pas, leur portée oui.",
-      "status": "backlog",
+      "description": "Vu en découpant les tests (24/10) : FloorTests._test_biomes fait « for attempt in 2 » mais construit chaque fois first_depth(a) + 1, avec la même graine de partie : le deuxième étage est le même que le premier (au tiroir de la forge près). Le test croit vérifier deux étages par biome et en vérifie un. Faire varier la profondeur (+ attempt, comme LevelTests) ; le nombre de vérifications ne change pas, leur portée oui.\n\nFait (27/10) : _test_biomes construit maintenant le 1er et le 2e étage de l'acte (first_depth(a) + attempt) : deux étages différents par biome, avant l'arène du boss (qui a ses propres décors : en essayant +1/+2, l'arène de l'acte IV avait des broken_column, normal pour une arène). Rien à vérifier sur l'appareil.",
+      "status": "done",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -3407,7 +3407,7 @@
         "tests"
       ],
       "created_at": 1792825538,
-      "updated_at": 1792825538
+      "updated_at": 1793075130
     },
     {
       "id": "task_224",
