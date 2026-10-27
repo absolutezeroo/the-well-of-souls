@@ -275,6 +275,7 @@ func run_title() -> void:
 	await _frames(3)
 	check(hub.spots.size() == 10 and hub.walker != null and not hub.walker.blocked, "Kagari opens with a controllable hero, surface/temple places and four residents")
 	await _test_temple(hub)
+	await _test_framing(hub)
 	var sleeper := hub.view.actor_for(VILLAGE.residents[2])
 	var sleeper_position := sleeper.position
 	await _frames(300)
@@ -460,6 +461,23 @@ func _test_descent(kept: String) -> void:
 	await _frames(2)
 
 
+## On a screen where PixelGrid's rounding takes scale off (1600x900: x1, not x1.25), the surface
+## and the temple keep their framing, as a floor does (GameCamera): no void around the temple.
+func _test_framing(hub: VillageHub) -> void:
+	var room := VILLAGE.interiors[0]
+	var window := get_tree().root.size
+	get_tree().root.size = Vector2i(1600, 900)
+	await _frames(3)
+	var grown := PixelGrid.world_zoom()
+	check(grown > 1.0 and hub.walker.camera.zoom.is_equal_approx(Vector2(2, 2) * grown), "the village's camera zooms by what the canvas's rounding took off (x%s)" % grown)
+	check(hub.enter_room(room) and hub.walker.camera.zoom.is_equal_approx(Vector2.ONE * room.camera_zoom * grown), "the temple keeps its authored framing on any screen")
+	check(hub.leave_room(), "back outside after the framing check")
+	get_tree().root.size = window
+	await _frames(3)
+	check(hub.walker.camera.zoom.is_equal_approx(Vector2(2, 2) * PixelGrid.world_zoom()), "the framing follows the window back")
+	hub.walker.position = VILLAGE.spawn
+
+
 func _test_temple(hub: VillageHub) -> void:
 	var room := VILLAGE.interiors[0]
 	var hero := hub.walker
@@ -553,6 +571,11 @@ func run_game(game: Game) -> void:
 	check(VillageProgress.stage(second) == VillageProgress.Step.FOUND and VillageProgress.stage(quest) == VillageProgress.Step.RETURNED, "recovering the verse preserves the first rescue")
 	await game.debug.enter_floor(second.floor_depth)
 	check(game.world.find_children("*", "VillageEvidence", true, false).is_empty(), "the recovered verse does not duplicate on floor reconstruction")
+	game.player.give_up()
+	await _until(func() -> bool: return game.game_over_panel.visible)
+	var dead_time := Profile.village_seconds
+	await _frames(10)
+	check(game.game_over_panel.visible and not get_tree().paused and Profile.village_seconds == dead_time, "the end screen after a death freezes village time like every other menu")
 
 
 func _choice(hub: VillageHub, key: String) -> Button:

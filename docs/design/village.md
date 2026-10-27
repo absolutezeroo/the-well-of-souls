@@ -140,7 +140,7 @@ Residents survive profile refreshes, so buying a lamp does not reset their posit
 ## Day, night and the quest board
 
 The first visit starts at 08:00. One fictional day lasts **16 minutes of active play**, authored
-in `data/village/clock.tres`. Time advances in the village and during descents, stops in menus
+in `data/village/clock.tres`. Time advances in the village and during descents, stops in menus (the end screen after a death too)
 and in the mobile background, and does not advance while the app is closed. Day number and
 hour appear on the village HUD; a Gradient tints only the world at dawn, day, dusk and night.
 It never changes dungeon seeds, real UTC bounty dates or infestation. There is no missed-day
@@ -181,7 +181,9 @@ second clock, combat actor, additional profile file or RunState change. A new la
 to the village spawn as before; the hero's room is session state, not new saved progression.
 Time continues while walking inside and freezes in menus. The room has steady warm lighting,
 while outside still follows the day/night gradient. Its fixed camera shows the whole room;
-2× atlas art at a 1.5× camera zoom keeps source pixels on a 3× grid. Exterior camera framing
+2× atlas art at a 1.5× camera zoom keeps source pixels on a 3× grid. Like a floor's camera, both
+zooms grow by what PixelGrid's rounding of the canvas's scale took off (`world_zoom()`), so
+1600×900 or a smaller interface size frames Kagari as 1280×720 does. Exterior camera framing
 and bounds return when leaving. A room visit never overwrites a suspended dungeon save.
 
 `VillageInteriorDef` owns doorway/return position, world offset, camera and walk bounds,

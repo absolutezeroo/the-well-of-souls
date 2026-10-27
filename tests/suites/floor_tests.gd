@@ -2400,6 +2400,14 @@ func _test_ambience(game: Game) -> void:
 	check(game.ambience.is_low_health() and AudioServer.is_bus_effect_enabled(music_bus, 0), "low health muffles the music")
 	player.heal(player.get_max_hp())
 	check(not game.ambience.is_low_health() and not AudioServer.is_bus_effect_enabled(music_bus, 0), "healing clears the muffle")
+	# Leaving the game close to death (the pause menu's Return to village) takes the muffle along.
+	player.hp = 1
+	player.health_changed.emit(player.hp, player.get_max_hp())
+	var ambience_parent := game.ambience.get_parent()
+	ambience_parent.remove_child(game.ambience)
+	check(not AudioServer.is_bus_effect_enabled(music_bus, 0), "leaving the game at low health unmuffles the village's music")
+	ambience_parent.add_child(game.ambience)
+	player.heal(player.get_max_hp())
 
 
 ## The dev tools (debug builds): open, jump to a cursed floor, god mode, spawn, close.

@@ -3,6 +3,8 @@ extends CharacterBody2D
 ## A peaceful surface body: the same movement actions and hero rig, with no run, combat or XP.
 
 const RIG := preload("res://src/entities/rig/actor_rig.tscn")
+## The surface's camera zoom at the layout's scale (PixelGrid.world_zoom() is added on top).
+const SURFACE_ZOOM := Vector2(2, 2)
 var def: VillageDef
 var hero: PlayerDef
 var blocked := false
@@ -29,9 +31,9 @@ func _ready() -> void:
 	for item in hero.starting_equipment:
 		equipment.equip(item)
 	rig.wear(equipment)
-	camera.zoom = Vector2(2, 2)
 	add_child(camera)
 	set_place(null, position)
+	PixelGrid.scale_changed.connect(_fit_zoom)
 
 
 ## A doorway moves the existing hero/rig and camera together without recreating equipment.
@@ -42,7 +44,7 @@ func set_place(next_room: VillageInteriorDef, at: Vector2) -> void:
 	position = at
 	velocity = Vector2.ZERO
 	camera.top_level = room != null
-	camera.zoom = Vector2.ONE * room.camera_zoom if room else Vector2(2, 2)
+	_fit_zoom()
 	camera.position = room.offset + room.camera_center if room else Vector2.ZERO
 	camera.limit_left = int(camera_bounds.position.x)
 	camera.limit_top = int(camera_bounds.position.y)
@@ -50,6 +52,12 @@ func set_place(next_room: VillageInteriorDef, at: Vector2) -> void:
 	camera.limit_bottom = int(camera_bounds.end.y)
 	camera.reset_smoothing()
 	camera.force_update_scroll()
+
+
+## The authored zoom (the surface's, a room's) grows by what PixelGrid's rounding of the canvas's
+## scale took off, as the dungeon's GameCamera does: a room fills any screen the same way.
+func _fit_zoom() -> void:
+	camera.zoom = (Vector2.ONE * room.camera_zoom if room else SURFACE_ZOOM) * PixelGrid.world_zoom()
 
 
 func _physics_process(delta: float) -> void:

@@ -188,7 +188,7 @@
   drifting pixel fog. Played by `Ambience` (`src/world/ambience.tscn`): the loop on the Ambience bus,
   footsteps and distant sounds on the World bus (both under the Ambience slider).
   Big monsters and bosses shake the ground when they walk. Under 30% HP a heartbeat plays and the
-  music gets muffled (a low-pass filter on the Music bus). The screen fades to black on the stairs.
+  music gets muffled (a low-pass filter on the Music bus, lifted when the game is left). The screen fades to black on the stairs.
 
 ## Music
 
