@@ -3622,8 +3622,8 @@
     {
       "id": "task_238",
       "title": "Test instable : « a room out of sight, a short walk away » (game.ai_movement)",
-      "description": "Échoue avec la graine 413192, aussi sans le changement des murs : l'étage tiré n'a pas de salle hors de vue à courte distance pour le test. Rendre le test indépendant de la graine (chercher sur plusieurs étages, ou poser l'étage).",
-      "status": "backlog",
+      "description": "Échoue avec la graine 413192, aussi sans le changement des murs : l'étage tiré n'a pas de salle hors de vue à courte distance pour le test. Rendre le test indépendant de la graine (chercher sur plusieurs étages, ou poser l'étage).\n\nCorrigé (27/10) : si aucune salle hors de vue à 250-1500 px de marche n'existe depuis la place du héros, le test essaie depuis chaque salle et y pose le héros. Passe avec la graine 413192 et d'autres.",
+      "status": "done",
       "priority": "low",
       "epic_id": "epic_5",
       "tags": [
@@ -3631,7 +3631,7 @@
         "bug"
       ],
       "created_at": 1792858090,
-      "updated_at": 1792858090,
+      "updated_at": 1793075271,
       "due_date": null
     },
     {

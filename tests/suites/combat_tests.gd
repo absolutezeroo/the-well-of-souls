@@ -1755,20 +1755,30 @@ func _test_ai_movement(game: Game) -> void:
 	await _clear_monsters(world)
 
 	# From another room, out of sight, around the walls: it finds the hero.
-	# (The room whose walk is closest to 600 px: layouts change with the data, so no fixed window.)
+	# (The room whose walk is closest to 600 px: layouts change with the data, so no fixed window.
+	# Some floors have none from where the hero stands: then the hero waits in another room.)
 	var hunter_spot := Vector2.INF
-	var best_gap := INF
+	var hero_spots: Array[Vector2] = [player.global_position]
 	for room in world.map.rooms:
-		var candidate := _solid_point_in(world, room)
-		if world.has_line_of_sight(candidate, player.global_position):
-			continue
-		var path := world.find_path(candidate, player.global_position)
-		var length := 0.0
-		for k in range(1, path.size()):
-			length += path[k - 1].distance_to(path[k])
-		if length >= 250.0 and length <= 1500.0 and absf(length - 600.0) < best_gap:
-			best_gap = absf(length - 600.0)
-			hunter_spot = candidate
+		hero_spots.append(_solid_point_in(world, room))
+	for hero_spot in hero_spots:
+		var best_gap := INF
+		for room in world.map.rooms:
+			var candidate := _solid_point_in(world, room)
+			if world.has_line_of_sight(candidate, hero_spot):
+				continue
+			var path := world.find_path(candidate, hero_spot)
+			var length := 0.0
+			for k in range(1, path.size()):
+				length += path[k - 1].distance_to(path[k])
+			if length >= 250.0 and length <= 1500.0 and absf(length - 600.0) < best_gap:
+				best_gap = absf(length - 600.0)
+				hunter_spot = candidate
+		if hunter_spot != Vector2.INF:
+			player.global_position = hero_spot
+			player.velocity = Vector2.ZERO
+			await _frames(2)
+			break
 	check(hunter_spot != Vector2.INF, "a room out of sight, a short walk away")
 	if hunter_spot != Vector2.INF:
 		var hunter := world.spawn_monster(rat_def, hunter_spot)
