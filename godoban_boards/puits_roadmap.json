@@ -5842,7 +5842,7 @@
     {
       "id": "task_388",
       "title": "Habiller Kagari avec Ninja Adventure : herbe, chemins et décor",
-      "description": "Fait : l'herbe vient du TilesetFloor de Ninja Adventure (tuile unie + variantes usées, sans le voile sombre qui la rendait brune), les chemins de terre sont auto-tuilés avec bords et coins intérieurs dans l'herbe, des fleurs et touffes sont semées de façon stable hors des accessoires, et une lisière d'arbres, tonneaux, caisses, linge, foin, souches et pierres habillent la place (VillageGround, données dans kagari.tres). À vérifier sur le S23 : lisibilité de jour et de nuit, densité du décor, aucun objet qui bloque un passage.\n\n27/10 : le village paraissait encore vide. Ajout d'une chaumière avec son potager au sud-ouest, d'une cabane et d'un tas de bois au sud-est, de caisses, pots, rochers et buissons sur les bords, et de plus de fleurs. À vérifier sur le S23 : densité, et qu'aucun objet ne gêne un passage.\n\n27/10 (2) : trop serré, ça ne respirait pas. La place passe de 960x640 à 1440x960 (tout écarté x1,5 : maisons, Puits, marché, mémorial, trajets et horaires des habitants, porte du temple ; l'intérieur du temple ne change pas), et des chemins de terre relient maintenant chaque maison à la croisée. À vérifier sur le S23 : temps de marche entre les lieux (pas trop long), et que les habitants arrivent bien à leurs rendez-vous.",
+      "description": "Fait : l'herbe vient du TilesetFloor de Ninja Adventure (tuile unie + variantes usées, sans le voile sombre qui la rendait brune), les chemins de terre sont auto-tuilés avec bords et coins intérieurs dans l'herbe, des fleurs et touffes sont semées de façon stable hors des accessoires, et une lisière d'arbres, tonneaux, caisses, linge, foin, souches et pierres habillent la place (VillageGround, données dans kagari.tres). À vérifier sur le S23 : lisibilité de jour et de nuit, densité du décor, aucun objet qui bloque un passage.\n\n27/10 : le village paraissait encore vide. Ajout d'une chaumière avec son potager au sud-ouest, d'une cabane et d'un tas de bois au sud-est, de caisses, pots, rochers et buissons sur les bords, et de plus de fleurs. À vérifier sur le S23 : densité, et qu'aucun objet ne gêne un passage.\n\n27/10 (2) : trop serré, ça ne respirait pas. La place passe de 960x640 à 1440x960 (tout écarté x1,5 : maisons, Puits, marché, mémorial, trajets et horaires des habitants, porte du temple ; l'intérieur du temple ne change pas), et des chemins de terre relient maintenant chaque maison à la croisée. À vérifier sur le S23 : temps de marche entre les lieux (pas trop long), et que les habitants arrivent bien à leurs rendez-vous.\n\n27/10 (3) : placement repensé par quartiers (posé « au pif » avant) : avenue du sud au temple par le Puits, rue du marché (ouest) au mémorial (est), maisons endormies de Sayo et Ren au nord au bout de leur ruelle (racines autour, pas en travers), chaumière + potager et cabane du bûcheron au sud, forêt tout autour sauf au sud. Habitants, étals et lampes suivent. Décrit dans docs/design/village.md, « The layout of Kagari ».",
       "status": "review",
       "priority": "high",
       "epic_id": "epic_1",
@@ -5856,7 +5856,7 @@
         "tests"
       ],
       "created_at": 1793074086,
-      "updated_at": 1793099606
+      "updated_at": 1793124296
     },
     {
       "id": "task_389",

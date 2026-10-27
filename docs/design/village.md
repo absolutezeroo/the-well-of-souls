@@ -159,6 +159,32 @@ there knocks and opens the normal conversation, so a quest or service is not tim
 Their actual home interiors await a residential asset pack. Kagari is an inhabited village
 whose souls were taken; its houses are not a settlement of ruins to rebuild.
 
+## The layout of Kagari
+
+The square (1440x960) reads as a village, not as props dropped on grass. One avenue runs from
+the open south edge, where the hero arrives, past the Well to the temple; one street crosses it
+at the Well's square. Every place stands where its use puts it:
+
+- **North, the sacred quarter:** the red-roofed temple at the avenue's end, a torii between it
+  and the Well, a grove of pines behind it.
+- **Centre, the Well's square:** the Well (the descent), the notice board at the square's
+  corner, the Keeper's watch beside it, the return spawn just south of it.
+- **West, the market:** the stall and the green shop face one small square at the street's end,
+  crates and barrels by the shop, the two market lamps at its corners.
+- **East, the memorial court:** the Keepers' statues, flowers laid before them, stones at the
+  corners, the two memorial lamps.
+- **North-west and north-east, the sleeping homes:** Sayo's and Ren's houses, each at the end of
+  its own lane from the street. The Well's roots smother each house on both sides (never across
+  its lane, so the echo at the door can still be reached); returning the quest clears them.
+  Sayo's washing line and Ren's hay sit beside their homes.
+- **South, the lane of cottages:** a cottage with its vegetable rows and the woodcutter's hut
+  with its woodpile, joined by a lane across the avenue.
+- **The forest ring** closes the clearing on every side but the south.
+
+Residents' homes, stall and lamp appointments are the doors and lamps of those places. The
+layout lives in `data/village/kagari.tres` (and the residents' files); the layout editor
+moves it by hand.
+
 ## The temple interior
 
 The **Temple of the Last Flame**, north of the Well, is a red-roofed shrine house from

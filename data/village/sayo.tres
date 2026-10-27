@@ -14,21 +14,21 @@
 script = ExtResource("activity_script")
 start_hour = 0.0
 display_name = "Resting at home"
-destination = Vector2(285, 315)
+destination = Vector2(304, 352)
 indoors = true
 
 [sub_resource type="Resource" id="activity_1"]
 script = ExtResource("activity_script")
 start_hour = 6.0
 display_name = "Opening her house"
-destination = Vector2(285, 315)
+destination = Vector2(304, 352)
 indoors = false
 
 [sub_resource type="Resource" id="activity_2"]
 script = ExtResource("activity_script")
 start_hour = 9.0
 display_name = "Visiting the market"
-destination = Vector2(420, 698)
+destination = Vector2(360, 700)
 indoors = false
 
 [sub_resource type="Resource" id="activity_3"]
@@ -43,21 +43,21 @@ room = ExtResource("temple")
 script = ExtResource("activity_script")
 start_hour = 16.0
 display_name = "Welcoming neighbours at home"
-destination = Vector2(285, 315)
+destination = Vector2(304, 352)
 indoors = false
 
 [sub_resource type="Resource" id="activity_5"]
 script = ExtResource("activity_script")
 start_hour = 20.0
 display_name = "Resting at home"
-destination = Vector2(285, 315)
+destination = Vector2(304, 352)
 indoors = true
 
 [resource]
 script = ExtResource("script")
 id = &"sayo"
 speaker = ExtResource("speaker")
-position = Vector2(285, 315)
+position = Vector2(304, 352)
 role = 1
 quest = ExtResource("quest")
 wakes_after = ExtResource("quest")

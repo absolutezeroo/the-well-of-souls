@@ -11,42 +11,42 @@
 script = ExtResource("activity_script")
 start_hour = 0.0
 display_name = "Resting behind the stall"
-destination = Vector2(338, 698)
+destination = Vector2(300, 736)
 indoors = true
 
 [sub_resource type="Resource" id="activity_1"]
 script = ExtResource("activity_script")
 start_hour = 6.0
 display_name = "Opening the market stall"
-destination = Vector2(338, 682)
+destination = Vector2(300, 720)
 indoors = false
 
 [sub_resource type="Resource" id="activity_2"]
 script = ExtResource("activity_script")
 start_hour = 12.0
 display_name = "Visiting the lantern-mender"
-destination = Vector2(1155, 398)
+destination = Vector2(1136, 384)
 indoors = false
 
 [sub_resource type="Resource" id="activity_3"]
 script = ExtResource("activity_script")
 start_hour = 14.0
 display_name = "Trading at the market"
-destination = Vector2(338, 682)
+destination = Vector2(300, 720)
 indoors = false
 
 [sub_resource type="Resource" id="activity_4"]
 script = ExtResource("activity_script")
 start_hour = 20.0
 display_name = "Resting behind the stall"
-destination = Vector2(338, 698)
+destination = Vector2(300, 736)
 indoors = true
 
 [resource]
 script = ExtResource("script")
 id = &"wanderer"
 speaker = ExtResource("speaker")
-position = Vector2(338, 682)
+position = Vector2(300, 720)
 role = 2
 quest = ExtResource("quest")
 echo = false
