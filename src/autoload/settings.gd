@@ -3,7 +3,8 @@ extends Node
 ## controls, fixed or floating joystick, battery saver (30 FPS), fewer effects, screen flashes, tutorial hints, run timer,
 ## boss stories (full, short, off), on a computer fullscreen or a window (F11, Alt+Enter), the
 ## interface's size (PixelGrid),
-## language (English or French: TranslationServer's locale, see locale/strings.csv).
+## language (English or French: TranslationServer's locale, see locale/strings.csv), and the
+## player's own keys and gamepad buttons (KeyBindings, Options > Controls).
 ## Saved in user://settings.cfg and applied as soon as they change.
 
 signal changed
@@ -83,6 +84,9 @@ var fullscreen := false
 ## UI_BIG, UI_MEDIUM or UI_SMALL: smaller leaves more room on a big monitor (the view of the
 ## floor stays the same).
 var ui_size := UI_BIG
+## The controls the player gave other keys or buttons: action -> its events (KeyBindings). Never
+## changed in place by the game: set_bindings() puts a new one.
+var bindings := {}
 
 var _last_vibration := 0
 ## Takes F11 and Alt+Enter before anything else (WindowKeys).
@@ -107,6 +111,14 @@ func set_option(key: StringName, value: Variant) -> void:
 	changed.emit()
 
 
+## Puts the player's keys and buttons (a new dictionary: KeyBindings), applies and saves them.
+func set_bindings(new_bindings: Dictionary) -> void:
+	bindings = new_bindings.duplicate(true)
+	apply()
+	save_settings()
+	changed.emit()
+
+
 ## Sets and applies `key` without writing the file: a slider being dragged (heard, seen at once;
 ## set_option() saves when it is let go).
 func preview_option(key: StringName, value: Variant) -> void:
@@ -122,6 +134,7 @@ func apply() -> void:
 	Engine.max_fps = SAVER_FPS if battery_saver else FPS
 	if TranslationServer.get_locale() != language:
 		TranslationServer.set_locale(language)
+	KeyBindings.apply(bindings)
 	_apply_window()
 
 
@@ -197,6 +210,8 @@ func save_settings() -> void:
 	var file := ConfigFile.new()
 	for key in KEYS:
 		file.set_value("options", key, get(key))
+	for action: String in bindings:
+		file.set_value("bindings", action, bindings[action])
 	file.save(path)
 
 
@@ -228,6 +243,13 @@ func load_settings() -> void:
 	boss_stories = clampi(int(file.get_value("options", "boss_stories", boss_stories)), STORIES_FULL, STORIES_OFF)
 	fullscreen = bool(file.get_value("options", "fullscreen", fullscreen))
 	ui_size = clampi(int(file.get_value("options", "ui_size", ui_size)), UI_BIG, UI_SMALL)
+	var kept := {}
+	if file.has_section("bindings"):
+		for action in file.get_section_keys("bindings"):
+			var events: Variant = file.get_value("bindings", action)
+			if KeyBindings.is_remappable(StringName(action)) and (events is PackedStringArray or events is Array):
+				kept[action] = PackedStringArray(events)
+	bindings = kept
 
 
 ## The slider's volume on top of the bus's own gain in the mix (headroom, see SoundMixDef).

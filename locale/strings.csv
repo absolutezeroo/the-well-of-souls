@@ -667,7 +667,15 @@ Gamepad: %s,Gamepad: %s,Manette : %s
 Gamepad,Gamepad,Manette
 Keyboard and mouse,Keyboard and mouse,Clavier et souris
 Touch,Touch,Tactile
+Default buttons,Default buttons,Boutons par défaut
+Default keys,Default keys,Touches par défaut
+Move,Move,Bouger
+That one is kept for: %s. Pick another.,That one is kept for: %s. Pick another.,Celle-ci est réservée à : %s. Choisis-en une autre.
+Press the new button for %s. Start: keep it as it is.,Press the new button for %s. Start: keep it as it is.,Appuie sur le nouveau bouton pour : %s. Start : ne rien changer.
+Press the new key for %s. Escape: keep it as it is.,Press the new key for %s. Escape: keep it as it is.,Appuie sur la nouvelle touche pour : %s. Échap : ne rien changer.
 "The controls of the device in hand. Pick up another (a key, a gamepad, a touch) and this page follows.","The controls of the device in hand. Pick up another (a key, a gamepad, a touch) and this page follows.","Les commandes de l'appareil en main. Prends-en un autre (une touche, une manette, l'écran) et cette page suit."
+The controls of the device in hand. Choose a fight's control to give it another key or button.,The controls of the device in hand. Choose a fight's control to give it another key or button.,Les commandes de l'appareil en main. Choisis une commande de combat pour lui donner une autre touche ou un autre bouton.
+Change,Change,Changer
 Done! Tips are back,Done! Tips are back,C'est fait ! Les conseils sont de retour
 Replay tutorial,Replay tutorial,Rejouer le tutoriel
 "Only its name and a line it remembers, about two seconds.","Only its name and a line it remembers, about two seconds.","Seulement son nom et une phrase dont il se souvient, environ deux secondes."
@@ -756,7 +764,6 @@ Delete my online data,Delete my online data,Supprimer mes données en ligne
 Delete,Delete,Supprimer
 Online save,Online save,Sauvegarde en ligne
 Your name,Your name,Ton nom
-Change,Change,Changer
 Publish my scores online,Publish my scores online,Publier mes scores en ligne
 "Your Dawn Knell scores and this name, public on the leaderboards. Off: nothing is sent nor read.","Your Dawn Knell scores and this name, public on the leaderboards. Off: nothing is sent nor read.","Tes scores du Glas de l'Aube et ce nom, publics dans les classements. Désactivé : rien n'est envoyé ni lu."
 The door seals behind you until every foe is slain: %d waves.,The door seals behind you until every foe is slain: %d waves.,La porte se scelle derrière toi jusqu'à ce que tous les ennemis soient abattus : %d vagues.
@@ -1639,7 +1646,7 @@ Mother of Tears,Mother of Tears,La Mère des Larmes
 "A ghost woven of Kagari's mourners. Her wail freezes the blood, and the lost come when she calls.","A ghost woven of Kagari's mourners. Her wail freezes the blood, and the lost come when she calls.","Un spectre tissé des pleureuses de Kagari. Sa plainte glace le sang, et les égarés viennent à son appel."
 Oath of the Colossus,Oath of the Colossus,Serment du Colosse
 "Start with the Hammer and 30% more max Health, but move 15% slower.","Start with the Hammer and 30% more max Health, but move 15% slower.","Commence avec le Marteau et 30 % de Vie max en plus, mais avance 15 % moins vite."
-"""I do not step back. Let the night come to me.""","""I do not step back. Let the night come to me.""","« Je ne recule pas. Que la nuit vienne à moi. »"
+"""I do not step back. Let the night come to me.""","""I do not step back. Let the night come to me.""",« Je ne recule pas. Que la nuit vienne à moi. »
 Oath of the Duelist,Oath of the Duelist,Serment du Duelliste
 "Start with the Rapier, +10% critical hit chance, and critical hits deal x2.5 instead of x1.75, but 20% less max Health.","Start with the Rapier, +10% critical hit chance, and critical hits deal x2.5 instead of x1.75, but 20% less max Health.","Commence avec la Rapière, +10 % de chance de coup critique, et les coups critiques infligent x2,5 au lieu de x1,75, mais 20 % de Vie max en moins."
 """I strike once, and true. My blood will answer for the rest.""","""I strike once, and true. My blood will answer for the rest.""","« Je frappe une fois, et juste. Mon sang répondra du reste. »"
@@ -2828,7 +2835,6 @@ Lanterns lit: %d / %d,Lanterns lit: %d / %d,Lanternes allumées : %d / %d
 "The fifth flame takes. The seal comes undone, and the door with it.","The fifth flame takes. The seal comes undone, and the door with it.","La cinquième flamme prend. Le sceau se défait, et la porte avec lui."
 The Unbound Seal,The Unbound Seal,Le Sceau Défait
 "Tôma undid the seal's knots one by one. Here a lesser seal still holds a door: light its five lanterns, and tie the knots back the other way.","Tôma undid the seal's knots one by one. Here a lesser seal still holds a door: light its five lanterns, and tie the knots back the other way.","Tôma a défait les nœuds du sceau un à un. Ici, un sceau plus petit tient encore une porte : allume ses cinq lanternes, et renoue les nœuds dans l'autre sens."
-Move,Move,Bouger
 Drag your thumb on the left side of the screen to walk.,Drag your thumb on the left side of the screen to walk.,Fais glisser ton pouce sur la gauche de l'écran pour marcher.
 Walk with {move}.,Walk with {move}.,Marche avec {move}.
 Sealed stairs,Sealed stairs,Escaliers scellés

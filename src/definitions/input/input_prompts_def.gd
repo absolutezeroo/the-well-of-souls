@@ -6,6 +6,9 @@ extends Resource
 
 ## Every control the player is told about, in the Controls page's order.
 @export var actions: Array[ActionPromptDef] = []
+## Input actions whose keys and buttons no other control may take (KeyBindings): moving, Pause
+## and Fullscreen, so the hero can always move and the game always pause.
+@export var reserved_actions: Array[StringName] = []
 ## The gamepad families; the last one is for pads no family claims.
 @export var pads: Array[PadGlyphsDef] = []
 ## Keys with a word of their own on their caps (physical keycodes), and those words, in the same

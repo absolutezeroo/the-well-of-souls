@@ -29,7 +29,8 @@ the menu on top (the title's, under the Options) takes no drag.
 | Fullscreen or a window | - | F11, Alt+Enter | - |
 
 A keyboard's letters are named as the player's keyboard prints them (`Prompts.key_word()`: the key
-in W's place reads Z on a French keyboard); the bindings are the input map's (project.godot), and
+in W's place reads Z on a French keyboard); the bindings are the input map's (project.godot, with
+the player's own over it: the Controls page, below), and
 what the player is told about them is `data/ui/input_prompts.tres` (see Devices below). B never
 pauses in a fight (it is a skill): only Escape, Start and the phone's back button do. The other
 way round, the press that closes a menu stays the menu's: B closing the pause menu, the forge or
@@ -128,10 +129,23 @@ shows to the device in hand.
   the screen closed itself, so the tap that closes a fragment never reaches the attack button
   under it. A grace after opening (the fragment's quarter of a second, the curse card's sigil)
   keeps the thumb that opened it from closing it (`TapTests`).
-- **The Controls page** (Options > Controls): what does what on the device in use, read-only: each
+- **The Controls page** (Options > Controls): what does what on the device in use: each
   control of `input_prompts.tres` with every key and mouse button (caps), the gamepad's buttons in
   its family's names, or how it is done by touch. Picking up another device turns the page.
-  Remapping is not there yet.
+- **The player's own keys** (`KeyBindings`, `Settings.bindings`): on keys and gamepads the
+  fight's controls (`ActionPromptDef.remappable`: Attack, the four skills, the three belt slots,
+  Use, the perks, the bag, the map) are buttons on the Controls page. Pressed, the page waits
+  ("Press the new key for Attack"); the next key, gamepad button or trigger becomes the control's
+  first (the one every prompt shows), Escape (Start on a pad) or a click gives up. One key does
+  one control: a key that was another control's first swaps with it (Roll given 2: the weapon
+  skill takes 1), another control's second key (J for Attack) is taken from it. The keys of moving,
+  Pause and Fullscreen (`InputPromptsDef.reserved_actions`) are refused ("That one is kept for:
+  Move"), so the hero can always move and the game always pause; the menus' own keys (Enter,
+  Escape, Q / E for tabs, the bag's X and G) never change. A key is taken by its place, like the
+  game's own. Default keys / Default buttons put back that device's, the other's kept. Saved in
+  `settings.cfg` (section `bindings`: the changed controls' whole lists, "k:74" a key, "b:2" a
+  button, "a:5:1" a trigger) and laid over project.godot's input map at start
+  (`KeyBindings.apply()`). Moving stays on WASD / the arrows and the left stick.
 
 ## Screens: windows, sizes, scale
 

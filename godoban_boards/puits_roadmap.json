@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 388,
+  "next_id": 389,
   "tags": [
     "pc",
     "test",
@@ -502,8 +502,8 @@
     {
       "id": "task_30",
       "title": "Réaffectation des touches",
-      "description": "Page Commandes en lecture seule pour l'instant. Permettre de changer les touches.",
-      "status": "backlog",
+      "description": "Page Commandes en lecture seule pour l'instant. Permettre de changer les touches.\n\nFait : Options > Commandes, au clavier et à la manette, les commandes de combat (attaque, 4 compétences, 3 emplacements de ceinture, Utiliser, atouts, sac, carte) sont des boutons : appuyer, puis la nouvelle touche / le nouveau bouton / la gâchette. Une touche = une commande (échange avec la 1re touche d'une autre commande, retrait d'une 2e touche). Déplacement, Pause et Plein écran réservés. Échap (Start) annule. « Touches par défaut » / « Boutons par défaut ». Sauvé dans settings.cfg. À vérifier sur PC et avec une vraie manette : changer l'attaque, jouer, relancer le jeu (gardé), gâchettes, clavier AZERTY (la touche est prise par sa place).",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_4",
       "due_date": null,
@@ -511,7 +511,7 @@
         "pc"
       ],
       "created_at": 1792685000,
-      "updated_at": 1792685000
+      "updated_at": 1793074791
     },
     {
       "id": "task_31",
@@ -5838,6 +5838,21 @@
       "created_at": 1793065447,
       "updated_at": 1793066691,
       "due_date": null
+    },
+    {
+      "id": "task_388",
+      "title": "Réaffecter aussi les touches de déplacement",
+      "description": "Suite de task_30 : le déplacement (ZQSD/WASD, flèches, stick gauche) et les touches des menus (Entrée, Échap, Q/E, X/G du sac) ne se changent pas. Pour les gauchers ou d'autres claviers : quatre lignes « Haut / Gauche / Bas / Droite » réaffectables (KeyBindings gère une action par ligne ; le déplacement est réservé aujourd'hui : InputPromptsDef.reserved_actions).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "pc",
+        "ui"
+      ],
+      "created_at": 1793074791,
+      "updated_at": 1793074791
     }
   ]
 }
