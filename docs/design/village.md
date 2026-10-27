@@ -18,7 +18,7 @@ The Well is central, the temple north, the market southwest and the memorial cou
 The skills shrine is inside the temple, reached through its southern doorway.
 The Veilleuse, Sayo and Ren make three inhabitants; the Old Wanderer is the merchant. Their
 positions, figures and words are resources. Existing residents retain the CC0 Ninja Adventure
-figures; the temple uses the user-supplied Craftpix Free Ruined Temple pack (its own license). Sayo and Ren begin as
+figures; the temple, the houses and the shop come from the pack's TilesetHouse. Sayo and Ren begin as
 faint echoes of sleeping villagers, consistent with [the lore](../lore.md). The player must
 approach and interact; walking by never launches a run or opens a conversation automatically.
 
@@ -161,10 +161,11 @@ whose souls were taken; its houses are not a settlement of ruins to rebuild.
 
 ## The temple interior
 
-The **Temple of the Last Flame**, north of the Well, now has a facade from the supplied
-Craftpix pack and a playable interior. Approach its door and use Interact. The same peaceful
-hero enters a room with stone paving, an aisle, banners, offering tables, lamps and the existing
-skills shrine. Approach the altar to open the normal ShrinePanel with its unchanged prices,
+The **Temple of the Last Flame**, north of the Well, is a red-roofed shrine house from
+Ninja Adventure's TilesetHouse, a torii on the path from the Well, and a playable interior. Approach its door and use Interact. The same peaceful
+hero enters a room with dark wooden boards, a golden aisle, red banners, seated stone monks,
+pillars and the existing skills shrine (Ninja Adventure interior floor, simple walls and house
+props). Approach the altar to open the normal ShrinePanel with its unchanged prices,
 prerequisites and permanent upgrades. The southern threshold returns to the matching exterior
 door. Entry/exit is explicit, works with keyboard/gamepad/touch and requires a fresh action
 press; holding Interact cannot bounce through the door. Modals prevent transitions.
@@ -193,9 +194,10 @@ records repeated atlas patches; `VillageInteriorFloor` draws them only on change
 registered room, and `VillageActivityDef.room` makes an appointment's destination room-local.
 Register more interiors in `VillageDef.interiors`; future houses can reuse this mechanism.
 
-Only three original PNG atlases from the archive are used. Editable PSD/Aseprite files,
-demo levels, enemies and traps are not imported. Credits and the Craftpix license reference
-are in `assets/village/temple/CREDITS.txt`. The residential houses remain a separate next step.
+All of Kagari is Ninja Adventure art (CC0, assets/LICENSE_NinjaAdventure.txt): TilesetHouse
+(assets/tiles/house.png) for the temple, the houses and the shop, TilesetInteriorFloor and
+TilesetWallSimple for the temple's room. The Craftpix temple used before clashed with that
+style and was removed. Enterable residential houses remain a separate next step.
 
 Sayo's figure and portrait share a teal palette material, distinguishing her from the Veilleuse
 without duplicating or regenerating sprite textures. Static props remain separate from these

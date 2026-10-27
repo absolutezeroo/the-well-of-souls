@@ -2,50 +2,51 @@
 [ext_resource type="Script" path="res://src/definitions/village/village_interior_def.gd" id="script"]
 [ext_resource type="Script" path="res://src/definitions/village/village_tile_patch_def.gd" id="tile"]
 [ext_resource type="Script" path="res://src/definitions/village/village_prop_def.gd" id="prop"]
-[ext_resource type="Texture2D" path="res://assets/village/temple/walls_floor.png" id="walls"]
-[ext_resource type="Texture2D" path="res://assets/village/temple/objects.png" id="objects"]
+[ext_resource type="Texture2D" path="res://assets/tiles/interior_floor.png" id="floor_art"]
+[ext_resource type="Texture2D" path="res://assets/tiles/interior_wall.png" id="walls"]
+[ext_resource type="Texture2D" path="res://assets/tiles/house.png" id="objects"]
 [ext_resource type="Texture2D" path="res://assets/props/altar.png" id="altar"]
 
 [sub_resource type="Resource" id="floor"]
 script = ExtResource("tile")
-texture = ExtResource("walls")
-region = Rect2(64, 176, 32, 32)
+texture = ExtResource("floor_art")
+region = Rect2(256, 208, 16, 16)
 area = Rect2(96, 160, 768, 320)
 
 [sub_resource type="Resource" id="back_wall"]
 script = ExtResource("tile")
 texture = ExtResource("walls")
-region = Rect2(32, 96, 16, 32)
+region = Rect2(48, 96, 16, 16)
 area = Rect2(96, 96, 768, 64)
 
 [sub_resource type="Resource" id="left_wall"]
 script = ExtResource("tile")
 texture = ExtResource("walls")
-region = Rect2(16, 16, 16, 16)
+region = Rect2(0, 128, 16, 16)
 area = Rect2(64, 96, 32, 448)
 
 [sub_resource type="Resource" id="right_wall"]
 script = ExtResource("tile")
 texture = ExtResource("walls")
-region = Rect2(16, 16, 16, 16)
+region = Rect2(0, 128, 16, 16)
 area = Rect2(864, 96, 32, 448)
 
 [sub_resource type="Resource" id="front_left"]
 script = ExtResource("tile")
 texture = ExtResource("walls")
-region = Rect2(32, 96, 16, 32)
+region = Rect2(48, 96, 16, 16)
 area = Rect2(96, 480, 352, 64)
 
 [sub_resource type="Resource" id="front_right"]
 script = ExtResource("tile")
 texture = ExtResource("walls")
-region = Rect2(32, 96, 16, 32)
+region = Rect2(48, 96, 16, 16)
 area = Rect2(512, 480, 352, 64)
 
 [sub_resource type="Resource" id="threshold"]
 script = ExtResource("tile")
-texture = ExtResource("walls")
-region = Rect2(112, 224, 16, 16)
+texture = ExtResource("floor_art")
+region = Rect2(96, 208, 16, 16)
 area = Rect2(448, 480, 64, 64)
 
 [sub_resource type="Resource" id="altar_prop"]
@@ -58,56 +59,56 @@ collision = Rect2(-28, -26, 56, 26)
 script = ExtResource("prop")
 texture = ExtResource("objects")
 position = Vector2(240, 246)
-region = Rect2(144, 104, 32, 56)
+region = Rect2(80, 240, 32, 32)
 collision = Rect2(-25, -20, 50, 20)
 
 [sub_resource type="Resource" id="stone_right_prop"]
 script = ExtResource("prop")
 texture = ExtResource("objects")
 position = Vector2(720, 246)
-region = Rect2(192, 104, 32, 56)
+region = Rect2(80, 240, 32, 32)
 collision = Rect2(-25, -20, 50, 20)
 
 [sub_resource type="Resource" id="banner_left_prop"]
 script = ExtResource("prop")
 texture = ExtResource("objects")
 position = Vector2(336, 210)
-region = Rect2(0, 104, 16, 56)
+region = Rect2(368, 320, 16, 32)
 
 [sub_resource type="Resource" id="candles_left_prop"]
 script = ExtResource("prop")
 texture = ExtResource("objects")
 position = Vector2(400, 238)
-region = Rect2(288, 168, 16, 24)
+region = Rect2(0, 244, 16, 44)
 
 [sub_resource type="Resource" id="candles_right_prop"]
 script = ExtResource("prop")
 texture = ExtResource("objects")
 position = Vector2(560, 238)
-region = Rect2(288, 168, 16, 24)
+region = Rect2(0, 244, 16, 44)
 
 [sub_resource type="Resource" id="jars_prop"]
 script = ExtResource("prop")
 texture = ExtResource("objects")
 position = Vector2(800, 260)
-region = Rect2(264, 0, 24, 32)
+region = Rect2(256, 240, 32, 16)
 collision = Rect2(-15, -10, 30, 10)
 
 [sub_resource type="Resource" id="banner_right_prop"]
 script = ExtResource("prop")
 texture = ExtResource("objects")
 position = Vector2(624, 210)
-region = Rect2(0, 104, 16, 56)
+region = Rect2(368, 320, 16, 32)
 
 [sub_resource type="Resource" id="aisle"]
 script = ExtResource("tile")
-texture = ExtResource("walls")
+texture = ExtResource("floor_art")
 region = Rect2(96, 208, 16, 16)
 area = Rect2(448, 224, 64, 256)
 
 [sub_resource type="Resource" id="dais"]
 script = ExtResource("tile")
-texture = ExtResource("walls")
+texture = ExtResource("floor_art")
 region = Rect2(96, 208, 16, 16)
 area = Rect2(384, 160, 192, 64)
 

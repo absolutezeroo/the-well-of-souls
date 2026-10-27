@@ -336,8 +336,8 @@ exterior prop/door, return_position, separate non-overlapping world offset, came
 walk bounds, spawn/exit and optional shrine. Tiles are VillageTilePatchDef atlas rectangles
 repeated at art_scale; areas must be exact multiples of the scaled region size. Walls and
 props supply both physics collisions and cached NPC navigation obstacles. Keep door, spawn,
-exit and appointment positions clear with body/grid clearance. Room artwork has its own credits;
-do not mark Craftpix resources as CC0. Houses should use residential art, not duplicate temples.
+exit and appointment positions clear with body/grid clearance. Use Ninja Adventure art (CC0)
+so the village keeps one style: assets/tiles/house.png has houses, shops, statues and banners.
 
 For Kagari layout editing, open `tools/village/layout.tscn`; the French
 [editing guide](modifier-village.md) explains the draggable points, explicit Apply/Reload,

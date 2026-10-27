@@ -73,10 +73,6 @@ docs/      Everything else (below)
 
 ## Credits
 
-- Village temple: **Craftpix.net — Free Ruined Temple Top-Down Location Pixel Art**, supplied
-  by the project owner, under the Craftpix Freebie license (not CC0). Used atlases and source
-  links: [temple credits](assets/village/temple/CREDITS.txt).
-
 - Art, sound effects and music: **[Ninja Adventure](https://pixel-boy.itch.io/ninja-adventure-asset-pack)**
   by Pixel-boy and AAA, CC0 (`assets/LICENSE_NinjaAdventure.txt`).
 - Font: **Pixel Operator** (Pixel Operator 8) by Jayvee

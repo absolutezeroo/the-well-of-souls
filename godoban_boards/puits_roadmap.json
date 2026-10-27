@@ -5757,7 +5757,7 @@
     {
       "id": "task_383",
       "title": "Construire les vraies maisons habitées de Kagari avec un pack résidentiel",
-      "description": "Le pack Craftpix du temple a été reçu et intégré : façade, salle jouable, sanctuaire des compétences intérieur et horaires des PNJ (voir task_384). Ce pack ne contient pas de maisons de village. En attente d’assets résidentiels : remplacer les façades provisoires, assembler les vrais intérieurs et relier portes, travail et repos aux horaires. Réutiliser VillageInteriorDef et les transitions/navigation du temple. Kagari est un village dont les âmes sont aspirées par le puits, pas une suite de ruines ; conserver mobile, sauvegardes et boucle roguelike.\n\nNote : les maisons habitées doivent venir du pack Ninja Adventure complet (TilesetHouse), pas d'un autre pack, pour garder un seul style.",
+      "description": "Le pack Craftpix du temple a été reçu et intégré : façade, salle jouable, sanctuaire des compétences intérieur et horaires des PNJ (voir task_384). Ce pack ne contient pas de maisons de village. En attente d’assets résidentiels : remplacer les façades provisoires, assembler les vrais intérieurs et relier portes, travail et repos aux horaires. Réutiliser VillageInteriorDef et les transitions/navigation du temple. Kagari est un village dont les âmes sont aspirées par le puits, pas une suite de ruines ; conserver mobile, sauvegardes et boucle roguelike.\n\nNote : les maisons habitées doivent venir du pack Ninja Adventure complet (TilesetHouse), pas d'un autre pack, pour garder un seul style.\n\n27/10 : le pack complet est maintenant disponible (assets/tiles/house.png = TilesetHouse) ; les maisons visibles sont posées, il reste à les rendre habitables (intérieurs).",
       "status": "todo",
       "priority": "high",
       "epic_id": "epic_1",
@@ -5770,7 +5770,7 @@
         "tests"
       ],
       "created_at": 1793039913,
-      "updated_at": 1793074086,
+      "updated_at": 1793118468,
       "due_date": null
     },
     {
@@ -5861,8 +5861,8 @@
     {
       "id": "task_389",
       "title": "Remplacer le temple Craftpix par un bâtiment Ninja Adventure",
-      "description": "Le temple de marbre blanc (Craftpix) jure avec le reste du village en Ninja Adventure, et ses PNG bruts sont dans un dépôt public alors que la licence interdit de les redistribuer tels quels. Il faut le pack Ninja Adventure complet (Backgrounds/Tilesets : TilesetHouse, temples et maisons) : l'envoyer à Claude, puis refaire la façade et l'intérieur avec, en gardant la porte et les passages des PNJ.\n\nLa question de licence est réglée (dépôt privé, task_393) ; reste la raison de style : le marbre blanc jure avec Ninja Adventure.",
-      "status": "todo",
+      "description": "Le temple de marbre blanc (Craftpix) jure avec le reste du village en Ninja Adventure, et ses PNG bruts sont dans un dépôt public alors que la licence interdit de les redistribuer tels quels. Il faut le pack Ninja Adventure complet (Backgrounds/Tilesets : TilesetHouse, temples et maisons) : l'envoyer à Claude, puis refaire la façade et l'intérieur avec, en gardant la porte et les passages des PNJ.\n\nLa question de licence est réglée (dépôt privé, task_393) ; reste la raison de style : le marbre blanc jure avec Ninja Adventure.\n\n27/10 : fait. Pack complet téléchargé (itch.io, CC0). Le temple est une maison au toit rouge de TilesetHouse avec un torii sur le chemin ; l'intérieur passe en planches sombres, allée dorée, bannières rouges, moines de pierre et piliers. Chaumière, cabane et une boutique verte viennent aussi de TilesetHouse. Les fichiers Craftpix sont supprimés. À vérifier sur le S23 : la porte du temple (entrer/sortir), le cadrage de l'intérieur.",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_1",
       "due_date": null,
@@ -5875,7 +5875,7 @@
         "tests"
       ],
       "created_at": 1793074086,
-      "updated_at": 1793117225
+      "updated_at": 1793118468
     },
     {
       "id": "task_390",

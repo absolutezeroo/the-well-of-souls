@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bycnguqef0eec"
-path="res://.godot/imported/objects.png-708508fbfb3c7c535e649c0e29ccb7a4.ctex"
+uid="uid://chi54tujju3ac"
+path="res://.godot/imported/house.png-99307c711fdea81e7c52faac4b093ee8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/village/temple/objects.png"
-dest_files=["res://.godot/imported/objects.png-708508fbfb3c7c535e649c0e29ccb7a4.ctex"]
+source_file="res://assets/tiles/house.png"
+dest_files=["res://.godot/imported/house.png-99307c711fdea81e7c52faac4b093ee8.ctex"]
 
 [params]
 
