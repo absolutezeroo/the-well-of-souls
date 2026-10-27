@@ -21,6 +21,9 @@ extends Resource
 @export var touch_text := ""
 ## Listed on the Controls page (some prompts, like a menu's accept, are only for sentences).
 @export var listed := true
+## The player may give it another key or gamepad button on the Controls page (KeyBindings).
+## Only single actions (no `parts`); the menu's own keys and the reserved ones never.
+@export var remappable := false
 
 
 ## The input actions behind it.

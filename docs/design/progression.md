@@ -196,6 +196,10 @@ Each oath card (and its node in the tree) lists the oath line by line (`OathDef.
 weapon in plain text, every gain in green, every cost in red, so the price of an oath reads at a
 glance. Every oath has at least one of each (a unit check).
 
+Each oath also keeps its **vow** (`OathDef.lore`): the line a keeper of old swore at the bell
+(docs/lore.md 6), shown dim above the rule when its node is picked at the shrine. Lore only:
+the rule is always the plain list below it.
+
 Not in the daily run (everyone starts the same). The run keeps its oath in the save (`RunState.oath`).
 The choice changes only by the player's taps (`Profile.select_oath()`, `select_start_weapon()`):
 opening the panel changes nothing, and a saved oath the tree no longer opens (a reset tree), or a

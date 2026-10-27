@@ -9,6 +9,7 @@ script = ExtResource("1")
 id = &"colossus"
 display_name = "Oath of the Colossus"
 description = "Start with the Hammer and 30% more max Health, but move 15% slower."
+lore = "\"I do not step back. Let the night come to me.\""
 icon = ExtResource("2")
 color = Color(0.95, 0.45, 0.35, 1)
 starting_weapon = ExtResource("3")

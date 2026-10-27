@@ -7,6 +7,9 @@ extends Resource
 @export var display_name: String
 ## The rule, in plain words: what you get and what it costs.
 @export_multiline var description: String
+## The vow itself, as a keeper of old swore it at the bell (docs/lore.md 6: each oath was a
+## keeper's way): one solemn line in quotes, shown at the shrine above the rule. Never a rule.
+@export_multiline var lore: String
 @export var icon: Texture2D
 @export var color: Color = Color.WHITE
 ## The weapon the run starts with (null: the usual one).

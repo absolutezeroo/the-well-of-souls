@@ -11,6 +11,6 @@ id = &"king_slime_journal"
 title = "Tôma's Journal, a Torn Page"
 author = "Tôma, keeper of the shrine"
 place = "The moonless night"
-lines = PackedStringArray("I poured the first soul into the bronze bowl. It was light, when I had expected it to weigh.", "The beast drank the way a child drinks.", "Hana, if you can hear me at the bottom of the water: this is only the beginning.")
+lines = PackedStringArray("I poured the first soul into the bronze bowl. It was light; I had thought a soul would weigh more.", "The beast drank the way a child drinks.", "Hana, if you can hear me at the bottom of the water: this is only the beginning.")
 look = ExtResource("3_keeperjourna")
 conditions = Array[ExtResource("4_progresscond")]([ExtResource("2_keepernamed")])

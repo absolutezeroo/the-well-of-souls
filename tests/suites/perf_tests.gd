@@ -21,6 +21,26 @@ func run_unit() -> void:
 	check(GridDirs.FOUR == four, "the grid's four steps keep their order (it decides ties: the same seed, the same floor)")
 	_test_body_tops()
 	_test_shared_looks()
+	_test_idle_ui()
+
+
+## The interface's helpers cost nothing at rest: a list's drag helper only runs while a let-go
+## list glides, the dialogue's "more" arrow only while shown, and the title's picture is drawn
+## again 12 times a second, not 60.
+func _test_idle_ui() -> void:
+	var list := ScrollContainer.new()
+	add_child(list)
+	var helper := TouchScroll.attach(list)
+	check(not helper.is_processing(), "a list at rest: its drag helper doesn't run")
+	list.queue_free()
+	var arrow := DialogueBox.MoreArrow.new()
+	arrow.visible = false
+	add_child(arrow)
+	check(not arrow.is_processing(), "the dialogue's hidden arrow doesn't run")
+	arrow.show()
+	check(arrow.is_processing(), "...shown, it bobs")
+	arrow.queue_free()
+	check(TitleBackdrop.REDRAW_FPS <= 15.0, "the title's picture is drawn again at most 15 times a second")
 
 
 ## The weapon at rest bobs with the body's art (BodyTops.bob): every frame of the hero measured

@@ -639,6 +639,7 @@ func _test_options_keys(title: TitleScreen) -> void:
 	await _frames(1)
 	var rows := page.rows_text()
 	check(rows.any(func(row: PackedStringArray) -> bool: return row[0] == "Attack (hold to charge)" and row[1].contains("Space")), "the Controls page lists the keys: %s" % [rows.slice(0, 3)])
+	await _test_remap(options, page)
 	InputDevice.use(InputDevice.Kind.GAMEPAD, &"playstation")
 	await _frames(1)
 	rows = page.rows_text()
@@ -679,6 +680,73 @@ func _test_options_keys(title: TitleScreen) -> void:
 	await _frames(1)
 	await _tap_pad(JOY_BUTTON_B)
 	check(not options.visible, "B closes the options")
+
+
+## Options > Controls: a fight's control given another key, then a gamepad button; one key does
+## one control (a second key taken, a first one swapped), moving and pausing keep theirs, Escape
+## gives up without closing the options, the keys are saved and come back, Default puts them back.
+func _test_remap(options: OptionsPanel, page: ControlsPage) -> void:
+	var keyboard := InputDevice.Kind.KEYBOARD
+	var pad := InputDevice.Kind.GAMEPAD
+	var attack_button := page.find_child("AttackKeyButton", true, false) as Button
+	check(attack_button != null and page.find_child("MoveKeyButton", true, false) == null and page.find_child("PauseKeyButton", true, false) == null, "keys: the fight's controls can change, moving and Pause can't")
+	if attack_button == null:
+		return
+	check(Settings.bindings.is_empty() and Prompts.glyph(&"attack", keyboard).text == "Space", "Attack starts on Space")
+	attack_button.pressed.emit()
+	await _frames(1)
+	check(page.listening() == &"attack" and attack_button.text == "...", "pressed: the page waits for Attack's new key")
+	await _tap_key(KEY_F)
+	check(page.listening() == &"" and Prompts.glyph(&"attack", keyboard).text == "F" and options.visible, "F pressed: Attack's first key is F, its prompts say so (%s)" % Prompts.glyph(&"attack", keyboard).text)
+	var press_f := InputEventKey.new()
+	press_f.physical_keycode = KEY_F
+	press_f.keycode = KEY_F  # (Use is bound by its letter, Attack by its place: a real F is both)
+	check(InputMap.event_is_action(press_f, &"attack") and not InputMap.event_is_action(press_f, &"interact"), "F attacks now, and no longer uses (one key, one control)")
+	check(Prompts.glyph(&"interact", keyboard).text == "E", "...Use keeps E")
+	var press_j := InputEventKey.new()
+	press_j.physical_keycode = KEY_J
+	check(InputMap.event_is_action(press_j, &"attack"), "...and Attack keeps its second key, J")
+	# Refused: a key that moves the hero; Escape gives up and leaves the options open.
+	page.listen(&"attack")
+	await _tap_key(KEY_W)
+	check(page.listening() == &"attack" and (page.get_child(1) as Label).text.contains("Move") and Prompts.glyph(&"attack", keyboard).text == "F", "W refused (it moves the hero): still waiting (%s)" % (page.get_child(1) as Label).text)
+	await _tap_key(KEY_ESCAPE)
+	check(page.listening() == &"" and options.visible and Prompts.glyph(&"attack", keyboard).text == "F", "Escape: given up, nothing changed, the options still open")
+	# A first key of another control: they swap.
+	page.listen(&"skill_1")
+	await _tap_key(KEY_2)
+	check(Prompts.glyph(&"skill_1", keyboard).text == "2" and Prompts.glyph(&"skill_2", keyboard).text == "1", "Roll given 2: the weapon skill takes Roll's 1 (a swap, %s / %s)" % [Prompts.glyph(&"skill_1", keyboard).text, Prompts.glyph(&"skill_2", keyboard).text])
+	# Kept in the settings file, and back from it.
+	var kept := Settings.bindings.duplicate(true)
+	Settings.path = "user://test_bindings_%d.cfg" % OS.get_process_id()
+	Settings.save_settings()
+	Settings.set(&"bindings", {})
+	Settings.apply()
+	check(Prompts.glyph(&"attack", keyboard).text == "Space", "(bindings cleared: Space again)")
+	Settings.load_settings()
+	Settings.apply()
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(Settings.path))
+	Settings.path = ""
+	check(Settings.bindings == kept and Prompts.glyph(&"attack", keyboard).text == "F" and Prompts.glyph(&"skill_1", keyboard).text == "2", "the keys are saved and come back (%s)" % [Settings.bindings])
+	for word: String in ["k:74", "l:77", "b:2", "a:5:1"]:
+		check(KeyBindings.serialize(KeyBindings.parse(word)) == word, "kept as words: %s" % word)
+	check(KeyBindings.parse("x:3") == null and KeyBindings.parse("b:99") == null and KeyBindings.parse("k") == null, "a word the game can't read is skipped")
+	# A gamepad: its own buttons.
+	InputDevice.use(pad, &"xbox")
+	await _frames(1)
+	var y_before: String = Prompts.glyph(&"skill_3", pad).text
+	page.listen(&"attack")
+	await _tap_pad(JOY_BUTTON_Y)
+	check(Prompts.glyph(&"attack", pad).text == y_before and Prompts.glyph(&"skill_3", pad).text == "X" and Prompts.glyph(&"attack", keyboard).text == "F", "pad: Attack given Y, the skill on Y takes X; the keys are untouched (%s, %s)" % [Prompts.glyph(&"attack", pad).text, Prompts.glyph(&"skill_3", pad).text])
+	page.listen(&"attack")
+	await _tap_pad(JOY_BUTTON_START)
+	check(page.listening() == &"" and options.visible, "Start gives up on a pad")
+	page.reset_bindings()
+	check(Prompts.glyph(&"attack", pad).text == "X" and Prompts.glyph(&"attack", keyboard).text == "F", "Default buttons: the pad's back, the keys still the player's")
+	_keys_mode()
+	await _frames(1)
+	page.reset_bindings()
+	check(Settings.bindings.is_empty() and Prompts.glyph(&"attack", keyboard).text == "Space" and Prompts.glyph(&"skill_1", keyboard).text == "1" and InputMap.event_is_action(press_f, &"interact"), "Default keys: every key back (%s)" % [Settings.bindings])
 
 
 func _test_codex_keys(title: TitleScreen) -> void:
@@ -731,6 +799,18 @@ func _test_codex_page_focus(codex: CodexPanel) -> void:
 	var frame := MenuNav.frame_area()
 	check(frame.size == Vector2.ZERO or box.grow(MenuNav.FocusFrame.REACH).encloses(frame), "a focus frame never leaves its column, its button scrolled out (%s, column %s)" % [frame, box])
 	codex.back()
+	await _frames(1)
+	# A warden's page, its chronicle with it: at the top too.
+	var boss: BossDef = CONTENT.dungeon.acts[0].boss
+	var boss_seen := Profile.seen_monsters.has(String(boss.id))
+	Profile.mark_seen(boss.id)
+	codex.open_monster(boss)
+	await _frames(3)
+	var boss_scrolled: Array = codex.get_node("%MonsterPage").find_children("*", "ScrollContainer", true, false).map(func(scroller: ScrollContainer) -> int: return scroller.scroll_vertical)
+	check(boss_scrolled.all(func(at: int) -> bool: return at == 0), "a warden's page and its chronicle open with keys at the top (%s)" % [boss_scrolled])
+	codex.back()
+	if not boss_seen:
+		Profile.seen_monsters.erase(String(boss.id))
 	codex.hide()
 	await _frames(1)
 	Settings.language = "en"
@@ -1252,6 +1332,7 @@ func _test_panels_keys(game: Game) -> void:
 	# The bag: the slot the keys stand on is the one picked (Enter uses it: BagTests).
 	game.open_inventory()
 	await _frames(2)
+	_check_opens_at_top(game.inventory_panel, "the bag")
 	await _check_keys_reach(game.inventory_panel, "the bag")
 	var focused := _focus()
 	if focused is ItemSlot:
@@ -1263,6 +1344,7 @@ func _test_panels_keys(game: Game) -> void:
 	await _frames(2)
 	game.open_shop(merchant)
 	await _frames(2)
+	_check_opens_at_top(game.shop_panel, "the merchant")
 	await _check_keys_reach(game.shop_panel, "the merchant")
 	await _tap_key(KEY_ESCAPE)
 	check(not game.shop_panel.visible, "Escape closes the merchant")
@@ -1272,6 +1354,7 @@ func _test_panels_keys(game: Game) -> void:
 	await _frames(2)
 	game.open_forge(forge)
 	await _frames(2)
+	_check_opens_at_top(game.menus.forge, "the forge")
 	await _check_keys_reach(game.menus.forge, "the forge")
 	await _tap_pad(JOY_BUTTON_B)
 	check(not game.menus.forge.visible, "B closes the forge")
@@ -1353,6 +1436,18 @@ func _test_panels_keys(game: Game) -> void:
 	game.game_over_panel.hide()
 	get_tree().paused = false
 	await _frames(2)
+
+
+## A window opened with keys starts at the top of its lists: its first button focused before its
+## columns were laid out must not have scrolled them (follow_focus) by its own height
+## (MonsterPage.scroll_to_top() fixed the codex's monster page).
+func _check_opens_at_top(window: Control, what: String) -> void:
+	var scrolled: Array[String] = []
+	for found in window.find_children("*", "ScrollContainer", true, false):
+		var list := found as ScrollContainer
+		if list.is_visible_in_tree() and list.scroll_vertical > 0:
+			scrolled.append("%s at %d" % [list.name, list.scroll_vertical])
+	check(scrolled.is_empty(), "%s opens at the top of its lists with keys (%s)" % [what, ", ".join(scrolled)])
 
 
 ## The HUD fits every screen, on touch and on keys: nothing out of it, nothing over anything.

@@ -66,7 +66,7 @@ static func glyphs(action: StringName, kind: int) -> Array[Dictionary]:
 		parts = entry.actions()
 	var result: Array[Dictionary] = []
 	if kind == InputDevice.Kind.KEYBOARD:
-		var preferred := entry.key if entry and parts.size() == 1 else KEY_NONE
+		var preferred := KeyBindings.preferred_key(entry) if entry and parts.size() == 1 else KEY_NONE
 		var per_part: Array = parts.map(func(part: StringName) -> Array: return _keys(part, preferred))
 		var sets := 0
 		for keys: Array in per_part:

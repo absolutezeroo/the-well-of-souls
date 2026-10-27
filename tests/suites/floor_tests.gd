@@ -2437,7 +2437,9 @@ func _test_biomes(game: Game) -> void:
 			var scenes := 0
 			for attempt in 2:
 				world.overrides.biome = biome
-				await game.debug.enter_floor(dungeon.first_depth(a) + 1)
+				# Two different floors of the act, before its boss's arena (the same depth and run
+				# seed would build the same floor twice; the arena has props of its own).
+				await game.debug.enter_floor(dungeon.first_depth(a) + attempt)
 				world = game.world
 				check(world.biome == biome and world.theme == biome.theme, "%s: the whole floor is it" % biome.id)
 				for count: int in FloorDresser.last_scenes.values():

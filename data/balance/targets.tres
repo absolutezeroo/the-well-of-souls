@@ -25,6 +25,8 @@ facetank_second_life_is_loss = true
 heal_share_max_expected = 0.25
 ; ...and at most 50% for a build that stacks sustain on purpose (degenerate, family builds).
 heal_share_max_degenerate = 0.5
+; Both only for a fight where the hero took at least 30% of his max Health: healing 80 of 120 taken in a fight he nearly didn't feel is no sustain problem (2026-10-27, task_211).
+heal_share_min_taken = 0.3
 ; At full health, 6 average boss hits at least (one mistake isn't the end)...
 boss_hits_to_kill_min = 6.0
 ; ...and 12 at most (ignoring the patterns must kill you; a hit-free fight stays possible).

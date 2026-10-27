@@ -123,6 +123,7 @@ func _test_compartments(weapons: int, armor: int, runes: int) -> void:
 	var mail := _item("res://data/items/armors/chain_mail.tres") as EquipmentDef
 	var bag := Inventory.new(16, CATEGORIES)
 	check(bag.compartment_count() == CATEGORIES.categories.size() and bag.capacity_of(weapons) == 16, "the hero's bag: one compartment per tab, 16 places in the weapons'")
+	check(not BagFullMark.any_full(bag) and not BagFullMark.any_full(null), "an empty bag (or none): no red dot on the Bag button")
 	var all_in := true
 	for level in range(1, 17):
 		all_in = bag.add(_katana(ItemRarity.COMMON, level)) and all_in
@@ -131,6 +132,7 @@ func _test_compartments(weapons: int, armor: int, runes: int) -> void:
 	check(bag.can_add(_katana(ItemRarity.COMMON, 5)), "...but one that stacks does")
 	check(bag.can_add(mail) and bag.can_add(_item("res://data/runes/ember.tres")) and bag.can_add(_item("res://data/items/tomes/tome_fire.tres")), "armor, runes and tomes still have all their room")
 	check(bag.free_in(armor) == 16 and not bag.is_full(), "the bag is full only when every compartment is")
+	check(BagFullMark.any_full(bag), "...but one full compartment is enough for the Bag button's red dot")
 	check(bag.full_text(_katana(ItemRarity.COMMON, 1)) == "No room left for weapons" and bag.full_text(mail) == "No room left for armor", "a full compartment says which it is")
 	# Equipping one of a stack: the worn piece needs a place in its own compartment.
 	var stacked := _katana(ItemRarity.COMMON, 5)
@@ -263,7 +265,8 @@ func _test_worn_marks(game: Game) -> void:
 
 ## The floor's loot, auto loot and the merchant ask the item's own compartment: a full weapons'
 ## compartment leaves a weapon on the ground and still takes a rune; the merchant won't sell a
-## weapon then, but sells armor. The bag shows the full tab, and an over-full one says so.
+## weapon then, but sells armor. The bag shows the full tab, and an over-full one says so; the
+## HUD's Bag button wears a red dot while a compartment is full.
 func _test_compartment_room(game: Game) -> void:
 	var player := game.player
 	var world := game.world
@@ -276,6 +279,15 @@ func _test_compartment_room(game: Game) -> void:
 	for level in range(1, bag.capacity_of(weapons) + 1):
 		bag.add(_katana(ItemRarity.COMMON, level))
 	check(bag.is_compartment_full(weapons), "the weapons' compartment filled (%d / %d)" % [bag.places_used_in(weapons), bag.capacity_of(weapons)])
+	var mark := game.hud.get_node("%BagButton/BagFullMark") as BagFullMark
+	check(mark != null and mark.visible, "a full compartment puts a red dot on the HUD's Bag button")
+	if mark:
+		var button := game.hud.get_node("%BagButton") as Control
+		check(Rect2(Vector2.ZERO, button.size).encloses(Rect2(mark.position, mark.size)), "...inside the button's top right corner (%s in %s)" % [mark.position, button.size])
+		bag.remove(bag.items[0])
+		check(not mark.visible, "...and it goes once a place is free again")
+		bag.add(_katana(ItemRarity.COMMON, 1))
+		check(mark.visible, "...and comes back when it fills again")
 	var spot := world.find_open_point_near(player.global_position + Vector2(30, 0), 30.0)
 	var sword := world.spawn_item(_katana(ItemRarity.MAGIC, 40), spot)
 	await _frames(2)

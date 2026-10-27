@@ -3,6 +3,14 @@
 Dated entries, newest first: what was measured, what changed and why, before/after numbers, open
 questions. How to measure: [balance.md](balance.md).
 
+## 2026-10-27 - Heal share only where the hero was hurt (tools only)
+
+The heal share targets (arena "heal share", model "heal share") now judge only fights where the
+hero took at least 30% of his max Health (`BalanceTargets.heal_share_min_taken`, targets.tres).
+Seen on 2026-10-24: at the bottom of the Well the act IV expected build's kite bot took 30-200
+damage and the Leech rune healed 30-100 of it, flagged "heal share > 25%" against Tôma too; that
+is no sustain undoing a boss. No game data changed; not re-measured (the balance suite is slow).
+
 ## 2026-10-26 - Kagari's fictional day
 
 The previously timeless hub now starts at 08:00 and advances one full day per 960 seconds

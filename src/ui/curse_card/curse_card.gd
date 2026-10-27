@@ -81,39 +81,44 @@ func _draw() -> void:
 	var grow := clampf(_time / 0.9, 0.0, 1.0)
 	grow = 1.0 - pow(1.0 - grow, 3.0)
 	var pulse := 0.5 + 0.5 * sin(_time * 4.0)
-	# Haze.
+	# Haze (drawn on the 2-unit grid of the UI's pixels, like everything below: PixelDraw).
 	for i in 6:
 		var radius := size.y * (0.18 + i * 0.09) * (0.6 + 0.4 * grow)
-		draw_circle(center, radius, Color(0.35, 0.12, 0.45, 0.07 * (6 - i) / 6.0))
+		PixelDraw.disc(self, center, radius, Color(0.35, 0.12, 0.45, 0.07 * (6 - i) / 6.0))
 	# Souls drawn into the sigil.
 	for i in SOULS:
 		var offset := float(i) * 12.9898
 		var phase := fposmod(_time * 0.45 + fposmod(sin(offset) * 437.5, 1.0), 1.0)
 		var distance := (1.0 - phase) * size.y * 0.45 + 30.0
 		var angle := offset + phase * 5.0 + _time * 0.6
-		var at := (center + Vector2.from_angle(angle) * distance).snapped(Vector2(3, 3))
+		var at := center + Vector2.from_angle(angle) * distance
 		var alpha := sin(phase * PI) * 0.8
-		draw_rect(Rect2(at, Vector2(4, 4)), Color(_color.lightened(0.4), alpha))
+		PixelDraw.pixel(self, at, Color(_color.lightened(0.4), alpha), 2)
 	# The sigil: two rings turning opposite ways, with runes, and an eye of the curse's color.
 	var ring := 110.0 * grow
 	if ring < 2.0:
 		return
 	var glow := Color(_color, 0.15 + 0.15 * pulse)
-	draw_circle(center, ring * 1.15, glow)
-	draw_arc(center, ring, 0.0, TAU, 64, Color(_color, 0.9), 4.0)
-	draw_arc(center, ring * 0.72, 0.0, TAU, 48, Color(_color, 0.7), 3.0)
+	PixelDraw.disc(self, center, ring * 1.15, glow)
+	PixelDraw.ring(self, center, ring, Color(_color, 0.9), 2)
+	PixelDraw.ring(self, center, ring * 0.72, Color(_color, 0.7), 2)
 	for i in 12:
 		var angle := _time * 0.5 + TAU * i / 12.0
-		var at := center + Vector2.from_angle(angle) * ring * 0.86
-		var rune := Rect2(at - Vector2(5, 5), Vector2(10, 10))
-		draw_rect(rune, Color(_color.lightened(0.3), 0.85), i % 3 == 0)
+		var at := PixelDraw.snap(center + Vector2.from_angle(angle) * ring * 0.86 - Vector2(5, 5))
+		var rune_color := Color(_color.lightened(0.3), 0.85)
+		if i % 3 == 0:
+			draw_rect(Rect2(at, Vector2(10, 10)), rune_color)
+		else:
+			# An empty square: a rim one pixel (2 units) wide.
+			for edge: Rect2 in [Rect2(at, Vector2(10, 2)), Rect2(at + Vector2(0, 8), Vector2(10, 2)), Rect2(at + Vector2(0, 2), Vector2(2, 6)), Rect2(at + Vector2(8, 2), Vector2(2, 6))]:
+				draw_rect(edge, rune_color)
 	for i in 3:
 		var angle := -_time * 0.8 + TAU * i / 3.0
 		var a := center + Vector2.from_angle(angle) * ring * 0.72
 		var b := center + Vector2.from_angle(angle + TAU / 3.0) * ring * 0.72
-		draw_line(a, b, Color(_color, 0.6), 3.0)
-	draw_circle(center, 14.0 + 4.0 * pulse, Color(_color.lightened(0.5), 0.95))
-	draw_circle(center, 6.0, Color(0.05, 0.02, 0.08, 1.0))
+		PixelDraw.line(self, a, b, Color(_color, 0.6), 2)
+	PixelDraw.disc(self, center, 14.0 + 4.0 * pulse, Color(_color.lightened(0.5), 0.95))
+	PixelDraw.disc(self, center, 6.0, Color(0.05, 0.02, 0.08, 1.0))
 
 
 ## Any tap, click, key or button skips it, once it has been up a moment (TapGate: never the

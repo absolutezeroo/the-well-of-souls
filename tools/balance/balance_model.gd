@@ -956,7 +956,7 @@ func _boss_tables() -> void:
 						"dps": out.dps, "ttk": ttk, "heal_hps": heal_hps, "sustain_cap": cap, "boss_dps_p1": first.dps,
 						"boss_dps_last": last.dps, "hits_to_kill_p1": hits_first, "hits_to_kill_last": hits_last,
 						"facetank_win": tank.win, "facetank_time": tank.time, "facetank_hp_left": tank.hp_left,
-						"facetank_heal_share": tank.heal_share, "threat": fight_threat,
+						"facetank_heal_share": tank.heal_share, "facetank_taken": tank.taken, "threat": fight_threat,
 					}
 					results.append(entry)
 					if rank == null:
@@ -1025,7 +1025,8 @@ func _check_boss(entry: Dictionary, build: BalanceBuildDef, boss: BossDef, diffi
 		report.flag(BalanceReport.WARN, "model: face-tank wins", subject, "wins with %.0f HP left" % entry.facetank_hp_left, "must die from %s" % targets.facetank_must_lose_from,
 			"standing and hitting beats the boss (model)")
 	var share_max := targets.heal_share_max_expected if build.has_tag("expected") else targets.heal_share_max_degenerate
-	if not build.has_tag("baseline") and entry.facetank_heal_share > share_max and d_key == "normal":
+	var felt: bool = float(entry.facetank_taken) >= targets.heal_share_min_taken * float(entry.hero_max_hp)
+	if not build.has_tag("baseline") and felt and entry.facetank_heal_share > share_max and d_key == "normal":
 		report.flag(BalanceReport.WARN, "model: heal share", subject, BalanceReport.pct(entry.facetank_heal_share), "<= %s" % BalanceReport.pct(share_max),
 			"healing during the face-tank fight / damage taken")
 

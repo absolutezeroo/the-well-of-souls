@@ -15,6 +15,7 @@ joined = true
 [sub_resource type="Resource" id="Action_attack"]
 script = ExtResource("2_action")
 action = &"attack"
+remappable = true
 display_name = "Attack (hold to charge)"
 key = 32
 mouse = 1
@@ -23,6 +24,7 @@ touch_text = "The big button, bottom right"
 [sub_resource type="Resource" id="Action_skill_1"]
 script = ExtResource("2_action")
 action = &"skill_1"
+remappable = true
 display_name = "Roll"
 key = 49
 mouse = 2
@@ -31,6 +33,7 @@ touch_text = "The round button left of the attack"
 [sub_resource type="Resource" id="Action_skill_2"]
 script = ExtResource("2_action")
 action = &"skill_2"
+remappable = true
 display_name = "Weapon skill"
 key = 50
 touch_text = "The round button above the roll"
@@ -38,6 +41,7 @@ touch_text = "The round button above the roll"
 [sub_resource type="Resource" id="Action_skill_3"]
 script = ExtResource("2_action")
 action = &"skill_3"
+remappable = true
 display_name = "Second weapon skill"
 key = 51
 touch_text = "The round button above the attack"
@@ -45,6 +49,7 @@ touch_text = "The round button above the attack"
 [sub_resource type="Resource" id="Action_skill_4"]
 script = ExtResource("2_action")
 action = &"skill_4"
+remappable = true
 display_name = "Spell (from a tome)"
 key = 52
 touch_text = "The fourth round button, once you know a spell"
@@ -52,6 +57,7 @@ touch_text = "The fourth round button, once you know a spell"
 [sub_resource type="Resource" id="Action_quick_item"]
 script = ExtResource("2_action")
 action = &"quick_item"
+remappable = true
 display_name = "Belt, first slot"
 key = 81
 touch_text = "The small buttons left of the skills"
@@ -59,18 +65,21 @@ touch_text = "The small buttons left of the skills"
 [sub_resource type="Resource" id="Action_belt_2"]
 script = ExtResource("2_action")
 action = &"belt_2"
+remappable = true
 display_name = "Belt, second slot"
 key = 53
 
 [sub_resource type="Resource" id="Action_belt_3"]
 script = ExtResource("2_action")
 action = &"belt_3"
+remappable = true
 display_name = "Belt, third slot"
 key = 54
 
 [sub_resource type="Resource" id="Action_interact"]
 script = ExtResource("2_action")
 action = &"interact"
+remappable = true
 display_name = "Use (trade, forge, read...)"
 key = 69
 touch_text = "The button over the skills, when something is in reach"
@@ -78,6 +87,7 @@ touch_text = "The button over the skills, when something is in reach"
 [sub_resource type="Resource" id="Action_offers"]
 script = ExtResource("2_action")
 action = &"offers"
+remappable = true
 display_name = "Choose a waiting perk"
 key = 67
 touch_text = "The golden star, left of the map"
@@ -85,6 +95,7 @@ touch_text = "The golden star, left of the map"
 [sub_resource type="Resource" id="Action_inventory"]
 script = ExtResource("2_action")
 action = &"inventory"
+remappable = true
 display_name = "Bag"
 key = 73
 touch_text = "The Bag button"
@@ -92,6 +103,7 @@ touch_text = "The Bag button"
 [sub_resource type="Resource" id="Action_map"]
 script = ExtResource("2_action")
 action = &"map"
+remappable = true
 display_name = "Whole floor's map"
 key = 77
 touch_text = "Tap the minimap"
@@ -190,6 +202,7 @@ face_colors = PackedColorArray(0.45, 0.8, 0.3, 1, 0.92, 0.32, 0.27, 1, 0.33, 0.5
 [resource]
 script = ExtResource("1_prompts")
 actions = Array[ExtResource("2_action")]([SubResource("Action_move"), SubResource("Action_attack"), SubResource("Action_skill_1"), SubResource("Action_skill_2"), SubResource("Action_skill_3"), SubResource("Action_skill_4"), SubResource("Action_quick_item"), SubResource("Action_belt_2"), SubResource("Action_belt_3"), SubResource("Action_interact"), SubResource("Action_offers"), SubResource("Action_inventory"), SubResource("Action_map"), SubResource("Action_pause"), SubResource("Action_ui_accept"), SubResource("Action_ui_cancel"), SubResource("Action_menu_tabs"), SubResource("Action_item_dismantle"), SubResource("Action_item_drop"), SubResource("Action_menu_scroll"), SubResource("Action_toggle_fullscreen")])
+reserved_actions = Array[StringName]([&"move_up", &"move_left", &"move_down", &"move_right", &"pause", &"toggle_fullscreen"])
 pads = Array[ExtResource("3_pad")]([SubResource("Pad_xbox"), SubResource("Pad_playstation"), SubResource("Pad_nintendo"), SubResource("Pad_generic")])
 key_codes = PackedInt32Array(4194305, 32, 4194306, 4194309, 4194308, 4194319, 4194320, 4194321, 4194322, 4194325, 4194326, 4194328, 4194342, 44, 46, 59, 47, 39, 91, 93, 45, 61, 92, 96)
 key_words = PackedStringArray("Esc", "Space", "Tab", "Enter", "Backspace", "←", "↑", "→", "↓", "Shift", "Ctrl", "Alt", "F11", ",", ".", ";", "/", "'", "[", "]", "-", "=", "\\", "`")

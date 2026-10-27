@@ -47,6 +47,7 @@ static func restore(player: Player, data: Dictionary) -> void:
 		var item := LootRoller.from_data(saved_item)
 		if item:
 			player.inventory.force_add(item)
+	player.inventory.changed.emit()  # (an empty bag too: whoever shows it asks again)
 	player.belt.load_data(data.get("belt", []))
 	player.perks.load_data(data.get("perks", []))
 	player.learned_skill = RunSave.load_ref(data.get("learned_skill")) as SkillDef

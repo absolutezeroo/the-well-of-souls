@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 397,
+  "next_id": 399,
   "tags": [
     "pc",
     "test",
@@ -318,8 +318,8 @@
     {
       "id": "task_17",
       "title": "Textes anglais du nouveau contenu",
-      "description": "Relire en anglais les chroniques, fragments, fins et textes PC (seules les captures FR ont été vérifiées).",
-      "status": "backlog",
+      "description": "Relire en anglais les chroniques, fragments, fins et textes PC (seules les captures FR ont été vérifiées).\n\nRelu (27/10) : les 14 chroniques, les 39 fragments, les 2 fins, le Fond du Puits et les phrases clavier/manette des conseils. Corrigé : orthographe américaine comme le reste du jeu (recognized x2), « It was light; I had thought a soul would weigh more » (journal de Tôma, bol de bronze), « those who take the rite at its hardest » (ordonnance de la Douce). Le français est inchangé. Reste : data/village/topics/keeper_box.tres dit encore « recognise » (village en refonte, non touché). À faire : lire en anglais sur le téléphone (longueurs dans les cadres).",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_1",
       "due_date": null,
@@ -327,7 +327,7 @@
         "traduction"
       ],
       "created_at": 1792685000,
-      "updated_at": 1792685000
+      "updated_at": 1793074917
     },
     {
       "id": "task_18",
@@ -502,8 +502,8 @@
     {
       "id": "task_30",
       "title": "Réaffectation des touches",
-      "description": "Page Commandes en lecture seule pour l'instant. Permettre de changer les touches.",
-      "status": "backlog",
+      "description": "Page Commandes en lecture seule pour l'instant. Permettre de changer les touches.\n\nFait : Options > Commandes, au clavier et à la manette, les commandes de combat (attaque, 4 compétences, 3 emplacements de ceinture, Utiliser, atouts, sac, carte) sont des boutons : appuyer, puis la nouvelle touche / le nouveau bouton / la gâchette. Une touche = une commande (échange avec la 1re touche d'une autre commande, retrait d'une 2e touche). Déplacement, Pause et Plein écran réservés. Échap (Start) annule. « Touches par défaut » / « Boutons par défaut ». Sauvé dans settings.cfg. À vérifier sur PC et avec une vraie manette : changer l'attaque, jouer, relancer le jeu (gardé), gâchettes, clavier AZERTY (la touche est prise par sa place).",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_4",
       "due_date": null,
@@ -511,7 +511,7 @@
         "pc"
       ],
       "created_at": 1792685000,
-      "updated_at": 1792685000
+      "updated_at": 1793074791
     },
     {
       "id": "task_31",
@@ -767,8 +767,8 @@
     {
       "id": "task_51",
       "title": "Bouton Sac : signaler un compartiment plein",
-      "description": "Rien sur le HUD ne dit qu'un compartiment du sac est plein (seul le toast au moment du butin le dit). Idée : un petit point rouge sur le bouton Sac, ou sur l'onglet, quand un compartiment est plein.",
-      "status": "backlog",
+      "description": "Rien sur le HUD ne dit qu'un compartiment du sac est plein (seul le toast au moment du butin le dit). Idée : un petit point rouge sur le bouton Sac, ou sur l'onglet, quand un compartiment est plein.\n\nFait : un petit point rouge (BagFullMark) en haut à droite du bouton Sac du HUD dès qu'un compartiment est plein ; il disparaît quand une place se libère. À vérifier sur le téléphone : point visible et lisible, pas sous le symbole de touche (PC/manette), pas confondu avec la gemme dorée « nouveau ».",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_4",
       "due_date": null,
@@ -777,7 +777,7 @@
         "idée"
       ],
       "created_at": 1792691163,
-      "updated_at": 1792691163
+      "updated_at": 1793073870
     },
     {
       "id": "task_54",
@@ -991,8 +991,8 @@
     {
       "id": "task_64",
       "title": "Une ligne de lore pour chaque serment",
-      "description": "Le canon dit que les serments (Colosse, Duelliste, Hérétique, Vautour) sont des vœux de gardiens d'autrefois, prêtés à la cloche ; aujourd'hui ils n'ont que leur règle. Ajouter un champ lore et l'afficher au sanctuaire.",
-      "status": "backlog",
+      "description": "Le canon dit que les serments (Colosse, Duelliste, Hérétique, Vautour) sont des vœux de gardiens d'autrefois, prêtés à la cloche ; aujourd'hui ils n'ont que leur règle. Ajouter un champ lore et l'afficher au sanctuaire.\n\nFait : champ OathDef.lore (le vœu d'un gardien d'autrefois, une ligne entre guillemets), écrit pour les 4 serments en FR et EN, affiché en gris au-dessus de la règle quand on choisit le nœud du serment à l'arbre des âmes (sanctuaire). Canon : docs/lore.md §6. À vérifier : relire les 4 vœux (ton, sens), et leur place dans la colonne du nœud sur téléphone (1540x720) sans défilement gênant.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_7",
       "due_date": null,
@@ -1002,7 +1002,7 @@
         "ui"
       ],
       "created_at": 1792704041,
-      "updated_at": 1792704041
+      "updated_at": 1793074102
     },
     {
       "id": "task_65",
@@ -1469,8 +1469,8 @@
     {
       "id": "task_93",
       "title": "Focus avant mise en page : vérifier les autres pages",
-      "description": "Vu en traitant « Codex au clavier » : une page qui donne le focus à son premier bouton avant que ses colonnes soient mises en page fait défiler sa liste (follow_focus) de la hauteur du bouton. Corrigé pour la page d'un monstre (MonsterPage.scroll_to_top), et le cadre de focus ne sort plus de sa boîte (MenuNav) ; d'autres pages construites puis focalisées dans la même image (sac, boutique, forge, chronique) peuvent avoir le même décalage : les ouvrir au clavier en 1280x720 et vérifier.",
-      "status": "backlog",
+      "description": "Vu en traitant « Codex au clavier » : une page qui donne le focus à son premier bouton avant que ses colonnes soient mises en page fait défiler sa liste (follow_focus) de la hauteur du bouton. Corrigé pour la page d'un monstre (MonsterPage.scroll_to_top), et le cadre de focus ne sort plus de sa boîte (MenuNav) ; d'autres pages construites puis focalisées dans la même image (sac, boutique, forge, chronique) peuvent avoir le même décalage : les ouvrir au clavier en 1280x720 et vérifier.\n\nVérifié (27/10) par des contrôles : le sac, le marchand et la forge ouverts au clavier en 1280x720, et la page d'un gardien du Codex (avec sa chronique) en français, s'ouvrent en haut de leurs listes (aucun ScrollContainer défilé). Pas de décalage trouvé ; les contrôles restent dans game.pc et title.pc.",
+      "status": "done",
       "priority": "low",
       "epic_id": "epic_4",
       "due_date": null,
@@ -1479,7 +1479,7 @@
         "pc"
       ],
       "created_at": 1792715222,
-      "updated_at": 1792715222
+      "updated_at": 1793076284
     },
     {
       "id": "task_94",
@@ -1715,8 +1715,8 @@
     {
       "id": "task_114",
       "title": "Débug : ouvrir l'épreuve du Seuil et les Profondeurs à la demande, sans mourir ni tomber",
-      "description": "Aujourd'hui on atteint le Seuil en tuant le héros (avec une seconde vie) et les Profondeurs comme par un trou. Un bouton qui ouvre l'épreuve du Seuil directement, et un qui mène au bout des Profondeurs (la Brèche de l'Aube), ferait gagner du temps pour les tester.",
-      "status": "backlog",
+      "description": "Aujourd'hui on atteint le Seuil en tuant le héros (avec une seconde vie) et les Profondeurs comme par un trou. Un bouton qui ouvre l'épreuve du Seuil directement, et un qui mène au bout des Profondeurs (la Brèche de l'Aube), ferait gagner du temps pour les tester.\n\nFait (27/10) : panneau de débug, onglet Monde, ligne Lieux : « Threshold trial » ouvre l'épreuve du Seuil tout de suite (sans coup mortel ni plume dépensée ; perdue, le héros meurt comme en vrai) et « Dawn Breach » pose le héros à deux cases de la Brèche de l'Aube (en descendant d'abord dans les Profondeurs si besoin). GameDebug.enter_threshold() / to_dawn_breach(), testés dans game.debug_panel. À vérifier dans l'éditeur ou sur le téléphone : les deux boutons, puis gagner l'épreuve et sortir par la Brèche.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -1724,13 +1724,13 @@
         "debug"
       ],
       "created_at": 1792730214,
-      "updated_at": 1792730214
+      "updated_at": 1793076613
     },
     {
       "id": "task_115",
       "title": "Débug : montrer aussi les pièges, les zones des boss et les projectiles dans la vue « Corps et portées »",
-      "description": "La vue de débug dessine les corps, la portée de l'arme du héros, la portée d'attaque et le rayon de détection des monstres. Il y manque les zones des pièges et des dangers, les aires d'effet des sorts des boss et les formes des projectiles.",
-      "status": "backlog",
+      "description": "La vue de débug dessine les corps, la portée de l'arme du héros, la portée d'attaque et le rayon de détection des monstres. Il y manque les zones des pièges et des dangers, les aires d'effet des sorts des boss et les formes des projectiles.\n\nFait (27/10) : « Corps et portées » dessine aussi les formes de collision de chaque Area2D en orange (pièges, projectiles, portées des dangers) et le cercle des frappes au sol en attente en magenta (sorts retardés des boss : GroundStrike). Les dangers dessinés en cellules (sables mouvants, eau, sol qui s'effondre) et les aires instantanées (déjà avertis par le télégraphe) ne sont pas dessinés. À vérifier dans l'éditeur : lisibilité des couleurs sur un étage avec pièges et un boss.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -1739,7 +1739,7 @@
         "combat"
       ],
       "created_at": 1792730214,
-      "updated_at": 1792730214
+      "updated_at": 1793076694
     },
     {
       "id": "task_116",
@@ -3108,8 +3108,8 @@
     {
       "id": "task_204",
       "title": "Audit UI : formes lisses restantes dans l'interface",
-      "description": "action_button.gd (cercle et camembert de recharge lisses en 32 pas) et curse_card.gd (sceau en draw_circle / draw_arc / draw_line) dessinent hors de la grille de pixels, contrairement à la barre d'action. Les passer en PixelDraw (anneaux et disques en pas, recharge par rangée de pixels).",
-      "status": "backlog",
+      "description": "action_button.gd (cercle et camembert de recharge lisses en 32 pas) et curse_card.gd (sceau en draw_circle / draw_arc / draw_line) dessinent hors de la grille de pixels, contrairement à la barre d'action. Les passer en PixelDraw (anneaux et disques en pas, recharge par rangée de pixels).\n\nFait (27/10) : les boutons ronds (ActionButton) dessinent leur recharge en rangées de pixels depuis le haut (comme la barre d'action au clavier) et leur pastille de compte en PixelDraw ; le sceau de la carte de malédiction (brume, anneaux, runes, triangle, œil, âmes) est sur la grille de 2 unités. Contrôle ajouté (vfx : pas de draw_circle/draw_arc dans ces deux fichiers). Non vu en image (tests sans rendu) : à regarder sur le téléphone, une compétence en recharge, une potion comptée, et une carte de malédiction.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_3",
       "due_date": null,
@@ -3118,7 +3118,7 @@
         "visuel"
       ],
       "created_at": 1792818511,
-      "updated_at": 1792818511
+      "updated_at": 1793075837
     },
     {
       "id": "task_205",
@@ -3215,8 +3215,8 @@
     {
       "id": "task_211",
       "title": "Outils d'équilibrage : drapeaux « heal share » sur des combats presque sans dégâts",
-      "description": "Vu le 24/10 : au fond du Puits, le build attendu de l'acte IV déclenche « heal share > 25 % » quand le bot kite ne prend presque rien (la rune Sangsue soigne 30-100 points sur 30-200 encaissés), contre Tôma aussi. La cible devrait sans doute ignorer les combats où les dégâts encaissés sont faibles (ex. < 30 % de la Vie).",
-      "status": "backlog",
+      "description": "Vu le 24/10 : au fond du Puits, le build attendu de l'acte IV déclenche « heal share > 25 % » quand le bot kite ne prend presque rien (la rune Sangsue soigne 30-100 points sur 30-200 encaissés), contre Tôma aussi. La cible devrait sans doute ignorer les combats où les dégâts encaissés sont faibles (ex. < 30 % de la Vie).\n\nFait (27/10) : nouvelle cible heal_share_min_taken = 0,3 (data/balance/targets.tres) : les drapeaux « heal share » (arène et modèle) ne jugent plus un combat où le héros a pris moins de 30 % de sa Vie. Pas re-mesuré (suite balance lente) : à relancer une fois (--only=balance) pour voir les drapeaux du Fond du Puits disparaître. Rien à vérifier sur le téléphone.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_2",
       "due_date": null,
@@ -3225,7 +3225,7 @@
         "test"
       ],
       "created_at": 1792816004,
-      "updated_at": 1792816004
+      "updated_at": 1793075673
     },
     {
       "id": "task_212",
@@ -3246,8 +3246,8 @@
     {
       "id": "task_213",
       "title": "Suite balance : échecs non marqués « KNOWN » (contenu hors acte, degenerate_skills_a3)",
-      "description": "Vus le 24/10 dans --only=balance, déjà là avant : « content: unlisted » (master_toma, nameless_effigy, nameless_keeper : dans aucun acte, alors qu'ils sont dans le fond du Puits / l'étage caché) et « degenerate DPS 2,52x (cible 2,5x) » pour degenerate_skills_a3. Le premier est un faux positif de l'outil (BalanceContent.unlisted ne connaît pas FinaleDef/HiddenFloorDef) ; le second est à mesurer.",
-      "status": "backlog",
+      "description": "Vus le 24/10 dans --only=balance, déjà là avant : « content: unlisted » (master_toma, nameless_effigy, nameless_keeper : dans aucun acte, alors qu'ils sont dans le fond du Puits / l'étage caché) et « degenerate DPS 2,52x (cible 2,5x) » pour degenerate_skills_a3. Le premier est un faux positif de l'outil (BalanceContent.unlisted ne connaît pas FinaleDef/HiddenFloorDef) ; le second est à mesurer.\n\nFait (27/10) : BalanceContent.unlisted compte les boss et monstres du Fond du Puits (FinaleDef.all_bosses) et de l'étage caché (HiddenFloorDef) : plus de faux « content: unlisted » (master_toma, the_maw, nameless_effigy, nameless_keeper). Nouveau contrôle dans unit.content : tout fichier de contenu apparaît dans une partie. Le second point (degenerate_skills_a3 2,52x) reste suivi par task_85.",
+      "status": "done",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -3256,7 +3256,7 @@
         "test"
       ],
       "created_at": 1792816004,
-      "updated_at": 1792816004
+      "updated_at": 1793075587
     },
     {
       "id": "task_214",
@@ -3320,8 +3320,8 @@
     {
       "id": "task_218",
       "title": "Perfs restantes de l'interface et des VFX",
-      "description": "Laissé par task_203 : SoulNodeButton crée une StyleBoxTexture par _draw et appelle Profile.can_buy_node par image ; PixelDraw.bit et `for side in [-1, 1]` construisent des tableaux par particule ; StatusFx active_ids() + _bits.duplicate() par image ; SwingVfx et BlastVfx font queue_redraw chaque image (le rectangle ne change pas) ; fond du titre redessiné à 60 fps (passer à 12 fps ou séparer la grotte fixe du faisceau) ; TouchScroll._process et DialogueBox.MoreArrow tournent même cachés ; ActionBar recopie les boutons tactiles chaque image ; ItemSlot garde une StyleBox par alpha du pouls ; ComposedVfx, WeaponAura et SplatLayer gardent leurs particules en Dictionary (le Bit typé de StatusFx est le modèle).\nRevue 2 : PixelDraw.ring() boucle sur GridDirs.SIGNS (plus de [-1, 1] par ligne) et la bulle de StatusFx sur une constante : faits. Reste le reste de la liste.",
-      "status": "backlog",
+      "description": "Laissé par task_203 : SoulNodeButton crée une StyleBoxTexture par _draw et appelle Profile.can_buy_node par image ; PixelDraw.bit et `for side in [-1, 1]` construisent des tableaux par particule ; StatusFx active_ids() + _bits.duplicate() par image ; SwingVfx et BlastVfx font queue_redraw chaque image (le rectangle ne change pas) ; fond du titre redessiné à 60 fps (passer à 12 fps ou séparer la grotte fixe du faisceau) ; TouchScroll._process et DialogueBox.MoreArrow tournent même cachés ; ActionBar recopie les boutons tactiles chaque image ; ItemSlot garde une StyleBox par alpha du pouls ; ComposedVfx, WeaponAura et SplatLayer gardent leurs particules en Dictionary (le Bit typé de StatusFx est le modèle).\nRevue 2 : PixelDraw.ring() boucle sur GridDirs.SIGNS (plus de [-1, 1] par ligne) et la bulle de StatusFx sur une constante : faits. Reste le reste de la liste.\n\nFait en partie (27/10) : fond du titre redessiné à 12 images/s (TitleBackdrop.REDRAW_FPS), TouchScroll ne tourne plus qu'au glissé après lâcher, la flèche « suite » du dialogue ne tourne que visible et ne se redessine qu'en bougeant, SoulNodeButton ne demande plus can_buy_node à chaque image (StyleBox déjà partagée). Le reste de la liste passe sur une nouvelle carte. À vérifier : l'animation du titre (âmes, flammes) reste fluide à l'œil à 12 images/s sur le téléphone ; le défilement au doigt garde son élan.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -3331,7 +3331,7 @@
         "vfx"
       ],
       "created_at": 1792823411,
-      "updated_at": 1792828483
+      "updated_at": 1793076132
     },
     {
       "id": "task_219",
@@ -3398,8 +3398,8 @@
     {
       "id": "task_223",
       "title": "Tests : _test_biomes construit deux fois le même étage",
-      "description": "Vu en découpant les tests (24/10) : FloorTests._test_biomes fait « for attempt in 2 » mais construit chaque fois first_depth(a) + 1, avec la même graine de partie : le deuxième étage est le même que le premier (au tiroir de la forge près). Le test croit vérifier deux étages par biome et en vérifie un. Faire varier la profondeur (+ attempt, comme LevelTests) ; le nombre de vérifications ne change pas, leur portée oui.",
-      "status": "backlog",
+      "description": "Vu en découpant les tests (24/10) : FloorTests._test_biomes fait « for attempt in 2 » mais construit chaque fois first_depth(a) + 1, avec la même graine de partie : le deuxième étage est le même que le premier (au tiroir de la forge près). Le test croit vérifier deux étages par biome et en vérifie un. Faire varier la profondeur (+ attempt, comme LevelTests) ; le nombre de vérifications ne change pas, leur portée oui.\n\nFait (27/10) : _test_biomes construit maintenant le 1er et le 2e étage de l'acte (first_depth(a) + attempt) : deux étages différents par biome, avant l'arène du boss (qui a ses propres décors : en essayant +1/+2, l'arène de l'acte IV avait des broken_column, normal pour une arène). Rien à vérifier sur l'appareil.",
+      "status": "done",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -3407,7 +3407,7 @@
         "tests"
       ],
       "created_at": 1792825538,
-      "updated_at": 1792825538
+      "updated_at": 1793075130
     },
     {
       "id": "task_224",
@@ -3622,8 +3622,8 @@
     {
       "id": "task_238",
       "title": "Test instable : « a room out of sight, a short walk away » (game.ai_movement)",
-      "description": "Échoue avec la graine 413192, aussi sans le changement des murs : l'étage tiré n'a pas de salle hors de vue à courte distance pour le test. Rendre le test indépendant de la graine (chercher sur plusieurs étages, ou poser l'étage).",
-      "status": "backlog",
+      "description": "Échoue avec la graine 413192, aussi sans le changement des murs : l'étage tiré n'a pas de salle hors de vue à courte distance pour le test. Rendre le test indépendant de la graine (chercher sur plusieurs étages, ou poser l'étage).\n\nCorrigé (27/10) : si aucune salle hors de vue à 250-1500 px de marche n'existe depuis la place du héros, le test essaie depuis chaque salle et y pose le héros. Passe avec la graine 413192 et d'autres.",
+      "status": "done",
       "priority": "low",
       "epic_id": "epic_5",
       "tags": [
@@ -3631,7 +3631,7 @@
         "bug"
       ],
       "created_at": 1792858090,
-      "updated_at": 1792858090,
+      "updated_at": 1793075271,
       "due_date": null
     },
     {
@@ -3917,8 +3917,8 @@
     {
       "id": "task_257",
       "title": "Test instable : « visible again: it notices him » (game.debug_panel)",
-      "description": "Échoue avec --seed=286597 (déjà avant le 25/10, même code). Le monstre ne reprend pas le héros pour cible dans les 60 images après « Invisible » coupé. À regarder. Vu aussi une fois en parallèle : « the spacing push is summed one frame in 3 (1 times in 12 frames) » (game.perf, seed 709392 ; passe seul) : le monstre suivi s'arrête peut-être (pas de poussée quand il ne bouge pas).",
-      "status": "todo",
+      "description": "Échoue avec --seed=286597 (déjà avant le 25/10, même code). Le monstre ne reprend pas le héros pour cible dans les 60 images après « Invisible » coupé. À regarder. Vu aussi une fois en parallèle : « the spacing push is summed one frame in 3 (1 times in 12 frames) » (game.perf, seed 709392 ; passe seul) : le monstre suivi s'arrête peut-être (pas de poussée quand il ne bouge pas).\n\nCorrigé (27/10) pour « visible again » : le monstre s'était éloigné hors de vue (118 px, derrière un obstacle) pendant que le héros était invisible ; le test le remet dans l'axe dégagé avant de rendre le héros visible, et le message dit maintenant distance / vue / éveil. Passe avec --seed=286597. Le « spacing push » de game.perf (graine 709392) ne se reproduit pas seul : à surveiller (laissé en revue pour ça).",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_4",
       "tags": [
@@ -3926,7 +3926,7 @@
         "bug"
       ],
       "created_at": 1792901891,
-      "updated_at": 1792901891,
+      "updated_at": 1793075485,
       "due_date": null
     },
     {
@@ -5987,6 +5987,36 @@
       "created_at": 1793074818,
       "updated_at": 1793074818,
       "due_date": null
+    },
+    {
+      "id": "task_397",
+      "title": "Réaffecter aussi les touches de déplacement",
+      "description": "Suite de task_30 : le déplacement (ZQSD/WASD, flèches, stick gauche) et les touches des menus (Entrée, Échap, Q/E, X/G du sac) ne se changent pas. Pour les gauchers ou d'autres claviers : quatre lignes « Haut / Gauche / Bas / Droite » réaffectables (KeyBindings gère une action par ligne ; le déplacement est réservé aujourd'hui : InputPromptsDef.reserved_actions).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "pc",
+        "ui"
+      ],
+      "created_at": 1793074791,
+      "updated_at": 1793074791
+    },
+    {
+      "id": "task_398",
+      "title": "Perfs restantes de l'interface et des VFX (suite)",
+      "description": "Suite de task_218, encore à faire : PixelDraw.bit construit des tableaux par particule ; StatusFx active_ids() + _bits.duplicate() par image ; SwingVfx et BlastVfx font queue_redraw chaque image (le rectangle ne change pas) ; ActionBar recopie les boutons tactiles chaque image ; ItemSlot garde une StyleBox par alpha du pouls ; ComposedVfx, WeaponAura et SplatLayer gardent leurs particules en Dictionary (le Bit typé de StatusFx est le modèle).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "due_date": null,
+      "tags": [
+        "perf",
+        "ui"
+      ],
+      "created_at": 1793076132,
+      "updated_at": 1793076132
     }
   ]
 }

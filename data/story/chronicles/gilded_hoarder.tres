@@ -58,7 +58,7 @@ slain = 2
 script = ExtResource("4_chroniclecha")
 id = &"a_bargain"
 title = "A Bargain"
-lines = PackedStringArray("The shrine's keeper came to bargain, and Ostarion recognised a man who wanted something too much.", "\"Keep these souls with your gold, and your heap will grow.\" The king said yes before the sentence was done.", "He keeps Kagari's souls the way he kept his people. He counts them.")
+lines = PackedStringArray("The shrine's keeper came to bargain, and Ostarion recognized a man who wanted something too much.", "\"Keep these souls with your gold, and your heap will grow.\" The king said yes before the sentence was done.", "He keeps Kagari's souls the way he kept his people. He counts them.")
 slain = 4
 
 [sub_resource type="Resource" id="Resource_8"]

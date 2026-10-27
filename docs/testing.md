@@ -282,8 +282,12 @@ step its value ("Damage x5"), and both stay pressed while on.
 - **World**: pick a depth and go there, next floor, rebuild the floor (plain unless you choose a
   **Curse** or a **floor Event** row: the floor is rebuilt with it, its card included,
   `World.overrides`, FloorOverrides). **Places**: the next boss floor, the hidden floor, the
-  Deeps (as if the hero fell into a hole), the bottom of the Well (the final fight, FinaleDef),
-  the Nameless Keeper (the bottom with the Keeper made from the hero as he is now).
+  Deeps (as if the hero fell into a hole), the **Dawn Breach** (the hero a few steps from the
+  Deeps' way out, down into them first if need be: `GameDebug.to_dawn_breach()`), the
+  **Threshold trial** (the trial of a second life at once, no killing blow, no feather spent:
+  `GameDebug.enter_threshold()`; lost, the hero dies as for real), the bottom of the Well (the
+  final fight, FinaleDef), the Nameless Keeper (the bottom with the Keeper made from the hero as
+  he is now).
   **Move**: to the stairs, to the boss room's doorway, to the next room, break the stairs' seal,
   **Reveal maps** (this floor's map and every next one's, seen as they begin). **Encounter**:
   pick any encounter and place it beside the hero; **Boss story** has the floor's warden tell its
@@ -315,7 +319,8 @@ step its value ("Damage x5"), and both stay pressed while on.
   camera's **zoom** (x1 / x0.75 / x0.5 / x0.35), **Full light** (every floor at its brightest,
   `World.relight()`), **Bodies & reach** (`DebugShapes`: each body's circle, the hero's weapon
   reach, each monster's attack range in red and how far it notices the hero, a line to its
-  target), **Frame rate** (`DebugOverlay`: frames per second, monsters awake / on the floor,
+  target, every area's collision shapes in orange: traps, shots, hazards' reaches, and the ground
+  strikes still to land in magenta: a boss's delayed spells), **Frame rate** (`DebugOverlay`: frames per second, monsters awake / on the floor,
   shots in the air, nodes, draw calls), **Save & reload** (saves the run and picks it up again,
   as the title's Continue would; not in a debug run).
 - **Remote**: the remote settings (`RemoteConfig`, docs/online.md "Remote settings"): every key of

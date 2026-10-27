@@ -398,6 +398,8 @@ func _test_content() -> void:
 		chances.append(CONTENT.get_difficulty(id).curse_chance)
 	check(chances[0] < chances[1] and chances[1] < chances[2] and chances[2] < chances[3], "curses: rare on Easy, often on Nightmare %s" % str(chances))
 	check(CONTENT.player != null and CONTENT.dungeon != null, "content db has player and dungeon config")
+	var unlisted := BalanceContent.unlisted(CONTENT)
+	check(unlisted.is_empty(), "every content file appears in a run: listed in content_db.tres, an act, the bottom of the Well or the hidden floor (%s)" % ", ".join(unlisted))
 	check(CONTENT.all_monsters().size() >= 20, "a big bestiary (%d monsters)" % CONTENT.all_monsters().size())
 	var ids := {}
 	for monster in CONTENT.all_monsters():
@@ -1500,6 +1502,7 @@ func _test_soul_tree() -> void:
 		var gains := oath.effects().filter(func(line: Array) -> bool: return line[1] > 0)
 		var costs := oath.effects().filter(func(line: Array) -> bool: return line[1] < 0)
 		check(not gains.is_empty() and not costs.is_empty(), "%s: its card shows a gain and a cost (%d, %d)" % [oath.id, gains.size(), costs.size()])
+		check(oath.lore.begins_with("\"") and oath.lore.ends_with("\"") and oath.lore.length() <= 120 and not oath.lore.contains("%"), "%s: its vow is one quoted line, never a rule (%s)" % [oath.id, oath.lore])
 
 	var saved_levels := Profile.levels.duplicate()
 	var saved_souls := Profile.souls

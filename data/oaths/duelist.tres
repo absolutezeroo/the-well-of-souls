@@ -14,6 +14,7 @@ script = ExtResource("1")
 id = &"duelist"
 display_name = "Oath of the Duelist"
 description = "Start with the Rapier, +10% critical hit chance, and critical hits deal x2.5 instead of x1.75, but 20% less max Health."
+lore = "\"I strike once, and true. My blood will answer for the rest.\""
 icon = ExtResource("2")
 color = Color(1, 0.8, 0.35, 1)
 starting_weapon = ExtResource("3")

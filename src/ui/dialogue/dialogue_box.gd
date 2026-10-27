@@ -288,17 +288,26 @@ func _input(event: InputEvent) -> void:
 class MoreArrow extends Control:
 
 	var _time := 0.0
+	## Up or down a pixel (drawn again only when it changes).
+	var _bob := 0.0
 
 	func _init() -> void:
 		custom_minimum_size = Vector2(16, 16)
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 
+	func _notification(what: int) -> void:
+		if what == NOTIFICATION_VISIBILITY_CHANGED or what == NOTIFICATION_READY:
+			set_process(is_visible_in_tree())  # hidden, it costs nothing
+
 	func _process(delta: float) -> void:
 		_time += delta
-		queue_redraw()
+		var bob := 2.0 if fmod(_time, 0.8) < 0.4 else 0.0
+		if bob != _bob:
+			_bob = bob
+			queue_redraw()
 
 	func _draw() -> void:
-		var bob := 2.0 if fmod(_time, 0.8) < 0.4 else 0.0
+		var bob := _bob
 		var points := PackedVector2Array([Vector2(2, 4 + bob), Vector2(14, 4 + bob), Vector2(8, 12 + bob)])
 		draw_colored_polygon(points, Fonts.OUTLINE)
 		var inner := PackedVector2Array([Vector2(4, 6 + bob), Vector2(12, 6 + bob), Vector2(8, 10 + bob)])

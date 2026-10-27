@@ -15,6 +15,7 @@ script = ExtResource("1")
 id = &"scholar"
 display_name = "Oath of the Heretic"
 description = "Start with the Book: skills deal 50% more damage, but your attacks are 20% slower."
+lore = "\"I take up the words the shrine kept silent, and bear their weight.\""
 icon = ExtResource("2")
 color = Color(0.7, 0.55, 1, 1)
 starting_weapon = ExtResource("3")

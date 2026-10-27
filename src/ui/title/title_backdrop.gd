@@ -22,6 +22,11 @@ const FLAME := Color(1.0, 0.72, 0.3)
 const FLAME_CORE := Color(1.0, 0.93, 0.6)
 const LAMP_STONE := Color(0.3, 0.25, 0.27)
 
+## How often the picture is drawn again (it changes by whole art pixels).
+const REDRAW_FPS := 12.0
+
+## The picture last drawn (floor(_time * REDRAW_FPS)).
+var _frame := -1
 ## The shrine's lamps, and how many burn.
 var lamps := 7
 var lamps_lit := 0:
@@ -47,7 +52,12 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_time += delta
-	queue_redraw()
+	# Big pixels move a whole art pixel at a time: 12 pictures a second are enough, and the
+	# title's whole screen isn't drawn again 60 times a second (docs/performance.md).
+	var frame := floori(_time * REDRAW_FPS)
+	if frame != _frame:
+		_frame = frame
+		queue_redraw()
 
 
 ## The middle of the Well's mouth (screen position).

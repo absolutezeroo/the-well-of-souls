@@ -45,6 +45,11 @@ Call it only when what `_draw()` shows changed:
 - Keep a key of what the last `_draw()` showed (a frame index, a phase, a shake bit) and redraw
   when it differs: `Trap._draw_key()`, `Quicksand._sheet_frame()`, `HeatSource._flame_key()`,
   `RoomGates._drawn_amount`, `AbyssHud.Arrow.refresh()`. `LootShine` steps at 12 fps the same way.
+  The title's picture (`TitleBackdrop.REDRAW_FPS`) too, and the dialogue's "more" arrow redraws
+  only when it bobs.
+- What waits for something runs only then: a list's drag helper (`TouchScroll`) processes only
+  while a let-go list glides, the "more" arrow only while shown, and a Tree of Souls node asks
+  `Profile.can_buy_node()` when the profile changes, not every frame (`SoulNodeButton._buyable`).
 - What moves continuously (a bob, a breathing glow, a trail) redraws only on screen:
   `Vfx.on_screen(node, reach)` (`reach`: how far its drawing goes from its origin). It is drawn
   again the frame it comes back into view. `MonsterOverlay` gates on `World.view_rect()`.

@@ -149,6 +149,7 @@ func run_game(game: Game) -> void:
 	await _test_hero_cheats(game)
 	_test_debug_run(game)
 	await _test_world_tools(game, debug)
+	await _test_pockets(game, debug)
 	await _test_gallery(game, debug)
 	if debug.visible:
 		debug.close()
@@ -257,9 +258,13 @@ func _test_invisible(game: Game) -> void:
 	await _frames(30)
 	check(monster.target == null and struck[0] == 0, "invisible: sent after him or struck, it forgets him")
 	Events.actor_damaged.disconnect(count_blow)
+	# Back in his sight (the blow's push, or its wandering while he was unseen, may have taken it
+	# behind a pillar: --seed=286597).
+	monster.global_position = player.global_position + (lane[1] as Vector2) * 60.0
+	monster.velocity = Vector2.ZERO
 	DebugCheats.set_invisible(false)
 	await _frames(60)
-	check(monster.target == player, "visible again: it notices him")
+	check(monster.target == player, "visible again: it notices him (%d px, in sight %s, awake %s)" % [monster.global_position.distance_to(player.global_position), world.has_line_of_sight(monster.global_position, player.global_position), monster.is_awake])
 	DebugCheats.reset()
 	await _clear_monsters(world)
 
@@ -392,6 +397,59 @@ func _test_world_tools(game: Game, debug: DebugPanel) -> void:
 		"Boss story: the warden is met again on demand (%d meetings, then %d)" % [meetings, Narrative.meetings(boss_def)])
 	await _frames(2)
 	DebugCheats.reset()
+
+
+## Places reached without dying or falling: the trial of the Threshold opened at once (no feather
+## spent), then the Deeps' Dawn Breach a few steps away, and through it home.
+func _test_pockets(game: Game, debug: DebugPanel) -> void:
+	DebugCheats.reset()
+	await game.debug.enter_floor(1)
+	await _frames(2)
+	var player := game.player
+	player.invincible = true
+	game.open_debug()
+	await _frames(1)
+	var trial_button := _button_named(debug, "Threshold trial")
+	var breach_button := _button_named(debug, "Dawn Breach")
+	check(trial_button != null and breach_button != null, "the World tab's Places: Threshold trial and Dawn Breach")
+	if trial_button == null or breach_button == null:
+		return
+	var feather := game.player.perks.entries.size()
+	trial_button.pressed.emit()
+	check(await _until_trial(game), "Threshold trial: the trial opens, nobody died")
+	check(not player.is_dead and player.perks.entries.size() == feather and DebugCheats.debug_run, "...the hero alive, no perk given or spent, a debug run")
+	game.threshold.abort()
+	await _frames(2)
+	check(not game.threshold.is_open() and player.world == game.world, "...and aborted, back on the floor")
+	game.open_debug()
+	await _frames(1)
+	breach_button.pressed.emit()
+	check(await _until(func() -> bool: return game.abyss.is_searching() and player.world == game.abyss.depths, 6.0), "Dawn Breach: down into the Deeps")
+	# Bodies and reaches drawn down there, its traps' and shots' areas too (DebugShapes: drawn
+	# without an engine error, the whole Deeps in play).
+	DebugCheats.show_shapes = true
+	await _frames(2)
+	var shapes := game.find_child("DebugShapes", true, false) as DebugShapes
+	check(shapes != null and shapes.visible, "Bodies and reaches: drawn in the Deeps")
+	DebugCheats.show_shapes = false
+	var depths := game.abyss.depths
+	var door := depths.map.cell_to_world(depths.map.stairs_cell) if depths else Vector2.INF
+	check(depths != null and player.global_position.distance_to(door) < 6.0 * depths.config().tile_size, "...the hero a few steps from the Dawn Breach (%d px)" % player.global_position.distance_to(door))
+	if depths:
+		player.global_position = door
+	check(await _until(func() -> bool: return not game.abyss.is_open(), 8.0), "...stepping into it brings him home")
+	player.invincible = false
+	await game.debug.enter_floor(1)
+	await _frames(2)
+	DebugCheats.reset()
+
+
+## The debug panel's button that says `words` (null if none).
+func _button_named(debug: DebugPanel, words: String) -> Button:
+	for found in debug.find_children("*", "Button", true, false):
+		if (found as Button).text == words:
+			return found as Button
+	return null
 
 
 ## Cheats on before the game suite starts a new run (a new run frees the hero the suite holds,
