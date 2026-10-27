@@ -5843,7 +5843,7 @@
       "id": "task_388",
       "title": "Chasse aux bugs du gameplay et de Kagari",
       "description": "Relecture critique du code de jeu (entités, IA, monde, combat, VFX, village Kagari, GameSession) : chaque bug confirmé a un test qui échoue avant la correction. Corrigé : l’horloge du village avançait pendant l’écran de fin après une mort (le jeu n’est pas en pause derrière), alors que le temps de Kagari doit s’arrêter dans les menus. Corrigé : quitter la partie sous 30 % de Santé (Retour au village, titre) laissait le filtre passe-bas du bus Music actif : musique du village étouffée, et toute la partie suivante aussi (le héros repart en pleine santé, l’ambiance ne le retirait jamais). Corrigé : la caméra de Kagari et du temple ignorait PixelGrid.world_zoom() ; en 1600×900, 1366×768 ou avec une interface plus petite, le village était dézoomé et le temple montrait le vide autour de ses murs.",
-      "status": "in_progress",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_5",
       "tags": [
@@ -5852,7 +5852,7 @@
         "qualité"
       ],
       "created_at": 1793074694,
-      "updated_at": 1793076826,
+      "updated_at": 1793076934,
       "due_date": null
     },
     {
