@@ -33,6 +33,10 @@ extends Resource
 @export var heal_share_max_expected: float = 0.25
 ## The same for "degenerate" (and "family") builds: they may lean on sustain, never cancel the fight.
 @export var heal_share_max_degenerate: float = 0.5
+## The heal share targets only judge fights where the hero took at least this share of his max
+## Health: a fight that barely touched him (a kite run, a rune of Leech healing 30-100 of 30-200
+## taken) says nothing about sustain undoing a boss.
+@export var heal_share_min_taken: float = 0.3
 ## How many average boss hits (melee or skill, after armor) kill the act's expected build at full
 ## health on Normal: at least this (a single mistake must not end the run)...
 @export var boss_hits_to_kill_min: float = 6.0

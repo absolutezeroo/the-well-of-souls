@@ -3215,8 +3215,8 @@
     {
       "id": "task_211",
       "title": "Outils d'équilibrage : drapeaux « heal share » sur des combats presque sans dégâts",
-      "description": "Vu le 24/10 : au fond du Puits, le build attendu de l'acte IV déclenche « heal share > 25 % » quand le bot kite ne prend presque rien (la rune Sangsue soigne 30-100 points sur 30-200 encaissés), contre Tôma aussi. La cible devrait sans doute ignorer les combats où les dégâts encaissés sont faibles (ex. < 30 % de la Vie).",
-      "status": "backlog",
+      "description": "Vu le 24/10 : au fond du Puits, le build attendu de l'acte IV déclenche « heal share > 25 % » quand le bot kite ne prend presque rien (la rune Sangsue soigne 30-100 points sur 30-200 encaissés), contre Tôma aussi. La cible devrait sans doute ignorer les combats où les dégâts encaissés sont faibles (ex. < 30 % de la Vie).\n\nFait (27/10) : nouvelle cible heal_share_min_taken = 0,3 (data/balance/targets.tres) : les drapeaux « heal share » (arène et modèle) ne jugent plus un combat où le héros a pris moins de 30 % de sa Vie. Pas re-mesuré (suite balance lente) : à relancer une fois (--only=balance) pour voir les drapeaux du Fond du Puits disparaître. Rien à vérifier sur le téléphone.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_2",
       "due_date": null,
@@ -3225,7 +3225,7 @@
         "test"
       ],
       "created_at": 1792816004,
-      "updated_at": 1792816004
+      "updated_at": 1793075673
     },
     {
       "id": "task_212",

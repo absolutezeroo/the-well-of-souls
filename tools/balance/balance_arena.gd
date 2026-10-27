@@ -394,7 +394,8 @@ func _check_fight(report: BalanceReport, r: Dictionary) -> void:
 		share_max = targets.heal_share_max_expected
 	elif tags.has("degenerate") or tags.has("family"):
 		share_max = targets.heal_share_max_degenerate
-	if share_max >= 0.0 and own and plain and r.damage_taken > 0 and sustain_share(r) > share_max:
+	var felt: bool = r.damage_taken >= targets.heal_share_min_taken * float(r.get("hero_max_hp", 1))
+	if share_max >= 0.0 and own and plain and r.damage_taken > 0 and felt and sustain_share(r) > share_max:
 		report.flag(BalanceReport.ERROR, "arena: heal share", subject, BalanceReport.pct(sustain_share(r)), "<= %s" % BalanceReport.pct(share_max),
 			"healed %d of %d taken (%s)" % [r.healed, r.damage_taken, BalanceLab.sources_text(r.heal_sources)])
 	if tags.has("expected") and own and r.bot == "kite":
