@@ -289,6 +289,13 @@ func _test_finale(game: Game) -> void:
 	check(relic_offered, "keep going after a resumed win: the last boss's relic is offered")
 	_close_offers(game)
 	check(not get_tree().paused and not game.run.finale and game.depth == total + 1, "keep going: endless mode, past the bottom")
+	# Leaving a won run for the title screen ends it: nothing is left for the Well to resume.
+	game._save_run()
+	var was_busy := Loader.busy
+	Loader.busy = true  # (the scene change itself is not for this test)
+	game.game_over_panel.title_requested.emit()
+	Loader.busy = was_busy
+	check(not RunSave.exists(), "the Title button erases the won run, as Return to village does")
 	Profile.reset()
 
 

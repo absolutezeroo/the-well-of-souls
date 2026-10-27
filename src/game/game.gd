@@ -191,10 +191,7 @@ func _connect_menus() -> void:
 	encounter_panel.closed.connect(_on_menu_closed)
 	game_over_panel.restart_requested.connect(return_to_village)
 	game_over_panel.continue_requested.connect(_on_continue_endless)
-	game_over_panel.title_requested.connect(func() -> void:
-		_records.record_history()
-		_set_paused(false)
-		Loader.go(TITLE_SCENE))
+	game_over_panel.title_requested.connect(return_to_title)
 
 
 func _connect_events() -> void:
@@ -907,6 +904,15 @@ func return_to_village() -> void:
 	RunSave.erase()
 	_set_paused(false)
 	Loader.go(VILLAGE_SCENE)
+
+
+## The end screen's Title button ends the run as Return to village does: the won (or lost) run
+## is erased, never left behind for the Well to resume into endless mode or record twice.
+func return_to_title() -> void:
+	_records.record_history()
+	RunSave.erase()
+	_set_paused(false)
+	Loader.go(TITLE_SCENE)
 
 
 func _on_continue_endless() -> void:
