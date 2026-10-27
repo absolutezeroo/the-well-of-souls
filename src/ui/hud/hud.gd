@@ -89,11 +89,14 @@ var _in_trial := false
 var action_bar := ActionBar.new()
 ## Clicks in the fight (built in code).
 var mouse_controls := MouseControls.new()
+## On the Bag button while a compartment of the bag is full (built in code).
+var bag_full_mark := BagFullMark.new()
 
 
 func _ready() -> void:
 	%BagButton.pressed.connect(func() -> void: inventory_requested.emit())
 	%BagButton.icon = BAG_ICON
+	%BagButton.add_child(bag_full_mark)
 	%PauseButton.pressed.connect(func() -> void: pause_requested.emit())
 	if DebugPanel.is_available():
 		_add_debug_button()
@@ -383,6 +386,7 @@ func bind_player(player: Player) -> void:
 	_weapon_shown = null
 	_temp_shown = Vector4(NAN, NAN, NAN, NAN)
 	loot_prompt.player = player
+	bag_full_mark.watch(player.inventory)
 	_player.health_changed.connect(_on_health_changed)
 	_vignette.reset()
 	_player.health_changed.connect(_vignette.on_health_changed)

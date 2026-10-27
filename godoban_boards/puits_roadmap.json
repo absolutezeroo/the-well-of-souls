@@ -767,8 +767,8 @@
     {
       "id": "task_51",
       "title": "Bouton Sac : signaler un compartiment plein",
-      "description": "Rien sur le HUD ne dit qu'un compartiment du sac est plein (seul le toast au moment du butin le dit). Idée : un petit point rouge sur le bouton Sac, ou sur l'onglet, quand un compartiment est plein.",
-      "status": "backlog",
+      "description": "Rien sur le HUD ne dit qu'un compartiment du sac est plein (seul le toast au moment du butin le dit). Idée : un petit point rouge sur le bouton Sac, ou sur l'onglet, quand un compartiment est plein.\n\nFait : un petit point rouge (BagFullMark) en haut à droite du bouton Sac du HUD dès qu'un compartiment est plein ; il disparaît quand une place se libère. À vérifier sur le téléphone : point visible et lisible, pas sous le symbole de touche (PC/manette), pas confondu avec la gemme dorée « nouveau ».",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_4",
       "due_date": null,
@@ -777,7 +777,7 @@
         "idée"
       ],
       "created_at": 1792691163,
-      "updated_at": 1792691163
+      "updated_at": 1793073870
     },
     {
       "id": "task_54",

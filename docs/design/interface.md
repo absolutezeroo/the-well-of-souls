@@ -466,7 +466,9 @@ stones lit in their runes' colors. The selected slot pulses gold.
     how many items it holds when any (a stack counts all of its own; red when the compartment is full) and
     a small gold gem while something new waits in it; under them the open tab's name and its own
     places ("Runes  3 / 16", red when full), between its keys on keys and gamepads ([Q] Weapons
-    16 / 16 [E], [LB] ... [RB]). A compartment holding more than its places (a run saved before,
+    16 / 16 [E], [LB] ... [RB]). While any compartment is full, the HUD's Bag button wears a small red dot in its top
+    right corner (`BagFullMark`), so a full compartment is known before the next loot stays on
+    the ground (the pickup's toast says it only once). A compartment holding more than its places (a run saved before,
     a compartment made smaller) keeps it all and says so under it ("More than it has room for:
     make room before anything new goes in."). Tap a tab, or Q / E, LB / RB (`MenuNav`,
     "menu_tabs"). The tab picked stays picked until the run ends (the bag opens on it); a new
