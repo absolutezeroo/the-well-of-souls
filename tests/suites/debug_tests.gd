@@ -257,9 +257,13 @@ func _test_invisible(game: Game) -> void:
 	await _frames(30)
 	check(monster.target == null and struck[0] == 0, "invisible: sent after him or struck, it forgets him")
 	Events.actor_damaged.disconnect(count_blow)
+	# Back in his sight (the blow's push, or its wandering while he was unseen, may have taken it
+	# behind a pillar: --seed=286597).
+	monster.global_position = player.global_position + (lane[1] as Vector2) * 60.0
+	monster.velocity = Vector2.ZERO
 	DebugCheats.set_invisible(false)
 	await _frames(60)
-	check(monster.target == player, "visible again: it notices him")
+	check(monster.target == player, "visible again: it notices him (%d px, in sight %s, awake %s)" % [monster.global_position.distance_to(player.global_position), world.has_line_of_sight(monster.global_position, player.global_position), monster.is_awake])
 	DebugCheats.reset()
 	await _clear_monsters(world)
 

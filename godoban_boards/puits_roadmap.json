@@ -3917,8 +3917,8 @@
     {
       "id": "task_257",
       "title": "Test instable : « visible again: it notices him » (game.debug_panel)",
-      "description": "Échoue avec --seed=286597 (déjà avant le 25/10, même code). Le monstre ne reprend pas le héros pour cible dans les 60 images après « Invisible » coupé. À regarder. Vu aussi une fois en parallèle : « the spacing push is summed one frame in 3 (1 times in 12 frames) » (game.perf, seed 709392 ; passe seul) : le monstre suivi s'arrête peut-être (pas de poussée quand il ne bouge pas).",
-      "status": "todo",
+      "description": "Échoue avec --seed=286597 (déjà avant le 25/10, même code). Le monstre ne reprend pas le héros pour cible dans les 60 images après « Invisible » coupé. À regarder. Vu aussi une fois en parallèle : « the spacing push is summed one frame in 3 (1 times in 12 frames) » (game.perf, seed 709392 ; passe seul) : le monstre suivi s'arrête peut-être (pas de poussée quand il ne bouge pas).\n\nCorrigé (27/10) pour « visible again » : le monstre s'était éloigné hors de vue (118 px, derrière un obstacle) pendant que le héros était invisible ; le test le remet dans l'axe dégagé avant de rendre le héros visible, et le message dit maintenant distance / vue / éveil. Passe avec --seed=286597. Le « spacing push » de game.perf (graine 709392) ne se reproduit pas seul : à surveiller (laissé en revue pour ça).",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_4",
       "tags": [
@@ -3926,7 +3926,7 @@
         "bug"
       ],
       "created_at": 1792901891,
-      "updated_at": 1792901891,
+      "updated_at": 1793075485,
       "due_date": null
     },
     {
