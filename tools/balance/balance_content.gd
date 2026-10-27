@@ -233,7 +233,8 @@ static func of_type(folder: String, type: Variant) -> Array:
 	return scan(folder).filter(func(r: Resource) -> bool: return is_instance_of(r, type))
 
 
-## Content files missing from ContentDB (they would never appear in a run): one line each.
+## Content files missing from ContentDB (they would never appear in a run): one line each. The
+## bottom of the Well's and the hidden floor's bosses and monsters count as listed.
 static func unlisted(content: ContentDB) -> PackedStringArray:
 	var result := PackedStringArray()
 	var checks := [
@@ -257,12 +258,24 @@ static func unlisted(content: ContentDB) -> PackedStringArray:
 	for w in weapons():
 		if not items.has(w):
 			result.append("weapons: %s is in data/ but can't drop (not in items, locked items or the starting kit)" % w.resource_path.get_file())
+	# The bottom of the Well (FinaleDef) and the hidden floor (HiddenFloorDef) bring their own
+	# bosses and monsters: listed there, not in an act.
+	var beyond_acts: Array[BossDef] = []
+	var dungeon := content.dungeon
+	if dungeon.finale:
+		beyond_acts.append_array(dungeon.finale.all_bosses())
+	if dungeon.hidden_floor and dungeon.hidden_floor.boss:
+		beyond_acts.append_array(dungeon.hidden_floor.boss.forms())
 	var in_acts := content.all_monsters()
+	if dungeon.hidden_floor:
+		in_acts.append_array(dungeon.hidden_floor.monsters)
+	in_acts.append_array(beyond_acts)
 	var summoned := summoners(content)
 	for m: Variant in scan(FOLDERS.monsters):
 		if m is MonsterDef and not in_acts.has(m) and not summoned.has((m as MonsterDef).id):
 			result.append("monsters: %s is in no act and summoned by no one" % (m as MonsterDef).resource_path.get_file())
 	var boss_list := bosses(content)
+	boss_list.append_array(beyond_acts)
 	for b: Variant in scan(FOLDERS.bosses):
 		if b is BossDef and not boss_list.has(b):
 			result.append("bosses: %s is in no act" % (b as BossDef).resource_path.get_file())

@@ -3246,8 +3246,8 @@
     {
       "id": "task_213",
       "title": "Suite balance : échecs non marqués « KNOWN » (contenu hors acte, degenerate_skills_a3)",
-      "description": "Vus le 24/10 dans --only=balance, déjà là avant : « content: unlisted » (master_toma, nameless_effigy, nameless_keeper : dans aucun acte, alors qu'ils sont dans le fond du Puits / l'étage caché) et « degenerate DPS 2,52x (cible 2,5x) » pour degenerate_skills_a3. Le premier est un faux positif de l'outil (BalanceContent.unlisted ne connaît pas FinaleDef/HiddenFloorDef) ; le second est à mesurer.",
-      "status": "backlog",
+      "description": "Vus le 24/10 dans --only=balance, déjà là avant : « content: unlisted » (master_toma, nameless_effigy, nameless_keeper : dans aucun acte, alors qu'ils sont dans le fond du Puits / l'étage caché) et « degenerate DPS 2,52x (cible 2,5x) » pour degenerate_skills_a3. Le premier est un faux positif de l'outil (BalanceContent.unlisted ne connaît pas FinaleDef/HiddenFloorDef) ; le second est à mesurer.\n\nFait (27/10) : BalanceContent.unlisted compte les boss et monstres du Fond du Puits (FinaleDef.all_bosses) et de l'étage caché (HiddenFloorDef) : plus de faux « content: unlisted » (master_toma, the_maw, nameless_effigy, nameless_keeper). Nouveau contrôle dans unit.content : tout fichier de contenu apparaît dans une partie. Le second point (degenerate_skills_a3 2,52x) reste suivi par task_85.",
+      "status": "done",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -3256,7 +3256,7 @@
         "test"
       ],
       "created_at": 1792816004,
-      "updated_at": 1792816004
+      "updated_at": 1793075587
     },
     {
       "id": "task_214",

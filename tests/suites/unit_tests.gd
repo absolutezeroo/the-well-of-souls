@@ -397,6 +397,8 @@ func _test_content() -> void:
 		chances.append(CONTENT.get_difficulty(id).curse_chance)
 	check(chances[0] < chances[1] and chances[1] < chances[2] and chances[2] < chances[3], "curses: rare on Easy, often on Nightmare %s" % str(chances))
 	check(CONTENT.player != null and CONTENT.dungeon != null, "content db has player and dungeon config")
+	var unlisted := BalanceContent.unlisted(CONTENT)
+	check(unlisted.is_empty(), "every content file appears in a run: listed in content_db.tres, an act, the bottom of the Well or the hidden floor (%s)" % ", ".join(unlisted))
 	check(CONTENT.all_monsters().size() >= 20, "a big bestiary (%d monsters)" % CONTENT.all_monsters().size())
 	var ids := {}
 	for monster in CONTENT.all_monsters():
