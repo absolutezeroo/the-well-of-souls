@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 390,
+  "next_id": 391,
   "tags": [
     "pc",
     "test",
@@ -5870,6 +5870,22 @@
       ],
       "created_at": 1793074133,
       "updated_at": 1793074133,
+      "due_date": null
+    },
+    {
+      "id": "task_390",
+      "title": "Outils Python sous Windows : catalogue des sauvegardes et lanceur de tests",
+      "description": "Corrigé (audit) : tools/saves/build_catalog.py lisait les fichiers avec l'encodage du système ; sous Windows (page de code) il plantait sur les textes accentués (src/online/player_name.gd, data/ui/input_prompts.tres), donc --check échouait avant un commit. Il lit et écrit maintenant en UTF-8 avec des fins de ligne LF, et --check dit quoi lancer quand le catalogue est périmé. tools/run_tests.py importait le module Unix « resource » : il ne démarrait pas sous Windows ; il démarre (sans le temps CPU), cherche aussi Godot_v4.7-stable_win64*.exe et donne à chaque processus son dossier user:// aussi via APPDATA. Tests hôtes : python3 -m unittest discover -s tools/tests. Non vérifié sur un vrai Windows : lancer une fois python tools/run_tests.py --only unit sur le PC.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "tags": [
+        "bug",
+        "tests",
+        "pc"
+      ],
+      "created_at": 1793074408,
+      "updated_at": 1793074408,
       "due_date": null
     }
   ]

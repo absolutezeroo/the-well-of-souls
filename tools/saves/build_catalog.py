@@ -1,6 +1,8 @@
 """Build stable save references; preserve historical paths when content is moved.
 
 Run from anywhere. --check is read-only and fails when regeneration is needed.
+Files are read and written as UTF-8 with LF line ends whatever the system's locale (a Windows
+console would otherwise decode the French texts with its code page and fail).
 Runtime uses only the generated Resource, never a filesystem scan.
 """
 import argparse
@@ -18,14 +20,14 @@ KINDS = {"ItemDef": "item", "SkillDef": "skill", "PerkDef": "perk",
 def collect(root):
     bases = {}
     for path in sorted((root / "src").rglob("*.gd")):
-        text = path.read_text()
+        text = path.read_text(encoding="utf-8")
         name = re.search(r"^class_name (\w+)", text, re.M)
         base = re.search(r"^extends (\w+)", text, re.M)
         if name and base:
             bases[name[1]] = base[1]
     entries = {}
     for path in sorted((root / "data").rglob("*.tres")):
-        text = path.read_text()
+        text = path.read_text(encoding="utf-8")
         kind = re.search(r'script_class="([^"]+)"', text)
         # Subresources may have their own ids; only the root resource names this entry.
         resource = text.partition('\n[resource]\n')[2]
@@ -75,14 +77,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    old = OUTPUT.read_text() if OUTPUT.exists() else ''
+    old = OUTPUT.read_text(encoding='utf-8') if OUTPUT.exists() else ''
     entries = collect(ROOT)
     result = render(entries, old)
     print(f'{len(entries)} stable content references')
     if args.check:
+        if result != old:
+            print('data/save/content_catalog.tres is out of date: run python3 tools/saves/build_catalog.py')
         return int(result != old)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(result)
+    OUTPUT.write_text(result, encoding='utf-8', newline='\n')
     return 0
 
 

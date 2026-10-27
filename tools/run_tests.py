@@ -8,7 +8,7 @@
 
 Each process runs `res://tests/run_tests.tscn -- --shard=i/N` (tests/run_tests.gd shares the
 tests out on tests/timings.json, the longest first) with its own user folder: XDG_DATA_HOME
-points at a fresh temporary folder, so no process reads or writes another's files (nor the
+(Linux) and APPDATA (Windows) point at a fresh temporary folder, so no process reads or writes another's files (nor the
 player's: the real game and every worktree share one user folder otherwise). Every process gets
 the same --seed (printed first), so a failure plays again with the same --seed and --test.
 
@@ -23,12 +23,16 @@ import json
 import os
 import random
 import re
-import resource
 import shutil
 import subprocess
 import sys
 import tempfile
 import time
+
+try:
+	import resource  # Unix only: the children's CPU time in the summary
+except ImportError:  # Windows
+	resource = None
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TIMINGS = os.path.join(ROOT, "tests", "timings.json")
@@ -54,7 +58,8 @@ def find_godot(given):
 	"""The Godot binary to run: the option, $GODOT, `godot` on the PATH, or a downloaded one."""
 	candidates = [given, os.environ.get("GODOT"), shutil.which("godot")]
 	for folder in (ROOT, os.path.join(ROOT, "_tool"), "/tmp"):
-		candidates.append(os.path.join(folder, "Godot_v4.7-stable_linux.x86_64"))
+		for name in ("Godot_v4.7-stable_linux.x86_64", "Godot_v4.7-stable_win64_console.exe", "Godot_v4.7-stable_win64.exe"):
+			candidates.append(os.path.join(folder, name))
 	for path in candidates:
 		if path and os.path.isfile(path) and os.access(path, os.X_OK):
 			return path
@@ -93,7 +98,8 @@ def main():
 		if args.test:
 			user_args.append("--test=" + args.test)
 		env = dict(os.environ)
-		env["XDG_DATA_HOME"] = os.path.join(homes, str(index))  # this process's own user:// folder
+		# This process's own user:// folder: Godot puts it under XDG_DATA_HOME on Linux, APPDATA on Windows.
+		env["XDG_DATA_HOME"] = env["APPDATA"] = os.path.join(homes, str(index))
 		os.makedirs(env["XDG_DATA_HOME"])
 		log_path = os.path.join(logs, "shard_%d.log" % index)
 		log = open(log_path, "w")
@@ -148,8 +154,8 @@ def main():
 				failures += 1
 				failed_lines.append("FAIL: shard %d exited %s despite a reported total (see %s)" % (index, code, log_path))
 	elapsed = time.monotonic() - started
-	usage = resource.getrusage(resource.RUSAGE_CHILDREN)
-	cpu = usage.ru_utime + usage.ru_stime
+	usage = resource.getrusage(resource.RUSAGE_CHILDREN) if resource else None
+	cpu = usage.ru_utime + usage.ru_stime if usage else 0.0
 	shutil.rmtree(homes, ignore_errors=True)
 
 	for line in failed_lines:
@@ -173,7 +179,8 @@ def main():
 			handle.write("\n")
 		print("tests/timings.json written (%d tests)" % len(kept))
 	print("\nLogs: %s" % logs)
-	print("%d checks, %d failed, in %.0f s (%.0f s of CPU; seed %d)" % (checks, failures, elapsed, cpu, seed))
+	cpu_text = "%.0f s of CPU; " % cpu if usage else ""
+	print("%d checks, %d failed, in %.0f s (%sseed %d)" % (checks, failures, elapsed, cpu_text, seed))
 	sys.exit(min(failures, 255))
 
 

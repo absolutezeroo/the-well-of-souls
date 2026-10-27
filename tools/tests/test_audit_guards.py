@@ -43,6 +43,24 @@ class EngineErrors(unittest.TestCase):
         self.assertTrue(runner.unexpected_engine_error("ERROR: a resource was leaked during gameplay"))
 
 
+class Portability(unittest.TestCase):
+    def test_the_runner_loads_without_the_unix_resource_module(self):
+        # Windows has no `resource`: the runner must still start (it only loses the CPU time).
+        import sys
+        saved = sys.modules.get("resource")
+        sys.modules["resource"] = None  # makes `import resource` raise ImportError
+        try:
+            probe_spec = importlib.util.spec_from_file_location("well_test_runner_windows", ROOT / "tools/run_tests.py")
+            probe = importlib.util.module_from_spec(probe_spec)
+            probe_spec.loader.exec_module(probe)
+            self.assertIsNone(probe.resource)
+        finally:
+            if saved is None:
+                del sys.modules["resource"]
+            else:
+                sys.modules["resource"] = saved
+
+
 @unittest.skipUnless(resource is not None and hasattr(resource, "prlimit"), "requires Linux prlimit")
 class ShortWrite(unittest.TestCase):
     def test_a_short_write_preserves_the_previous_save(self):
