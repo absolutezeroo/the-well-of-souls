@@ -178,7 +178,9 @@ second clock, combat actor, additional profile file or RunState change. A new la
 to the village spawn as before; the hero's room is session state, not new saved progression.
 Time continues while walking inside and freezes in menus. The room has steady warm lighting,
 while outside still follows the day/night gradient. Its fixed camera shows the whole room;
-2× atlas art at a 1.5× camera zoom keeps source pixels on a 3× grid. Exterior camera framing
+2× atlas art at a 1.5× camera zoom keeps source pixels on a 3× grid. Like a floor's camera, both
+zooms grow by what PixelGrid's rounding of the canvas's scale took off (`world_zoom()`), so
+1600×900 or a smaller interface size frames Kagari as 1280×720 does. Exterior camera framing
 and bounds return when leaving. A room visit never overwrites a suspended dungeon save.
 
 `VillageInteriorDef` owns doorway/return position, world offset, camera and walk bounds,

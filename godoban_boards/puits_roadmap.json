@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 389,
+  "next_id": 390,
   "tags": [
     "pc",
     "test",
@@ -5842,7 +5842,7 @@
     {
       "id": "task_388",
       "title": "Chasse aux bugs du gameplay et de Kagari",
-      "description": "Relecture critique du code de jeu (entités, IA, monde, combat, VFX, village Kagari, GameSession) : chaque bug confirmé a un test qui échoue avant la correction. Corrigé : l’horloge du village avançait pendant l’écran de fin après une mort (le jeu n’est pas en pause derrière), alors que le temps de Kagari doit s’arrêter dans les menus. Corrigé : quitter la partie sous 30 % de Santé (Retour au village, titre) laissait le filtre passe-bas du bus Music actif : musique du village étouffée, et toute la partie suivante aussi (le héros repart en pleine santé, l’ambiance ne le retirait jamais).",
+      "description": "Relecture critique du code de jeu (entités, IA, monde, combat, VFX, village Kagari, GameSession) : chaque bug confirmé a un test qui échoue avant la correction. Corrigé : l’horloge du village avançait pendant l’écran de fin après une mort (le jeu n’est pas en pause derrière), alors que le temps de Kagari doit s’arrêter dans les menus. Corrigé : quitter la partie sous 30 % de Santé (Retour au village, titre) laissait le filtre passe-bas du bus Music actif : musique du village étouffée, et toute la partie suivante aussi (le héros repart en pleine santé, l’ambiance ne le retirait jamais). Corrigé : la caméra de Kagari et du temple ignorait PixelGrid.world_zoom() ; en 1600×900, 1366×768 ou avec une interface plus petite, le village était dézoomé et le temple montrait le vide autour de ses murs.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_5",
@@ -5852,7 +5852,23 @@
         "qualité"
       ],
       "created_at": 1793074694,
-      "updated_at": 1793076586,
+      "updated_at": 1793076826,
+      "due_date": null
+    },
+    {
+      "id": "task_389",
+      "title": "Temple de Kagari : bandes sombres sur écran large (S23)",
+      "description": "Vu en capture 2340×1080 (toile 1560×720) : à zoom 1,5 la vue fait 1040 unités de large pour une salle de 960 ; des bandes sombres (et un liseré de l’extérieur à gauche) apparaissent de chaque côté. Choisir : salle plus large, zoom calculé pour remplir la largeur, ou bandes assumées. À vérifier sur le téléphone.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_3",
+      "tags": [
+        "visuel",
+        "android",
+        "playtest"
+      ],
+      "created_at": 1793076826,
+      "updated_at": 1793076826,
       "due_date": null
     }
   ]

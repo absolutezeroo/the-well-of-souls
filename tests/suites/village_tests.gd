@@ -275,6 +275,7 @@ func run_title() -> void:
 	await _frames(3)
 	check(hub.spots.size() == 10 and hub.walker != null and not hub.walker.blocked, "Kagari opens with a controllable hero, surface/temple places and four residents")
 	await _test_temple(hub)
+	await _test_framing(hub)
 	var sleeper := hub.view.actor_for(VILLAGE.residents[2])
 	var sleeper_position := sleeper.position
 	await _frames(300)
@@ -458,6 +459,23 @@ func _test_descent(kept: String) -> void:
 	Settings.fewer_effects = fewer
 	hub.queue_free()
 	await _frames(2)
+
+
+## On a screen where PixelGrid's rounding takes scale off (1600x900: x1, not x1.25), the surface
+## and the temple keep their framing, as a floor does (GameCamera): no void around the temple.
+func _test_framing(hub: VillageHub) -> void:
+	var room := VILLAGE.interiors[0]
+	var window := get_tree().root.size
+	get_tree().root.size = Vector2i(1600, 900)
+	await _frames(3)
+	var grown := PixelGrid.world_zoom()
+	check(grown > 1.0 and hub.walker.camera.zoom.is_equal_approx(Vector2(2, 2) * grown), "the village's camera zooms by what the canvas's rounding took off (x%s)" % grown)
+	check(hub.enter_room(room) and hub.walker.camera.zoom.is_equal_approx(Vector2.ONE * room.camera_zoom * grown), "the temple keeps its authored framing on any screen")
+	check(hub.leave_room(), "back outside after the framing check")
+	get_tree().root.size = window
+	await _frames(3)
+	check(hub.walker.camera.zoom.is_equal_approx(Vector2(2, 2) * PixelGrid.world_zoom()), "the framing follows the window back")
+	hub.walker.position = VILLAGE.spawn
 
 
 func _test_temple(hub: VillageHub) -> void:
