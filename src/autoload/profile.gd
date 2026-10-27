@@ -712,16 +712,58 @@ func to_data() -> Dictionary:
 	}
 
 
+## Reads the file. A damaged one (a hand edit, a disk fault, a newer game's field) is copied aside
+## first, since the next save replaces it, and what can still be read of it is kept: one bad
+## field never costs the whole profile.
 func load_profile() -> void:
 	if save_path.is_empty():
 		return
 	var data: Variant = SafeFile.read_json(save_path)
 	if data == null:
+		if FileAccess.file_exists(save_path):
+			push_warning("Profile file can't be read, keeping the current profile (the file is kept as %s)." % _set_aside())
 		return
 	if not is_valid_data(data, false):
-		push_warning("Profile file is damaged, keeping the current profile.")
-		return
+		var aside := _set_aside()
+		data = repaired(data)
+		if data == null:
+			push_warning("Profile file is damaged, keeping the current profile (the file is kept as %s)." % aside)
+			return
+		push_warning("Profile file is damaged: its damaged fields are dropped (the file is kept as %s)." % aside)
 	_read(data)
+
+
+## A copy of the profile file as it is, next to it (`profile.json.damaged-<unix time>`). Its path.
+func _set_aside() -> String:
+	var stamp := int(Time.get_unix_time_from_system())
+	var aside := "%s.damaged-%d" % [save_path, stamp]
+	var count := 1
+	while FileAccess.file_exists(aside):
+		aside = "%s.damaged-%d-%d" % [save_path, stamp, count]
+		count += 1
+	if DirAccess.copy_absolute(ProjectSettings.globalize_path(save_path), ProjectSettings.globalize_path(aside)) != OK:
+		push_warning("Could not copy the damaged profile file aside.")
+	return aside
+
+
+## What can still be read of a damaged profile (to_data()'s form): its fields and entries of the
+## wrong kind, out-of-range quest steps and unreadable memorials dropped. Null when nothing can be.
+static func repaired(data: Variant) -> Variant:
+	var kept: Variant = RunSave.sanitized(data, SAVE_SHAPE, "profile")
+	if not kept is Dictionary:
+		return null
+	var quests: Variant = (kept as Dictionary).get("village_quests")
+	if quests is Dictionary:
+		for key: Variant in (quests as Dictionary).keys():
+			var value: float = float(quests[key])
+			if value != int(value) or value < 0 or value > VillageProgress.Step.RETURNED:
+				(quests as Dictionary).erase(key)
+	if float((kept as Dictionary).get("village_seconds", 0.0)) < 0.0:
+		(kept as Dictionary).erase("village_seconds")
+	var memorials: Variant = (kept as Dictionary).get("village_memorials")
+	if memorials is Array:
+		kept["village_memorials"] = (memorials as Array).filter(func(snapshot: Variant) -> bool: return KeeperSnapshot.is_valid(snapshot))
+	return kept if is_valid_data(kept, false) else null
 
 
 ## The profile replaced by `data` (to_data()'s form, from another device: CloudSave), checked as

@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 388,
+  "next_id": 390,
   "tags": [
     "pc",
     "test",
@@ -5837,6 +5837,39 @@
       ],
       "created_at": 1793065447,
       "updated_at": 1793066691,
+      "due_date": null
+    },
+    {
+      "id": "task_388",
+      "title": "Audit global : sauvegardes, en ligne, interface, outils, licences",
+      "description": "Audit de santé du projet (branche agent/audit) : sauvegardes et profil (atomicité, corruption, migration, consentement, conflits cloud), services Talo (erreurs, secrets, données perso), restes de l'expérience RPG, fuites de signaux et navigation des menus, licences et hygiène du dépôt, docs et outils. Chaque problème confirmé est corrigé avec un test, ou laissé en carte pour décision.",
+      "status": "in_progress",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "qualité",
+        "sauvegarde",
+        "en ligne",
+        "tests"
+      ],
+      "created_at": 1793074133,
+      "updated_at": 1793074133,
+      "due_date": null
+    },
+    {
+      "id": "task_389",
+      "title": "Profil endommagé : ne plus tout perdre au prochain enregistrement",
+      "description": "Corrigé (audit) : un seul champ abîmé dans user://profile.json (édition à la main, panne disque, champ d'une version plus récente du jeu) faisait rejeter tout le profil au démarrage ; le jeu repartait d'un profil vide et le premier enregistrement écrasait le fichier : toute la progression perdue. Maintenant le fichier est d'abord copié à côté (profile.json.damaged-<date>), puis seuls les champs et entrées abîmés sont écartés (Profile.repaired()). Un fichier illisible (pas du JSON) est aussi copié avant d'être remplacé. Test unit.profile_damaged ; le test du Gardien sans nom (keeper_tests) passait jusque-là sans vérifier ce qu'il annonçait. À vérifier : rien à faire en jeu, sauf si un fichier .damaged apparaît chez un joueur.",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "bug",
+        "sauvegarde",
+        "tests"
+      ],
+      "created_at": 1793074133,
+      "updated_at": 1793074133,
       "due_date": null
     }
   ]
