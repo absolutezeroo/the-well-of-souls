@@ -318,8 +318,8 @@
     {
       "id": "task_17",
       "title": "Textes anglais du nouveau contenu",
-      "description": "Relire en anglais les chroniques, fragments, fins et textes PC (seules les captures FR ont été vérifiées).",
-      "status": "backlog",
+      "description": "Relire en anglais les chroniques, fragments, fins et textes PC (seules les captures FR ont été vérifiées).\n\nRelu (27/10) : les 14 chroniques, les 39 fragments, les 2 fins, le Fond du Puits et les phrases clavier/manette des conseils. Corrigé : orthographe américaine comme le reste du jeu (recognized x2), « It was light; I had thought a soul would weigh more » (journal de Tôma, bol de bronze), « those who take the rite at its hardest » (ordonnance de la Douce). Le français est inchangé. Reste : data/village/topics/keeper_box.tres dit encore « recognise » (village en refonte, non touché). À faire : lire en anglais sur le téléphone (longueurs dans les cadres).",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_1",
       "due_date": null,
@@ -327,7 +327,7 @@
         "traduction"
       ],
       "created_at": 1792685000,
-      "updated_at": 1792685000
+      "updated_at": 1793074917
     },
     {
       "id": "task_18",

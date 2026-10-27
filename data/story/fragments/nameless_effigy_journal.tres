@@ -11,6 +11,6 @@ id = &"nameless_effigy_journal"
 title = "Tôma's Journal, the Last Page"
 author = "Tôma, keeper of the shrine"
 place = "The Nameless Charnel"
-lines = PackedStringArray("The first keeper rose against me. I struck the way I teach my pupil.", "The seal opened without a sound. The knight's name blew away like ash.", "My pupil will recognise the cut. I pray he never comes this far.")
+lines = PackedStringArray("The first keeper rose against me. I struck the way I teach my pupil.", "The seal opened without a sound. The knight's name blew away like ash.", "My pupil will recognize the cut. I pray he never comes this far.")
 look = ExtResource("3_keeperjourna")
 conditions = Array[ExtResource("4_progresscond")]([ExtResource("2_keepernamed")])

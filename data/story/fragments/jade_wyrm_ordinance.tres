@@ -9,5 +9,5 @@ id = &"jade_wyrm_ordinance"
 title = "The Priests' Ordinance"
 author = "The high priest of Solhar"
 place = "The Hushed Archive, shelf of rites"
-lines = PackedStringArray("The Gentle One rises only for the willing, those who come at the hardest of the rite.", "The lukewarm she swallows without a glance.", "Let only those who come down as martyrs approach her head.")
+lines = PackedStringArray("The Gentle One rises only for the willing, those who take the rite at its hardest.", "The lukewarm she swallows without a glance.", "Let only those who come down as martyrs approach her head.")
 look = ExtResource("2_sealedletter")
