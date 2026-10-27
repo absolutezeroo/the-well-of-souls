@@ -5794,7 +5794,7 @@
     {
       "id": "task_385",
       "title": "Refaire les dialogues de village avec le pack Ninja Adventure",
-      "description": "Implémenté : cadre, portrait et boutons Ninja Adventure originaux (CC0, source officielle épinglée), boîte basse en deux colonnes, monde visible ; texte et réponses défilables, navigation existante conservée. Fin du grand panneau brun pour les échanges du village. Captures FR/EN à 1540×720 et 2340×1080 inspectées, hauteur après retour à la ligne corrigée. Suite complète 20 062 vérifications sans échec ; 673 scripts sans diagnostic ; traductions et catalogue valides. Validation tactile/manette et préférence visuelle finale : essai utilisateur, task_376.",
+      "description": "Correction après retour utilisateur : les premiers cadres provenaient du projet d’exemple Godot GitHub et n’étaient pas les éléments spécifiques de dialogue du pack complet. ZIP officiel itch.io (upload 16981275, 29 mars 2026) téléchargé ; dossier Ui/Dialog inspecté. Les images du jeu sont désormais identiques octet pour octet à DialogueBoxSimple.png, FacesetBox.png et ChoiceBox.png. Provenance, chemins d’origine et SHA-256 du ZIP documentés dans assets/ui/dialogue/README.md. Texte sombre adapté au fond clair, y compris focus/clavier et survol/appui ; mise en page basse, défilement et progression conservés. Captures Compatibility FR/EN à 1540×720 et 2340×1080 contrôlées. Suite rapide : 17 093 vérifications sans échec ; lint : 673 scripts sans diagnostic ; traductions et catalogue valides. Validation tactile/manette et préférence visuelle finale : essai utilisateur, task_376. Suite complète finale : 20 062 vérifications, zéro échec (graine 347348).",
       "status": "review",
       "priority": "high",
       "epic_id": "epic_1",
@@ -5804,7 +5804,7 @@
         "tests"
       ],
       "created_at": 1793065447,
-      "updated_at": 1793066691,
+      "updated_at": 1793069042,
       "due_date": null
     },
     {

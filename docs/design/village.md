@@ -226,7 +226,8 @@ OpenGL captures can check layout; they do not prove touch feel, S23 performance 
 
 ## Conversation presentation and descent
 
-VillagePanel uses Ninja Adventure's original nine-patch speech, portrait and reply frames,
+VillagePanel uses the full itch.io Ninja Adventure pack's `Ui/Dialog/DialogueBoxSimple.png`,
+`FacesetBox.png` and `ChoiceBox.png`, sliced to preserve their borders,
 not the ornate inventory window. The lower conversation card leaves the world visible, with
 speaker/words on the left and quest details/replies on the right. Both text and replies scroll
 when needed; focus follows into view for keyboard/gamepad and touch dragging never selects a

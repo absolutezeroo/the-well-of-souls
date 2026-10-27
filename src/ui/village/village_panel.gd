@@ -4,7 +4,6 @@ extends Control
 ## same presenter with more height. Choices only emit requests; progression belongs to the hub.
 
 signal picked(action: StringName, payload: Resource)
-const PAPER := Color("fbeee8")
 const INK := Color("283a3d")
 const SPEECH: Texture2D = preload("res://assets/ui/dialogue/speech.png")
 const REPLY: Texture2D = preload("res://assets/ui/dialogue/reply.png")
@@ -142,12 +141,17 @@ static func _button(value: String) -> Button:
 	var button := MenuWindow.button(value, Fonts.BODY, 52)
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.add_theme_stylebox_override("normal", _skin(REPLY, 12))
-	button.add_theme_stylebox_override("hover", _skin(REPLY, 12))
-	button.add_theme_stylebox_override("pressed", _skin(REPLY, 12))
+	var hover := _skin(REPLY, 12)
+	hover.modulate_color = Color(1.08, 1.03, 0.94)
+	button.add_theme_stylebox_override("hover", hover)
+	var pressed := _skin(REPLY, 12)
+	pressed.modulate_color = Color(0.9, 0.85, 0.8)
+	button.add_theme_stylebox_override("pressed", pressed)
 	button.add_theme_stylebox_override("disabled", _skin(REPLY, 12))
-	for state in [&"font_color", &"font_hover_color", &"font_pressed_color"]:
-		button.add_theme_color_override(state, PAPER)
-	button.add_theme_color_override("font_disabled_color", Color("b6bba6"))
+	for state in [&"font_color", &"font_hover_color", &"font_pressed_color", &"font_focus_color", &"font_hover_pressed_color"]:
+		button.add_theme_color_override(state, INK)
+	button.add_theme_color_override("font_disabled_color", Color("78717d"))
+	button.add_theme_constant_override("outline_size", 0)
 	return button
 
 
