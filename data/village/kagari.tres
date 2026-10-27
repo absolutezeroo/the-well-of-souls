@@ -73,7 +73,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="prop_6"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(65, 545)
+position = Vector2(30, 610)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -97,7 +97,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="prop_9"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(875, 535)
+position = Vector2(940, 560)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -370,6 +370,199 @@ position = Vector2(250, 560)
 art_scale = 2.0
 region = Rect2(80, 128, 16, 16)
 
+[sub_resource type="Resource" id="dress_18"]
+script = ExtResource("prop_script")
+texture = ExtResource("ruins")
+position = Vector2(110, 565)
+art_scale = 2.0
+region = Rect2(0, 0, 64, 48)
+collision = Rect2(-56, -44, 112, 44)
+
+[sub_resource type="Resource" id="dress_19"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(215, 520)
+art_scale = 2.0
+region = Rect2(112, 176, 16, 16)
+
+[sub_resource type="Resource" id="dress_20"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(245, 520)
+art_scale = 2.0
+region = Rect2(112, 176, 16, 16)
+
+[sub_resource type="Resource" id="dress_21"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(275, 520)
+art_scale = 2.0
+region = Rect2(128, 176, 16, 16)
+
+[sub_resource type="Resource" id="dress_22"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(215, 548)
+art_scale = 2.0
+region = Rect2(128, 176, 16, 16)
+
+[sub_resource type="Resource" id="dress_23"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(245, 548)
+art_scale = 2.0
+region = Rect2(112, 176, 16, 16)
+
+[sub_resource type="Resource" id="dress_24"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(275, 548)
+art_scale = 2.0
+region = Rect2(112, 176, 16, 16)
+
+[sub_resource type="Resource" id="dress_25"]
+script = ExtResource("prop_script")
+texture = ExtResource("furniture")
+position = Vector2(190, 585)
+art_scale = 2.0
+region = Rect2(192, 64, 16, 32)
+
+[sub_resource type="Resource" id="dress_26"]
+script = ExtResource("prop_script")
+texture = ExtResource("furniture")
+position = Vector2(175, 600)
+art_scale = 2.0
+region = Rect2(64, 0, 16, 16)
+collision = Rect2(-8, -6, 16, 8)
+
+[sub_resource type="Resource" id="dress_27"]
+script = ExtResource("prop_script")
+texture = ExtResource("ruins")
+position = Vector2(850, 610)
+art_scale = 2.0
+region = Rect2(64, 0, 48, 48)
+collision = Rect2(-42, -44, 84, 44)
+
+[sub_resource type="Resource" id="dress_28"]
+script = ExtResource("prop_script")
+texture = ExtResource("ruins")
+position = Vector2(770, 575)
+art_scale = 2.0
+region = Rect2(96, 96, 16, 32)
+collision = Rect2(-10, -8, 20, 10)
+
+[sub_resource type="Resource" id="dress_29"]
+script = ExtResource("prop_script")
+texture = ExtResource("furniture")
+position = Vector2(905, 505)
+art_scale = 2.0
+region = Rect2(0, 0, 16, 16)
+collision = Rect2(-11, -8, 22, 10)
+
+[sub_resource type="Resource" id="dress_30"]
+script = ExtResource("prop_script")
+texture = ExtResource("furniture")
+position = Vector2(925, 515)
+art_scale = 2.0
+region = Rect2(16, 0, 16, 16)
+collision = Rect2(-11, -8, 22, 10)
+
+[sub_resource type="Resource" id="dress_31"]
+script = ExtResource("prop_script")
+texture = ExtResource("furniture")
+position = Vector2(590, 412)
+art_scale = 2.0
+region = Rect2(64, 16, 16, 16)
+collision = Rect2(-10, -8, 20, 10)
+
+[sub_resource type="Resource" id="dress_32"]
+script = ExtResource("prop_script")
+texture = ExtResource("furniture")
+position = Vector2(610, 420)
+art_scale = 2.0
+region = Rect2(96, 16, 16, 16)
+
+[sub_resource type="Resource" id="dress_33"]
+script = ExtResource("prop_script")
+texture = ExtResource("furniture")
+position = Vector2(42, 372)
+art_scale = 2.0
+region = Rect2(144, 32, 16, 16)
+collision = Rect2(-11, -8, 22, 10)
+
+[sub_resource type="Resource" id="dress_34"]
+script = ExtResource("prop_script")
+texture = ExtResource("furniture")
+position = Vector2(62, 384)
+art_scale = 2.0
+region = Rect2(160, 32, 16, 16)
+collision = Rect2(-11, -8, 22, 10)
+
+[sub_resource type="Resource" id="dress_35"]
+script = ExtResource("prop_script")
+texture = ExtResource("furniture")
+position = Vector2(36, 395)
+art_scale = 2.0
+region = Rect2(96, 16, 16, 16)
+
+[sub_resource type="Resource" id="dress_36"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(250, 610)
+art_scale = 2.0
+region = Rect2(208, 128, 32, 32)
+collision = Rect2(-26, -20, 52, 22)
+
+[sub_resource type="Resource" id="dress_37"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(470, 615)
+art_scale = 2.0
+region = Rect2(0, 160, 16, 16)
+
+[sub_resource type="Resource" id="dress_38"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(500, 622)
+art_scale = 2.0
+region = Rect2(32, 160, 16, 16)
+
+[sub_resource type="Resource" id="dress_39"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(560, 500)
+art_scale = 2.0
+region = Rect2(48, 176, 16, 16)
+
+[sub_resource type="Resource" id="dress_40"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(400, 500)
+art_scale = 2.0
+region = Rect2(16, 176, 16, 16)
+
+[sub_resource type="Resource" id="dress_41"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(930, 300)
+art_scale = 2.0
+region = Rect2(208, 128, 32, 32)
+collision = Rect2(-26, -20, 52, 22)
+
+[sub_resource type="Resource" id="dress_42"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(110, 250)
+art_scale = 2.0
+region = Rect2(64, 160, 16, 16)
+
+[sub_resource type="Resource" id="dress_43"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(845, 250)
+art_scale = 2.0
+region = Rect2(80, 160, 16, 16)
+
 [resource]
 script = ExtResource("script")
 atmosphere = ExtResource("atmosphere")
@@ -399,8 +592,8 @@ path_inner_corners = Vector2(80, 128)
 path_details = Array[Rect2]([Rect2(0, 176, 16, 16), Rect2(16, 176, 16, 16)])
 decor_texture = ExtResource("nature")
 decor_regions = Array[Rect2]([Rect2(0, 160, 16, 16), Rect2(16, 160, 16, 16), Rect2(32, 160, 16, 16), Rect2(48, 160, 16, 16), Rect2(96, 160, 16, 16), Rect2(0, 176, 16, 16), Rect2(16, 176, 16, 16), Rect2(32, 176, 16, 16), Rect2(48, 176, 16, 16), Rect2(96, 176, 16, 16)])
-decor_chance = 0.1
+decor_chance = 0.18
 quests = [ExtResource("quest"), ExtResource("sayo_quest")]
 services = [ExtResource("market"), ExtResource("memorial")]
 residents = [ExtResource("keeper"), ExtResource("sayo"), ExtResource("ren"), ExtResource("wanderer")]
-props = [SubResource("prop_0"), SubResource("prop_1"), SubResource("prop_2"), SubResource("prop_3"), SubResource("prop_4"), SubResource("prop_5"), SubResource("prop_6"), SubResource("prop_7"), SubResource("prop_8"), SubResource("prop_9"), SubResource("prop_10"), SubResource("prop_11"), SubResource("prop_12"), SubResource("prop_13"), SubResource("prop_14"), SubResource("prop_15"), SubResource("prop_16"), SubResource("prop_17"), SubResource("prop_18"), SubResource("prop_19"), SubResource("west_roots_0"), SubResource("west_roots_1"), SubResource("west_roots_2"), SubResource("west_roots_3"), SubResource("dress_0"), SubResource("dress_1"), SubResource("dress_2"), SubResource("dress_3"), SubResource("dress_4"), SubResource("dress_5"), SubResource("dress_6"), SubResource("dress_7"), SubResource("dress_8"), SubResource("dress_9"), SubResource("dress_10"), SubResource("dress_11"), SubResource("dress_12"), SubResource("dress_13"), SubResource("dress_14"), SubResource("dress_15"), SubResource("dress_16"), SubResource("dress_17")]
+props = [SubResource("prop_0"), SubResource("prop_1"), SubResource("prop_2"), SubResource("prop_3"), SubResource("prop_4"), SubResource("prop_5"), SubResource("prop_6"), SubResource("prop_7"), SubResource("prop_8"), SubResource("prop_9"), SubResource("prop_10"), SubResource("prop_11"), SubResource("prop_12"), SubResource("prop_13"), SubResource("prop_14"), SubResource("prop_15"), SubResource("prop_16"), SubResource("prop_17"), SubResource("prop_18"), SubResource("prop_19"), SubResource("west_roots_0"), SubResource("west_roots_1"), SubResource("west_roots_2"), SubResource("west_roots_3"), SubResource("dress_0"), SubResource("dress_1"), SubResource("dress_2"), SubResource("dress_3"), SubResource("dress_4"), SubResource("dress_5"), SubResource("dress_6"), SubResource("dress_7"), SubResource("dress_8"), SubResource("dress_9"), SubResource("dress_10"), SubResource("dress_11"), SubResource("dress_12"), SubResource("dress_13"), SubResource("dress_14"), SubResource("dress_15"), SubResource("dress_16"), SubResource("dress_17"), SubResource("dress_18"), SubResource("dress_19"), SubResource("dress_20"), SubResource("dress_21"), SubResource("dress_22"), SubResource("dress_23"), SubResource("dress_24"), SubResource("dress_25"), SubResource("dress_26"), SubResource("dress_27"), SubResource("dress_28"), SubResource("dress_29"), SubResource("dress_30"), SubResource("dress_31"), SubResource("dress_32"), SubResource("dress_33"), SubResource("dress_34"), SubResource("dress_35"), SubResource("dress_36"), SubResource("dress_37"), SubResource("dress_38"), SubResource("dress_39"), SubResource("dress_40"), SubResource("dress_41"), SubResource("dress_42"), SubResource("dress_43")]
