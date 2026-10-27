@@ -1715,8 +1715,8 @@
     {
       "id": "task_114",
       "title": "Débug : ouvrir l'épreuve du Seuil et les Profondeurs à la demande, sans mourir ni tomber",
-      "description": "Aujourd'hui on atteint le Seuil en tuant le héros (avec une seconde vie) et les Profondeurs comme par un trou. Un bouton qui ouvre l'épreuve du Seuil directement, et un qui mène au bout des Profondeurs (la Brèche de l'Aube), ferait gagner du temps pour les tester.",
-      "status": "backlog",
+      "description": "Aujourd'hui on atteint le Seuil en tuant le héros (avec une seconde vie) et les Profondeurs comme par un trou. Un bouton qui ouvre l'épreuve du Seuil directement, et un qui mène au bout des Profondeurs (la Brèche de l'Aube), ferait gagner du temps pour les tester.\n\nFait (27/10) : panneau de débug, onglet Monde, ligne Lieux : « Threshold trial » ouvre l'épreuve du Seuil tout de suite (sans coup mortel ni plume dépensée ; perdue, le héros meurt comme en vrai) et « Dawn Breach » pose le héros à deux cases de la Brèche de l'Aube (en descendant d'abord dans les Profondeurs si besoin). GameDebug.enter_threshold() / to_dawn_breach(), testés dans game.debug_panel. À vérifier dans l'éditeur ou sur le téléphone : les deux boutons, puis gagner l'épreuve et sortir par la Brèche.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -1724,7 +1724,7 @@
         "debug"
       ],
       "created_at": 1792730214,
-      "updated_at": 1792730214
+      "updated_at": 1793076613
     },
     {
       "id": "task_115",

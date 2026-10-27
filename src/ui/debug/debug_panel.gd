@@ -6,7 +6,8 @@ extends RpgWindow
 ## Six tabs (tapped, clicked, or switched with Q / E and LB / RB like the bag's: MenuNav), each a
 ## column of rows, a row's name on its left and its buttons after it:
 ## - **World**: jump to any floor (with a curse or an event), the special places (the next boss,
-##   the hidden floor, the Deeps, the bottom of the Well), to the stairs, the boss room, the next
+##   the hidden floor, the Deeps and their Dawn Breach, the Threshold's trial, the bottom of the
+##   Well), to the stairs, the boss room, the next
 ##   room, the maps revealed, pacts, any encounter or fragment of the past placed beside the
 ##   hero, the floor's warden telling its story.
 ## - **Hero**: the cheats (god mode, invisible, damage and armor steps, speed, no cooldowns: they
@@ -192,6 +193,9 @@ func _build_world(page: VBoxContainer) -> void:
 			_game.debug.enter_hidden()))
 	if _game_content().dungeon.abyss:
 		places.add_child(_button("The Deeps", _enter_deeps))
+		places.add_child(_button("Dawn Breach", _to_dawn_breach))
+	if GameDebug.threshold_trial(_game_content()):
+		places.add_child(_button("Threshold trial", _enter_threshold))
 	if _game_content().dungeon.finale:
 		places.add_child(_button("The Well's bottom", func() -> void:
 			DebugCheats.mark_run()
@@ -614,6 +618,27 @@ func _enter_deeps() -> void:
 	DebugCheats.mark_run()
 	close()
 	_game.abyss.open(player, player.global_position)
+
+
+## By the Deeps' way out (into the Deeps first if need be): GameDebug.to_dawn_breach().
+func _to_dawn_breach() -> void:
+	if not _game.abyss.is_open() and not _game.abyss.can_take(_game.player):
+		_status.text = "No Deeps from here"
+		return
+	DebugCheats.mark_run()
+	close()
+	if not await _game.debug.to_dawn_breach():
+		_status.text = "No way to the Dawn Breach"
+
+
+## The trial of the Threshold now, no killing blow, no feather spent (GameDebug.enter_threshold()).
+func _enter_threshold() -> void:
+	if not _game.threshold.can_host(_game.player):
+		_status.text = "No trial from here"
+		return
+	DebugCheats.mark_run()
+	close()
+	_game.debug.enter_threshold()
 
 
 ## The hero to the middle of the next room of the map (the arena too, on a boss floor).
