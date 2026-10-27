@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 391,
+  "next_id": 392,
   "tags": [
     "pc",
     "test",
@@ -5886,6 +5886,22 @@
       ],
       "created_at": 1793074408,
       "updated_at": 1793074408,
+      "due_date": null
+    },
+    {
+      "id": "task_391",
+      "title": "Licence : les PNG Craftpix du temple sont publiés dans un dépôt PUBLIC (à décider)",
+      "description": "Constat de l'audit, rien n'a été supprimé ni réécrit : assets/village/temple/exterior.png, objects.png et walls_floor.png sont les PNG du pack « Free Ruined Temple » de Craftpix copiés sans modification (voir son CREDITS.txt). La licence Craftpix des « freebies » autorise leur usage dans un jeu, mais interdit de les redistribuer comme assets ; or le dépôt github.com/absolutezeroo/the-well-of-souls est public : n'importe qui peut télécharger ces fichiers tels quels (et ils restent dans l'historique git même après une suppression). Le reste des assets est CC0 (Ninja Adventure, Kenney, Pixel Operator). Options pour Clayton : (1) passer le dépôt en privé (le plus simple ; l'historique n'est plus exposé) ; (2) sortir les trois PNG de git (.gitignore + copie locale, documenter où les mettre ; l'historique public les garde, il faudrait alors aussi réécrire l'historique pour être propre) ; (3) remplacer le temple par des tuiles CC0 (Ninja Adventure) et retirer les PNG Craftpix. Relire aussi les conditions exactes sur https://craftpix.net/file-licenses/ (section FREEBIE) avant de décider. Lien : task_384.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_6",
+      "tags": [
+        "release",
+        "git",
+        "visuel"
+      ],
+      "created_at": 1793074431,
+      "updated_at": 1793074431,
       "due_date": null
     }
   ]
