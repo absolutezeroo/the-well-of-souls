@@ -257,6 +257,9 @@ func _test_invisible(game: Game) -> void:
 	await _frames(30)
 	check(monster.target == null and struck[0] == 0, "invisible: sent after him or struck, it forgets him")
 	Events.actor_damaged.disconnect(count_blow)
+	# Back in the lane: idle, it wandered for two seconds and may have lost sight of him behind a
+	# pillar (--seed=286597), which says nothing of being visible again.
+	monster.global_position = player.global_position + (lane[1] as Vector2) * 60.0
 	DebugCheats.set_invisible(false)
 	await _frames(60)
 	check(monster.target == player, "visible again: it notices him")
