@@ -139,7 +139,19 @@ func _on_health_changed(current: int, maximum: int) -> void:
 		return
 	_low_health = low
 	_heartbeat_timer = 0.0
-	# Muffled music while close to death.
+	_muffle(low)
+
+
+## Muffled music while close to death. The filter is the Music bus's, shared by every scene.
+static func _muffle(on: bool) -> void:
 	var bus := AudioServer.get_bus_index(&"Music")
 	if bus >= 0 and AudioServer.get_bus_effect_count(bus) > 0:
-		AudioServer.set_bus_effect_enabled(bus, 0, low)
+		AudioServer.set_bus_effect_enabled(bus, 0, on)
+
+
+## Leaving the game close to death (back to the village or the title): the muffle goes too, or
+## the village's music and the next run (whose hero starts healthy) would stay muffled.
+func _exit_tree() -> void:
+	if _low_health:
+		_low_health = false
+		_muffle(false)
