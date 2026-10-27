@@ -113,3 +113,6 @@ Voir [le village](docs/design/village.md). Le jeu reste un roguelike.
 Après le réveil de Ren, Sayo propose **Le Dernier Verset**. Les habitants ont leurs propres
 questions, réagissent aux retours des voisins et reprennent leurs activités au fil de la journée une fois
 réveillés ; leurs brèves répliques de proximité n'interrompent pas le déplacement.
+
+Pour modifier les décors, portes et routines de Kagari dans Godot :
+[guide visuel du village](docs/modifier-village.md), scène `tools/village/layout.tscn`.

@@ -418,3 +418,9 @@ and collision with the square. Residents route through a doorway before changing
 VillageNavigation caches per-room grids. No Loader transition, new autoload, RunState mutation
 or additional persistent store is involved. Interactions require the walker and target to be
 in the same room, even if a stale focus survived a previous frame.
+
+VillageAtmosphereDef owns surface/descent art tuning. VillageWellVfx draws ambient spirits and
+restored lamp flames; WellDescent owns the cancellable cinematic and emits completion once.
+VillageHub commits launch flags and calls Loader only then. VillagePanel is a standalone compact
+conversation/service presenter using Ninja Adventure frames and the existing MenuNav/TouchScroll.
+The @tool layout scene lives under tools/village and never instantiates runtime Profile/Hub.

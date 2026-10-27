@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 385,
+  "next_id": 388,
   "tags": [
     "pc",
     "test",
@@ -5789,6 +5789,54 @@
       ],
       "created_at": 1793048483,
       "updated_at": 1793048483,
+      "due_date": null
+    },
+    {
+      "id": "task_385",
+      "title": "Refaire les dialogues de village avec le pack Ninja Adventure",
+      "description": "Implémenté : cadre, portrait et boutons Ninja Adventure originaux (CC0, source officielle épinglée), boîte basse en deux colonnes, monde visible ; texte et réponses défilables, navigation existante conservée. Fin du grand panneau brun pour les échanges du village. Captures FR/EN à 1540×720 et 2340×1080 inspectées, hauteur après retour à la ligne corrigée. Suite complète 20 062 vérifications sans échec ; 673 scripts sans diagnostic ; traductions et catalogue valides. Validation tactile/manette et préférence visuelle finale : essai utilisateur, task_376.",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_1",
+      "tags": [
+        "ui",
+        "visuel",
+        "tests"
+      ],
+      "created_at": 1793065447,
+      "updated_at": 1793066691,
+      "due_date": null
+    },
+    {
+      "id": "task_386",
+      "title": "Modifier Kagari visuellement dans l’éditeur Godot",
+      "description": "Implémenté : tools/village/layout.tscn, aperçu 2D sans profil, décors/collisions, chemins, points du village, portes, intérieurs et destinations horaires déplaçables. Application explicite des positions aux fichiers .tres, coordonnées locales des salles conservées, ressources externes et sous-ressources sauvegardées ; fichier temporaire puis remplacement, retrait des UID selon conventions, modifications gardées pour réessai. Guide français docs/modifier-village.md et lien README. Ouverture réelle dans l’éditeur sans erreur ; tests de coordonnées et de sérialisation/rechargement passent. Déplacement de façades et de leurs portes volontairement explicite, aucune réparation automatique de chemins. Ergonomie à essayer par l’utilisateur.",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_1",
+      "tags": [
+        "ui",
+        "visuel",
+        "tests"
+      ],
+      "created_at": 1793065447,
+      "updated_at": 1793066691,
+      "due_date": null
+    },
+    {
+      "id": "task_387",
+      "title": "Animer la descente dans le puits et l’atmosphère du village",
+      "description": "Implémenté : âmes ambiantes au puits et flammes des lanternes restaurées ; séquence de descente de 2,2 s (approche, convergence des âmes, absorption du héros, iris pixel avant Loader). Paramètres dans atmosphere.tres, palette esprit/feu, rendu à 12 Hz, aucun tirage aléatoire de gameplay ni lumière ajoutée. Version effets réduits : quatre motes sans traînées, colonne ou flammes ; aucun flash ni secousse. Tests : échec d’enregistrement, profil cloud bloqué, double départ/Retour, fermeture pendant l’animation préservant la sauvegarde, fin unique ; flags de partie seulement à la fin. Captures réelles des trois phases contrôlées en FR/EN et deux résolutions. Suite complète valide ; rendu et sensation S23/Windows restent task_376.",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_1",
+      "tags": [
+        "ui",
+        "visuel",
+        "tests"
+      ],
+      "created_at": 1793065447,
+      "updated_at": 1793066691,
       "due_date": null
     }
   ]

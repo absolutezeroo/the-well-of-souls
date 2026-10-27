@@ -338,3 +338,8 @@ repeated at art_scale; areas must be exact multiples of the scaled region size. 
 props supply both physics collisions and cached NPC navigation obstacles. Keep door, spawn,
 exit and appointment positions clear with body/grid clearance. Room artwork has its own credits;
 do not mark Craftpix resources as CC0. Houses should use residential art, not duplicate temples.
+
+For Kagari layout editing, open `tools/village/layout.tscn`; the French
+[editing guide](modifier-village.md) explains the draggable points, explicit Apply/Reload,
+room-local coordinates and how to add props or edit schedules. Source resources remain
+`data/village/*.tres`; the preview scene is not a second runtime layout.

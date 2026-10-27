@@ -44,6 +44,7 @@ var _hud: Control
 var _was_down := true
 var _blocked := false
 var _leaving := false
+var descent: WellDescent
 var _new_daily := false
 var _memorial_index := 0
 var _resident: VillageResidentDef
@@ -317,25 +318,12 @@ func open_journal() -> void:
 
 func _talk(resident: VillageResidentDef, topic: VillageTopicDef = null) -> void:
 	_resident = resident
-	panel.open(tr(resident.speaker.display_name), tr(topic.reply if topic else VillageProgress.greeting(resident)))
-	var portrait_row := HBoxContainer.new()
-	portrait_row.add_theme_constant_override("separation", 16)
-	panel.list.add_child(portrait_row)
-	panel.list.move_child(portrait_row, 0)
-	var portrait := PixelPortrait.new()
-	portrait.texture = resident.speaker.portrait
-	portrait.material = resident.appearance
-	portrait_row.add_child(portrait)
-	var details := VBoxContainer.new()
-	portrait_row.add_child(details)
-	details.add_child(UiSkin.label(tr(resident.speaker.title), Fonts.BODY, UiSkin.GOLD))
 	var actor := view.actor_for(resident)
-	if actor.activity:
-		details.add_child(UiSkin.label(tr(actor.activity.display_name), Fonts.BODY, UiSkin.DIM))
+	panel.speak(resident, tr(topic.reply if topic else VillageProgress.greeting(resident)), tr(actor.activity.display_name) if actor.activity else "")
 	if actor.indoors:
 		panel.words.text = tr("You knock at the door. A sleepy voice answers.") + "\n" + panel.words.text
 	if resident.echo and (resident.wakes_after == null or VillageProgress.stage(resident.wakes_after) != VillageProgress.Step.RETURNED):
-		details.add_child(UiSkin.label(tr("A voice caught in the lantern's light."), Fonts.BODY, UiSkin.DIM))
+		panel.list.add_child(UiSkin.label(tr("A voice caught in the lantern's light."), Fonts.BODY, UiSkin.DIM, true))
 	if resident.role == VillageResidentDef.Role.QUEST and resident.quest:
 		var quest := resident.quest
 		if VillageProgress.stage(quest) != VillageProgress.Step.RETURNED:
@@ -375,6 +363,7 @@ func open_well() -> void:
 
 
 func _choose(action: StringName, payload: Resource) -> void:
+	if _leaving: return
 	match action:
 		&"topic":
 			var subject := payload as VillageTopicDef
@@ -430,10 +419,25 @@ func _prepare_launch() -> void:
 
 
 func _launch(resume: bool) -> void:
-	if _leaving:
+	if _leaving or Loader.busy or Profile.held:
 		return
-	Profile.save_profile()
+	if not Profile.save_profile():
+		panel.open(tr("The Well"), tr("Could not save village progress. Try again."))
+		return
 	_leaving = true
+	walker.blocked = true
+	for modal in _modals: modal.hide()
+	_hud.hide()
+	descent = WellDescent.new()
+	descent.walker = walker
+	descent.effect = view.well_vfx
+	descent.def = def.atmosphere
+	descent.well = def.well
+	descent.finished.connect(_finish_descent.bind(resume), CONNECT_ONE_SHOT)
+	add_child(descent)
+
+
+func _finish_descent(resume: bool) -> void:
 	daily_requested = false
 	Game.resume_requested = resume
 	Game.daily_requested = _new_daily and not resume
@@ -480,6 +484,7 @@ func _ask_cloud_conflict() -> void:
 
 
 func _back() -> void:
+	if _leaving: return
 	for index in range(_modals.size() - 1, -1, -1):
 		if _modals[index].visible:
 			if _modals[index] == cloud_conflict:

@@ -223,3 +223,28 @@ XDG_DATA_HOME=/tmp/puits-village-review godot --path . --resolution 1540x720 \
 The review resets only its in-memory test profile and writes screenshots under that isolated
 folder's `Mini Roguelike/village_review/`. Repeat at 2340x1080 and in English. Desktop software
 OpenGL captures can check layout; they do not prove touch feel, S23 performance or Windows exports.
+
+## Conversation presentation and descent
+
+VillagePanel uses Ninja Adventure's original nine-patch speech, portrait and reply frames,
+not the ornate inventory window. The lower conversation card leaves the world visible, with
+speaker/words on the left and quest details/replies on the right. Both text and replies scroll
+when needed; focus follows into view for keyboard/gamepad and touch dragging never selects a
+reply. Service/register cards use the same skin with more height. Other game menus retain their
+normal skin. The compact layout rechecks its size after wrapped text changes its minimum.
+
+The Well plays an authored 2.2-second sequence after the final descent confirmation: approach,
+converging spirit motes, the hero swallowed by the mouth, then an opaque stepped iris into
+Loader. No animation starts on proximity or while deciding whether to replace a save. A failed
+profile save leaves the request retryable. Movement, village time, menus and repeated launch
+requests are blocked during the sequence. The owner sets new/resumed/daily flags only on
+completion; freeing the scene first cancels the sequence and preserves RunSave. The effect has
+no timers or awaits that can outlive its scene. Ambient souls and restored lantern flames use
+one bounded low-frequency draw node and no gameplay randomness. Reduced effects keeps four
+motes and removes trails, the column and lamp flames; no screen flash or shake is added.
+
+For direct visual editing, see the French [village editing guide](../modifier-village.md).
+The tool scene previews resources without constructing VillageHub or reading Profile. Draggable
+handles copy positions back only with Apply; room-local coordinates and path dimensions are
+preserved. Props, home positions, appointment destinations and doors remain explicit independent
+resources, so moving a facade does not silently rewrite a resident's schedule.

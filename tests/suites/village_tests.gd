@@ -36,6 +36,7 @@ func run_unit() -> void:
 	check(not VillageProgress.buy(service), "a restored lamp cannot be sold twice")
 	_test_sequence()
 	_test_conversations()
+	_test_layout_handles()
 	_test_calendar()
 	_test_memorials()
 	var rng := RandomNumberGenerator.new()
@@ -47,6 +48,48 @@ func run_unit() -> void:
 	var resumed := RunState.create(CONTENT, JSON.parse_string(JSON.stringify(first.to_data())), rng)
 	check(resumed.journey_id == first.journey_id, "the receipt identity survives a JSON run save and resume")
 	Profile.reset()
+
+
+func _test_layout_handles() -> void:
+	var handle := VillageLayoutHandle.new()
+	var appointment := VillageActivityDef.new()
+	appointment.destination = Vector2(40, 60)
+	handle.source = appointment
+	handle.field = &"destination"
+	handle.origin = Vector2(1600, 0)
+	handle.position = Vector2(1660, 100)
+	handle.apply()
+	check(appointment.destination == Vector2(60, 100), "dragging an indoor appointment stores room-local coordinates")
+	var layout := VillageDef.new()
+	layout.paths = [Rect2(10, 20, 96, 64), Rect2(200, 200, 32, 32)]
+	handle.source = layout
+	handle.field = &"paths"
+	handle.index = 0
+	handle.origin = Vector2.ZERO
+	handle.position = Vector2(42, 52)
+	handle.apply()
+	check(layout.paths[0] == Rect2(42, 52, 96, 64) and layout.paths[1] == Rect2(200, 200, 32, 32), "moving a path keeps its dimensions and every other path")
+	handle.free()
+	var prop := VillagePropDef.new()
+	prop.texture = VILLAGE.ground
+	prop.position = Vector2(80, 96)
+	layout.props = [prop]
+	var path := "user://test_village_layout.tres"
+	check(VillageLayoutWriter.save(layout, path) == OK, "the layout writer can serialize a fresh resource with inline props and external art")
+	var loaded := ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE) as VillageDef
+	check(loaded != null and loaded.props[0].position == prop.position and loaded.props[0].texture.resource_path == VILLAGE.ground.resource_path, "layout serialization retains inline props and path-based external references")
+	if loaded:
+		loaded.props[0].position = Vector2(120, 128)
+		check(VillageLayoutWriter.save(loaded, path) == OK, "the layout writer can replace a previously loaded file")
+		var reloaded := ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE) as VillageDef
+		check(reloaded.props[0].position == Vector2(120, 128), "saving an existing layout keeps its changed subresources, not stale temporary references")
+	check(not FileAccess.get_file_as_string(path).contains("uid=") and not FileAccess.file_exists("user://test_village_layout.layout-tmp.tres"), "layout writes keep path-only references and consume the temporary file")
+	DirAccess.remove_absolute(path)
+	var atmosphere := VILLAGE.atmosphere
+	check(atmosphere != null, "the village registers its atmosphere after the script in the resource")
+	if atmosphere:
+		check(atmosphere.approach_seconds > 0 and atmosphere.gathering_seconds > 0 and atmosphere.fall_seconds > 0 and atmosphere.close_seconds > 0, "each descent phase has a positive duration")
+		check(atmosphere.element.id == &"spirit" and atmosphere.ambient_count <= 24 and atmosphere.descent_count <= 40 and atmosphere.fps <= 20, "surface effects use spirit art with bounded counts and redraw rate")
 
 
 func _test_sequence() -> void:
@@ -262,6 +305,9 @@ func run_title() -> void:
 	hub.walker.position = hub.view.actor_for(VILLAGE.residents[0]).position + Vector2(0, 25)
 	await _frames(3)
 	check(hub.interact() and hub.panel.visible, "standing near a resident offers an explicit conversation")
+	await _frames(3)
+	check(hub.panel.conversation and hub.panel.portrait.texture == VILLAGE.residents[0].speaker.portrait, "a resident uses the compact Ninja Adventure conversation and their own portrait")
+	check(hub.panel.card.position.y >= 0 and hub.panel.card.position.y + hub.panel.card.size.y <= hub.panel.size.y, "the full conversation stays inside the viewport")
 	hub.panel.picked.emit(&"accept", VILLAGE.quests[0])
 	check(VillageProgress.stage(VILLAGE.quests[0]) == VillageProgress.Step.ACCEPTED, "the conversation accepts its data-defined quest through gameplay")
 	hub.panel.hide()
@@ -362,8 +408,56 @@ func run_title() -> void:
 	check(Profile.from_data(older) and returning_echo.asleep and returning_echo.position == returning_echo.def.position, "loading an older profile returns a travelling resident's echo to its original doorway")
 	night.queue_free()
 	await _frames(2)
+	await _test_descent(kept)
 	RunSave.erase()
 	Profile.reset()
+
+
+func _test_descent(kept: String) -> void:
+	var hub := HUB.instantiate() as VillageHub
+	add_child(hub)
+	await _frames(2)
+	Profile.held = true
+	hub._launch(true)
+	check(hub.descent == null and not Loader.busy, "a held cloud profile cannot begin a cinematic or a run")
+	Profile.held = false
+	var path := Profile.save_path
+	Profile.save_path = "user://missing_village_directory/profile.json"
+	hub._launch(true)
+	check(hub.descent == null and hub.panel.visible and not hub.walker.blocked, "a failed profile write leaves the launch retryable")
+	Profile.save_path = path
+	hub._launch(true)
+	var first := hub.descent
+	check(first != null and not hub.walker.is_physics_processing() and not hub.panel.visible, "a successful launch locks movement and closes the choices before animating")
+	hub._launch(false)
+	hub._back()
+	check(hub.descent == first and not hub.panel.visible, "repeated launch and Back cannot start a second descent or reopen a menu")
+	first.advance(0.7)
+	check(not Game.resume_requested and not Game.daily_requested and not Loader.busy and FileAccess.get_file_as_string(RunSave.path) == kept, "the cinematic never changes run flags or the suspended save before completion")
+	hub.queue_free()
+	await _frames(3)
+	check(not Loader.busy and not Game.resume_requested and FileAccess.get_file_as_string(RunSave.path) == kept, "freeing the village mid-descent cancels launch without losing its saved run")
+	# Test the sequence's public completion independently of the owner's scene loader.
+	hub = HUB.instantiate() as VillageHub
+	add_child(hub)
+	await _frames(2)
+	var sequence := WellDescent.new()
+	sequence.walker = hub.walker
+	sequence.effect = hub.view.well_vfx
+	sequence.def = VILLAGE.atmosphere
+	sequence.well = VILLAGE.well
+	var completions: Array[int] = [0]
+	sequence.finished.connect(func() -> void: completions[0] += 1)
+	hub.add_child(sequence)
+	sequence.set_process(false)
+	var fewer := Settings.fewer_effects
+	Settings.fewer_effects = true
+	sequence.advance(VILLAGE.atmosphere.duration())
+	sequence.advance(100.0)
+	check(sequence.completed and completions[0] == 1 and not hub.walker.rig.visible, "the reduced-effect sequence hides the hero and completes exactly once, even after a long delta")
+	Settings.fewer_effects = fewer
+	hub.queue_free()
+	await _frames(2)
 
 
 func _test_temple(hub: VillageHub) -> void:

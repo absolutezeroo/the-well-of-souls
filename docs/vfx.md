@@ -803,3 +803,14 @@ parts, each on its rule.
   (`aura_ground_ui.gdshader`): written with blending off, it showed through the windows opened
   over the title's transparent viewport.
 
+
+## Surface Well and lamps
+
+`data/village/atmosphere.tres` points to the spirit and fire ramps. `VillageWellVfx` keeps ambient
+soul motes faint; the descent gathers them in curved, broken tails and an upright dashed column.
+Only PixelDraw grid shapes are used, at 12 fps, with no free sprite rotation, alpha fade, screen
+flash, shake or screen texture. `WellDescent` moves the existing rig at its original scale, hides
+it in the mouth and closes an opaque stepped iris before Loader. Reduced effects retains the
+same timing/readability with four motes and without column, trails or lamp flames. Review frames
+are produced by tools/village/review.tscn (descent_gather/fall/iris, FR/EN, both review resolutions).
+The tint and input timing still need exported S23/Windows play-testing.

@@ -538,8 +538,9 @@ hero is still valid before disconnecting signals.
 
 [Kagari](village.md) replaces direct run launch with walking to the central well. Approach an
 inhabitant, shrine or statue and press the normal Interact action; touch uses the existing stick
-and ActionButton. Conversations, restoration purchases and memorials use a scrollable RpgWindow
-and stop walking. New descents explicitly ask before replacing a saved run. Pause and end-of-run
+and ActionButton. Conversations, restoration purchases and memorials use the scrollable Ninja Adventure
+VillagePanel and stop walking. The conversation sits low on screen with its portrait, readable
+words and separate choices; the world remains visible. Longer replies and services scroll. New descents explicitly ask before replacing a saved run. Pause and end-of-run
 Return to village buttons lead back to the square; the pause path keeps the active save.
 
 The village HUD shows day/time and a **Quests** button. The wooden noticeboard opens the same

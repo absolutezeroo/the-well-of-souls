@@ -70,6 +70,22 @@ func _ready() -> void:
 	hub.refresh_time()
 	hub.walker.position = Vector2(480, 420)
 	await _capture("night_" + language)
+	# Review the cinematic itself without starting a run or changing launch flags.
+	hub.walker.position = hub.def.well + Vector2(0, 55)
+	hub.get("_hud").hide()
+	var descent := WellDescent.new()
+	descent.walker = hub.walker
+	descent.effect = hub.view.well_vfx
+	descent.def = hub.def.atmosphere
+	descent.well = hub.def.well
+	hub.add_child(descent)
+	descent.set_process(false)
+	descent.advance(0.95)
+	await _capture("descent_gather_" + language)
+	descent.advance(0.5)
+	await _capture("descent_fall_" + language)
+	descent.advance(0.6)
+	await _capture("descent_iris_" + language)
 	get_tree().quit()
 
 

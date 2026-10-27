@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="VillageAtmosphereDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_atmosphere_def.gd" id="1"]
+[ext_resource type="Resource" path="res://data/vfx/elements/spirit.tres" id="2"]
+[ext_resource type="Resource" path="res://data/vfx/elements/fire.tres" id="fire"]
+[resource]
+script = ExtResource("1")
+element = ExtResource("2")
+lamp_element = ExtResource("fire")
+lamp_offset = Vector2(0, -28)
+fps = 12
+ambient_count = 9
+ambient_radius = 60.0
+ambient_height = 48.0
+ambient_period = 4.0
+descent_count = 24
+descent_radius = 92.0
+approach_seconds = 0.45
+gathering_seconds = 0.8
+fall_seconds = 0.4
+close_seconds = 0.55
+darkness = Color(0.0705882, 0.0470588, 0.117647, 1)

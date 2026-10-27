@@ -10,6 +10,7 @@ var residents: Array[VillageResident] = []
 var _resident_by_def: Dictionary[VillageResidentDef, VillageResident] = {}
 var navigation := VillageNavigation.new()
 var daylight := CanvasModulate.new()
+var well_vfx := VillageWellVfx.new()
 var active_room: VillageInteriorDef
 
 
@@ -17,11 +18,18 @@ func _ready() -> void:
 	add_child(dressing)
 	add_child(daylight)
 	dressing.y_sort_enabled = true
+	well_vfx.def = def.atmosphere
+	well_vfx.position = def.well + Vector2(0, -12)
+	add_child(well_vfx)
 	Profile.changed.connect(refresh)
 	refresh()
 
 
 func refresh() -> void:
+	well_vfx.lamps.clear()
+	for prop in def.props:
+		if prop.lit_by and VillageProgress.restored(prop.lit_by):
+			well_vfx.lamps.append(prop.position - well_vfx.position)
 	navigation.rebuild(def)
 	for child in dressing.get_children():
 		if child != walker and not child is VillageResident:
@@ -74,6 +82,7 @@ func refresh() -> void:
 
 
 func apply_hour(hour: float) -> void:
+	well_vfx.visible = active_room == null
 	daylight.color = active_room.light if active_room else def.clock.daylight.sample(hour / 24.0)
 	for resident in residents:
 		resident.apply_hour(hour)

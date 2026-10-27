@@ -236,3 +236,10 @@ or new appointments allocate a route; room entry reuses the walker/rig and does 
 assets, regenerate a level or reload a scene. VillagePropView shares existing prop rendering.
 One CanvasModulate switches between exterior daylight and the active room's authored lighting;
 HUD/modals stay on their own CanvasLayer. No shadow-casting lights or runtime textures are added.
+
+VillageWellVfx uses fixed-count arithmetic for at most 24 ambient/40 descent motes, at an
+authored maximum 20 redraws/second (Kagari: 9/24 motes, 12 fps). Restored lamp positions are
+cached on profile refresh. No per-frame collections, random draws, texture reads or lights
+are introduced. The separate iris draws at most two rectangles per eight UI pixels per row
+only during the final closing phase. Exterior effects stop redrawing inside a room. Reduced
+effects caps motes at four and removes trails, the light column and lamp flames.
