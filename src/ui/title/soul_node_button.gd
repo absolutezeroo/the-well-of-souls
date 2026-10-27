@@ -13,6 +13,8 @@ var selected := false:
 		queue_redraw()
 
 var _time := 0.0
+## Profile.can_buy_node(node), asked again when the profile changes (not every frame).
+var _buyable := false
 
 
 func _init(def: SoulNodeDef) -> void:
@@ -30,9 +32,30 @@ func _get_tooltip(_at: Vector2) -> String:
 	return "%s\n%s" % [node.display_name(), ShrinePanel.status_of(node)]
 
 
+func _enter_tree() -> void:
+	if not Profile.changed.is_connected(_on_profile_changed):
+		Profile.changed.connect(_on_profile_changed)
+	_on_profile_changed()
+
+
+func _exit_tree() -> void:
+	if Profile.changed.is_connected(_on_profile_changed):
+		Profile.changed.disconnect(_on_profile_changed)
+
+
+func _on_profile_changed() -> void:
+	refresh()
+
+
+## Asks again whether it can be bought, and draws it again.
+func refresh() -> void:
+	_buyable = Profile.can_buy_node(node)
+	queue_redraw()
+
+
 func _process(delta: float) -> void:
 	_time += delta
-	if Profile.can_buy_node(node) or selected:
+	if _buyable or selected:
 		queue_redraw()
 
 
@@ -56,7 +79,7 @@ func _draw() -> void:
 		draw_texture_rect(picture, Rect2((inner.position + (inner.size - drawn) * 0.5).round(), drawn), false, tint)
 	if owned:
 		draw_rect(area.grow(-3), Color(UiSkin.GOLD, 0.95), false, 3.0)
-	elif Profile.can_buy_node(node):
+	elif _buyable:
 		var pulse := 0.55 + 0.45 * sin(_time * 4.0)
 		draw_rect(area.grow(-3), Color(color.lerp(Color.WHITE, 0.4), pulse), false, 3.0)
 	elif open:

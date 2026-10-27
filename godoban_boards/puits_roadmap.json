@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 389,
+  "next_id": 390,
   "tags": [
     "pc",
     "test",
@@ -3320,8 +3320,8 @@
     {
       "id": "task_218",
       "title": "Perfs restantes de l'interface et des VFX",
-      "description": "Laissé par task_203 : SoulNodeButton crée une StyleBoxTexture par _draw et appelle Profile.can_buy_node par image ; PixelDraw.bit et `for side in [-1, 1]` construisent des tableaux par particule ; StatusFx active_ids() + _bits.duplicate() par image ; SwingVfx et BlastVfx font queue_redraw chaque image (le rectangle ne change pas) ; fond du titre redessiné à 60 fps (passer à 12 fps ou séparer la grotte fixe du faisceau) ; TouchScroll._process et DialogueBox.MoreArrow tournent même cachés ; ActionBar recopie les boutons tactiles chaque image ; ItemSlot garde une StyleBox par alpha du pouls ; ComposedVfx, WeaponAura et SplatLayer gardent leurs particules en Dictionary (le Bit typé de StatusFx est le modèle).\nRevue 2 : PixelDraw.ring() boucle sur GridDirs.SIGNS (plus de [-1, 1] par ligne) et la bulle de StatusFx sur une constante : faits. Reste le reste de la liste.",
-      "status": "backlog",
+      "description": "Laissé par task_203 : SoulNodeButton crée une StyleBoxTexture par _draw et appelle Profile.can_buy_node par image ; PixelDraw.bit et `for side in [-1, 1]` construisent des tableaux par particule ; StatusFx active_ids() + _bits.duplicate() par image ; SwingVfx et BlastVfx font queue_redraw chaque image (le rectangle ne change pas) ; fond du titre redessiné à 60 fps (passer à 12 fps ou séparer la grotte fixe du faisceau) ; TouchScroll._process et DialogueBox.MoreArrow tournent même cachés ; ActionBar recopie les boutons tactiles chaque image ; ItemSlot garde une StyleBox par alpha du pouls ; ComposedVfx, WeaponAura et SplatLayer gardent leurs particules en Dictionary (le Bit typé de StatusFx est le modèle).\nRevue 2 : PixelDraw.ring() boucle sur GridDirs.SIGNS (plus de [-1, 1] par ligne) et la bulle de StatusFx sur une constante : faits. Reste le reste de la liste.\n\nFait en partie (27/10) : fond du titre redessiné à 12 images/s (TitleBackdrop.REDRAW_FPS), TouchScroll ne tourne plus qu'au glissé après lâcher, la flèche « suite » du dialogue ne tourne que visible et ne se redessine qu'en bougeant, SoulNodeButton ne demande plus can_buy_node à chaque image (StyleBox déjà partagée). Le reste de la liste passe sur une nouvelle carte. À vérifier : l'animation du titre (âmes, flammes) reste fluide à l'œil à 12 images/s sur le téléphone ; le défilement au doigt garde son élan.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -3331,7 +3331,7 @@
         "vfx"
       ],
       "created_at": 1792823411,
-      "updated_at": 1792828483
+      "updated_at": 1793076132
     },
     {
       "id": "task_219",
@@ -5853,6 +5853,21 @@
       ],
       "created_at": 1793074791,
       "updated_at": 1793074791
+    },
+    {
+      "id": "task_389",
+      "title": "Perfs restantes de l'interface et des VFX (suite)",
+      "description": "Suite de task_218, encore à faire : PixelDraw.bit construit des tableaux par particule ; StatusFx active_ids() + _bits.duplicate() par image ; SwingVfx et BlastVfx font queue_redraw chaque image (le rectangle ne change pas) ; ActionBar recopie les boutons tactiles chaque image ; ItemSlot garde une StyleBox par alpha du pouls ; ComposedVfx, WeaponAura et SplatLayer gardent leurs particules en Dictionary (le Bit typé de StatusFx est le modèle).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "due_date": null,
+      "tags": [
+        "perf",
+        "ui"
+      ],
+      "created_at": 1793076132,
+      "updated_at": 1793076132
     }
   ]
 }

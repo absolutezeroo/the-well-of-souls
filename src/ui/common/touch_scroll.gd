@@ -64,6 +64,7 @@ func _input(event: InputEvent) -> void:
 			_tracking = false
 			if _dragging:
 				_dragging = false
+				set_process(true)  # the momentum glides it on a moment
 				get_viewport().set_input_as_handled()  # not a tap: no button fires
 				# The button under the finger still waits for its release: give it one far away,
 				# so it lets go without firing.
@@ -113,8 +114,15 @@ static func _keeps_drag_at(node: Node, point: Vector2) -> bool:
 	return false
 
 
+func _ready() -> void:
+	set_process(false)  # only while a let-go list glides on (see _glide())
+
+
 func _process(delta: float) -> void:
-	if _dragging or _velocity.length() < 20.0:
+	if _dragging:
+		return
+	if _velocity.length() < 20.0:
+		set_process(false)
 		return
 	_move(_velocity * delta)
 	_velocity = _velocity.lerp(Vector2.ZERO, minf(FRICTION * delta, 1.0))

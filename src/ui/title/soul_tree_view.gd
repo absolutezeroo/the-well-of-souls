@@ -72,7 +72,7 @@ func center_of(node: SoulNodeDef) -> Vector2:
 
 func refresh() -> void:
 	for button in _buttons:
-		button.queue_redraw()
+		button.refresh()
 	queue_redraw()
 
 
