@@ -3108,8 +3108,8 @@
     {
       "id": "task_204",
       "title": "Audit UI : formes lisses restantes dans l'interface",
-      "description": "action_button.gd (cercle et camembert de recharge lisses en 32 pas) et curse_card.gd (sceau en draw_circle / draw_arc / draw_line) dessinent hors de la grille de pixels, contrairement à la barre d'action. Les passer en PixelDraw (anneaux et disques en pas, recharge par rangée de pixels).",
-      "status": "backlog",
+      "description": "action_button.gd (cercle et camembert de recharge lisses en 32 pas) et curse_card.gd (sceau en draw_circle / draw_arc / draw_line) dessinent hors de la grille de pixels, contrairement à la barre d'action. Les passer en PixelDraw (anneaux et disques en pas, recharge par rangée de pixels).\n\nFait (27/10) : les boutons ronds (ActionButton) dessinent leur recharge en rangées de pixels depuis le haut (comme la barre d'action au clavier) et leur pastille de compte en PixelDraw ; le sceau de la carte de malédiction (brume, anneaux, runes, triangle, œil, âmes) est sur la grille de 2 unités. Contrôle ajouté (vfx : pas de draw_circle/draw_arc dans ces deux fichiers). Non vu en image (tests sans rendu) : à regarder sur le téléphone, une compétence en recharge, une potion comptée, et une carte de malédiction.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_3",
       "due_date": null,
@@ -3118,7 +3118,7 @@
         "visuel"
       ],
       "created_at": 1792818511,
-      "updated_at": 1792818511
+      "updated_at": 1793075837
     },
     {
       "id": "task_205",

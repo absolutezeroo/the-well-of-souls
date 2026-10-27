@@ -639,14 +639,15 @@ func _test_particles() -> void:
 
 
 ## The props and overlays that drew smooth circles and arcs (mixels, alpha gradients) draw on
-## the grid now (PixelDraw).
+## the grid now (PixelDraw); the round touch buttons and the curse card's sigil too.
 func _test_smooth_shapes() -> void:
 	for path: String in ["res://src/entities/monster/monster_overlay.gd", "res://src/definitions/monster_traits/guard_trait.gd",
 			"res://src/entities/hazards/heat_source.gd", "res://src/world/pact_room.gd", "res://src/game/threshold.gd",
 			"res://src/entities/stairs/stairs.gd", "res://src/entities/stairs/hidden_way.gd", "res://src/entities/encounter/encounter.gd",
 			"res://src/entities/pickup/item_pickup.gd", "res://src/entities/gold/gold_pickup.gd", "res://src/entities/hazards/chest.gd",
 			"res://src/entities/forge/forge.gd", "res://src/entities/interactable.gd", "res://src/entities/merchant/merchant.gd",
-			"res://src/entities/prop/prop.gd", "res://src/entities/hazards/quicksand.gd"]:
+			"res://src/entities/prop/prop.gd", "res://src/entities/hazards/quicksand.gd",
+			"res://src/ui/controls/action_button.gd", "res://src/ui/curse_card/curse_card.gd"]:
 		var source := FileAccess.get_file_as_string(path)
 		var smooth := source.contains("draw_circle(") or source.contains("draw_arc(") or source.contains("draw_polyline(") or source.contains("draw_colored_polygon(")
 		check(not smooth, "smooth shapes: %s draws on the art's grid (PixelDraw)" % path.get_file())

@@ -22,7 +22,7 @@ var icon: Texture2D:
 			icon = value
 			queue_redraw()
 var icon_tint := Color.WHITE
-## 0 = ready, 1 = just used. Draws a dark pie over the button.
+## 0 = ready, 1 = just used. Draws dark rows of pixels over the button, from the top.
 var cooldown_ratio := 0.0:
 	set(value):
 		if not is_equal_approx(value, cooldown_ratio):
@@ -79,22 +79,30 @@ func _draw() -> void:
 		Fonts.draw(self, Vector2(0, Fonts.half_cap(font_size)), label, font_size, Color.WHITE, 0.5, Color("2b1d24"))
 
 	if cooldown_ratio > 0.01:
-		var points := PackedVector2Array([Vector2.ZERO])
-		var steps := 32
-		for i in steps + 1:
-			var angle := -PI * 0.5 + TAU * cooldown_ratio * i / steps
-			points.append(Vector2.from_angle(angle) * (radius - 6.0))
-		draw_colored_polygon(points, Color(0.08, 0.04, 0.06, 0.65))
+		_draw_cooldown()
 
 	if charge_ratio > 0.0 or charge_full:
 		_draw_charge()
 
 	if counter >= 0:
 		var badge := Vector2(radius * 0.7, -radius * 0.7)
-		draw_circle(badge, 14.0, Color("2b1d24"))
-		draw_circle(badge, 14.0, Color("e9a85a"), false, 2.0)
+		PixelDraw.disc(self, badge, 14.0, Color("2b1d24"))
+		PixelDraw.ring(self, badge, 14.0, Color("e9a85a"))
 		var count_text := str(counter)
 		Fonts.draw(self, badge + Vector2(0, Fonts.half_cap(Fonts.BODY)), count_text, Fonts.BODY, Color.WHITE, 0.5, Color.TRANSPARENT)
+
+
+## The time left as shade over the face, the art's pixels: a disc whose rows from the top cover
+## `cooldown_ratio` of it, falling a row at a time (as the action bar's slots, ActionBar).
+func _draw_cooldown() -> void:
+	var r := maxf((radius - 6.0) / PixelDraw.PX, 1.0)
+	var top := -floori(r)
+	var rows := floori(r) * 2 + 1
+	var shaded := ceili(rows * cooldown_ratio)
+	for k in shaded:
+		var y := top + k
+		var half := floori(sqrt(maxf(r * r - y * y, 0.0)) + 0.5)
+		draw_rect(Rect2(Vector2(-half, y) * PixelDraw.PX, Vector2(half * 2 + 1, 1) * PixelDraw.PX), Color(0.08, 0.04, 0.06, 0.65))
 
 
 ## The charge gauge on the rim: twelve steps of square pixels (the art's blocks, no smooth arc),
