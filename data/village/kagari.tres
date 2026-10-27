@@ -25,7 +25,7 @@
 [sub_resource type="Resource" id="prop_0"]
 script = ExtResource("prop_script")
 texture = ExtResource("ruins")
-position = Vector2(160, 135)
+position = Vector2(240, 202)
 art_scale = 2.0
 region = Rect2(184, 96, 72, 80)
 collision = Rect2(-60, -55, 120, 55)
@@ -33,7 +33,7 @@ collision = Rect2(-60, -55, 120, 55)
 [sub_resource type="Resource" id="prop_1"]
 script = ExtResource("prop_script")
 texture = ExtResource("ruins")
-position = Vector2(760, 135)
+position = Vector2(1140, 202)
 art_scale = 2.0
 region = Rect2(256, 96, 64, 80)
 collision = Rect2(-50, -55, 100, 55)
@@ -41,7 +41,7 @@ collision = Rect2(-50, -55, 100, 55)
 [sub_resource type="Resource" id="prop_2"]
 script = ExtResource("prop_script")
 texture = ExtResource("temple_art")
-position = Vector2(470, 240)
+position = Vector2(705, 360)
 art_scale = 2.0
 region = Rect2(0, 224, 112, 128)
 collision = Rect2(-100, -200, 200, 190)
@@ -49,7 +49,7 @@ collision = Rect2(-100, -200, 200, 190)
 [sub_resource type="Resource" id="prop_3"]
 script = ExtResource("prop_script")
 texture = ExtResource("desert")
-position = Vector2(205, 420)
+position = Vector2(308, 630)
 art_scale = 2.0
 region = Rect2(32, 160, 32, 32)
 collision = Rect2(-45, -18, 90, 25)
@@ -57,7 +57,7 @@ collision = Rect2(-45, -18, 90, 25)
 [sub_resource type="Resource" id="prop_4"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(60, 100)
+position = Vector2(90, 150)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -65,7 +65,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="prop_5"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(60, 300)
+position = Vector2(90, 450)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -73,7 +73,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="prop_6"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(30, 610)
+position = Vector2(45, 915)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -81,7 +81,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="prop_7"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(880, 85)
+position = Vector2(1320, 128)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -89,7 +89,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="prop_8"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(900, 320)
+position = Vector2(1350, 480)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -97,7 +97,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="prop_9"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(940, 560)
+position = Vector2(1410, 840)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -105,7 +105,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="prop_10"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(330, 80)
+position = Vector2(495, 120)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -113,7 +113,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="prop_11"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(630, 70)
+position = Vector2(945, 105)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -121,7 +121,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="prop_12"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(650, 220)
+position = Vector2(975, 330)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
 tint = Color(0.32, 0.2, 0.38, 1)
@@ -131,7 +131,7 @@ cleared_by = ExtResource("quest")
 [sub_resource type="Resource" id="prop_13"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(630, 260)
+position = Vector2(945, 390)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
 tint = Color(0.32, 0.2, 0.38, 1)
@@ -141,7 +141,7 @@ cleared_by = ExtResource("quest")
 [sub_resource type="Resource" id="prop_14"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(665, 300)
+position = Vector2(998, 450)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
 tint = Color(0.32, 0.2, 0.38, 1)
@@ -151,7 +151,7 @@ cleared_by = ExtResource("quest")
 [sub_resource type="Resource" id="prop_15"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(700, 315)
+position = Vector2(1050, 472)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
 tint = Color(0.32, 0.2, 0.38, 1)
@@ -161,35 +161,35 @@ cleared_by = ExtResource("quest")
 [sub_resource type="Resource" id="prop_16"]
 script = ExtResource("prop_script")
 texture = ExtResource("lantern")
-position = Vector2(180, 455)
+position = Vector2(270, 682)
 art_scale = 2.0
 lit_by = ExtResource("market")
 
 [sub_resource type="Resource" id="prop_17"]
 script = ExtResource("prop_script")
 texture = ExtResource("lantern")
-position = Vector2(285, 455)
+position = Vector2(428, 682)
 art_scale = 2.0
 lit_by = ExtResource("market")
 
 [sub_resource type="Resource" id="prop_18"]
 script = ExtResource("prop_script")
 texture = ExtResource("lantern")
-position = Vector2(650, 470)
+position = Vector2(975, 705)
 art_scale = 2.0
 lit_by = ExtResource("memorial")
 
 [sub_resource type="Resource" id="prop_19"]
 script = ExtResource("prop_script")
 texture = ExtResource("lantern")
-position = Vector2(790, 470)
+position = Vector2(1185, 705)
 art_scale = 2.0
 lit_by = ExtResource("memorial")
 
 [sub_resource type="Resource" id="west_roots_0"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(310, 220)
+position = Vector2(465, 330)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
 tint = Color(0.32, 0.2, 0.38, 1)
@@ -199,7 +199,7 @@ cleared_by = ExtResource("sayo_quest")
 [sub_resource type="Resource" id="west_roots_1"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(330, 260)
+position = Vector2(495, 390)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
 tint = Color(0.32, 0.2, 0.38, 1)
@@ -209,7 +209,7 @@ cleared_by = ExtResource("sayo_quest")
 [sub_resource type="Resource" id="west_roots_2"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(295, 300)
+position = Vector2(442, 450)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
 tint = Color(0.32, 0.2, 0.38, 1)
@@ -219,7 +219,7 @@ cleared_by = ExtResource("sayo_quest")
 [sub_resource type="Resource" id="west_roots_3"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(260, 315)
+position = Vector2(390, 472)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
 tint = Color(0.32, 0.2, 0.38, 1)
@@ -233,7 +233,7 @@ region = Rect2(0, 48, 32, 32)
 [sub_resource type="Resource" id="dress_0"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(28, 205)
+position = Vector2(42, 308)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -241,7 +241,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="dress_1"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(25, 430)
+position = Vector2(38, 645)
 art_scale = 2.0
 region = Rect2(48, 288, 48, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -249,7 +249,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="dress_2"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(935, 205)
+position = Vector2(1402, 308)
 art_scale = 2.0
 region = Rect2(48, 288, 48, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -257,7 +257,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="dress_3"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(938, 430)
+position = Vector2(1407, 645)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -265,7 +265,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="dress_4"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(190, 630)
+position = Vector2(285, 945)
 art_scale = 2.0
 region = Rect2(48, 288, 48, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -273,7 +273,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="dress_5"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(330, 625)
+position = Vector2(495, 938)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -281,7 +281,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="dress_6"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(630, 628)
+position = Vector2(945, 942)
 art_scale = 2.0
 region = Rect2(0, 32, 64, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -289,7 +289,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="dress_7"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(780, 630)
+position = Vector2(1170, 945)
 art_scale = 2.0
 region = Rect2(48, 288, 48, 48)
 collision = Rect2(-15, -12, 30, 20)
@@ -297,7 +297,7 @@ collision = Rect2(-15, -12, 30, 20)
 [sub_resource type="Resource" id="dress_8"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(135, 458)
+position = Vector2(202, 687)
 art_scale = 2.0
 region = Rect2(16, 0, 16, 16)
 collision = Rect2(-11, -8, 22, 10)
@@ -305,7 +305,7 @@ collision = Rect2(-11, -8, 22, 10)
 [sub_resource type="Resource" id="dress_9"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(118, 470)
+position = Vector2(177, 705)
 art_scale = 2.0
 region = Rect2(0, 0, 16, 16)
 collision = Rect2(-11, -8, 22, 10)
@@ -313,14 +313,14 @@ collision = Rect2(-11, -8, 22, 10)
 [sub_resource type="Resource" id="dress_10"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(152, 488)
+position = Vector2(228, 732)
 art_scale = 2.0
 region = Rect2(48, 0, 16, 16)
 
 [sub_resource type="Resource" id="dress_11"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(312, 470)
+position = Vector2(468, 705)
 art_scale = 2.0
 region = Rect2(144, 32, 16, 16)
 collision = Rect2(-11, -8, 22, 10)
@@ -328,7 +328,7 @@ collision = Rect2(-11, -8, 22, 10)
 [sub_resource type="Resource" id="dress_12"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(100, 215)
+position = Vector2(150, 322)
 art_scale = 2.0
 region = Rect2(224, 32, 32, 32)
 collision = Rect2(-22, -6, 44, 8)
@@ -336,21 +336,21 @@ collision = Rect2(-22, -6, 44, 8)
 [sub_resource type="Resource" id="dress_13"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(692, 165)
+position = Vector2(1038, 248)
 art_scale = 2.0
 region = Rect2(192, 64, 16, 32)
 
 [sub_resource type="Resource" id="dress_14"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(712, 172)
+position = Vector2(1068, 258)
 art_scale = 2.0
 region = Rect2(192, 64, 16, 32)
 
 [sub_resource type="Resource" id="dress_15"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(575, 575)
+position = Vector2(862, 862)
 art_scale = 2.0
 region = Rect2(64, 128, 16, 16)
 collision = Rect2(-8, -6, 16, 8)
@@ -358,7 +358,7 @@ collision = Rect2(-8, -6, 16, 8)
 [sub_resource type="Resource" id="dress_16"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(372, 560)
+position = Vector2(558, 840)
 art_scale = 2.0
 region = Rect2(64, 208, 16, 16)
 collision = Rect2(-8, -6, 16, 8)
@@ -366,14 +366,14 @@ collision = Rect2(-8, -6, 16, 8)
 [sub_resource type="Resource" id="dress_17"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(250, 560)
+position = Vector2(375, 840)
 art_scale = 2.0
 region = Rect2(80, 128, 16, 16)
 
 [sub_resource type="Resource" id="dress_18"]
 script = ExtResource("prop_script")
 texture = ExtResource("ruins")
-position = Vector2(110, 565)
+position = Vector2(165, 848)
 art_scale = 2.0
 region = Rect2(0, 0, 64, 48)
 collision = Rect2(-56, -44, 112, 44)
@@ -381,56 +381,56 @@ collision = Rect2(-56, -44, 112, 44)
 [sub_resource type="Resource" id="dress_19"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(215, 520)
+position = Vector2(322, 780)
 art_scale = 2.0
 region = Rect2(112, 176, 16, 16)
 
 [sub_resource type="Resource" id="dress_20"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(245, 520)
+position = Vector2(368, 780)
 art_scale = 2.0
 region = Rect2(112, 176, 16, 16)
 
 [sub_resource type="Resource" id="dress_21"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(275, 520)
+position = Vector2(412, 780)
 art_scale = 2.0
 region = Rect2(128, 176, 16, 16)
 
 [sub_resource type="Resource" id="dress_22"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(215, 548)
+position = Vector2(322, 822)
 art_scale = 2.0
 region = Rect2(128, 176, 16, 16)
 
 [sub_resource type="Resource" id="dress_23"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(245, 548)
+position = Vector2(368, 822)
 art_scale = 2.0
 region = Rect2(112, 176, 16, 16)
 
 [sub_resource type="Resource" id="dress_24"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(275, 548)
+position = Vector2(412, 822)
 art_scale = 2.0
 region = Rect2(112, 176, 16, 16)
 
 [sub_resource type="Resource" id="dress_25"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(190, 585)
+position = Vector2(285, 878)
 art_scale = 2.0
 region = Rect2(192, 64, 16, 32)
 
 [sub_resource type="Resource" id="dress_26"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(175, 600)
+position = Vector2(262, 900)
 art_scale = 2.0
 region = Rect2(64, 0, 16, 16)
 collision = Rect2(-8, -6, 16, 8)
@@ -438,7 +438,7 @@ collision = Rect2(-8, -6, 16, 8)
 [sub_resource type="Resource" id="dress_27"]
 script = ExtResource("prop_script")
 texture = ExtResource("ruins")
-position = Vector2(850, 610)
+position = Vector2(1275, 915)
 art_scale = 2.0
 region = Rect2(64, 0, 48, 48)
 collision = Rect2(-42, -44, 84, 44)
@@ -446,7 +446,7 @@ collision = Rect2(-42, -44, 84, 44)
 [sub_resource type="Resource" id="dress_28"]
 script = ExtResource("prop_script")
 texture = ExtResource("ruins")
-position = Vector2(770, 575)
+position = Vector2(1155, 862)
 art_scale = 2.0
 region = Rect2(96, 96, 16, 32)
 collision = Rect2(-10, -8, 20, 10)
@@ -454,7 +454,7 @@ collision = Rect2(-10, -8, 20, 10)
 [sub_resource type="Resource" id="dress_29"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(905, 505)
+position = Vector2(1358, 758)
 art_scale = 2.0
 region = Rect2(0, 0, 16, 16)
 collision = Rect2(-11, -8, 22, 10)
@@ -462,7 +462,7 @@ collision = Rect2(-11, -8, 22, 10)
 [sub_resource type="Resource" id="dress_30"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(925, 515)
+position = Vector2(1388, 772)
 art_scale = 2.0
 region = Rect2(16, 0, 16, 16)
 collision = Rect2(-11, -8, 22, 10)
@@ -470,7 +470,7 @@ collision = Rect2(-11, -8, 22, 10)
 [sub_resource type="Resource" id="dress_31"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(590, 412)
+position = Vector2(885, 618)
 art_scale = 2.0
 region = Rect2(64, 16, 16, 16)
 collision = Rect2(-10, -8, 20, 10)
@@ -478,14 +478,14 @@ collision = Rect2(-10, -8, 20, 10)
 [sub_resource type="Resource" id="dress_32"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(610, 420)
+position = Vector2(915, 630)
 art_scale = 2.0
 region = Rect2(96, 16, 16, 16)
 
 [sub_resource type="Resource" id="dress_33"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(42, 372)
+position = Vector2(63, 558)
 art_scale = 2.0
 region = Rect2(144, 32, 16, 16)
 collision = Rect2(-11, -8, 22, 10)
@@ -493,7 +493,7 @@ collision = Rect2(-11, -8, 22, 10)
 [sub_resource type="Resource" id="dress_34"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(62, 384)
+position = Vector2(93, 576)
 art_scale = 2.0
 region = Rect2(160, 32, 16, 16)
 collision = Rect2(-11, -8, 22, 10)
@@ -501,14 +501,14 @@ collision = Rect2(-11, -8, 22, 10)
 [sub_resource type="Resource" id="dress_35"]
 script = ExtResource("prop_script")
 texture = ExtResource("furniture")
-position = Vector2(36, 395)
+position = Vector2(54, 592)
 art_scale = 2.0
 region = Rect2(96, 16, 16, 16)
 
 [sub_resource type="Resource" id="dress_36"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(250, 610)
+position = Vector2(375, 915)
 art_scale = 2.0
 region = Rect2(208, 128, 32, 32)
 collision = Rect2(-26, -20, 52, 22)
@@ -516,35 +516,35 @@ collision = Rect2(-26, -20, 52, 22)
 [sub_resource type="Resource" id="dress_37"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(470, 615)
+position = Vector2(705, 922)
 art_scale = 2.0
 region = Rect2(0, 160, 16, 16)
 
 [sub_resource type="Resource" id="dress_38"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(500, 622)
+position = Vector2(750, 933)
 art_scale = 2.0
 region = Rect2(32, 160, 16, 16)
 
 [sub_resource type="Resource" id="dress_39"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(560, 500)
+position = Vector2(840, 750)
 art_scale = 2.0
 region = Rect2(48, 176, 16, 16)
 
 [sub_resource type="Resource" id="dress_40"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(400, 500)
+position = Vector2(600, 750)
 art_scale = 2.0
 region = Rect2(16, 176, 16, 16)
 
 [sub_resource type="Resource" id="dress_41"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(930, 300)
+position = Vector2(1395, 450)
 art_scale = 2.0
 region = Rect2(208, 128, 32, 32)
 collision = Rect2(-26, -20, 52, 22)
@@ -552,14 +552,14 @@ collision = Rect2(-26, -20, 52, 22)
 [sub_resource type="Resource" id="dress_42"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(110, 250)
+position = Vector2(165, 375)
 art_scale = 2.0
 region = Rect2(64, 160, 16, 16)
 
 [sub_resource type="Resource" id="dress_43"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(845, 250)
+position = Vector2(1268, 375)
 art_scale = 2.0
 region = Rect2(80, 160, 16, 16)
 
@@ -572,16 +572,16 @@ path_region = Rect2(16, 128, 16, 16)
 display_name = "Kagari"
 description = "The village sleeps. The Well does not."
 restored_text = "Two windows burn. Beyond the square, Kagari still sleeps."
-bounds = Rect2(0, 0, 960, 640)
-spawn = Vector2(480, 470)
-well = Vector2(480, 330)
+bounds = Rect2(0, 0, 1440, 960)
+spawn = Vector2(720, 705)
+well = Vector2(720, 495)
 interiors = [ExtResource("temple")]
-memorial = Vector2(720, 470)
-noticeboard = Vector2(345, 430)
+memorial = Vector2(1080, 705)
+noticeboard = Vector2(518, 645)
 clock = ExtResource("clock")
 move_speed = 160.0
 interaction_reach = 72.0
-paths = [Rect2(130, 285, 700, 95), Rect2(425, 120, 110, 450), Rect2(170, 370, 120, 100), Rect2(640, 365, 155, 145)]
+paths = [Rect2(195, 448, 1056, 96), Rect2(672, 192, 96, 672), Rect2(224, 576, 256, 160), Rect2(960, 576, 256, 160), Rect2(208, 192, 64, 288), Rect2(1120, 192, 64, 288), Rect2(128, 704, 128, 64), Rect2(128, 704, 64, 160), Rect2(1184, 704, 128, 64), Rect2(1248, 704, 64, 192)]
 ground = ExtResource("ground")
 ground_region = Rect2(0, 192, 16, 16)
 ground_variants = Array[Rect2]([Rect2(16, 192, 16, 16), Rect2(32, 192, 16, 16), Rect2(48, 192, 16, 16), Rect2(64, 192, 16, 16), Rect2(32, 176, 16, 16), Rect2(48, 176, 16, 16)])

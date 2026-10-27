@@ -12,49 +12,49 @@
 script = ExtResource("activity_script")
 start_hour = 0.0
 display_name = "Resting at home"
-destination = Vector2(740, 230)
+destination = Vector2(1110, 345)
 indoors = true
 
 [sub_resource type="Resource" id="activity_1"]
 script = ExtResource("activity_script")
 start_hour = 6.0
 display_name = "Mending lanterns at home"
-destination = Vector2(740, 230)
+destination = Vector2(1110, 345)
 indoors = false
 
 [sub_resource type="Resource" id="activity_2"]
 script = ExtResource("activity_script")
 start_hour = 8.0
 display_name = "Checking the market lamps"
-destination = Vector2(285, 465)
+destination = Vector2(428, 698)
 indoors = false
 
 [sub_resource type="Resource" id="activity_3"]
 script = ExtResource("activity_script")
 start_hour = 12.0
 display_name = "Mending lanterns at home"
-destination = Vector2(740, 230)
+destination = Vector2(1110, 345)
 indoors = false
 
 [sub_resource type="Resource" id="activity_4"]
 script = ExtResource("activity_script")
 start_hour = 16.0
 display_name = "Lighting the memorial court"
-destination = Vector2(770, 495)
+destination = Vector2(1155, 742)
 indoors = false
 
 [sub_resource type="Resource" id="activity_5"]
 script = ExtResource("activity_script")
 start_hour = 20.0
 display_name = "Resting at home"
-destination = Vector2(740, 230)
+destination = Vector2(1110, 345)
 indoors = true
 
 [resource]
 script = ExtResource("script")
 id = &"ren"
 speaker = ExtResource("speaker")
-position = Vector2(740, 230)
+position = Vector2(1110, 345)
 role = 0
 quest = ExtResource("quest")
 wakes_after = ExtResource("quest")

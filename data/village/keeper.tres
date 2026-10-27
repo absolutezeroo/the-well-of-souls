@@ -13,7 +13,7 @@
 script = ExtResource("activity_script")
 start_hour = 0.0
 display_name = "Keeping watch at the Well"
-destination = Vector2(540, 280)
+destination = Vector2(810, 420)
 indoors = false
 
 [sub_resource type="Resource" id="activity_1"]
@@ -28,7 +28,7 @@ room = ExtResource("temple")
 script = ExtResource("activity_script")
 start_hour = 12.0
 display_name = "Receiving visitors at the Well"
-destination = Vector2(540, 280)
+destination = Vector2(810, 420)
 indoors = false
 
 [sub_resource type="Resource" id="activity_3"]
@@ -43,14 +43,14 @@ room = ExtResource("temple")
 script = ExtResource("activity_script")
 start_hour = 22.0
 display_name = "Keeping watch at the Well"
-destination = Vector2(540, 280)
+destination = Vector2(810, 420)
 indoors = false
 
 [resource]
 script = ExtResource("script")
 id = &"keeper"
 speaker = ExtResource("speaker")
-position = Vector2(540, 280)
+position = Vector2(810, 420)
 role = 1
 quest = ExtResource("quest")
 echo = false
