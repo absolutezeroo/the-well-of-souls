@@ -13,8 +13,11 @@ func _ready() -> void:
 	Events.floor_entered.connect(_on_floor)
 
 
+## Active play only. Menus pause the tree, but the end screen after a death does not: the
+## world behind it goes on, the village's time must not.
 func _process(delta: float) -> void:
-	VillageClock.advance(delta)
+	if game and is_instance_valid(game.player) and not game.player.is_dead:
+		VillageClock.advance(delta)
 
 
 func _on_floor(world: World) -> void:

@@ -553,6 +553,11 @@ func run_game(game: Game) -> void:
 	check(VillageProgress.stage(second) == VillageProgress.Step.FOUND and VillageProgress.stage(quest) == VillageProgress.Step.RETURNED, "recovering the verse preserves the first rescue")
 	await game.debug.enter_floor(second.floor_depth)
 	check(game.world.find_children("*", "VillageEvidence", true, false).is_empty(), "the recovered verse does not duplicate on floor reconstruction")
+	game.player.give_up()
+	await _until(func() -> bool: return game.game_over_panel.visible)
+	var dead_time := Profile.village_seconds
+	await _frames(10)
+	check(game.game_over_panel.visible and not get_tree().paused and Profile.village_seconds == dead_time, "the end screen after a death freezes village time like every other menu")
 
 
 func _choice(hub: VillageHub, key: String) -> Button:

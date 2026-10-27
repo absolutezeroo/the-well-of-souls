@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 388,
+  "next_id": 389,
   "tags": [
     "pc",
     "test",
@@ -5837,6 +5837,22 @@
       ],
       "created_at": 1793065447,
       "updated_at": 1793066691,
+      "due_date": null
+    },
+    {
+      "id": "task_388",
+      "title": "Chasse aux bugs du gameplay et de Kagari",
+      "description": "Relecture critique du code de jeu (entités, IA, monde, combat, VFX, village Kagari, GameSession) : chaque bug confirmé a un test qui échoue avant la correction. Corrigé : l’horloge du village avançait pendant l’écran de fin après une mort (le jeu n’est pas en pause derrière), alors que le temps de Kagari doit s’arrêter dans les menus.",
+      "status": "in_progress",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "bug",
+        "tests",
+        "qualité"
+      ],
+      "created_at": 1793074694,
+      "updated_at": 1793074694,
       "due_date": null
     }
   ]

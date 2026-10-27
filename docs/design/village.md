@@ -137,7 +137,7 @@ Residents survive profile refreshes, so buying a lamp does not reset their posit
 ## Day, night and the quest board
 
 The first visit starts at 08:00. One fictional day lasts **16 minutes of active play**, authored
-in `data/village/clock.tres`. Time advances in the village and during descents, stops in menus
+in `data/village/clock.tres`. Time advances in the village and during descents, stops in menus (the end screen after a death too)
 and in the mobile background, and does not advance while the app is closed. Day number and
 hour appear on the village HUD; a Gradient tints only the world at dawn, day, dusk and night.
 It never changes dungeon seeds, real UTC bounty dates or infestation. There is no missed-day
