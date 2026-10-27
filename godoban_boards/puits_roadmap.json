@@ -1469,8 +1469,8 @@
     {
       "id": "task_93",
       "title": "Focus avant mise en page : vérifier les autres pages",
-      "description": "Vu en traitant « Codex au clavier » : une page qui donne le focus à son premier bouton avant que ses colonnes soient mises en page fait défiler sa liste (follow_focus) de la hauteur du bouton. Corrigé pour la page d'un monstre (MonsterPage.scroll_to_top), et le cadre de focus ne sort plus de sa boîte (MenuNav) ; d'autres pages construites puis focalisées dans la même image (sac, boutique, forge, chronique) peuvent avoir le même décalage : les ouvrir au clavier en 1280x720 et vérifier.",
-      "status": "backlog",
+      "description": "Vu en traitant « Codex au clavier » : une page qui donne le focus à son premier bouton avant que ses colonnes soient mises en page fait défiler sa liste (follow_focus) de la hauteur du bouton. Corrigé pour la page d'un monstre (MonsterPage.scroll_to_top), et le cadre de focus ne sort plus de sa boîte (MenuNav) ; d'autres pages construites puis focalisées dans la même image (sac, boutique, forge, chronique) peuvent avoir le même décalage : les ouvrir au clavier en 1280x720 et vérifier.\n\nVérifié (27/10) par des contrôles : le sac, le marchand et la forge ouverts au clavier en 1280x720, et la page d'un gardien du Codex (avec sa chronique) en français, s'ouvrent en haut de leurs listes (aucun ScrollContainer défilé). Pas de décalage trouvé ; les contrôles restent dans game.pc et title.pc.",
+      "status": "done",
       "priority": "low",
       "epic_id": "epic_4",
       "due_date": null,
@@ -1479,7 +1479,7 @@
         "pc"
       ],
       "created_at": 1792715222,
-      "updated_at": 1792715222
+      "updated_at": 1793076284
     },
     {
       "id": "task_94",

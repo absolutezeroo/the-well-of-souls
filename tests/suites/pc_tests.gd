@@ -799,6 +799,18 @@ func _test_codex_page_focus(codex: CodexPanel) -> void:
 	var frame := MenuNav.frame_area()
 	check(frame.size == Vector2.ZERO or box.grow(MenuNav.FocusFrame.REACH).encloses(frame), "a focus frame never leaves its column, its button scrolled out (%s, column %s)" % [frame, box])
 	codex.back()
+	await _frames(1)
+	# A warden's page, its chronicle with it: at the top too.
+	var boss: BossDef = CONTENT.dungeon.acts[0].boss
+	var boss_seen := Profile.seen_monsters.has(String(boss.id))
+	Profile.mark_seen(boss.id)
+	codex.open_monster(boss)
+	await _frames(3)
+	var boss_scrolled: Array = codex.get_node("%MonsterPage").find_children("*", "ScrollContainer", true, false).map(func(scroller: ScrollContainer) -> int: return scroller.scroll_vertical)
+	check(boss_scrolled.all(func(at: int) -> bool: return at == 0), "a warden's page and its chronicle open with keys at the top (%s)" % [boss_scrolled])
+	codex.back()
+	if not boss_seen:
+		Profile.seen_monsters.erase(String(boss.id))
 	codex.hide()
 	await _frames(1)
 	Settings.language = "en"
@@ -1320,6 +1332,7 @@ func _test_panels_keys(game: Game) -> void:
 	# The bag: the slot the keys stand on is the one picked (Enter uses it: BagTests).
 	game.open_inventory()
 	await _frames(2)
+	_check_opens_at_top(game.inventory_panel, "the bag")
 	await _check_keys_reach(game.inventory_panel, "the bag")
 	var focused := _focus()
 	if focused is ItemSlot:
@@ -1331,6 +1344,7 @@ func _test_panels_keys(game: Game) -> void:
 	await _frames(2)
 	game.open_shop(merchant)
 	await _frames(2)
+	_check_opens_at_top(game.shop_panel, "the merchant")
 	await _check_keys_reach(game.shop_panel, "the merchant")
 	await _tap_key(KEY_ESCAPE)
 	check(not game.shop_panel.visible, "Escape closes the merchant")
@@ -1340,6 +1354,7 @@ func _test_panels_keys(game: Game) -> void:
 	await _frames(2)
 	game.open_forge(forge)
 	await _frames(2)
+	_check_opens_at_top(game.menus.forge, "the forge")
 	await _check_keys_reach(game.menus.forge, "the forge")
 	await _tap_pad(JOY_BUTTON_B)
 	check(not game.menus.forge.visible, "B closes the forge")
@@ -1421,6 +1436,18 @@ func _test_panels_keys(game: Game) -> void:
 	game.game_over_panel.hide()
 	get_tree().paused = false
 	await _frames(2)
+
+
+## A window opened with keys starts at the top of its lists: its first button focused before its
+## columns were laid out must not have scrolled them (follow_focus) by its own height
+## (MonsterPage.scroll_to_top() fixed the codex's monster page).
+func _check_opens_at_top(window: Control, what: String) -> void:
+	var scrolled: Array[String] = []
+	for found in window.find_children("*", "ScrollContainer", true, false):
+		var list := found as ScrollContainer
+		if list.is_visible_in_tree() and list.scroll_vertical > 0:
+			scrolled.append("%s at %d" % [list.name, list.scroll_vertical])
+	check(scrolled.is_empty(), "%s opens at the top of its lists with keys (%s)" % [what, ", ".join(scrolled)])
 
 
 ## The HUD fits every screen, on touch and on keys: nothing out of it, nothing over anything.
