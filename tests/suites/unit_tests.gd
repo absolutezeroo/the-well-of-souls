@@ -52,6 +52,7 @@ func test_cases() -> Array:
 		["boss_slows", _test_boss_slows],
 		["nameless_keeper", _test_nameless_keeper],
 		["profile", _test_profile],
+		["profile_damaged", _test_profile_damaged],
 		["audit_regressions", func() -> void: await _part(AuditRegressionTests.new(), func(suite: AuditRegressionTests) -> void: await suite.run_unit())],
 		["soul_economy", _test_soul_economy],
 		["run_time", _test_run_time],
@@ -2250,6 +2251,44 @@ func _test_profile() -> void:
 	Profile.reset()
 
 
+## A profile file with a damaged field (a hand edit, a disk fault, a newer game's record) keeps
+## everything else, and the file as it was is set aside before the next save replaces it.
+func _test_profile_damaged() -> void:
+	var path := "user://test_damaged_profile_%d.json" % OS.get_process_id()
+	Profile.reset()
+	Profile.save_path = path
+	SafeFile.write_json(path, { "souls": 420, "runs": 12, "levels": { "vitality": 2 }, "history": [{ "depth": 3 }, 7], "village_quests": { "kagari": 99 } })
+	Profile.load_profile()
+	check(Profile.souls == 420 and Profile.runs == 12 and int(Profile.levels.get("vitality", 0)) == 2, "a damaged field never costs the rest of the profile")
+	check(Profile.history.size() == 1 and Profile.village_quests.is_empty(), "only the damaged entries are dropped")
+	var aside := _set_aside_profiles(path)
+	var copy: Variant = SafeFile.read_json(path.get_base_dir().path_join(aside[0])) if aside.size() == 1 else null
+	check(copy is Dictionary and (copy as Dictionary).history.size() == 2, "the damaged file is set aside whole before a save replaces it")
+	# Not JSON at all: nothing can be read, the profile in memory stays, the file is kept aside.
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	file.store_string("{\"souls\": 9")
+	file.close()
+	Profile.load_profile()
+	check(Profile.souls == 420 and _set_aside_profiles(path).size() == 2, "an unreadable file is set aside too, never overwritten unseen")
+	Profile.save_profile()
+	Profile.load_profile()
+	check(Profile.souls == 420 and _set_aside_profiles(path).size() == 2, "a sound file sets nothing aside")
+	for file_name in _set_aside_profiles(path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(path.get_base_dir().path_join(file_name)))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	Profile.save_path = ""
+	Profile.reset()
+
+
+## The copies Profile set aside for the profile file at `path` (file names).
+func _set_aside_profiles(path: String) -> Array[String]:
+	var found: Array[String] = []
+	for file_name in DirAccess.get_files_at(path.get_base_dir()):
+		if file_name.begins_with(path.get_file() + ".damaged"):
+			found.append(file_name)
+	return found
+
+
 ## Bigger floors on harder difficulties: more rooms, the same clean walls, everything reachable.
 func _test_floor_size() -> void:
 	var rng := RandomNumberGenerator.new()
@@ -2381,6 +2420,12 @@ func _test_languages() -> void:
 	Settings.language = "en"
 	Settings.load_settings()
 	check(Settings.language == "fr", "languages: the setting is saved")
+	check(not FileAccess.file_exists(path + ".tmp"), "settings: written beside, then renamed over the file")
+	DirAccess.rename_absolute(path, path + ".tmp")  # (the app killed between the write and its rename)
+	Settings.language = "en"
+	Settings.load_settings()
+	check(Settings.language == "fr", "settings: a save cut short before its rename is read back")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(path + ".tmp"))
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	Settings.path = ""
 	Settings.set_option(&"language", "en")

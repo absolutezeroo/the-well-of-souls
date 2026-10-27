@@ -179,6 +179,9 @@ func _test_profile_keeps_him() -> void:
 	check(Profile.keepers_freed.size() == Profile.KEEPERS_KEPT, "the codex keeps the last %d Keepers freed" % Profile.KEEPERS_KEPT)
 	Profile.save_path = ""
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	for file_name in DirAccess.get_files_at(path.get_base_dir()):
+		if file_name.begins_with(path.get_file() + ".damaged"):  # (the damaged file above, set aside by Profile)
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path.get_base_dir().path_join(file_name)))
 	Profile.reset()
 
 

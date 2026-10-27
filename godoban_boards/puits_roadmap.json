@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 390,
+  "next_id": 397,
   "tags": [
     "pc",
     "test",
@@ -5876,6 +5876,117 @@
       ],
       "created_at": 1793074086,
       "updated_at": 1793074086
+    },
+    {
+      "id": "task_390",
+      "title": "Audit global : sauvegardes, en ligne, interface, outils, licences",
+      "description": "Audit de santé du projet (branche agent/audit). Corrigé avec tests : profil endommagé qui effaçait toute la progression (task_391), outils Python sous Windows (task_392), options enregistrées de façon atomique et fenêtres en ligne vérifiées en 4:3 (task_394). À décider : PNG Craftpix dans un dépôt public (task_393), fichiers orphelins (task_395), mot de passe gardé en clair avec « Rester connecté » (task_396). Vérifié sans défaut : écriture atomique SafeFile, migrations du profil et de la partie, logique de conflit CloudSave, consentement avant tout appel réseau, erreurs/nouvelles tentatives Talo, aucun secret dans git ni dans les journaux, déconnexion automatique des signaux (lambdas comprises), restes RPG, chemins et classes cités dans docs/. Non vérifié en vrai : Windows, rendu 4:3.",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "qualité",
+        "sauvegarde",
+        "en ligne",
+        "tests"
+      ],
+      "created_at": 1793074133,
+      "updated_at": 1793074818,
+      "due_date": null
+    },
+    {
+      "id": "task_391",
+      "title": "Profil endommagé : ne plus tout perdre au prochain enregistrement",
+      "description": "Corrigé (audit) : un seul champ abîmé dans user://profile.json (édition à la main, panne disque, champ d'une version plus récente du jeu) faisait rejeter tout le profil au démarrage ; le jeu repartait d'un profil vide et le premier enregistrement écrasait le fichier : toute la progression perdue. Maintenant le fichier est d'abord copié à côté (profile.json.damaged-<date>), puis seuls les champs et entrées abîmés sont écartés (Profile.repaired()). Un fichier illisible (pas du JSON) est aussi copié avant d'être remplacé. Test unit.profile_damaged ; le test du Gardien sans nom (keeper_tests) passait jusque-là sans vérifier ce qu'il annonçait. À vérifier : rien à faire en jeu, sauf si un fichier .damaged apparaît chez un joueur.",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "tags": [
+        "bug",
+        "sauvegarde",
+        "tests"
+      ],
+      "created_at": 1793074133,
+      "updated_at": 1793074133,
+      "due_date": null
+    },
+    {
+      "id": "task_392",
+      "title": "Outils Python sous Windows : catalogue des sauvegardes et lanceur de tests",
+      "description": "Corrigé (audit) : tools/saves/build_catalog.py lisait les fichiers avec l'encodage du système ; sous Windows (page de code) il plantait sur les textes accentués (src/online/player_name.gd, data/ui/input_prompts.tres), donc --check échouait avant un commit. Il lit et écrit maintenant en UTF-8 avec des fins de ligne LF, et --check dit quoi lancer quand le catalogue est périmé. tools/run_tests.py importait le module Unix « resource » : il ne démarrait pas sous Windows ; il démarre (sans le temps CPU), cherche aussi Godot_v4.7-stable_win64*.exe et donne à chaque processus son dossier user:// aussi via APPDATA. Tests hôtes : python3 -m unittest discover -s tools/tests. Non vérifié sur un vrai Windows : lancer une fois python tools/run_tests.py --only unit sur le PC.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "tags": [
+        "bug",
+        "tests",
+        "pc"
+      ],
+      "created_at": 1793074408,
+      "updated_at": 1793074408,
+      "due_date": null
+    },
+    {
+      "id": "task_393",
+      "title": "Licence : les PNG Craftpix du temple sont publiés dans un dépôt PUBLIC (à décider)",
+      "description": "Constat de l'audit, rien n'a été supprimé ni réécrit : assets/village/temple/exterior.png, objects.png et walls_floor.png sont les PNG du pack « Free Ruined Temple » de Craftpix copiés sans modification (voir son CREDITS.txt). La licence Craftpix des « freebies » autorise leur usage dans un jeu, mais interdit de les redistribuer comme assets ; or le dépôt github.com/absolutezeroo/the-well-of-souls est public : n'importe qui peut télécharger ces fichiers tels quels (et ils restent dans l'historique git même après une suppression). Le reste des assets est CC0 (Ninja Adventure, Kenney, Pixel Operator). Options pour Clayton : (1) passer le dépôt en privé (le plus simple ; l'historique n'est plus exposé) ; (2) sortir les trois PNG de git (.gitignore + copie locale, documenter où les mettre ; l'historique public les garde, il faudrait alors aussi réécrire l'historique pour être propre) ; (3) remplacer le temple par des tuiles CC0 (Ninja Adventure) et retirer les PNG Craftpix. Relire aussi les conditions exactes sur https://craftpix.net/file-licenses/ (section FREEBIE) avant de décider. Lien : task_384.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_6",
+      "tags": [
+        "release",
+        "git",
+        "visuel"
+      ],
+      "created_at": 1793074431,
+      "updated_at": 1793074431,
+      "due_date": null
+    },
+    {
+      "id": "task_394",
+      "title": "Options : enregistrement atomique, et fenêtres en ligne vérifiées en 4:3",
+      "description": "Corrigé (audit) : user://settings.cfg était réécrit en place (ConfigFile.save) ; une appli tuée pendant l'écriture laissait un fichier coupé et toutes les options (langue, volumes, contrôles) revenaient par défaut. Il est maintenant écrit à côté puis renommé, comme le profil (SafeFile), et une copie complète laissée par un enregistrement interrompu est relue. Test dans unit.languages. Aussi : les tests de mise en page du compte, de l'envoi d'avis, des classements et du conflit de sauvegarde en ligne vérifient maintenant 1024x768 (4:3) en plus des écrans 16:9 ; tout tient (aucun défaut trouvé). Non vérifié : l'aspect réel sur un écran 4:3.",
+      "status": "review",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "tags": [
+        "bug",
+        "sauvegarde",
+        "ui",
+        "tests"
+      ],
+      "created_at": 1793074738,
+      "updated_at": 1793074738,
+      "due_date": null
+    },
+    {
+      "id": "task_395",
+      "title": "Nettoyage : fichiers orphelins (sans lien avec le RPG)",
+      "description": "Relevé par l'audit, rien supprimé (à décider) : src/ui/title/upgrade_row.tscn n'est instancié nulle part (seules les fonctions statiques d'UpgradeRow servent encore, au Sanctuaire) ; cinq meubles ne sont posés par aucun thème depuis la refonte des biomes du 19/10 : data/props/furniture/cauldron, dead_tree, dresser, lamp_post, orange_rock (.tres). Les garder comme réserve de contenu ou les supprimer. Les restes de l'expérience RPG ont été vérifiés : aucun fichier, donnée, traduction ni doc orpheline sur main (GameSession, PlayerCommand et BufferedPlayerInput sont gardés exprès, docs/rpg-archive.md).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "tags": [
+        "qualité"
+      ],
+      "created_at": 1793074818,
+      "updated_at": 1793074818,
+      "due_date": null
+    },
+    {
+      "id": "task_396",
+      "title": "Compte : le mot de passe « Rester connecté » est gardé en clair sur l'appareil",
+      "description": "Constat de l'audit, comportement voulu et annoncé dans la politique de confidentialité : avec « Rester connecté », user://account.json garde le mot de passe en clair pour se reconnecter seul quand une session est prise par un autre appareil. Rien d'autre de sensible n'est écrit dans les journaux (clé Talo, jeton, e-mail, mot de passe : jamais affichés). Idée si besoin : chiffrer avec une clé de l'appareil, ou garder le jeton de session seulement et redemander le mot de passe.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "tags": [
+        "en ligne",
+        "sauvegarde"
+      ],
+      "created_at": 1793074818,
+      "updated_at": 1793074818,
+      "due_date": null
     }
   ]
 }

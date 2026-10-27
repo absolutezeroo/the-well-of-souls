@@ -220,10 +220,15 @@ The `Profile` autoload keeps souls, upgrades and records in `user://profile.json
 `SafeFile` writes and flushes a temporary file, verifies its error state, length and bytes,
 then renames it over the destination. A short write never replaces the previous save; a failed
 rename keeps the previous file and the complete recovery copy. Reads try a complete `.tmp`
-when the main file is missing or damaged (including the title's Resume check). `Profile.saved`
+when the main file is missing or damaged (including the title's Resume check). The options
+(`Settings`, `user://settings.cfg`) are written beside and renamed the same way. `Profile.saved`
 means the write succeeded. An imported cloud profile is validated, including nested counters,
 and committed to disk before replacing memory; malformed input or disk failure leaves progress
-unchanged. Older local profiles may omit fields introduced later. Run fields with a wrong type,
+unchanged. Older local profiles may omit fields introduced later. A local `profile.json` that is
+damaged (a field of the wrong kind, an unreadable memorial, not JSON at all) is first copied
+aside whole (`profile.json.damaged-<unix time>`, since the next save replaces it), then only its
+damaged fields and entries are dropped (`Profile.repaired()`): one bad field never resets the
+whole profile. Run fields with a wrong type,
 including null in a non-nullable field or non-finite coordinates, are discarded before restoration.
 
 The run in progress is saved (`RunSave`, `user://run.json`) when a floor begins and whenever the

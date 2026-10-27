@@ -1,6 +1,9 @@
 """Stable catalog generation: migration aliases and accidental identity reuse."""
 import importlib.util
+import os
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -35,6 +38,14 @@ class ContentCatalog(unittest.TestCase):
             with self.assertRaises(ValueError):
                 catalog.collect(root)
 
+    def test_reads_utf8_whatever_the_locale(self):
+        # An ASCII locale fails on the same files a Windows code page does (French texts).
+        env = dict(os.environ, LC_ALL='C', LANG='C', PYTHONCOERCECLOCALE='0', PYTHONUTF8='0')
+        process = subprocess.run([sys.executable, str(ROOT / 'tools/saves/build_catalog.py'), '--check'],
+                                 env=env, capture_output=True, text=True, encoding='utf-8')
+        self.assertNotIn('Traceback', process.stderr)
+        self.assertEqual(process.returncode, 0, process.stdout + process.stderr)
+
     def test_shipped_catalog_is_current(self):
-        old = catalog.OUTPUT.read_text()
+        old = catalog.OUTPUT.read_text(encoding='utf-8')
         self.assertEqual(catalog.render(catalog.collect(ROOT), old), old)
