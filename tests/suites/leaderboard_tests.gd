@@ -456,7 +456,7 @@ func _test_tag_layout() -> void:
 	for language: String in ["en", "fr"]:
 		Settings.language = language
 		Settings.apply()
-		for screen: Vector2i in [Vector2i(2340, 1080), Vector2i(2548, 1296), Vector2i(1280, 720)]:
+		for screen: Vector2i in [Vector2i(2340, 1080), Vector2i(2548, 1296), Vector2i(1280, 720), Vector2i(1024, 768)]:
 			get_tree().root.size = screen
 			(title.get_node("%LeaderboardsButton") as Button).pressed.emit()
 			await _frames(4)

@@ -197,14 +197,19 @@ func save_settings() -> void:
 	var file := ConfigFile.new()
 	for key in KEYS:
 		file.set_value("options", key, get(key))
-	file.save(path)
+	# Written beside, then renamed over the old file (as SafeFile does): a write cut short (the app
+	# killed) never leaves a half file in its place.
+	var temp := path + ".tmp"
+	if file.save(temp) != OK or DirAccess.rename_absolute(temp, path) != OK:
+		push_warning("Could not save %s" % path)
 
 
 func load_settings() -> void:
 	if path.is_empty():
 		return
 	var file := ConfigFile.new()
-	if file.load(path) != OK:
+	# (a complete copy left by a save cut short before its rename, when the file itself is missing)
+	if file.load(path) != OK and (not FileAccess.file_exists(path + ".tmp") or file.load(path + ".tmp") != OK):
 		return
 	for key: StringName in VOLUME_BUSES:
 		set(key, clampf(float(file.get_value("options", key, get(key))), 0.0, 1.0))

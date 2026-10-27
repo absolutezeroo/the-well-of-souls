@@ -220,7 +220,8 @@ The `Profile` autoload keeps souls, upgrades and records in `user://profile.json
 `SafeFile` writes and flushes a temporary file, verifies its error state, length and bytes,
 then renames it over the destination. A short write never replaces the previous save; a failed
 rename keeps the previous file and the complete recovery copy. Reads try a complete `.tmp`
-when the main file is missing or damaged (including the title's Resume check). `Profile.saved`
+when the main file is missing or damaged (including the title's Resume check). The options
+(`Settings`, `user://settings.cfg`) are written beside and renamed the same way. `Profile.saved`
 means the write succeeded. An imported cloud profile is validated, including nested counters,
 and committed to disk before replacing memory; malformed input or disk failure leaves progress
 unchanged. Older local profiles may omit fields introduced later. A local `profile.json` that is

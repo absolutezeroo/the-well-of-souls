@@ -2420,6 +2420,12 @@ func _test_languages() -> void:
 	Settings.language = "en"
 	Settings.load_settings()
 	check(Settings.language == "fr", "languages: the setting is saved")
+	check(not FileAccess.file_exists(path + ".tmp"), "settings: written beside, then renamed over the file")
+	DirAccess.rename_absolute(path, path + ".tmp")  # (the app killed between the write and its rename)
+	Settings.language = "en"
+	Settings.load_settings()
+	check(Settings.language == "fr", "settings: a save cut short before its rename is read back")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(path + ".tmp"))
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	Settings.path = ""
 	Settings.set_option(&"language", "en")

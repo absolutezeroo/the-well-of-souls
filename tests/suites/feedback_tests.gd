@@ -243,7 +243,7 @@ func _test_title_form() -> void:
 	await _frames(2)
 	check(title.feedback.visible, "feedback: the title's button opens the form")
 	title.feedback.set_text("Un bug, ici.")
-	for screen: Vector2i in [Vector2i(2340, 1080), Vector2i(2548, 1296), Vector2i(1280, 720)]:
+	for screen: Vector2i in [Vector2i(2340, 1080), Vector2i(2548, 1296), Vector2i(1280, 720), Vector2i(1024, 768)]:
 		get_tree().root.size = screen
 		await _frames(3)
 		var visible_rect := Rect2(Vector2.ZERO, get_viewport().get_visible_rect().size).grow(1.0)

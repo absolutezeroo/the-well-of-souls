@@ -351,7 +351,7 @@ func _test_account_window() -> void:
 	(dialog.get_node("%AccountName") as LineEdit).text = "kagari@mail.fr"
 	await dialog._create()
 	check((dialog.get_node("%AccountProblem") as Label).text.contains("e-mail") and not Account.is_signed_in(), "account: a refusal said under the form, in French")
-	for screen: Vector2i in [Vector2i(2340, 1080), Vector2i(2548, 1296), Vector2i(1280, 720)]:
+	for screen: Vector2i in [Vector2i(2340, 1080), Vector2i(2548, 1296), Vector2i(1280, 720), Vector2i(1024, 768)]:
 		get_tree().root.size = screen
 		await _frames(3)
 		var visible_rect := Rect2(Vector2.ZERO, get_viewport().get_visible_rect().size).grow(1.0)
@@ -363,7 +363,7 @@ func _test_account_window() -> void:
 	await _frames(2)
 	check(Account.is_signed_in() and dialog.page == AccountDialog.Page.ACCOUNT and (dialog.get_node("%AccountText") as Label).text.contains("Kagari"), "account: made through the form, its page shown")
 	check((dialog.get_node("%SaveState") as Label).text.contains("Sauvegardé en ligne"), "account: the online save's state (%s)" % (dialog.get_node("%SaveState") as Label).text)
-	for screen: Vector2i in [Vector2i(2340, 1080), Vector2i(1280, 720)]:
+	for screen: Vector2i in [Vector2i(2340, 1080), Vector2i(1280, 720), Vector2i(1024, 768)]:
 		get_tree().root.size = screen
 		await _frames(3)
 		check(Rect2(Vector2.ZERO, get_viewport().get_visible_rect().size).grow(1.0).encloses(dialog.board_rect()), "account: its page fits %s" % screen)
@@ -398,6 +398,13 @@ func _test_title_conflict() -> void:
 	check(title.cloud_conflict.visible, "conflict: asked on the title")
 	check((title.cloud_conflict.get_node("%OnlineSummary") as Label).text.contains("800") and (title.cloud_conflict.get_node("%DeviceSummary") as Label).text.contains("60"), "conflict: both sides summarised")
 	check(title.back() and title.cloud_conflict.visible, "conflict: Back doesn't skip the choice")
+	var size_before := get_tree().root.size
+	for screen: Vector2i in [Vector2i(2340, 1080), Vector2i(1280, 720), Vector2i(1024, 768)]:
+		get_tree().root.size = screen
+		await _frames(3)
+		check(Rect2(Vector2.ZERO, get_viewport().get_visible_rect().size).grow(1.0).encloses(title.cloud_conflict.board_rect()), "conflict: the choice fits %s (%s)" % [screen, title.cloud_conflict.board_rect()])
+	get_tree().root.size = size_before
+	await _frames(2)
 	(title.cloud_conflict.get_node("%TakeOnlineButton") as Button).pressed.emit()
 	await _frames(2)
 	check(not title.cloud_conflict.visible and Profile.souls == 800 and CloudSave.state == CloudSave.Step.IDLE, "conflict: the online one taken")

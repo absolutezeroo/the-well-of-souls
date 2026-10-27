@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 392,
+  "next_id": 393,
   "tags": [
     "pc",
     "test",
@@ -5902,6 +5902,23 @@
       ],
       "created_at": 1793074431,
       "updated_at": 1793074431,
+      "due_date": null
+    },
+    {
+      "id": "task_392",
+      "title": "Options : enregistrement atomique, et fenêtres en ligne vérifiées en 4:3",
+      "description": "Corrigé (audit) : user://settings.cfg était réécrit en place (ConfigFile.save) ; une appli tuée pendant l'écriture laissait un fichier coupé et toutes les options (langue, volumes, contrôles) revenaient par défaut. Il est maintenant écrit à côté puis renommé, comme le profil (SafeFile), et une copie complète laissée par un enregistrement interrompu est relue. Test dans unit.languages. Aussi : les tests de mise en page du compte, de l'envoi d'avis, des classements et du conflit de sauvegarde en ligne vérifient maintenant 1024x768 (4:3) en plus des écrans 16:9 ; tout tient (aucun défaut trouvé). Non vérifié : l'aspect réel sur un écran 4:3.",
+      "status": "review",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "tags": [
+        "bug",
+        "sauvegarde",
+        "ui",
+        "tests"
+      ],
+      "created_at": 1793074738,
+      "updated_at": 1793074738,
       "due_date": null
     }
   ]
