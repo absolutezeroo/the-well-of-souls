@@ -425,7 +425,13 @@ func _test_pockets(game: Game, debug: DebugPanel) -> void:
 	await _frames(1)
 	breach_button.pressed.emit()
 	check(await _until(func() -> bool: return game.abyss.is_searching() and player.world == game.abyss.depths, 6.0), "Dawn Breach: down into the Deeps")
+	# Bodies and reaches drawn down there, its traps' and shots' areas too (DebugShapes: drawn
+	# without an engine error, the whole Deeps in play).
+	DebugCheats.show_shapes = true
 	await _frames(2)
+	var shapes := game.find_child("DebugShapes", true, false) as DebugShapes
+	check(shapes != null and shapes.visible, "Bodies and reaches: drawn in the Deeps")
+	DebugCheats.show_shapes = false
 	var depths := game.abyss.depths
 	var door := depths.map.cell_to_world(depths.map.stairs_cell) if depths else Vector2.INF
 	check(depths != null and player.global_position.distance_to(door) < 6.0 * depths.config().tile_size, "...the hero a few steps from the Dawn Breach (%d px)" % player.global_position.distance_to(door))

@@ -319,7 +319,8 @@ step its value ("Damage x5"), and both stay pressed while on.
   camera's **zoom** (x1 / x0.75 / x0.5 / x0.35), **Full light** (every floor at its brightest,
   `World.relight()`), **Bodies & reach** (`DebugShapes`: each body's circle, the hero's weapon
   reach, each monster's attack range in red and how far it notices the hero, a line to its
-  target), **Frame rate** (`DebugOverlay`: frames per second, monsters awake / on the floor,
+  target, every area's collision shapes in orange: traps, shots, hazards' reaches, and the ground
+  strikes still to land in magenta: a boss's delayed spells), **Frame rate** (`DebugOverlay`: frames per second, monsters awake / on the floor,
   shots in the air, nodes, draw calls), **Save & reload** (saves the run and picks it up again,
   as the title's Continue would; not in a debug run).
 - **Remote**: the remote settings (`RemoteConfig`, docs/online.md "Remote settings"): every key of

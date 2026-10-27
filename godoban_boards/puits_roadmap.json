@@ -1729,8 +1729,8 @@
     {
       "id": "task_115",
       "title": "Débug : montrer aussi les pièges, les zones des boss et les projectiles dans la vue « Corps et portées »",
-      "description": "La vue de débug dessine les corps, la portée de l'arme du héros, la portée d'attaque et le rayon de détection des monstres. Il y manque les zones des pièges et des dangers, les aires d'effet des sorts des boss et les formes des projectiles.",
-      "status": "backlog",
+      "description": "La vue de débug dessine les corps, la portée de l'arme du héros, la portée d'attaque et le rayon de détection des monstres. Il y manque les zones des pièges et des dangers, les aires d'effet des sorts des boss et les formes des projectiles.\n\nFait (27/10) : « Corps et portées » dessine aussi les formes de collision de chaque Area2D en orange (pièges, projectiles, portées des dangers) et le cercle des frappes au sol en attente en magenta (sorts retardés des boss : GroundStrike). Les dangers dessinés en cellules (sables mouvants, eau, sol qui s'effondre) et les aires instantanées (déjà avertis par le télégraphe) ne sont pas dessinés. À vérifier dans l'éditeur : lisibilité des couleurs sur un étage avec pièges et un boss.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -1739,7 +1739,7 @@
         "combat"
       ],
       "created_at": 1792730214,
-      "updated_at": 1792730214
+      "updated_at": 1793076694
     },
     {
       "id": "task_116",
