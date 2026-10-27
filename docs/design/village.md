@@ -231,13 +231,13 @@ OpenGL captures can check layout; they do not prove touch feel, S23 performance 
 
 ## Conversation presentation and descent
 
-VillagePanel uses the full itch.io Ninja Adventure pack's `Ui/Dialog/DialogueBoxSimple.png`,
-`FacesetBox.png` and `ChoiceBox.png`, sliced to preserve their borders,
-not the ornate inventory window. The lower conversation card leaves the world visible, with
+VillagePanel wears the game's own skin, like every window and the DialogueBox: the wooden
+OrnateBoard with its gold border, the speaker's name in gold, the face on a plaque, the words
+in a dark inset and the shared wood buttons (the white Ninja Adventure dialogue frames clashed
+with the rest of the interface and were removed). The lower conversation card leaves the world visible, with
 speaker/words on the left and quest details/replies on the right. Both text and replies scroll
 when needed; focus follows into view for keyboard/gamepad and touch dragging never selects a
-reply. Service/register cards use the same skin with more height. Other game menus retain their
-normal skin. The compact layout rechecks its size after wrapped text changes its minimum.
+reply. Service/register cards use the same skin with more height. The compact layout rechecks its size after wrapped text changes its minimum.
 
 The Well plays an authored 2.2-second sequence after the final descent confirmation: approach,
 converging spirit motes, the hero swallowed by the mouth, then an opaque stepped iris into

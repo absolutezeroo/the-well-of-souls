@@ -1,18 +1,16 @@
 class_name VillagePanel
 extends Control
-## Compact Ninja Adventure conversations keep the speaker's world visible. Services use the
-## same presenter with more height. Choices only emit requests; progression belongs to the hub.
+## Compact conversations at the bottom of the screen keep the speaker's world visible, in the
+## game's skin (OrnateBoard, UiSkin, the shared wood buttons) like every other window and the
+## DialogueBox. Services use the same presenter with more height. Choices only emit requests;
+## progression belongs to the hub.
 
 signal picked(action: StringName, payload: Resource)
-const INK := Color("283a3d")
-const SPEECH: Texture2D = preload("res://assets/ui/dialogue/speech.png")
-const REPLY: Texture2D = preload("res://assets/ui/dialogue/reply.png")
-const FACE: Texture2D = preload("res://assets/ui/dialogue/portrait.png")
 var list: VBoxContainer
 var words: Label
 var close_button: Button
 var conversation := false
-var card := PanelContainer.new()
+var card := OrnateBoard.new()
 var portrait := PixelPortrait.new()
 var _heading: Label
 var _subtitle: Label
@@ -30,15 +28,19 @@ func _init() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	# Invisible modal shield: the village remains fully visible behind the conversation.
 	add_child(card)
-	card.add_theme_stylebox_override("panel", _skin(SPEECH, 18))
 	card.resized.connect(_place_card)
 	card.minimum_size_changed.connect(_layout.call_deferred)
+	# Inside the ornate border, as RpgWindow's contents.
+	var margin := MarginContainer.new()
+	for side in ["margin_left", "margin_right", "margin_top", "margin_bottom"]:
+		margin.add_theme_constant_override(side, 10)
+	card.add_child(margin)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 12)
-	card.add_child(column)
+	margin.add_child(column)
 	var header := HBoxContainer.new()
 	column.add_child(header)
-	_heading = _paper_label("", Fonts.BODY)
+	_heading = UiSkin.label("", Fonts.BODY, UiSkin.GOLD)
 	_heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(_heading)
 	close_button = _button(tr("Close"))
@@ -55,17 +57,22 @@ func _init() -> void:
 	var speaker_row := HBoxContainer.new()
 	speaker_row.add_theme_constant_override("separation", 14)
 	_message.add_child(speaker_row)
-	_face_frame.add_theme_stylebox_override("panel", _skin(FACE, 6))
+	_face_frame.add_theme_stylebox_override("panel", UiSkin.plaque())
+	_face_frame.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	_face_frame.add_child(portrait)
 	speaker_row.add_child(_face_frame)
-	_subtitle = _paper_label("", Fonts.BODY, true)
+	_subtitle = UiSkin.label("", Fonts.BODY, UiSkin.DIM, true)
 	_subtitle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_subtitle.custom_minimum_size.x = 200.0
 	speaker_row.add_child(_subtitle)
+	# The words in a dark recess, as the DialogueBox's.
+	var recess := PanelContainer.new()
+	recess.add_theme_stylebox_override("panel", UiSkin.inset())
+	recess.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_message.add_child(recess)
 	var speech_scroll := UiParts.scroll()
-	speech_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_message.add_child(speech_scroll)
-	words = _paper_label("", Fonts.BODY, true)
+	recess.add_child(speech_scroll)
+	words = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
 	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	speech_scroll.add_child(words)
 	_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -74,8 +81,6 @@ func _init() -> void:
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list.add_theme_constant_override("separation", 10)
 	_scroll.add_child(list)
-	# Existing quest/service rows keep their common text helper, recolored on entry.
-	list.child_entered_tree.connect(_style_row)
 	resized.connect(_layout)
 	hide()
 
@@ -124,44 +129,7 @@ func _place_card() -> void:
 	card.position = Vector2(roundf((size.x - card.size.x) * 0.5), size.y - card.size.y - 24.0)
 
 
-func _style_row(node: Node) -> void:
-	if node is Label:
-		var label := node as Label
-		label.add_theme_color_override("font_color", INK)
-		label.add_theme_constant_override("outline_size", 0)
-
-
-static func _paper_label(value: String, font_size: int, wraps: bool = false) -> Label:
-	var label := UiSkin.label(value, font_size, INK, wraps)
-	label.add_theme_constant_override("outline_size", 0)
-	return label
-
-
 static func _button(value: String) -> Button:
 	var button := MenuWindow.button(value, Fonts.BODY, 52)
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	button.add_theme_stylebox_override("normal", _skin(REPLY, 12))
-	var hover := _skin(REPLY, 12)
-	hover.modulate_color = Color(1.08, 1.03, 0.94)
-	button.add_theme_stylebox_override("hover", hover)
-	var pressed := _skin(REPLY, 12)
-	pressed.modulate_color = Color(0.9, 0.85, 0.8)
-	button.add_theme_stylebox_override("pressed", pressed)
-	button.add_theme_stylebox_override("disabled", _skin(REPLY, 12))
-	for state in [&"font_color", &"font_hover_color", &"font_pressed_color", &"font_focus_color", &"font_hover_pressed_color"]:
-		button.add_theme_color_override(state, INK)
-	button.add_theme_color_override("font_disabled_color", Color("78717d"))
-	button.add_theme_constant_override("outline_size", 0)
 	return button
-
-
-static func _skin(texture: Texture2D, padding: float) -> StyleBoxTexture:
-	var box := StyleBoxTexture.new()
-	box.texture = texture
-	for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
-		box.set_texture_margin(side, 5)
-		box.set_expand_margin(side, 0)
-		box.set_content_margin(side, padding)
-	box.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
-	box.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
-	return box
