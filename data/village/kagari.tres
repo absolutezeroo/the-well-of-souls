@@ -21,6 +21,14 @@
 [ext_resource type="Resource" path="res://data/village/wanderer.tres" id="wanderer"]
 
 [ext_resource type="Resource" path="res://data/village/clock.tres" id="clock"]
+[ext_resource type="Script" path="res://src/definitions/village/village_animal_def.gd" id="animal_script"]
+[ext_resource type="Texture2D" path="res://assets/props/flag_red.png" id="flag_red"]
+[ext_resource type="Texture2D" path="res://assets/props/flag_blue.png" id="flag_blue"]
+[ext_resource type="Texture2D" path="res://assets/props/swaying_flower.png" id="swaying_flower"]
+[ext_resource type="Texture2D" path="res://assets/characters/animals/hen_white.png" id="hen_white_art"]
+[ext_resource type="Texture2D" path="res://assets/characters/animals/hen_brown.png" id="hen_brown_art"]
+[ext_resource type="Texture2D" path="res://assets/characters/animals/cat.png" id="cat_art"]
+[ext_resource type="Texture2D" path="res://assets/characters/animals/dog.png" id="dog_art"]
 
 [ext_resource type="Resource" path="res://data/village/atmosphere.tres" id="atmosphere"]
 
@@ -371,10 +379,12 @@ region = Rect2(0, 176, 16, 16)
 
 [sub_resource type="Resource" id="deco_18"]
 script = ExtResource("prop_script")
-texture = ExtResource("nature")
+texture = ExtResource("swaying_flower")
 position = Vector2(1104, 748)
 art_scale = 2.0
-region = Rect2(96, 176, 16, 16)
+region = Rect2(0, 0, 16, 16)
+frames = 4
+frame_time = 0.2
 
 [sub_resource type="Resource" id="deco_19"]
 script = ExtResource("prop_script")
@@ -385,10 +395,12 @@ region = Rect2(48, 176, 16, 16)
 
 [sub_resource type="Resource" id="deco_20"]
 script = ExtResource("prop_script")
-texture = ExtResource("nature")
+texture = ExtResource("swaying_flower")
 position = Vector2(1176, 740)
 art_scale = 2.0
-region = Rect2(96, 176, 16, 16)
+region = Rect2(0, 0, 16, 16)
+frames = 4
+frame_time = 0.2
 
 [sub_resource type="Resource" id="deco_21"]
 script = ExtResource("prop_script")
@@ -524,6 +536,93 @@ position = Vector2(720, 432)
 art_scale = 2.0
 region = Rect2(0, 80, 48, 32)
 
+[sub_resource type="Resource" id="temple_flag_left"]
+script = ExtResource("prop_script")
+texture = ExtResource("flag_red")
+position = Vector2(632, 320)
+art_scale = 2.0
+region = Rect2(0, 0, 16, 16)
+frames = 4
+frame_time = 0.12
+
+[sub_resource type="Resource" id="temple_flag_right"]
+script = ExtResource("prop_script")
+texture = ExtResource("flag_red")
+position = Vector2(864, 320)
+art_scale = 2.0
+region = Rect2(0, 0, 16, 16)
+frames = 4
+frame_time = 0.12
+
+[sub_resource type="Resource" id="market_flag"]
+script = ExtResource("prop_script")
+texture = ExtResource("flag_blue")
+position = Vector2(356, 690)
+art_scale = 2.0
+region = Rect2(0, 0, 16, 16)
+frames = 4
+frame_time = 0.12
+
+[sub_resource type="Resource" id="hen_white"]
+script = ExtResource("animal_script")
+id = &"hen_white"
+texture = ExtResource("hen_white_art")
+home = Vector2(588, 748)
+roam = Vector2(48, 32)
+idle_frames = Array[Rect2]([Rect2(0, 0, 16, 16), Rect2(0, 0, 16, 16), Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16)])
+walk_frames = Array[Rect2]([Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16)])
+idle_frame_time = 0.4
+walk_frame_time = 0.15
+walk_speed = 22.0
+pause = Vector2(1.5, 5)
+wakes_at = 6.0
+sleeps_at = 20.0
+
+[sub_resource type="Resource" id="hen_brown"]
+script = ExtResource("animal_script")
+id = &"hen_brown"
+texture = ExtResource("hen_brown_art")
+home = Vector2(628, 792)
+roam = Vector2(48, 32)
+idle_frames = Array[Rect2]([Rect2(0, 0, 16, 16), Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16), Rect2(0, 0, 16, 16), Rect2(0, 0, 16, 16)])
+walk_frames = Array[Rect2]([Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16)])
+idle_frame_time = 0.4
+walk_frame_time = 0.15
+walk_speed = 20.0
+pause = Vector2(2, 6)
+wakes_at = 6.0
+sleeps_at = 20.0
+
+[sub_resource type="Resource" id="market_cat"]
+script = ExtResource("animal_script")
+id = &"market_cat"
+texture = ExtResource("cat_art")
+home = Vector2(360, 716)
+roam = Vector2(40, 28)
+idle_frames = Array[Rect2]([Rect2(0, 0, 16, 16)])
+walk_frames = Array[Rect2]([Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16)])
+idle_frame_time = 0.6
+walk_frame_time = 0.15
+walk_speed = 26.0
+pause = Vector2(4, 10)
+wakes_at = 0.0
+sleeps_at = 0.0
+
+[sub_resource type="Resource" id="woodcutter_dog"]
+script = ExtResource("animal_script")
+id = &"woodcutter_dog"
+texture = ExtResource("dog_art")
+home = Vector2(1028, 842)
+roam = Vector2(36, 14)
+idle_frames = Array[Rect2]([Rect2(0, 0, 16, 16)])
+walk_frames = Array[Rect2]([Rect2(0, 0, 16, 16), Rect2(16, 0, 16, 16)])
+idle_frame_time = 0.6
+walk_frame_time = 0.15
+walk_speed = 24.0
+pause = Vector2(3, 9)
+wakes_at = 7.0
+sleeps_at = 19.0
+
 [resource]
 script = ExtResource("script")
 atmosphere = ExtResource("atmosphere")
@@ -557,4 +656,5 @@ decor_chance = 0.18
 quests = [ExtResource("quest"), ExtResource("sayo_quest")]
 services = [ExtResource("market"), ExtResource("memorial")]
 residents = [ExtResource("keeper"), ExtResource("sayo"), ExtResource("ren"), ExtResource("wanderer")]
-props = [SubResource("prop_0"), SubResource("prop_1"), SubResource("prop_2"), SubResource("prop_3"), SubResource("prop_4"), SubResource("prop_5"), SubResource("prop_6"), SubResource("prop_7"), SubResource("prop_8"), SubResource("prop_9"), SubResource("prop_10"), SubResource("prop_11"), SubResource("prop_12"), SubResource("prop_13"), SubResource("prop_14"), SubResource("prop_15"), SubResource("prop_16"), SubResource("prop_17"), SubResource("prop_18"), SubResource("prop_19"), SubResource("west_roots_0"), SubResource("west_roots_1"), SubResource("west_roots_2"), SubResource("west_roots_3"), SubResource("deco_0"), SubResource("deco_1"), SubResource("deco_2"), SubResource("deco_3"), SubResource("deco_4"), SubResource("deco_5"), SubResource("deco_6"), SubResource("deco_7"), SubResource("deco_8"), SubResource("deco_9"), SubResource("deco_10"), SubResource("deco_11"), SubResource("deco_12"), SubResource("deco_13"), SubResource("deco_14"), SubResource("deco_15"), SubResource("deco_16"), SubResource("deco_17"), SubResource("deco_18"), SubResource("deco_19"), SubResource("deco_20"), SubResource("deco_21"), SubResource("deco_22"), SubResource("deco_23"), SubResource("deco_24"), SubResource("deco_25"), SubResource("deco_26"), SubResource("deco_27"), SubResource("deco_28"), SubResource("deco_29"), SubResource("deco_30"), SubResource("deco_31"), SubResource("deco_32"), SubResource("deco_33"), SubResource("deco_34"), SubResource("deco_35"), SubResource("deco_36"), SubResource("deco_37"), SubResource("deco_38")]
+props = [SubResource("prop_0"), SubResource("prop_1"), SubResource("prop_2"), SubResource("prop_3"), SubResource("prop_4"), SubResource("prop_5"), SubResource("prop_6"), SubResource("prop_7"), SubResource("prop_8"), SubResource("prop_9"), SubResource("prop_10"), SubResource("prop_11"), SubResource("prop_12"), SubResource("prop_13"), SubResource("prop_14"), SubResource("prop_15"), SubResource("prop_16"), SubResource("prop_17"), SubResource("prop_18"), SubResource("prop_19"), SubResource("west_roots_0"), SubResource("west_roots_1"), SubResource("west_roots_2"), SubResource("west_roots_3"), SubResource("deco_0"), SubResource("deco_1"), SubResource("deco_2"), SubResource("deco_3"), SubResource("deco_4"), SubResource("deco_5"), SubResource("deco_6"), SubResource("deco_7"), SubResource("deco_8"), SubResource("deco_9"), SubResource("deco_10"), SubResource("deco_11"), SubResource("deco_12"), SubResource("deco_13"), SubResource("deco_14"), SubResource("deco_15"), SubResource("deco_16"), SubResource("deco_17"), SubResource("deco_18"), SubResource("deco_19"), SubResource("deco_20"), SubResource("deco_21"), SubResource("deco_22"), SubResource("deco_23"), SubResource("deco_24"), SubResource("deco_25"), SubResource("deco_26"), SubResource("deco_27"), SubResource("deco_28"), SubResource("deco_29"), SubResource("deco_30"), SubResource("deco_31"), SubResource("deco_32"), SubResource("deco_33"), SubResource("deco_34"), SubResource("deco_35"), SubResource("deco_36"), SubResource("deco_37"), SubResource("deco_38"), SubResource("temple_flag_left"), SubResource("temple_flag_right"), SubResource("market_flag")]
+animals = Array[ExtResource("animal_script")]([SubResource("hen_white"), SubResource("hen_brown"), SubResource("market_cat"), SubResource("woodcutter_dog")])

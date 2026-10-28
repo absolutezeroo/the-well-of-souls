@@ -68,6 +68,8 @@ func _test_layout_rules() -> void:
 				places["%s: %s" % [resident.id, activity.display_name]] = activity.destination
 	for room in VILLAGE.interiors:
 		places["the door of %s" % room.id] = room.door
+	for animal in VILLAGE.animals:
+		places["the place of %s" % animal.id] = animal.home
 	var unreachable: Array[String] = []
 	for place in places:
 		if places[place].distance_to(VILLAGE.spawn) > VillageNavigation.CELL and navigation.path(VILLAGE.spawn, places[place]).is_empty():
@@ -135,6 +137,28 @@ func _test_layout_rules() -> void:
 		for prop in room.props:
 			if not is_equal_approx(prop.art_scale, roundf(prop.art_scale)):
 				odd_scales.append("%s prop %s" % [room.id, prop.region])
+	# Animation is the pack's own frames, stepped whole (docs/art-bible.md "Grid and scale").
+	var bad_frames: Array[String] = []
+	for prop in all_props:
+		if prop.frames <= 1:
+			continue
+		var strip := Rect2(prop.region.position, Vector2(prop.region.size.x * prop.frames, prop.region.size.y))
+		if prop.frame_time <= 0.0 or not prop.region.has_area() or not Rect2(Vector2.ZERO, prop.texture.get_size()).encloses(strip):
+			bad_frames.append("%s at %s" % [prop.texture.resource_path, prop.position])
+	var strays: Array[String] = []
+	for animal in VILLAGE.animals:
+		var sheet := Rect2(Vector2.ZERO, animal.texture.get_size()) if animal.texture else Rect2()
+		var frames := animal.idle_frames + animal.walk_frames
+		if animal.idle_frames.is_empty() or animal.walk_frames.is_empty() or frames.any(func(frame: Rect2) -> bool: return not sheet.encloses(frame)):
+			bad_frames.append(String(animal.id))
+		if not is_equal_approx(animal.art_scale, roundf(animal.art_scale)) or animal.art_scale < 1.0:
+			odd_scales.append(String(animal.id))
+		# Its place stays in the clearing and near its owner: a wandering box of a few tiles.
+		var place := Rect2(animal.home - animal.roam, animal.roam * 2.0)
+		if not VILLAGE.bounds.encloses(place) or animal.roam.x > 3 * VillageGround.CELL or animal.roam.y > 3 * VillageGround.CELL:
+			strays.append(String(animal.id))
+	check(bad_frames.is_empty(), "animated props and animals step the pack's whole frames, inside their sheet (%s)" % [bad_frames])
+	check(strays.is_empty(), "every animal keeps a small place in the clearing, near its owner (%s; docs/design/village.md \"Animals\")" % [strays])
 	check(odd_scales.is_empty(), "pack art is drawn at whole scales only, never stretched to fit (%s)" % [odd_scales])
 	check(_neutral_light(VILLAGE.ground_tint), "the ground is never darkened or coloured by a tint: grass turns to mud (%s; docs/art-bible.md \"Mood\")" % VILLAGE.ground_tint)
 
@@ -373,6 +397,7 @@ func run_title() -> void:
 	await _test_temple(hub)
 	await _test_framing(hub)
 	_test_untinted_well(hub)
+	await _test_animals(hub)
 	var sleeper := hub.view.actor_for(VILLAGE.residents[2])
 	var sleeper_position := sleeper.position
 	await _frames(300)
@@ -416,7 +441,7 @@ func run_title() -> void:
 	var roots := 0
 	for prop in VILLAGE.props:
 		if prop.cleared_by == VILLAGE.quests[0]: roots += 1
-	check(roots > 0 and hub.view.dressing.get_child_count() == VILLAGE.props.size() - roots + VILLAGE.residents.size() + 5, "returning the quest removes its root props and their collisions")
+	check(roots > 0 and hub.view.dressing.get_child_count() == VILLAGE.props.size() - roots + VILLAGE.residents.size() + VILLAGE.animals.size() + 5, "returning the quest removes its root props and their collisions")
 	var first_count := hub.view.dressing.get_child_count()
 	hub.panel.hide()
 	check(hub.leave_room(), "the temple returns the existing hero to its exterior doorway")
@@ -574,6 +599,51 @@ func _test_framing(hub: VillageHub) -> void:
 	await _frames(3)
 	check(hub.walker.camera.zoom.is_equal_approx(Vector2.ONE * PixelGrid.camera_zoom(VillageWalker.SURFACE_ZOOM)), "the framing follows the window back")
 	hub.walker.position = VILLAGE.spawn
+
+
+## Kagari's animals keep their places: they wander by day inside them, stand still under a
+## modal like the residents, and go home outside their hours (docs/design/village.md "Animals").
+func _test_animals(hub: VillageHub) -> void:
+	var animals := hub.view.animals
+	check(not VILLAGE.animals.is_empty() and animals.size() == VILLAGE.animals.size(), "Kagari's hens, cat and dog live in the village")
+	var start := PackedVector2Array()
+	for animal in animals:
+		start.append(animal.position)
+	await _frames(660)
+	var moved := false
+	var strayed: Array[String] = []
+	for i in animals.size():
+		moved = moved or animals[i].position.distance_to(start[i]) > 4.0
+		var place := Rect2(animals[i].def.home - animals[i].def.roam, animals[i].def.roam * 2.0).grow(VillageNavigation.CELL)
+		if not place.has_point(animals[i].position):
+			strayed.append(String(animals[i].def.id))
+	check(moved, "an animal walks about its place by day")
+	check(strayed.is_empty(), "animals keep to their place (strayed: %s)" % [strayed])
+	hub.open_well()
+	await _frames(2)
+	start.clear()
+	for animal in animals:
+		start.append(animal.position)
+	await _frames(90)
+	var still := true
+	for i in animals.size():
+		still = still and animals[i].position == start[i] and animals[i].paused
+	check(still, "an open village window stops the animals with the residents")
+	hub.panel.hide()
+	# Night, on the animals alone: the hub's clock would bring the morning back every minute.
+	hub.set_physics_process(false)
+	for animal in animals:
+		animal.paused = false
+		animal.apply_hour(22.0)
+	await _frames(480)
+	var away: Array[String] = []
+	for animal in animals:
+		if not animal.def.awake_at(22.0) and (animal.awake or animal.position.distance_to(animal.def.home) > 3.0):
+			away.append(String(animal.def.id))
+	check(away.is_empty(), "outside its hours an animal goes home and stays there (not home: %s)" % [away])
+	for animal in animals:
+		animal.apply_hour(VillageClock.hour(VILLAGE.clock))
+	hub.set_physics_process(true)
 
 
 ## Decision 0009: the Well is drawn in the pack's colours (its grey stone is a recoloured piece,

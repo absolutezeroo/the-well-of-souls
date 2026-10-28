@@ -313,6 +313,11 @@ is saved. Optional questions and quest choices express the player's intent; the 
 unvoiced. Sayo's teal hair and clothing palette distinguish her from the Veilleuse's silver and
 bell-rope red while reusing the existing figure and portrait art.
 
+The Well took Kagari's people, not its beasts. The hens still scratch in the vegetable rows of a
+cottage whose gardener sleeps, the market cat keeps the Wanderer's stall, and the woodcutter's
+dog waits at a door that does not open. They are only animals: they neither speak nor know
+anything of the moonless night, and their patience is the village's, not a sign.
+
 The Old Wanderer can cross the Well's rim as he crosses its floors. At the surface he
 barters work for souls that are released into Kagari's lamps, never eaten or imprisoned:
 he sells the lighting of the market and the memorial court, once each. These services

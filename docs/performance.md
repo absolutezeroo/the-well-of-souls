@@ -11,7 +11,10 @@ The 16-pixel surface navigation grid (60 × 40 cells) rebuilds on profile refres
 Paths allocate only on appointment/obstacle changes. Clock text, world tint and appointment
 selection update once per fictional minute (about 0.67 seconds), not every frame; the frame
 loop only advances a scalar and checks the minute. The noticeboard is a static draw. There are
-no per-NPC timers, wall-clock polls or dungeon navigation work for these routines.
+no per-NPC timers, wall-clock polls or dungeon navigation work for these routines. The four
+animals follow the same rules: a path only for a new walk (every few seconds), their frame regions
+changed at the authored rate, no `move_and_slide()` while they stand. An animated prop (a flag, a
+swaying flower) sets its sprite's region only when its frame changes, and only on screen.
 
 The game must hold 60 frames a second on a phone (the target is a Samsung S23 Ultra, on the
 Compatibility renderer) in a crowded fight, and lay a floor without a long freeze. GDScript is

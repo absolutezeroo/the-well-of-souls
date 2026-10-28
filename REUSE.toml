@@ -52,3 +52,9 @@ path = ["assets/props/well.png"]
 SPDX-FileCopyrightText = "Pixel-boy and AAA (Ninja Adventure asset pack, https://pixel-boy.itch.io/ninja-adventure-asset-pack)"
 SPDX-License-Identifier = "CC0-1.0"
 SPDX-FileComment = "Kagari's Well: the well of Backgrounds/Tilesets/TilesetDesert.png at (0, 48, 32, 32), recoloured colour for colour onto the grey stone ramp of TilesetHouse's grey statues (bd7959>46402e, c69469>56634d, d2b37d>5f7160, ecd5ad>8d977f, f2eaf1>afc29f), so it needs no tint (decision 0009)."
+
+[[annotations]]
+path = ["assets/props/flag_red.png", "assets/props/flag_blue.png", "assets/props/swaying_flower.png", "assets/characters/animals/**"]
+SPDX-FileCopyrightText = "Pixel-boy and AAA (Ninja Adventure asset pack, https://pixel-boy.itch.io/ninja-adventure-asset-pack)"
+SPDX-License-Identifier = "CC0-1.0"
+SPDX-FileComment = "Kagari's ambient life, pack sheets copied unchanged: Backgrounds/Animated/Flag/FlagRed16x16.png and FlagBlue16x16.png (flags), Backgrounds/Animated/Plant/SpriteSheet16x16.png (swaying_flower), Actor/Animal/Chicken/SpriteSheetWhite.png and SpriteSheetBrown.png (hen_white, hen_brown), Actor/Animal/Cat/SpriteSheet.png (cat), Actor/Animal/Dog/SpriteSheet.png (dog)."

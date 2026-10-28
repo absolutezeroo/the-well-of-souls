@@ -234,12 +234,39 @@ laid out in width, not height.
   lamp is the pack's empty stone lantern (`VillagePropDef.unlit`, TilesetDungeon), the Well is
   the pack's well recoloured onto the grey stone of the pack's grey statues (`assets/props/well.png`).
 
-**Checked** by `VillageTests._test_layout_rules` (unit.village): every service, home, appointment
-and door walkable from the spawn; no solid prop on a road (paths 3 tiles wide or less) or
+- **Animated decor and animals are props too**: an owner, no tint, whole scales, even positions;
+  an animal's home lies within about 3 tiles of its owner and it wanders a box of at most 3 tiles
+  each way around it ("Ambient life" below).
+
+**Checked** by `VillageTests._test_layout_rules` (unit.village): every service, home, appointment,
+animal's place and door walkable from the spawn; animated props and animals stepping the pack's
+whole frames inside their sheets; every animal's place inside the clearing and small; no solid prop on a road (paths 3 tiles wide or less) or
 crowding a door, home or the spawn; a path at each interior door; whole art scales; the ground
 and room floors never tinted; no prop tinted, every prop on even units, unlit lamps on their own
 piece (and `title.village`: the Well untinted). The rest is checked by looking: `python3 tools/design/capture.py`
 (the `village_map` shot shows the whole square).
+
+## Ambient life
+
+Kagari's people sleep; its flags, flowers and beasts do not. Small, cheap movements make the
+square read as a place that waits, not a picture:
+
+- **Animated decor** is the pack's own frames (`Backgrounds/Animated`), stepped whole by
+  `VillagePropDef.frames` and `frame_time` like any prop: two red flags at the temple's front
+  corners, the Wanderer's blue pennant at his stall (the blue of his shutters in the Sandchoked
+  City), and the two white flowers laid before the Keepers' statues swaying. Neighbouring flags
+  start at a phase taken from their position, so they never wave in step. `VillagePropView` sets
+  a frame's region only when the frame changes, and only on screen.
+- **Animals** (`VillageAnimalDef` in `VillageDef.animals`, drawn by `VillageAnimal`): two hens in
+  the cottage's vegetable rows, the market cat by the Wanderer's stall, the woodcutter's dog
+  waiting at his hut's door. Each belongs to a place as a prop to its owner: a home, and a box
+  around it (`roam`) where it wanders. It waits a few seconds (`pause`), walks to a spot of its box
+  on the village navigation, around the static collisions, and waits again. Outside its hours
+  (`wakes_at`/`sleeps_at`: the hens 6 to 20, the dog 7 to 19, the cat at all hours) it walks home
+  and stays. Animals have no conversation and do not block the hero, as residents do not; they
+  stand still while a village window is open and survive profile refreshes. Each draws from its
+  own seeded generator, never the dungeon's dice. `title.village` checks them wandering inside
+  their place, stopping under a window and going home at night.
 
 ## The temple interior
 

@@ -50,6 +50,8 @@ Which pack sheet each project atlas is (byte-identical unless said):
 | `assets/tiles/nature.png`, `ruins.png` | `Backgrounds/Tilesets/TilesetNature.png`, `TilesetVillageAbandoned.png` (same layout, retouched for the game) |
 | `assets/tiles/furniture.png` | the pack's interior furniture (barrels, crates, sacks, washing line, hay), from an earlier version of the pack |
 | water pools, `assets/tiles/ceiling/*` | drawn for the game from the biome tilesets, on the world palette |
+| `assets/props/flag_red.png`, `flag_blue.png`, `swaying_flower.png` | `Backgrounds/Animated/Flag/FlagRed16x16.png`, `FlagBlue16x16.png`, `Backgrounds/Animated/Plant/SpriteSheet16x16.png` (4 frames each, stepped by `VillagePropDef.frames`) |
+| `assets/characters/animals/hen_white.png`, `hen_brown.png`, `cat.png`, `dog.png` | `Actor/Animal/Chicken/SpriteSheetWhite.png`, `SpriteSheetBrown.png`, `Actor/Animal/Cat/SpriteSheet.png`, `Actor/Animal/Dog/SpriteSheet.png` (2 frames, facing right) |
 | `assets/props/well.png` | `Backgrounds/Tilesets/TilesetDesert.png`, the well at (0, 48), recoloured colour for colour onto the grey stone of TilesetHouse's grey statues (the pack's own sand-to-grey twins) |
 | `assets/characters/**`, `assets/items/**`, `assets/weapons/**` | `Actor/`, `Items/` (most unchanged; hero wear, runes, fragments and new bosses drawn for the game on the pack's colours) |
 

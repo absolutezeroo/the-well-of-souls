@@ -40,3 +40,5 @@ extends Resource
 @export var quests: Array[VillageQuestDef] = []
 @export var services: Array[VillageServiceDef] = []
 @export var props: Array[VillagePropDef] = []
+## The hens, cat and dog that still keep their places while Kagari's people sleep.
+@export var animals: Array[VillageAnimalDef] = []

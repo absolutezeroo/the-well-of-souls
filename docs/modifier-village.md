@@ -35,6 +35,7 @@ concernés avec Git. L’outil n’est pas un éditeur de sauvegardes de joueurs
 | `Well`, `Spawn`, `Noticeboard`, `Memorial` | Puits, arrivée du héros, tableau de quêtes, statue. |
 | `Path_XX` | Début d’une zone pavée ; sa taille reste inchangée. |
 | `Home_nom` | Position d’origine/écho d’un habitant. |
+| `Animal_nom` | Place d’un animal (poules, chat, chien) : il y dort et se promène dans le cadre bleu autour. Garde-la à moins de 3 tuiles de son propriétaire (potager, étal, cabane). |
 | `nom_08h_…` | Destination d’une activité à cette heure. Chaque horaire reste indépendant. |
 | `temple_door`, `temple_return_position` | Entrée extérieure et endroit où ressort le héros. |
 | `temple_spawn`, `temple_exit`, `temple_shrine` | Arrivée, sortie et sanctuaire dans la salle. |
@@ -58,6 +59,12 @@ Ouvre les `.tres` dans l’inspecteur, enregistre-les, puis recharge l’aperçu
   renseigne `Texture`, `Region`, `Position`, `Art Scale` et `Collision`. La position est au
   milieu du bas du sprite ; la collision est locale. Ne duplique pas une référence partagée
   pour créer un nouvel objet : utilise **Rendre unique** ou une nouvelle ressource.
+- **Décors animés :** un `VillagePropDef` dont `Frames` vaut plus de 1 joue les images du pack
+  posées côte à côte à partir de `Region` (drapeaux, fleur qui se balance), une toutes les
+  `Frame Time` secondes. Copie la feuille du pack telle quelle (dossier `Backgrounds/Animated`).
+- **Animaux :** `Animals` dans `kagari.tres` (`VillageAnimalDef`) : feuille du pack
+  (`Actor/Animal`), `Home`, `Roam` (demi-taille du cadre de promenade, 3 tuiles au plus),
+  `Idle Frames`/`Walk Frames`, vitesse, pauses et heures de veille (`Wakes At`, `Sleeps At`).
 - **Sols/chemins :** `Ground`, `Ground Region`, `Paths`, `Path Texture` et `Path Region`.
   L’aperçu déplace les chemins ; leurs dimensions se règlent dans `Paths`.
 - **Temple :** `data/village/temple.tres`, avec `Tiles`, `Props`, `Walls`, `Walk Bounds`,

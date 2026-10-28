@@ -7,6 +7,8 @@ var content: ContentDB
 var dressing := Node2D.new()
 var walker: VillageWalker
 var residents: Array[VillageResident] = []
+## Made once, like the residents: a purchase or a profile refresh never teleports a hen.
+var animals: Array[VillageAnimal] = []
 var _resident_by_def: Dictionary[VillageResidentDef, VillageResident] = {}
 var navigation := VillageNavigation.new()
 var daylight := CanvasModulate.new()
@@ -34,7 +36,7 @@ func refresh() -> void:
 	navigation.rebuild(def)
 	_keep_clear = _clear_spots()
 	for child in dressing.get_children():
-		if child != walker and not child is VillageResident:
+		if child != walker and not child is VillageResident and not child is VillageAnimal:
 			dressing.remove_child(child)
 			child.queue_free()
 	for prop in def.props:
@@ -61,6 +63,15 @@ func refresh() -> void:
 		actor.apply_hour(VillageClock.hour(def.clock), true)
 		residents.append(actor)
 		_resident_by_def[resident] = actor
+	if animals.is_empty():
+		for animal_def in def.animals:
+			var animal := VillageAnimal.new()
+			animal.def = animal_def
+			animal.navigation = navigation
+			animal.position = animal_def.home
+			dressing.add_child(animal)
+			animal.apply_hour(VillageClock.hour(def.clock))
+			animals.append(animal)
 	var memorial := VillageMemorial.new()
 	memorial.content = content
 	memorial.snapshot = Profile.village_memorials[0] if not Profile.village_memorials.is_empty() else {}
@@ -87,6 +98,8 @@ func apply_hour(hour: float) -> void:
 	daylight.color = active_room.light if active_room else def.clock.daylight.sample(hour / 24.0)
 	for resident in residents:
 		resident.apply_hour(hour)
+	for animal in animals:
+		animal.apply_hour(hour)
 
 
 func actor_for(resident: VillageResidentDef) -> VillageResident:

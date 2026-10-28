@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 434,
+  "next_id": 435,
   "tags": [
     "pc",
     "test",
@@ -5649,7 +5649,7 @@
       "title": "Étendre les quêtes et les fronts d’infestation de Kagari",
       "description": "Suite de contenu à concevoir après le playtest de la première quête : autres habitants à réveiller, plusieurs fronts visuels de racines et conséquences selon les quêtes, dialogues réactifs, services marchands supplémentaires et décors dédiés. Garder les ressources modulaires et le cœur roguelike. Le premier lot implémenté est statique jusqu’à la remise de quête ; ni simulation de propagation autonome ni économie d’équipement du village ne sont livrées. Deuxième lot réalisé par task_379/380 : Sayo, second front, questions et routines. Restent d’autres quêtes, habitants, services et décors dédiés ; aucune propagation autonome livrée.",
       "priority": "medium",
-      "status": "backlog",
+      "status": "in_progress",
       "epic_id": "epic_7",
       "tags": [
         "idée",
@@ -5659,7 +5659,7 @@
         "économie"
       ],
       "created_at": 1793032681,
-      "updated_at": 1793038992,
+      "updated_at": 1793186003,
       "due_date": null
     },
     {
@@ -5758,7 +5758,7 @@
       "id": "task_383",
       "title": "Construire les vraies maisons habitées de Kagari avec un pack résidentiel",
       "description": "Le pack Craftpix du temple a été reçu et intégré : façade, salle jouable, sanctuaire des compétences intérieur et horaires des PNJ (voir task_384). Ce pack ne contient pas de maisons de village. En attente d’assets résidentiels : remplacer les façades provisoires, assembler les vrais intérieurs et relier portes, travail et repos aux horaires. Réutiliser VillageInteriorDef et les transitions/navigation du temple. Kagari est un village dont les âmes sont aspirées par le puits, pas une suite de ruines ; conserver mobile, sauvegardes et boucle roguelike.\n\nNote : les maisons habitées doivent venir du pack Ninja Adventure complet (TilesetHouse), pas d'un autre pack, pour garder un seul style.\n\n27/10 : le pack complet est maintenant disponible (assets/tiles/house.png = TilesetHouse) ; les maisons visibles sont posées, il reste à les rendre habitables (intérieurs).",
-      "status": "todo",
+      "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_1",
       "tags": [
@@ -5770,7 +5770,7 @@
         "tests"
       ],
       "created_at": 1793039913,
-      "updated_at": 1793118468,
+      "updated_at": 1793186003,
       "due_date": null
     },
     {
@@ -6544,6 +6544,23 @@
       ],
       "created_at": 1793170158,
       "updated_at": 1793170158
+    },
+    {
+      "id": "task_434",
+      "title": "Faire vivre Kagari : drapeaux, fleurs animées et animaux",
+      "description": "Fait (28/10, agent Kagari) : décors animés du pack (Backgrounds/Animated, images copiées telles quelles) posés comme des accessoires avec propriétaire — deux drapeaux rouges aux coins avant du temple, le fanion bleu du Vieil Errant à son étal (le bleu de ses volets dans la Cité ensablée), les deux fleurs blanches posées devant les statues du mémorial qui se balancent. Quatre animaux (Actor/Animal) qui gardent leur place : deux poules dans le potager de la chaumière, le chat du marché près de l'étal, le chien du bûcheron qui attend devant la cabane. Ils attendent, marchent vers un point de leur petit cadre (3 tuiles au plus) par la navigation du village, rentrent chez eux hors de leurs heures (poules 6-20 h, chien 7-19 h, chat jamais), s'arrêtent quand une fenêtre est ouverte, ne bloquent pas le héros. Choix : rien d'eau (pas de point d'eau dans le plan, pas de moulin ni de nénuphars inventés), animaux au pas ×2 du pack (les poules sont grandes, c'est le style du pack). Coût : une région de sprite changée seulement au changement d'image et à l'écran ; un chemin par promenade (toutes les quelques secondes) ; aucun dé du donjon. Tests : unit.village (images entières dans leur feuille, place de chaque animal atteignable et petite), title.village (promenade dans leur place, arrêt sous une fenêtre, retour à la maison la nuit). Captures : /tmp/claude-0/-home-claude/d124b88d-9642-5f48-896d-092820964a06/scratchpad/fix_kagari/ambient/ (village, village_map ×3 résolutions, zoom, gris).\n\nÀ vérifier sur le S23 : cadence des drapeaux et des fleurs (calme ?), taille des poules à côté du héros, que les animaux ne gênent jamais le passage, fluidité. Non vérifié : sensation sur appareil ; la revue art-reviewer n'a pas pu être lancée depuis cet agent (auto-revue faite contre docs/art-bible.md).",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_3",
+      "due_date": null,
+      "tags": [
+        "visuel",
+        "pnj",
+        "perf",
+        "tests"
+      ],
+      "created_at": 1793186003,
+      "updated_at": 1793186003
     }
   ]
 }

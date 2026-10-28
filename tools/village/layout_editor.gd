@@ -42,6 +42,11 @@ func rebuild() -> void:
 		for i in resident.schedule.size():
 			var activity := resident.schedule[i]
 			_point(activity, &"destination", "%s_%02dh_%d" % [resident.id, activity.start_hour, i], activity.room.offset if activity.room else Vector2.ZERO)
+	for animal in village.animals:
+		var home := _point(animal, &"home", "Animal_" + String(animal.id))
+		home.area = Rect2(-animal.roam, animal.roam * 2.0)
+		var frame := animal.idle_frames[0] if not animal.idle_frames.is_empty() else Rect2(0, 0, 16, 16)
+		_sprite(home, animal.texture, frame, animal.art_scale, Vector2(0, -frame.size.y * animal.art_scale * 0.5))
 	for room in village.interiors:
 		for field: StringName in [&"door", &"return_position"]:
 			_point(room, field, String(room.id) + "_" + String(field))

@@ -14,3 +14,8 @@ extends Resource
 ## What a lamp shows until `lit_by` is restored: the pack's own unlit piece (never the lit one
 ## darkened by a multiply: decision 0009).
 @export var unlit: Texture2D
+## The pack's pre-drawn frames, laid side by side from `region` (Backgrounds/Animated: a flag in
+## the wind, a swaying flower). 1 is a still prop. Stepped one whole frame at a time, never
+## scaled, rotated or tweened (docs/art-bible.md "Grid and scale").
+@export_range(1, 16) var frames: int = 1
+@export var frame_time: float = 0.15

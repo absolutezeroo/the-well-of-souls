@@ -187,6 +187,8 @@ func _physics_process(delta: float) -> void:
 	for resident in view.residents:
 		resident.paused = blocked
 		resident.hero = walker
+	for animal in view.animals:
+		animal.paused = blocked
 	if blocked != _blocked:
 		_blocked = blocked
 		_device_changed()
