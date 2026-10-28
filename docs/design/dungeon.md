@@ -161,7 +161,9 @@ playing on the S23.
   one has a free spot by its walls, else to a calm room on the way.
 - **Room to move around pillars**: nothing standing (a scene's furniture, a lamp, a crate, a
   chest) within 2 cells of a shaped room's pillar (`FloorPopulator.PILLAR_CLEARANCE`), so no
-  one-cell squeeze between them; the monsters may stand there.
+  one-cell squeeze between them; the monsters may stand there. A signature room's own scenes
+  (the Throne Hall's throne and rubble, made around its columns) are the exception: they always
+  find their place (`FloorDresser.dress()`, `kept_clear`).
 
 Measured on 960 generated floors (`tools/levels/floor_probe.tscn` and `floor_report.py`: the four
 difficulties, every floor of the run, 20 seeds; the 640 normal floors counted), before and after

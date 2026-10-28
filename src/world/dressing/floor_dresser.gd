@@ -19,7 +19,10 @@ static var _nudges: Array[Vector2] = []
 
 
 ## `taken`: cells already used (see HazardDef). `with_scenes`: false in a boss arena.
-static func dress(world: World, taken: Dictionary, with_scenes: bool = true) -> void:
+## `kept_clear`: cells of `taken` kept free only to leave room around the pillars
+## (FloorPopulator.PILLAR_CLEARANCE): a room shape's own scenes (a signature room's throne and
+## rubble, made around its columns) may stand there, nothing else.
+static func dress(world: World, taken: Dictionary, with_scenes: bool = true, kept_clear: Dictionary = {}) -> void:
 	var biome := world.biome
 	if biome == null:
 		return
@@ -29,7 +32,7 @@ static func dress(world: World, taken: Dictionary, with_scenes: bool = true) -> 
 			_lay_ground(world, layer, walls)
 	var standing := {}  # cells of what the scenes put up
 	if with_scenes:
-		_place_scenes(world, biome, taken, standing)
+		_place_scenes(world, biome, taken, standing, kept_clear)
 	for rule in biome.decor:
 		if rule and not rule.pieces.is_empty():
 			_scatter(world, rule, walls, standing)
@@ -129,7 +132,7 @@ static func _lay_ground(world: World, layer: GroundLayerDef, walls: Dictionary) 
 	world.spawn_vfx(view)
 
 
-static func _place_scenes(world: World, biome: BiomeDef, taken: Dictionary, standing: Dictionary) -> void:
+static func _place_scenes(world: World, biome: BiomeDef, taken: Dictionary, standing: Dictionary, kept_clear: Dictionary = {}) -> void:
 	if biome.scenes.is_empty():
 		return
 	var map := world.map
@@ -147,10 +150,21 @@ static func _place_scenes(world: World, biome: BiomeDef, taken: Dictionary, stan
 		# only its own (it is that place, nothing else).
 		var shape := map.plan(i).shape
 		if shape:
+			# (The room around its own pillars is the shape's to dress: kept clear for the others.)
+			var opened: Array[Vector2i] = []
+			if not shape.scenes.is_empty() and not kept_clear.is_empty():
+				for y in range(room.position.y, room.end.y):
+					for x in range(room.position.x, room.end.x):
+						var cell := Vector2i(x, y)
+						if kept_clear.has(cell) and taken.has(cell):
+							taken.erase(cell)
+							opened.append(cell)
 			for scene in shape.scenes:
 				if scene and scene.try_place(world, room, taken, rng, standing):
 					placed[scene] = placed.get(scene, 0) + 1
 					wanted -= 1
+			for cell in opened:
+				taken[cell] = true
 			if shape.set_piece:
 				wanted = 0
 		var tries := wanted * 4

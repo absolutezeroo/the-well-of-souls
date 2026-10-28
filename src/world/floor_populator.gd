@@ -27,7 +27,8 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 		taken[cell] = true
 	# Two free cells between a pillar and the furniture and lamps the dressing stands along the walls:
 	# no one-cell squeeze (crates and chests keep clear by near_pillar()). Given back once they
-	# stand: a trial's souls, an encounter, the monsters only need their own room.
+	# stand: a trial's souls, an encounter, the monsters only need their own room. A signature
+	# room's own scenes are drawn around its pillars: they ignore it (FloorDresser.dress()).
 	var pillar_clearance := {}
 	for cell: Vector2i in map.pillars:
 		for dy in range(-PILLAR_CLEARANCE, PILLAR_CLEARANCE + 1):
@@ -109,7 +110,7 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 			forced[i] = true
 	pacing.plan_breathers(config.max_fights_in_a_row, calm, forced)
 	# The biome's grounds, scenes and decor, before anything else claims the rooms.
-	FloorDresser.dress(world, taken)
+	FloorDresser.dress(world, taken, true, pillar_clearance)
 	for i in map.rooms.size():
 		if i != merchant_index and i != forge_index:
 			place_lights(world, config, map.rooms[i], taken)
