@@ -97,6 +97,7 @@ func _facts(world: World, depth: int, difficulty: int, s: int) -> Dictionary:
 		"w": map.width, "h": map.height,
 		"tiles": rows,
 		"rooms": rooms,
+		"ents": ents,
 		"start": [map.start_cell.x, map.start_cell.y],
 		"stairs": [map.stairs_cell.x, map.stairs_cell.y],
 		"stairs2": [map.second_stairs_cell.x, map.second_stairs_cell.y],

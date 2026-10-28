@@ -12,9 +12,9 @@ hold more, a side room fewer); an elite or a big body (radius 14+) counts 2 (`to
 floor's cap counts the same way (`max_monsters_per_floor` 130, was 110 bodies: about 100 bodies).
 Calm rooms on the way (`max_fights_in_a_row` 3) hold none. `room_cells` was set so a floor holds
 what it did: measured on the same 960 floors (`tools/levels/floor_report.py`, 20 seeds, every
-floor, the four difficulties), monsters a floor 47 / 65 / 86 / 97 before, 49 / 68 / 91 / 97 after
+floor, the four difficulties), monsters a floor 47 / 65 / 86 / 97 before, 49 / 68 / 90 / 97 after
 (Pilgrim / Keeper / Martyr / Nightmare), elites and big bodies counted twice 55 / 80 / 108 / 125
-before, 57 / 84 / 113 / 123 after: the same fight, spread by size (r(open cells, monsters) 0.02 ->
+before, 57 / 83 / 113 / 123 after: the same fight, spread by size (r(open cells, monsters) 0.02 ->
 0.64). The seal (70% of the floor's monsters) follows. The balance tools' room (`BalanceLab.
 room_size()`) is a room of `room_cells` cells: what a room held before, except the deepest rooms on
 Normal and up, now one monster more where the old cap of 6 cut them (model, `--mode=model`: same
@@ -33,9 +33,9 @@ better 5.7% on floor 1, 10% around floor 5, 15% around floor 9), the share of Ra
 38 / 34 / 29. Kept gentle on purpose: it cuts the long droughts, not the odds.
 
 **A heal before every boss**: the Spring of the Last Vigil heals whole in the boss floor's first
-room on every difficulty (Pilgrim already healed 30% on each new floor). Boss fights now start at
-full Health whoever drinks: the bosses' tuning assumed so on the expected builds (the arena starts
-the hero full), so the measures don't move; in play it forgives a hard last floor before a boss.
+room on every difficulty (Pilgrim already healed 25% on each new floor). The balance tools' boss
+fights already start from a set Health (`BalanceArena`), so their measures don't move; in play a
+hero who drinks meets the boss whole, whatever the floor before cost him.
 
 Open: the floor's real length (3-6 min on the phone, telemetry `floor_times`), the density and the
 calm rooms' share to tune by playing (roadmap).

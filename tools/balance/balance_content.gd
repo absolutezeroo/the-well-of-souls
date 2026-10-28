@@ -237,6 +237,10 @@ static func of_type(folder: String, type: Variant) -> Array:
 ## bottom of the Well's and the hidden floor's bosses and monsters count as listed.
 static func unlisted(content: ContentDB) -> PackedStringArray:
 	var result := PackedStringArray()
+	# The spring before every boss is the dungeon's own (DungeonConfig.boss_spring), never drawn.
+	var encounters: Array = content.encounters.duplicate()
+	if content.dungeon.boss_spring:
+		encounters.append(content.dungeon.boss_spring)
 	var checks := [
 		["perks", scan_all(FOLDERS.perks), content.perks],
 		["runes", scan(FOLDERS.runes), content.runes],
@@ -244,7 +248,7 @@ static func unlisted(content: ContentDB) -> PackedStringArray:
 		["upgrades", scan(FOLDERS.upgrades), content.upgrades],
 		["elites", scan(FOLDERS.elites), content.elite_affixes],
 		["families", scan(FOLDERS.families), content.synergies],
-		["encounters", scan(FOLDERS.encounters), content.encounters],
+		["encounters", scan(FOLDERS.encounters), encounters],
 		["difficulties", scan(FOLDERS.difficulties), content.difficulties],
 	]
 	for check: Array in checks:

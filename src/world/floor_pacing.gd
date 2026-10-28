@@ -11,7 +11,7 @@ extends RefCounted
 ## is laid the same).
 
 ## The walk's neighbour order (right, left, down, up), as the level probe measures it
-## (tools/levels/floor_pacing_probe.py): the same shortest way when two are as short.
+## (tools/levels/floor_report.py): the same shortest way when two are as short.
 const WALK: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.LEFT, Vector2i.DOWN, Vector2i.UP]
 
 var map: DungeonMap

@@ -61,7 +61,8 @@ extends Resource
 ## least `tough_radius`) counts as `tough_cost` monsters.
 @export_range(1, 4) var tough_cost: int = 2
 @export var tough_radius: float = 14.0
-## The most monsters a floor starts with (the phone keeps up; rooms get fewer when over).
+## The most monsters a floor starts with, counted as the rooms' shares (a tough one counts
+## `tough_cost`): the phone keeps up; rooms get fewer when over.
 @export var max_monsters_per_floor: int = 110
 @export var items_per_floor: int = 4
 

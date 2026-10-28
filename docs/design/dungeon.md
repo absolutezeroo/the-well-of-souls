@@ -146,7 +146,7 @@ playing on the S23.
   monster takes more of the share: an elite (any rank) or a big body (radius 14 or more) counts
   `tough_cost` (2). The floor's cap (`max_monsters_per_floor`, 130) counts the same way. A small
   side room holds two or three, a great hall eight or nine; a floor as a whole holds about what it
-  did before (Pilgrim 47, Keeper 65, Martyr 86, Nightmare 97 on average).
+  did before (Pilgrim 47, Keeper 65, Martyr 86, Nightmare 97 on average; 49, 68, 90, 97 now).
 - **A breather after a few fights**: walking the shortest way from the start to each stairs, the
   hero never crosses more than `max_fights_in_a_row` (3) fight rooms in a row (an ambush and a
   pact door count as fights). The room that would make one too many is kept calm (no monsters, no
@@ -176,7 +176,8 @@ difficulties, every floor of the run, 20 seeds; the 640 normal floors counted), 
 | Ambush along the way; merchant and forge | 56%; 55% (median) | 68%; 85% |
 | Open spaces holding two rooms or more; p90 size | 30%; 64 cells | 22%; 51 cells |
 | Pillared rooms with a crate or lamp within 2 cells of a pillar | 930 of 1027 | 1 of 977 |
-| Monsters a floor, Pilgrim / Keeper / Martyr / Nightmare | 47 / 65 / 86 / 97 | 49 / 68 / 91 / 97 |
+| Monsters a floor, Pilgrim / Keeper / Martyr / Nightmare | 47 / 65 / 86 / 97 | 49 / 68 / 90 / 97 |
+| The seal asks for no more kills than the floor's monsters | (not measured) | 100% of floors |
 
 `tests/suites/pacing_tests.gd` holds these on fixed seeds: fights in a row, a chest on every floor,
 monsters by size (r >= 0.5), the peak and the release, merged spaces, pillars' room, the seal.
