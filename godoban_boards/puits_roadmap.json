@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 408,
+  "next_id": 416,
   "tags": [
     "pc",
     "test",
@@ -6081,7 +6081,7 @@
     {
       "id": "task_403",
       "title": "Donjon : un pixel d'art fait 4,5 pixels d'écran sur le S23 et en 1080p",
-      "description": "Trouvé par le calcul pendant la recherche : à 1080 lignes, l'interface est à x1,5 (PixelGrid) et la caméra du donjon à zoom 1,5 (player.tscn), donc 2 unités x 1,5 x 1,5 = 4,5 pixels d'écran par pixel d'art. Avec le filtre au plus proche, les colonnes alternent 4 et 5 pixels (légère déformation, scintillement au défilement). À 720, 1440 et 2160 lignes, c'est entier (3, 6, 9). Le village (zoom 2) donne 6, entier. L'intérieur du temple (zoom 1,5) a le même souci. Options : au pas x1,5 seulement, zoom 4/3 (4 px, cadrage ~12 % plus large) ou 5/3 (5 px, ~10 % plus serré). DÉCISION DU PROPRIÉTAIRE (cadrage du combat) : regarder d'abord une capture zoomée sur le S23. Aucun agent ne le change seul.",
+      "description": "Trouvé par le calcul pendant la recherche : à 1080 lignes, l'interface est à x1,5 (PixelGrid) et la caméra du donjon à zoom 1,5 (player.tscn), donc 2 unités x 1,5 x 1,5 = 4,5 pixels d'écran par pixel d'art. Avec le filtre au plus proche, les colonnes alternent 4 et 5 pixels (légère déformation, scintillement au défilement). À 720, 1440 et 2160 lignes, c'est entier (3, 6, 9). Le village (zoom 2) donne 6, entier. L'intérieur du temple (zoom 1,5) a le même souci. Options : au pas x1,5 seulement, zoom 4/3 (4 px, cadrage ~12 % plus large) ou 5/3 (5 px, ~10 % plus serré). DÉCISION DU PROPRIÉTAIRE (cadrage du combat) : regarder d'abord une capture zoomée sur le S23. Aucun agent ne le change seul.\n\nAudit du 28/10 : confirmé par mesure à 1920x1080 (plages de 4 px à 37 %, de 5 px à 38 %). Autres échelles fractionnaires du même ordre : élites agrandies à 1,15-1,45 (MonsterRankDef.scale), squash x1,25/x0,8 à chaque coup (actor_rig.gd:380), flamme des bougies 0,55, ailes du Wyrm ; plantes cisaillées et queue du Wyrm tournée librement. Doc fausse à corriger : vfx.md §1 et village.md annoncent 3 px d'écran.",
       "status": "todo",
       "priority": "high",
       "epic_id": "epic_3",
@@ -6092,7 +6092,7 @@
         "pc"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793159546
+      "updated_at": 1793161745
     },
     {
       "id": "task_404",
@@ -6128,7 +6128,7 @@
     {
       "id": "task_406",
       "title": "Contrat d'équité : plancher de télégraphe et budget de dégâts",
-      "description": "design/pillars.md propose (sans source publiée, à valider en jeu) : une préparation jamais sous 0,4 s (0,6-1,0 s pour les coups lourds et les boss), quelle que soit la difficulté ; en Gardien un coup ordinaire au plus 15-20 % des PV max, un coup de boss 25-30 %, toutes les attaques télégraphiées simultanées 50 %. DÉCISION DU PROPRIÉTAIRE : valider ou ajuster ces chiffres, puis les transformer en tests d'équilibrage.",
+      "description": "design/pillars.md propose (sans source publiée, à valider en jeu) : une préparation jamais sous 0,4 s (0,6-1,0 s pour les coups lourds et les boss), quelle que soit la difficulté ; en Gardien un coup ordinaire au plus 15-20 % des PV max, un coup de boss 25-30 %, toutes les attaques télégraphiées simultanées 50 %. DÉCISION DU PROPRIÉTAIRE : valider ou ajuster ces chiffres, puis les transformer en tests d'équilibrage.\n\nAudit du 28/10 : aucun plancher dans le code. En Gardien, 18 monstres sur 49 préparent en moins de 0,4 s (chauve-souris et ratons 0,2 s dès l'étage 1 ; défaut MonsterDef 0,35 s) ; les 14 boss passent sous 0,4 s en phase 3 (0,295 s au pire) ; 0,13 s en Cauchemar+10 ; « volley » n'a aucune préparation ; aucune attaque n'a de son de préparation ; l'anneau des ondes de choc s'efface avant le coup. Le budget de dégâts, lui, est tenu (pire coup ordinaire 13 %, pire coup de boss 18 % des PV du héros attendu).",
       "status": "todo",
       "priority": "medium",
       "epic_id": "epic_2",
@@ -6138,12 +6138,12 @@
         "combat"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793159546
+      "updated_at": 1793161745
     },
     {
       "id": "task_407",
       "title": "Tailles tactiles et texte sur téléphone selon la bible",
-      "description": "interface.md « One skin » fixe : boutons de combat avec une zone de toucher d'au moins 96x96 unités (~9 mm sur S23), tout élément tactile 64x64, 16 unités d'écart. Les recommandations Xbox donnent sur mobile un texte bien plus grand que la police BODY actuelle. Mesurer les boutons et le texte réels sur le S23, puis décider (taille d'interface par défaut sur téléphone ?).",
+      "description": "interface.md « One skin » fixe : boutons de combat avec une zone de toucher d'au moins 96x96 unités (~9 mm sur S23), tout élément tactile 64x64, 16 unités d'écart. Les recommandations Xbox donnent sur mobile un texte bien plus grand que la police BODY actuelle. Mesurer les boutons et le texte réels sur le S23, puis décider (taille d'interface par défaut sur téléphone ?).\n\nAudit du 28/10 (mesuré dans le moteur à 2340x1080) : compétences et esquive Ø 92 unités (8,3 mm) au lieu de 96 ; les 50 contrôles des options sous 64 unités ; écarts de 4 à 14 unités ; le curseur « Taille des boutons » à 0,7 passe sous tous les seuils et à 1,3 fait chevaucher « Prendre » et la compétence 4 ; zone sûre jamais lue (get_display_safe_area) ; texte courant à 32 % de la cible Xbox mobile, sans option pour l'agrandir ; bouton désactivé à 1,64:1 de contraste.",
       "status": "todo",
       "priority": "medium",
       "epic_id": "epic_4",
@@ -6153,7 +6153,126 @@
         "android"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793159546
+      "updated_at": 1793161745
+    },
+    {
+      "id": "task_408",
+      "title": "Teintes sur l'art du monde : donjon et racines de Kagari",
+      "description": "Audit du 28/10 : 10 thèmes de donjon sur 12 multiplient sols, murs et plateau au-delà du seuil de la bible (canaux ≥ 0,75, écart ≤ 0,12) via dungeon_view.gd:89-103 (Seuil 0,50 ; Fond du Puits 0,62 ; Ossuaire 0,68). L'étalonnage d'écran par biome (screen.gdshader) s'y ajoute. À Kagari, les racines du Puits sont des arbres du pack teintés en violet-noir (0,32 ; 0,2 ; 0,38) et le Puits est teinté. Proposé : thèmes en blanc et tilesets recolorés (recolor.py) ; étalonnage borné par un test sur AmbienceDef, avec les exceptions narratives (Lune de sang, Tréfonds, Seuil) consignées dans une décision (le propriétaire tranche la nuance de la règle) ; de vraies racines dessinées sur la palette.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_3",
+      "due_date": null,
+      "tags": [
+        "visuel"
+      ],
+      "created_at": 1793161745,
+      "updated_at": 1793161745
+    },
+    {
+      "id": "task_409",
+      "title": "Premières minutes : premier combat en moins de 30 s, premier contact protégé",
+      "description": "Audit du 28/10 : il faut 60 à 120 s avant le premier combat pour un joueur qui lit (titre, consentement, intro de 6 pages, Kagari, chercher la Veilleuse au temple, Puits, difficulté, descente, deux chargements). Immobile dans la salle de départ, le héros est repéré et touché dans 7 départs sur 33 (17-26 s). 42 % des premiers monstres sont rapides (rat, chauve-souris, serpent, préparation 0,2-0,3 s) ; les monstres lents demandent 6 à 10 coups. Proposé (décision du propriétaire sur le parcours) : au tout premier lancement, l'étage 1 directement après une page d'intro, Kagari et la Veilleuse au premier retour ; salle 0 protégée tant que le héros n'a pas bougé et attaqué ; un premier monstre lent posé dans la salle voisine.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "playtest",
+        "combat"
+      ],
+      "created_at": 1793161745,
+      "updated_at": 1793161745
+    },
+    {
+      "id": "task_410",
+      "title": "Rythme des étages : répits, monstres selon la surface, trésor garanti",
+      "description": "Audit du 28/10 (960 étages générés) : sur le trajet vers l'escalier, médiane de 4 salles de combat d'affilée (max 9, 55 % des étages au-delà de 3) ; 9 % seulement de salles sans monstre ; nombre de monstres sans lien avec la taille de la salle (corrélation 0,02, floor_populator.gd:156) ; 35 % des étages sans coffre, coffres en cul-de-sac 6 % ; 37 % des espaces ouverts fusionnés au-delà d'un écran (salles à 2 cases d'écart fusionnées par smooth()). Proposé : effectif selon la surface (1 monstre pour 25-35 cases, plafonné), une salle calme toutes les 2-3 sur le chemin, pic vers 60-80 % puis relâche, au moins un trésor, écart de 3 cases entre salles ; tests sur graines fixes. Durée réelle d'un étage à mesurer (télémétrie floor_times ; cible 3-6 min).",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "niveaux",
+        "équilibrage"
+      ],
+      "created_at": 1793161745,
+      "updated_at": 1793161745
+    },
+    {
+      "id": "task_411",
+      "title": "Sensations : tampon d'entrée, gel pendant un ralenti, vibrations, menaces hors écran",
+      "description": "Audit du 28/10 : tampon d'attaque 0,3 s (règle : 0,1-0,15 s), aucun tampon pour l'esquive et les compétences, décompte en temps de jeu (figé pendant un gel) ; HitStop.freeze gèle aussi pendant un ralenti ; un gel, un kick et une vibration par cible touchée ; le téléphone vibre à chaque coup ordinaire et aux pas des boss ; la vignette rouge de dégâts ignore l'option Flashs ; nombres de dégâts non fusionnés en foule ; aucune flèche pour une menace hors écran. Proposé : tampon unique de 0,12 s en temps réel, consommé à l'usage (core_tests.gd:34 à mettre à jour avec l'accord du propriétaire) ; garde « pas de gel pendant un ralenti » ; un retour par attaque ; vibration seulement pour blessure, critique et boss ; vignette derrière l'option ; flèche de bord.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "combat",
+        "android"
+      ],
+      "created_at": 1793161745,
+      "updated_at": 1793161745
+    },
+    {
+      "id": "task_412",
+      "title": "Chance et choix : pitié, soin avant boss, pas de répétition, rôles déclarés",
+      "description": "Audit du 28/10 : aucune protection contre la malchance sur la rareté (loot_roller.gd) ; pas de soin garanti avant un boss sauf en Pèlerin ; tirages avec remise pour événements, malédictions, rencontres, pactes et épreuves (voir task_277) ; aucun rôle (pilier ou « à construire ») déclaré sur les atouts et affixes, 0 affixe sur 22 relié à une famille (Brûlant et des Braises → Brasier, Gelé et Fracassant → Givre, Électrique → Orage, Vampirique → Sang, des Échos → Arcane). Décision du propriétaire : le sort des 4 atouts sans famille (Force, Précision, Fortune, Bannière de guerre).",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "équilibrage",
+        "économie"
+      ],
+      "created_at": 1793161745,
+      "updated_at": 1793161745
+    },
+    {
+      "id": "task_413",
+      "title": "Accessibilité de base : maintien, difficulté en partie, mode assisté, texte qui saute",
+      "description": "Audit du 28/10, niveau Basic des Game Accessibility Guidelines exigé par pillars.md : l'attaque chargée se fait seulement en maintenant (pas d'option bascule) ; difficulté non modifiable en partie (game.gd:274) ; pas de mode assisté façon Hades/Celeste ; les mots sautent de ligne pendant la frappe du dialogue (VC_CHARS_BEFORE_SHAPING, dialogue_box.gd:219, cinematic_view.gd:280) ; pas de réglage de vitesse du texte ; pas de bouton « Redescendre » sur l'écran de mort (Kagari obligatoire) ; indices de 3 lignes au lieu d'une et non relisibles (pas d'onglet Conseils au codex). Décisions du propriétaire : mode assisté, et si changer de difficulté en partie sort la partie des records.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "pc",
+        "android"
+      ],
+      "created_at": 1793161745,
+      "updated_at": 1793161745
+    },
+    {
+      "id": "task_414",
+      "title": "Performance prouvée sur le S23 : P99, pools, une création lourde par image",
+      "description": "Audit du 28/10 : aucune mesure sur le téléphone (voir task_98). Sur la VM : combat de 40 monstres, moyenne 5,75 ms, P95 11,9 ms, max 23,9 ms ; lancement jusqu'au titre 4,4-4,6 s en headless (cible < 5 s, à risque sur Android). Écarts dans le code : projectiles et nombres de dégâts non mis en pool ; defer_monsters et SummonEffect créent tout un lot dans la même image ; MenuNav._process alloue et scanne un groupe à chaque image ; Tutorial._check_world continue quand tous les indices sont vus ; perf_probe ne donne pas de P99.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "due_date": null,
+      "tags": [
+        "perf",
+        "android"
+      ],
+      "created_at": 1793161745,
+      "updated_at": 1793161745
+    },
+    {
+      "id": "task_415",
+      "title": "Corriger les erreurs de doc trouvées par l'audit",
+      "description": "vfx.md §1 et village.md disent « 3 pixels d'écran » par pixel d'art : faux à 1080 lignes (4,5 dans le donjon, 6 au village) ; dungeon.md a deux fois la section « Room trials » (l. 516-545 et 546-575) et dit « a couple of minutes » par étage (cible 3-6 min). Positions impaires à Kagari (temple 747, racine 1225, deux décors) ; alpha non binaire de cracks.png et spike_holes.png.",
+      "status": "todo",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "due_date": null,
+      "tags": [
+        "qualité"
+      ],
+      "created_at": 1793161745,
+      "updated_at": 1793161745
     }
   ]
 }
