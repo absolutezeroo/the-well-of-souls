@@ -157,8 +157,9 @@ func update_attack(delta: float, fresh: bool = true) -> void:
 	elif charge.state != AttackCharge.State.IDLE:
 		if charge.release() and charged and weapon:
 			player.unleash(weapon, charged)
-	if charge.is_charging() and _buffered == ATTACK_PRESS:
-		_buffered = NO_PRESS
+	if charge.is_charging():
+		if _buffered == ATTACK_PRESS:
+			_buffered = NO_PRESS  # (a press that started a charge never swings after it)
 		# Winding up toward the closest enemy; with none in sight, the way he walks.
 		var target := aim_target(player.tuning().skill_aim_range)
 		if target:

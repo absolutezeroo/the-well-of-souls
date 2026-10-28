@@ -196,6 +196,8 @@ func _test_tap_to_charge(game: Game) -> void:
 	await tap.call()
 	await _frames(4)
 	check(player.charge.is_charging() and not Input.is_action_pressed(&"attack"), "charge: with Tap to charge a double tap charges, the button up")
+	await _frames(30)
+	check(player.charge.is_charging() and player.controls.aim_hold > 0.0, "charge: while it charges he keeps facing his aim (the closest enemy)")
 	var filled: bool = await _until_full(player)
 	check(filled and unleashed[0] == 0, "charge: ...it fills by itself and waits")
 	await _frames(20)
