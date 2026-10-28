@@ -189,6 +189,8 @@ func run_unit() -> void:
 	_test_whole_art_pixels()
 	_test_skin_grid()
 	_test_round_buttons_whole()
+	_test_codex_whole()
+	_test_temple_framing()
 	await _test_menu_nav_unit()
 	_test_contrast()
 	_test_colour_cues()
@@ -547,6 +549,57 @@ func _test_round_buttons_whole() -> void:
 	var expected := PixelGridScript.whole_art_scale(144.0 / 32.0, PixelGrid.ui_scale()) * 16.0
 	check(art <= button.radius and is_equal_approx(art, expected), "round buttons: the attack button draws its sphere at that size on this canvas (%s in %s, expected %s)" % [art, button.radius, expected])
 	button.free()
+
+
+## The bestiary draws its monsters on whole screen pixels per art pixel (task 425, decision 0007):
+## a page's look (3.5 units a pixel wanted, a warden 2.2, less where the room is short) and the
+## attack preview's bodies on its scaled stage, rounded down at every canvas scale.
+func _test_codex_whole() -> void:
+	var wrong: Array[String] = []
+	for scale: float in [1.0, 1.5, 2.0, 2.5, 3.0]:
+		for art: Vector2 in [Vector2(16, 16), Vector2(24, 32), Vector2(32, 32), Vector2(48, 64), Vector2(96, 80)]:
+			for big in [false, true]:
+				var look := MonsterPage.look_scale_for(art, Vector2(320, 208), big, scale)
+				var wanted := minf(MonsterPage.BOSS_LOOK_SCALE if big else MonsterPage.MONSTER_LOOK_SCALE, minf(320.0 / art.x, 208.0 / art.y))
+				if absf(look * scale - roundf(look * scale)) > 0.001 or look > wanted + 0.001:
+					wrong.append("look %s at x%s: %s" % [art, scale, look])
+		for stage: float in [0.55, 0.8, 1.0]:
+			for body: float in [2.2, 3.0, 1.7]:
+				if stage * body * scale < 1.0:
+					continue  # (under one screen pixel a pixel: drawn as it fits, PixelGrid.whole_art_scale())
+				var drawn := AttackPreview.whole_body(stage, body, scale) * stage * scale
+				if absf(drawn - roundf(drawn)) > 0.001 or AttackPreview.whole_body(stage, body, scale) > body + 0.001:
+					wrong.append("preview %s on a stage x%s at x%s: %s" % [body, stage, scale, drawn])
+	check(wrong.is_empty(), "the bestiary's monsters on whole screen pixels per art pixel, never bigger than wanted (%s)" % [wrong.slice(0, 6)])
+	var page := MonsterPage.new()
+	add_child(page)
+	page.show_monster(load("res://data/monsters/bat.tres") as MonsterDef, CONTENT)
+	var looks := page.find_children("Look", "AnimatedSprite2D", true, false)
+	var sprite := looks[0] as AnimatedSprite2D if not looks.is_empty() else null
+	var art := MonsterPage.art_rect(sprite.sprite_frames, sprite.animation, sprite.offset) if sprite else Rect2()
+	var room := Vector2(MonsterPage.LEFT_WIDTH - 44, MonsterPage.LOOK_MAX_HEIGHT) - Vector2.ONE * MonsterPage.LOOK_PADDING * 2.0
+	check(sprite != null and is_equal_approx(sprite.scale.x, MonsterPage.look_scale_for(art.size, room, false, PixelGrid.ui_scale())), "a page's look is drawn at that scale (%s)" % [sprite.scale if sprite else Vector2.ZERO])
+	page.free()
+
+
+## The temple's view on wide screens (task 400): with its camera at a whole zoom (decision 0007)
+## the S23 sees 1170 units across a room of 960; whatever the screen up to 21:9, the view stays on
+## the room's own dark backdrop (its bounds), never on the village beside it, and that backdrop
+## never covers the village's ground.
+func _test_temple_framing() -> void:
+	var kagari := load("res://data/village/kagari.tres") as VillageDef
+	var outside: Array[String] = []
+	for room: VillageInteriorDef in kagari.interiors:
+		var backdrop := room.world_bounds()
+		if backdrop.intersects(kagari.bounds):
+			outside.append("%s's backdrop over the village" % room.id)
+		for size: Vector2i in [Vector2i(2340, 1080), Vector2i(2560, 1080), Vector2i(1920, 1080), Vector2i(3440, 1440), Vector2i(1280, 720), Vector2i(2400, 1080)]:
+			var fit := minf(size.x / 1280.0, size.y / 720.0)
+			var units := float(PixelGridScript.art_pixel_size(room.camera_zoom, fit)) / PixelGridScript.ART_PIXEL  # screen pixels per world unit
+			var seen := Rect2(room.offset + room.camera_center - Vector2(size) / units * 0.5, Vector2(size) / units)
+			if not backdrop.grow(0.5).encloses(seen):
+				outside.append("%s at %s: %s outside %s" % [room.id, size, seen, backdrop])
+	check(outside.is_empty(), "a room's view stays on its own backdrop on every common screen (%s)" % [outside])
 
 
 ## MenuNav on a little menu: first focus, moving, wrapping, tabs, a slider.

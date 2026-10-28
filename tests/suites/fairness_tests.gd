@@ -23,6 +23,8 @@ func run_game(game: Game) -> void:
 	await _test_threat_markers(game)
 	await _test_warning_sound(game)
 	await _test_tempo_kept(game)
+	await _test_later_marks(game)
+	await _test_lanes_stop_at_walls(game)
 
 
 # --- Unit ----------------------------------------------------------------------
@@ -398,6 +400,107 @@ func _test_tempo_kept(game: Game) -> void:
 	if is_instance_valid(rat):
 		rat.queue_free()
 	await _frames(5)
+
+
+## A later blow of a cast has its own mark from the cast's start until it lands (roadmap task
+## 416): the fierce Hailstorm's second burst, between the gaps of the first, shows its 16 lanes
+## turned half a gap, still there after the first burst flew, gone once it has. Every later blow
+## of a monster's skill that hurts gets one, except in a cast that carries its caster (a leap).
+func _test_later_marks(game: Game) -> void:
+	var player := game.player
+	var world := game.world
+	await _clear_monsters(world)
+	var skill := load("res://data/skills/boss/hailstorm_fierce.tres") as SkillDef
+	var caster := world.spawn_monster(load("res://data/monsters/rat.tres") as MonsterDef, world.find_open_point_near(player.global_position, 90.0))
+	await _frames(2)
+	caster.target = player
+	var list: Array[SkillDef] = [skill]
+	caster.skills.set_skills(list)
+	caster.casting_index = 0
+	(caster.get_node("StateMachine") as StateMachine).transition_to(&"Cast")
+	await _frames(2)
+	var marks := _later_marks(world)
+	check(marks.size() == 1 and marks[0].warned_effect() == skill.effects[1], "later marks: the fierce Hailstorm's second burst is marked from the cast's start (%d)" % marks.size())
+	var cast := caster.skill_cast_time(skill)
+	await _frames(roundi(cast * 60.0) + 6)  # the first burst flew
+	marks = _later_marks(world)
+	check(marks.size() == 1 and marks[0].view().visible, "later marks: ...still marked once the first burst flew, until it comes")
+	await _frames(roundi(skill.effects[1].delay * 60.0) + 6)
+	check(_later_marks(world).is_empty(), "later marks: ...and gone once it has")
+	var missing: Array[String] = []
+	for monster_def in _all_monster_defs():
+		for monster_skill in _skills_of(monster_def):
+			if monster_skill.effects.any(func(e: Effect) -> bool: return e != null and e.moves_caster()):
+				continue
+			for later in LaterMark.later_effects(monster_skill):
+				var view := TelegraphView.new()
+				if not later.show_warning(view, 0.0, 0.5, 10.0):
+					missing.append(String(monster_skill.id))
+				view.free()
+	check(missing.is_empty(), "later marks: every later blow of a monster's skill shows a warning of its own (%s)" % [missing])
+	if is_instance_valid(caster):
+		caster.queue_free()
+	await _frames(3)
+
+
+## The skills a monster or a boss may cast (its own and every phase's).
+func _skills_of(monster_def: MonsterDef) -> Array[SkillDef]:
+	var result: Array[SkillDef] = []
+	for skill in monster_def.skills:
+		if skill and not result.has(skill):
+			result.append(skill)
+	var boss := monster_def as BossDef
+	if boss:
+		for phase in boss.phases:
+			for skill in phase.skills:
+				if skill and not result.has(skill):
+					result.append(skill)
+	return result
+
+
+func _later_marks(world: World) -> Array[LaterMark]:
+	var result: Array[LaterMark] = []
+	for node in world.find_children("*", "LaterMark", true, false):
+		if not node.is_queued_for_deletion():
+			result.append(node as LaterMark)
+	return result
+
+
+## A shot's lane ends at the first wall in its way, as the shot does (roadmap task 419): a lane
+## pointed at a wall a few cells off is cut there, one into the open runs its whole reach.
+func _test_lanes_stop_at_walls(game: Game) -> void:
+	var world := game.world
+	var map := world.map
+	var from := Vector2.INF
+	var toward := Vector2.ZERO
+	var start := map.world_to_cell(game.player.global_position)
+	for radius in range(0, 30):
+		for y in range(start.y - radius, start.y + radius + 1):
+			for x in range(start.x - radius, start.x + radius + 1):
+				var cell := Vector2i(x, y)
+				if from != Vector2.INF or not world.is_free_cell(cell):
+					continue
+				for way: Vector2i in [Vector2i.RIGHT, Vector2i.LEFT, Vector2i.DOWN, Vector2i.UP]:
+					if world.is_free_cell(cell + way) and world.is_free_cell(cell + way * 2) and not map.is_floor(cell + way * 3) and not map.is_floor(cell + way * 4):
+						from = map.cell_to_world(cell)
+						toward = Vector2(way)
+						break
+	check(from != Vector2.INF, "lanes at walls: a spot three cells from a wall")
+	if from == Vector2.INF:
+		return
+	var view := TelegraphView.new()
+	view.clip_to_walls = true
+	world.add_child(view)
+	view.global_position = from
+	var wall := view.lane_reaches(400.0, toward.angle(), 1, 0.0)
+	var back := view.lane_reaches(400.0, (-toward).angle(), 16, 360.0)
+	var cell_size := map.cell_to_world(Vector2i(1, 0)).x - map.cell_to_world(Vector2i.ZERO).x
+	check(wall.size() == 1 and wall[0] < cell_size * 3.6 and wall[0] > cell_size * 1.4, "lanes at walls: a lane toward a wall 3 cells off ends there (%s, a cell %s)" % [wall, cell_size])
+	var reaches := Array(back)
+	var cut := reaches.filter(func(reach: float) -> bool: return reach < 399.0).size()
+	check(back.size() == 16 and cut >= 1 and reaches.max() - reaches.min() > cell_size, "lanes at walls: a ring's lanes are cut one by one, each at its own wall (%d of 16 cut: %s)" % [cut, back])
+	view.queue_free()
+	await _frames(1)
 
 
 # --- Helpers --------------------------------------------------------------------

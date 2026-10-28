@@ -422,9 +422,11 @@ func fall(pit: PitDef) -> void:
 	var into := world.map.cell_to_world(world.map.world_to_cell(global_position))
 	_fall_tween = create_tween().set_parallel()
 	_fall_tween.tween_property(self, "global_position", global_position.lerp(into, 0.6), FALL_TIME)
-	if rig:
-		_fall_tween.tween_property(rig, "scale", Vector2.ZERO, FALL_TIME).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		_fall_tween.tween_property(rig, "rotation", TAU * 0.75, FALL_TIME)
+	if rig and rig.look:
+		# Drawn down into the dark on its own pixels (an implosion in the shadow's ramp), never
+		# shrunk nor spun (decision 0007; it was until 28 Oct 2026).
+		rig.look.vanish(DeathLookDef.Style.IMPLODE, VfxElementDef.named(&"shadow"))
+		_fall_tween.tween_method(rig.look.set_vanishing, 0.0, 1.0, FALL_TIME).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	_fall_tween.chain().tween_callback(_on_fell.bind(pit))
 	queue_redraw()
 
@@ -444,9 +446,8 @@ func cancel_fall() -> void:
 func _recover_from_fall() -> void:
 	is_falling = false
 	_fall_tween = null
-	if rig:
-		rig.scale = Vector2.ONE
-		rig.rotation = 0.0
+	if rig and rig.look:
+		rig.look.come_back()
 	queue_redraw()
 
 

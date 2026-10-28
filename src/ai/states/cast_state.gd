@@ -27,6 +27,7 @@ func enter() -> void:
 		actor.rig.play_cast(_aim, _cast_time, skill.cast_animation)
 	if skill.hurts():
 		Sfx.play_warning(actor.global_position)  # the pose, the mark on the ground, and a sound
+		LaterMark.mark_later_blows(actor, skill, _aim.angle(), _cast_time)  # its later blows' own marks
 
 
 func exit() -> void:

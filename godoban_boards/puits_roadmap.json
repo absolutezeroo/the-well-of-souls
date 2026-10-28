@@ -6037,8 +6037,8 @@
     {
       "id": "task_400",
       "title": "Temple de Kagari : bandes sombres sur écran large (S23)",
-      "description": "Vu en capture 2340×1080 (toile 1560×720) : à zoom 1,5 la vue fait 1040 unités de large pour une salle de 960 ; des bandes sombres (et un liseré de l’extérieur à gauche) apparaissent de chaque côté. Choisir : salle plus large, zoom calculé pour remplir la largeur, ou bandes assumées. À vérifier sur le téléphone.\n\n28/10 : avec le zoom entier (décision 0007), le temple est dessiné à 4 px par pixel d'art sur le S23 au lieu de 4,5 : la vue fait 1170 unités de large pour la salle de 960, les bandes sombres sur les côtés sont donc un peu plus larges (capture temple_2340x1080 de l'agent art). Le choix reste à faire (salle plus large, ou bandes assumées) ; zoomer pour remplir la largeur reviendrait à un zoom non entier.",
-      "status": "backlog",
+      "description": "Vu en capture 2340×1080 (toile 1560×720) : à zoom 1,5 la vue fait 1040 unités de large pour une salle de 960 ; des bandes sombres (et un liseré de l’extérieur à gauche) apparaissent de chaque côté. Choisir : salle plus large, zoom calculé pour remplir la largeur, ou bandes assumées. À vérifier sur le téléphone.\n\n28/10 : avec le zoom entier (décision 0007), le temple est dessiné à 4 px par pixel d'art sur le S23 au lieu de 4,5 : la vue fait 1170 unités de large pour la salle de 960, les bandes sombres sur les côtés sont donc un peu plus larges (capture temple_2340x1080 de l'agent art). Le choix reste à faire (salle plus large, ou bandes assumées) ; zoomer pour remplir la largeur reviendrait à un zoom non entier.\n\n28/10 (agent polish) : fait (petit, champ de cadrage seul). Les bounds du temple (son fond sombre et les limites de la caméra) vont de -160 à 1120 (1280 unités) : la vue du S23 (1170) et d'un 21:9 1080p (1280) reste sur le fond du temple, plus de bandes rougeâtres ni de bord du village, et ce fond ne recouvre pas Kagari (qui finit à 1440 = 1600 - 160). Les côtés restent sombres (comme au-dessus et en dessous de la salle) : élargir la salle elle-même serait un choix de mise en page (agent Kagari / propriétaire). Test : PcTests._test_temple_framing. Capture temple avant/après.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_3",
       "tags": [
@@ -6047,7 +6047,7 @@
         "playtest"
       ],
       "created_at": 1793076826,
-      "updated_at": 1793163670,
+      "updated_at": 1793191680,
       "due_date": null
     },
     {
@@ -6277,8 +6277,8 @@
     {
       "id": "task_416",
       "title": "Anneaux « féroces » : la seconde vague n'a pas sa propre marque",
-      "description": "Les versions féroces des anneaux de tirs (hailstorm_fierce, toxic_bloom_fierce, fire_ring_fierce, wailing_ring_fierce, coin_storm_fierce...) tirent une seconde vague 0,45 s après la première, décalée d'un demi-écart : elle tombe dans les trous que montrait la marque et n'a pas de marque à elle (TelegraphView ne montre que le premier effet d'une compétence). Proposé : montrer les couloirs de la seconde vague dès que la première part (ou les deux pendant l'incantation), et la compter dans le test unit.fairness.",
-      "status": "todo",
+      "description": "Les versions féroces des anneaux de tirs (hailstorm_fierce, toxic_bloom_fierce, fire_ring_fierce, wailing_ring_fierce, coin_storm_fierce...) tirent une seconde vague 0,45 s après la première, décalée d'un demi-écart : elle tombe dans les trous que montrait la marque et n'a pas de marque à elle (TelegraphView ne montre que le premier effet d'une compétence). Proposé : montrer les couloirs de la seconde vague dès que la première part (ou les deux pendant l'incantation), et la compter dans le test unit.fairness.\n\n28/10 (agent polish) : fait. Chaque coup plus tardif d'un sort de monstre (un effet avec un délai : la 2e salve des anneaux féroces entre les trous de la 1re, le 2e Arc de flammes, une 2e volée) a sa propre marque (LaterMark) dès le début de l'incantation jusqu'à l'impact : pendant l'incantation les deux salves se voient (plus de trou sûr près du lanceur, c'est la vérité), puis seule la 2e reste. Pas encore pour un sort qui déplace le lanceur (sauts : task_436). Tests : game.fairness (later marks). Captures : hail_cast/hail_second avant/après. À vérifier sur le S23 : lisible, pas trop chargé ?",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6287,7 +6287,7 @@
         "vfx"
       ],
       "created_at": 1793165202,
-      "updated_at": 1793165202
+      "updated_at": 1793191680
     },
     {
       "id": "task_417",
@@ -6322,8 +6322,8 @@
     {
       "id": "task_419",
       "title": "Couloirs de tirs dessinés à travers les murs",
-      "description": "Les marques de tirs vont maintenant jusqu'au bout de la portée (décision 0008) ; un mur arrête le tir mais pas sa marque. À voir sur le S23 si cela gêne ; sinon couper le couloir au premier mur (un rayon par couloir au début de la préparation).",
-      "status": "backlog",
+      "description": "Les marques de tirs vont maintenant jusqu'au bout de la portée (décision 0008) ; un mur arrête le tir mais pas sa marque. À voir sur le S23 si cela gêne ; sinon couper le couloir au premier mur (un rayon par couloir au début de la préparation).\n\n28/10 (agent polish) : fait. Les couloirs de tirs s'arrêtent au premier mur (un rayon par couloir au début de la préparation, recalculé seulement si le lanceur ou sa visée bouge ; le shader coupe chaque couloir à sa longueur). Test : game.fairness (lanes at walls). Capture hail_cast avant/après : avant les couloirs traversaient les murs. À vérifier sur le S23.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6332,7 +6332,7 @@
         "combat"
       ],
       "created_at": 1793165202,
-      "updated_at": 1793165202
+      "updated_at": 1793191680
     },
     {
       "id": "task_420",
@@ -6397,8 +6397,8 @@
     },
     {
       "title": "Chute, Seuil, corps avalé : disparitions en fondu dithéré au lieu d'un rétrécissement",
-      "description": "Reste de la décision 0007 (agent art, 28/10) : trois transitions rétrécissent encore l'art du pack et le font disparaître en alpha : la chute dans un trou (Actor, échelle vers 0 et rotation en 0,5 s), l'âme du héros qui s'enfonce au Seuil (Threshold._sink_soul, échelle 0,7 x 0,25) et le corps avalé par un boss qui se relève (BossArena, échelle 0,5). Écrites comme exceptions dans docs/vfx.md §1. Mieux : une disparition dithérée par le shader du corps (BodyLook, comme les morts) ou des images dessinées.",
-      "status": "backlog",
+      "description": "Reste de la décision 0007 (agent art, 28/10) : trois transitions rétrécissent encore l'art du pack et le font disparaître en alpha : la chute dans un trou (Actor, échelle vers 0 et rotation en 0,5 s), l'âme du héros qui s'enfonce au Seuil (Threshold._sink_soul, échelle 0,7 x 0,25) et le corps avalé par un boss qui se relève (BossArena, échelle 0,5). Écrites comme exceptions dans docs/vfx.md §1. Mieux : une disparition dithérée par le shader du corps (BodyLook, comme les morts) ou des images dessinées.\n\n28/10 (agent polish) : fait. Plus de rétrécissement ni de fondu en alpha : la chute dans un trou et le corps avalé par un boss qui se relève implosent en un point sombre (style IMPLODE du shader du corps, rampe de l'ombre), l'âme au Seuil vacille et s'efface en dithering (WISP, rampe de l'esprit), cinq pixels d'art plus bas par pas entiers. BodyLook.vanish/come_back. Exception retirée de docs/vfx.md. Tests : game.boss_fight, game.finale, game.perks. Captures fall_a/fall_b avant/après. À vérifier sur le S23 : le héros devient violet en tombant : lisible comme une chute ?",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_3",
       "tags": [
@@ -6408,12 +6408,12 @@
       "id": "task_424",
       "due_date": null,
       "created_at": 1793165896,
-      "updated_at": 1793165896
+      "updated_at": 1793191680
     },
     {
       "title": "Codex : aperçus des monstres à échelle fractionnaire",
-      "description": "Trouvé par l'agent art en appliquant la décision 0007 (28/10), hors de son périmètre (interface) : la page d'un monstre du codex le dessine à min(échelle voulue, place disponible) (monster_page.gd:230, look_scale quelconque) et l'aperçu d'attaque met la scène à size.x / 260 et un boss à 2,2 (attack_preview.gd:110-115) : pixels de deux tailles dans le codex. Arrondir à un pas entier vers le bas (comme PixelGrid.camera_zoom) et ajouter le cas au test « whole scales ».",
-      "status": "backlog",
+      "description": "Trouvé par l'agent art en appliquant la décision 0007 (28/10), hors de son périmètre (interface) : la page d'un monstre du codex le dessine à min(échelle voulue, place disponible) (monster_page.gd:230, look_scale quelconque) et l'aperçu d'attaque met la scène à size.x / 260 et un boss à 2,2 (attack_preview.gd:110-115) : pixels de deux tailles dans le codex. Arrondir à un pas entier vers le bas (comme PixelGrid.camera_zoom) et ajouter le cas au test « whole scales ».\n\n28/10 (agent polish) : fait. Le codex dessine ses monstres en pixels d'écran entiers par pixel d'art, arrondis vers le bas (MonsterPage.look_scale_for, AttackPreview.whole_body ; PixelGrid.whole_art_scale). Mesuré à 2340x1080 : aperçu de la page avant 5/6 px, après 5 ; aperçu d'attaque avant 4/5, après 4. Test : PcTests._test_codex_whole. À vérifier sur le S23 : monstres un peu plus petits par endroits, nets.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_3",
       "tags": [
@@ -6423,7 +6423,7 @@
       "id": "task_425",
       "due_date": null,
       "created_at": 1793168315,
-      "updated_at": 1793168315
+      "updated_at": 1793191680
     },
     {
       "id": "task_426",

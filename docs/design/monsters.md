@@ -109,9 +109,15 @@ rhythm its phase multipliers give it. Harder modes and late phases keep their pr
 numbers and tempo; only the warning is longer. `game.fairness` ("tempo kept").
 
 The mark covers the real area and lasts until the hit: a shot's lane is drawn as far as it flies
-and as wide as the shot (`TelegraphView.show_shots()`; a ranged monster's shot too), a ring of
-shots (Hailstorm, Toxic Bloom, Sandstorm) by its lanes, not a small circle; a blast's mark
-(`FuseMark`) fills up for its whole fuse and follows a boss that moves. The bestiary's preview
+and as wide as the shot (`TelegraphView.show_shots()`; a ranged monster's shot too), **cut at the
+first wall** in its way as the shot is (`TelegraphView.clip_to_walls`: a ray per lane when the
+wind-up starts, again only if the caster or its aim moves), a ring of shots (Hailstorm, Toxic
+Bloom, Sandstorm) by its lanes, not a small circle; a blast's mark (`FuseMark`) fills up for its
+whole fuse and follows a boss that moves. A cast's **later blows** (an effect with a `delay`: a
+fierce ring's second burst between the first one's gaps, the second fierce Flame Arc, a second
+volley) get their own mark from the cast's start until they land (`LaterMark`), so the gaps that
+will be filled read as filled; not yet for a cast that carries its caster (a leap's second leg
+and landing: roadmap), whose later blows land where the body will be. The bestiary's preview
 plays the same wind-up. An awake monster winding up off screen, or an enemy shot flying in from
 off screen, gets an arrow at the screen's edge (`ThreatMarkers`, the HUD). `unit.fairness` walks
 every MonsterDef and BossDef x difficulty (Nightmare at its last ascension too) x phase.

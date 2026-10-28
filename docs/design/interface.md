@@ -543,10 +543,12 @@ Numbers to hold (sources in [the art bible](../art-bible.md)'s research report):
   over each other keep their pixels in step; where a piece stretches, the rows and columns it
   repeats are alike (the ribbon's middle, the plaque's), so nothing is drawn at an uneven size.
   The UI's own pictures follow the cameras' rule (`PixelGrid.art_scale()`): the HUD's round
-  buttons and the joystick draw their 32-pixel spheres, and slots their icons, as big as their
-  room allows with each art pixel on a whole number of screen pixels, rounded down (the attack's
-  sphere 128 units across on a phone, its touch circle still 144). **Checked**:
-  `PcTests._test_skin_grid()`, `_test_round_buttons_whole()`.
+  buttons and the joystick draw their 32-pixel spheres, slots their icons and the bestiary its
+  monsters (a page's look, the attack preview's bodies: `MonsterPage.look_scale_for()`,
+  `AttackPreview.whole_body()`), as big as their room allows with each art pixel on a whole
+  number of screen pixels, rounded down (the attack's sphere 128 units across on a phone, its
+  touch circle still 144). **Checked**:
+  `PcTests._test_skin_grid()`, `_test_round_buttons_whole()`, `_test_codex_whole()`.
 
 Before calling a screen done: captures at 2340x1080, 1920x1080 and 1280x720
 (`tools/design/capture.py`), in French and English; the same border, ribbon and insets as the

@@ -37,11 +37,13 @@ An effect whose pixels are smaller
   rows of their art (rows left out), its tail turns by quarter turns only; a plant leans by
   moving each row of its art by whole pixels (`DecorLayer.row_shift`), never a skew; a body
   without death frames falls over by a quarter turn in one step. Checked by `unit.vfx`
-  ("whole scales"). **Exceptions**, transitions of half a second or less where the body leaves
-  the world and the pack has no frames for it: a fall into a hole (`Actor`, shrinks and spins
-  away), the hero's soul sinking at the Threshold (`Threshold._sink_soul`), a body drawn into a
-  risen boss's mouth (`BossArena`). They also fade by alpha; redrawing them as dithered
-  dissolves is on the roadmap.
+  ("whole scales"). A body that leaves the world without dying is taken away by the body
+  shader on its own art pixels, never shrunk, spun nor faded by alpha (`BodyLook.vanish()`, a
+  death's style without the death): a fall into a hole and a body drawn into a risen boss's
+  mouth implode into one dark point in the shadow's ramp (`Actor.fall`, `BossArena`), the hero's
+  soul sinking at the Threshold wavers and thins away in the spirit's (`Threshold._sink_soul`,
+  five art pixels lower by whole pixels). Checked by `game.boss_fight`, `game.finale`,
+  `game.perks` (the body's scale stays its own while it goes).
 - **A melee blow is drawn in the body's four directions.** Bodies, armor and the weapon in hand
   exist facing down, up, left and right only, so everything drawn for a melee blow (its arc or
   streak, a smash, a claw or bite sheet, the crescents and slams of charged blows and blade

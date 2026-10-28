@@ -8,6 +8,8 @@ extends Control
 
 ## The stage is drawn at this many screen pixels per world pixel, at most.
 const MAX_SCALE := 1.0
+## (Its static helpers: on the script, not the autoload.)
+const PixelGridScript := preload("res://src/autoload/pixel_grid.gd")
 ## World pixels between the monster and the stand-in hero.
 const GAP := 330.0
 const LOOP := 3.0
@@ -123,10 +125,19 @@ func _layout() -> void:
 		var lowest := world_size.y - margin - art.end.y * body
 		_home.y = minf(maxf(_home.y, margin - art.position.y * body), maxf(lowest, _home.y))
 		_target = _home + Vector2(GAP, 0)
-	_sprite.scale = Vector2.ONE * body
-	_hero.scale = Vector2.ONE * 3.0
+	_sprite.scale = Vector2.ONE * whole_body(scale_factor, body, PixelGrid.ui_scale())
+	_hero.scale = Vector2.ONE * whole_body(scale_factor, 3.0, PixelGrid.ui_scale())
 	_hero.position = _target
 	_restart()
+
+
+## A body's scale on the stage (itself scaled `stage`): at most `body`, in stage units per art pixel,
+## rounded down so that each art pixel covers a whole number of screen pixels on a canvas scaled
+## `ui_scale` (decision 0007, task 425: the stage at size.x / 590 made them fractional).
+static func whole_body(stage: float, body: float, ui_scale: float) -> float:
+	if stage <= 0.0:
+		return body
+	return PixelGridScript.whole_art_scale(stage * body, ui_scale) / stage
 
 
 func _restart() -> void:

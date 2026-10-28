@@ -84,6 +84,10 @@ func telegraph_kind() -> Telegraph:
 	return Telegraph.DIVE
 
 
+func moves_caster() -> bool:
+	return moves
+
+
 func ai_reach() -> float:
 	return distance
 

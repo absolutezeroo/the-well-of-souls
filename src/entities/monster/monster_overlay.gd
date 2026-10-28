@@ -37,6 +37,7 @@ static func create(host: Monster, overlay_layer: Layer) -> MonsterOverlay:
 		VfxLayer.apply(overlay, VfxLayer.Layer.GROUND)
 		overlay._telegraph = TelegraphView.new()  # on the floor, lit by its own light
 		overlay._telegraph.add_light()
+		overlay._telegraph.clip_to_walls = true  # a shot's lane ends at the wall that stops it
 		overlay.add_child(overlay._telegraph)
 	return overlay
 
