@@ -94,6 +94,12 @@ and `rare_ranks`, rarest first, each with its own chance from its depth, times t
 | **Legendary** (from depth 5) | 3 | - / x8.5 / x11.5 | x1.3 | golden rings and a crown of rays | x10 XP, 3 extra drops of high quality, x15 gold |
 | **Celestial** (1 in 400, any depth) | none | x3.3 / x3.9 / x4.8 | x1 | other colors (hue shift), a gleam sweeping its body, sparkles | x8 XP, 3 extra drops, x25 gold; joins the bestiary's Celestial collection |
 
+Every rank also shows a rim of its color around the body (`BodyLook.outline`) and its name over
+the monster. Its body is wider (`radius_multiplier`: x1.125 Elite, x1.175 Fell, x1.225
+Legendary, x1.075 Celestial: collision, reach, shadow, aura), but its art is never enlarged:
+pack art stays at scale 2 ([decision 0007](../decisions/0007-whole-pixels-on-screen.md); the
+ranks were drawn x1.15 to x1.45 before, pixels of two sizes side by side).
+
 A rank's Health grows with depth (`hp_multiplier` + `hp_multiplier_per_depth` per floor): the
 hero's power grows faster than the monsters' own depth scaling, so a deeper Elite needs more
 Health to stay a short duel. Its affixes' Health on top (Ironclad x1.3, Bursting x0.85...).

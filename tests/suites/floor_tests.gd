@@ -813,7 +813,7 @@ func _test_hazards(game: Game, world: World, player: Player) -> void:
 	player.inventory.changed.emit()
 	await _frames(2)
 
-	# Elites: an affix, more HP, a name, bigger, and their perk works.
+	# Elites: an affix, more HP, a name, a wider body (not bigger art), and their perk works.
 	var elite := world.spawn_monster(slime_def, world.map.cell_to_world(_open_cell_near(world, player.global_position, 1)))
 	elite.dormant = true
 	var base_hp := elite.get_max_hp()
@@ -855,7 +855,8 @@ func _test_hazards(game: Game, world: World, player: Player) -> void:
 	for rare in ranked:
 		if is_instance_valid(rare) and not rare.is_dead:
 			rare.queue_free()
-	check(elite.display_name.begins_with("Vampiric") and elite.rig.scale.x > 1.0, "elites have a name and are bigger")
+	check(elite.display_name.begins_with("Vampiric") and elite.radius > elite.def.radius and elite.rig.look.outline == elite.rank_color(), "elites have a name, a rim of their color and a wider body")
+	check(elite.rig.scale == Vector2.ONE and ranked.all(func(m: Monster) -> bool: return not is_instance_valid(m) or m.rig.scale == Vector2.ONE), "a rank never enlarges the art: pack art stays at scale 2 (decision 0007)")
 	elite.hp = 1
 	elite.perks.on_hit_dealt(elite, player, HitInfo.new(), 10)
 	check(elite.hp > 1, "vampiric elites heal when they hit")

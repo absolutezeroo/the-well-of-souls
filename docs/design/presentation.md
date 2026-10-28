@@ -31,7 +31,8 @@
   (`src/vfx/particles/*.tscn`, edit them in the inspector; `pixel_particles.gdshader` keeps them
   whole art pixels on the grid, their fades dithered), dash afterimages (dithered, in the dash's
   element; plain rushes like a beast's Charge also kick up dust), animated projectiles,
-  squash on hit, popping damage numbers, red vignette when hurt or low on HP.
+  a one-art-pixel flinch on hit (never a squash: whole pixels, decision 0007), popping damage
+  numbers, red vignette when hurt or low on HP.
 - **Atmosphere** (`AmbienceDef` > Atmosphere, one per biome and curse): the whole picture takes
   the biome's colors (`screen.gdshader`: shadows and highlights graded toward two tints,
   saturation, contrast), bright things **bloom** (a flat rim of light one art pixel wide around
@@ -334,7 +335,7 @@ Every actor (player and monsters) has a **rig**: `src/entities/rig/actor_rig.tsc
 ```
 Rig                  at the actor's feet
 └── Visual           body shader (flash.gdshader: flash, statuses, rim, deaths), scaled 2x (units = art pixels)
-    └── Squash       squash & stretch on hits
+    └── Squash       lunges (moved, never scaled; a hit drops the Visual one art pixel)
         ├── Body       AnimatedSprite2D: the character (SpriteFrames from the data)
         ├── BodyArmor  AnimatedSprite2D: worn body armor, same animation and frame as Body
         ├── Helmet     AnimatedSprite2D: worn helmet, same animation and frame as Body

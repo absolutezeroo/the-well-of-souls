@@ -67,7 +67,10 @@ temples, statues, banners, furniture, interiors, animated flags, flowers, water 
   **Checked** (`unit.pc`).
 - Pack art is shown at **scale 2**. A whole step (3 for a building that must read larger, like
   the temple) is allowed; **never 1.5, 2.5, 0.95** or any fraction to make something fit (it
-  makes "mixels": pixels of different sizes side by side). **Checked** for the village.
+  makes "mixels": pixels of different sizes side by side), not even for a moment: a rank shows
+  by rim, aura and name, a hit by a one-pixel flinch, a smaller flame is a smaller piece
+  ([vfx.md](vfx.md) section 1, its listed exceptions). **Checked** for the village (`unit.village`),
+  bodies, ranks, props' flames, the Wyrm and plants (`unit.vfx`).
 - Positions of static art on even units; **rotation 0** (pre-drawn directions only, [vfx.md](vfx.md));
   texture filter **Nearest**, no mipmaps (the project default, never overridden).
 - The pack's projection: straight top-down with the front faces of walls and houses visible.

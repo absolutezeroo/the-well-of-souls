@@ -20,7 +20,9 @@ extends Resource
 @export var hp_multiplier_per_depth: float = 0.0
 ## Multiplies its attacks and skills (not bosses: they keep their own damage).
 @export var damage_multiplier: float = 1.0
-@export var scale: float = 1.25
+## Its body is this much wider (collision, reach, shadow, aura): a gameplay size only. The art
+## stays at scale 2 (decision 0007: never 1.25); the rank shows by its rim, aura and name.
+@export var radius_multiplier: float = 1.125
 ## At least this much knockback resistance.
 @export_range(0.0, 1.0) var knockback_resistance: float = 0.5
 

@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 416,
+  "next_id": 417,
   "tags": [
     "pc",
     "test",
@@ -6081,7 +6081,7 @@
     {
       "id": "task_403",
       "title": "Donjon : un pixel d'art fait 4,5 pixels d'écran sur le S23 et en 1080p",
-      "description": "Trouvé par le calcul pendant la recherche : à 1080 lignes, l'interface est à x1,5 (PixelGrid) et la caméra du donjon à zoom 1,5 (player.tscn), donc 2 unités x 1,5 x 1,5 = 4,5 pixels d'écran par pixel d'art. Avec le filtre au plus proche, les colonnes alternent 4 et 5 pixels (légère déformation, scintillement au défilement). À 720, 1440 et 2160 lignes, c'est entier (3, 6, 9). Le village (zoom 2) donne 6, entier. L'intérieur du temple (zoom 1,5) a le même souci. Options : au pas x1,5 seulement, zoom 4/3 (4 px, cadrage ~12 % plus large) ou 5/3 (5 px, ~10 % plus serré). DÉCISION DU PROPRIÉTAIRE (cadrage du combat) : regarder d'abord une capture zoomée sur le S23. Aucun agent ne le change seul.\n\nAudit du 28/10 : confirmé par mesure à 1920x1080 (plages de 4 px à 37 %, de 5 px à 38 %). Autres échelles fractionnaires du même ordre : élites agrandies à 1,15-1,45 (MonsterRankDef.scale), squash x1,25/x0,8 à chaque coup (actor_rig.gd:380), flamme des bougies 0,55, ailes du Wyrm ; plantes cisaillées et queue du Wyrm tournée librement. Doc fausse à corriger : vfx.md §1 et village.md annoncent 3 px d'écran.\n\n28/10 (décision 0007, agent art) : le zoom des caméras du monde est maintenant entier (PixelGrid.camera_zoom) : le cadrage voulu arrondi vers le bas, la vue plus large. Donjon et temple : 3 px d'écran par pixel d'art en 720, 4 en 1080 et sur le S23 (au lieu de 4,5 : la vue montre environ 12 % de plus du combat, 30 tuiles de large en 16:9), 6 en 1440, 9 en 2160 ; village : 6 en 1080 (inchangé), 5 en 1600x900. Mesuré sur captures 1920x1080 et 2340x1080 : 92-98 % des plages de couleur sont des multiples de 4 dans le donjon (avant : 37-40 %), 100 % dans le temple et le village. Test unit.pc (_test_whole_art_pixels).",
+      "description": "Trouvé par le calcul pendant la recherche : à 1080 lignes, l'interface est à x1,5 (PixelGrid) et la caméra du donjon à zoom 1,5 (player.tscn), donc 2 unités x 1,5 x 1,5 = 4,5 pixels d'écran par pixel d'art. Avec le filtre au plus proche, les colonnes alternent 4 et 5 pixels (légère déformation, scintillement au défilement). À 720, 1440 et 2160 lignes, c'est entier (3, 6, 9). Le village (zoom 2) donne 6, entier. L'intérieur du temple (zoom 1,5) a le même souci. Options : au pas x1,5 seulement, zoom 4/3 (4 px, cadrage ~12 % plus large) ou 5/3 (5 px, ~10 % plus serré). DÉCISION DU PROPRIÉTAIRE (cadrage du combat) : regarder d'abord une capture zoomée sur le S23. Aucun agent ne le change seul.\n\nAudit du 28/10 : confirmé par mesure à 1920x1080 (plages de 4 px à 37 %, de 5 px à 38 %). Autres échelles fractionnaires du même ordre : élites agrandies à 1,15-1,45 (MonsterRankDef.scale), squash x1,25/x0,8 à chaque coup (actor_rig.gd:380), flamme des bougies 0,55, ailes du Wyrm ; plantes cisaillées et queue du Wyrm tournée librement. Doc fausse à corriger : vfx.md §1 et village.md annoncent 3 px d'écran.\n\n28/10 (décision 0007, agent art) : le zoom des caméras du monde est maintenant entier (PixelGrid.camera_zoom) : le cadrage voulu arrondi vers le bas, la vue plus large. Donjon et temple : 3 px d'écran par pixel d'art en 720, 4 en 1080 et sur le S23 (au lieu de 4,5 : la vue montre environ 12 % de plus du combat, 30 tuiles de large en 16:9), 6 en 1440, 9 en 2160 ; village : 6 en 1080 (inchangé), 5 en 1600x900. Mesuré sur captures 1920x1080 et 2340x1080 : 92-98 % des plages de couleur sont des multiples de 4 dans le donjon (avant : 37-40 %), 100 % dans le temple et le village. Test unit.pc (_test_whole_art_pixels).\n\n28/10, suite (agent art) : plus aucune échelle fractionnaire sur l'art du pack. Les rangs ne grossissent plus le corps : un élite se lit par son liseré de couleur, son aura au sol (anneaux, rayons pour le Légendaire) et son nom ; seul le corps de jeu reste plus large (MonsterRankDef.radius_multiplier, mêmes chiffres qu'avant : portée et collision inchangées). Un coup reçu fait descendre le corps d'un pixel d'art pendant 0,12 s au lieu du squash x1,25. Flamme des bougies : une scène de particules plus petite à l'échelle 1 (plus de 0,55). Wyrm : ailes repliées par rangées entières de leur dessin, queue tournée par quarts de tour seulement. Plantes : chaque rangée décalée d'un nombre entier de pixels (plus de cisaillement). Un monstre sans image de mort bascule d'un quart de tour d'un coup. Exceptions écrites dans vfx.md §1 (chute dans un trou, âme qui s'enfonce au Seuil, corps avalé par un boss : transitions de 0,5 s au plus). Test unit.vfx « whole scales ». À vérifier sur le S23 : les élites se reconnaissent-ils assez sans leur taille ?",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_3",
@@ -6092,7 +6092,7 @@
         "pc"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793163670
+      "updated_at": 1793165896
     },
     {
       "id": "task_404",
@@ -6273,6 +6273,21 @@
       ],
       "created_at": 1793161745,
       "updated_at": 1793163670
+    },
+    {
+      "title": "Chute, Seuil, corps avalé : disparitions en fondu dithéré au lieu d'un rétrécissement",
+      "description": "Reste de la décision 0007 (agent art, 28/10) : trois transitions rétrécissent encore l'art du pack et le font disparaître en alpha : la chute dans un trou (Actor, échelle vers 0 et rotation en 0,5 s), l'âme du héros qui s'enfonce au Seuil (Threshold._sink_soul, échelle 0,7 x 0,25) et le corps avalé par un boss qui se relève (BossArena, échelle 0,5). Écrites comme exceptions dans docs/vfx.md §1. Mieux : une disparition dithérée par le shader du corps (BodyLook, comme les morts) ou des images dessinées.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_3",
+      "tags": [
+        "visuel",
+        "vfx"
+      ],
+      "id": "task_416",
+      "due_date": null,
+      "created_at": 1793165896,
+      "updated_at": 1793165896
     }
   ]
 }

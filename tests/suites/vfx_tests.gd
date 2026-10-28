@@ -37,6 +37,7 @@ func run() -> void:
 	_test_body_shader()
 	_test_shaders()
 	_test_no_squared_colors()
+	_test_whole_scales()
 	_test_simulation()
 
 
@@ -686,6 +687,78 @@ func _test_grid_rule_breaks() -> void:
 		states[warning.is_lit()] = true
 	check(states.size() == 2, "grid: the cell warning blinks on and off (no smooth pulse)")
 	warning.free()
+
+
+## Decision 0007: pack art is never drawn at a fractional scale (pixels of two sizes side by
+## side). A rig's art stays at 2 through a hit (it drops one art pixel, no squash x1.25); a rank
+## has no art scale (rim, aura and name show it); a prop's flame is a scene at its own size; a
+## wyrm's wings fold by whole rows of their art and its tail turns by quarter turns; a plant
+## leans by whole art pixels, row by row.
+func _test_whole_scales() -> void:
+	var rig := (load("res://src/entities/rig/actor_rig.tscn") as PackedScene).instantiate() as ActorRig
+	add_child(rig)
+	rig.setup(load("res://data/visuals/monsters/bat.tres") as SpriteFrames, Vector2.ZERO)
+	rig.play_hurt()
+	rig._process(0.016)
+	check(rig.visual.scale == Vector2(2, 2) and rig.squash_node.scale == Vector2.ONE and rig.visual.position == Vector2(0, PixelDraw.PX),
+		"whole scales: a hit drops the body one art pixel, its art kept at scale 2 (Visual %s, Squash %s)" % [rig.visual.scale, rig.squash_node.scale])
+	rig._process(ActorRig.FLINCH_TIME)
+	check(rig.visual.position == Vector2.ZERO and rig.squash_node.scale == Vector2.ONE, "whole scales: the flinch over, the body is back on its feet")
+	rig.free()
+	for file in DirAccess.get_files_at("res://data/monster_ranks"):
+		var rank := load("res://data/monster_ranks".path_join(file)) as MonsterRankDef
+		if rank:
+			check(rank.get("scale") == null and rank.radius_multiplier >= 1.0, "whole scales: rank %s has no art scale, only a wider body" % rank.id)
+	var props := 0
+	for path in _resources_under("res://data/props"):
+		var prop := load(path) as PropDef
+		if prop == null:
+			continue
+		props += 1
+		check(prop.get("flame_scale") == null, "whole scales: %s has no flame scale" % prop.id)
+		if prop.flame:
+			var flame := prop.flame.instantiate()
+			var odd: Array[String] = []
+			for node: Node in [flame] + flame.find_children("*", "Node2D", true, false):
+				var scale := (node as Node2D).scale if node is Node2D else Vector2.ONE
+				if not is_equal_approx(scale.x, roundf(scale.x)) or not is_equal_approx(scale.y, roundf(scale.y)) or absf(scale.x) < 1.0 or absf(scale.y) < 1.0:
+					odd.append("%s %s" % [node.name, scale])
+			check(odd.is_empty(), "whole scales: %s's flame is drawn at its own size, never scaled (%s)" % [prop.id, odd])
+			flame.free()
+	check(props >= 10, "whole scales: every prop checked (%d)" % props)
+	var turns := {}
+	for i in 32:
+		var turn := WyrmBody.tail_turn(Vector2.ZERO, Vector2.from_angle(TAU * i / 32.0))
+		turns[snappedf(fposmod(turn, TAU), 0.001)] = true
+		check(is_equal_approx(fposmod(turn, PI * 0.5), 0.0) or is_equal_approx(fposmod(turn, PI * 0.5), PI * 0.5), "whole scales: the wyrm's tail turns by quarter turns only (%s)" % turn)
+	check(turns.size() == 4, "whole scales: the tail points four ways")
+	var rows_ok := true
+	for shown in range(34, 58):
+		var last := -1
+		for row in shown:
+			var source := WyrmBody._wing_row(row, shown, 57)
+			rows_ok = rows_ok and source > last and source < 57
+			last = source
+	check(rows_ok, "whole scales: a folded wing shows whole rows of its art, in order, none twice")
+	var shifts := PackedInt32Array()
+	for row in 16:
+		shifts.append(DecorLayer.row_shift(row, 16, 0.55))
+	check(shifts[0] == -9 and shifts[15] == 0, "whole scales: a plant bent hard moves its top row 9 art pixels, its foot none (%s)" % shifts)
+	var monotonic := true
+	for row in 15:
+		monotonic = monotonic and shifts[row] <= shifts[row + 1]
+	check(monotonic, "whole scales: each row of a leaning plant moves less than the one above it")
+
+
+## Every .tres under `dir` and its subfolders.
+func _resources_under(dir: String) -> Array[String]:
+	var found: Array[String] = []
+	for file in DirAccess.get_files_at(dir):
+		if file.ends_with(".tres"):
+			found.append(dir.path_join(file))
+	for sub in DirAccess.get_directories_at(dir):
+		found.append_array(_resources_under(dir.path_join(sub)))
+	return found
 
 
 ## One source for the interface's colors (UiSkin; gold is Palette.GOLD): no panel keeps its own

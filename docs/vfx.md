@@ -29,6 +29,19 @@ An effect whose pixels are smaller
   as it is. A long thing that points somewhere (a shard, an arrow) is **drawn in 16 directions**
   (`VfxSheetDef.Orient.ROWS`: the frost shard), or at worst turned to the nearest of 16 angles
   (`SNAPPED`: old arrows and slashes). Never `rotation = direction.angle()`.
+- **No fractional scale of pack art** ([decision 0007](decisions/0007-whole-pixels-on-screen.md)):
+  bodies, props and their flames stay at the art's 2x. A rank shows by its rim, aura and name,
+  never by a bigger body (`MonsterRankDef.radius_multiplier` widens the gameplay body only); a
+  hit drops the body one art pixel for 0.12 s (`ActorRig.FLINCH_TIME`), never a squash; a
+  candle's flame is a smaller particle scene, never a scaled one; the Wyrm's wings fold by whole
+  rows of their art (rows left out), its tail turns by quarter turns only; a plant leans by
+  moving each row of its art by whole pixels (`DecorLayer.row_shift`), never a skew; a body
+  without death frames falls over by a quarter turn in one step. Checked by `unit.vfx`
+  ("whole scales"). **Exceptions**, transitions of half a second or less where the body leaves
+  the world and the pack has no frames for it: a fall into a hole (`Actor`, shrinks and spins
+  away), the hero's soul sinking at the Threshold (`Threshold._sink_soul`), a body drawn into a
+  risen boss's mouth (`BossArena`). They also fade by alpha; redrawing them as dithered
+  dissolves is on the roadmap.
 - **A melee blow is drawn in the body's four directions.** Bodies, armor and the weapon in hand
   exist facing down, up, left and right only, so everything drawn for a melee blow (its arc or
   streak, a smash, a claw or bite sheet, the crescents and slams of charged blows and blade
