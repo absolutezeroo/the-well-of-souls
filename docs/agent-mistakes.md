@@ -12,3 +12,5 @@ fix is a new check (a gap in the enforcement), and a line here. Read this before
 | 2026-10-27 | Village houses and props were placed wherever there was room | [0006](decisions/0006-kagari-districts.md), docs/design/village.md "Placement rules", `VillageTests._test_layout_rules` |
 | 2026-10-27 | Visual work was called done because the tests passed | AGENTS.md hard rule 8: captures (`tools/design/capture.py`), visual cards stop in `review` |
 | 2026-10-25 | Several agents gave new roadmap cards the same ids | Read `next_id` just before writing; renumber when merging branches |
+| 2026-10-28 | An agent used `git stash` while others worked in sibling worktrees: the stash list is shared, and it popped another agent's work | Never use `git stash` with several worktrees; commit or copy files instead |
+| 2026-10-28 | A clearance rule reserved cells before a set piece's own scenes were placed, leaving the Throne Hall bare on some seeds | `unit.pacing` checks every set piece keeps its scenes over several seeds |
