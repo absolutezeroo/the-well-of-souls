@@ -3,7 +3,7 @@ extends Resource
 ## One of Kagari's animals (the pack's Actor/Animal sheets): it belongs to a place, like a prop to
 ## its owner (the cottage's hens, the Wanderer's cat, the woodcutter's dog), and wanders around it
 ## on the village's navigation. Ambient only: no conversation, no collision with the hero, no
-## dungeon dice (docs/design/village.md "Animals").
+## dungeon dice (docs/design/village.md "Ambient life").
 
 @export var id: StringName
 ## A row of 16x16 frames facing right (the pack's two-frame animal sheets).

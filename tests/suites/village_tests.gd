@@ -181,7 +181,7 @@ func _test_layout_rules() -> void:
 	check(bad_frames.is_empty(), "animated props and animals step the pack's whole frames, inside their sheet (%s)" % [bad_frames])
 	var solid_flat := all_props.filter(func(prop: VillagePropDef) -> bool: return prop.flat and (prop.collision.has_area() or prop.frames > 1 or prop.lit_by != null))
 	check(solid_flat.is_empty(), "what lies on the ground is drawn with it: never solid, animated or lit (%s)" % [solid_flat.size()])
-	check(strays.is_empty(), "every animal keeps a small place in the clearing, near its owner (%s; docs/design/village.md \"Animals\")" % [strays])
+	check(strays.is_empty(), "every animal keeps a small place in the clearing, near its owner (%s; docs/design/village.md \"Ambient life\")" % [strays])
 	check(odd_scales.is_empty(), "pack art is drawn at whole scales only, never stretched to fit (%s)" % [odd_scales])
 	check(_neutral_light(VILLAGE.ground_tint), "the ground is never darkened or coloured by a tint: grass turns to mud (%s; docs/art-bible.md \"Mood\")" % VILLAGE.ground_tint)
 
@@ -725,7 +725,7 @@ func _test_open_homes(hub: VillageHub) -> void:
 
 
 ## Kagari's animals keep their places: they wander by day inside them, stand still under a
-## modal like the residents, and go home outside their hours (docs/design/village.md "Animals").
+## modal like the residents, and go home outside their hours (docs/design/village.md "Ambient life").
 func _test_animals(hub: VillageHub) -> void:
 	var animals := hub.view.animals
 	check(not VILLAGE.animals.is_empty() and animals.size() == VILLAGE.animals.size(), "Kagari's hens, cat and dog live in the village")

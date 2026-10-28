@@ -374,8 +374,9 @@ house's own door. `tools/design/capture.py` shoots each home (`homes`) and the w
 (`village_woken`).
 
 Sayo's figure and portrait share a teal palette material, distinguishing her from the Veilleuse
-without duplicating or regenerating sprite textures. Static props remain separate from these
-four moving residents. Routines do not consume dungeon random numbers or alter run state.
+without duplicating or regenerating sprite textures; Gen wears the pack's old gardener in his
+straw hat (OldMan3). Static props remain separate from these five moving residents and the four
+animals. Routines do not consume dungeon random numbers or alter run state.
 
 ## Validation
 
