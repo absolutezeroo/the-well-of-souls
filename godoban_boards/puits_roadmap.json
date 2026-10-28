@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 424,
+  "next_id": 426,
   "tags": [
     "pc",
     "test",
@@ -6037,7 +6037,7 @@
     {
       "id": "task_400",
       "title": "Temple de Kagari : bandes sombres sur écran large (S23)",
-      "description": "Vu en capture 2340×1080 (toile 1560×720) : à zoom 1,5 la vue fait 1040 unités de large pour une salle de 960 ; des bandes sombres (et un liseré de l’extérieur à gauche) apparaissent de chaque côté. Choisir : salle plus large, zoom calculé pour remplir la largeur, ou bandes assumées. À vérifier sur le téléphone.",
+      "description": "Vu en capture 2340×1080 (toile 1560×720) : à zoom 1,5 la vue fait 1040 unités de large pour une salle de 960 ; des bandes sombres (et un liseré de l’extérieur à gauche) apparaissent de chaque côté. Choisir : salle plus large, zoom calculé pour remplir la largeur, ou bandes assumées. À vérifier sur le téléphone.\n\n28/10 : avec le zoom entier (décision 0007), le temple est dessiné à 4 px par pixel d'art sur le S23 au lieu de 4,5 : la vue fait 1170 unités de large pour la salle de 960, les bandes sombres sur les côtés sont donc un peu plus larges (capture temple_2340x1080 de l'agent art). Le choix reste à faire (salle plus large, ou bandes assumées) ; zoomer pour remplir la largeur reviendrait à un zoom non entier.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_3",
@@ -6047,7 +6047,7 @@
         "playtest"
       ],
       "created_at": 1793076826,
-      "updated_at": 1793076826,
+      "updated_at": 1793163670,
       "due_date": null
     },
     {
@@ -6081,8 +6081,8 @@
     {
       "id": "task_403",
       "title": "Donjon : un pixel d'art fait 4,5 pixels d'écran sur le S23 et en 1080p",
-      "description": "Trouvé par le calcul pendant la recherche : à 1080 lignes, l'interface est à x1,5 (PixelGrid) et la caméra du donjon à zoom 1,5 (player.tscn), donc 2 unités x 1,5 x 1,5 = 4,5 pixels d'écran par pixel d'art. Avec le filtre au plus proche, les colonnes alternent 4 et 5 pixels (légère déformation, scintillement au défilement). À 720, 1440 et 2160 lignes, c'est entier (3, 6, 9). Le village (zoom 2) donne 6, entier. L'intérieur du temple (zoom 1,5) a le même souci. Options : au pas x1,5 seulement, zoom 4/3 (4 px, cadrage ~12 % plus large) ou 5/3 (5 px, ~10 % plus serré). DÉCISION DU PROPRIÉTAIRE (cadrage du combat) : regarder d'abord une capture zoomée sur le S23. Aucun agent ne le change seul.\n\nAudit du 28/10 : confirmé par mesure à 1920x1080 (plages de 4 px à 37 %, de 5 px à 38 %). Autres échelles fractionnaires du même ordre : élites agrandies à 1,15-1,45 (MonsterRankDef.scale), squash x1,25/x0,8 à chaque coup (actor_rig.gd:380), flamme des bougies 0,55, ailes du Wyrm ; plantes cisaillées et queue du Wyrm tournée librement. Doc fausse à corriger : vfx.md §1 et village.md annoncent 3 px d'écran.",
-      "status": "todo",
+      "description": "Trouvé par le calcul pendant la recherche : à 1080 lignes, l'interface est à x1,5 (PixelGrid) et la caméra du donjon à zoom 1,5 (player.tscn), donc 2 unités x 1,5 x 1,5 = 4,5 pixels d'écran par pixel d'art. Avec le filtre au plus proche, les colonnes alternent 4 et 5 pixels (légère déformation, scintillement au défilement). À 720, 1440 et 2160 lignes, c'est entier (3, 6, 9). Le village (zoom 2) donne 6, entier. L'intérieur du temple (zoom 1,5) a le même souci. Options : au pas x1,5 seulement, zoom 4/3 (4 px, cadrage ~12 % plus large) ou 5/3 (5 px, ~10 % plus serré). DÉCISION DU PROPRIÉTAIRE (cadrage du combat) : regarder d'abord une capture zoomée sur le S23. Aucun agent ne le change seul.\n\nAudit du 28/10 : confirmé par mesure à 1920x1080 (plages de 4 px à 37 %, de 5 px à 38 %). Autres échelles fractionnaires du même ordre : élites agrandies à 1,15-1,45 (MonsterRankDef.scale), squash x1,25/x0,8 à chaque coup (actor_rig.gd:380), flamme des bougies 0,55, ailes du Wyrm ; plantes cisaillées et queue du Wyrm tournée librement. Doc fausse à corriger : vfx.md §1 et village.md annoncent 3 px d'écran.\n\n28/10 (décision 0007, agent art) : le zoom des caméras du monde est maintenant entier (PixelGrid.camera_zoom) : le cadrage voulu arrondi vers le bas, la vue plus large. Donjon et temple : 3 px d'écran par pixel d'art en 720, 4 en 1080 et sur le S23 (au lieu de 4,5 : la vue montre environ 12 % de plus du combat, 30 tuiles de large en 16:9), 6 en 1440, 9 en 2160 ; village : 6 en 1080 (inchangé), 5 en 1600x900. Mesuré sur captures 1920x1080 et 2340x1080 : 92-98 % des plages de couleur sont des multiples de 4 dans le donjon (avant : 37-40 %), 100 % dans le temple et le village. Test unit.pc (_test_whole_art_pixels).\n\n28/10, suite (agent art) : plus aucune échelle fractionnaire sur l'art du pack. Les rangs ne grossissent plus le corps : un élite se lit par son liseré de couleur, son aura au sol (anneaux, rayons pour le Légendaire) et son nom ; seul le corps de jeu reste plus large (MonsterRankDef.radius_multiplier, mêmes chiffres qu'avant : portée et collision inchangées). Un coup reçu fait descendre le corps d'un pixel d'art pendant 0,12 s au lieu du squash x1,25. Flamme des bougies : une scène de particules plus petite à l'échelle 1 (plus de 0,55). Wyrm : ailes repliées par rangées entières de leur dessin, queue tournée par quarts de tour seulement. Plantes : chaque rangée décalée d'un nombre entier de pixels (plus de cisaillement). Un monstre sans image de mort bascule d'un quart de tour d'un coup. Exceptions écrites dans vfx.md §1 (chute dans un trou, âme qui s'enfonce au Seuil, corps avalé par un boss : transitions de 0,5 s au plus). Test unit.vfx « whole scales ». À vérifier sur le S23 : les élites se reconnaissent-ils assez sans leur taille ?\n\nFini côté agent art (28/10), captures dans le dossier fix_art de la session (donjon avant/après en 1920x1080 et 2340x1080, rangs, coup, Wyrm, bougie, temple, village). À regarder sur le S23 : le combat cadré plus large (environ 12 % de plus) reste-t-il lisible ? Plus de scintillement en défilant ? Les élites se reconnaissent-ils sans grossir ?",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_3",
       "due_date": null,
@@ -6092,7 +6092,7 @@
         "pc"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793161745
+      "updated_at": 1793168315
     },
     {
       "id": "task_404",
@@ -6158,8 +6158,8 @@
     {
       "id": "task_408",
       "title": "Teintes sur l'art du monde : donjon et racines de Kagari",
-      "description": "Audit du 28/10 : 10 thèmes de donjon sur 12 multiplient sols, murs et plateau au-delà du seuil de la bible (canaux ≥ 0,75, écart ≤ 0,12) via dungeon_view.gd:89-103 (Seuil 0,50 ; Fond du Puits 0,62 ; Ossuaire 0,68). L'étalonnage d'écran par biome (screen.gdshader) s'y ajoute. À Kagari, les racines du Puits sont des arbres du pack teintés en violet-noir (0,32 ; 0,2 ; 0,38) et le Puits est teinté. Proposé : thèmes en blanc et tilesets recolorés (recolor.py) ; étalonnage borné par un test sur AmbienceDef, avec les exceptions narratives (Lune de sang, Tréfonds, Seuil) consignées dans une décision (le propriétaire tranche la nuance de la règle) ; de vraies racines dessinées sur la palette.",
-      "status": "todo",
+      "description": "Audit du 28/10 : 10 thèmes de donjon sur 12 multiplient sols, murs et plateau au-delà du seuil de la bible (canaux ≥ 0,75, écart ≤ 0,12) via dungeon_view.gd:89-103 (Seuil 0,50 ; Fond du Puits 0,62 ; Ossuaire 0,68). L'étalonnage d'écran par biome (screen.gdshader) s'y ajoute. À Kagari, les racines du Puits sont des arbres du pack teintés en violet-noir (0,32 ; 0,2 ; 0,38) et le Puits est teinté. Proposé : thèmes en blanc et tilesets recolorés (recolor.py) ; étalonnage borné par un test sur AmbienceDef, avec les exceptions narratives (Lune de sang, Tréfonds, Seuil) consignées dans une décision (le propriétaire tranche la nuance de la règle) ; de vraies racines dessinées sur la palette.\n\n28/10 (décision 0009, agent art) : donjon fait. Les 7 thèmes hors seuil passent à une atténuation neutre (Ossuaire 0,84/0,88/0,92 ; Catacombes, Cavernes noyées, Archives, Ruines, Temple, Tombeau : écart ≤ 0,08, canal ≥ 0,84) ; l'identité du biome reste dans ses tuiles, sa lumière (LightingDef propre à chaque biome) et son étalonnage. Exceptions narratives écrites dans les données (narrative_exception) : thèmes du Seuil, des Tréfonds et du Fond du Puits ; ambiances du Seuil, des Tréfonds, de la Lune de sang et des malédictions (Souffle de cendre, Givre). Test unit.vfx « tints » : teinte des thèmes et cumul thème x étalonnage ≥ 0,6 sur les tons moyens (0,25 à 0,5), exceptions limitées à la liste de la décision. Captures avant/après des 11 biomes à 1920x1080 par l'agent art : biomes toujours reconnaissables. Kagari : commit suivant.\n\nKagari (même jour) : aucune teinte sur les objets du village. Les racines du Puits sont les arbres morts du pack dans leurs propres couleurs (bois mort noueux qui étouffe les maisons endormies ; la teinte violet-noire est retirée). Le Puits n'est plus teinté : c'est le puits du pack recoloré pierre grise, couleur pour couleur, sur la rampe des statues grises du pack (assets/props/well.png, noté dans REUSE.toml et la bible). Les lampes éteintes montrent la lanterne de pierre vide du pack (TilesetDungeon) au lieu de la lanterne allumée assombrie ; allumées, plus de teinte jaune x1,3. Tests unit.village (aucune teinte, positions paires, lampe éteinte = sa propre image) et title.village (Puits sans teinte). À vérifier sur le S23 : les racines se lisent-elles comme des ronces/racines mortes autour des maisons ? Le Puits gris convient-il ? (le puits ocre du pack sans recoloration est l'autre choix, une ligne à changer). Captures village, carte et temple par l'agent art (1:1, x4, gris).",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_3",
       "due_date": null,
@@ -6167,7 +6167,7 @@
         "visuel"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793167513
     },
     {
       "id": "task_409",
@@ -6263,8 +6263,8 @@
     {
       "id": "task_415",
       "title": "Corriger les erreurs de doc trouvées par l'audit",
-      "description": "vfx.md §1 et village.md disent « 3 pixels d'écran » par pixel d'art : faux à 1080 lignes (4,5 dans le donjon, 6 au village) ; dungeon.md a deux fois la section « Room trials » (l. 516-545 et 546-575) et dit « a couple of minutes » par étage (cible 3-6 min). Positions impaires à Kagari (temple 747, racine 1225, deux décors) ; alpha non binaire de cracks.png et spike_holes.png.",
-      "status": "todo",
+      "description": "vfx.md §1 et village.md disent « 3 pixels d'écran » par pixel d'art : faux à 1080 lignes (4,5 dans le donjon, 6 au village) ; dungeon.md a deux fois la section « Room trials » (l. 516-545 et 546-575) et dit « a couple of minutes » par étage (cible 3-6 min). Positions impaires à Kagari (temple 747, racine 1225, deux décors) ; alpha non binaire de cracks.png et spike_holes.png.\n\n28/10 (agent art) : positions impaires de Kagari corrigées (temple 748, racine 1224, décors 1104 et 1176) et testées (unit.village).\n\nAlpha binaire : les fissures du sol qui s'effondre (cracks.png) et les trous du piège à pointes (spike_holes.png) sont opaques (le reflet clair des fissures, à 24 %, est retiré : le noir seul se lit sur tous les sols) ; le sol qui s'effondre n'est plus dessiné à 55 % au repos, il tremble par pixels entiers et s'assombrit en tramage. tools/design/check.py vérifie maintenant l'alpha binaire de tout l'art du monde et des effets ; test unit.vfx « hazards ». À voir sur le S23 : les fissures au repos sont-elles assez visibles sans être criardes ?\n\nDoc : vfx.md §1 et village.md donnent maintenant les vrais chiffres (entiers, décision 0007) ; la section « Room trials » en double dans dungeon.md est retirée (la copie était identique, ligne pour ligne). Reste « a couple of minutes » par étage dans dungeon.md : laissé à l'agent du rythme des étages (task_410), qui fixe la durée cible.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -6272,7 +6272,7 @@
         "qualité"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793168280
     },
     {
       "id": "task_416",
@@ -6394,6 +6394,36 @@
       ],
       "created_at": 1793166835,
       "updated_at": 1793166835
+    },
+    {
+      "title": "Chute, Seuil, corps avalé : disparitions en fondu dithéré au lieu d'un rétrécissement",
+      "description": "Reste de la décision 0007 (agent art, 28/10) : trois transitions rétrécissent encore l'art du pack et le font disparaître en alpha : la chute dans un trou (Actor, échelle vers 0 et rotation en 0,5 s), l'âme du héros qui s'enfonce au Seuil (Threshold._sink_soul, échelle 0,7 x 0,25) et le corps avalé par un boss qui se relève (BossArena, échelle 0,5). Écrites comme exceptions dans docs/vfx.md §1. Mieux : une disparition dithérée par le shader du corps (BodyLook, comme les morts) ou des images dessinées.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_3",
+      "tags": [
+        "visuel",
+        "vfx"
+      ],
+      "id": "task_424",
+      "due_date": null,
+      "created_at": 1793165896,
+      "updated_at": 1793165896
+    },
+    {
+      "title": "Codex : aperçus des monstres à échelle fractionnaire",
+      "description": "Trouvé par l'agent art en appliquant la décision 0007 (28/10), hors de son périmètre (interface) : la page d'un monstre du codex le dessine à min(échelle voulue, place disponible) (monster_page.gd:230, look_scale quelconque) et l'aperçu d'attaque met la scène à size.x / 260 et un boss à 2,2 (attack_preview.gd:110-115) : pixels de deux tailles dans le codex. Arrondir à un pas entier vers le bas (comme PixelGrid.camera_zoom) et ajouter le cas au test « whole scales ».",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_3",
+      "tags": [
+        "visuel",
+        "ui"
+      ],
+      "id": "task_425",
+      "due_date": null,
+      "created_at": 1793168315,
+      "updated_at": 1793168315
     }
   ]
 }

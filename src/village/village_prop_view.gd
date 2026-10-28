@@ -8,15 +8,13 @@ var def: VillagePropDef
 func _ready() -> void:
 	position = def.position
 	var sprite := Sprite2D.new()
-	sprite.texture = def.texture
+	sprite.texture = def.unlit if def.lit_by and def.unlit and not VillageProgress.restored(def.lit_by) else def.texture
 	sprite.region_enabled = def.region.has_area()
 	sprite.region_rect = def.region
 	sprite.scale = Vector2.ONE * def.art_scale
 	var picture_size := def.region.size if def.region.has_area() else def.texture.get_size()
 	sprite.offset.y = -picture_size.y * 0.5
 	sprite.modulate = def.tint
-	if def.lit_by:
-		sprite.modulate = Color(1.3, 1.15, 0.75) if VillageProgress.restored(def.lit_by) else Color(0.3, 0.35, 0.4)
 	add_child(sprite)
 	if def.collision.has_area(): add_collision(self, def.collision)
 

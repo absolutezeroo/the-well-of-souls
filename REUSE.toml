@@ -46,3 +46,9 @@ SPDX-License-Identifier = "CC0-1.0"
 path = ["assets/LICENSE_NinjaAdventure.txt", "assets/**/*.import", "assets/**/*.uid", "assets/**/*.txt", "assets/**/*.md", "assets/**/*.regions.txt"]
 SPDX-FileCopyrightText = "See the asset they describe"
 SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ["assets/props/well.png"]
+SPDX-FileCopyrightText = "Pixel-boy and AAA (Ninja Adventure asset pack, https://pixel-boy.itch.io/ninja-adventure-asset-pack)"
+SPDX-License-Identifier = "CC0-1.0"
+SPDX-FileComment = "Kagari's Well: the well of Backgrounds/Tilesets/TilesetDesert.png at (0, 48, 32, 32), recoloured colour for colour onto the grey stone ramp of TilesetHouse's grey statues (bd7959>46402e, c69469>56634d, d2b37d>5f7160, ecd5ad>8d977f, f2eaf1>afc29f), so it needs no tint (decision 0009)."

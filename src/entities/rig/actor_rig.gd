@@ -5,7 +5,7 @@ extends Node2D
 ##   Rig (this, at the actor's feet)
 ##   └── Visual        body shader (flash.gdshader: hit flash, statuses, elite rim, deaths; driven
 ##       │             by `look`, a BodyLook), scaled 2x (units inside = art pixels)
-##       └── Squash    squash & stretch on hits, lunges
+##       └── Squash    lunges (moved, never scaled: a hit drops the Visual one art pixel instead)
 ##           ├── Body       AnimatedSprite2D: idle_/walk_/attack_/hit_/dash_ + down/up/left/right, dead,
 ##           │              and for bosses cast (telegraphed skills) and intro (wakes up)
 ##           ├── BodyArmor  AnimatedSprite2D: worn body armor, same animation and frame as Body
@@ -28,7 +28,8 @@ extends Node2D
 ## the body's art (BodyTops).
 
 const DIRECTIONS: Array[StringName] = [&"down", &"up", &"left", &"right"]
-const SQUASH_TIME := 0.12
+## A hit drops the body one art pixel for this long (a flinch: never a squash, decision 0007).
+const FLINCH_TIME := 0.12
 const FLASH_TIME := 0.1
 const HURT_TIME := 0.25
 const CHEST_HEIGHT := 14.0  # world pixels above the feet
@@ -46,7 +47,7 @@ var _held := false
 ## Casts held in a looping pose so far (play_cast()): only the last one's timer ends it.
 var _cast_holds := 0
 var _flash := 0.0
-var _squash := 0.0
+var _flinch := 0.0
 var _hurt := 0.0
 var _weapon_def: WeaponDef
 ## A ghost's washed-out look (the spectres of the Threshold): the body blended this much toward
@@ -335,7 +336,7 @@ func play_named(base: StringName) -> void:
 func play_hurt(element: VfxElementDef = null) -> void:
 	look.hit(element)
 	_flash = FLASH_TIME
-	_squash = SQUASH_TIME
+	_flinch = FLINCH_TIME
 	_hurt = HURT_TIME
 
 
@@ -347,9 +348,11 @@ func play_death() -> void:
 	weapon.visible = false
 	_update_back()
 	if not _play(&"dead", 1.0, true):
-		# No death frames: fall over.
+		# No death frames: it falls over, a quarter turn in one step (a turn through the angles
+		# between would draw its pixels askew: docs/vfx.md, "No free rotation").
 		var tween := create_tween()
-		tween.tween_property(squash_node, "rotation", -PI / 2.0, 0.25)
+		tween.tween_interval(0.12)
+		tween.tween_callback(func() -> void: squash_node.rotation = -PI / 2.0)
 
 
 ## Goes as `death` says in `element`'s ramp (the body shader's death), then `finished` is
@@ -373,11 +376,12 @@ func _process(delta: float) -> void:
 	if not Vfx.shown:
 		return  # a simulation: nothing to see (Vfx.shown)
 	_flash = maxf(_flash - delta, 0.0)
-	_squash = maxf(_squash - delta, 0.0)
+	_flinch = maxf(_flinch - delta, 0.0)
 	if not on_view:
 		return  # (its owner says it is out of view: nothing to keep up there)
-	var t := _squash / SQUASH_TIME
-	squash_node.scale = Vector2(1.0 + 0.25 * t, 1.0 - 0.2 * t)
+	# One whole art pixel down while it flinches: the art keeps its scale (a squash x1.25 drew
+	# pixels of two sizes side by side).
+	visual.position.y = PixelDraw.PX if _flinch > 0.0 else 0.0
 	look.set_shared(&"flash_amount", 1.0 if _flash > 0.0 else pallor)
 	if pallor > 0.0:
 		look.set_shared(&"flash_color", Color.WHITE if _flash > 0.0 else pallor_color)

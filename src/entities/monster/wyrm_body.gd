@@ -3,6 +3,9 @@ extends Node2D
 ## The body of a WyrmTrait monster: segments following the trail of the head, wings flapping on
 ## its sides, a tail at the end. Drawn behind the head in world space (top level). The hero
 ## touching a segment is burned and thrown back (the head is the only part that can be hurt).
+## On the art's grid like every body (decision 0007): the wings flap by whole rows of their art
+## (rows left out, never squashed), the tail turns by quarter turns only, the coils bob by a
+## whole art pixel.
 
 ## Art pixels are drawn this big, like the actors' rigs.
 const ART_SCALE := 2.0
@@ -109,8 +112,10 @@ func _draw() -> void:
 		var texture: Texture2D = _shape.tail if i == _points.size() - 1 else _segment(i)
 		if texture == null:
 			continue
-		var angle := (ahead - at).angle() + PI * 0.5 if i == _points.size() - 1 else 0.0
-		var bob := sin(_time * 6.0 - i * 0.8) * 1.5
+		# The tail points back along the body, to the nearest quarter turn (a turn between them
+		# would draw its pixels askew).
+		var angle := tail_turn(at, ahead) if i == _points.size() - 1 else 0.0
+		var bob := roundf(sin(_time * 6.0 - i * 0.8) * 0.75) * ART_SCALE
 		_draw_texture(texture, at + Vector2(0, bob), angle, tint, false)
 	# The wings, on the head's sides, flapping.
 	if _shape.wing:
@@ -134,9 +139,35 @@ func _draw_texture(texture: Texture2D, at: Vector2, angle: float, tint: Color, f
 	draw_set_transform(Vector2.ZERO)
 
 
+## The wing folded to `flap` of its height: that many of its art's rows, evenly picked (whole
+## rows at the art's scale, the others left out), its root (bottom left of the art) at the
+## shoulder.
 func _draw_wing(at: Vector2, flap: float, tint: Color, flip: bool) -> void:
-	var size := _shape.wing.get_size() * ART_SCALE
-	draw_set_transform(at, 0.0, Vector2(-1.0 if flip else 1.0, flap))
-	# The wing's root (bottom left of the art) at the shoulder.
-	draw_texture_rect(_shape.wing, Rect2(Vector2(-size.x * 0.3, -size.y * 0.8), size), false, tint)
+	var wing := _shape.wing
+	var rows := wing.get_height()
+	var shown := clampi(roundi(rows * flap), 1, rows)
+	var width := wing.get_width() * ART_SCALE
+	var top := -roundf(shown * 0.8) * ART_SCALE
+	draw_set_transform(at, 0.0, Vector2(-1.0 if flip else 1.0, 1.0))
+	var start := 0
+	while start < shown:
+		# A band of consecutive rows of the art, drawn in one go.
+		var source := _wing_row(start, shown, rows)
+		var count := 1
+		while start + count < shown and _wing_row(start + count, shown, rows) == source + count:
+			count += 1
+		var target := Rect2(Vector2(-width * 0.3, top + start * ART_SCALE), Vector2(width, count * ART_SCALE))
+		draw_texture_rect_region(wing, target, Rect2(0, source, wing.get_width(), count), tint)
+		start += count
 	draw_set_transform(Vector2.ZERO)
+
+
+## How the tail at `at` is turned to point back from the segment at `ahead`: the nearest
+## quarter turn (its pixels stay whole and square).
+static func tail_turn(at: Vector2, ahead: Vector2) -> float:
+	return snappedf((ahead - at).angle() + PI * 0.5, PI * 0.5)
+
+
+## The art's row shown as row `row` of a wing folded to `shown` of its `rows`.
+static func _wing_row(row: int, shown: int, rows: int) -> int:
+	return mini(floori((row + 0.5) * rows / float(shown)), rows - 1)

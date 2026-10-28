@@ -9,8 +9,14 @@ extends Node
 ## lines, x1.5 on 1080, x2 on 1440, x3 on 2160: whole font pixels), and the canvas grows to fill
 ## the screen (1366x768 lays out at 1366x768, 3440x1440 at 1720x720). A screen too small for
 ## x1 (1024x768: x0.8) keeps Godot's scale; nothing whole fits. Settings.ui_size takes one or two
-## steps off (never under x1): more room on a big monitor. The floor's framing doesn't change:
-## the camera zooms in by what the rounding took off (world_zoom(), GameCamera).
+## steps off (never under x1): more room on a big monitor. The floor's framing doesn't change
+## with it: the world's cameras ask camera_zoom() (GameCamera, VillageWalker).
+##
+## The world's pixels. A camera's zoom is chosen so that one art pixel (2 world units) covers a
+## whole number of screen pixels: the framing the camera was designed at (its zoom at 1280x720)
+## rounded down to the nearest whole size, the wider view (decision 0007). At 1080 lines the
+## dungeon (designed at 1.5) is drawn 4 screen pixels to an art pixel, not 4.5: columns of 4 and
+## 5 would alternate and shimmer as the view scrolls. 3 at 720 lines, 6 at 1440, 9 at 2160.
 ##
 ## The shift. On a phone the UI is stretched x1.5 (1080 lines for the 720 the layouts use): an odd
 ## position in the UI's units falls on a half screen pixel. There, every screen pixel samples a
@@ -30,6 +36,8 @@ signal scale_changed
 const SHIFT := 0.25
 ## The scale goes by these steps (whole font pixels at BODY: 2 UI units a font pixel).
 const STEP := 0.5
+## World units in one art pixel (pack art is drawn at scale 2: docs/art-bible.md).
+const ART_PIXEL := 2.0
 
 ## Godot's own scale for this window (expand), and the one used.
 var _fit := 1.0
@@ -53,10 +61,26 @@ static func canvas_scale(fit: float, ui_size: int) -> float:
 	return maxf(1.0, whole - STEP * ui_size)
 
 
-## How much more the camera zooms so the floor fills the screen as it would at Godot's own scale
-## (1 when nothing was rounded off).
-func world_zoom() -> float:
-	return maxf(1.0, _fit / _scale) if _scale > 0.0 else 1.0
+## Screen pixels per art pixel for a camera designed at zoom `designed` (its framing at the
+## layouts' 1280x720) on a window Godot would scale by `fit`: the designed size rounded down to a
+## whole number (the wider view); 0 on a window too small for even one (a test's 64x64 window).
+static func art_pixel_size(designed: float, fit: float) -> int:
+	return floori(ART_PIXEL * designed * fit + 0.001)
+
+
+## The camera zoom drawing art_pixel_size() screen pixels per art pixel under a canvas scaled by
+## `scale` (canvas_scale()); the designed framing itself where not one whole pixel fits.
+static func whole_zoom(designed: float, fit: float, scale: float) -> float:
+	var pixels := art_pixel_size(designed, fit)
+	if pixels < 1:
+		return designed * fit / scale
+	return pixels / (ART_PIXEL * scale)
+
+
+## This window's zoom for a world camera designed at `designed` (GameCamera, VillageWalker):
+## every art pixel on a whole number of screen pixels, whatever the window and the interface size.
+func camera_zoom(designed: float) -> float:
+	return whole_zoom(designed, _fit, _scale) if _scale > 0.0 else designed
 
 
 ## The scale in use (screen pixels per UI unit).

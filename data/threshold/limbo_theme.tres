@@ -12,6 +12,7 @@
 [resource]
 script = ExtResource("5_theme")
 tint = Color(0.5, 0.56, 0.76, 1)
+narrative_exception = true
 lighting = ExtResource("8_lighting")
 music = ExtResource("snd_dream")
 ambience = ExtResource("1_ambience")

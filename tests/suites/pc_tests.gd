@@ -185,6 +185,7 @@ func run_unit() -> void:
 	_test_font_glyphs()
 	await _test_settings()
 	await _test_canvas_scale()
+	_test_whole_art_pixels()
 	await _test_menu_nav_unit()
 	InputDevice.use(before)
 
@@ -432,12 +433,38 @@ func _test_canvas_scale() -> void:
 		check(visible.x >= 1279.0 and visible.y >= 719.0, "%s: the canvas is at least 1280x720 (%s)" % [size, visible])
 		check(fit < 1.0 or is_equal_approx(fposmod(scale, 0.5), 0.0), "%s: a whole step of scale (x%s)" % [size, scale])
 		check(is_equal_approx(visible.x * scale, size.x) or is_equal_approx(visible.y * scale, size.y), "%s: the canvas fills the screen, never stretched" % size)
-		check(is_equal_approx(PixelGrid.world_zoom(), maxf(1.0, fit / scale)), "%s: the camera zooms by what the rounding took off" % size)
+		var art_pixel := PixelGridScript.ART_PIXEL * PixelGrid.camera_zoom(1.5) * scale
+		check(is_equal_approx(art_pixel, PixelGridScript.art_pixel_size(1.5, fit)), "%s: the floor's camera draws an art pixel on %s screen pixels, its framing rounded down to a whole size (%s)" % [size, PixelGridScript.art_pixel_size(1.5, fit), art_pixel])
 	Settings.ui_size = Settings.UI_MEDIUM
 	await _window(Vector2i(2560, 1440))
-	check(is_equal_approx(PixelGrid.ui_scale(), 1.5) and is_equal_approx(PixelGrid.world_zoom(), 2.0 / 1.5), "Medium on 1440 lines: x1.5, the floor framed as at x2")
+	check(is_equal_approx(PixelGrid.ui_scale(), 1.5) and is_equal_approx(PixelGrid.camera_zoom(1.5), 2.0), "Medium on 1440 lines: x1.5, the floor framed as at x2 (6 screen pixels per art pixel)")
 	Settings.ui_size = Settings.UI_BIG
 	await _restore_window(before)
+
+
+## Decision 0007: a world camera draws every art pixel on a whole number of screen pixels, its
+## designed framing rounded down (the wider view), whatever the window and the interface size.
+## The dungeon and the temple (designed at 1.5) and the village (2) on common screens.
+func _test_whole_art_pixels() -> void:
+	var expected: Array = [
+		[Vector2i(1280, 720), 1.5, 3], [Vector2i(1366, 768), 1.5, 3], [Vector2i(1600, 900), 1.5, 3],
+		[Vector2i(1920, 1080), 1.5, 4], [Vector2i(2340, 1080), 1.5, 4], [Vector2i(2560, 1440), 1.5, 6],
+		[Vector2i(3840, 2160), 1.5, 9], [Vector2i(1280, 800), 1.5, 3], [Vector2i(3440, 1440), 1.5, 6],
+		[Vector2i(1024, 768), 1.5, 2], [Vector2i(1920, 1080), 2.0, 6], [Vector2i(2340, 1080), 2.0, 6],
+		[Vector2i(1280, 720), 2.0, 4], [Vector2i(1366, 768), 2.0, 4], [Vector2i(1600, 900), 2.0, 5],
+	]
+	var wrong: Array[String] = []
+	for row: Array in expected:
+		var size: Vector2i = row[0]
+		var designed: float = row[1]
+		var fit := minf(size.x / 1280.0, size.y / 720.0)
+		for ui_size in [Settings.UI_BIG, Settings.UI_MEDIUM, Settings.UI_SMALL]:
+			var scale := PixelGridScript.canvas_scale(fit, ui_size)
+			var zoom := PixelGridScript.whole_zoom(designed, fit, scale)
+			var pixels := PixelGridScript.ART_PIXEL * zoom * scale
+			if not is_equal_approx(pixels, float(row[2])) or zoom * scale > designed * fit + 0.001:
+				wrong.append("%s at zoom %s, interface %d: %s" % [size, designed, ui_size, pixels])
+	check(wrong.is_empty(), "a world camera draws each art pixel on a whole number of screen pixels, never more than its designed framing (3 at 720 lines, 4 at 1080, 6 at 1440, 9 at 2160; wrong: %s)" % [wrong])
 
 
 ## MenuNav on a little menu: first focus, moving, wrapping, tabs, a slider.

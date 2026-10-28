@@ -4,8 +4,8 @@ extends Camera2D
 ## direction that springs back (the weight of a blow, a shot's recoil), apart from the shake.
 ## A boss too big for the view makes it lean toward it (lean_toward()).
 ## Both scale with the Screen shake option.
-## Its zoom (the scene's) grows by what PixelGrid's rounding of the canvas's scale took off, so a
-## floor fills any screen the same way (PixelGrid.world_zoom()).
+## Its zoom is the scene's framing made whole: every art pixel on a whole number of screen pixels
+## on any window, the framing rounded toward the wider view (PixelGrid.camera_zoom(), decision 0007).
 
 const MAX_OFFSET := 10.0
 const DECAY := 2.5
@@ -30,7 +30,7 @@ var _lean_target: Node2D
 var _lean_share := 0.0
 var _lean_height := 0.0
 var _lean := Vector2.ZERO
-## The zoom set in the scene, before PixelGrid's share.
+## The zoom set in the scene: the framing designed at 1280x720 (PixelGrid makes it whole).
 var _base_zoom := Vector2.ONE
 
 
@@ -43,9 +43,10 @@ func _ready() -> void:
 	fit_zoom()
 
 
-## Also when the debug panel's zoom step changes (DebugCheats.zoom()).
+## Also when the debug panel's zoom step changes (DebugCheats.zoom(): a tool, its steps may leave
+## the whole grid).
 func fit_zoom() -> void:
-	zoom = _base_zoom * PixelGrid.world_zoom() * DebugCheats.zoom()
+	zoom = Vector2.ONE * PixelGrid.camera_zoom(_base_zoom.x) * DebugCheats.zoom()
 
 
 ## Pushes the view `pixels` along `direction`; it springs back. One blow striking a crowd kicks

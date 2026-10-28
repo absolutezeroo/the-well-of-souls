@@ -8,6 +8,8 @@ Each failure says what to do instead. A failure is a rule to follow, never a che
 - Palette: every opaque pixel of the world art (tiles, props, characters, items, weapons,
   projectiles) is a colour of assets/palette/world.hex (Ninja Adventure's colours and the
   project's approved recolours). Another pack's art fails here.
+- Alpha: every pixel of the world art and the effects (assets/fx) is fully opaque or fully
+  transparent; fades are dithered (docs/art-bible.md "Palette", docs/vfx.md section 1).
 - UI skin: no new StyleBoxFlat/StyleBoxTexture built outside src/ui/common/ (OrnateBoard,
   RpgWindow, RpgDialog, UiParts, UiSkin draw every frame, docs/design/interface.md).
 - Media stays in assets/: no image, sound or font referenced from anywhere else.
@@ -117,6 +119,21 @@ def check_palette():
 	return failures
 
 
+def check_alpha():
+	try:
+		from PIL import Image
+	except ImportError:
+		print("design: alpha check skipped (pip install pillow)", file=sys.stderr)
+		return []
+	failures = []
+	for path in list(_world_pngs()) + sorted((ROOT / "assets/fx").rglob("*.png")):
+		image = Image.open(path).convert("RGBA")
+		partial = sum(image.getchannel("A").histogram()[1:255])
+		if partial:
+			failures.append("%s: %d half-transparent pixel(s). Alpha is 1-bit in the world's art: make each pixel opaque (a colour of the palette) or transparent, and dither a fade (docs/art-bible.md \"Palette\")." % (path.relative_to(ROOT).as_posix(), partial))
+	return failures
+
+
 def check_ui_skin():
 	failures = []
 	for path in sorted((ROOT / "src").rglob("*.gd")):
@@ -153,7 +170,7 @@ def check_agents_length():
 
 
 def run():
-	return check_provenance() + check_palette() + check_ui_skin() + check_media_paths() + check_agents_length()
+	return check_provenance() + check_palette() + check_alpha() + check_ui_skin() + check_media_paths() + check_agents_length()
 
 
 def snapshot_palette(pack):

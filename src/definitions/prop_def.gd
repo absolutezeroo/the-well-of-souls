@@ -24,11 +24,11 @@ extends ContentDef
 ## Light given off (LightField): level 12 lights its tile 12, the next ones 11... 0 = none.
 @export_range(0, 15) var light_level: int = 0
 @export var light_color: Color = Color(1, 0.85, 0.6)
-## Flames rising from it (braziers, candles): a looping particle scene, where on the sprite
-## (from its foot), and how big.
+## Flames rising from it (braziers, candles): a looping scene, drawn at its own size (a smaller
+## flame is a smaller scene, never a scaled one: decision 0007), and where on the sprite (from
+## its foot).
 @export var flame: PackedScene
 @export var flame_offset: Vector2 = Vector2(0, -24)
-@export var flame_scale: float = 1.0
 
 
 func is_breakable() -> bool:

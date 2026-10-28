@@ -34,6 +34,9 @@
     loses 15% of his max Health (`PitDef.fall_damage`). Rolling carries you over; flying monsters
     (bats, ghosts...) don't care. Walking monsters steer around holes, so knock them in.
   - **Crumbling floor**: cracked tiles that hold until someone stands on them, then give way.
+    Its cracks are drawn opaque, darker than any floor's own marks, so it reads at rest; giving
+    way, they jolt by whole art pixels and the cell darkens by dithering. (The spike trap's holes
+    are opaque too.)
     A crack that gave way is saved with the floor (`World.spent_data()` "collapsed"): a resumed
     run finds the hole there, not the crack again.
   - **Quicksand** (ruins) and **mud** (caves): very slow to cross, and they hurt if you stay.
@@ -60,7 +63,10 @@
   **Cinder Ruins**, **Godless Temple**; Act IV **Sandchoked City** (sand streets, an abandoned market,
   oases and palms, a lion fountain) and **Tomb of the Dead Sun** (sarcophagi, burial chambers, gold). Nothing from another biome ever shows up. A biome has:
   - its **look** (`theme`: floor and wall tiles, tint, darkness, music) and its **lights**
-    (candles in the crypt and the library, braziers in the ruins);
+    (candles in the crypt and the library, braziers in the ruins). The theme's tint is a neutral
+    dim at most: the biome's colour comes from its tiles, its light and its screen grading
+    ([decision 0009](../decisions/0009-world-tints.md); only the Threshold, the Deeps and the
+    Well's Bottom are flagged `narrative_exception`);
   - its **grounds** (`GroundLayerDef`: moss, sand, mud, shallow water, cobbles...): patches shaped
     by noise, drifting against the walls or keeping to the middle, drawn by a shader
     (`GroundLayer`) with rounded, ragged edges and a rim, in the art's chunky pixels;
@@ -526,36 +532,6 @@ quitting is lost (no relic); a cost already paid stays paid.
 
 The first pact door seen brings a tutorial hint. Debug panel: "Pact door" spawns one of each in a
 dead-end room of the current floor.
-
-## Room trials
-
-A floor may hold a trial (« épreuve », `RoomTrial`, `data/trials/`, `TrialDef`): something to do
-besides reaching the stairs, optional, in the Well's voice. **One thing of its own a floor**: only
-a normal floor past the first with no curse and no floor event (cold, night, heat...), never a
-boss floor, and a floor with a trial has no pact door (`DungeonConfig` > Room trials:
-`trial_chance` 0.45 of those floors). It comes from the floor's seed (its own generator,
-`RoomTrial.floor_rng()`: the rest of the floor is laid the same), so a daily run has the same.
-As the floor begins a banner names it and the log says its call; under the minimap a line says
-its objective ("Souls freed: 2 / 4", `TrialLine`); the minimap marks what is left to do once
-seen; each step is a toast, the end a banner ("Trial done") and the log's last line. Each step
-brings foes (`foes_per_step`, +1 every `depths_per_extra_foe` floors). Done, it pays
-(`bonus_souls` to the run, paid at its end like the hidden floor's; `relic_choices` relics if
-any: the Game, on `Events.trial_completed`). A floor's save keeps its steps done (`"trial"`): a
-resumed floor finds them done again, quietly (no foes, no reward again). A partly freed soul
-also keeps its progress and whether its foes were already called, so resuming beside it never
-calls a second wave. Older saves without that state start untouched souls normally. Debug panel:
-"Room trial" lays one on the current floor.
-
-| Trial (FR / EN) | What to do | Each step | Reward |
-|---|---|---|---|
-| Les Âmes de Kagari / The Souls of Kagari | free 3-4 souls held by chains of tar in the floor's biggest quiet room: stand by each for 3 s (stepping away stops the count, it is not lost) | the first moment by a soul, the Well sends foes to take it back; freed, it rises (spirit nova, light) and gives back 6% of max Health | 25 souls |
-| Le Sceau Défait / The Unbound Seal | light the 5 lanterns standing cold in other rooms (Interact: "Kindle"); a dead-end room is shut behind violet spikes, a star drawn before its door, a point for each lantern | the dark answers each lantern with foes around it; its point of the star lights | the door opens on its hoard (a big chest, seen through the bars all along), 15 souls |
-
-The souls are villagers' figures (the merchant's, the smith's, the Vigil-Keeper's frames),
-washed pale and see-through in spirit's ramp, a soft halo behind them (`CaptiveSoul`); the seal's
-star and the lanterns' flames are drawn on the art's grid at 8 and 12 fps (`SealTrial`,
-`SealLantern`). The trials' lore: the souls Tôma gave to the Well on the moonless night; the seal
-whose knots he undid, tied back here one flame at a time (docs/lore.md).
 
 ## Room trials
 

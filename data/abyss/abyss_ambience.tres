@@ -26,6 +26,7 @@ fog_speed = Vector2(4, -6)
 grade_shadows = Color(0.62, 0.22, 0.26, 1)
 grade_highlights = Color(1, 0.86, 0.74, 1)
 grade_strength = 0.6
+narrative_exception = true
 saturation = 0.8
 contrast = 1.12
 bloom = 0.45

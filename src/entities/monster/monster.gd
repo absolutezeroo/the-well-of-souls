@@ -126,8 +126,9 @@ func make_elite(affix: EliteAffixDef, config: DungeonConfig) -> void:
 	make_ranked(config.elite_rank, list)
 
 
-## Raises the monster to `new_rank` with `new_affixes` (their perks): more HP, bigger, more XP,
-## better loot, its aura and name. A boss keeps its size and gets its rank's boss HP.
+## Raises the monster to `new_rank` with `new_affixes` (their perks): more HP, a wider body, more
+## XP, better loot, its rim, aura and name (its art keeps scale 2: decision 0007). A boss keeps
+## its size and gets its rank's boss HP.
 func make_ranked(new_rank: MonsterRankDef, new_affixes: Array[EliteAffixDef]) -> void:
 	if new_rank == null or rank != null:
 		return  # ranking is a spawn-time operation; repeated calls must not stack rewards/stats
@@ -157,11 +158,10 @@ func make_ranked(new_rank: MonsterRankDef, new_affixes: Array[EliteAffixDef]) ->
 	invalidate_stats()
 	hp = get_max_hp()
 	if not is_boss():
-		head_height *= rank.scale
-		set_body_radius(radius * lerpf(1.0, rank.scale, 0.5))
+		# A wider body (gameplay), the same art: pack art is never stretched (decision 0007).
+		set_body_radius(radius * rank.radius_multiplier)
 		if rig:
 			rig.position = Vector2(0, _feet_y())
-			rig.scale = Vector2.ONE * rank.scale
 		drops.xp_multiplier = rank.xp_multiplier
 	drops.bonus_drops = rank.bonus_drops
 	if rig and (rank.hue_shift > 0.0 or rank.shimmer):

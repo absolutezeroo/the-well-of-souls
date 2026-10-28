@@ -162,9 +162,11 @@ shows to the device in hand.
   shape (`canvas_items`, expand). Its scale is rounded down to a step of 0.5 (x1 from 720 to 1079
   lines, x1.5 at 1080, x2 at 1440, x3 at 2160), where BODY letters keep whole pixels, and the canvas
   takes the rest (1366x768 lays out at 1366x768, 21:9 at 1720x720, 16:10 at 1280x800). A screen too
-  small for x1 (1024x768) keeps its own scale (x0.8: letters a little uneven). The camera zooms in
-  by what the rounding took off, so a floor is framed as before on every screen
-  (`PixelGrid.world_zoom()`, `GameCamera`).
+  small for x1 (1024x768) keeps its own scale (x0.8: letters a little uneven). The world's cameras
+  keep their framing whatever the interface's scale, made whole: their zoom draws every art pixel
+  on a whole number of screen pixels, the designed framing rounded down to the wider view
+  ([decision 0007](../decisions/0007-whole-pixels-on-screen.md); `PixelGrid.camera_zoom()`,
+  `GameCamera`, `VillageWalker`).
 - **Typing on a phone** (`SoftKeyboard`, every `LineEdit` / `TextEdit`: the feedback form, the
   pseudonym): Godot's Android activity is `adjustResize`, so the phone's keyboard shrinks the
   game's window to the strip above it (2340x1080 to about 2340x480 held sideways). Read as a new

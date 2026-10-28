@@ -9,16 +9,16 @@ colors = PackedColorArray(1, 0.9647, 0.8471, 1, 1, 0.8824, 0.5529, 1, 1, 0.6784,
 
 [node name="PropFlame" type="CPUParticles2D"]
 material = ExtResource("pixel_material")
-amount = 10
-lifetime = 0.55
+amount = 6
+lifetime = 0.4
 preprocess = 1.0
 emission_shape = 3
-emission_rect_extents = Vector2(3, 1)
+emission_rect_extents = Vector2(1, 0.5)
 direction = Vector2(0, -1)
 spread = 12.0
-gravity = Vector2(0, -60)
-initial_velocity_min = 8.0
-initial_velocity_max = 22.0
+gravity = Vector2(0, -36)
+initial_velocity_min = 5.0
+initial_velocity_max = 12.0
 scale_amount_min = 2.0
 scale_amount_max = 2.0
 color_ramp = SubResource("Gradient_steps")

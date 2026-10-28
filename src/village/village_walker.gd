@@ -3,8 +3,8 @@ extends CharacterBody2D
 ## A peaceful surface body: the same movement actions and hero rig, with no run, combat or XP.
 
 const RIG := preload("res://src/entities/rig/actor_rig.tscn")
-## The surface's camera zoom at the layout's scale (PixelGrid.world_zoom() is added on top).
-const SURFACE_ZOOM := Vector2(2, 2)
+## The surface's camera zoom as designed at 1280x720 (PixelGrid.camera_zoom() makes it whole).
+const SURFACE_ZOOM := 2.0
 var def: VillageDef
 var hero: PlayerDef
 var blocked := false
@@ -54,10 +54,11 @@ func set_place(next_room: VillageInteriorDef, at: Vector2) -> void:
 	camera.force_update_scroll()
 
 
-## The authored zoom (the surface's, a room's) grows by what PixelGrid's rounding of the canvas's
-## scale took off, as the dungeon's GameCamera does: a room fills any screen the same way.
+## The authored zoom (the surface's, a room's) made whole on this window, as the dungeon's
+## GameCamera does: every art pixel on a whole number of screen pixels, the framing rounded
+## toward the wider view (PixelGrid.camera_zoom(), decision 0007).
 func _fit_zoom() -> void:
-	camera.zoom = (Vector2.ONE * room.camera_zoom if room else SURFACE_ZOOM) * PixelGrid.world_zoom()
+	camera.zoom = Vector2.ONE * PixelGrid.camera_zoom(room.camera_zoom if room else SURFACE_ZOOM)
 
 
 func _physics_process(delta: float) -> void:
