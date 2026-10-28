@@ -29,6 +29,12 @@ extends Resource
 @export_range(0.1, 2.0, 0.05) var min_boss_windup: float = 0.5
 ## Shockwaves, delayed and posthumous blasts, traps and fused explosives warn at least this long.
 @export_range(0.1, 2.0, 0.05) var min_blast_warning: float = 0.4
+## The share of what a floor adds to a monster's wind-up or cast that comes off the wait before its
+## next blow or that skill (Monster.keep_attack_tempo(), keep_skill_tempo()): 1, its rhythm stays
+## what its data, the difficulty and its phase make it, only its warning is longer. The challenge
+## of a fast monster, a boss's last phase or Nightmare stays in its tempo, not in a warning too
+## short to read (decision 0008; balance log, 28 Oct 2026). Never below its recovery.
+@export_range(0.0, 1.0, 0.05) var floor_tempo_kept: float = 1.0
 
 
 ## How long a wind-up of `seconds` (every multiplier already in) really lasts: never under the

@@ -100,6 +100,14 @@ per mechanism, **after** the difficulty's, an ascension's and the boss phases' m
 | A shockwave, a burst after death, a bomb's or a barrel's fuse, a trapped chest | 0.4 s | `Combat.shockwave()`, `Combat.delayed_blast()`, `Prop`, `Chest` (`CombatRulesDef.blast_warning()`) |
 | A trap's click (spikes, an arrow plate) | 0.4 s | `TrapDef.warning_seconds()` |
 
+**The tempo is kept** ([decision 0014](../decisions/0014-tempo-under-the-floors.md)): what a floor
+adds to a wind-up or a cast comes off the wait after it (`CombatRulesDef.floor_tempo_kept`, 1:
+all of it; `Monster.keep_attack_tempo()` takes it off the blow's cooldown, never below its
+recovery, `keep_skill_tempo()` off the skill's cooldown). A rat written 0.25 s of wind-up and a
+bite every 0.9 s winds up 0.4 s and still bites every 1.15 s; a boss's last phase keeps the
+rhythm its phase multipliers give it. Harder modes and late phases keep their pressure in
+numbers and tempo; only the warning is longer. `game.fairness` ("tempo kept").
+
 The mark covers the real area and lasts until the hit: a shot's lane is drawn as far as it flies
 and as wide as the shot (`TelegraphView.show_shots()`; a ranged monster's shot too), a ring of
 shots (Hailstorm, Toxic Bloom, Sandstorm) by its lanes, not a small circle; a blast's mark

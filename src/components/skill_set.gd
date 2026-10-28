@@ -47,6 +47,12 @@ func cooldown_ratio(index: int) -> float:
 	return _cooldowns[index] / _durations[index]
 
 
+## The cooldown running in slot `index` shortened by `seconds` (of cooldown time; never below 0).
+func shorten(index: int, seconds: float) -> void:
+	if index >= 0 and index < _cooldowns.size() and seconds > 0.0:
+		_cooldowns[index] = maxf(_cooldowns[index] - seconds, 0.0)
+
+
 ## Ready again at once (an echoing perk).
 func reset_cooldown(skill: SkillDef) -> void:
 	var index := skills.find(skill)

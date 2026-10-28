@@ -266,6 +266,31 @@ func windup_for(seconds: float) -> float:
 	return Combat.RULES.monster_windup(seconds * _windup_multiplier, is_boss())
 
 
+## How much longer the fairness floor makes a wind-up or cast written `seconds` than its
+## multipliers alone would (0 where they leave it above the floor).
+func floor_extra(seconds: float) -> float:
+	return maxf(windup_for(seconds) - seconds * _windup_multiplier, 0.0)
+
+
+## Its blow just struck after a wind-up the floor held longer: the wait before the next one is
+## shorter by as much (CombatRulesDef.floor_tempo_kept), never below its recovery. A bat bites
+## every 1.1 s as its data says, warned 0.4 s instead of 0.2.
+func keep_attack_tempo() -> void:
+	var extra := floor_extra(def.attack_windup) * Combat.RULES.floor_tempo_kept
+	if extra > 0.0:
+		_attack_cooldown = maxf(_attack_cooldown - extra, def.attack_recovery)
+
+
+## Its skill in slot `index` just went off after a cast the floor held longer: its cooldown is
+## shorter by as much (in the cooldown's own time: a phase's cooldown_speed).
+func keep_skill_tempo(index: int) -> void:
+	var skill := skills.skills[index] if index >= 0 and index < skills.skills.size() else null
+	if skill == null or not skill.hurts():
+		return
+	var extra := maxf(skill_cast_time(skill) - skill.cast_time * _windup_multiplier, 0.0) * Combat.RULES.floor_tempo_kept
+	skills.shorten(index, extra * cooldown_speed)
+
+
 ## A warning it gives as written (a strike's fuse on the ground: GroundStrike), held to the floor.
 func floor_windup(seconds: float) -> float:
 	return Combat.RULES.monster_windup(seconds, is_boss())

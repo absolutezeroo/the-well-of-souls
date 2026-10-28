@@ -30,6 +30,62 @@ const KNOWN := [
 const KNOWN_DATE := "2026-10-20"
 
 
+## The main run, and an act's alternate warden on its own (each test has its time).
+func test_cases() -> Array:
+	return [["", Callable(self, &"run")], ["alternates", Callable(self, &"run_alternates")]]
+
+
+## The Ember Ronin (act III's alternate warden), hard but fair on Keeper over four seeds
+## (2026-10-28: the kite bot won 2 of 8 with the floors' tempo kept, 7 of 8 with his second fierce
+## arc and last-phase blade lighter; here 3 of 4): the kite bot wins 3 of 4 at least, the
+## face-tank loses every one. The Mire Matron (act I's) is a coin toss for the kite bot (8 of 12
+## over these seeds and the command line's), not guarded yet: balance log 2026-10-28.
+func run_alternates() -> void:
+	var shown := Vfx.shown
+	Vfx.shown = false
+	var targets := BalanceBuild.load_targets()
+	var builds := BalanceBuild.load_all()
+	var lab := BalanceLab.new()
+	lab.content = CONTENT
+	add_child(lab)
+	var arena := BalanceArena.new()
+	arena.lab = lab
+	arena.content = CONTENT
+	arena.targets = targets
+	arena.all_builds = builds
+	arena.verbose = false
+	add_child(arena)
+	lab.override_chances()
+	var normal := BalanceContent.difficulty(CONTENT, "normal")
+	for boss_id: StringName in [&"red_samurai"]:
+		var fair: BossDef = null
+		for candidate: BossDef in BalanceContent.bosses(CONTENT):
+			if candidate.id == boss_id:
+				fair = candidate
+		var expected := BalanceBuild.expected(builds, BalanceContent.act_of_boss(CONTENT, fair) if fair else 0)
+		check(fair != null and expected != null, "%s and its act's expected build exist" % boss_id)
+		if fair == null or expected == null:
+			continue
+		var kite_wins := 0
+		var lines := PackedStringArray()
+		for s in range(1, 5):
+			lab.seed_value = s
+			for bot in ["kite", "face_tank"]:
+				var r := await arena.fight_boss(fair, expected, normal, bot)
+				var line := BalanceArena.fight_line(r)
+				print("  duel (seed %d): %s" % [s, line])
+				if bot == "kite":
+					kite_wins += 1 if r.result == "win" else 0
+					lines.append(line)
+				else:
+					_target(r.result == "loss" or (r.result == "win" and not BalanceArena.facetank_won(r, targets)), "duel: %s face-tank loses on Keeper" % fair.display_name, "seed %d: %s" % [s, line])
+		_target(kite_wins >= 3, "duel: %s kite wins on Keeper" % fair.display_name, "%d of 4 seeds won (target >= 3): %s" % [kite_wins, " / ".join(lines)])
+	arena.queue_free()
+	lab.queue_free()
+	BalanceLab.isolate_profile()
+	Vfx.shown = shown
+
+
 func run() -> void:
 	var shown := Vfx.shown
 	Vfx.shown = false  # the tools simulate (BalanceLab.simulate): nothing to see, twice as fast

@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 434,
+  "next_id": 437,
   "tags": [
     "pc",
     "test",
@@ -1217,8 +1217,8 @@
     {
       "id": "task_81",
       "title": "La Matrone du Bourbier bat souvent le bot kite en Gardien",
-      "description": "Boss alternatif de l'acte I : kite 4/8, joueur 0/8, face-tank 0/4 (graines 1-8, passe du 23/10). Hors de la cible « le kite gagne en Gardien ». À mesurer (journal des coups, --hits) et corriger ce qui est injuste.",
-      "status": "todo",
+      "description": "Boss alternatif de l'acte I : kite 4/8, joueur 0/8, face-tank 0/4 (graines 1-8, passe du 23/10). Hors de la cible « le kite gagne en Gardien ». À mesurer (journal des coups, --hits) et corriger ce qui est injuste.\n\n28/10 (agent polish) : mesuré avec le tempo gardé, sans changement de ses chiffres : kite 7/8 (graines 1-8 en ligne de commande), 1/4 sur les graines de la suite d'équilibrage (perdu à 0-1 %) : pile ou face (8/12) ; face-tank 0/12. Ce qui coûte : le Saut féroce en phase 3 (2e bond et anneau d'atterrissage sans marque à eux : carte ajoutée). Essai cooldown 4 → 4,5 s abandonné (pas mieux). À jouer sur le S23 avant de toucher ses chiffres.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -1227,13 +1227,13 @@
         "boss"
       ],
       "created_at": 1792715509,
-      "updated_at": 1792715509
+      "updated_at": 1793190065
     },
     {
       "id": "task_82",
       "title": "Le Rônin des Braises bat le bot kite en Gardien",
-      "description": "Acte III : kite 1/4, joueur 0/4 (boss à 24-33 %), face-tank 0/4 (graines 1-4, passe du 23/10). Hors de la cible « le kite gagne en Gardien ». À mesurer (journal des coups) avant de corriger.",
-      "status": "todo",
+      "description": "Acte III : kite 1/4, joueur 0/4 (boss à 24-33 %), face-tank 0/4 (graines 1-4, passe du 23/10). Hors de la cible « le kite gagne en Gardien ». À mesurer (journal des coups) avant de corriger.\n\n28/10 (agent polish) : corrigé. Avec le tempo gardé le kite ne gagnait que 2/8 (graines 1-8) : sa phase 3 (Arc de flammes féroce, 2e coup au même endroit 0,5 s après à x1,3, et sa lame). 2e arc x0,9 (au lieu de x1,3), bonus de Dégâts de phase 3 +2 (au lieu de +3) : kite 7/8, joueur 0/8, face-tank 0/8 (33-55 % restants). Garde : balance.alternates (kite 3/4 au moins). À vérifier sur le S23 : dur mais battable ; le 2e arc a maintenant sa propre marque (voir task_416).",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -1242,7 +1242,7 @@
         "boss"
       ],
       "created_at": 1792715509,
-      "updated_at": 1792715509
+      "updated_at": 1793190065
     },
     {
       "id": "task_83",
@@ -6292,8 +6292,8 @@
     {
       "id": "task_417",
       "title": "Équilibrage après les planchers de préparation",
-      "description": "Les planchers (0,4 s / 0,5 s boss) rallongent les préparations des monstres rapides (chauves-souris, ratons, rats, crânes) et des boss en phase 3, et A6/A10 ont perdu un modificateur (A6 plus de « moins de temps pour esquiver », A10 plus de +15 % de Vie) : Cauchemar+10 est un peu plus facile. Repasser les outils d'équilibrage (game-balancer) en Gardien et en Cauchemar+10, et chercher le défi dans les chiffres, la densité et les motifs (décision 0008), pas dans des préparations plus courtes.",
-      "status": "todo",
+      "description": "Les planchers (0,4 s / 0,5 s boss) rallongent les préparations des monstres rapides (chauves-souris, ratons, rats, crânes) et des boss en phase 3, et A6/A10 ont perdu un modificateur (A6 plus de « moins de temps pour esquiver », A10 plus de +15 % de Vie) : Cauchemar+10 est un peu plus facile. Repasser les outils d'équilibrage (game-balancer) en Gardien et en Cauchemar+10, et chercher le défi dans les chiffres, la densité et les motifs (décision 0008), pas dans des préparations plus courtes.\n\n28/10 (agent polish) : mesuré (balance-log 28/10) contre le build d'avant les planchers, mêmes graines. Règle ajoutée (décision 0014) : ce qu'un plancher ajoute à une préparation est retiré de l'attente qui suit (cooldown, jamais sous la récupération) : un rat mord de nouveau toutes les 1,15 s (1,3 s avec le plancher), préparé 0,4 s ; idem chauves-souris, ratons, crânes, phases finales des boss, Cauchemar (x0,7). Boss en Gardien (10 boss, graines 1-2) : bot kite 16/20 avant, 19/20 planchers, 17/20 avec le tempo ; bot joueur 5 → 9 → 10/20 (il lit enfin les préparations : le but du contrat). A10 : « +15 % de Dégâts encore » (au lieu de 10 %) : menace de boss en Cauchemar+10 x4,46-5,48 contre x4,28-5,32 avant les planchers. À vérifier sur le S23 : les monstres rapides (chauves-souris, rats) et les dernières phases restent-ils pressants mais lisibles ? Cauchemar+10 assez dur ?",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6302,7 +6302,7 @@
         "combat"
       ],
       "created_at": 1793165202,
-      "updated_at": 1793165202
+      "updated_at": 1793190065
     },
     {
       "id": "task_418",
@@ -6544,6 +6544,50 @@
       ],
       "created_at": 1793170158,
       "updated_at": 1793170158
+    },
+    {
+      "id": "task_434",
+      "title": "Suite d'équilibrage : le cas principal s'arrête au chien de garde de 900 s",
+      "description": "Vu le 28/10 (agent polish) : python3 tools/run_tests.py --only balance s'arrête sur « balance still running after 900 s (stuck) » après 69 vérifications, aussi sur le build d'avant cette passe (842a370). Le temps de jeu simulé des duels dépasse TEST_TIMEOUT : ses dernières vérifications (duels des boss justes, Gardien sans fond, courbe) ne tournent plus. Découper run() en plusieurs cas (comme balance.alternates) ou donner à la suite son propre délai.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "due_date": null,
+      "tags": [
+        "tests",
+        "équilibrage"
+      ],
+      "created_at": 1793190065,
+      "updated_at": 1793190065
+    },
+    {
+      "id": "task_435",
+      "title": "Gauntlet à repasser après les planchers et le tempo gardé",
+      "description": "28/10 (agent polish) : la passe d'équilibrage a mesuré les boss (arène, 10 boss, graines 1-2), le modèle et les salles (pack, actes I-II), pas le gauntlet (lent). Vérifier la cible « bot joueur : 75 % des actes gagnés en Gardien » et le coût des étages après la décision 0014.",
+      "status": "todo",
+      "priority": "low",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "équilibrage"
+      ],
+      "created_at": 1793190065,
+      "updated_at": 1793190065
+    },
+    {
+      "id": "task_436",
+      "title": "Marques des coups suivants d'un sort qui déplace le lanceur (sauts, ruées)",
+      "description": "28/10 (agent polish) : LaterMark (task_416) marque les coups plus tardifs d'un sort dès le début de l'incantation, sauf quand le sort déplace le lanceur (Saut féroce de la Matrone et du Thésauriseur, ruées du Wyrm, de Tôma, du Tengu) : la marque suivrait le corps et montrerait le coup au mauvais endroit avant le saut. Proposé : placer ces marques le long de la visée (fin du premier bond, coupée aux murs). C'est ce qui coûte le plus au bot kite contre la Matrone (task_81).",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "combat",
+        "vfx"
+      ],
+      "created_at": 1793190065,
+      "updated_at": 1793190065
     }
   ]
 }

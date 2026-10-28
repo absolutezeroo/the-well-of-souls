@@ -43,5 +43,6 @@ func physics_update(delta: float) -> void:
 	if _timer <= 0.0:
 		var index := actor.casting_index
 		actor.casting_index = -1
-		actor.skills.try_use(index, actor, _aim)
+		if actor.skills.try_use(index, actor, _aim):
+			actor.keep_skill_tempo(index)  # its rhythm kept under the fairness floor
 		machine.transition_to(&"Chase")

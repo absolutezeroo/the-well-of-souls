@@ -22,6 +22,7 @@ func run_unit() -> void:
 func run_game(game: Game) -> void:
 	await _test_threat_markers(game)
 	await _test_warning_sound(game)
+	await _test_tempo_kept(game)
 
 
 # --- Unit ----------------------------------------------------------------------
@@ -363,6 +364,39 @@ func _test_warning_sound(game: Game) -> void:
 	check(wound, "warning sound: a rat next to the hero winds up")
 	check(Sfx.warnings_played > played, "warning sound: ...and its wind-up sounds")
 	rat.queue_free()
+	await _frames(5)
+
+
+## The floor lengthens a fast monster's warning, not the time between its blows: a rat (wind-up
+## 0.25 s written, its bite every 0.9 s) winds up 0.4 s, and the wait after its bite is 0.15 s
+## shorter, so a rat that stays on the hero bites every 1.15 s as its data says
+## (CombatRulesDef.floor_tempo_kept; balance log 28 Oct 2026). Before, the floor's 0.15 s came on
+## top: 1.3 s. (Its walk between bites is its own: measured is the wait the rule shortens.)
+func _test_tempo_kept(game: Game) -> void:
+	var player := game.player
+	var world := game.world
+	await _clear_monsters(world)
+	var def := load("res://data/monsters/rat.tres") as MonsterDef
+	var rat := world.spawn_monster(def, world.find_open_point_near(player.global_position, 36.0))
+	var windups: Array[int] = []
+	var waits: Array[float] = []
+	var winding := 0
+	for frame in 60 * 8:
+		if not is_instance_valid(rat) or waits.size() >= 3:
+			break
+		if rat.telegraph > 0.0:
+			winding += 1
+		elif winding > 0:
+			windups.append(winding)
+			waits.append(rat._attack_cooldown)  # the wait before its next bite, just set by this one
+			winding = 0
+		await _frames(1)
+	var extra := rat.floor_extra(def.attack_windup) if is_instance_valid(rat) else 0.0
+	var expected := def.weapon.cooldown - extra
+	check(windups.size() >= 2 and windups.min() >= 23, "tempo kept: a rat's bites each warned at least the floor's 0.4 s (%s frames)" % [windups])
+	check(extra > 0.1 and not waits.is_empty() and waits.all(func(wait: float) -> bool: return absf(wait - expected) <= 0.04), "tempo kept: ...and the wait after each %.2f s, its %.2f s less what the floor added (%.2f): its rhythm as its data says (%s)" % [expected, def.weapon.cooldown, extra, waits])
+	if is_instance_valid(rat):
+		rat.queue_free()
 	await _frames(5)
 
 

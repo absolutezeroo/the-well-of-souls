@@ -35,7 +35,8 @@ func physics_update(delta: float) -> void:
 			actor.telegraph = 1.0 - clampf(_timer / maxf(actor.get_attack_windup(), 0.001), 0.0, 1.0)
 			if _timer <= 0.0:
 				actor.telegraph = 0.0
-				actor.attack(_aim)
+				if actor.attack(_aim):
+					actor.keep_attack_tempo()  # its rhythm kept under the fairness floor
 				_phase = Phase.RECOVER
 				_timer = actor.def.attack_recovery
 		Phase.RECOVER:

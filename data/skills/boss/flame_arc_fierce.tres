@@ -25,7 +25,7 @@ element = ExtResource("vfx_fire")
 [sub_resource type="Resource" id="Resource_uynmm"]
 script = ExtResource("3_3u2bv")
 radius = 90.0
-damage_multiplier = 1.3
+damage_multiplier = 0.9
 offset = 60.0
 knockback = 280.0
 color = Color(1, 0.54901963, 0.25882354, 1)
