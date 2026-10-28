@@ -215,10 +215,14 @@ static func blast(world: World, center: Vector2, radius: float, amount: int, kno
 	hit_props(world, source, center, radius)
 
 
-## A warning ring around `source`, then after `fuse` seconds a blast that hurts and pushes
-## away its enemies only (a boss throwing the hero off). Follows `source` while it moves.
+## A warning on the ground around `source` (FuseMark: the blast's whole area, filling up until it
+## lands, following `source` while it moves) and its sound, then after `fuse` seconds (never
+## under the fairness floor: CombatRulesDef.blast_warning()) a blast that hurts and pushes away
+## its enemies only (a boss throwing the hero off).
 static func shockwave(world: World, source: Actor, radius: float, amount: int, knockback: float, fuse: float) -> void:
-	world.spawn_vfx(RingVfx.create(source.global_position, radius, Color(1.0, 0.3, 0.2, 0.8)))
+	fuse = RULES.blast_warning(fuse)
+	world.spawn_vfx(FuseMark.create(source.global_position, radius, fuse, source))
+	Sfx.play_warning(source.global_position)
 	var floor_id := world.floor_id
 	# (Weak references: the timer outlives a freed world or boss; see Effect.apply_all().)
 	var world_ref: WeakRef = weakref(world)
@@ -245,11 +249,14 @@ static func shockwave(world: World, source: Actor, radius: float, amount: int, k
 		hit_props(home, boss, center, radius))
 
 
-## A warning ring, then after `fuse` seconds a blast (see blast()). `fx`: a sheet of square
-## frames to play instead of the usual explosion; `element`: its nova instead (a frost skull
-## bursting into a ring of ice).
+## A warning on the ground (FuseMark: the blast's whole area, until it lands) and its sound,
+## then after `fuse` seconds (never under the fairness floor: CombatRulesDef.blast_warning()) a
+## blast (see blast()). `fx`: a sheet of square frames to play instead of the usual explosion;
+## `element`: its nova instead (a frost skull bursting into a ring of ice).
 static func delayed_blast(world: World, center: Vector2, radius: float, amount: int, fuse: float, fx: Texture2D = null, status: OnHitStatus = null, element: VfxElementDef = null) -> void:
-	world.spawn_vfx(RingVfx.create(center, radius, Color(1.0, 0.3, 0.2, 0.8)))
+	fuse = RULES.blast_warning(fuse)
+	world.spawn_vfx(FuseMark.create(center, radius, fuse))
+	Sfx.play_warning(center)
 	var floor_id := world.floor_id
 	var via := Actor.heal_source  # who set it off: its hits are credited to it (HitInfo.via)
 	var world_ref: WeakRef = weakref(world)  # (the timer outlives a freed world: see Effect.apply_all())

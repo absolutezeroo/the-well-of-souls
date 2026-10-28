@@ -74,6 +74,20 @@ func warning_reach() -> float:
 	return 0.0
 
 
+## Its hits hurt (a blast, a blow, a shot, a strike on the ground): a monster's cast of it is a
+## wind-up the fairness contract holds to its floor (SkillDef.hurts(), docs/decisions/0008).
+## False for a summon, a heal, a ward, a plain step.
+func hurts() -> bool:
+	return false
+
+
+## What each of its hits carries from `user` before the hit's own roll and the target's armor
+## (Combat.make_hit), 0 for a kind that hurts no one. Its apply() deals this; the damage budget's
+## test reads it.
+func hit_amount(_user: Actor) -> int:
+	return 0
+
+
 ## Shows how it is coming on `view` (a monster's cast: TelegraphView.show_skill()), cast toward
 ## `angle` by a body of `body_radius`, `progress` 0 when the warning starts and 1 when it lands:
 ## a shot's lane, a dive's line, an area's circle. False when it has nothing to warn of (a summon,

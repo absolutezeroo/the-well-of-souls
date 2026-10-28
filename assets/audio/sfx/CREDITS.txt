@@ -6,3 +6,6 @@ magic/gas.ogg        = Sounds/Elemental/Bubble, pitched down 15% (a pool of pois
 ../jingles/fragment.ogg = Jingles/Secret1 (a fragment of the past found)
 creatures/maw_bite.ogg = made for the game from materials/bone_1.ogg (Kenney "Impact Sounds", CC0)
   pitched down 28%, under combat/hit_heavy_1.ogg pitched down 15% (the Maw's jaw snapping shut)
+combat/telegraph.ogg = made for the game from two of its own sounds, no new source: materials/spirit_1.ogg
+  (Kenney "Impact Sounds", CC0) pitched down 25% and cut to 0.16 s, then combat/whoosh_0.ogg
+  (Ninja Adventure, CC0) reversed and pitched down 10%, 0.3 s in all (a monster's wind-up warning)

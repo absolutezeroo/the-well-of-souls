@@ -252,9 +252,29 @@ func get_move_speed() -> float:
 	return speed
 
 
-## Wind-ups and casts last longer on easy, shorter on hard (and in late boss phases).
+## Wind-ups and casts last longer on easy, shorter on hard (and in late boss phases), never under
+## the fairness floor (windup_for()).
 func get_telegraph_scale() -> float:
 	return _windup_multiplier
+
+
+## How long a wind-up or a warning written `seconds` lasts here: times the difficulty's, the
+## ascension's and its phases' multipliers, never under the floor of a monster's attack (a
+## boss's for a boss: CombatRulesDef.monster_windup(), docs/decisions/0008). Every wind-up of a
+## monster is asked here (its blow, its warned pulse, a maw's bite).
+func windup_for(seconds: float) -> float:
+	return Combat.RULES.monster_windup(seconds * _windup_multiplier, is_boss())
+
+
+## A warning it gives as written (a strike's fuse on the ground: GroundStrike), held to the floor.
+func floor_windup(seconds: float) -> float:
+	return Combat.RULES.monster_windup(seconds, is_boss())
+
+
+## How long its cast of `skill` lasts (SkillDef.monster_cast_time()): its own times
+## get_telegraph_scale(), at least the floor when it hurts; 0 for an instant one that hurts no one.
+func skill_cast_time(skill: SkillDef) -> float:
+	return skill.monster_cast_time(_windup_multiplier, is_boss()) if skill else 0.0
 
 
 ## Its wind-ups and casts last `factor` times as long from now on (a boss phase: BossBrain).
@@ -414,9 +434,9 @@ func casting_skill() -> SkillDef:
 	return skills.skills[casting_index] if casting_index >= 0 and casting_index < skills.skills.size() else null
 
 
-## Telegraph time before attacking (shorter in later boss phases).
+## Telegraph time before attacking (shorter in later boss phases, never under the floor).
 func get_attack_windup() -> float:
-	return def.attack_windup * _windup_multiplier
+	return windup_for(def.attack_windup)
 
 
 ## The debug panel's No AI: it stands where it is (its StateMachine thinks no more, its traits

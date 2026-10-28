@@ -60,7 +60,11 @@
   Monster warnings (`TelegraphView`, `telegraph.gdshader`): zone, cone, line or the lanes of a
   fan or ring of shots (so the gaps read), with crawling hazard stripes and a solid rim, filling
   up from the monster as the attack comes, flashing just before it lands; every monster shot
-  and dash now warns (lanes, line). Shots leave a glowing streak.
+  and dash warns (lanes, line), as far as it flies and as wide as the shot; a blast's mark
+  (`FuseMark`: a shockwave, a burst after death, a fuse) fills up for the whole fuse and follows
+  a boss that moves; a short sound starts every wind-up (`Sfx.play_warning()`), and an arrow at
+  the screen's edge points at a threat winding up out of sight (`ThreatMarkers`; all in
+  monsters.md "Warnings"). Shots leave a glowing streak.
 - **Light, space and screen** (docs/vfx.md, "Shaders"): glowing cores have a stepped **halo**
   (two flat bands of added light in their element's darker steps, sparser on bright floors):
   fire's heart in braziers and campfires, magic shots, Smite's column foot, Thunder's strike, a
@@ -204,7 +208,7 @@ project's own values already follow them: a hit freezes 0.035 s (a crit 0.07), t
 | Freeze and slow | Never a freeze during a slow |
 | Screen shake | Through `Events.screen_shake`/`GameCamera` only (the Screen shake option, 0 respected); trauma capped at 1; along the cause; whole art pixels; never rotation |
 | Input | Read on the first frame; attack, dodge and skill presses buffered 0.1-0.15 s, the buffer keeps counting through hitstop, consumed when used; the dodge cancels an attack's recovery |
-| Telegraph | Every attack that hurts has a wind-up on at least two channels (pose, colour or ground mark, sound), its ground mark equal to the real area, and a way out ([pillars.md](pillars.md)) |
+| Telegraph | Every attack that hurts has a wind-up on at least two channels (pose, colour or ground mark, sound: `Sfx.play_warning()`), its ground mark equal to the real area and lasting until the hit, a way out, and an edge arrow when it comes from off screen; at least 0.4 s (a boss's 0.5 s) after every multiplier ([pillars.md](pillars.md), monsters.md "Warnings") |
 | Flashes | At most 3 per second over a large area, and behind the Screen flashes option |
 | Haptics | Rare, short and crisp, only for important events (hurt, crit, boss), behind the Vibrations option; nothing on ordinary hits in a crowd |
 | Readability | Threats are the most salient layer; the hero's effects lower and more transparent; ground effects under bodies unless they are threats; damage numbers merge in a crowd |

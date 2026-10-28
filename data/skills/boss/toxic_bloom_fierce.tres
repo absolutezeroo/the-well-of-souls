@@ -49,4 +49,3 @@ effects = Array[ExtResource("1_sltrq")]([SubResource("Resource_lcar1"), SubResou
 sound = ExtResource("6_dh2t5")
 ai_max_range = 300.0
 cast_time = 0.8
-telegraph_radius = 90.0

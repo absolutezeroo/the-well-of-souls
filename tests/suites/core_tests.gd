@@ -396,7 +396,7 @@ func _test_delayed_source(game: Game) -> void:
 			vias.append(hit.via)
 	Events.actor_damaged.connect(on_damaged)
 	Actor.with_source(&"item:test_bomb", func() -> void: Combat.delayed_blast(world, slime.global_position, 40.0, 3, 0.1))
-	await _frames(14)
+	await _frames(ceili(Combat.RULES.blast_warning(0.1) * 60.0) + 8)  # (its fuse, held to the fairness floor)
 	Events.actor_damaged.disconnect(on_damaged)
 	check(not vias.is_empty() and vias.all(func(v: StringName) -> bool: return v == &"item:test_bomb"), "a delayed blast's hits are credited to what set it off (%s)" % [vias])
 	if is_instance_valid(slime):

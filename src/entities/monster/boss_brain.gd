@@ -75,17 +75,7 @@ func loot_quality(config: DungeonConfig) -> float:
 
 
 func _enter_phase(phase: BossPhase) -> void:
-	if phase.bonuses:
-		monster.base_stats = monster.base_stats.plus(phase.bonuses)
-		monster.invalidate_stats()
-	if not phase.skills.is_empty():
-		monster.skills.set_skills(phase.skills)
-		monster.casting_index = -1
-	monster.scale_telegraph(phase.windup_multiplier)
-	monster.cooldown_speed /= phase.cooldown_multiplier
-	if phase.shockwave_after_hits > 0:
-		shockwave_after = phase.shockwave_after_hits
-	tint = phase.tint
+	take_phase(phase)
 	# A roar: untouchable for a moment, and whoever stands close is thrown off.
 	monster.invincible = true
 	roar_time = def.phase_roar_time
@@ -97,6 +87,23 @@ func _enter_phase(phase: BossPhase) -> void:
 	Vfx.magic(world, monster.global_position, Palette.DANGER)
 	Sfx.play_at(Sfx.bank.boss_roar, monster.global_position)
 	Events.screen_shake.emit(0.6)
+
+
+## What `phase` changes in the fight, without its roar: its stats, skills, wind-ups (the
+## fairness floor still holds: Monster.windup_for()), cooldowns, shockwave and tint. The fairness
+## tests walk the phases through here.
+func take_phase(phase: BossPhase) -> void:
+	if phase.bonuses:
+		monster.base_stats = monster.base_stats.plus(phase.bonuses)
+		monster.invalidate_stats()
+	if not phase.skills.is_empty():
+		monster.skills.set_skills(phase.skills)
+		monster.casting_index = -1
+	monster.scale_telegraph(phase.windup_multiplier)
+	monster.cooldown_speed /= phase.cooldown_multiplier
+	if phase.shockwave_after_hits > 0:
+		shockwave_after = phase.shockwave_after_hits
+	tint = phase.tint
 
 
 ## Hit again (a hostile blow, not a tick) soon after the last hit: the streak grows; too long,
@@ -115,7 +122,13 @@ func _shockwave(fuse: float) -> void:
 		return
 	var world := monster.world
 	shockwave_cooldown = def.shockwave_cooldown
-	var damage := world.rules.dungeon_damage(def.shockwave_base_damage, def.shockwave_damage_per_depth) if world.rules else def.shockwave_fallback_damage
+	Combat.shockwave(world, monster, def.shockwave_radius + monster.radius, shockwave_damage(world.rules), def.shockwave_knockback, fuse)
+
+
+## Its shockwave's damage under `rules` (null: none): the dungeon's small blast, or its share of
+## the boss's power when that is more.
+func shockwave_damage(rules: FloorRules) -> int:
+	var damage := rules.dungeon_damage(def.shockwave_base_damage, def.shockwave_damage_per_depth) if rules else def.shockwave_fallback_damage
 	if def.shockwave_power > 0.0:
 		damage = maxi(damage, roundi(monster.get_power() * def.shockwave_power))
-	Combat.shockwave(world, monster, def.shockwave_radius + monster.radius, damage, def.shockwave_knockback, fuse)
+	return damage

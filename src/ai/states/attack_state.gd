@@ -21,6 +21,7 @@ func enter() -> void:
 	_timer = actor.get_attack_windup()
 	if actor.rig:
 		actor.rig.play_windup(_aim, _timer)
+	Sfx.play_warning(actor.global_position)  # the pose, the mark on the ground, and a sound
 
 
 func exit() -> void:

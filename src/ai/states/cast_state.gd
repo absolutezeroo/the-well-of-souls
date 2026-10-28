@@ -1,6 +1,7 @@
 extends State
-## Telegraphed skill: the monster stops, glows and shows the area, then the skill goes off.
-## The aim is locked when the cast starts, so the player can get out of the way.
+## Telegraphed skill: the monster stops, glows, shows the area and sounds its warning, then the
+## skill goes off. The aim is locked when the cast starts, so the player can get out of the way.
+## A skill that hurts is cast at least the fairness floor (Monster.skill_cast_time()).
 
 var _timer := 0.0
 var _cast_time := 0.0
@@ -19,10 +20,13 @@ func enter() -> void:
 	actor.move_direction = Vector2.ZERO
 	_aim = actor.global_position.direction_to(actor.target.global_position)
 	actor.facing = _aim
-	_cast_time = skill.cast_time * actor.get_telegraph_scale()
+	# Its own, times the difficulty and the phases, never under the floor when it hurts.
+	_cast_time = actor.skill_cast_time(skill)
 	_timer = _cast_time
 	if actor.rig:
 		actor.rig.play_cast(_aim, _cast_time, skill.cast_animation)
+	if skill.hurts():
+		Sfx.play_warning(actor.global_position)  # the pose, the mark on the ground, and a sound
 
 
 func exit() -> void:

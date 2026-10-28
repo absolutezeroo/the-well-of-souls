@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 416,
+  "next_id": 420,
   "tags": [
     "pc",
     "test",
@@ -6128,8 +6128,8 @@
     {
       "id": "task_406",
       "title": "Contrat d'équité : plancher de télégraphe et budget de dégâts",
-      "description": "design/pillars.md propose (sans source publiée, à valider en jeu) : une préparation jamais sous 0,4 s (0,6-1,0 s pour les coups lourds et les boss), quelle que soit la difficulté ; en Gardien un coup ordinaire au plus 15-20 % des PV max, un coup de boss 25-30 %, toutes les attaques télégraphiées simultanées 50 %. DÉCISION DU PROPRIÉTAIRE : valider ou ajuster ces chiffres, puis les transformer en tests d'équilibrage.\n\nAudit du 28/10 : aucun plancher dans le code. En Gardien, 18 monstres sur 49 préparent en moins de 0,4 s (chauve-souris et ratons 0,2 s dès l'étage 1 ; défaut MonsterDef 0,35 s) ; les 14 boss passent sous 0,4 s en phase 3 (0,295 s au pire) ; 0,13 s en Cauchemar+10 ; « volley » n'a aucune préparation ; aucune attaque n'a de son de préparation ; l'anneau des ondes de choc s'efface avant le coup. Le budget de dégâts, lui, est tenu (pire coup ordinaire 13 %, pire coup de boss 18 % des PV du héros attendu).",
-      "status": "todo",
+      "description": "design/pillars.md propose (sans source publiée, à valider en jeu) : une préparation jamais sous 0,4 s (0,6-1,0 s pour les coups lourds et les boss), quelle que soit la difficulté ; en Gardien un coup ordinaire au plus 15-20 % des PV max, un coup de boss 25-30 %, toutes les attaques télégraphiées simultanées 50 %. DÉCISION DU PROPRIÉTAIRE : valider ou ajuster ces chiffres, puis les transformer en tests d'équilibrage.\n\nAudit du 28/10 : aucun plancher dans le code. En Gardien, 18 monstres sur 49 préparent en moins de 0,4 s (chauve-souris et ratons 0,2 s dès l'étage 1 ; défaut MonsterDef 0,35 s) ; les 14 boss passent sous 0,4 s en phase 3 (0,295 s au pire) ; 0,13 s en Cauchemar+10 ; « volley » n'a aucune préparation ; aucune attaque n'a de son de préparation ; l'anneau des ondes de choc s'efface avant le coup. Le budget de dégâts, lui, est tenu (pire coup ordinaire 13 %, pire coup de boss 18 % des PV du héros attendu).\n\nFait (branche fix/feel, 28/10) : planchers en données (data/combat/combat_rules.tres) appliqués après difficulté, ascension et phase, en un seul endroit par mécanisme : 0,4 s pour un coup de monstre, 0,5 s pour un boss, 0,4 s pour les ondes de choc, explosions, mèches et pièges ; « volley » prépare 0,5 s (pose + couloirs) ; un son de préparation court au début de chaque préparation (2 à la fois au plus, 1 toutes les 0,1 s) ; marques = zone réelle (couloirs de tirs jusqu'au bout de leur portée, anneaux de 16 tirs en couloirs au lieu d'un petit cercle, tir à distance tracé sur toute la portée, onde de choc et explosions marquées pendant toute la mèche, en suivant le boss) ; flèche de bord pour une menace hors écran ; A6 et A10 n'ajoutent plus qu'un modificateur ; aperçu du bestiaire au vrai temps. Tests : unit.fairness (tous les monstres × difficultés, Cauchemar+10 compris, × phases ; budget de dégâts 13,3 % / 17,7 %), game.fairness.\nÀ VÉRIFIER SUR LE S23 : les anneaux de couloirs d'un boss (beaucoup de rouge à l'écran : lisible ?), le son de préparation (timbre, volume, pas de cacophonie dans une foule : fichier fait à partir de deux sons du jeu, jamais écouté), les flèches de bord (taille, couleur, pas sous le pouce ni sous le bouton d'attaque dans les coins), le ressenti des chauves-souris, ratons et rats plus lents, la phase 3 des boss.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6138,7 +6138,7 @@
         "combat"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793161745
+      "updated_at": 1793165202
     },
     {
       "id": "task_407",
@@ -6273,6 +6273,66 @@
       ],
       "created_at": 1793161745,
       "updated_at": 1793161745
+    },
+    {
+      "id": "task_416",
+      "title": "Anneaux « féroces » : la seconde vague n'a pas sa propre marque",
+      "description": "Les versions féroces des anneaux de tirs (hailstorm_fierce, toxic_bloom_fierce, fire_ring_fierce, wailing_ring_fierce, coin_storm_fierce...) tirent une seconde vague 0,45 s après la première, décalée d'un demi-écart : elle tombe dans les trous que montrait la marque et n'a pas de marque à elle (TelegraphView ne montre que le premier effet d'une compétence). Proposé : montrer les couloirs de la seconde vague dès que la première part (ou les deux pendant l'incantation), et la compter dans le test unit.fairness.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "combat",
+        "vfx"
+      ],
+      "created_at": 1793165202,
+      "updated_at": 1793165202
+    },
+    {
+      "id": "task_417",
+      "title": "Équilibrage après les planchers de préparation",
+      "description": "Les planchers (0,4 s / 0,5 s boss) rallongent les préparations des monstres rapides (chauves-souris, ratons, rats, crânes) et des boss en phase 3, et A6/A10 ont perdu un modificateur (A6 plus de « moins de temps pour esquiver », A10 plus de +15 % de Vie) : Cauchemar+10 est un peu plus facile. Repasser les outils d'équilibrage (game-balancer) en Gardien et en Cauchemar+10, et chercher le défi dans les chiffres, la densité et les motifs (décision 0008), pas dans des préparations plus courtes.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "équilibrage",
+        "combat"
+      ],
+      "created_at": 1793165202,
+      "updated_at": 1793165202
+    },
+    {
+      "id": "task_418",
+      "title": "Budget de dégâts : attaques simultanées et élites",
+      "description": "Le test unit.fairness tient le budget d'un coup ordinaire (≤ 20 %) et d'un coup de boss (≤ 30 %) sur Gardien pour les monstres simples. Pas encore mesuré : toutes les attaques télégraphiées simultanées ensemble ≤ 50 % (pillars.md) et les élites (×1,15, Légendaire ×1,3 : 15 % et 17 % au pire selon l'audit).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "équilibrage",
+        "tests"
+      ],
+      "created_at": 1793165202,
+      "updated_at": 1793165202
+    },
+    {
+      "id": "task_419",
+      "title": "Couloirs de tirs dessinés à travers les murs",
+      "description": "Les marques de tirs vont maintenant jusqu'au bout de la portée (décision 0008) ; un mur arrête le tir mais pas sa marque. À voir sur le S23 si cela gêne ; sinon couper le couloir au premier mur (un rayon par couloir au début de la préparation).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "vfx",
+        "combat"
+      ],
+      "created_at": 1793165202,
+      "updated_at": 1793165202
     }
   ]
 }

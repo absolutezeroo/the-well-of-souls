@@ -9,7 +9,7 @@ the normal game:
 |---|---|---|---|---|
 | Monster HP | x0.7 | x1 | x1.3 | x1.7 |
 | Monster damage (attacks, skills, traps, bursts) | x0.6 | x1 | x1.35 | x1.8 |
-| Time to dodge (wind-ups, casts) | x1.35 | x1 | x0.85 | x0.7 |
+| Time to dodge (wind-ups, casts; never under 0.4 s, a boss's 0.5 s: decision 0008) | x1.35 | x1 | x0.85 | x0.7 |
 | Monster speed | x0.9 | x1 | x1.05 | x1.15 |
 | How far monsters spot you (`detect_range`) | x0.85 | x1 | x1.2 | x1.4 |
 | Extra monsters per room | 0 | 0 | +1 | +2 |
@@ -38,10 +38,11 @@ phone keeps up on Nightmare; the seal never asks for more than `seal_max` (50) k
 Pilgrim, Keeper and Martyr are open; **Nightmare unlocks after a win on Martyr** (`unlocked_by`).
 **Ascension**: a Nightmare win opens **Nightmare +1**, a +1 win opens +2, up to +10
 (`data/ascension/`, `AscensionDef`, picked on a strip under the difficulty cards, which lists every
-twist up to the chosen level, the next one and the souls multiplier). Each level adds its twist
-on top of the ones below: tougher monsters, harder hits, more elites, higher prices, one more
-monster per room, faster monsters, tougher bosses, darker floors, less max HP... and 10% more
-souls per level.
+twist up to the chosen level, the next one and the souls multiplier). Each level adds exactly
+one readable twist on top of the ones below (pillars.md): tougher monsters, harder hits, more
+elites, higher prices, one more monster per room, faster monsters, tougher bosses, darker floors,
+less max HP, harder hits again... and 10% more souls per level. None shortens the time to dodge
+(the fairness floor would take it back anyway).
 The last choice is remembered (gold frame), shown in the HUD and on the end-of-run screen.
 The difficulty window (`DifficultyPanel`, one `DifficultyCard` each) says what changes in plain
 words, compared with Keeper (`DifficultyCard.effects()`: "Monster health +30%", "Time to dodge

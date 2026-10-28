@@ -60,7 +60,10 @@ func take_hit(hit: HitInfo) -> void:
 		return
 	_breaker = hit.source if is_instance_valid(hit.source) else null
 	if def.is_explosive():
-		_fuse = def.fuse_time
+		# Its fuse (never under the fairness floor), its blast's area marked on the ground.
+		_fuse = Combat.RULES.blast_warning(def.fuse_time)
+		world.spawn_vfx(FuseMark.create(global_position, def.explosion_radius, _fuse))
+		Sfx.play_warning(global_position)
 	else:
 		_break()
 

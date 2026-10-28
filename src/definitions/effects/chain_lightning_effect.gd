@@ -26,7 +26,7 @@ func apply(user: Actor, aim: Vector2) -> void:
 	var origin := user.shot_origin(aim)
 	if origin == Vector2.INF:
 		origin = user.global_position + Vector2(0, -8)
-	var amount := float(flat_damage + roundi(user.get_skill_power() * damage_multiplier))
+	var amount := float(hit_amount(user))
 	var color := element.color() if element else Color("c9b8ff")
 	var target := _first_target(user, aim)
 	if target == null:
@@ -105,3 +105,12 @@ func with_hit_status(new_status: OnHitStatus) -> Effect:
 	var copy := copied() as ChainLightningEffect
 	copy.status = new_status
 	return copy
+
+
+func hurts() -> bool:
+	return true
+
+
+## Its flat damage plus the user's skill power times its multiplier.
+func hit_amount(user: Actor) -> int:
+	return flat_damage + roundi(user.get_skill_power() * damage_multiplier)

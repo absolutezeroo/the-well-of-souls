@@ -809,6 +809,11 @@ func get_hostiles(faction: Actor.Faction) -> Array[Actor]:
 	return result
 
 
+## The shots in flight (read only: the layer's children, walked by index, never copied).
+func projectile_layer() -> Node2D:
+	return _projectiles
+
+
 ## Every living actor, whatever its side (traps and explosions hurt everyone).
 func get_actors() -> Array[Actor]:
 	var result: Array[Actor] = get_hostiles(Actor.Faction.PLAYER)
