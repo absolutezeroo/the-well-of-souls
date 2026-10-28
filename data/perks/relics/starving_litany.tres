@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="PerkDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/items/tome_wind.png" id="1_icon"]
+[ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="2_passive"]
+[ext_resource type="Script" path="res://src/definitions/passives/skill_hunger_passive.gd" id="3_hunger"]
+[ext_resource type="Script" path="res://src/definitions/stat_block.gd" id="4_stats"]
+[ext_resource type="Script" path="res://src/definitions/perk_def.gd" id="5_perk"]
+[ext_resource type="Script" path="res://src/definitions/synergy_def.gd" id="6_synergy"]
+[ext_resource type="Resource" path="res://data/perks/synergies/arcane.tres" id="7_arcane"]
+
+[sub_resource type="Resource" id="Resource_power"]
+script = ExtResource("4_stats")
+skill_power = 0.6
+
+[sub_resource type="Resource" id="Resource_hunger"]
+script = ExtResource("3_hunger")
+
+[resource]
+script = ExtResource("5_perk")
+role = 2
+twist = true
+id = &"starving_litany"
+display_name = "Starving Litany"
+description = "Your skills no longer recharge with time, only when you slay: a quarter of their wait a kill, 3% a blow on a warden. The roll is spared."
+icon = ExtResource("1_icon")
+color = Color(0.941176, 0.478431, 0.847059, 1)
+rarity = 1
+max_stacks = 1
+synergies = Array[ExtResource("6_synergy")]([ExtResource("7_arcane")])
+bonuses = SubResource("Resource_power")
+passives = Array[ExtResource("2_passive")]([SubResource("Resource_hunger")])

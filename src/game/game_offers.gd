@@ -63,15 +63,17 @@ func _cards_for(offer: OfferQueue.Offer) -> Array[PerkDef]:
 		if perk and not game.run.banished.has(perk) and game.player.perks.can_take(perk) and not cards.has(perk):
 			cards.append(perk)
 	if cards.size() < offer.count:
-		cards.append_array(_pick_offer(offer.count - cards.size(), offer.rarity, cards))
+		var bent := cards.filter(func(perk: PerkDef) -> bool: return perk.twist).size()
+		cards.append_array(_pick_offer(offer.count - cards.size(), offer.rarity, cards, maxi(0, offer.twists - bent)))
 	return cards
 
 
 ## Family weighting and floor dice stay identical to the Game's original dealing order.
-func _pick_offer(count: int, rarity: PerkDef.Rarity, also_left_out: Array[PerkDef]) -> Array[PerkDef]:
+## `twists`: cards that are relics bending a rule (a warden's choice).
+func _pick_offer(count: int, rarity: PerkDef.Rarity, also_left_out: Array[PerkDef], twists: int = 0) -> Array[PerkDef]:
 	var left_out: Array[PerkDef] = game.run.banished.duplicate()
 	left_out.append_array(also_left_out)
-	return game.content.pick_perks(game.player.perks, count, rarity, game.world.rng, left_out, game.content.dungeon.family_bias)
+	return game.content.pick_perks(game.player.perks, count, rarity, game.world.rng, left_out, game.content.dungeon.family_bias, twists)
 
 
 func _on_perk_reroll() -> void:
@@ -79,7 +81,7 @@ func _on_perk_reroll() -> void:
 	if shown == null or game.run.rerolls <= 0:
 		return
 	var current := game.perk_panel.get_offered()
-	var fresh := _pick_offer(current.size(), shown.rarity, current)
+	var fresh := _pick_offer(current.size(), shown.rarity, current, shown.twists)
 	if fresh.is_empty():
 		Events.log_message(tr("Nothing else to offer."), Palette.DANGER)
 		return
@@ -101,7 +103,7 @@ func _on_perk_banish(index: int) -> void:
 	Events.log_message(tr("%s is banished for this run.") % tr(gone.display_name), Palette.DANGER)
 	Events.perk_banished.emit(gone)
 	var cards: Array[PerkDef] = current.duplicate()
-	var replacement := _pick_offer(1, shown.rarity, current)
+	var replacement := _pick_offer(1, shown.rarity, current, 1 if gone.twist else 0)
 	if replacement.is_empty():
 		cards.remove_at(index)
 	else:

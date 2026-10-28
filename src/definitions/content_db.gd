@@ -139,17 +139,35 @@ func all_hazards() -> Array[HazardDef]:
 ## Never `left_out` ones (banished for the run, the cards on the table being rerolled...).
 ## `family_bias`: perks of a family `owned` has started but not woken weigh (1 + bias) times
 ## more per such family, so families come together.
-func pick_perks(owned: PerkSet, count: int, rarity: PerkDef.Rarity, rng: RandomNumberGenerator, left_out: Array[PerkDef] = [], family_bias: float = 0.0) -> Array[PerkDef]:
+## `twists`: how many of the `count` cards are relics that bend a rule (PerkDef.twist: a warden's
+## choice holds one), dealt first when some are left; every other card is never one.
+func pick_perks(owned: PerkSet, count: int, rarity: PerkDef.Rarity, rng: RandomNumberGenerator, left_out: Array[PerkDef] = [], family_bias: float = 0.0, twists: int = 0) -> Array[PerkDef]:
 	var result: Array[PerkDef] = []
 	var started: Array[SynergyDef] = []
 	for synergy in owned.families():
 		if not owned.is_awake(synergy):
 			started.append(synergy)
+	if twists > 0:
+		var bent: Array = []
+		var bent_weights := PackedInt32Array()
+		for perk in perks:
+			if perk and perk.twist and owned.can_take(perk) and not left_out.has(perk):
+				var shared := perk.synergies.filter(func(s: SynergyDef) -> bool: return started.has(s)).size()
+				bent.append(perk)
+				bent_weights.append(roundi(perk.weight * 10.0 * (1.0 + family_bias * shared)))
+		while result.size() < mini(twists, count) and not bent.is_empty():
+			var twisted: PerkDef = RandomUtils.pick_weighted(bent, bent_weights, rng)
+			if twisted == null:
+				break
+			var at := bent.find(twisted)
+			bent.remove_at(at)
+			bent_weights.remove_at(at)
+			result.append(twisted)
 	for wanted_rarity in [rarity, PerkDef.Rarity.COMMON if rarity == PerkDef.Rarity.RARE else PerkDef.Rarity.RARE]:
 		var candidates: Array = []
 		var weights := PackedInt32Array()
 		for perk in perks:
-			if perk and perk.rarity == wanted_rarity and owned.can_take(perk) and not result.has(perk) and not left_out.has(perk):
+			if perk and not perk.twist and perk.rarity == wanted_rarity and owned.can_take(perk) and not result.has(perk) and not left_out.has(perk):
 				var shared := perk.synergies.filter(func(s: SynergyDef) -> bool: return started.has(s)).size()
 				candidates.append(perk)
 				weights.append(roundi(perk.weight * 10.0 * (1.0 + family_bias * shared)))

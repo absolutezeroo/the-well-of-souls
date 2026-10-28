@@ -3,6 +3,25 @@
 Dated entries, newest first: what was measured, what changed and why, before/after numbers, open
 questions. How to measure: [balance.md](balance.md).
 
+## 2026-10-28 - Five relics that bend a rule (one in every warden's choice)
+
+What changed: Bleeding Stride, Starving Litany, Restless Storm, Funeral Pyre and Heart of Winter
+(docs/design/builds.md "Rule-bending relics"), one card of every warden's three. Marginal lab,
+acts II and III, Normal, seed 1, next to the plain relics measured in the same run (the last full
+pass put the relic median near +24% in act III):
+
+| Relic | Act II | Act III | Reads as |
+|---|---|---|---|
+| Heart of Winter | +28% | +45% | its chill wakes the Frost family's +50% on slowed foes for every foe near (as Frostbite does on hits); its price, 20% less speed, is not measured (the dummy fight never walks): about 1.9x the full relic median, kept |
+| Restless Storm | -3% | +15% | the dummy fight stands still: the storm strikes the hero there (its price) and the packs (+31% clear in act III) |
+| Starving Litany | -2% | +3% | +60% skill damage against skills recharging only by kills (3% a blow on the boss dummy) |
+| Funeral Pyre | -1% -> +1% | -2% -> +7% | its blast (KillBurstPassive, knockback 160) threw packs apart: `blast_knockback` 160 -> 40 (a new export, 160 kept for the others), blast 80% -> 120% of Damage, radius 64 -> 72; the live room's damage taken (the blast on the hero, its price) +438% in act II |
+| Bleeding Stride | +0% | +0% | the lab's blind spot: the dummy fight never rolls |
+| (War Banner, Guardian Ring, Executioner, Sage's Codex, Hydra's Quiver) | +17%, +39%, +9%, -4%, +0% | +29%, +30%, +15%, +9%, +2% | the plain relics, for scale |
+
+None over twice the full relic median; the ones near zero pay with a rule the lab does not play
+(rolls, walking). Their prices never deal the last blow and are ticks (no free invulnerability).
+
 ## 2026-10-28 - Five behaviour perks (Cinder Wake, Riven Glyph, Leaping Bolt, Burst Veins, Rime Halo)
 
 What changed: five new common build-arounds, one per family, weight 6 like their neighbours

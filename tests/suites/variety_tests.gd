@@ -8,12 +8,15 @@ extends TestSuite
 
 ## The perks that do something in the world on a roll, a shot, a crit, a kill or by themselves.
 const BEHAVIOUR_PERKS := ["cinder_wake", "riven_glyph", "leaping_bolt", "burst_veins", "rime_halo"]
+## The relics that bend a rule (PerkDef.twist).
+const TWISTS := ["bleeding_stride", "starving_litany", "restless_storm", "funeral_pyre", "heart_of_winter"]
 
 
 # --- The unit suite --------------------------------------------------------------------
 
 func run_unit() -> void:
 	_test_behaviour_share()
+	_test_twists()
 
 
 ## A third of the perks that are not plain staples change how you play (a new action in the
@@ -48,6 +51,45 @@ static func _acts_in_world(passive: Passive) -> bool:
 		or passive is CritShockwavePassive or passive is KillBurstPassive or passive is RetaliatePassive \
 		or passive is ChainLightningPassive or passive is ExtraProjectilesPassive \
 		or passive is SkillEchoPassive or passive is CheatDeathPassive or passive is FloorWardPassive
+
+
+## Relics that bend a rule: one in every warden's choice, never anywhere else.
+func _test_twists() -> void:
+	var families := {}
+	for id: String in TWISTS:
+		var relic := _perk(id)
+		check(relic != null and CONTENT.perks.has(relic), "%s is offered" % id)
+		if relic == null:
+			continue
+		check(relic.twist and relic.rarity == PerkDef.Rarity.RARE and relic.max_stacks == 1, "%s: a relic that bends a rule, taken once" % id)
+		check(relic.role == BuildRole.Role.BUILD_AROUND and relic.synergies.size() == 1, "%s: a build-around of one family" % id)
+		check(not relic.description.is_empty() and tr(relic.description).length() <= 160, "%s: its rule reads in one line (%d characters)" % [id, tr(relic.description).length()])
+		families[relic.synergies[0]] = true
+	check(families.size() == 5, "one relic that bends a rule in each family")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 11
+	var owned := PerkSet.new()
+	var warden_ok := true
+	var plain_ok := true
+	for i in 300:
+		var warden := CONTENT.pick_perks(owned, 3, PerkDef.Rarity.RARE, rng, [], 1.0, OfferQueue.BOSS_TWISTS)
+		warden_ok = warden_ok and warden.size() == 3 and warden.filter(func(p: PerkDef) -> bool: return p.twist).size() == 1
+		for rarity in [PerkDef.Rarity.RARE, PerkDef.Rarity.COMMON]:
+			plain_ok = plain_ok and not CONTENT.pick_perks(owned, 3, rarity, rng).any(func(p: PerkDef) -> bool: return p.twist)
+	check(warden_ok, "a warden's 3 relics hold exactly one that bends a rule")
+	check(plain_ok, "level ups, pacts, trials and gifts never offer one")
+	var queue := OfferQueue.new()
+	queue.add_relic(CONTENT.dungeon.acts[0].boss)
+	var offer := queue.pop()
+	check(offer.twists == OfferQueue.BOSS_TWISTS, "a warden's offer asks for one")
+	var saved := OfferQueue.new()
+	saved.load_data([offer.to_data()])
+	check(saved.pop().twists == OfferQueue.BOSS_TWISTS, "...and a saved run keeps it")
+	var daily_ok := true
+	for day in 400:
+		var relic := DailyRun.relic(CONTENT, 20000 + day)
+		daily_ok = daily_ok and relic != null and not relic.twist
+	check(daily_ok, "the daily run's relic is never one (the day is the same for everyone)")
 
 
 # --- The game suite ----------------------------------------------------------------------
@@ -221,4 +263,163 @@ func _test_rime_halo(world: World, player: Player) -> void:
 	check(looks.is_empty(), "...and they go with the perk")
 	near.queue_free()
 	far.queue_free()
+	await _frames(2)
+
+
+# --- Relics that bend a rule ---------------------------------------------------------------
+
+## The five relics that bend a rule, each on a real floor, and a warden's choice holding one.
+func run_twist_relics(game: Game) -> void:
+	var world := game.world
+	var player := game.player
+	await _clear_monsters(world)
+	await _test_bleeding_stride(world, player)
+	await _test_starving_litany(world, player)
+	await _test_restless_storm(world, player)
+	await _test_funeral_pyre(world, player)
+	await _test_heart_of_winter(world, player)
+	await _test_warden_choice(game)
+
+
+func _full(player: Player) -> void:
+	player.hp = player.get_max_hp()
+	player._invulnerable_time = 0.0
+
+
+func _test_bleeding_stride(world: World, player: Player) -> void:
+	var direction := await _lane(world, player, 200.0)
+	_full(player)
+	player.perks.add(_perk("bleeding_stride"))
+	var passed := _dummy(world, player.global_position + direction * 60.0)
+	var hp := player.hp
+	player.facing = direction
+	_set_move(direction)
+	player.use_skill(0)
+	await _frames(30)
+	_set_move(Vector2.ZERO)
+	check(hp - player.hp == roundi(player.get_max_hp() * 0.04), "Bleeding Stride: a roll costs 4%% of max Health (%d)" % (hp - player.hp))
+	check(passed.hp < passed.get_max_hp(), "...and cuts the enemy it rolls through")
+	player.hp = 1
+	player.skills.reset_cooldown(player.def.innate_skills[0])
+	await _frames(2)
+	player.use_skill(0)
+	await _frames(25)
+	check(player.hp == 1 and not player.is_dead, "...a price that never deals the last blow")
+	passed.queue_free()
+	player.perks.clear()
+	await _stand_still(world, player)
+
+
+func _test_starving_litany(world: World, player: Player) -> void:
+	var direction := await _lane(world, player, 160.0)
+	_full(player)
+	player.perks.add(_perk("starving_litany"))
+	var slot := -1
+	for i in player.skills.skills.size():
+		if i > 0 and player.skills.skills[i] != null:
+			slot = i
+			break
+	check(slot > 0, "the hero has a weapon skill to starve")
+	if slot < 0:
+		player.perks.clear()
+		return
+	player.skills.reset_cooldown(player.skills.skills[slot])
+	var foe := _dummy(world, player.global_position + direction * 50.0)
+	player.facing = direction
+	check(player.skills.try_use(slot, player, direction), "...a skill is used")
+	var waiting := player.skills.cooldown_left(slot)
+	await _frames(60)
+	check(waiting > 0.0 and is_equal_approx(player.skills.cooldown_left(slot), waiting), "Starving Litany: a used skill does not recharge with time (%.2f s left)" % player.skills.cooldown_left(slot))
+	var roll := player.def.innate_skills[0]
+	player.use_skill(0)
+	var roll_wait := player.skills.cooldown_left(0)
+	await _frames(20)
+	check(roll_wait > 0.0 and player.skills.cooldown_left(0) < roll_wait, "...the roll still recharges (%s)" % roll.id)
+	var weak := _dummy(world, player.global_position + direction * 90.0, 1)
+	var kill := Combat.make_hit_from(player, 50)
+	weak.take_hit(kill)
+	check(weak.is_dead and player.skills.cooldown_left(slot) <= waiting - player.skills.skills[slot].cooldown * 0.25 + 0.01, "...a kill takes a quarter of its wait off")
+	foe.queue_free()
+	player.perks.clear()
+	await _stand_still(world, player)
+
+
+func _test_restless_storm(world: World, player: Player) -> void:
+	var direction := await _lane(world, player, 200.0)
+	_full(player)
+	player.perks.add(_perk("restless_storm"))
+	var hp := player.hp
+	await _frames(90)
+	check(player.hp == hp, "Restless Storm: no foe near, standing still costs nothing")
+	var foe := _dummy(world, player.global_position + direction * 140.0)
+	_set_move(direction)
+	await _frames(50)
+	_set_move(Vector2.ZERO)
+	check(foe.hp < foe.get_max_hp(), "...moving, lightning strikes the foe nearby")
+	check(player.hp == hp, "...and spares the hero")
+	await _stand_still(world, player)
+	foe.global_position = player.global_position + direction * 100.0
+	await _frames(100)
+	check(player.hp < hp and player.hp >= hp - roundi(player.get_max_hp() * 0.03) * 2, "...standing still over a second, it strikes him (%d lost)" % (hp - player.hp))
+	foe.queue_free()
+	player.perks.clear()
+	await _frames(2)
+
+
+func _test_funeral_pyre(world: World, player: Player) -> void:
+	var direction := await _lane(world, player, 200.0)
+	_full(player)
+	player.perks.add(_perk("funeral_pyre"))
+	var neighbour := _dummy(world, player.global_position + direction * 150.0)
+	var far_one := _dummy(world, player.global_position + direction * 110.0, 1)
+	var hp := player.hp
+	far_one.take_hit(Combat.make_hit_from(player, 50))
+	await _frames(2)
+	check(far_one.is_dead and neighbour.hp < neighbour.get_max_hp(), "Funeral Pyre: a slain foe explodes onto the one beside it")
+	check(player.hp == hp, "...and spares the hero standing out of the blast")
+	var close := _dummy(world, player.global_position + direction * 30.0, 1)
+	close.take_hit(Combat.make_hit_from(player, 50))
+	await _frames(2)
+	check(hp - player.hp == roundi(player.get_max_hp() * 0.06), "...the blast burns the hero standing in it (%d)" % (hp - player.hp))
+	neighbour.queue_free()
+	player.perks.clear()
+	await _frames(2)
+
+
+func _test_heart_of_winter(world: World, player: Player) -> void:
+	var direction := await _lane(world, player, 200.0)
+	_full(player)
+	var speed := player.get_move_speed()
+	player.perks.add(_perk("heart_of_winter"))
+	check(player.get_move_speed() < speed, "Heart of Winter: the hero moves slower (%d -> %d)" % [speed, player.get_move_speed()])
+	var near := _dummy(world, player.global_position + direction * 70.0)
+	var far := _dummy(world, player.global_position + direction * 180.0)
+	await _frames(30)
+	check(near.statuses.is_slowed() and not far.statuses.is_slowed(), "...foes close to him are slowed, not the ones away")
+	near.queue_free()
+	far.queue_free()
+	player.perks.clear()
+	await _frames(2)
+
+
+func _test_warden_choice(game: Game) -> void:
+	game.offers.clear()
+	game.offers.add_relic(game.content.dungeon.acts[0].boss)
+	game.choices.show_next()
+	await _frames(2)
+	var shown := game.perk_panel.get_offered()
+	check(game.perk_panel.visible and shown.size() == 3 and shown.filter(func(p: PerkDef) -> bool: return p.twist).size() == 1, "a warden's relics: 3 cards, one that bends a rule")
+	game.run.rerolls = 1
+	game.choices._on_perk_reroll()
+	var rerolled := game.perk_panel.get_offered()
+	check(rerolled.filter(func(p: PerkDef) -> bool: return p.twist).size() == 1, "...a reroll keeps one")
+	var at := -1
+	for i in rerolled.size():
+		if rerolled[i].twist:
+			at = i
+	game.run.banishes = 1
+	game.choices._on_perk_banish(at)
+	var after := game.perk_panel.get_offered()
+	check(after.filter(func(p: PerkDef) -> bool: return p.twist).size() == 1 and not after.has(rerolled[at]), "...banishing it brings another one")
+	game.perk_panel.chosen.emit(after[0])
 	await _frames(2)

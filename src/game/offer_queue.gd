@@ -20,6 +20,8 @@ class Offer:
 	var level := 0
 	## Waits for the player to open it (a level up, or a choice put off).
 	var on_demand := false
+	## How many of its cards are relics that bend a rule (PerkDef.twist): a warden's choice, 1.
+	var twists := 0
 	## The cards dealt (after rerolls and banishes), kept when the choice is put off or saved;
 	## empty until it is first shown.
 	var cards: Array[PerkDef] = []
@@ -31,7 +33,7 @@ class Offer:
 
 	func to_data() -> Dictionary:
 		return { "rarity": rarity, "count": count, "title": title, "subtitle": subtitle,
-			"on_demand": on_demand, "cards": RunSave.refs(cards), "level": level }
+			"on_demand": on_demand, "cards": RunSave.refs(cards), "level": level, "twists": twists }
 
 
 	static func from_data(data: Dictionary) -> Offer:
@@ -41,6 +43,7 @@ class Offer:
 		offer.title = str(data.get("title", ""))
 		offer.subtitle = str(data.get("subtitle", ""))
 		offer.level = int(data.get("level", 0))
+		offer.twists = int(data.get("twists", 0))
 		OfferQueue._migrate_words(offer)
 		# Saves from before choices waited: whatever was pending waits for the player.
 		offer.on_demand = bool(data.get("on_demand", true))
@@ -50,6 +53,9 @@ class Offer:
 				offer.cards.append(perk)
 		return offer
 
+
+## Relics that bend a rule among a warden's choice (when it offers more than one).
+const BOSS_TWISTS := 1
 
 ## The choice on screen right now (null when none).
 var shown: Offer
@@ -71,11 +77,12 @@ func add(rarity: PerkDef.Rarity, count: int, title: String, subtitle: String, on
 	return offer
 
 
-## The relics a boss leaves behind (if it has any).
-## `extra`: more relics to choose from (a Legendary or Shiny boss).
+## The relics a boss leaves behind (if it has any), one of them a relic that bends a rule
+## (PerkDef.twist) while some are left. `extra`: more relics to choose from (a Legendary or Shiny boss).
 func add_relic(boss: BossDef, extra: int = 0) -> void:
 	if boss and boss.relic_choices > 0:
-		add(PerkDef.Rarity.RARE, boss.relic_choices + extra, "Relic", "A relic lies in the warden's remains. Choose one.")  # i18n
+		var offer := add(PerkDef.Rarity.RARE, boss.relic_choices + extra, "Relic", "A relic lies in the warden's remains. Choose one.")  # i18n
+		offer.twists = BOSS_TWISTS if boss.relic_choices + extra > 1 else 0
 
 
 func is_empty() -> bool:

@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 436,
+  "next_id": 437,
   "tags": [
     "pc",
     "test",
@@ -588,8 +588,8 @@
     {
       "id": "task_36",
       "title": "Reliques qui brisent les règles",
-      "description": "Idée proposée : reliques rares qui changent une règle du jeu.\nÉtude SPD du 25/10 : babioles changeant fréquences de butin/terrain, avec compromis. Pistes propres au Puits : meilleure qualité contre moins de soins, davantage de secrets contre davantage d’élites (chiffres à définir). Réemploi OathDef/RunBoons/FloorRules ; nouveaux points nécessaires pour chances de salles/élites/catégories. Serment au départ plus simple que relique acquise pendant la partie. État sauvegardé, effets de génération sur futurs étages, règles du quotidien. Voir docs/shattered-pixel-dungeon-study.md.\nRoadmap RPG du 26/10/2026 : R6.3 (task_325), docs/rpg-roadmap.md. Reliques de descente à adapter au contexte de région et à la persistance. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
-      "status": "backlog",
+      "description": "Idée proposée : reliques rares qui changent une règle du jeu.\nÉtude SPD du 25/10 : babioles changeant fréquences de butin/terrain, avec compromis. Pistes propres au Puits : meilleure qualité contre moins de soins, davantage de secrets contre davantage d’élites (chiffres à définir). Réemploi OathDef/RunBoons/FloorRules ; nouveaux points nécessaires pour chances de salles/élites/catégories. Serment au départ plus simple que relique acquise pendant la partie. État sauvegardé, effets de génération sur futurs étages, règles du quotidien. Voir docs/shattered-pixel-dungeon-study.md.\nRoadmap RPG du 26/10/2026 : R6.3 (task_325), docs/rpg-roadmap.md. Reliques de descente à adapter au contexte de région et à la persistance. Statut historique conservé ; voir le nouveau cadrage avant reprise.\nS23 (28/10) : fait. Cinq reliques qui brisent une règle, une par famille (docs/design/builds.md « Rule-bending relics ») : Foulée Sanglante (la roulade tranche ce qu'elle traverse, chaque roulade coûte 4 % de Vie max), Litanie Affamée (les compétences ne se rechargent qu'en tuant, +60 % de dégâts), Orage sans Repos (en bougeant la foudre frappe l'ennemi proche ; immobile une seconde, elle te frappe), Bûcher Funèbre (chaque ennemi abattu explose ; l'explosion te brûle si tu y restes), Cœur de l'Hiver (les ennemis proches ralentis de 35 %, toi de 20 %). Une carte sur trois de chaque relique de gardien, jamais ailleurs (montée de niveau, pactes, épreuves, rencontres, relique du jour). Le prix d'une relique ne porte jamais le dernier coup. Mesuré (balance-log 28/10), captures dans le scratchpad fix_variety/relics.\nÀ vérifier sur le S23 : la carte « Relique : brise une règle » tient en français ; l'Orage sans Repos se joue au doigt (attaquer en marchant) sans frustrer ; la Litanie se lit (le cercle de recharge figé) ; le coût de la Foulée se sent sans gêner (pas de secousse à chaque roulade).",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_7",
       "due_date": null,
@@ -597,7 +597,7 @@
         "idée"
       ],
       "created_at": 1792685000,
-      "updated_at": 1792973386
+      "updated_at": 1793187229
     },
     {
       "id": "task_37",
@@ -6575,6 +6575,21 @@
       ],
       "created_at": 1793186390,
       "updated_at": 1793186390
+    },
+    {
+      "id": "task_436",
+      "title": "Relique du jour qui brise une règle (Glas de l'Aube)",
+      "description": "Idée : la course du jour pourrait imposer une relique qui brise une règle (même pour tous), comme un mutateur. Aujourd'hui elle est exclue de la relique du jour (DailyRun.relic) pour garder la journée identique à avant.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "contenu"
+      ],
+      "created_at": 1793187229,
+      "updated_at": 1793187229
     }
   ]
 }

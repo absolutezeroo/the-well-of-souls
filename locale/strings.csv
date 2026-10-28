@@ -818,6 +818,7 @@ Press again to end the run. Anything else to cancel.,Press again to end the run.
 This descent: %s,This descent: %s,Cette descente : %s
 Lower it for the rest of this descent only. It then sets no records and goes on no leaderboard; souls and achievements still count.,Lower it for the rest of this descent only. It then sets no records and goes on no leaderboard; souls and achievements still count.,La baisser pour le reste de cette descente seulement. Elle n'établit alors plus de record et n'entre dans aucun classement ; les âmes et les succès comptent toujours.
 Nothing is gentler than this.,Nothing is gentler than this.,Rien n'est plus clément.
+Relic that bends a rule,Relic that bends a rule,Relique : brise une règle
 New perk,New perk,Nouvel atout
 New perk  (up to level %d),New perk  (up to level %d),Nouvel atout  (jusqu'au niveau %d)
 Level %d > %d  (max %d),Level %d > %d  (max %d),Niveau %d > %d  (max %d)
@@ -1787,15 +1788,25 @@ Critical hits release a shockwave that hurts the enemies around the target.,Crit
 Vampirism,Vampirism,Vampirisme
 Slaying an enemy heals 3 Health per level (summoned monsters don't count).,Slaying an enemy heals 3 Health per level (summoned monsters don't count).,Abattre un ennemi rend 3 de Vie par niveau (les monstres invoqués ne comptent pas).
 Vitality,Vitality,Vitalité
+Bleeding Stride,Bleeding Stride,Foulée Sanglante
+"Your roll cuts every enemy you pass through for 150% of your Damage, but each roll costs 4% of your max Health.","Your roll cuts every enemy you pass through for 150% of your Damage, but each roll costs 4% of your max Health.","Ta roulade tranche chaque ennemi traversé pour 150 % de tes Dégâts, mais chaque roulade coûte 4 % de ta Vie max."
 Executioner,Executioner,Bourreau
 +75% damage per level against enemies below 35% Health.,+75% damage per level against enemies below 35% Health.,+75 % de Dégâts par niveau contre les ennemis sous 35 % de Vie.
+Funeral Pyre,Funeral Pyre,Bûcher Funèbre
+"Every foe you slay explodes in flames that burn those around, but the blast burns you too if you stand in it (6% of your max Health).","Every foe you slay explodes in flames that burn those around, but the blast burns you too if you stand in it (6% of your max Health).","Chaque ennemi que tu abats explose en flammes qui brûlent ceux alentour, mais l'explosion te brûle aussi si tu t'y tiens (6 % de ta Vie max)."
 Guardian Ring,Guardian Ring,Anneau du Gardien
 Every floor starts with a shell of frost that soaks up 20 damage.,Every floor starts with a shell of frost that soaks up 20 damage.,Chaque étage commence avec une carapace de givre qui absorbe 20 Dégâts.
+Heart of Winter,Heart of Winter,Cœur de l'Hiver
+"Foes within three steps of you are slowed by 35%, but the cold slows you too (20%).","Foes within three steps of you are slowed by 35%, but the cold slows you too (20%).","Les ennemis à moins de trois pas de toi sont ralentis de 35 %, mais le froid te ralentit aussi (20 %)."
 Hydra's Quiver,Hydra's Quiver,Carquois de l'Hydre
 "Everything you shoot fires 1 more projectile per level, fireballs included (2 more at most with Prism runes; the volley shares its damage).","Everything you shoot fires 1 more projectile per level, fireballs included (2 more at most with Prism runes; the volley shares its damage).","Tout ce que tu tires part avec 1 projectile de plus par niveau, boules de feu comprises (2 de plus au maximum avec les runes Prisme ; la salve partage ses Dégâts)."
 Phoenix Feather,Phoenix Feather,Plume de Phénix
 "Once per level, a killing blow sends you to the Threshold: slay 8 foes in 25 s (more in later acts) to return where you fell, at half Health (a quarter in a boss fight).","Once per level, a killing blow sends you to the Threshold: slay 8 foes in 25 s (more in later acts) to return where you fell, at half Health (a quarter in a boss fight).","Une fois par niveau, un coup fatal t'envoie au Seuil : abats 8 ennemis en 25 s (plus aux actes suivants) pour revenir où tu es tombé, à la moitié de ta Vie (un quart en combat de boss)."
+Restless Storm,Restless Storm,Orage sans Repos
+"While foes are near, lightning strikes the nearest every 0.7 s as you move; stand still a second and it strikes you.","While foes are near, lightning strikes the nearest every 0.7 s as you move; stand still a second and it strikes you.","Tant que des ennemis sont proches, la foudre frappe le plus proche toutes les 0,7 s quand tu bouges ; reste immobile une seconde et c'est toi qu'elle frappe."
 Sage's Codex,Sage's Codex,Codex du Sage
+Starving Litany,Starving Litany,Litanie Affamée
+"Your skills no longer recharge with time, only when you slay: a quarter of their wait a kill, 3% a blow on a warden. The roll is spared.","Your skills no longer recharge with time, only when you slay: a quarter of their wait a kill, 3% a blow on a warden. The roll is spared.","Tes compétences ne se rechargent plus avec le temps, seulement quand tu tues : un quart de leur attente par ennemi abattu, 3 % par coup porté à un gardien. La roulade est épargnée."
 War Banner,War Banner,Bannière de Guerre
 Arcane,Arcane,Arcanes
 Using a skill also fires a ring of 8 arcane bolts.,Using a skill also fires a ring of 8 arcane bolts.,Utiliser une compétence tire aussi un anneau de 8 traits arcaniques.

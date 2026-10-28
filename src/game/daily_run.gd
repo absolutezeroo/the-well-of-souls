@@ -38,7 +38,7 @@ static func weapon(content: ContentDB, day: int) -> WeaponDef:
 
 ## The relic everyone starts that day with.
 static func relic(content: ContentDB, day: int) -> PerkDef:
-	var choices := content.perks.filter(func(perk: PerkDef) -> bool: return perk.rarity == PerkDef.Rarity.RARE)
+	var choices := content.perks.filter(func(perk: PerkDef) -> bool: return perk.rarity == PerkDef.Rarity.RARE and not perk.twist)  # a plain relic: the day is the same for everyone, not a twist
 	return _pick(choices, day, 2) as PerkDef
 
 

@@ -146,7 +146,8 @@ Saved titles/subtitles are English message keys, with the level stored separatel
 happens when shown, so changing language also changes waiting offers. Older rendered titles are
 recovered through the installed translations when possible.
 Taking a perk again levels it up (up to its `max_stacks`). Bosses drop a choice of **relics** (rare
-perks), and so does a kept pact (pact doors, see [dungeon.md](dungeon.md)).
+perks), one of them a relic that bends a rule (below, "Rule-bending relics"), and so does a kept
+pact, without one (pact doors, see [dungeon.md](dungeon.md)).
 
 **What waits, what comes by itself** (`OfferQueue.Offer.on_demand`). Level ups wait: they come
 mid-fight, where a window over the screen broke the fight's flow. Relics (a boss', a kept pact's,
@@ -200,6 +201,11 @@ A `PerkDef` (in `data/perks/`) is stat bonuses + a list of `Passive`s, both mult
 | `CritLeapPassive` | on hit (crits) | Leaping Bolt |
 | `OverkillBurstPassive` | before a hit (Health left), on hit (the killing blow) | Burst Veins |
 | `FrostOrbitPassive` | every frame (`Passive.tick`, shards drawn by `FrostOrbitVfx`) | Rime Halo |
+| `RollStrikePassive` | on skill (the roll: pays), every frame while rolling (cuts) | Bleeding Stride |
+| `SkillHungerPassive` | every frame (holds the cooldowns, `SkillSet.wind`), on kill, on hit (a boss) | Starving Litany |
+| `RestlessStormPassive` | every frame (moving or standing still near a foe) | Restless Storm |
+| `PyreKillPassive` (a `KillBurstPassive`) | on kill (a blast; the owner in it pays) | Funeral Pyre |
+| `WinterAuraPassive` | every frame (a chill pulse every 0.25 s) | Heart of Winter |
 
 **Acting over time** (`Passive.ticks()` / `tick()`): a passive that does something by itself
 (shards circling the hero) says so, and only those are called each physics frame
@@ -276,11 +282,11 @@ perks** of a family wakes its bonus for the rest of the run: a change in how you
 
 | Family | Perks and relics | Awake |
 |---|---|---|
-| **Inferno** | Ignite, Kindling, Blazing Roll, Burning Thorns, Cinder Wake, Phoenix Feather | enemies that die burning explode and set everything around on fire |
-| **Frost** | Frostbite, Cold Snap, Ice Shards, Frost Armor, Rime Halo, Guardian Ring | slowed enemies take +50%, crits freeze them |
-| **Blood** | Vampirism, Vitality, Bloodrage, Devotion, Burst Veins, Executioner | below half Health +40% damage, every kill heals 4% max Health |
-| **Storm** | Frenzy, Thunderclap, Shock Roll, Swiftness, Leaping Bolt | attacks 15% faster; every 3rd hit, lightning jumps to 3 enemies |
-| **Arcane** | Arcane Focus, Arcane Power, Devotion, Echo, Riven Glyph, Sage's Codex, Hydra's Quiver | every skill also fires a ring of 8 bolts |
+| **Inferno** | Ignite, Kindling, Blazing Roll, Burning Thorns, Cinder Wake, Phoenix Feather, Funeral Pyre | enemies that die burning explode and set everything around on fire |
+| **Frost** | Frostbite, Cold Snap, Ice Shards, Frost Armor, Rime Halo, Guardian Ring, Heart of Winter | slowed enemies take +50%, crits freeze them |
+| **Blood** | Vampirism, Vitality, Bloodrage, Devotion, Burst Veins, Executioner, Bleeding Stride | below half Health +40% damage, every kill heals 4% max Health |
+| **Storm** | Frenzy, Thunderclap, Shock Roll, Swiftness, Leaping Bolt, Restless Storm | attacks 15% faster; every 3rd hit, lightning jumps to 3 enemies |
+| **Arcane** | Arcane Focus, Arcane Power, Devotion, Echo, Riven Glyph, Sage's Codex, Hydra's Quiver, Starving Litany | every skill also fires a ring of 8 bolts |
 
 A perk sits in a family only if its effect plainly belongs to it (Inferno: fire and burning;
 Frost: cold, slows, freezing; Blood: health, life drain, low-health power; Storm: lightning,
@@ -299,10 +305,34 @@ perk, relic or affix without a role, or a build-around without a family.
 |---|---|---|
 | Staple, no family | Strength, Precision, Fortune, War Banner | Brutal, Ironbound, Light, Unerring, Sharp, Stalwart, Swift, Venomous, of Fury, of Haste, of Sorcery, of the Bear, of the Fox, of the Titan, of Thorns |
 | Staple, in a family | Arcane Focus, Arcane Power, Sage's Codex (Arcane); Frenzy, Swiftness (Storm); Vitality (Blood); Guardian Ring (Frost) | |
-| Build-around | Ignite, Kindling, Blazing Roll, Burning Thorns, Cinder Wake, Phoenix Feather (Inferno); Frostbite, Cold Snap, Ice Shards, Frost Armor, Rime Halo (Frost); Vampirism, Bloodrage, Devotion, Burst Veins, Executioner (Blood); Thunderclap, Shock Roll, Leaping Bolt (Storm); Echo, Devotion, Riven Glyph, Hydra's Quiver (Arcane) | Burning, of Embers (Inferno); Frozen, Shattering (Frost); Thundering (Storm); Vampiric (Blood); of Echoes (Arcane) |
+| Build-around | Ignite, Kindling, Blazing Roll, Burning Thorns, Cinder Wake, Phoenix Feather (Inferno); Frostbite, Cold Snap, Ice Shards, Frost Armor, Rime Halo (Frost); Vampirism, Bloodrage, Devotion, Burst Veins, Executioner (Blood); Thunderclap, Shock Roll, Leaping Bolt (Storm); Echo, Devotion, Riven Glyph, Hydra's Quiver (Arcane); the five relics that bend a rule, one per family | Burning, of Embers (Inferno); Frozen, Shattering (Frost); Thundering (Storm); Vampiric (Blood); of Echoes (Arcane) |
 
 A new perk, relic or affix declares its role with its numbers: a staple is plain numbers or a
 modest effect worth taking anywhere; a build-around's effect plainly belongs to its family.
+
+### Rule-bending relics
+
+Isaac's and Gungeon's best items change a rule rather than a number, with a price or a twist.
+Five relics do (`PerkDef.twist`), one per family, each readable in one line:
+
+| Relic | Family | The rule bent | The price |
+|---|---|---|---|
+| **Bleeding Stride** | Blood | the roll cuts every enemy it passes through for 150% of your Damage | each roll costs 4% of max Health |
+| **Starving Litany** | Arcane | skills (not the roll) recharge only by slaying: a quarter of their wait a kill, 3% a blow on a warden; +60% skill damage | no recharge with time |
+| **Restless Storm** | Storm | while foes are near and you move, lightning strikes the nearest every 0.7 s (your Damage) | standing still a second, it strikes you (3% max Health a second) |
+| **Funeral Pyre** | Inferno | every foe you slay explodes (120% of your Damage, radius 72, sets on fire) | the blast burns you too if you stand in it (6% max Health) |
+| **Heart of Winter** | Frost | foes within three steps (100) are slowed by 35% (it feeds the Frost family) | you move 20% slower (-34) |
+
+- **Only wardens offer them**, one card of the three of every warden's relics while some are left
+  (`OfferQueue.add_relic`, `Offer.twists`, `ContentDB.pick_perks(..., twists)`); a reroll keeps one,
+  banishing it brings another. Level ups, pacts, trials and encounters' gifts never offer one,
+  nor is one the daily run's relic (the day is the same for everyone). The card says
+  "Relic that bends a rule" in the danger color.
+- **A relic's own price never deals the last blow**: it leaves 1 Health, and it is a tick (no hit
+  stop, no free invulnerability: standing still under the storm must not shelter the hero). A
+  roll's invulnerability spares him the pyre's blast; the storm rages only with a foe within
+  150 (a shop, a talk, a quiet room are left alone).
+- The Nameless Keeper never wears them (his relics are a list of plain ones, `kept_perks`).
 
 ### Behaviour perks (the audit of 2026-10-28)
 
@@ -329,8 +359,8 @@ Veins** (Blood: a killing blow's damage past the Health left bursts onto the ene
 packs) and **Rime Halo** (Frost: 2 shards of ice circle you, +1 a level, cutting and chilling
 what they pass through, each enemy once every 0.6 s: you stay close and circle). All are
 build-arounds of weight 6, like the others; their hits are secondary (no on-hit perks, nothing
-loops). Now 15 of the 29 perks and relics past the staples act in the world (`unit.variety`
-keeps it at a third at least), and the rule-bending relics below add more.
+loops). Now 15 of the 29 perks and relics past the staples acted in the world (`unit.variety`
+keeps it at a third at least); the five rule-bending relics above made it 20 of 34.
 
 ### Choosing: reroll, banish, families first
 
