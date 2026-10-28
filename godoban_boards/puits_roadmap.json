@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 416,
+  "next_id": 420,
   "tags": [
     "pc",
     "test",
@@ -6273,6 +6273,67 @@
       ],
       "created_at": 1793161745,
       "updated_at": 1793161745
+    },
+    {
+      "id": "task_416",
+      "title": "Aide sans jugement : Aide des âmes, difficulté en partie, indices relisibles",
+      "description": "Partie de task_413 faite sur la branche fix/flow (décision 0011 ; le maintien de la charge et le texte qui saute sont à d'autres branches). Options > Jouabilité > Difficulté : « Aide des âmes » (20 % de dégâts en moins, +2 % par mort avec l'aide, 80 % au plus ; data/player/assist.tres ; gardée dans le profil). Menu pause > « Difficulté » : seulement plus bas, pour la partie en cours (les monstres présents suivent). Une partie aidée (aide activée à un moment, ou difficulté baissée) est notée dans la sauvegarde, n'entre dans aucun classement, n'établit aucun record (temps, Fond du Puits, score du Glas de l'aube) ; âmes, histoire, codex, succès comptent. Indices : une ligne chacun (anglais et français, les 33 réécrits), cadre à la largeur de la ligne qui évite les coins du HUD ; un indice qui expire sans être lu revient une fois à un étage suivant ; onglet « Conseils » au codex.\nÀ vérifier sur le S23 : (1) l'option se trouve et se comprend ; (2) avec l'aide, un coup ordinaire fait bien moins mal ; (3) Pause > Difficulté baisse bien et le HUD affiche la nouvelle ; (4) les indices tiennent sur une ligne en français et ne cachent pas la barre de vie ; (5) l'onglet Conseils au codex.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "android",
+        "records"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793166835
+    },
+    {
+      "id": "task_417",
+      "title": "Menu pause plein à 720 lignes (8 boutons)",
+      "description": "Avec « Difficulté », le menu pause a huit lignes de 54 unités et remplit l'écran à 1280x720 (planche de y 30 à 705). Si les boutons passent à 64 unités (task_407), retirer la ligne d'aide du bas (or et âmes) ou regrouper deux boutons.",
+      "status": "todo",
+      "priority": "low",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793166835
+    },
+    {
+      "id": "task_418",
+      "title": "Statistiques de jeu : marquer les parties aidées",
+      "description": "Les statistiques de jeu (Talo) ne savent pas qu'une partie était aidée (Aide des âmes, difficulté baissée) : les mesures d'équilibrage les mélangent. Ajouter le drapeau aux propriétés envoyées demande de mettre à jour docs/privacy-ops.md et la fiche Data safety (ce qui est envoyé). Idée, à décider.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "en ligne",
+        "équilibrage"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793166835
+    },
+    {
+      "id": "task_419",
+      "title": "Cadre des indices : coins du HUD en dur",
+      "description": "HintBox.CLEAR_LEFT (452) et CLEAR_RIGHT (244) recopient la mise en page de hud.tscn (barres à gauche jusqu'à 436, sac/pause/minicarte dans les 236 de droite). Si le HUD bouge (zone sûre, tailles tactiles), mettre ces valeurs à jour ou les demander au HUD.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "qualité"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793166835
     }
   ]
 }

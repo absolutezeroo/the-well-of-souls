@@ -32,6 +32,7 @@ const SAVE_SHAPE := {
 		"skills": ["string"], "perks": [{"id": "string", "stacks": "number"}]
 	}], "ending_receipts": {"*": "string"},
 	"quests_claimed": {"*": ["string"]}, "keeper": "dict", "keepers_freed": ["dict"], "history": ["dict"],
+	"assist": "bool", "assist_deaths": "number",
 }
 
 var souls := 0
@@ -124,6 +125,10 @@ var deaths_by := {}
 ## The deepest floor ever reached, on any difficulty (the story's progress; best_depth is the
 ## feats' record, without Pilgrim runs). An older save starts from best_depth.
 var deepest := 0
+## The Souls' Aid (AssistDef, the Options): on or off, and the deaths with it on (each takes a
+## little more damage away). Kept with the profile, like a save file's own setting.
+var assist := false
+var assist_deaths := 0
 
 const HISTORY_SIZE := 20
 ## The Nameless Keepers freed that the codex remembers.
@@ -531,6 +536,21 @@ func record_time(key: String, seconds: float, splits: Array[float]) -> bool:
 	return true
 
 
+## The Souls' Aid turned on or off (the Options; the run in progress follows it: Game).
+func set_assist(on: bool) -> void:
+	if assist == on:
+		return
+	assist = on
+	save_profile()
+	changed.emit()
+
+
+## The hero died with the Souls' Aid on: the next hits weigh a little less (AssistDef).
+func count_assist_death() -> void:
+	assist_deaths += 1
+	save_profile()
+
+
 ## The tutorial starts over (Options).
 func reset_hints() -> void:
 	hints_seen = {}
@@ -668,6 +688,8 @@ func reset() -> void:
 	lines_order = {}
 	deaths_by = {}
 	deepest = 0
+	assist = false
+	assist_deaths = 0
 	changed.emit()
 
 
@@ -709,6 +731,7 @@ func to_data() -> Dictionary:
 		"chronicle_told": chronicle_told, "fragments_found": fragments_found, "deeds_done": deeds_done,
 		"boss_meetings": boss_meetings, "deepest": deepest,
 		"lines_told": lines_told, "lines_order": lines_order, "deaths_by": deaths_by,
+		"assist": assist, "assist_deaths": assist_deaths,
 	}
 
 
@@ -859,6 +882,8 @@ func _read(data: Dictionary) -> void:
 	lines_order = _ints(data.get("lines_order", {}))
 	deaths_by = _ints(data.get("deaths_by", {}))
 	deepest = maxi(int(data.get("deepest", 0)), best_depth)
+	assist = bool(data.get("assist", false))
+	assist_deaths = maxi(int(data.get("assist_deaths", 0)), 0)
 	best_splits = {}
 	var saved_splits: Variant = data.get("best_splits", {})
 	if saved_splits is Dictionary:

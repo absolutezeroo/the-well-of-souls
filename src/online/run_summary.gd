@@ -32,6 +32,9 @@ var score := 0
 var nights := 0
 ## A debug run (DebugCheats.debug_run): never sent anywhere.
 var debug := false
+## An aided run (RunState.assisted: the Souls' Aid, or its difficulty lowered midway): never sent
+## to a leaderboard.
+var assisted := false
 
 
 ## The summary of `run` as it ends, with its hero.
@@ -58,6 +61,7 @@ static func of(run: RunState, player: Player, content: ContentDB) -> RunSummary:
 		summary.relic = start_relic.id if start_relic else &""
 		summary.score = DailyRun.score(run)
 	summary.debug = DebugCheats.debug_run
+	summary.assisted = run.assisted
 	return summary
 
 

@@ -65,6 +65,9 @@ var killer_def: MonsterDef
 var killer_was_elite := false
 ## Cold floors and hot ground (see BodyTemperature).
 var temperature := BodyTemperature.new()
+## The share of each hit the Souls' Aid takes away (AssistDef; the Game sets it from the profile,
+## 0 without it), after Armor: the one place the aid touches the damage path (_incoming_damage).
+var aid := 0.0
 ## Holding the attack button: the weapon's charged attack (AttackCharge, ChargedAttackDef).
 var charge := AttackCharge.new()
 ## The input, the aim and the attack button (PlayerControls).
@@ -391,6 +394,14 @@ func _on_attacked(weapon: WeaponDef) -> void:
 		camera.kick(facing, 1.5)
 	else:
 		camera.kick(-facing, 3.0)
+
+
+## After Armor (Combat.mitigate()), before a ward soaks what is left: the Souls' Aid's share taken
+## away, never a hit turned into nothing.
+func _incoming_damage(_hit: HitInfo, damage: int) -> int:
+	if aid <= 0.0 or damage <= 0:
+		return damage
+	return maxi(1, roundi(damage * (1.0 - aid)))
 
 
 func _on_damaged(hit: HitInfo, damage: int) -> void:

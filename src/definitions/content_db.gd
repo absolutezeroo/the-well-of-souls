@@ -54,6 +54,8 @@ extends Resource
 @export var runes: Array[RuneDef] = []
 ## The first steps and the hints of the tutorial.
 @export var tutorial: TutorialDef
+## The Souls' Aid, the option that takes damage away (decision 0011).
+@export var assist: AssistDef
 ## The first runs' gentle start: a sheltered first room, a slow first monster (decision 0010).
 @export var first_steps: FirstStepsDef
 

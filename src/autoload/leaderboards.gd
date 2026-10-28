@@ -8,7 +8,8 @@ extends OnlineService
 ## Its own file, user://leaderboards.json (never the player's save, never the Profile): the
 ## pseudonym, "publish my scores online" and the scores waiting to be sent. The device's anonymous
 ## id, the Talo player it became and the server itself are the OnlineSession's, shared by every
-## online service. Nothing is sent for a debug run, a practice attempt, a run that fails
+## online service. Nothing is sent for a debug run, an aided run (RunSummary.assisted: the Souls'
+## Aid, a difficulty lowered midway), a practice attempt, a run that fails
 ## RunSummary.check(), in the tests (they give the session an offline backend and no file), and
 ## **nothing at all, not even a read of a board, until the player chose to publish their scores**
 ## (PseudonymDialog: the choice is the consent the law asks for, docs/privacy-ops.md; the gate is
@@ -200,7 +201,7 @@ func forget() -> void:
 ## queued (none without a server: an offline build keeps nothing).
 func record(summary: RunSummary) -> int:
 	last_rejection = ""
-	if not OnlineSession.scores_allowed() or summary.debug:
+	if not OnlineSession.scores_allowed() or summary.debug or summary.assisted:
 		return 0  # (scores_allowed(): a server, published, not stopped by the remote kill switch)
 	var boards := config.boards.filter(func(def: LeaderboardDef) -> bool: return def.accepts(summary))
 	if boards.is_empty():

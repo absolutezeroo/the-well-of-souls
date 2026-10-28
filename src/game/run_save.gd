@@ -65,6 +65,7 @@ const SHAPE := {
 	"difficulty": "string",
 	"ascension": "number",
 	"remote": "dict",
+	"assisted": "bool",
 	"last_boss": "string",
 	"boss_slain": "bool",
 	"floors_without_forge": "number",

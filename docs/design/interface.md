@@ -285,8 +285,12 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   perk choices still waiting, the one on screen with its cards). Dying erases it. "Save and quit" in the pause menu does the same on purpose.
   Never during the trial of the Threshold: quit in there, and the run picks up as it was before
   the killing blow.
-- **Pause menu** (the II button, Escape, a gamepad's Start, or the phone's back button): resume, options, bestiary,
-  **Send feedback**, save and quit, give up the run (two taps). Coming back to the app, the game waits paused.
+- **Pause menu** (the II button, Escape, a gamepad's Start, or the phone's back button): resume, options,
+  **Difficulty** (lower it for the rest of this run only, never raise it: `RunDifficultyDialog`, a
+  button per lower difficulty with its description, and Back; the run is then aided, see
+  progression.md "Help without judgement"), bestiary, **Send feedback**, save and quit, give up the
+  run (two taps). Eight rows: at 720 lines the board fills the screen (a taller button would need
+  the help line under them to go). Coming back to the app, the game waits paused.
 - **Options** (`Settings` autoload, `user://settings.cfg`), on the title screen and in the pause menu:
   five volumes (**General**, **Music**, **Interface**, **Combat**, **Ambience**: which sounds
   each one sets is in presentation.md, SFX; a slider follows the finger or the mouse smoothly (a
@@ -304,15 +308,17 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   By hand, three buttons, the picked one's rule spelled out under them; see design/loot.md),
   **boss stories** (Full / Short / Off, three buttons the same way: the cinematic before a
   warden's fight, presentation.md "Boss stories"),
-  **tutorial hints** (on/off) and **Replay tutorial**, on a computer **fullscreen**, the
+  **tutorial hints** (on/off) and **Replay tutorial**, the **Souls' Aid** (*Aide des âmes*: on/off,
+  its line saying what it takes away now and that its runs set no records; kept in the Profile, not
+  in Settings, like a save file's own setting: progression.md), on a computer **fullscreen**, the
 **interface size** (Big / Medium / Small), and the **language** (English / Français,
   see Languages). The window (`OptionsPanel`, built in code on `MenuWindow`) has five tabs, each
   option with a one-line "what it does"; on/off options are big switches, and tapping an
   option's name flips it too; a choice of a few (language, auto loot, boss stories, interface
   size) is a row of buttons under its name, the one in use pressed:
   - **Gameplay** (opens first): Language (first, for a player who can't read the one in use),
-    Loot (auto loot), Story (boss stories); In a run (run timer, screen shake, vibrations),
-    Tutorial (hints, Replay tutorial).
+    Loot (auto loot), Story (boss stories); Difficulty (the Souls' Aid), In a run (run timer,
+    screen shake, vibrations), Tutorial (hints, Replay tutorial).
   - **Graphics**: Screen (fullscreen on a computer, interface size), Touch controls (buttons
     size, fixed joystick); Effects and battery (fewer effects, screen flashes, battery saver).
   - **Audio**: the five volumes, long sliders in one column.
@@ -563,8 +569,8 @@ stones lit in their runes' colors. The selected slot pulses gold.
   the cards on dark wood with Reroll / Banish explained and **Later** (the choice waits behind the
   perk button; Back does the same), coming in softly (the world dims, the board rises, 0.2 s)
   instead of cutting over the fight; each pause button says what it does, with
-  what gold and souls are for; the end screen shows the run's numbers (`RunState.summary_rows()`),
-  the souls earned and what they buy. After a death, the
+  what gold and souls are for; the end screen shows the run's numbers (`RunState.summary_rows()`;
+  an aided run says it sets no records), the souls earned and what they buy. After a death, the
   Vigil-Keeper's tale and advice sit under the title in her `DialogueBox` (presentation.md); with
   nothing for her to say, the story's line. A death's buttons: **Descend again** (straight into the
   next descent, as the Well would start it: the difficulty, ascension and oath chosen there, a Dawn

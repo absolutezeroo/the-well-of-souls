@@ -41,7 +41,9 @@ decision ([decisions/](../decisions/README.md)).
   of max Health, a boss hit 25-30 %, all simultaneous telegraphed attacks together 50 %.
 - Each ascension level adds exactly one readable modifier that keeps this contract.
 - Help without judgement: like Hades' God Mode (20 % damage resistance, +2 % per death) and
-  Celeste's Assist Mode, an easier way is offered plainly, never mocked.
+  Celeste's Assist Mode, an easier way is offered plainly, never mocked: the Souls' Aid and
+  lowering the difficulty in a run (decision 0011, progression.md "Help without judgement"); aided
+  runs stay off the leaderboards and records, everything else counts.
 - Luck is engineered: bad-luck protection on rarity, critical resources guaranteed (a heal before
   a boss), draws without repeats in a run, honest odds when shown.
 
@@ -59,8 +61,9 @@ decision ([decisions/](../decisions/README.md)).
 
 The Game Accessibility Guidelines' **Basic** level is required: remappable controls, large
 targets, readable font and contrast, never colour or sound alone, separate volumes, subtitles,
-no flicker, saved settings, a wide choice of difficulty. Also: an alternative to held buttons, no
-required simultaneous presses, autosave, difficulty changeable in a run. Screen shake (0-100 %),
+no flicker, saved settings, a wide choice of difficulty (and the Souls' Aid). Also: an alternative
+to held buttons, no required simultaneous presses, autosave, difficulty changeable in a run (the
+pause menu lowers it). Screen shake (0-100 %),
 Screen flashes and Vibrations are options every effect respects.
 
 ## Performance on the phone

@@ -112,6 +112,13 @@ The suites (`tests/suites/`, each a `TestSuite`):
   (the cinematic in an arena, skipping, no replay on a run picked up again, Short and Off, a deed,
   fragments on the floors and their panel). The runner turns Boss stories off for every other test
   (`Settings.boss_stories`), as it does the tutorial hints; the story tests turn them on.
+- The first minutes and the help (`first_run_tests.gd`, `FirstRunTests`, decisions 0010 and 0011):
+  its title part (the first Play going straight down on Keeper, the privacy questions first, the
+  time from launch to the first monster noticing the hero, story skipped, under 30 s at 60 fixed
+  frames a second), its game parts as `game.first_steps`, `game.descend_again`, `game.assist`,
+  `game.lower_difficulty` and `game.hints`. The runner turns the first runs' gentle start off for
+  every other test (`FirstSteps.enabled`: a fresh profile's floor 1 would shelter the hero and
+  change its first room's monsters); `first_steps` and the launch test turn it on.
 - Keyboards, mice and gamepads (`pc_tests.gd`, `PcTests`): its unit part in the unit suite (the
   device in use from keys, gamepad buttons and sticks with the dead zone, touches and the mouse;
   the prompts per device and gamepad family; the input map; the settings; the canvas's scale at

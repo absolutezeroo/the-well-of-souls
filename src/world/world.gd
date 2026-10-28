@@ -34,6 +34,7 @@ var difficulty: DifficultyDef:
 		difficulty = value
 		if rules:
 			rules = FloorRules.make(rules.config, value, floor_event, depth, curse)
+			rules.boons = boons
 ## Boss floors only: the arena and its boss (null on normal floors), and its plan (ArenaDef).
 var arena: BossArena
 var arena_plan: ArenaDef
@@ -259,6 +260,22 @@ func clear_floor() -> void:
 ## don't notice him there yet (Monster.notice_target()).
 func shelters(actor: Actor) -> bool:
 	return first_steps != null and first_steps.shelters(actor)
+
+
+## The run's difficulty was lowered in the middle of this floor (the pause menu, RunState): the
+## floor's rules follow it (its boons kept), and so do the monsters already standing (their
+## Health, blows, speed, wind-ups and sight: Monster.follow_rules()) and the floor's light.
+func lower_difficulty(lower: DifficultyDef) -> void:
+	var before := rules
+	difficulty = lower
+	if before == null:
+		return
+	for node in get_tree().get_nodes_in_group("monsters"):
+		var monster := node as Monster
+		if monster and monster.world == self and not monster.is_dead:
+			monster.follow_rules(before, rules)
+	_light_tint = rules.ambient_light()
+	relight()
 
 
 func place_player(new_player: Player) -> void:

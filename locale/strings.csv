@@ -213,6 +213,7 @@ The light takes you back up.,The light takes you back up.,La lumière te ramène
 Out before the dark closed in: the dawn leaves you a gift.,Out before the dark closed in: the dawn leaves you a gift.,Sorti avant que l'ombre ne se referme : l'aube te laisse un présent.
 Seen,Seen,Vu
 Unknown,Unknown,Inconnu
+The descent goes on as %s. It sets no records now.,The descent goes on as %s. It sets no records now.,La descente se poursuit en %s. Elle n'établit plus de record.
 +%d souls for the descent.,+%d souls for the descent.,+%d âmes pour la descente.
 New record: %s!,New record: %s!,Nouveau record : %s !
 Could not save village progress. Try again.,Could not save village progress. Try again.,La progression du village n’a pas pu être sauvegardée. Réessaie.
@@ -251,6 +252,8 @@ Hero level,Hero level,Niveau du héros
 Monsters slain,Monsters slain,Monstres abattus
 Bosses slain,Bosses slain,Boss abattus
 Time,Time,Temps
+Records,Records,Records
+None: an aided descent,None: an aided descent,Aucun : une descente aidée
 Secret rooms found,Secret rooms found,Salles secrètes trouvées
 (best %d),(best %d),(meilleur %d)
 (practice),(practice),(entraînement)
@@ -683,6 +686,7 @@ The controls of the device in hand. Choose a fight's control to give it another 
 Change,Change,Changer
 Done! Tips are back,Done! Tips are back,C'est fait ! Les conseils sont de retour
 Replay tutorial,Replay tutorial,Rejouer le tutoriel
+"%d%% less damage taken, +%d%% each death (up to %d%%). No records or leaderboards.","%d%% less damage taken, +%d%% each death (up to %d%%). No records or leaderboards.","%d %% de dégâts subis en moins, +%d %% par mort (%d %% au plus). Ni records ni classements."
 "Only its name and a line it remembers, about two seconds.","Only its name and a line it remembers, about two seconds.","Seulement son nom et une phrase dont il se souvient, environ deux secondes."
 No scene: the fight starts at once.,No scene: the fight starts at once.,Aucune scène : le combat commence aussitôt.
 A new chapter of its story when there is one; otherwise two seconds.,A new chapter of its story when there is one; otherwise two seconds.,Un nouveau chapitre de son histoire quand il y en a un ; sinon deux secondes.
@@ -695,6 +699,7 @@ Every change is saved right away.,Every change is saved right away.,Chaque chang
 Language,Language,Langue
 Loot,Loot,Butin
 Story,Story,Histoire
+Souls' Aid,Souls' Aid,Aide des âmes
 In a run,In a run,En partie
 Run timer,Run timer,Chronomètre
 "The run's time, under the map.","The run's time, under the map.","Le temps de la partie, sous la carte."
@@ -785,6 +790,7 @@ Paused,Paused,Pause
 Resume,Resume,Reprendre
 Back to the fight.,Back to the fight.,Retour au combat.
 "Sound, music, button size, effects.","Sound, music, button size, effects.","Son, musique, taille des boutons, effets."
+Lower it for this descent.,Lower it for this descent.,La baisser pour cette descente.
 The monsters you have met: how they attack and how to beat them.,The monsters you have met: how they attack and how to beat them.,Les monstres rencontrés : comment ils attaquent et comment les vaincre.
 Quest journal,Quest journal,Journal de quêtes
 "Village requests, current objectives and bounties.","Village requests, current objectives and bounties.","Demandes du village, objectifs en cours et primes."
@@ -797,6 +803,9 @@ Really? Press again,Really? Press again,Vraiment ? Appuie encore
 Ends this run now. You keep the souls earned so far.,Ends this run now. You keep the souls earned so far.,Met fin à la partie maintenant. Tu gardes les âmes gagnées jusqu'ici.
 Tap again to end the run. Anything else to cancel.,Tap again to end the run. Anything else to cancel.,Touche encore pour abandonner. N'importe quoi d'autre pour annuler.
 Press again to end the run. Anything else to cancel.,Press again to end the run. Anything else to cancel.,Appuie encore pour abandonner. N'importe quoi d'autre pour annuler.
+This descent: %s,This descent: %s,Cette descente : %s
+Lower it for the rest of this descent only. It then sets no records and goes on no leaderboard; souls and achievements still count.,Lower it for the rest of this descent only. It then sets no records and goes on no leaderboard; souls and achievements still count.,La baisser pour le reste de cette descente seulement. Elle n'établit alors plus de record et n'entre dans aucun classement ; les âmes et les succès comptent toujours.
+Nothing is gentler than this.,Nothing is gentler than this.,Rien n'est plus clément.
 RELIC,RELIC,RELIQUE
 New perk,New perk,Nouvel atout
 New perk  (up to level %d),New perk  (up to level %d),Nouvel atout  (jusqu'au niveau %d)

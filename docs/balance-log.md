@@ -1957,3 +1957,21 @@ After Ren's request is returned, Sayo offers a second one-time rescue with evide
 Manual return awards 20 souls, wakes Sayo and clears the western roots. Both village requests
 together award 35 souls once per profile; neither can be repeated for farming or collected on
 a daily descent. No new combat benefits or shop prices are introduced.
+
+## 2026-10-28 — The first minutes and help without judgement (decisions 0010, 0011)
+
+Not measured with the balance tools (no target moves): numbers set from the decisions and the
+audit's probes, to check on the S23.
+
+- **First steps** (`data/tutorial/first_steps.tres`): on floor 1 of a profile's first three runs,
+  the start room shelters the hero until he has walked 110 px and swung once (the audit: hit
+  standing still in 7 starts of 33, 17-26 s in); the nearest room with monsters holds one Slime
+  instead of its pack: 10 Health, no Armor (the kind: 28 and 1), 40 px/s (55), wind-up 0.8 s
+  (0.5), recovery 0.6 s (0.4). The starting katana (5 Damage, ±15 %) kills it in 2 or 3 ordinary
+  blows. Floor 1 of those runs has that room's other monsters fewer, so its seal asks a few kills
+  less.
+- **The Souls' Aid** (`data/player/assist.tres`): 20 % less damage taken, +2 % after each death
+  with it on, 80 % at most (Hades' God Mode's numbers), after Armor, at least 1. Aided runs go on
+  no leaderboard and set no record; their souls are those of their difficulty.
+- **Lowering the difficulty in a run** keeps the remote settings the run began with; its souls
+  are the lower difficulty's from then on (paid at the end on the difficulty the run ends on).

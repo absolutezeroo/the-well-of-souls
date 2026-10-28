@@ -1,9 +1,10 @@
 class_name FirstRunTests
 extends TestSuite
-## The first minutes (decision 0010): the first launch going straight down the Well (the privacy
-## questions first), the time from launch to the first monster noticing the hero, the first runs'
-## sheltered first room and slow first monster, the death screen's Descend again; and the hints
-## (one line each, back when they ran out unread, read again in the codex's Tips).
+## The first minutes and the help without judgement (decisions 0010 and 0011): the first launch
+## going straight down the Well (the privacy questions first), the time from launch to the first
+## monster noticing the hero, the first runs' sheltered first room and slow first monster, the
+## death screen's Descend again, the Souls' Aid, lowering the difficulty from the pause menu, and
+## the hints (one line each, back when they ran out unread, read again in the codex's Tips).
 ## run_title() on the title suite; the run_* parts on fresh games of the game suite.
 
 ## What a new player takes, as the audit timed the first launch: the privacy questions come
@@ -283,6 +284,160 @@ func run_descend_again(game: Game) -> void:
 	game.game_over_panel.show_end(true, "", [], 0, 0)
 	check(not descend.is_visible_in_tree() and (game.game_over_panel.get_node("%ContinueButton") as Button).is_visible_in_tree(), "a victory's screen keeps its own choices")
 	game.game_over_panel.hide()
+
+
+# --- The Souls' Aid ---------------------------------------------------------------------
+
+## The Souls' Aid: 20 % less damage, 2 % more after each death with it on, at most 80 %; the run
+## aided (saved so, picked up so), off the leaderboards and the records; souls still paid.
+func run_assist(game: Game) -> void:
+	var rules := CONTENT.assist
+	check(rules != null and is_equal_approx(rules.resistance_after(0), 0.2) and is_equal_approx(rules.resistance_after(3), 0.26) and is_equal_approx(rules.resistance_after(1000), 0.8), "the aid: 20 %, +2 % a death, at most 80 %")
+	Profile.reset()
+	game.start_run()
+	await _frames(3)
+	check(not game.run.assisted and game.run.ranked() and is_zero_approx(game.player.aid), "off by default: a ranked run")
+	# The option, in the Options.
+	var options := (load("res://src/ui/options/options_panel.tscn") as PackedScene).instantiate() as OptionsPanel
+	add_child(options)
+	await _frames(1)
+	options.open()
+	var switch := options.get_node("%AssistCheck") as CheckButton
+	check(not switch.button_pressed, "the Options show the aid off")
+	switch.button_pressed = true
+	await _frames(1)
+	check(Profile.assist and switch.button_pressed, "the switch turns it on (the profile keeps it)")
+	var note := OptionRows.note_of(switch.get_parent().get_child(0) as VBoxContainer)
+	check(note.text.contains("20%") and note.text.contains("80%"), "its line says what it does (%s)" % note.text)
+	options.queue_free()
+	# Turned on in the middle of a run: the run follows at once, and is aided for good.
+	check(game.run.assisted and is_equal_approx(game.player.aid, 0.2), "turned on mid-run: the hero takes 20 %% less (%.2f), the run is aided" % game.player.aid)
+	var player := game.player
+	player.base_stats.defense = 0
+	player.invalidate_stats()
+	player._invulnerable_time = 0.0
+	var hp := player.hp
+	var hit := HitInfo.new()
+	hit.amount = 10
+	player.take_hit(hit)
+	check(hp - player.hp == 8, "a 10-damage hit takes 8 (%d)" % (hp - player.hp))
+	player._invulnerable_time = 0.0
+	hp = player.hp
+	var small := HitInfo.new()
+	small.amount = 1
+	player.take_hit(small)
+	check(hp - player.hp == 1, "never a hit turned into nothing")
+	Profile.set_assist(false)
+	check(game.run.assisted and is_zero_approx(player.aid), "off again: no aid, the run stays aided")
+	Profile.set_assist(true)
+	# Saved and picked up aided, even with the aid off by then.
+	game._save_run()
+	var saved := RunSave.read()
+	check(bool(saved.get("assisted", false)), "the run save says the run is aided")
+	Profile.set_assist(false)
+	game.resume_run(saved)
+	await _frames(3)
+	check(game.run.assisted and not game.run.ranked() and is_zero_approx(game.player.aid), "picked up: still aided, no aid while it is off")
+	Profile.set_assist(true)
+	# Off the leaderboards: an aided Dawn Knell's official attempt is never queued.
+	var boards := LeaderboardTests.new()
+	add_child(boards)
+	boards._use_fake()
+	var summary := boards._summary()
+	check(Leaderboards.record(summary) == 1, "an official Dawn Knell is queued...")
+	Leaderboards.use_for_tests(FakeBoardBackend.new())
+	Leaderboards.set_shown(true)
+	summary.assisted = true
+	check(Leaderboards.record(summary) == 0 and Leaderboards.queue.is_empty(), "...but not an aided one")
+	check(RunSummary.of(game.run, game.player, CONTENT).assisted, "a run's summary says it is aided")
+	boards._restore()
+	boards.queue_free()
+	# A death with it on: counted, the next run's aid a little stronger; an aided Dawn Knell sets no
+	# score; souls are paid as ever.
+	game.start_run(true)
+	await _frames(3)
+	check(game.run.is_daily() and game.run.daily_official and game.run.assisted, "an aided Dawn Knell, the day's first attempt")
+	game.run.kills = 12
+	var souls := Profile.souls
+	game.player.give_up()  # (a Dawn Knell's relic may be a second life)
+	await _until(func() -> bool: return game.game_over_panel.visible, 4.0)
+	check(Profile.assist_deaths == 1, "a death with the aid on is counted")
+	check(Profile.daily_score == 0 and Profile.daily_best == 0, "an aided Dawn Knell sets no score")
+	check(Profile.souls > souls, "souls are paid as ever (%d -> %d)" % [souls, Profile.souls])
+	game.start_run()
+	await _frames(3)
+	check(is_equal_approx(game.player.aid, 0.22), "after a death with it on: 22 %% (%.2f)" % game.player.aid)
+	Profile.assist_deaths = 500
+	Profile.changed.emit()
+	check(is_equal_approx(game.player.aid, 0.8), "never more than 80 %")
+	# A win while aided: counted (souls, victories), but its time is no record.
+	game.player.invincible = true
+	game.depth = CONTENT.dungeon.total_floors()
+	game._enter_floor()
+	await _frames(5)
+	var world := game.world
+	check(world.arena != null, "the last floor: its warden")
+	if world.arena:
+		game.player.global_position = world.map.cell_to_world(world.map.boss_room.get_center() + Vector2i(0, 4))
+		await _frames(5)
+		var final_hit := HitInfo.new()
+		final_hit.amount = 999999
+		world.arena.boss.take_hit(final_hit)
+		await _until(func() -> bool: return game.game_over_panel.visible, 6.0)
+		check(game.has_won and Profile.victories == 1, "an aided win counts")
+		check(Profile.best_times.is_empty() and not game.game_over_panel.shown_text().contains(tr("New record!")), "...but its time is no record")
+		check(game.game_over_panel.shown_text().contains(tr("None: an aided descent")), "the end screen says an aided run sets no records")
+	game.player.invincible = false
+	Profile.reset()
+
+
+# --- Lowering the difficulty ------------------------------------------------------------
+
+## The pause menu's Difficulty: only lower ones, for this run; the floor's rules, its monsters and
+## the next floors follow; the run aided, saved and picked up so.
+func run_lower_difficulty(game: Game) -> void:
+	Profile.reset()
+	Profile.difficulty = &"hard"
+	game.start_run()
+	await _frames(3)
+	var run := game.run
+	check(run.difficulty.id == &"hard", "a run on Martyr")
+	var ids := run.lower_difficulties(CONTENT).map(func(d: DifficultyDef) -> StringName: return d.id)
+	check(ids == [&"easy", &"normal"], "only lower difficulties are offered (%s)" % [ids])
+	game.open_pause_menu()
+	await _frames(1)
+	(game.pause_menu.get_node("%DifficultyButton") as Button).pressed.emit()
+	await _frames(1)
+	var dialog := game.pause_menu.difficulty
+	check(dialog.visible and dialog.has_node("%Lower_normal") and dialog.has_node("%Lower_easy") and not dialog.has_node("%Lower_hard") and not dialog.has_node("%Lower_nightmare"), "the pause menu's Difficulty lists the lower ones")
+	var screen := get_viewport().get_visible_rect()
+	check(screen.encloses(dialog.board_rect()), "the dialog fits the screen (%s)" % dialog.board_rect())
+	var monster := game.world.spawn_monster(load("res://data/monsters/skeleton.tres"), game.player.global_position + Vector2(300, 0))
+	monster.hp = roundi(monster.get_max_hp() * 0.5)
+	var max_hp := monster.get_max_hp()
+	var power := monster.get_power()
+	var windup := monster.get_telegraph_scale()
+	var boons := game.world.boons
+	(dialog.get_node("%Lower_normal") as Button).pressed.emit()
+	await _frames(1)
+	check(not dialog.visible and run.difficulty.id == &"normal" and run.assisted and not run.ranked(), "picked: the run goes on as Keeper, aided")
+	check(game.world.difficulty == run.difficulty and game.world.rules.difficulty == run.difficulty and game.world.rules.boons == boons, "the floor's rules follow (its boons kept)")
+	check(monster.get_max_hp() < max_hp and monster.get_power() <= power and monster.get_telegraph_scale() > windup, "the monsters standing follow (Health %d -> %d, wind-ups x%.2f -> x%.2f)" % [max_hp, monster.get_max_hp(), windup, monster.get_telegraph_scale()])
+	check(absf(float(monster.hp) / monster.get_max_hp() - 0.5) < 0.05, "...keeping their share of Health")
+	check(not game.lower_difficulty(load("res://data/difficulties/nightmare.tres")), "never a harder one")
+	var saved := RunSave.read()
+	check(String(saved.get("difficulty", "")) == "normal" and bool(saved.get("assisted", false)), "saved as Keeper, aided")
+	game.pause_menu.hide()
+	game.resume_run(saved)
+	await _frames(3)
+	check(game.run.difficulty.id == &"normal" and game.run.assisted, "picked up as Keeper, aided")
+	check(Profile.difficulty == &"hard", "the Well's choice stays the player's (Martyr next time)")
+	# Pilgrim: nothing gentler.
+	Profile.difficulty = &"easy"
+	game.start_run()
+	await _frames(3)
+	check(game.run.lower_difficulties(CONTENT).is_empty(), "on Pilgrim: nothing lower")
+	Profile.reset()
 
 
 # --- Hints --------------------------------------------------------------------------------
