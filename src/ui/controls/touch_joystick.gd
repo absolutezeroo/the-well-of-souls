@@ -27,6 +27,7 @@ var _pressed_actions := {}
 
 func _ready() -> void:
 	mouse_filter = MOUSE_FILTER_IGNORE
+	PixelGrid.scale_changed.connect(queue_redraw)
 
 
 func _input(event: InputEvent) -> void:
@@ -100,7 +101,8 @@ func _draw() -> void:
 	var base := _origin if _finger != -1 else home()
 	var knob := _knob if _finger != -1 else base
 	var alpha := 0.85 if _finger != -1 else 0.4
-	var base_size := Vector2.ONE * max_distance * 2.0
+	# The spheres as big as the reach allows, each art pixel on whole screen pixels (decision 0007).
+	var base_size := BASE.get_size() * PixelGrid.art_scale(max_distance * 2.0 / BASE.get_width())
 	draw_texture_rect(BASE, Rect2(base - base_size * 0.5, base_size), false, Color(1, 1, 1, alpha * 0.7))
-	var knob_size := Vector2.ONE * max_distance * 0.9
+	var knob_size := KNOB.get_size() * PixelGrid.art_scale(max_distance * 0.9 / KNOB.get_width())
 	draw_texture_rect(KNOB, Rect2(knob - knob_size * 0.5, knob_size), false, Color(1, 1, 1, alpha))

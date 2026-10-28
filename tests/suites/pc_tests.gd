@@ -187,6 +187,8 @@ func run_unit() -> void:
 	await _test_settings()
 	await _test_canvas_scale()
 	_test_whole_art_pixels()
+	_test_skin_grid()
+	_test_round_buttons_whole()
 	await _test_menu_nav_unit()
 	_test_contrast()
 	_test_colour_cues()
@@ -468,6 +470,83 @@ func _test_whole_art_pixels() -> void:
 			if not is_equal_approx(pixels, float(row[2])) or zoom * scale > designed * fit + 0.001:
 				wrong.append("%s at zoom %s, interface %d: %s" % [size, designed, ui_size, pixels])
 	check(wrong.is_empty(), "a world camera draws each art pixel on a whole number of screen pixels, never more than its designed framing (3 at 720 lines, 4 at 1080, 6 at 1440, 9 at 2160; wrong: %s)" % [wrong])
+
+
+## The UI skin is stored at 2 units per art pixel (every 2x2 block of a texture one colour), so a
+## phone's x1.5 canvas draws each art pixel on 3 screen pixels, never 4 and 5 side by side
+## (decision 0007, design/interface.md "One skin", Pixels): every texture of assets/ui/rpg/ and
+## assets/ui/wood/ and every box the skin builds, whose nine-patch margins count whole art pixels
+## (even units), and the ornate border drawn a whole number of art pixels in.
+func _test_skin_grid() -> void:
+	var wrong: Array[String] = []
+	for folder in ["res://assets/ui/rpg/", "res://assets/ui/wood/"]:
+		for file in ResourceLoader.list_directory(folder):
+			if file.ends_with(".png") and not _in_blocks_of_two((load(folder + file) as Texture2D)):
+				wrong.append(file)
+	check(wrong.is_empty(), "UI skin: every texture at 2 units per art pixel (2x2 blocks; wrong: %s)" % [wrong])
+	var theme := load("res://assets/theme/main_theme.tres") as Theme
+	var boxes := {
+		"panel": UiSkin.panel(), "inset": UiSkin.inset(), "ribbon": UiSkin.ribbon(), "plaque": UiSkin.plaque(),
+		"bar": UiSkin.bar_frame(), "slot frame": UiSkin.slot_frame(10), "note": UiSkin.note_box(),
+		"slot": ItemSlot.slot_box(), "rarity frame": ItemSlot.frame_box(UiSkin.GOLD), "ornate": OrnateBoard.ornate_box(),
+		"panel container": theme.get_stylebox(&"panel", &"PanelContainer"),
+	}
+	for state in [&"normal", &"hover", &"pressed", &"disabled"]:
+		boxes["button " + state] = theme.get_stylebox(state, &"Button")
+		boxes["perk card " + state] = theme.get_stylebox(state, &"PerkCard")
+	var odd: Array[String] = []
+	for box_name: String in boxes:
+		var box := boxes[box_name] as StyleBoxTexture
+		if box == null:
+			continue
+		if not _in_blocks_of_two(box.texture):
+			odd.append("%s's art" % box_name)
+		for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
+			if fposmod(box.get_texture_margin(side), 2.0) > 0.01:
+				odd.append("%s's margin %s" % [box_name, box.get_texture_margin(side)])
+	check(odd.is_empty(), "UI skin: every nine-patch on the skin's 2-unit art grid, margins of whole art pixels (%s)" % [odd])
+	check(is_zero_approx(fposmod(OrnateBoard.INSET, 2.0)), "UI skin: the ornate border lies a whole number of art pixels inside the wood (%s units)" % OrnateBoard.INSET)
+
+
+## Whether `texture` is made of 2x2 blocks of one colour (transparent pixels all alike).
+static func _in_blocks_of_two(texture: Texture2D) -> bool:
+	if texture == null:
+		return false
+	var image := texture.get_image()
+	if image.is_compressed():
+		image.decompress()
+	if image.get_width() % 2 or image.get_height() % 2:
+		return false
+	for y in range(0, image.get_height(), 2):
+		for x in range(0, image.get_width(), 2):
+			var first := image.get_pixel(x, y)
+			for k in [Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)]:
+				var here := image.get_pixel(x + k.x, y + k.y)
+				if not here.is_equal_approx(first) and not (here.a == 0.0 and first.a == 0.0):
+					return false
+	return true
+
+
+## The HUD's round buttons and the joystick draw their 32-pixel spheres with each art pixel on a
+## whole number of screen pixels, as big as the touch circle allows (rounded down like the
+## cameras, decision 0007), at every canvas scale and buttons size; the touch circle keeps its
+## size (task 431).
+func _test_round_buttons_whole() -> void:
+	var wrong: Array[String] = []
+	for scale: float in [1.0, 1.5, 2.0, 2.5, 3.0]:
+		for radius: float in [72.0, 48.0, 44.0, 32.0, 90.0, 60.0, 55.0, 40.0]:
+			var per_pixel := PixelGridScript.whole_art_scale(radius * 2.0 / 32.0, scale)
+			var screen := per_pixel * scale
+			if absf(screen - roundf(screen)) > 0.001 or per_pixel * 32.0 > radius * 2.0 + 0.001 or (per_pixel + 1.0 / scale) * 32.0 <= radius * 2.0:
+				wrong.append("radius %s at x%s: %s screen pixels a pixel" % [radius, scale, screen])
+	check(wrong.is_empty(), "round buttons: their art on whole screen pixels per art pixel, the biggest that fits the touch circle (%s)" % [wrong])
+	check(is_equal_approx(PixelGridScript.whole_art_scale(144.0 / 32.0, 1.5) * 32.0, 128.0) and is_equal_approx(PixelGridScript.whole_art_scale(96.0 / 32.0, 1.5) * 32.0 * 1.5, 128.0), "round buttons on a phone: the attack's sphere 128 units across (6 screen pixels a pixel, not 6.75), a skill's on 128 screen pixels (4 a pixel, not 4.5)")
+	var button := ActionButton.new()
+	button.radius = 72.0
+	var art := button.art_radius()
+	var expected := PixelGridScript.whole_art_scale(144.0 / 32.0, PixelGrid.ui_scale()) * 16.0
+	check(art <= button.radius and is_equal_approx(art, expected), "round buttons: the attack button draws its sphere at that size on this canvas (%s in %s, expected %s)" % [art, button.radius, expected])
+	button.free()
 
 
 ## MenuNav on a little menu: first focus, moving, wrapping, tabs, a slider.

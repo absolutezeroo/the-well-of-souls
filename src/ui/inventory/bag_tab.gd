@@ -45,10 +45,10 @@ func _draw() -> void:
 	var dim := count == 0 and not button_pressed
 	draw_style_box(ItemSlot.slot_box(), area)
 	if is_hovered() and not button_pressed:
-		draw_rect(area.grow(-9), Color(1, 0.9, 0.6, 0.08))
+		draw_rect(area.grow(-ItemSlot.RIM), Color(1, 0.9, 0.6, 0.08))
 	if button_pressed:
-		draw_rect(area.grow(-9), Color(UiSkin.GOLD, 0.14))
-		draw_style_box(ItemSlot.frame_box(UiSkin.GOLD), area.grow(-1))
+		draw_rect(area.grow(-ItemSlot.RIM), Color(UiSkin.GOLD, 0.14))
+		draw_style_box(ItemSlot.frame_box(UiSkin.GOLD), area.grow(-ItemSlot.PX))
 	if category.icon:
 		# The compartment's pictogram (assets/ui/placeholders/: a sign, not an item of the game),
 		# in the middle of the slot.

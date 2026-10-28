@@ -17,13 +17,13 @@ SPDX-FileComment = "World art. Pack sheets copied unchanged, or derived from the
 path = ["assets/ui/*.png", "assets/ui/emotes/**", "assets/ui/icons/**", "assets/ui/perks/**", "assets/ui/skills/**", "assets/ui/sphere/**", "assets/ui/synergies/**", "assets/ui/wood/**"]
 SPDX-FileCopyrightText = "Pixel-boy and AAA (Ninja Adventure asset pack and its Godot example project)"
 SPDX-License-Identifier = "CC0-1.0"
-SPDX-FileComment = "Icons and small UI pieces from the pack; ui/wood from the pack's Godot example project."
+SPDX-FileComment = "Icons and small UI pieces from the pack; ui/wood from the pack's Godot example project, rescaled from x3 to x2 (2 UI units per art pixel; same pixels and colours) by tools/ui/rescale_skin.py on 28 Oct 2026."
 
 [[annotations]]
 path = ["assets/ui/rpg/**"]
 SPDX-FileCopyrightText = "Kenney (Pixel UI Pack, Fantasy UI Borders, https://kenney.nl)"
 SPDX-License-Identifier = "CC0-1.0"
-SPDX-FileComment = "The game's window skin (UiSkin, OrnateBoard). Licences: assets/ui/rpg/LICENSE_Kenney_*.txt."
+SPDX-FileComment = "The game's window skin (UiSkin, OrnateBoard), rescaled from x3 to x2 (2 UI units per art pixel; same pixels and colours) by tools/ui/rescale_skin.py on 28 Oct 2026. Licences: assets/ui/rpg/LICENSE_Kenney_*.txt."
 
 [[annotations]]
 path = ["assets/ui/placeholders/**", "assets/ui/scroll/**", "assets/icon/**", "assets/palette/**", "assets/shaders/**", "assets/theme/**"]

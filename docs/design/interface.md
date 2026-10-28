@@ -534,13 +534,19 @@ Numbers to hold (sources in [the art bible](../art-bible.md)'s research report):
   seconds, gold in the bag) flashes pixel brackets round its still words (`TextCue`), the perk
   button a ring, the temperature bar stays lighter at the extreme instead of blinking.
 - **Pixels**: offsets, sizes and margins in steps of 2 units; Control scale 1 or 2; Nearest.
-  **The exception: the Kenney skin's own grid.** Its pieces (`assets/ui/rpg/`) are 16-pixel art
-  stored at x3, so they are drawn at 3 units per art pixel; their nine-patch margins (9, 15, 39,
-  42) and `OrnateBoard.INSET` (9: three art pixels in from the wood's edge) are multiples of 3,
-  never moved to even values: two textures laid over each other would then have their pixels out
-  of step. Everything placed around them (offsets, sizes, separations, content margins) is even.
-  On a phone (x1.5) a skin pixel is 4.5 screen pixels, uneven whatever its place: making it whole
-  means redrawing the skin at 2 or 4 units per pixel, an art decision (roadmap).
+  The skin's pieces (`assets/ui/rpg/`, `assets/ui/wood/`) are 16-pixel art stored at **2 units
+  per art pixel**, like the font and the world's art: 2 screen pixels at x1, 3 on a phone (x1.5),
+  4 at x2 ([decision 0013](../decisions/0013-ui-skin-two-units.md); until 28 Oct 2026 they were at
+  x3, 4.5 screen pixels on a phone, `tools/ui/rescale_skin.py`). Their nine-patch margins count
+  whole art pixels (even units: the wood 10, insets and slots 10, the rarity frame and buttons
+  6, the ornate border 28 and `OrnateBoard.INSET` 6, the ribbon's ends 32), so two pieces laid
+  over each other keep their pixels in step; where a piece stretches, the rows and columns it
+  repeats are alike (the ribbon's middle, the plaque's), so nothing is drawn at an uneven size.
+  The UI's own pictures follow the cameras' rule (`PixelGrid.art_scale()`): the HUD's round
+  buttons and the joystick draw their 32-pixel spheres, and slots their icons, as big as their
+  room allows with each art pixel on a whole number of screen pixels, rounded down (the attack's
+  sphere 128 units across on a phone, its touch circle still 144). **Checked**:
+  `PcTests._test_skin_grid()`, `_test_round_buttons_whole()`.
 
 Before calling a screen done: captures at 2340x1080, 1920x1080 and 1280x720
 (`tools/design/capture.py`), in French and English; the same border, ribbon and insets as the

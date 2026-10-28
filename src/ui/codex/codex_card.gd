@@ -91,7 +91,7 @@ func _draw() -> void:
 	_slot.modulate_color = Color(0.55, 0.5, 0.5) if disabled else (Color(1.15, 1.1, 1.0) if is_hovered() else Color.WHITE)
 	draw_style_box(_slot, area)
 	if _mastered:
-		draw_style_box(_frame, area.grow(-3))
+		draw_style_box(_frame, area.grow(-ItemSlot.PX))
 
 
 func _centered(words: String, font_size: int, color: Color) -> Label:

@@ -19,6 +19,7 @@ owner first" lists what needs a new decision.
 | [0010](0010-first-minutes.md) | First run starts at once; a protected first room; Descend again | 2026-10-28 |
 | [0011](0011-assist-and-difficulty.md) | Assist option, lowering difficulty in a run, tap-to-charge | 2026-10-28 |
 | [0012](0012-luck-and-roles.md) | Bad-luck protection, a heal before bosses, no repeats, roles, floor pacing | 2026-10-28 |
+| [0013](0013-ui-skin-two-units.md) | The UI skin at 2 units per art pixel; UI pictures on whole screen pixels | 2026-10-28 |
 
 Template for a new one (`NNNN-short-name.md`): **Status** (accepted / replaced by NNNN),
 **Context** (what made it necessary), **Decision** (one or two sentences), **Consequences** (what

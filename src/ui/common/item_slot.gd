@@ -18,6 +18,10 @@ const FAMILY_SIGNS := {
 }
 ## The UI's pixel for the pips and signs.
 const PX := 2.0
+## The slot's wooden rim (3 art pixels of the skin, UiSkin): shades and glows go inside it.
+const RIM := 6.0
+## How far in from the slot's edge its item's picture fits (its size: ItemSlot.fit()).
+const ICON_ROOM := 9.0
 
 var item: ItemDef:
 	set(value):
@@ -109,15 +113,15 @@ func _draw() -> void:
 	var area := Rect2(Vector2.ZERO, size)
 	draw_style_box(slot_box(), area)
 	if is_hovered() and not disabled:
-		draw_rect(area.grow(-9), Color(1, 0.9, 0.6, 0.08))
+		draw_rect(area.grow(-RIM), Color(1, 0.9, 0.6, 0.08))
 	if is_pressed() and not disabled and not toggle_mode:
 		# Pressed: the slot sinks (a shade over it, its icon a UI pixel lower below).
-		draw_rect(area.grow(-9), Color(0.0, 0.0, 0.0, 0.3))
+		draw_rect(area.grow(-RIM), Color(0.0, 0.0, 0.0, 0.3))
 	if item:
 		var frame_color := _frame_color()
 		if frame_color.a > 0.0:
-			draw_rect(area.grow(-9), Color(frame_color, 0.16))  # a glow of its rarity inside
-		var inner := area.grow(-9)
+			draw_rect(area.grow(-RIM), Color(frame_color, 0.16))  # a glow of its rarity inside
+		var inner := area.grow(-ICON_ROOM)
 		if is_pressed() and not disabled and not toggle_mode:
 			inner.position.y += 2.0
 		if item.icon:
@@ -126,7 +130,7 @@ func _draw() -> void:
 			if _has_sheen():
 				_draw_sheen(icon_rect)
 		if frame_color.a > 0.0:
-			draw_style_box(frame_box(frame_color), area.grow(-3))
+			draw_style_box(frame_box(frame_color), area.grow(-PX))
 		_draw_sockets(area)
 		_draw_level()
 		_draw_rarity_pips()
@@ -134,7 +138,7 @@ func _draw() -> void:
 		if count > 1:
 			_text("x%d" % count, Vector2(size.x - 6, size.y - 6), HORIZONTAL_ALIGNMENT_RIGHT, Fonts.BODY, Color.WHITE)
 	elif placeholder:
-		draw_texture_rect(placeholder, centered_icon(placeholder, area.grow(-9), 0.6), false, Color(EMPTY_TEXT, 0.3))
+		draw_texture_rect(placeholder, centered_icon(placeholder, area.grow(-ICON_ROOM), 0.6), false, Color(EMPTY_TEXT, 0.3))
 	elif not caption.is_empty():
 		_text(caption, Vector2(size.x * 0.5, size.y * 0.5 + Fonts.half_cap(Fonts.SMALL)), HORIZONTAL_ALIGNMENT_CENTER, Fonts.SMALL, EMPTY_TEXT)
 	if fresh and item:
@@ -268,12 +272,11 @@ func _text(words: String, at: Vector2, align: HorizontalAlignment, font_size: in
 	Fonts.draw(self, at, words, font_size, color, 1.0 if align == HORIZONTAL_ALIGNMENT_RIGHT else (0.5 if align == HORIZONTAL_ALIGNMENT_CENTER else 0.0))
 
 
-## `texture`'s rect in `box`: centred, at the biggest whole scale that fits (pixels stay square).
+## `texture`'s rect in `box`: centred, at the biggest scale that fits with each of its pixels on
+## a whole number of screen pixels (PixelGrid.art_scale(): square, never 4 and 5 side by side).
 static func fit(texture: Texture2D, box: Rect2) -> Rect2:
 	var source := texture.get_size()
-	var factor := floorf(minf(box.size.x / source.x, box.size.y / source.y))
-	if factor < 1.0:
-		factor = minf(box.size.x / source.x, box.size.y / source.y)
+	var factor := PixelGrid.art_scale(minf(box.size.x / source.x, box.size.y / source.y))
 	var drawn := source * factor
 	return Rect2((box.position + (box.size - drawn) * 0.5).round(), drawn)
 
@@ -288,7 +291,7 @@ static func slot_box() -> StyleBoxTexture:
 		_slot = StyleBoxTexture.new()
 		_slot.texture = UiSkin.SLOT
 		for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
-			_slot.set_texture_margin(side, 15)
+			_slot.set_texture_margin(side, 10)
 	return _slot
 
 
@@ -301,7 +304,7 @@ static func frame_box(color: Color) -> StyleBoxTexture:
 		box.modulate_color = color
 		box.draw_center = false
 		for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
-			box.set_texture_margin(side, 9)
+			box.set_texture_margin(side, 6)
 		_frames[key] = box
 	return _frames[key]
 
@@ -310,6 +313,6 @@ static func frame_box(color: Color) -> StyleBoxTexture:
 ## side (so pictograms of any size sit in the middle at one size).
 static func centered_icon(picture: Texture2D, box: Rect2, share: float) -> Rect2:
 	var art := picture.get_size()
-	var factor := maxf(1.0, floorf(minf(box.size.x, box.size.y) * share / maxf(art.x, art.y)))
+	var factor := PixelGrid.art_scale(maxf(1.0, minf(box.size.x, box.size.y) * share / maxf(art.x, art.y)))
 	var drawn := art * factor
 	return Rect2((box.position + (box.size - drawn) * 0.5).round(), drawn)

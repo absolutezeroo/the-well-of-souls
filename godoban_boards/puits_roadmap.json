@@ -6488,8 +6488,8 @@
     {
       "id": "task_430",
       "title": "Skin Kenney à 3 unités par pixel d'art : 4,5 pixels d'écran sur le S23",
-      "description": "Les pièces de l'interface (assets/ui/rpg/, Kenney) sont du pixel art 16 px stocké en x3 : 3 unités par pixel d'art, donc 4,5 pixels d'écran à l'échelle x1,5 du téléphone (pixels inégaux, comme le donjon avant la décision 0007). Leurs marges (9, 15, 39, 42) et OrnateBoard.INSET (9) restent des multiples de 3 exprès (exception écrite dans interface.md « One skin », Pixels). Pour des pixels entiers partout : redessiner le skin à 2 ou 4 unités par pixel (x2 ou x4). Décision du propriétaire (art, cadre de l'interface).",
-      "status": "backlog",
+      "description": "Les pièces de l'interface (assets/ui/rpg/, Kenney) sont du pixel art 16 px stocké en x3 : 3 unités par pixel d'art, donc 4,5 pixels d'écran à l'échelle x1,5 du téléphone (pixels inégaux, comme le donjon avant la décision 0007). Leurs marges (9, 15, 39, 42) et OrnateBoard.INSET (9) restent des multiples de 3 exprès (exception écrite dans interface.md « One skin », Pixels). Pour des pixels entiers partout : redessiner le skin à 2 ou 4 unités par pixel (x2 ou x4). Décision du propriétaire (art, cadre de l'interface).\n\n28/10 (agent polish) : fait. Le skin est stocké à 2 unités par pixel d'art (décision 0013 ; tools/ui/rescale_skin.py ramène chaque pièce x3 à ses pixels puis x2, rien de redessiné), comme la police : 3 pixels d'écran par pixel d'art sur le S23. Marges des neuf-cases en pixels d'art entiers (bois 10, encarts 10, cadre 6, ornement 28, INSET 6, ruban 32), mises en page inchangées. Mesuré à 2340x1080 (bord du menu Pause) : avant 4 px 22 % / 5 px 31 % ; après 3 px 63 %, 6 px 20 %. Le ruban garde 48 de haut (sa rangée du milieu se répète) : les mots sont dans la bande. Test : PcTests._test_skin_grid. À vérifier sur le S23 : cadres nets (bois, liseré doré, ruban, plaque du portrait), rien de coupé ni décalé dans le sac, la pause, une conversation.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_4",
       "due_date": null,
@@ -6498,13 +6498,13 @@
         "visuel"
       ],
       "created_at": 1793170158,
-      "updated_at": 1793170158
+      "updated_at": 1793185864
     },
     {
       "id": "task_431",
       "title": "Boutons ronds du HUD : la sphère de 32 px dessinée à une échelle non entière",
-      "description": "ActionButton dessine backgroundwood.png (32x32) à la taille de sa zone de toucher : 144 unités pour l'attaque (4,5 unités par pixel), 120 en taille Grande… Garder la zone de toucher et dessiner l'art au multiple entier inférieur (128, 96…) ou des sphères redessinées aux bonnes tailles. À regarder sur le S23 (rond flou ou pixels inégaux ?).",
-      "status": "backlog",
+      "description": "ActionButton dessine backgroundwood.png (32x32) à la taille de sa zone de toucher : 144 unités pour l'attaque (4,5 unités par pixel), 120 en taille Grande… Garder la zone de toucher et dessiner l'art au multiple entier inférieur (128, 96…) ou des sphères redessinées aux bonnes tailles. À regarder sur le S23 (rond flou ou pixels inégaux ?).\n\n28/10 (agent polish) : fait. ActionButton et le joystick dessinent leur sphère de 32 px au plus grand nombre entier de pixels d'écran par pixel d'art qui tient dans le cercle de toucher (PixelGrid.art_scale, arrondi vers le bas comme les caméras) : sur le S23 l'attaque fait 128 unités (6 px par pixel, avant 6,75), une compétence 85 (4 px, avant 4,5) ; la zone de toucher ne change pas (144, 96). Icônes des boutons et des emplacements au même régime. Mesuré (HUD sur fond uni) : attaque avant 6/7/8 px, après 6 px ; compétence avant 3/4/5, après 3/4. Test : PcTests._test_round_buttons_whole. À vérifier sur le S23 : les boutons ronds paraissent-ils trop petits dans leur zone (surtout l'Interaction, 88 → 85) ?",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_4",
       "due_date": null,
@@ -6513,7 +6513,7 @@
         "visuel"
       ],
       "created_at": 1793170158,
-      "updated_at": 1793170158
+      "updated_at": 1793185864
     },
     {
       "id": "task_432",
