@@ -1,0 +1,71 @@
+[gd_resource type="Resource" script_class="VillageResidentDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_resident_def.gd" id="script"]
+[ext_resource type="Resource" path="res://data/village/gen_speaker.tres" id="speaker"]
+[ext_resource type="Resource" path="res://data/village/gen_seeds.tres" id="quest"]
+[ext_resource type="Resource" path="res://data/village/topics/gen_flowers.tres" id="topic_0"]
+[ext_resource type="Resource" path="res://data/village/topics/gen_hens.tres" id="topic_1"]
+[ext_resource type="Resource" path="res://data/village/topics/gen_plant.tres" id="topic_2"]
+[ext_resource type="Script" path="res://src/definitions/village/village_activity_def.gd" id="activity_script"]
+
+[sub_resource type="Resource" id="activity_0"]
+script = ExtResource("activity_script")
+start_hour = 0.0
+display_name = "Resting at home"
+destination = Vector2(454, 838)
+indoors = true
+
+[sub_resource type="Resource" id="activity_1"]
+script = ExtResource("activity_script")
+start_hour = 5.0
+display_name = "Tending his garden"
+destination = Vector2(604, 818)
+indoors = false
+
+[sub_resource type="Resource" id="activity_2"]
+script = ExtResource("activity_script")
+start_hour = 10.0
+display_name = "Laying flowers at the memorial"
+destination = Vector2(1064, 712)
+indoors = false
+
+[sub_resource type="Resource" id="activity_3"]
+script = ExtResource("activity_script")
+start_hour = 13.0
+display_name = "Tending his garden"
+destination = Vector2(664, 760)
+indoors = false
+
+[sub_resource type="Resource" id="activity_4"]
+script = ExtResource("activity_script")
+start_hour = 18.0
+display_name = "Sitting by his door"
+destination = Vector2(500, 846)
+indoors = false
+
+[sub_resource type="Resource" id="activity_5"]
+script = ExtResource("activity_script")
+start_hour = 21.0
+display_name = "Resting at home"
+destination = Vector2(454, 838)
+indoors = true
+
+[resource]
+script = ExtResource("script")
+id = &"gen"
+speaker = ExtResource("speaker")
+position = Vector2(454, 838)
+role = 1
+quest = ExtResource("quest")
+wakes_after = ExtResource("quest")
+echo = true
+text = "The frost is coming, and I have not sown the white rows. Where did I put my seeds?"
+accepted_text = "I carried them down to the Ossuary for the niches, and the earth sank with them. The fifth floor, I think; it smells of wet stone."
+found_text = "I would know that pouch's knot with my eyes shut. Give it here."
+used_text = "The rows are late, but the earth forgives. Sayo will have her flowers for the next song."
+ambient_before = PackedStringArray("Before the frost... before the frost...", "Who walks on my rows?")
+ambient_after = PackedStringArray("Mind the seedlings.", "White for the dead, green for the living.")
+topics = [ExtResource("topic_0"), ExtResource("topic_1"), ExtResource("topic_2")]
+idle_frames = [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16)]
+walk_frames = [Rect2(0, 32, 16, 16), Rect2(0, 48, 16, 16), Rect2(0, 64, 16, 16), Rect2(0, 80, 16, 16)]
+schedule = [SubResource("activity_0"), SubResource("activity_1"), SubResource("activity_2"), SubResource("activity_3"), SubResource("activity_4"), SubResource("activity_5")]
+walk_speed = 30.0

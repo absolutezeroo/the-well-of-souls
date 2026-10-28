@@ -33,10 +33,10 @@ then on. A first run left from the pause menu, or won, returns the same way.
 
 The Well is central, the temple north, the market southwest and the memorial court southeast.
 The skills shrine is inside the temple, reached through its southern doorway.
-The Veilleuse, Sayo and Ren make three inhabitants; the Old Wanderer is the merchant. Their
+The Veilleuse, Sayo, Ren and Gen make four inhabitants; the Old Wanderer is the merchant. Their
 positions, figures and words are resources. Existing residents retain the CC0 Ninja Adventure
 figures; the temple, the houses and the shop come from the pack's TilesetHouse. Sayo and Ren begin as
-faint echoes of sleeping villagers, consistent with [the lore](../lore.md). The player must
+faint echoes of sleeping villagers, as Gen does, consistent with [the lore](../lore.md). The player must
 approach and interact; walking by never launches a run or opens a conversation automatically.
 
 **A Hearth Without a Flame** begins at the Veilleuse:
@@ -62,10 +62,31 @@ no offline deterioration and no penalty for failed runs.
 3. Return it to Sayo. She wakes, the western roots and their collisions disappear, her house
    wakes and opens, and 20 souls are paid once. Ren's rescue and the memorials remain intact.
 
-The two fronts are independent: Ren's return removes only the eastern roots. Sayo stays an echo
-until her own quest is returned. The HUD points to the next available quest when none is active,
-then shows its search/return objective. After both rescues it acknowledges the two lit windows;
-the rest of Kagari still sleeps. Further fronts and autonomous propagation are future content.
+**Seeds of Mourning** continues at Gen's cottage on the southern lane once Sayo's verse has
+been **returned** (task_377):
+
+1. Speak to Gen's echo at his door and accept his request (Sayo, awake, asks the hero to listen
+   at the southern lane; before her return the choice is disabled with its prerequisite).
+2. Recover his seed pouch on floor 5 of an ordinary descent (Act II, the Ossuary, where he laid
+   his white flowers in the first niches); the lantern keeps it under the same rules.
+3. Return it to Gen. He wakes, the southern roots and their collision go, the shut door of his
+   cottage opens, his white rows flower before the vegetable beds, and 25 souls are paid once.
+
+The chain's rewards grow with the floor they send the hero to: 15 souls (floor 2), 20 (floor 4),
+25 (floor 5), each once; `unit.village` checks every request waits for the one before, lies
+deeper and pays in line (30 at most). A garden that paid souls every day was considered and
+refused: souls are Kagari's people brought back, and a garden cannot grow them; the reward of
+the place is the place.
+
+The three fronts are independent: each return removes only its own roots. A sleeper stays an
+echo until their own quest is returned. **The Well's roots creep** from the Well's square toward
+each sleeping home, through the grass at the edge of the street and toward the southern lane:
+the pack's flat root decals (TilesetFloorDetail), drawn with the ground under everything that
+walks (`VillagePropDef.flat`), never solid. Each trail withers with its sleeper's rescue, so the
+square around the Well clears as Kagari wakes. The HUD points to the next available quest when
+none is active, then shows its search/return objective. After the three rescues it says three
+homes are awake again; the rest of Kagari still sleeps. Further fronts and autonomous
+propagation are future content.
 
 `VillageQuestDef.requires_quest` declares the predecessor, `VillageProgress.can_accept()` checks
 its returned stage, and the disabled conversation choice explains the prerequisite. Gameplay
@@ -74,10 +95,11 @@ Existing profiles with Ren already awake can immediately accept Sayo's request. 
 or format changes: the new id is absent/available until accepted. Failed acceptance/hand-in
 leaves all progress and rewards unchanged. The next-objective and reward sentences live in data.
 
-The Wanderer then offers two permanent restorations: **Market Lanterns** (5 souls) and
-**Lights for the Nameless** (8 souls). Both are one-time purchases with visible lamps; neither
-adds equipment, statistics or consumables to a run. Costs and prerequisite are in the service
-resources. These are the first shop services, not a full village equipment economy.
+The Wanderer then offers permanent restorations: **Market Lanterns** (5 souls) and **Lights for
+the Nameless** (8 souls) once Ren wakes, **Lanterns of the Lane** (10 souls, the two stone
+lanterns at the southern lane's ends) once Gen wakes. Each is a one-time purchase with visible
+lamps; none adds equipment, statistics or consumables to a run. Costs and prerequisite are in
+the service resources. These are shop services, not a village equipment economy.
 
 ## Memorials
 
@@ -132,10 +154,13 @@ village; options, privacy, account and records remain reachable through Menu →
 Residents have different greetings before acceptance, during the search, when the evidence is
 found and after return. Optional questions have their own replies; they spend nothing and do
 not advance a quest. Stage-gated reactions let the Veilleuse, Ren and the Wanderer acknowledge
-Sayo's return. Completed quests no longer fill the conversation with objectives and rewards.
+Sayo's return, and every neighbour has a word for Gen's. Completed quests no longer fill the
+conversation with objectives and rewards.
 The dialogue keeps the practical objective separate from what the resident says.
 
-`VillageTopicDef` holds a prompt/reply and an optional quest-stage interval. A resident's topics
+`VillageTopicDef` holds a prompt/reply, an optional quest-stage interval and an optional
+`after_quest` that must also be returned (Sayo asks the hero to listen at the southern lane only
+once she is awake herself, and until Gen wakes). A resident's topics
 are questions; its reactions use the same conditional reply without a prompt (first match).
 `VillageProgress` selects the greeting and gates topics again when clicked, so an old button
 cannot disclose a topic made unavailable by a profile replacement. All words, including short
@@ -143,7 +168,9 @@ ambient lines, live under `data/village/` and are translated.
 
 `VillageResident` animates the existing idle/walk cells and follows a daily schedule of
 `VillageActivityDef` appointments. Ren repairs his doorway, tends market lamps, visits the
-memorial and goes home; Sayo visits the market and shrine; the Wanderer trades and visits Ren.
+memorial and goes home; Sayo visits the market and shrine; the Wanderer trades and visits Ren;
+Gen tends his garden morning and afternoon, lays flowers at the memorial court mid-morning, sits
+by his door at dusk and rests behind it at night (his cottage has no room yet).
 The Veilleuse alternates between the shrine and Well, keeping watch through the night.
 Unrecovered echoes stay at their doors. People walk around static collisions using a shared
 navigation grid. An appointment changes their destination without teleporting them. Scene
@@ -172,7 +199,8 @@ Reading a board never accepts or pays a request: return to the resident for thos
 Bounties continue to use real-world dates, independently of the village clock.
 
 A woken Sayo and Ren rest inside their own homes ("The homes" below), where the hero can find
-them at night. The Wanderer still rests behind his stall's door; interacting there knocks and
+them at night. The Wanderer still rests behind his stall's door and Gen behind his cottage's;
+interacting there knocks and
 opens the normal conversation, so a quest or service is not time-locked. Kagari is an inhabited
 village whose souls were taken; its houses are not a settlement of ruins to rebuild.
 
@@ -196,8 +224,10 @@ at the Well's square. Every place stands where its use puts it:
   the pack's own moss-covered twin from TilesetVillageAbandoned. Returning the quest clears the
   roots and wakes the house: the same house from TilesetHouse takes its place (`shown_after`),
   its door at the lane's end, and it opens. Sayo's washing line and Ren's hay sit beside them.
-- **South, the lane of cottages:** a cottage with its vegetable rows and the woodcutter's hut
-  with its woodpile, joined by a lane across the avenue.
+- **South, the lane of cottages:** Gen's cottage with its vegetable rows (his hens in them) and
+  the woodcutter's hut with its woodpile (his dog at the door), joined by a lane across the
+  avenue, a stone lantern at each of its ends. While Gen sleeps, the Well's roots grip the
+  cottage's west wall and roof and its door is shut (the pack's own door piece over the doorway).
 - **The forest ring** closes the clearing on every side but the south.
 
 Residents' homes, stall and lamp appointments are the doors and lamps of those places. The
@@ -353,8 +383,9 @@ four moving residents. Routines do not consume dungeon random numbers or alter r
 old-profile migration, all memorials surviving reload and idempotent endings. It also validates
 unique quest ids and acyclic registered prerequisites, ordered acceptance, cloud holds and
 failed hand-in rollback. `title.village` checks the real hub, movement, locked/unlocked Sayo
-conversations, independent root removal and saved-run protection. `game.village` checks evidence
-on both real procedural floors, its absence before acceptance and on a daily run, and no respawn
+and Gen conversations, independent root removal (Gen's with the Well's roots toward him and his
+shut door) and saved-run protection. `game.village` checks evidence
+on the three real procedural floors (2, 4, 5), its absence before acceptance and on a daily run, and no respawn
 after collection. Calendar checks cover old saves, midnight, cloud holds, UTC independence,
 all authored paths before/after restoration, a full day of real resident physics, pause/resume
 in village and dungeon, night entry, read-only journal access and a cloud rollback returning

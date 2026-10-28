@@ -72,13 +72,18 @@ Ouvre les `.tres` dans l’inspecteur, enregistre-les, puis recharge l’aperçu
   maison fermée tant que son habitant dort. Pour une autre maison jouable, crée un autre
   `VillageInteriorDef` et ajoute-le à `Interiors` sur le village ; place sa porte sous la
   collision de la façade (les tests vérifient qu'on peut y marcher).
+- **Racines au sol :** un `VillagePropDef` avec `Flat` est dessiné avec le sol, sous ce qui
+  marche (les racines du Puits dans l'herbe, TilesetFloorDetail) : jamais de collision, jamais
+  animé. Avec `Cleared By`, il disparaît au réveil de l'habitant.
 - **Façades endormies et réveillées :** une maison endormie est l'accessoire envahi de mousse
   avec `Cleared By` = la quête de son habitant ; la même maison réveillée est un second
   accessoire avec `Shown After` = cette quête. L'aperçu montre les deux superposées.
-- **PNJ :** `keeper.tres`, `ren.tres`, `sayo.tres`, `wanderer.tres`. `Schedule` contient les
+- **PNJ :** `keeper.tres`, `ren.tres`, `sayo.tres`, `wanderer.tres`, `gen.tres`. `Schedule` contient les
   horaires ; `Destination` donne le lieu et `Room` l’intérieur éventuel. Les horaires commencent
   à minuit et restent triés. `Idle Frames` et `Walk Frames` décrivent l’animation du spritesheet.
-- **Dialogues :** les salutations, réactions et `Topics` sont dans ces ressources.
+- **Dialogues :** les salutations, réactions et `Topics` sont dans ces ressources. `After Quest`
+  sur un sujet exige aussi qu'une autre quête soit rendue (Sayo ne parle de Gen qu'une fois
+  réveillée).
   Le texte source est en anglais ; sa traduction française va dans `locale/strings.csv`.
 - **Jour/nuit :** `data/village/clock.tres` (durée d’une journée et couleurs).
 - **Âmes, lampes et descente :** `data/village/atmosphere.tres` (quantité, vitesse, rayon,

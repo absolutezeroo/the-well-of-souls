@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="VillageTopicDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_topic_def.gd" id="script"]
+[ext_resource type="Resource" path="res://data/village/gen_seeds.tres" id="gate"]
+[resource]
+script = ExtResource("script")
+prompt = "Your hens waited for you."
+reply = "They want the grain, nothing more. Still, I heard them scratching in the dark, and it helped."
+quest = ExtResource("gate")
+min_stage = 3
+max_stage = 3

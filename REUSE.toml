@@ -64,3 +64,9 @@ path = ["assets/tiles/bed.png", "assets/tiles/camp.png"]
 SPDX-FileCopyrightText = "Pixel-boy and AAA (Ninja Adventure asset pack, https://pixel-boy.itch.io/ninja-adventure-asset-pack)"
 SPDX-License-Identifier = "CC0-1.0"
 SPDX-FileComment = "Kagari's homes, pack sheets copied unchanged: Backgrounds/Tilesets/tileset_bed.png (bed), Backgrounds/Tilesets/tileset_camp.png (camp)."
+
+[[annotations]]
+path = ["assets/characters/npc/gardener.png", "assets/characters/npc/gardener_face.png", "assets/items/seed_pouch.png"]
+SPDX-FileCopyrightText = "Pixel-boy and AAA (Ninja Adventure asset pack, https://pixel-boy.itch.io/ninja-adventure-asset-pack)"
+SPDX-License-Identifier = "CC0-1.0"
+SPDX-FileComment = "Gen the gardener and his seed pouch, pack sheets copied unchanged: Actor/Character/OldMan3/SpriteSheet.png and Faceset.png (gardener, gardener_face), Items/Object/Bag.png (seed_pouch)."

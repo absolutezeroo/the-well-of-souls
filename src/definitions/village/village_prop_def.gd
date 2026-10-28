@@ -22,3 +22,6 @@ extends Resource
 ## scaled, rotated or tweened (docs/art-bible.md "Grid and scale").
 @export_range(1, 16) var frames: int = 1
 @export var frame_time: float = 0.15
+## Lies on the ground (the Well's roots creeping through the grass): drawn with the ground, under
+## everything that walks, recorded only when the profile changes. Never solid, never animated.
+@export var flat := false

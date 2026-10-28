@@ -51,6 +51,27 @@ func run_unit() -> void:
 	Profile.reset()
 
 
+## The third sleeper (task_377): Sayo speaks of Gen only once she is awake herself and until he
+## wakes; his rescue gives every neighbour a new word, as Sayo's did.
+func _test_third_home(sayo: VillageResidentDef) -> void:
+	var gen := VILLAGE.quests[2]
+	var gen_topics := sayo.topics.filter(func(subject: VillageTopicDef) -> bool: return subject.quest == gen)
+	check(gen_topics.size() == 1 and gen_topics[0].after_quest == sayo.quest, "Sayo has one question about the southern lane, gated by her own waking")
+	var sayo_stage := int(Profile.village_quests.get(String(sayo.quest.id), 0))
+	Profile.village_quests[String(sayo.quest.id)] = VillageProgress.Step.ACCEPTED
+	check(not VillageProgress.topic_available(gen_topics[0]), "a sleeping Sayo cannot speak of the next sleeper, even with his request still open")
+	Profile.village_quests[String(sayo.quest.id)] = sayo_stage
+	check(VillageProgress.topic_available(gen_topics[0]), "awake, Sayo points the hero to the southern lane")
+	check(VillageProgress.accept(gen) and VillageProgress.discover(gen) and VillageProgress.hand_in(gen), "Gen's request follows the same accepted, found, returned steps")
+	check(not VillageProgress.topic_available(gen_topics[0]), "once Gen wakes, Sayo no longer asks who sleeps there")
+	for person in VILLAGE.residents:
+		if person.wakes_after == gen or person.reactions.is_empty():
+			continue
+		var greeting := VillageProgress.greeting(person)
+		var three := person.reactions.filter(func(reaction: VillageTopicDef) -> bool: return reaction.quest == gen)
+		check(three.size() == 1 and greeting == three[0].reply, "%s greets the hero with a word about Gen's waking" % person.id)
+
+
 ## docs/design/village.md "Placement rules" and docs/art-bible.md: what any layout change (by hand,
 ## the layout editor or an agent) must keep. A failure names the rule; fix the data, not the check.
 func _test_layout_rules() -> void:
@@ -158,6 +179,8 @@ func _test_layout_rules() -> void:
 		if not VILLAGE.bounds.encloses(place) or animal.roam.x > 3 * VillageGround.CELL or animal.roam.y > 3 * VillageGround.CELL:
 			strays.append(String(animal.id))
 	check(bad_frames.is_empty(), "animated props and animals step the pack's whole frames, inside their sheet (%s)" % [bad_frames])
+	var solid_flat := all_props.filter(func(prop: VillagePropDef) -> bool: return prop.flat and (prop.collision.has_area() or prop.frames > 1 or prop.lit_by != null))
+	check(solid_flat.is_empty(), "what lies on the ground is drawn with it: never solid, animated or lit (%s)" % [solid_flat.size()])
 	check(strays.is_empty(), "every animal keeps a small place in the clearing, near its owner (%s; docs/design/village.md \"Animals\")" % [strays])
 	check(odd_scales.is_empty(), "pack art is drawn at whole scales only, never stretched to fit (%s)" % [odd_scales])
 	check(_neutral_light(VILLAGE.ground_tint), "the ground is never darkened or coloured by a tint: grass turns to mud (%s; docs/art-bible.md \"Mood\")" % VILLAGE.ground_tint)
@@ -244,6 +267,13 @@ func _test_sequence() -> void:
 	old_profile = JSON.parse_string(JSON.stringify(Profile.to_data())) as Dictionary
 	Profile.reset()
 	check(Profile.from_data(old_profile) and VillageProgress.stage(first) == VillageProgress.Step.RETURNED and VillageProgress.stage(second) == VillageProgress.Step.RETURNED, "both independent infestation fronts stay cleared after a profile reload")
+	# The first chapter's chain (docs/design/village.md): each request after the first waits for
+	# the one before, sends the hero deeper and pays a little more, never more than 30 souls.
+	for i in range(1, VILLAGE.quests.size()):
+		var quest := VILLAGE.quests[i]
+		var prior := VILLAGE.quests[i - 1]
+		check(quest.requires_quest == prior, "%s waits for %s" % [quest.id, prior.id])
+		check(quest.floor_depth > prior.floor_depth and quest.reward_souls >= prior.reward_souls and quest.reward_souls <= 30, "%s lies deeper than %s and pays in line with it (%d souls)" % [quest.id, prior.id, quest.reward_souls])
 	var ids: Array[StringName] = []
 	for quest in VILLAGE.quests:
 		check(not quest.id.is_empty() and not ids.has(quest.id), "village quests have unique stable ids")
@@ -278,7 +308,9 @@ func _test_conversations() -> void:
 	VillageProgress.discover(sayo.quest)
 	VillageProgress.hand_in(sayo.quest)
 	check(VillageProgress.topic_available(after_topic) and not VillageProgress.topic_available(sayo.topics[0]), "waking Sayo opens her plans and retires the forgotten-verse question")
-	check(VillageProgress.greeting(resident) == resident.reactions[0].reply, "the keeper reacts to both rescued neighbours rather than sending the player to an already completed rescue")
+	var two_homes := resident.reactions.filter(func(reaction: VillageTopicDef) -> bool: return reaction.quest == sayo.quest)
+	check(two_homes.size() == 1 and VillageProgress.greeting(resident) == two_homes[0].reply, "the keeper reacts to both rescued neighbours rather than sending the player to an already completed rescue")
+	_test_third_home(sayo)
 	var language := TranslationServer.get_locale()
 	TranslationServer.set_locale("fr")
 	for person in VILLAGE.residents:
@@ -427,6 +459,12 @@ func run_title() -> void:
 	var locked_choice := _choice(hub, VILLAGE.quests[1].locked_text)
 	check(locked_choice != null and locked_choice.disabled, "Sayo explains her prerequisite with a disabled choice before Ren wakes")
 	hub.panel.hide()
+	hub.walker.position = hub.view.actor_for(VILLAGE.residents[4]).position + Vector2(0, 25)
+	await _frames(3)
+	hub.interact()
+	var gen_locked := _choice(hub, VILLAGE.quests[2].locked_text)
+	check(gen_locked != null and gen_locked.disabled, "Gen explains his prerequisite with a disabled choice before Sayo wakes")
+	hub.panel.hide()
 	check(hub.enter_room(VILLAGE.interiors[0]), "the keeper can be visited in the temple on her morning schedule")
 	hub.walker.position = hub.view.actor_for(VILLAGE.residents[0]).position + Vector2(0, 25)
 	await _frames(3)
@@ -445,7 +483,7 @@ func run_title() -> void:
 	for prop in VILLAGE.props:
 		if prop.cleared_by == VILLAGE.quests[0]: roots += 1
 	# The walker, the memorial, the Well, the board, every room's view, the present props, people.
-	var dressing := func() -> int: return 4 + VILLAGE.interiors.size() + VILLAGE.props.filter(func(prop: VillagePropDef) -> bool: return VillageProgress.prop_present(prop)).size() + VILLAGE.residents.size() + VILLAGE.animals.size()
+	var dressing := func() -> int: return 4 + VILLAGE.interiors.size() + VILLAGE.props.filter(func(prop: VillagePropDef) -> bool: return not prop.flat and VillageProgress.prop_present(prop)).size() + VILLAGE.residents.size() + VILLAGE.animals.size()
 	check(roots > 0 and hub.view.dressing.get_child_count() == dressing.call(), "returning the quest removes its root props and their collisions")
 	var first_count := hub.view.dressing.get_child_count()
 	hub.panel.hide()
@@ -462,7 +500,7 @@ func run_title() -> void:
 	if return_choice: return_choice.pressed.emit()
 	var west_roots := 0
 	for prop in VILLAGE.props:
-		if prop.cleared_by == VILLAGE.quests[1]: west_roots += 1
+		if prop.cleared_by == VILLAGE.quests[1] and not prop.flat: west_roots += 1
 	var woken := 0
 	for prop in VILLAGE.props:
 		if prop.shown_after == VILLAGE.quests[1]: woken += 1
@@ -475,6 +513,7 @@ func run_title() -> void:
 	if question: question.pressed.emit()
 	check(hub.panel.words.text == tr(subject.reply) and Profile.to_data() == conversation_save, "asking a question shows its reply without paying a reward or changing progression")
 	hub.panel.hide()
+	await _test_gen_wakes(hub)
 	hub.walker.position = Vector2(480, 550)
 	var ren := hub.view.actor_for(VILLAGE.residents[2])
 	var start := ren.position
@@ -611,6 +650,37 @@ func _test_framing(hub: VillageHub) -> void:
 	await _frames(3)
 	check(hub.walker.camera.zoom.is_equal_approx(Vector2.ONE * PixelGrid.camera_zoom(VillageWalker.SURFACE_ZOOM)), "the framing follows the window back")
 	hub.walker.position = VILLAGE.spawn
+
+
+## Gen's chapter in the real hub (task_377): his request from his door, the souls once, the
+## southern roots and the shut door gone with their collisions, the Well's roots no longer drawn,
+## his white rows in flower.
+func _test_gen_wakes(hub: VillageHub) -> void:
+	var quest := VILLAGE.quests[2]
+	var gen := VILLAGE.residents[4]
+	hub.walker.position = hub.view.actor_for(gen).position + Vector2(0, 25)
+	await _frames(3)
+	check(hub.focus != null and hub.focus.resident == gen and hub.interact(), "Gen's echo can be spoken to at his door")
+	var accept := _choice(hub, quest.accept_label)
+	check(accept != null and not accept.disabled, "Sayo's return opens Gen's request in the real conversation")
+	if accept: accept.pressed.emit()
+	VillageProgress.discover(quest)
+	var souls := Profile.souls
+	var hand_in := _choice(hub, quest.hand_in_label)
+	check(hand_in != null and not hand_in.disabled, "Gen offers to take back his seed pouch")
+	if hand_in: hand_in.pressed.emit()
+	check(VillageProgress.stage(quest) == VillageProgress.Step.RETURNED and Profile.souls == souls + quest.reward_souls, "returning the pouch pays its souls once and wakes Gen")
+	check(hub.panel.words.text == tr(gen.used_text) and not hub.view.actor_for(gen).asleep, "Gen speaks as himself once awake")
+	var standing := hub.view.dressing.get_children().filter(func(node: Node) -> bool: return node is VillagePropView).map(func(node: Node) -> VillagePropDef: return (node as VillagePropView).def)
+	var front := VILLAGE.props.filter(func(prop: VillagePropDef) -> bool: return prop.cleared_by == quest)
+	var rows := VILLAGE.props.filter(func(prop: VillagePropDef) -> bool: return prop.shown_after == quest)
+	check(not front.is_empty() and front.all(func(prop: VillagePropDef) -> bool: return not standing.has(prop)), "the southern roots, the shut door and the Well's roots toward Gen are gone")
+	check(not rows.is_empty() and rows.all(func(prop: VillagePropDef) -> bool: return standing.has(prop)), "Gen's white rows flower once he is back")
+	var navigation := VillageNavigation.new()
+	navigation.rebuild(VILLAGE)
+	var solid := front.filter(func(prop: VillagePropDef) -> bool: return prop.collision.has_area())
+	check(not solid.is_empty() and solid.all(func(prop: VillagePropDef) -> bool: return not navigation.path(VILLAGE.spawn, prop.position + prop.collision.get_center()).is_empty()), "the southern roots' collisions go with them")
+	hub.panel.hide()
 
 
 ## A sleeping home is sealed (task_383): its overgrown facade stands, its door is no interaction
@@ -799,6 +869,17 @@ func run_game(game: Game) -> void:
 	check(VillageProgress.stage(second) == VillageProgress.Step.FOUND and VillageProgress.stage(quest) == VillageProgress.Step.RETURNED, "recovering the verse preserves the first rescue")
 	await game.debug.enter_floor(second.floor_depth)
 	check(game.world.find_children("*", "VillageEvidence", true, false).is_empty(), "the recovered verse does not duplicate on floor reconstruction")
+	var third := VILLAGE.quests[2]
+	VillageProgress.hand_in(second)
+	VillageProgress.accept(third)
+	await game.debug.enter_floor(third.floor_depth)
+	await _frames(2)
+	found = game.world.find_children("*", "VillageEvidence", true, false)
+	check(found.size() == 1 and (found[0] as VillageEvidence).quest == third and game.world.is_solid_ground((found[0] as VillageEvidence).position), "Gen's seed pouch lies on solid ground in a real floor-five room")
+	if not found.is_empty():
+		(found[0] as VillageEvidence).spot.use(game.player)
+		await _frames(2)
+	check(VillageProgress.stage(third) == VillageProgress.Step.FOUND, "the lantern keeps Gen's seed pouch like the other evidence")
 	game.player.give_up()
 	await _until(func() -> bool: return game.game_over_panel.visible)
 	var dead_time := Profile.village_seconds

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="VillageTopicDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_topic_def.gd" id="script"]
+[ext_resource type="Resource" path="res://data/village/gen_seeds.tres" id="gate"]
+[ext_resource type="Resource" path="res://data/village/last_verse.tres" id="after"]
+[resource]
+script = ExtResource("script")
+prompt = "Who sleeps on the southern lane?"
+reply = "Gen, who grew the white flowers for every song I sang at a grave. Without them my verses had nothing to fall on."
+quest = ExtResource("gate")
+min_stage = 0
+max_stage = 2
+after_quest = ExtResource("after")

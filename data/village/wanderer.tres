@@ -5,6 +5,7 @@
 [ext_resource type="Resource" path="res://data/village/topics/merchant_lamps.tres" id="topic_0"]
 [ext_resource type="Resource" path="res://data/village/topics/merchant_well.tres" id="topic_1"]
 [ext_resource type="Resource" path="res://data/village/topics/wanderer_two_homes.tres" id="reaction"]
+[ext_resource type="Resource" path="res://data/village/topics/wanderer_three_homes.tres" id="reaction_three"]
 [ext_resource type="Script" path="res://src/definitions/village/village_activity_def.gd" id="activity_script"]
 
 [sub_resource type="Resource" id="activity_0"]
@@ -57,6 +58,6 @@ ambient_after = PackedStringArray("Oil, wicks... I even give ghosts credit.", "M
 topics = [ExtResource("topic_0"), ExtResource("topic_1")]
 idle_frames = [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16)]
 walk_frames = [Rect2(0, 32, 16, 16), Rect2(0, 48, 16, 16), Rect2(0, 64, 16, 16), Rect2(0, 80, 16, 16)]
-reactions = [ExtResource("reaction")]
+reactions = [ExtResource("reaction_three"), ExtResource("reaction")]
 schedule = [SubResource("activity_0"), SubResource("activity_1"), SubResource("activity_2"), SubResource("activity_3"), SubResource("activity_4")]
 walk_speed = 42.0

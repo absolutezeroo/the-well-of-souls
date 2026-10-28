@@ -40,7 +40,7 @@ func refresh() -> void:
 			dressing.remove_child(child)
 			child.queue_free()
 	for prop in def.props:
-		if not VillageProgress.prop_present(prop):
+		if prop.flat or not VillageProgress.prop_present(prop):
 			continue
 		var body := VillagePropView.new()
 		body.def = prop
@@ -108,6 +108,11 @@ func actor_for(resident: VillageResidentDef) -> VillageResident:
 
 func _draw() -> void:
 	VillageGround.draw(self, def, _keep_clear)
+	# What lies on the ground is drawn with it, under the walkers (VillagePropDef.flat).
+	for prop in def.props:
+		if prop.flat and VillageProgress.prop_present(prop):
+			var size := prop.region.size * prop.art_scale
+			draw_texture_rect_region(prop.texture, Rect2(prop.position - Vector2(size.x * 0.5, size.y), size), prop.region)
 	for quest in def.quests:
 		if VillageProgress.stage(quest) == VillageProgress.Step.RETURNED:
 			# The restored house is identified by its resident, not by a quest id in code.

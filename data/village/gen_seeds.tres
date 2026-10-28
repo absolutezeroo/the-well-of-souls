@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="VillageQuestDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_quest_def.gd" id="script"]
+[ext_resource type="Texture2D" path="res://assets/items/seed_pouch.png" id="icon"]
+[ext_resource type="Resource" path="res://data/village/last_verse.tres" id="previous_quest"]
+[resource]
+script = ExtResource("script")
+id = &"gen_seed_pouch"
+title = "Seeds of Mourning"
+description = "Old Gen grew the white flowers Kagari lays on its graves. His seed pouch sank with the Ossuary's first niches; bring it back before the frost, and his soul may find its garden."
+objective = "Find the seed pouch on floor 5, then return to Gen."
+done_line = "Gen kneels in his rows again. The roots let go of the southern lane."
+evidence_name = "Gen's Seed Pouch"
+evidence_text = "The seed pouch is safe in your lantern. Return to Gen; even death will not take it."
+evidence_icon = ExtResource("icon")
+requires_quest = ExtResource("previous_quest")
+floor_depth = 5
+reward_souls = 25
+accept_label = "I will bring back your seeds."
+hand_in_label = "Here are your seeds, Gen."
+pending_text = "The seed pouch is still below."
+return_text = "Return the seed pouch to Gen."
+locked_text = "Wake Sayo with her quest first."
+offer_text = "Sayo is awake. Listen at the cottage on the southern lane."
+reward_text = "Reward: %d souls, Gen's awakening and his garden in flower."

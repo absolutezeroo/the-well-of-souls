@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 436,
+  "next_id": 439,
   "tags": [
     "pc",
     "test",
@@ -5647,9 +5647,9 @@
     {
       "id": "task_377",
       "title": "Étendre les quêtes et les fronts d’infestation de Kagari",
-      "description": "Suite de contenu à concevoir après le playtest de la première quête : autres habitants à réveiller, plusieurs fronts visuels de racines et conséquences selon les quêtes, dialogues réactifs, services marchands supplémentaires et décors dédiés. Garder les ressources modulaires et le cœur roguelike. Le premier lot implémenté est statique jusqu’à la remise de quête ; ni simulation de propagation autonome ni économie d’équipement du village ne sont livrées. Deuxième lot réalisé par task_379/380 : Sayo, second front, questions et routines. Restent d’autres quêtes, habitants, services et décors dédiés ; aucune propagation autonome livrée.",
+      "description": "Suite de contenu à concevoir après le playtest de la première quête : autres habitants à réveiller, plusieurs fronts visuels de racines et conséquences selon les quêtes, dialogues réactifs, services marchands supplémentaires et décors dédiés. Garder les ressources modulaires et le cœur roguelike. Le premier lot implémenté est statique jusqu’à la remise de quête ; ni simulation de propagation autonome ni économie d’équipement du village ne sont livrées. Deuxième lot réalisé par task_379/380 : Sayo, second front, questions et routines. Restent d’autres quêtes, habitants, services et décors dédiés ; aucune propagation autonome livrée.\n\n28/10 (agent Kagari) — troisième lot fait : Gen, le jardinier de la chaumière de la ruelle du sud (OldMan3 du pack, chapeau de paille), dort et devient le troisième front. Quête « Les Graines du Deuil » (après Le Dernier Verset, acceptation à sa porte) : sa bourse de graines est à l'étage 5 (l'Ossuaire, où il portait ses fleurs blanches aux premières niches), rapportée elle paie 25 âmes une fois (chaîne 15/20/25, test : chaque quête plus profonde et pas moins payée, 30 au plus). Au réveil : les racines du sud et la porte fermée de la chaumière disparaissent (collisions comprises), ses rangs de fleurs blanches se balancent devant le potager. Les racines du Puits rampent maintenant dans l'herbe depuis la place vers chaque maison endormie (décalques plats du pack, dessinés avec le sol, VillagePropDef.flat) et chaque traînée se retire au réveil de son dormeur : la place se dégage à mesure que Kagari se réveille. Nouveau service du Vieil Errant : Lanternes de la Ruelle (10 âmes, après Gen). Dialogues FR/EN dans la voix des habitants : Gen (texte, accepté, trouvé, réveillé, 4 répliques de proximité, 3 questions), Sayo parle de Gen une fois réveillée elle-même (VillageTopicDef.after_quest), Veilleuse/Ren/Errant/Sayo réagissent au réveil de Gen. Refusé : un jardin qui rapporterait des âmes chaque jour (les âmes sont les gens de Kagari ramenés ; pas de revenu hors des descentes) — noté dans docs/balance-log.md. Tests : unit.village (chaîne, sujets conditionnés, réactions, décalques jamais solides), title.village (Gen verrouillé avant Sayo, conversation réelle, récompense unique, front sud et traînée retirés, rangs fleuris, collisions), game.village (bourse sur un sol praticable à l'étage 5, gardée par la lanterne). Captures : /tmp/claude-0/-home-claude/d124b88d-9642-5f48-896d-092820964a06/scratchpad/fix_kagari/gen/ (village, village_map, village_woken, talk_gen, woken_talk_gen ×3 résolutions).\n\nÀ vérifier sur le S23 : lisibilité des racines au sol (assez visibles sans faire fouillis ?), la conversation de Gen et ses textes FR dans la boîte, la bourse à l'étage 5, la promenade de Gen (potager, mémorial, porte), le prix des lanternes de la ruelle.",
       "priority": "medium",
-      "status": "in_progress",
+      "status": "review",
       "epic_id": "epic_7",
       "tags": [
         "idée",
@@ -5659,7 +5659,7 @@
         "économie"
       ],
       "created_at": 1793032681,
-      "updated_at": 1793186003,
+      "updated_at": 1793188209,
       "due_date": null
     },
     {
@@ -6577,6 +6577,54 @@
       ],
       "created_at": 1793187036,
       "updated_at": 1793187036
+    },
+    {
+      "id": "task_436",
+      "title": "Le bûcheron, quatrième dormeur de Kagari",
+      "description": "Suite de task_377 : la cabane du bûcheron (ruelle du sud, son chien attend devant) pourrait devenir le quatrième front : racines, porte fermée, quête d'un objet plus profond (acte III ?), réveil et service lié (bois pour le sanctuaire ?). Garder la chaîne : plus profond, récompense dans la lignée (30 âmes au plus aujourd'hui, à revoir si l'acte III).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "pnj",
+        "lore",
+        "contenu"
+      ],
+      "created_at": 1793188209,
+      "updated_at": 1793188209
+    },
+    {
+      "id": "task_437",
+      "title": "Fenêtres des maisons réveillées allumées la nuit",
+      "description": "Constat en travaillant sur task_383 : VillageView dessine une « fenêtre éclairée » (un rectangle doré) sous la couche des façades, donc invisible derrière les maisons. Il faudrait une vraie lueur de fenêtre la nuit pour les maisons réveillées, sans teinte (LightField ou pièce du pack posée sur la fenêtre), puis retirer l'ancien dessin.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_3",
+      "due_date": null,
+      "tags": [
+        "visuel",
+        "bug"
+      ],
+      "created_at": 1793188209,
+      "updated_at": 1793188209
+    },
+    {
+      "id": "task_438",
+      "title": "Intérieur de la chaumière de Gen",
+      "description": "Gen se repose derrière sa porte la nuit (pas encore de pièce). Même mécanisme que les maisons de Sayo et Ren : une petite pièce de jardinier (graines, outils, pots), ses rendez-vous du soir à l'intérieur.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "pnj",
+        "visuel"
+      ],
+      "created_at": 1793188209,
+      "updated_at": 1793188209
     }
   ]
 }

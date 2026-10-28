@@ -1,6 +1,6 @@
 # Performance
 
-Village life uses four persistent `VillageResident` bodies, authored schedules and cached frame
+Village life uses five persistent `VillageResident` bodies, authored schedules and cached frame
 lists. Proximity checks use squared distance to the one walker; there are no group scans or
 per-frame arrays/strings. Sprite regions change only at the authored frame rate. Speech text is
 translated on an actual greeting, with a cooldown, and hidden during modals. Static ground is
@@ -13,7 +13,8 @@ selection update once per fictional minute (about 0.67 seconds), not every frame
 loop only advances a scalar and checks the minute. The noticeboard is a static draw. There are
 no per-NPC timers, wall-clock polls or dungeon navigation work for these routines. The four
 animals follow the same rules: a path only for a new walk (every few seconds), their frame regions
-changed at the authored rate, no `move_and_slide()` while they stand. An animated prop (a flag, a
+changed at the authored rate, no `move_and_slide()` while they stand. The Well's roots in the
+grass (`VillagePropDef.flat`) are recorded into the ground's drawing on profile change, not nodes. An animated prop (a flag, a
 swaying flower) sets its sprite's region only when its frame changes, and only on screen.
 
 The game must hold 60 frames a second on a phone (the target is a Samsung S23 Ultra, on the

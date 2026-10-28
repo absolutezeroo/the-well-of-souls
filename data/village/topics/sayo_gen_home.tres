@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="VillageTopicDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_topic_def.gd" id="script"]
+[ext_resource type="Resource" path="res://data/village/gen_seeds.tres" id="gate"]
+[resource]
+script = ExtResource("script")
+reply = "Gen brought me the first white flower. Too early for it, he says; it came anyway."
+quest = ExtResource("gate")
+min_stage = 3
+max_stage = 3

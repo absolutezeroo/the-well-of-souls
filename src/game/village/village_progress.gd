@@ -7,7 +7,8 @@ enum Step { AVAILABLE, ACCEPTED, FOUND, RETURNED }
 
 
 static func topic_available(topic: VillageTopicDef) -> bool:
-	return topic.quest == null or (stage(topic.quest) >= topic.min_stage and stage(topic.quest) <= topic.max_stage)
+	return (topic.quest == null or (stage(topic.quest) >= topic.min_stage and stage(topic.quest) <= topic.max_stage)) \
+		and (topic.after_quest == null or stage(topic.after_quest) == Step.RETURNED)
 
 
 static func greeting(resident: VillageResidentDef) -> String:

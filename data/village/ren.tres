@@ -6,6 +6,7 @@
 [ext_resource type="Resource" path="res://data/village/topics/ren_sayo_wait.tres" id="topic_1"]
 [ext_resource type="Resource" path="res://data/village/topics/ren_sayo_home.tres" id="topic_2"]
 [ext_resource type="Resource" path="res://data/village/topics/ren_two_homes.tres" id="reaction"]
+[ext_resource type="Resource" path="res://data/village/topics/ren_three_homes.tres" id="reaction_three"]
 [ext_resource type="Script" path="res://src/definitions/village/village_activity_def.gd" id="activity_script"]
 [ext_resource type="Resource" path="res://data/village/ren_home.tres" id="home"]
 
@@ -71,6 +72,6 @@ ambient_after = PackedStringArray("There. This one will last until you return.",
 topics = [ExtResource("topic_0"), ExtResource("topic_1"), ExtResource("topic_2")]
 idle_frames = [Rect2(0, 0, 16, 16), Rect2(0, 16, 16, 16)]
 walk_frames = [Rect2(0, 32, 16, 16), Rect2(0, 48, 16, 16), Rect2(0, 64, 16, 16), Rect2(0, 80, 16, 16)]
-reactions = [ExtResource("reaction")]
+reactions = [ExtResource("reaction_three"), ExtResource("reaction")]
 schedule = [SubResource("activity_0"), SubResource("activity_1"), SubResource("activity_2"), SubResource("activity_3"), SubResource("activity_4"), SubResource("activity_5")]
 walk_speed = 42.0

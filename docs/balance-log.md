@@ -3,6 +3,18 @@
 Dated entries, newest first: what was measured, what changed and why, before/after numbers, open
 questions. How to measure: [balance.md](balance.md).
 
+## 2026-10-28 - Kagari's third rescue and lane lanterns (task_377)
+
+What changed: a third village request, **Seeds of Mourning** (Gen's seed pouch on floor 5, after
+Sayo's), pays **25 souls once**; the Wanderer's **Lanterns of the Lane** cost **10 souls once**
+after it. Why these numbers: the chain's rewards grow by 5 souls per request with the floor they
+send the hero to (15 at floor 2, 20 at floor 4, 25 at floor 5), and the three lamp services cost
+5, 8 and 10: the village stays a one-time source of a few runs' worth of souls, beside the Tree
+of Souls' nodes of 90 souls and more. A garden paying souls every village day was refused (no
+recurring income outside runs; souls are Kagari's people brought back). Checked by
+`unit.village` (each request deeper than the one before, paying at least as much, 30 at most).
+Not measured with the bots: village rewards are one-time and outside runs.
+
 ## 2026-10-28 - The fairness contract: wind-up floors, one twist per ascension (decision 0008)
 
 What changed: no wind-up of an attack that hurts goes under **0.4 s** (a boss's **0.5 s**; a

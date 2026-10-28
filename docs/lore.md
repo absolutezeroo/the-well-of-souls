@@ -305,6 +305,16 @@ western roots wither and her window lights. She remembers the mourners, not who 
 lamps. The remaining sleepers still wait. This is another local rescue, never the ending's
 awakening of all Kagari.
 
+Once Sayo sings again she remembers who grew the flowers she sang over: old **Gen**, the
+gardener of the cottage on the southern lane. He grew Kagari's vegetables and the white flowers
+it lays on its graves, and every autumn he carried a bundle down to the Ossuary's first niches.
+When the Well stirred and the Ossuary sank, his seed pouch went down with them; it lies on the
+fifth floor, where the stone smells of wet earth. His echo frets about the frost and the rows he
+has not sown. Returning the pouch wakes him: the roots let go of his cottage, its door opens, and
+his white rows flower again. He remembers his hens and his frost, not the moonless night. The
+roots that crept from the Well toward each sleeping home through the grass wither one trail at
+a time, as each sleeper wakes; the square around the Well clears, the rest of Kagari sleeps.
+
 Their conversations stay close to daily life. Ren returns to his wicks because familiar work
 steadies his hands; Sayo leaves her door open for the next neighbour to return. The Veilleuse
 hears the square becoming inhabited again, and the Wanderer complains fondly about customers

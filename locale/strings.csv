@@ -3058,8 +3058,35 @@ The ember-box is still below.,The ember-box is still below.,La boîte à braises
 Return the ember-box to the Vigil-Keeper.,Return the ember-box to the Vigil-Keeper.,Rapporte la boîte à braises à la Veilleuse.
 Find the Vigil-Keeper at the Well or in the temple.,Find the Vigil-Keeper at the Well or in the temple.,Retrouve la Veilleuse près du puits ou dans le temple.
 Reward: %d souls and a waking home.,Reward: %d souls and a waking home.,Récompense : %d âmes et un foyer qui se réveille.
+Resting at home,Resting at home,Se repose chez soi
+Tending his garden,Tending his garden,Soigne son jardin
+Laying flowers at the memorial,Laying flowers at the memorial,Dépose des fleurs au mémorial
+Sitting by his door,Sitting by his door,S'assoit devant sa porte
+"The frost is coming, and I have not sown the white rows. Where did I put my seeds?","The frost is coming, and I have not sown the white rows. Where did I put my seeds?","Le gel arrive, et je n'ai pas semé les rangs blancs. Où ai-je mis mes graines ?"
+"I carried them down to the Ossuary for the niches, and the earth sank with them. The fifth floor, I think; it smells of wet stone.","I carried them down to the Ossuary for the niches, and the earth sank with them. The fifth floor, I think; it smells of wet stone.","Je les avais descendues à l'Ossuaire pour les niches, et la terre a sombré avec elles. Au cinquième étage, je crois ; ça sent la pierre mouillée."
+I would know that pouch's knot with my eyes shut. Give it here.,I would know that pouch's knot with my eyes shut. Give it here.,Je reconnaîtrais le nœud de cette bourse les yeux fermés. Donne-la-moi.
+"The rows are late, but the earth forgives. Sayo will have her flowers for the next song.","The rows are late, but the earth forgives. Sayo will have her flowers for the next song.","Les rangs ont du retard, mais la terre pardonne. Sayo aura ses fleurs pour le prochain chant."
+Before the frost... before the frost...,Before the frost... before the frost...,Avant le gel... avant le gel...
+Who walks on my rows?,Who walks on my rows?,Qui marche sur mes rangs ?
+Mind the seedlings.,Mind the seedlings.,Attention aux semis.
+"White for the dead, green for the living.","White for the dead, green for the living.","Du blanc pour les morts, du vert pour les vivants."
+Seeds of Mourning,Seeds of Mourning,Les Graines du Deuil
+"Old Gen grew the white flowers Kagari lays on its graves. His seed pouch sank with the Ossuary's first niches; bring it back before the frost, and his soul may find its garden.","Old Gen grew the white flowers Kagari lays on its graves. His seed pouch sank with the Ossuary's first niches; bring it back before the frost, and his soul may find its garden.","Le vieux Gen faisait pousser les fleurs blanches que Kagari dépose sur ses tombes. Sa bourse de graines a sombré avec les premières niches de l’Ossuaire ; rapporte-la avant le gel, et son âme retrouvera peut-être son jardin."
+"Find the seed pouch on floor 5, then return to Gen.","Find the seed pouch on floor 5, then return to Gen.","Retrouve la bourse de graines à l’étage 5, puis rapporte-la à Gen."
+Gen kneels in his rows again. The roots let go of the southern lane.,Gen kneels in his rows again. The roots let go of the southern lane.,Gen s’agenouille de nouveau dans ses rangs. Les racines lâchent la ruelle du sud.
+Gen's Seed Pouch,Gen's Seed Pouch,La Bourse de Gen
+The seed pouch is safe in your lantern. Return to Gen; even death will not take it.,The seed pouch is safe in your lantern. Return to Gen; even death will not take it.,La bourse de graines repose dans ta lanterne. Retourne voir Gen ; même la mort ne te la prendra pas.
+I will bring back your seeds.,I will bring back your seeds.,Je te rapporterai tes graines.
+"Here are your seeds, Gen.","Here are your seeds, Gen.","Voici tes graines, Gen."
+The seed pouch is still below.,The seed pouch is still below.,La bourse de graines est encore en bas.
+Return the seed pouch to Gen.,Return the seed pouch to Gen.,Rapporte la bourse de graines à Gen.
+Wake Sayo with her quest first.,Wake Sayo with her quest first.,Réveille d’abord Sayo grâce à sa quête.
+Sayo is awake. Listen at the cottage on the southern lane.,Sayo is awake. Listen at the cottage on the southern lane.,"Sayo est réveillée. Écoute à la porte de la chaumière, dans la ruelle du sud."
+"Reward: %d souls, Gen's awakening and his garden in flower.","Reward: %d souls, Gen's awakening and his garden in flower.","Récompense : %d âmes, le réveil de Gen et son jardin en fleurs."
+Gen,Gen,Gen
+The Gardener,The Gardener,Le Jardinier
 The village sleeps. The Well does not.,The village sleeps. The Well does not.,Le village dort. Le Puits veille.
-"Two windows burn. Beyond the square, Kagari still sleeps.","Two windows burn. Beyond the square, Kagari still sleeps.","Deux fenêtres brillent. Au-delà de la place, Kagari dort encore."
+"Three homes are awake again. Beyond them, Kagari still sleeps.","Three homes are awake again. Beyond them, Kagari still sleeps.","Trois foyers se sont réveillés. Au-delà, Kagari dort encore."
 Keeping watch at the Well,Keeping watch at the Well,Veille près du Puits
 Tending the shrine,Tending the shrine,Entretient le sanctuaire
 Receiving visitors at the Well,Receiving visitors at the Well,Accueille les visiteurs près du Puits
@@ -3071,6 +3098,8 @@ Listen to him grumbling about his wicks: Ren is back indeed. Go and see Sayo by 
 Take a moment to catch your breath.,Take a moment to catch your breath.,Prends le temps de souffler.
 Ren is up already... That man cannot sit still.,Ren is up already... That man cannot sit still.,Ren est déjà debout... Cet homme ne tient pas en place.
 Is your lantern holding up?,Is your lantern holding up?,Ta lanterne tient bon ?
+Lanterns of the Lane,Lanterns of the Lane,Les Lanternes de la Ruelle
+"Light the southern lane's two lanterns permanently, so Gen finds his door after dark.","Light the southern lane's two lanterns permanently, so Gen finds his door after dark.","Rallume définitivement les deux lanternes de la ruelle du sud, pour que Gen retrouve sa porte à la nuit tombée."
 The Last Verse,The Last Verse,Le Dernier Verset
 "Ren's lamp burns again, but Sayo's song still ends in silence. Find the lost verse below the roots, and bring it back to her door.","Ren's lamp burns again, but Sayo's song still ends in silence. Find the lost verse below the roots, and bring it back to her door.","La lampe de Ren brûle de nouveau, mais le chant de Sayo s’achève encore dans le silence. Retrouve le verset perdu sous les racines et rapporte-le à sa porte."
 "Find the last verse on floor 4, then return to Sayo.","Find the last verse on floor 4, then return to Sayo.","Retrouve le dernier verset à l’étage 4, puis rapporte-le à Sayo."
@@ -3088,7 +3117,6 @@ Market Lanterns,Market Lanterns,Les Lanternes du Marché
 Light the market lamps permanently. A village restoration; no combat bonus.,Light the market lamps permanently. A village restoration; no combat bonus.,"Rallume définitivement les lanternes du marché. Une restauration du village, sans bonus de combat."
 Lights for the Nameless,Lights for the Nameless,Des Lumières pour les Sans-Nom
 Light the memorial court permanently. Your fallen Keepers will have their vigil.,Light the memorial court permanently. Your fallen Keepers will have their vigil.,Rallume définitivement la cour du souvenir. Tes Gardiens auront leur veille.
-Resting at home,Resting at home,Se repose chez soi
 Mending lanterns at home,Mending lanterns at home,Répare les lanternes chez lui
 Checking the market lamps,Checking the market lamps,Vérifie les lampes du marché
 Lighting the memorial court,Lighting the memorial court,Allume les lanternes de la cour
@@ -3125,10 +3153,17 @@ Ren has already told me my wicks are too short. It is good to have difficult peo
 I keep the stall open. Out of habit.,I keep the stall open. Out of habit.,Je garde l'étal ouvert. Par habitude.
 "Oil, wicks... I even give ghosts credit.","Oil, wicks... I even give ghosts credit.","De l'huile, des mèches... Je fais aussi crédit aux fantômes."
 "Mind your step, I have just tidied up.","Mind your step, I have just tidied up.","Regarde où tu marches, je viens de ranger."
+Who are the white flowers for?,Who are the white flowers for?,Pour qui sont les fleurs blanches ?
+For those who go down and do not come up. I grew them for every grave Sayo sang over; the Ossuary has more of my flowers than my garden.,For those who go down and do not come up. I grew them for every grave Sayo sang over; the Ossuary has more of my flowers than my garden.,Pour ceux qui descendent et ne remontent pas. J'en ai fait pousser pour chaque tombe où Sayo a chanté ; l'Ossuaire a plus de mes fleurs que mon jardin.
+Your hens waited for you.,Your hens waited for you.,Tes poules t'ont attendu.
+"They want the grain, nothing more. Still, I heard them scratching in the dark, and it helped.","They want the grain, nothing more. Still, I heard them scratching in the dark, and it helped.","Elles veulent le grain, rien de plus. Mais je les entendais gratter dans le noir, et ça m'aidait."
+What will you plant first?,What will you plant first?,Que vas-tu planter d'abord ?
+"The white rows first, for the memorial court, then beans. The dead are patient; the living are hungry.","The white rows first, for the memorial court, then beans. The dead are patient; the living are hungry.","Les rangs blancs d'abord, pour la cour du mémorial, puis des haricots. Les morts sont patients ; les vivants ont faim."
 Why his ember-box?,Why his ember-box?,Pourquoi sa boîte à braises ?
 He kept it close so the embers would last until morning. I want to give him back something he will recognise.,He kept it close so the embers would last until morning. I want to give him back something he will recognise.,Il la gardait contre lui pour que les braises tiennent jusqu'au matin. Je veux lui rendre quelque chose qu'il reconnaîtra.
 What if I do not come back?,What if I do not come back?,Et si je ne reviens pas ?
 "Do not promise me success, child; promise me you will take care. While your lantern burns, I keep a place for you.","Do not promise me success, child; promise me you will take care. While your lantern burns, I keep a place for you.","Ne me promets pas de réussir, petit ; promets-moi de faire attention. Tant que ta lanterne brûle, je garde une place pour toi."
+"Three hearths, child, and Gen kneels in his rows saying the dead are patient. I am less so: rest before you go down.","Three hearths, child, and Gen kneels in his rows saying the dead are patient. I am less so: rest before you go down.","Trois foyers, petit, et Gen à genoux dans ses rangs qui dit que les morts sont patients. Moi, je le suis moins : repose-toi avant de redescendre."
 "Ren mends, Sayo sings... I had almost forgotten the sound of this square. It does me good to hear them.","Ren mends, Sayo sings... I had almost forgotten the sound of this square. It does me good to hear them.","Ren répare, Sayo chante... J'avais presque oublié le bruit de cette place. Ça me fait du bien de les entendre."
 Why pay for lanterns?,Why pay for lanterns?,Pourquoi payer pour des lanternes ?
 "The souls go into the lights, not my pocket. I provide the oil, the wicks and the knees that climb the ladder.","The souls go into the lights, not my pocket. I provide the oil, the wicks and the knees that climb the ladder.","Les âmes vont aux lumières, pas dans ma poche. Moi, je fournis l'huile, les mèches et les genoux qui montent à l'échelle."
@@ -3138,15 +3173,20 @@ Sayo is back.,Sayo is back.,Sayo est revenue.
 I heard her before I saw her. She asked for a lantern by her door; at this rate we will run out of oil.,I heard her before I saw her. She asked for a lantern by her door; at this rate we will run out of oil.,Je l'ai entendue avant de la voir. Elle m'a demandé une lanterne pour sa porte ; je crois qu'on va finir par manquer d'huile.
 Do you know Sayo?,Do you know Sayo?,Tu connais Sayo ?
 "She sang so loudly I could hear her from the workshop. Go and talk to her; even if she barely answers, she hates being ignored.","She sang so loudly I could hear her from the workshop. Go and talk to her; even if she barely answers, she hates being ignored.","Elle chantait si fort que je l'entendais depuis l'atelier. Va lui parler ; même si elle répond à peine, elle déteste qu'on l'ignore."
+"Gen wants a lantern for his rows, so the frost sees him coming. I told him frost has no eyes; he wants two.","Gen wants a lantern for his rows, so the frost sees him coming. I told him frost has no eyes; he wants two.","Gen veut une lanterne pour ses rangs, pour que le gel le voie venir. Je lui ai dit que le gel n'a pas d'yeux ; il en veut deux."
 "Sayo has left her door open. I will make her a lantern; she says my smoke makes her cough, but she still wants one.","Sayo has left her door open. I will make her a lantern; she says my smoke makes her cough, but she still wants one.","Sayo a laissé sa porte ouverte. Je vais lui préparer une lanterne ; elle dit que ma fumée lui fait tousser, mais elle en veut une quand même."
 Back to work already?,Back to work already?,Tu te remets déjà au travail ?
 "A wick, a little oil, and I know what to do with my hands. It is easier than thinking about what happened to us.","A wick, a little oil, and I know what to do with my hands. It is easier than thinking about what happened to us.","Une mèche, un peu d'huile, et je sais quoi faire de mes mains. C'est plus facile que de penser à ce qui nous est arrivé."
 What will you do now?,What will you do now?,Que vas-tu faire maintenant ?
 "Leave my door open, for a start. If another neighbour comes back, I do not want them finding an empty street.","Leave my door open, for a start. If another neighbour comes back, I do not want them finding an empty street.","Laisser ma porte ouverte, déjà. Si un autre voisin revient, je ne veux pas qu'il trouve la rue vide."
+"Gen brought me the first white flower. Too early for it, he says; it came anyway.","Gen brought me the first white flower. Too early for it, he says; it came anyway.","Gen m'a apporté la première fleur blanche. Trop tôt pour elle, dit-il ; elle est venue quand même."
+Who sleeps on the southern lane?,Who sleeps on the southern lane?,Qui dort dans la ruelle du sud ?
+"Gen, who grew the white flowers for every song I sang at a grave. Without them my verses had nothing to fall on.","Gen, who grew the white flowers for every song I sang at a grave. Without them my verses had nothing to fall on.","Gen, qui faisait pousser les fleurs blanches de chaque chant que je donnais sur une tombe. Sans elles, mes vers n'avaient rien où tomber."
 Do you remember that night?,Do you remember that night?,Tu te souviens de cette nuit ?
 "I heard a door close, then nothing. I do not even know how long I have been asleep.","I heard a door close, then nothing. I do not even know how long I have been asleep.","J'ai entendu une porte se fermer, puis plus rien. Je ne sais même pas combien de temps j'ai dormi."
 What was the song?,What was the song?,Quel était ce chant ?
 We sang it outside the houses when someone died. I knew every word; now I cannot remember the last verse.,We sang it outside the houses when someone died. I knew every word; now I cannot remember the last verse.,"On le chantait devant les maisons quand quelqu'un mourait. Je connaissais toutes les paroles ; maintenant, le dernier verset m'échappe."
+"The gardener paid me in beans, and I took them. Tell no one.","The gardener paid me in beans, and I took them. Tell no one.","Le jardinier m'a payé en haricots, et je les ai pris. Ne le dis à personne."
 "Two neighbours awake, and both have complaints about my stall. I am starting to like this village.","Two neighbours awake, and both have complaints about my stall. I am starting to like this village.","Deux voisins réveillés, et tous les deux ont quelque chose à redire sur mon étal. Ce village commence à me plaire."
 grammar:feminine:Brutal,grammar:feminine:Brutal,Brutale
 grammar:feminine:Burning,grammar:feminine:Burning,Ardente

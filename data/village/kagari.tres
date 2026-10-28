@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" path="res://assets/tiles/ruins.png" id="ruins"]
 [ext_resource type="Texture2D" path="res://assets/tiles/furniture.png" id="furniture"]
 [ext_resource type="Texture2D" path="res://assets/tiles/nature.png" id="nature"]
+[ext_resource type="Texture2D" path="res://assets/tiles/floor_detail.png" id="floor_detail"]
 [ext_resource type="Texture2D" path="res://assets/tiles/desert.png" id="desert"]
 [ext_resource type="Texture2D" path="res://assets/props/lantern.png" id="lantern"]
 [ext_resource type="Texture2D" path="res://assets/tiles/dungeon.png" id="dungeon_tiles"]
@@ -21,6 +22,9 @@
 [ext_resource type="Resource" path="res://data/village/sayo.tres" id="sayo"]
 [ext_resource type="Resource" path="res://data/village/ren.tres" id="ren"]
 [ext_resource type="Resource" path="res://data/village/wanderer.tres" id="wanderer"]
+[ext_resource type="Resource" path="res://data/village/gen.tres" id="gen"]
+[ext_resource type="Resource" path="res://data/village/gen_seeds.tres" id="gen_quest"]
+[ext_resource type="Resource" path="res://data/village/lane_lamps.tres" id="lane"]
 
 [ext_resource type="Resource" path="res://data/village/clock.tres" id="clock"]
 [ext_resource type="Script" path="res://src/definitions/village/village_animal_def.gd" id="animal_script"]
@@ -645,6 +649,176 @@ pause = Vector2(3, 9)
 wakes_at = 7.0
 sleeps_at = 19.0
 
+[sub_resource type="Resource" id="gen_roots_0"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(376, 806)
+art_scale = 2.0
+region = Rect2(64, 0, 32, 32)
+collision = Rect2(-14, -15, 28, 30)
+cleared_by = ExtResource("gen_quest")
+
+[sub_resource type="Resource" id="gen_roots_1"]
+script = ExtResource("prop_script")
+texture = ExtResource("nature")
+position = Vector2(472, 724)
+art_scale = 2.0
+region = Rect2(64, 0, 32, 32)
+cleared_by = ExtResource("gen_quest")
+
+[sub_resource type="Resource" id="gen_door_shut"]
+script = ExtResource("prop_script")
+texture = ExtResource("house")
+position = Vector2(454, 820)
+art_scale = 2.0
+region = Rect2(32, 48, 16, 16)
+cleared_by = ExtResource("gen_quest")
+
+[sub_resource type="Resource" id="gen_white_row_0"]
+script = ExtResource("prop_script")
+texture = ExtResource("swaying_flower")
+position = Vector2(568, 828)
+art_scale = 2.0
+region = Rect2(0, 0, 16, 16)
+frames = 4
+frame_time = 0.2
+shown_after = ExtResource("gen_quest")
+
+[sub_resource type="Resource" id="gen_white_row_1"]
+script = ExtResource("prop_script")
+texture = ExtResource("swaying_flower")
+position = Vector2(604, 828)
+art_scale = 2.0
+region = Rect2(0, 0, 16, 16)
+frames = 4
+frame_time = 0.2
+shown_after = ExtResource("gen_quest")
+
+[sub_resource type="Resource" id="gen_white_row_2"]
+script = ExtResource("prop_script")
+texture = ExtResource("swaying_flower")
+position = Vector2(640, 828)
+art_scale = 2.0
+region = Rect2(0, 0, 16, 16)
+frames = 4
+frame_time = 0.2
+shown_after = ExtResource("gen_quest")
+
+[sub_resource type="Resource" id="lane_lamp_0"]
+script = ExtResource("prop_script")
+texture = ExtResource("lantern")
+position = Vector2(336, 862)
+art_scale = 2.0
+lit_by = ExtResource("lane")
+unlit = SubResource("lantern_unlit")
+
+[sub_resource type="Resource" id="lane_lamp_1"]
+script = ExtResource("prop_script")
+texture = ExtResource("lantern")
+position = Vector2(1104, 862)
+art_scale = 2.0
+lit_by = ExtResource("lane")
+unlit = SubResource("lantern_unlit")
+
+[sub_resource type="Resource" id="roots_trail_quest_0"]
+script = ExtResource("prop_script")
+texture = ExtResource("floor_detail")
+position = Vector2(888, 512)
+art_scale = 2.0
+region = Rect2(128, 0, 16, 16)
+cleared_by = ExtResource("quest")
+flat = true
+
+[sub_resource type="Resource" id="roots_trail_quest_1"]
+script = ExtResource("prop_script")
+texture = ExtResource("floor_detail")
+position = Vector2(944, 506)
+art_scale = 2.0
+region = Rect2(112, 0, 16, 16)
+cleared_by = ExtResource("quest")
+flat = true
+
+[sub_resource type="Resource" id="roots_trail_quest_2"]
+script = ExtResource("prop_script")
+texture = ExtResource("floor_detail")
+position = Vector2(1000, 512)
+art_scale = 2.0
+region = Rect2(128, 0, 16, 16)
+cleared_by = ExtResource("quest")
+flat = true
+
+[sub_resource type="Resource" id="roots_trail_quest_3"]
+script = ExtResource("prop_script")
+texture = ExtResource("floor_detail")
+position = Vector2(1056, 506)
+art_scale = 2.0
+region = Rect2(80, 0, 16, 16)
+cleared_by = ExtResource("quest")
+flat = true
+
+[sub_resource type="Resource" id="roots_trail_sayo_quest_0"]
+script = ExtResource("prop_script")
+texture = ExtResource("floor_detail")
+position = Vector2(552, 512)
+art_scale = 2.0
+region = Rect2(128, 0, 16, 16)
+cleared_by = ExtResource("sayo_quest")
+flat = true
+
+[sub_resource type="Resource" id="roots_trail_sayo_quest_1"]
+script = ExtResource("prop_script")
+texture = ExtResource("floor_detail")
+position = Vector2(496, 506)
+art_scale = 2.0
+region = Rect2(112, 0, 16, 16)
+cleared_by = ExtResource("sayo_quest")
+flat = true
+
+[sub_resource type="Resource" id="roots_trail_sayo_quest_2"]
+script = ExtResource("prop_script")
+texture = ExtResource("floor_detail")
+position = Vector2(440, 512)
+art_scale = 2.0
+region = Rect2(128, 0, 16, 16)
+cleared_by = ExtResource("sayo_quest")
+flat = true
+
+[sub_resource type="Resource" id="roots_trail_sayo_quest_3"]
+script = ExtResource("prop_script")
+texture = ExtResource("floor_detail")
+position = Vector2(384, 506)
+art_scale = 2.0
+region = Rect2(80, 0, 16, 16)
+cleared_by = ExtResource("sayo_quest")
+flat = true
+
+[sub_resource type="Resource" id="roots_trail_gen_quest_0"]
+script = ExtResource("prop_script")
+texture = ExtResource("floor_detail")
+position = Vector2(600, 668)
+art_scale = 2.0
+region = Rect2(128, 0, 16, 16)
+cleared_by = ExtResource("gen_quest")
+flat = true
+
+[sub_resource type="Resource" id="roots_trail_gen_quest_1"]
+script = ExtResource("prop_script")
+texture = ExtResource("floor_detail")
+position = Vector2(568, 696)
+art_scale = 2.0
+region = Rect2(112, 0, 16, 16)
+cleared_by = ExtResource("gen_quest")
+flat = true
+
+[sub_resource type="Resource" id="roots_trail_gen_quest_2"]
+script = ExtResource("prop_script")
+texture = ExtResource("floor_detail")
+position = Vector2(536, 724)
+art_scale = 2.0
+region = Rect2(128, 0, 16, 16)
+cleared_by = ExtResource("gen_quest")
+flat = true
+
 [resource]
 script = ExtResource("script")
 atmosphere = ExtResource("atmosphere")
@@ -653,7 +827,7 @@ path_texture = ExtResource("ground")
 path_region = Rect2(16, 128, 16, 16)
 display_name = "Kagari"
 description = "The village sleeps. The Well does not."
-restored_text = "Two windows burn. Beyond the square, Kagari still sleeps."
+restored_text = "Three homes are awake again. Beyond them, Kagari still sleeps."
 bounds = Rect2(0, 0, 1440, 960)
 spawn = Vector2(720, 680)
 well = Vector2(720, 560)
@@ -675,8 +849,8 @@ path_details = Array[Rect2]([Rect2(0, 176, 16, 16), Rect2(16, 176, 16, 16)])
 decor_texture = ExtResource("nature")
 decor_regions = Array[Rect2]([Rect2(0, 160, 16, 16), Rect2(16, 160, 16, 16), Rect2(32, 160, 16, 16), Rect2(48, 160, 16, 16), Rect2(96, 160, 16, 16), Rect2(0, 176, 16, 16), Rect2(16, 176, 16, 16), Rect2(32, 176, 16, 16), Rect2(48, 176, 16, 16), Rect2(96, 176, 16, 16)])
 decor_chance = 0.18
-quests = [ExtResource("quest"), ExtResource("sayo_quest")]
-services = [ExtResource("market"), ExtResource("memorial")]
-residents = [ExtResource("keeper"), ExtResource("sayo"), ExtResource("ren"), ExtResource("wanderer")]
-props = [SubResource("prop_0"), SubResource("sayo_house_awake"), SubResource("prop_1"), SubResource("ren_house_awake"), SubResource("prop_2"), SubResource("prop_3"), SubResource("prop_4"), SubResource("prop_5"), SubResource("prop_6"), SubResource("prop_7"), SubResource("prop_8"), SubResource("prop_9"), SubResource("prop_10"), SubResource("prop_11"), SubResource("prop_12"), SubResource("prop_13"), SubResource("prop_14"), SubResource("prop_15"), SubResource("prop_16"), SubResource("prop_17"), SubResource("prop_18"), SubResource("prop_19"), SubResource("west_roots_0"), SubResource("west_roots_1"), SubResource("west_roots_2"), SubResource("west_roots_3"), SubResource("deco_0"), SubResource("deco_1"), SubResource("deco_2"), SubResource("deco_3"), SubResource("deco_4"), SubResource("deco_5"), SubResource("deco_6"), SubResource("deco_7"), SubResource("deco_8"), SubResource("deco_9"), SubResource("deco_10"), SubResource("deco_11"), SubResource("deco_12"), SubResource("deco_13"), SubResource("deco_14"), SubResource("deco_15"), SubResource("deco_16"), SubResource("deco_17"), SubResource("deco_18"), SubResource("deco_19"), SubResource("deco_20"), SubResource("deco_21"), SubResource("deco_22"), SubResource("deco_23"), SubResource("deco_24"), SubResource("deco_25"), SubResource("deco_26"), SubResource("deco_27"), SubResource("deco_28"), SubResource("deco_29"), SubResource("deco_30"), SubResource("deco_31"), SubResource("deco_32"), SubResource("deco_33"), SubResource("deco_34"), SubResource("deco_35"), SubResource("deco_36"), SubResource("deco_37"), SubResource("deco_38"), SubResource("temple_flag_left"), SubResource("temple_flag_right"), SubResource("market_flag")]
+quests = [ExtResource("quest"), ExtResource("sayo_quest"), ExtResource("gen_quest")]
+services = [ExtResource("market"), ExtResource("memorial"), ExtResource("lane")]
+residents = [ExtResource("keeper"), ExtResource("sayo"), ExtResource("ren"), ExtResource("wanderer"), ExtResource("gen")]
+props = [SubResource("prop_0"), SubResource("sayo_house_awake"), SubResource("prop_1"), SubResource("ren_house_awake"), SubResource("prop_2"), SubResource("prop_3"), SubResource("prop_4"), SubResource("prop_5"), SubResource("prop_6"), SubResource("prop_7"), SubResource("prop_8"), SubResource("prop_9"), SubResource("prop_10"), SubResource("prop_11"), SubResource("prop_12"), SubResource("prop_13"), SubResource("prop_14"), SubResource("prop_15"), SubResource("prop_16"), SubResource("prop_17"), SubResource("prop_18"), SubResource("prop_19"), SubResource("west_roots_0"), SubResource("west_roots_1"), SubResource("west_roots_2"), SubResource("west_roots_3"), SubResource("deco_0"), SubResource("deco_1"), SubResource("deco_2"), SubResource("deco_3"), SubResource("deco_4"), SubResource("deco_5"), SubResource("deco_6"), SubResource("deco_7"), SubResource("deco_8"), SubResource("deco_9"), SubResource("deco_10"), SubResource("deco_11"), SubResource("deco_12"), SubResource("deco_13"), SubResource("deco_14"), SubResource("deco_15"), SubResource("deco_16"), SubResource("deco_17"), SubResource("deco_18"), SubResource("deco_19"), SubResource("deco_20"), SubResource("deco_21"), SubResource("deco_22"), SubResource("deco_23"), SubResource("deco_24"), SubResource("deco_25"), SubResource("deco_26"), SubResource("gen_door_shut"), SubResource("deco_27"), SubResource("deco_28"), SubResource("deco_29"), SubResource("deco_30"), SubResource("deco_31"), SubResource("deco_32"), SubResource("deco_33"), SubResource("deco_34"), SubResource("deco_35"), SubResource("deco_36"), SubResource("deco_37"), SubResource("deco_38"), SubResource("temple_flag_left"), SubResource("temple_flag_right"), SubResource("market_flag"), SubResource("gen_roots_0"), SubResource("gen_roots_1"), SubResource("gen_white_row_0"), SubResource("gen_white_row_1"), SubResource("gen_white_row_2"), SubResource("lane_lamp_0"), SubResource("lane_lamp_1"), SubResource("roots_trail_quest_0"), SubResource("roots_trail_quest_1"), SubResource("roots_trail_quest_2"), SubResource("roots_trail_quest_3"), SubResource("roots_trail_sayo_quest_0"), SubResource("roots_trail_sayo_quest_1"), SubResource("roots_trail_sayo_quest_2"), SubResource("roots_trail_sayo_quest_3"), SubResource("roots_trail_gen_quest_0"), SubResource("roots_trail_gen_quest_1"), SubResource("roots_trail_gen_quest_2")]
 animals = Array[ExtResource("animal_script")]([SubResource("hen_white"), SubResource("hen_brown"), SubResource("market_cat"), SubResource("woodcutter_dog")])

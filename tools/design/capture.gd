@@ -4,7 +4,8 @@ extends Node
 ## (readability by value). A tool, not exported; tools/design/capture.py runs it per resolution.
 ## godot --rendering-driver opengl3 --resolution WxH res://tools/design/capture.tscn -- <outdir> <tag> [shots]
 ## shots (comma-separated, default all): village, village_map, temple, talk, village_woken (the map
-## once every sleeper is woken), homes (each resident's room, at an hour they are in).
+## once every sleeper is woken), homes (each resident's room, at an hour they are in); on demand,
+## talk_<resident id> (that resident's greeting, e.g. talk_gen) and woken_talk_<id> (once awake).
 
 const SHOTS := ["village", "village_map", "temple", "talk", "village_woken", "homes"]
 const HUB := "res://src/village/village_hub.tscn"
@@ -28,7 +29,7 @@ func _ready() -> void:
 			await _homes(out, tag)
 			continue
 		Profile.reset()
-		if shot == "village_woken":
+		if shot == "village_woken" or shot.begins_with("woken_talk_"):
 			_wake_all()
 		var hub := (load(HUB) as PackedScene).instantiate()
 		add_child(hub)
@@ -46,6 +47,10 @@ func _ready() -> void:
 				await _frames(30)
 			"talk":
 				hub._talk(hub.def.residents[0])
+			_ when shot.contains("talk_"):
+				for resident in hub.def.residents:
+					if shot.ends_with("talk_" + String(resident.id)):
+						hub._talk(resident)
 		await _frames(20)
 		_save(get_viewport().get_texture().get_image(), "%s/%s_%s" % [out, shot, tag])
 		hub.queue_free()

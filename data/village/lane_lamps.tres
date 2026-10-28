@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="VillageServiceDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_service_def.gd" id="script"]
+[ext_resource type="Resource" path="res://data/village/gen_seeds.tres" id="quest"]
+[resource]
+script = ExtResource("script")
+id = &"lane_lamps"
+display_name = "Lanterns of the Lane"
+description = "Light the southern lane's two lanterns permanently, so Gen finds his door after dark."
+cost = 10
+requires_quest = ExtResource("quest")
