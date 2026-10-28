@@ -167,6 +167,8 @@ Starts with the %s,Starts with the %s,Commence avec : %s
 %+d Damage,%+d Damage,%+d Dégâts
 %+d Armor,%+d Armor,%+d Armure
 Critical hits deal x%s (instead of x%s),Critical hits deal x%s (instead of x%s),Critiques à x%s (au lieu de x%s)
+%+d%% healing,%+d%% healing,%+d %% de soins
+%+d%% souls,%+d%% souls,%+d %% d'âmes
 %+d%% gold,%+d%% gold,%+d %% d'or
 %+d%% chance of better gear,%+d%% chance of better gear,%+d %% de chances d'objets meilleurs
 Merchant prices %+d%%,Merchant prices %+d%%,Prix du marchand %+d %%
@@ -407,6 +409,8 @@ Slain,Slain,Abattus
 "%d monsters, %d boss","%d monsters, %d boss","%d monstres, %d boss"
 "%d monsters, %d bosses","%d monsters, %d bosses","%d monstres, %d boss"
 Earned,Earned,Gagné
+Oath,Oath,Serment
+Unsworn,Unsworn,Sans serment
 "{month} {day}, {time}","{month} {day}, {time}","{day} {month}, {time}"
 floor %d (endless),floor %d (endless),étage %d (sans fin)
 floor %d of %d,floor %d of %d,étage %d sur %d
@@ -944,8 +948,8 @@ Choose one to begin the descent. Harder ones pay more souls.,Choose one to begin
 Nightmare ascension,Nightmare ascension,Ascension du Cauchemar
 Armory level %d (max): %d weapons.,Armory level %d (max): %d weapons.,Armurerie niveau %d (max) : %d armes.
 Armory level %d: %d weapons. More in the Tree of Souls.,Armory level %d: %d weapons. More in the Tree of Souls.,Armurerie niveau %d : %d armes. D'autres dans l'Arbre des Âmes.
-Unsworn,Unsworn,Sans serment
 "The usual start: the Katana, no rule changed.","The usual start: the Katana, no rule changed.","Le départ habituel : le Katana, aucune règle changée."
+Opens with a feat: %s,Opens with a feat: %s,S'ouvre avec un exploit : %s
 "Opens at the end of the %s branch of the Tree of Souls, at the shrine.","Opens at the end of the %s branch of the Tree of Souls, at the shrine.","S'ouvre au bout de la branche %s de l'Arbre des Âmes, au Sanctuaire."
 Sworn,Sworn,Juré
 "Your starting weapon (Armory): your oath brings its own, the %s. Without the oath, pick one below.","Your starting weapon (Armory): your oath brings its own, the %s. Without the oath, pick one below.","Ton arme de départ (Armurerie) : ton serment apporte la sienne, %s. Sans serment, choisis-en une ci-dessous."
@@ -1710,6 +1714,24 @@ Oath of the Vulture,Oath of the Vulture,Serment du Vautour
 Oath of the Heretic,Oath of the Heretic,Serment Hérétique
 "Start with the Book: skills deal 50% more damage, but your attacks are 20% slower.","Start with the Book: skills deal 50% more damage, but your attacks are 20% slower.","Commence avec le Grimoire : les compétences infligent 50 % de Dégâts en plus, mais tes attaques sont 20 % plus lentes."
 """I take up the words the shrine kept silent, and bear their weight.""","""I take up the words the shrine kept silent, and bear their weight.""","« Je reprends les mots que le sanctuaire a tus, et j'en porte le poids. »"
+Oath of the Flayed,Oath of the Flayed,Serment de l'Écorché
+"Start with the Battle Axe and the Bleeding Stride: your roll cuts every foe it passes through, but each roll costs 2% of your max Health. 25% more max Health.","Start with the Battle Axe and the Bleeding Stride: your roll cuts every foe it passes through, but each roll costs 2% of your max Health. 25% more max Health.","Commence avec la Hache de Guerre et la Foulée Sanglante : ta roulade tranche chaque ennemi traversé, mais chaque roulade coûte 2 % de ta Vie max. 25 % de Vie max en plus."
+"""My blood opens the way, and I walk it red.""","""My blood opens the way, and I walk it red.""","« Mon sang ouvre la voie, et je la foule rouge. »"
+Your roll cuts the foes it passes through,Your roll cuts the foes it passes through,Ta roulade tranche les ennemis traversés
+Each roll costs 2% of max Health,Each roll costs 2% of max Health,Chaque roulade coûte 2 % de Vie max
+Oath of the Fletcher,Oath of the Fletcher,Serment de l'Archer
+"Start with the Bow; your roll looses three shots at the nearest foe, but you have 20% less max Health.","Start with the Bow; your roll looses three shots at the nearest foe, but you have 20% less max Health.","Commence avec l'Arc ; ta roulade décoche trois traits sur l'ennemi le plus proche, mais tu as 20 % de Vie max en moins."
+"""I give ground, and every step I give is paid in arrows.""","""I give ground, and every step I give is paid in arrows.""","« Je cède du terrain, et chaque pas cédé se paie en flèches. »"
+Your roll looses three shots,Your roll looses three shots,Ta roulade décoche trois traits
+Oath of the Penitent,Oath of the Penitent,Serment du Pénitent
+"Start with the Templar Sword and Vampirism: every kill heals you. 40% more souls at the end of the run, but every heal is 30% weaker.","Start with the Templar Sword and Vampirism: every kill heals you. 40% more souls at the end of the run, but every heal is 30% weaker.","Commence avec l'Épée de Templier et le Vampirisme : chaque ennemi abattu te soigne. 40 % d'âmes en plus à la fin de la partie, mais chaque soin est 30 % plus faible."
+"""No draught will mend me. Only the fallen.""","""No draught will mend me. Only the fallen.""",« Nul breuvage ne me guérira. Seuls les morts. »
+Every kill heals you,Every kill heals you,Chaque ennemi abattu te soigne
+Oath of the Tempest,Oath of the Tempest,Serment de la Tempête
+"Start with the Spark Wand and the Restless Storm: while you move near foes, lightning strikes them; stand still and it strikes you. You move 15% faster.","Start with the Spark Wand and the Restless Storm: while you move near foes, lightning strikes them; stand still and it strikes you. You move 15% faster.","Commence avec la Baguette d'Étincelles et la Tempête sans Repos : quand tu bouges près des ennemis, la foudre les frappe ; reste immobile et c'est toi qu'elle frappe. Tu te déplaces 15 % plus vite."
+"""I do not stand still. Let the sky strike whoever does.""","""I do not stand still. Let the sky strike whoever does.""",« Je ne reste pas immobile. Que le ciel frappe qui le fait. »
+"Moving, lightning strikes the foes near you","Moving, lightning strikes the foes near you","En mouvement, la foudre frappe les ennemis"
+"Standing still, it strikes you","Standing still, it strikes you","Immobile, elle te frappe"
 Bug,Bug,Bug
 "What happened, what were you doing, what did you expect?","What happened, what were you doing, what did you expect?","Que s'est-il passé, que faisais-tu, qu'attendais-tu ?"
 Idea,Idea,Idée
@@ -1813,8 +1835,10 @@ Critical hits release a shockwave that hurts the enemies around the target.,Crit
 Vampirism,Vampirism,Vampirisme
 Slaying an enemy heals 3 Health per level (summoned monsters don't count).,Slaying an enemy heals 3 Health per level (summoned monsters don't count).,Abattre un ennemi rend 3 de Vie par niveau (les monstres invoqués ne comptent pas).
 Vitality,Vitality,Vitalité
+Fletcher's Draw,Fletcher's Draw,Tir de l'Archer
+Your roll looses three shots at the nearest foe.,Your roll looses three shots at the nearest foe.,Ta roulade décoche trois traits sur l'ennemi le plus proche.
 Bleeding Stride,Bleeding Stride,Foulée Sanglante
-"Your roll cuts every enemy you pass through for 150% of your Damage, but each roll costs 4% of your max Health.","Your roll cuts every enemy you pass through for 150% of your Damage, but each roll costs 4% of your max Health.","Ta roulade tranche chaque ennemi traversé pour 150 % de tes Dégâts, mais chaque roulade coûte 4 % de ta Vie max."
+"Your roll cuts every enemy you pass through for 150% of your Damage, but each roll costs 2% of your max Health.","Your roll cuts every enemy you pass through for 150% of your Damage, but each roll costs 2% of your max Health.","Ta roulade tranche chaque ennemi traversé pour 150 % de tes Dégâts, mais chaque roulade coûte 2 % de ta Vie max."
 Executioner,Executioner,Bourreau
 +75% damage per level against enemies below 35% Health.,+75% damage per level against enemies below 35% Health.,+75 % de Dégâts par niveau contre les ennemis sous 35 % de Vie.
 Funeral Pyre,Funeral Pyre,Bûcher Funèbre

@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 439,
+  "next_id": 443,
   "tags": [
     "pc",
     "test",
@@ -588,7 +588,7 @@
     {
       "id": "task_36",
       "title": "Reliques qui brisent les règles",
-      "description": "Idée proposée : reliques rares qui changent une règle du jeu.\nÉtude SPD du 25/10 : babioles changeant fréquences de butin/terrain, avec compromis. Pistes propres au Puits : meilleure qualité contre moins de soins, davantage de secrets contre davantage d’élites (chiffres à définir). Réemploi OathDef/RunBoons/FloorRules ; nouveaux points nécessaires pour chances de salles/élites/catégories. Serment au départ plus simple que relique acquise pendant la partie. État sauvegardé, effets de génération sur futurs étages, règles du quotidien. Voir docs/shattered-pixel-dungeon-study.md.\nRoadmap RPG du 26/10/2026 : R6.3 (task_325), docs/rpg-roadmap.md. Reliques de descente à adapter au contexte de région et à la persistance. Statut historique conservé ; voir le nouveau cadrage avant reprise.\nS23 (28/10) : fait. Cinq reliques qui brisent une règle, une par famille (docs/design/builds.md « Rule-bending relics ») : Foulée Sanglante (la roulade tranche ce qu'elle traverse, chaque roulade coûte 4 % de Vie max), Litanie Affamée (les compétences ne se rechargent qu'en tuant, +60 % de dégâts), Orage sans Repos (en bougeant la foudre frappe l'ennemi proche ; immobile une seconde, elle te frappe), Bûcher Funèbre (chaque ennemi abattu explose ; l'explosion te brûle si tu y restes), Cœur de l'Hiver (les ennemis proches ralentis de 35 %, toi de 20 %). Une carte sur trois de chaque relique de gardien, jamais ailleurs (montée de niveau, pactes, épreuves, rencontres, relique du jour). Le prix d'une relique ne porte jamais le dernier coup. Mesuré (balance-log 28/10), captures dans le scratchpad fix_variety/relics.\nÀ vérifier sur le S23 : la carte « Relique : brise une règle » tient en français ; l'Orage sans Repos se joue au doigt (attaquer en marchant) sans frustrer ; la Litanie se lit (le cercle de recharge figé) ; le coût de la Foulée se sent sans gêner (pas de secousse à chaque roulade).",
+      "description": "Idée proposée : reliques rares qui changent une règle du jeu.\nÉtude SPD du 25/10 : babioles changeant fréquences de butin/terrain, avec compromis. Pistes propres au Puits : meilleure qualité contre moins de soins, davantage de secrets contre davantage d’élites (chiffres à définir). Réemploi OathDef/RunBoons/FloorRules ; nouveaux points nécessaires pour chances de salles/élites/catégories. Serment au départ plus simple que relique acquise pendant la partie. État sauvegardé, effets de génération sur futurs étages, règles du quotidien. Voir docs/shattered-pixel-dungeon-study.md.\nRoadmap RPG du 26/10/2026 : R6.3 (task_325), docs/rpg-roadmap.md. Reliques de descente à adapter au contexte de région et à la persistance. Statut historique conservé ; voir le nouveau cadrage avant reprise.\nS23 (28/10) : fait. Cinq reliques qui brisent une règle, une par famille (docs/design/builds.md « Rule-bending relics ») : Foulée Sanglante (la roulade tranche ce qu'elle traverse, chaque roulade coûte 4 % de Vie max), Litanie Affamée (les compétences ne se rechargent qu'en tuant, +60 % de dégâts), Orage sans Repos (en bougeant la foudre frappe l'ennemi proche ; immobile une seconde, elle te frappe), Bûcher Funèbre (chaque ennemi abattu explose ; l'explosion te brûle si tu y restes), Cœur de l'Hiver (les ennemis proches ralentis de 35 %, toi de 20 %). Une carte sur trois de chaque relique de gardien, jamais ailleurs (montée de niveau, pactes, épreuves, rencontres, relique du jour). Le prix d'une relique ne porte jamais le dernier coup. Mesuré (balance-log 28/10), captures dans le scratchpad fix_variety/relics.\nÀ vérifier sur le S23 : la carte « Relique : brise une règle » tient en français ; l'Orage sans Repos se joue au doigt (attaquer en marchant) sans frustrer ; la Litanie se lit (le cercle de recharge figé) ; le coût de la Foulée se sent sans gêner (pas de secousse à chaque roulade).\nMise à jour (S23, 28/10, kits de départ) : le prix de la Foulée Sanglante passe de 4 % à 2 % de Vie max par roulade. Mesurée pour la première fois avec des robots qui roulent (arène des boss, Serment de l'Écorché) : à 4 %, le prix coûtait plus de la moitié de la Vie du héros par combat (balance-log « Four starting kits »).",
       "status": "review",
       "priority": "low",
       "epic_id": "epic_7",
@@ -597,7 +597,7 @@
         "idée"
       ],
       "created_at": 1792685000,
-      "updated_at": 1793187229
+      "updated_at": 1793191234
     },
     {
       "id": "task_37",
@@ -1379,8 +1379,8 @@
     {
       "id": "task_87",
       "title": "Classes de héros",
-      "description": "Plusieurs héros avec leur kit de départ, leurs compétences et leur histoire (lore : disciples du sanctuaire ?). Un des grands moteurs de rejouabilité du genre.\nRoadmap RPG du 26/10/2026 : R4.2 (task_314), docs/rpg-roadmap.md. Les classes restent une décision de conception ; le RPG ne les impose pas. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
-      "status": "backlog",
+      "description": "Plusieurs héros avec leur kit de départ, leurs compétences et leur histoire (lore : disciples du sanctuaire ?). Un des grands moteurs de rejouabilité du genre.\nRoadmap RPG du 26/10/2026 : R4.2 (task_314), docs/rpg-roadmap.md. Les classes restent une décision de conception ; le RPG ne les impose pas. Statut historique conservé ; voir le nouveau cadrage avant reprise.\nS23 (28/10) : fait sous forme de kits de départ « X, mais Y » (pas de nouveaux héros ni de nouvel art ; décision 0013, docs/design/progression.md « Oaths and kits »). Quatre serments ouverts par un exploit, choisis Au Bord du Puits après ceux de l'Arbre : Serment de l'Archer (Tombeur de Gardien ; Arc ; ta roulade décoche trois traits ; -20 % de Vie max), Serment de la Tempête (Vers les Ténèbres ; Baguette d'Étincelles ; la Tempête sans Repos dès le départ, +15 % de Vitesse ; immobile, la foudre te frappe), Serment de l'Écorché (Chasseur d'Élus ; Hache de Guerre ; la Foulée Sanglante, +25 % de Vie max ; chaque roulade coûte 2 % de Vie max), Serment du Pénitent (Chercheur de Présages ; Épée de Templier ; Vampirisme, +40 % d'âmes ; soins -30 %). La toute première partie reste sans serment (décision 0010). Le serment est gardé dans la partie et l'historique (codex, onglet Parties : « Serment »). Équilibrage : arène des boss de l'acte I contre le départ par défaut et contre la même arme sans serment (balance-log « Four starting kits ») ; prix de la Foulée Sanglante 4 % -> 2 % par roulade. Les cartes de serment passent à 290 de large (les noms français tenaient sur deux lignes et débordaient) ; un test vérifie que chaque carte tient, en anglais et en français. Captures : scratchpad fix_variety/kits.\nÀ vérifier sur le S23 : la rangée des serments en français (cartes plus larges, défilement) ; la salve de l'Archer se lit pendant la roulade ; la foudre de la Tempête quand on s'arrête n'est pas injuste ; le prix de l'Écorché à 2 % se sent sans punir chaque esquive.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_80",
       "due_date": null,
@@ -1389,7 +1389,7 @@
         "contenu"
       ],
       "created_at": 1792720000,
-      "updated_at": 1792973386
+      "updated_at": 1793191224
     },
     {
       "id": "task_88",
@@ -6620,6 +6620,59 @@
       ],
       "created_at": 1793189177,
       "updated_at": 1793189177
+    },
+    {
+      "id": "task_439",
+      "title": "Kits : un record d'ascension par kit",
+      "description": "Suite de task_87 (S23, 28/10). Les kits de départ sont gardés dans l'historique, mais rien ne compte la meilleure ascension ou la victoire par kit (comme les « aspects » de Hades). Idée : une ligne par kit dans le codex (Exploits ou Parties) et un petit sceau sur sa carte Au Bord du Puits une fois vaincu avec. Non fait : à décider par le propriétaire.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée"
+      ],
+      "created_at": 1793191224,
+      "updated_at": 1793191224
+    },
+    {
+      "id": "task_440",
+      "title": "Plus de kits de départ (Givre, Arcanes ; « sans armure, plus d'âmes »)",
+      "description": "Suite de task_87 (S23, 28/10). Quatre kits (Tempête, Sang, Sang/Arc, Pénitent) ; aucun ne vise le Givre ni les Arcanes. Idées non faites : un kit Givre (Bâton de Givre, Halo de Givre dès le départ, mais plus lent), un kit Arcanes (Grimoire, Glyphe Fendu), et le kit « sans armure, plus d'âmes » (aucune armure de toute la partie, +60 % d'âmes) écarté pour l'instant (il touche aux coffres et à la forge). Chaque nouveau kit : un exploit visible qui l'ouvre, un build kit_*_a1 et une mesure dans balance-log.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "contenu"
+      ],
+      "created_at": 1793191224,
+      "updated_at": 1793191224
+    },
+    {
+      "id": "task_441",
+      "title": "Serment de l'Archer : à surveiller (le plus fort des kits)",
+      "description": "S23 (28/10), mesure des kits (balance-log « Four starting kits ») : l'Archer gagne 7 combats de boss sur 8 à l'acte I (son Arc sans serment : 5 sur 8 ; le Katana par défaut : 3 sur 8) et prend moins de coups malgré -20 % de Vie max. Dans le bruit d'un seul tirage, mais c'est le premier kit ouvert (un premier gardien vaincu). À remesurer avec plusieurs graines et le gauntlet ; si l'écart tient, baisser la salve (50 % -> 40 % des Dégâts par trait) ou le prix (-25 % de Vie max).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [],
+      "created_at": 1793191224,
+      "updated_at": 1793191224
+    },
+    {
+      "id": "task_442",
+      "title": "Équilibrage : les kits dans le gauntlet et en meute",
+      "description": "S23 (28/10) : les kits n'ont été mesurés que dans l'arène des boss de l'acte I (balance-log « Four starting kits »). Les atouts de l'Écorché (la roulade qui tranche) et de la Tempête (la foudre en mouvement) brillent surtout en meute. À faire : le gauntlet de l'acte I avec les builds kit_*_a1 (`--mode=gauntlet --build=...`), et les salles (`pack`). Lié à task_435 (le labo ne mesure ni les roulades ni les tirs).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [],
+      "created_at": 1793191224,
+      "updated_at": 1793191224
     }
   ]
 }

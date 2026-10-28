@@ -11,7 +11,8 @@ extends Resource
 ## Why the build looks like this: where its level, gear and perks come from.
 @export_multiline var description: String = ""
 ## "baseline" (a fresh hero), "expected" (what an average player has at that act's boss),
-## "degenerate" (one thing stacked as hard as the game allows). Targets differ by tag.
+## "degenerate" (one thing stacked as hard as the game allows), "kit" (the expected build sworn
+## to a starting kit, measured against it). Targets differ by tag.
 @export var tags: PackedStringArray = []
 ## The act whose bosses (and monsters) this build is measured against (1-4).
 @export_range(1, 4) var act: int = 1
@@ -49,6 +50,10 @@ extends Resource
 @export var upgrades: Dictionary = {}
 ## A spell taught by a tome (the 4th skill button), or none.
 @export var learned_skill: SkillDef
+## An oath or starting kit sworn (OathDef): its stats, its starting perks and its healing, as
+## ShrineUpgrades.apply_to() and RunBoons give them (the weapon is the build's own: set it to the
+## oath's). The kits are measured against the default start this way (balance-log 2026-10-28).
+@export var oath: OathDef
 
 
 ## Not saved: set by the lab when it adds one thing to a build (BalanceBuild.variant()).

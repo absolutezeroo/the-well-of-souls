@@ -42,6 +42,9 @@ extends Resource
 @export var ascensions: Array[AscensionDef] = []
 ## Goals across runs (they pay souls).
 @export var achievements: Array[AchievementDef] = []
+## The starting kits: oaths opened by a feat (OathDef.unlocked_by) rather than the Tree of
+## Souls, sworn at the Well's edge like the tree's (docs/design/progression.md "Oaths and kits").
+@export var kits: Array[OathDef] = []
 ## Daily and weekly quests (QuestBoard draws a few of each from the date).
 @export var quests: Array[QuestDef] = []
 ## What the hero wears for the look alone (the Wardrobe: auras...), in its order.
@@ -215,3 +218,11 @@ func get_cosmetic(id: StringName) -> CosmeticDef:
 			return cosmetic
 	return null
 
+
+## The kits whose feat is done (OathDef.is_unlocked()), in their order.
+func open_kits() -> Array[OathDef]:
+	var result: Array[OathDef] = []
+	for kit in kits:
+		if kit and kit.is_unlocked():
+			result.append(kit)
+	return result

@@ -190,7 +190,8 @@ func reset_tree(tree: SoulTreeDef) -> bool:
 			levels.erase(String(node.upgrade.id))
 	souls += refund - tree.reset_cost
 	runs_since_reset = 0
-	if not tree.open_oaths().any(func(o: OathDef) -> bool: return o.id == oath):
+	# (a kit, opened by a feat, stays sworn: only the tree's own oaths close with it)
+	if tree.oaths().any(func(o: OathDef) -> bool: return o.id == oath) and not tree.open_oaths().any(func(o: OathDef) -> bool: return o.id == oath):
 		oath = &""
 	save_profile()
 	changed.emit()

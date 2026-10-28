@@ -1,7 +1,8 @@
 class_name OathPanel
 extends Control
 ## "At the Well's Edge", between the difficulty and the run, once the Tree of Souls opened an oath
-## or the Armory: swear an oath (OathDef, "X, but Y") or none, and pick the weapon to start with.
+## or the Armory, or a feat opened a starting kit: swear an oath (OathDef, "X, but Y": the tree's,
+## then the kits, ContentDB.kits) or none, and pick the weapon to start with.
 ## The choice is remembered for the next runs (Profile.oath, Profile.starting_weapon). The Armory
 ## offers only the weapons its level opened (UpgradeDef.armory_weapons), and says so.
 ## Built in code; %OathCards, %WeaponRow, %ArmoryText and %StartRunButton are reachable from the
@@ -9,7 +10,10 @@ extends Control
 
 signal started
 
-const CARD_SIZE := Vector2(250, 296)
+## A card: wide enough for an oath's name on one line in French ("Serment de la Tempête"), its
+## words wrapping under it; the row scrolls sideways. The height is fixed: on a 720-line screen the
+## window is full (the Armory's strip below), so a card's words must fit it (title_tests).
+const CARD_SIZE := Vector2(290, 296)
 ## The Armory's line, right of the weapon slots (two lines at most beside them).
 const ARMORY_TEXT_WIDTH := 440.0
 
@@ -34,6 +38,8 @@ func _ready() -> void:
 
 ## Something to choose: an open oath, or the Armory bought.
 static func has_choices(content: ContentDB) -> bool:
+	if not content.open_kits().is_empty():
+		return true
 	return content.soul_tree != null and (not content.soul_tree.open_oaths().is_empty() or has_armory(content))
 
 
@@ -98,9 +104,13 @@ func _fill_cards() -> void:
 	_sworn = Game.sworn_oath(_content)
 	UiParts.clear(_cards)
 	_cards.add_child(_card(null, true))
-	for oath in _content.soul_tree.oaths():
-		var is_open := _content.soul_tree.open_oaths().has(oath)
-		_cards.add_child(_card(oath, is_open))
+	if _content.soul_tree:
+		for oath in _content.soul_tree.oaths():
+			var is_open := _content.soul_tree.open_oaths().has(oath)
+			_cards.add_child(_card(oath, is_open))
+	for kit in _content.kits:
+		if kit:
+			_cards.add_child(_card(kit, kit.is_unlocked()))
 
 
 func _card(oath: OathDef, is_open: bool) -> Control:
@@ -137,7 +147,7 @@ func _card(oath: OathDef, is_open: bool) -> Control:
 	icon.modulate = Color.WHITE if is_open else Color(0.4, 0.38, 0.36)
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(icon)
-	var label_name := UiSkin.label(tr(oath.display_name) if oath else tr("Unsworn"), Fonts.BODY, (oath.color.lerp(Color.WHITE, 0.3) if oath else UiSkin.TEXT) if is_open else UiSkin.DIM)
+	var label_name := UiSkin.label(tr(oath.display_name) if oath else tr("Unsworn"), Fonts.BODY, (oath.color.lerp(Color.WHITE, 0.3) if oath else UiSkin.TEXT) if is_open else UiSkin.DIM, true)  # (a long name wraps: "Serment de la Tempête")
 	label_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(label_name)
 	# What it changes: gains in green, costs in red (faded while it is locked).
@@ -151,7 +161,12 @@ func _card(oath: OathDef, is_open: bool) -> Control:
 		var words := UiSkin.label(line[0], Fonts.SMALL, color if is_open else Color(color, 0.55), true)  # fine print: five cards abreast
 		words.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		column.add_child(words)
-	if not is_open:
+	if not is_open and oath.is_kit():
+		# A kit: the feat that opens it (named even when secret: kits ask for plain feats).
+		var feat := UiSkin.label(tr("Opens with a feat: %s") % tr(oath.unlocked_by.description), Fonts.SMALL, UiSkin.DIM, true)
+		feat.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		column.add_child(feat)
+	elif not is_open:
 		var branch := ""
 		for node in _content.soul_tree.nodes:
 			if node.oath == oath and node.branch < _content.soul_tree.branches.size():

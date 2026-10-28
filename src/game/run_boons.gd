@@ -36,4 +36,5 @@ static func build(content: ContentDB, sworn: OathDef = null) -> RunBoons:
 		boons.loot_quality_scale *= sworn.loot_quality_scale
 		boons.shop_price_scale *= sworn.shop_price_scale
 		boons.crit_damage_bonus += sworn.crit_damage_bonus
+		boons.healing_scale *= sworn.healing_scale
 	return boons

@@ -214,6 +214,11 @@ static func build_roots(build: BalanceBuildDef, content: ContentDB) -> PackedStr
 		roots.append(build.resource_path)
 	if build.weapon:
 		roots.append(build.weapon.resource_path)
+	if build.oath:
+		roots.append(build.oath.resource_path)
+		for perk in build.oath.starting_perks:
+			if perk:
+				roots.append(perk.resource_path)
 	for armor in build.armors:
 		if armor:
 			roots.append(armor.resource_path)
@@ -261,7 +266,8 @@ static func build_id(build: BalanceBuildDef) -> String:
 		",".join(build.extra_families.map(func(f: SynergyDef) -> String: return String(f.id))),
 		",".join(build.suppress_families.map(func(f: SynergyDef) -> String: return String(f.id))),
 		",".join(build.buffs.map(func(b: Variant) -> String: return _buff_text(b))),
-		str(build.ignore_sockets), "%.3f" % build.max_hp_cost, build.learned_skill.resource_path if build.learned_skill else "-"])
+		str(build.ignore_sockets), "%.3f" % build.max_hp_cost, build.learned_skill.resource_path if build.learned_skill else "-",
+		build.oath.resource_path if build.oath else "-"])
 	return ";".join(parts)
 
 

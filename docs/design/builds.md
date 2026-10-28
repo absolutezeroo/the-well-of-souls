@@ -322,7 +322,7 @@ Five relics do (`PerkDef.twist`), one per family, each readable in one line:
 
 | Relic | Family | The rule bent | The price |
 |---|---|---|---|
-| **Bleeding Stride** | Blood | the roll cuts every enemy it passes through for 150% of your Damage | each roll costs 4% of max Health |
+| **Bleeding Stride** | Blood | the roll cuts every enemy it passes through for 150% of your Damage | each roll costs 2% of max Health (was 4%: the kit arena, balance-log 2026-10-28) |
 | **Starving Litany** | Arcane | skills (not the roll) recharge only by slaying: a quarter of their wait a kill, 3% a blow on a warden; +60% skill damage | no recharge with time |
 | **Restless Storm** | Storm | while foes are near and you move, lightning strikes the nearest every 0.7 s (your Damage) | standing still a second, it strikes you (3% max Health a second) |
 | **Funeral Pyre** | Inferno | every foe you slay explodes (120% of your Damage, radius 72, sets on fire) | the blast burns you too if you stand in it (6% max Health) |

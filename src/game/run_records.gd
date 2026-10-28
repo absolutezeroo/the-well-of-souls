@@ -100,6 +100,7 @@ func record_history() -> void:
 		"won": run.has_won,
 		"souls": run.souls_awarded,
 		"weapon": weapon.display_name if weapon else "Bare hands",
+		"oath": run.oath.display_name if run.oath else "",  # (the kit or oath sworn: its name, an English key)
 		"cause": player.killed_by if player.is_dead else "",
 		"duration": roundi(run.run_time() * 1000.0),  # ms: the win's time, or how long it lasted
 		# What the Vigil-Keeper remembers of it (DeathStreakCondition): who, how.

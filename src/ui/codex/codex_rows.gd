@@ -234,6 +234,8 @@ static func run_row(entry: Dictionary, content: ContentDB) -> Control:
 		stacked_fact(TranslationServer.tr("Earned"), souls(int(entry.get("souls", 0))), SOUL),
 		stacked_fact(TranslationServer.tr("Hero level"), str(int(entry.get("level", 1)))),
 		stacked_fact(TranslationServer.tr("Weapon"), TranslationServer.tr(str(entry.get("weapon", "?")))),
+		# The oath or kit sworn (older entries: none recorded, "-").
+		stacked_fact(TranslationServer.tr("Oath"), TranslationServer.tr(str(entry.oath)) if not str(entry.get("oath", "")).is_empty() else (TranslationServer.tr("Unsworn") if entry.has("oath") else "-")),
 	]
 	for i in cells.size():
 		(cells[i] as Control).custom_minimum_size.x = RUN_COLUMNS[i % RUN_COLUMNS.size()]

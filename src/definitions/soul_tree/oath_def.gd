@@ -1,7 +1,10 @@
 class_name OathDef
 extends Resource
 ## An oath: a way to start a run, sworn before it begins ("X, but Y"). Opened at the end of a
-## branch of the Tree of Souls (SoulNodeDef.oath). Not in the daily run (everyone starts the same).
+## branch of the Tree of Souls (SoulNodeDef.oath), or, a starting kit (ContentDB.kits), by a feat
+## (`unlocked_by`: an achievement): a weapon and a twist that changes how the run is played
+## (docs/design/progression.md "Oaths and kits"). One oath a run. Not in the daily run (everyone
+## starts the same), never on the very first run (decision 0010: it starts unsworn).
 
 @export var id: StringName
 @export var display_name: String
@@ -14,6 +17,16 @@ extends Resource
 @export var color: Color = Color.WHITE
 ## The weapon the run starts with (null: the usual one).
 @export var starting_weapon: WeaponDef
+## A kit's rule, one line for its card, what it gives (the roll that fires, the storm that
+## strikes your foes); `price`, what it asks, if the numbers don't say it. Empty for the tree's
+## oaths (their numbers say it all).
+@export var twist: String = ""
+@export var price: String = ""
+## A starting kit: opened when this feat is done (Profile.is_achieved), not by the Tree of Souls.
+@export var unlocked_by: AchievementDef
+## Perks and relics the hero starts the run with (the kit's twist: a relic that bends a rule, a
+## gift of its own). They count toward their families like any other.
+@export var starting_perks: Array[PerkDef] = []
 
 @export_group("The hero")
 ## Added to the hero's starting stats.
@@ -28,6 +41,21 @@ extends Resource
 @export var gold_scale: float = 1.0
 @export var loot_quality_scale: float = 1.0
 @export var shop_price_scale: float = 1.0
+## Multiplies every heal the hero gets (RunBoons.healing_scale, Actor.healing_scale: potions,
+## springs, spells, perks), as the tree's Blood Pact does.
+@export var healing_scale: float = 1.0
+## Multiplies the souls the run is worth at its end (RunState.souls()).
+@export var souls_scale: float = 1.0
+
+
+## A starting kit (opened by a feat), not one of the Tree of Souls' oaths.
+func is_kit() -> bool:
+	return unlocked_by != null
+
+
+## A kit's feat is done (a tree oath: always true here; its node decides).
+func is_unlocked() -> bool:
+	return unlocked_by == null or Profile.is_achieved(unlocked_by.id)
 
 
 ## What it changes, one line each, in plain words: [text, +1 a gain / -1 a cost / 0 neither].
@@ -36,6 +64,10 @@ func effects() -> Array:
 	var lines := []
 	if starting_weapon:
 		lines.append([tr("Starts with the %s") % tr(starting_weapon.display_name), 0])
+	if not twist.is_empty():
+		lines.append([tr(twist), 1])
+	if not price.is_empty():
+		lines.append([tr(price), -1])
 	_percent(lines, max_hp_scale, tr("%+d%% max Health"), 1)
 	_percent(lines, move_speed_scale, tr("%+d%% move speed"), 1)
 	if bonuses:
@@ -54,6 +86,8 @@ func effects() -> Array:
 	if crit_damage_bonus != 0.0:
 		var multiplier := Combat.RULES.crit_multiplier + crit_damage_bonus
 		lines.append([tr("Critical hits deal x%s (instead of x%s)") % [_number(multiplier), _number(Combat.RULES.crit_multiplier)], signi(roundi(crit_damage_bonus * 100.0))])
+	_percent(lines, healing_scale, tr("%+d%% healing"), 1)
+	_percent(lines, souls_scale, tr("%+d%% souls"), 1)
 	_percent(lines, gold_scale, tr("%+d%% gold"), 1)
 	_percent(lines, loot_quality_scale, tr("%+d%% chance of better gear"), 1)
 	_percent(lines, shop_price_scale, tr("Merchant prices %+d%%"), -1)

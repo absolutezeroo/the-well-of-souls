@@ -10,6 +10,7 @@
 
 [sub_resource type="Resource" id="Resource_roll"]
 script = ExtResource("3_roll")
+health_cost = 0.02
 element = ExtResource("vfx_blood")
 
 [resource]
@@ -18,7 +19,7 @@ role = 2
 twist = true
 id = &"bleeding_stride"
 display_name = "Bleeding Stride"
-description = "Your roll cuts every enemy you pass through for 150% of your Damage, but each roll costs 4% of your max Health."
+description = "Your roll cuts every enemy you pass through for 150% of your Damage, but each roll costs 2% of your max Health."
 icon = ExtResource("1_icon")
 color = Color(0.9098039, 0.27058825, 0.21568628, 1)
 rarity = 1

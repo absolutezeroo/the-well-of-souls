@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="OathDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/soul_tree/oath_def.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/weapons/axe.png" id="2"]
+[ext_resource type="Resource" path="res://data/items/weapons/axe.tres" id="3"]
+[ext_resource type="Resource" path="res://data/achievements/elite_hunter.tres" id="4"]
+[ext_resource type="Script" path="res://src/definitions/perk_def.gd" id="5"]
+[ext_resource type="Resource" path="res://data/perks/relics/bleeding_stride.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+id = &"flayed"
+display_name = "Oath of the Flayed"
+description = "Start with the Battle Axe and the Bleeding Stride: your roll cuts every foe it passes through, but each roll costs 2% of your max Health. 25% more max Health."
+lore = "\"My blood opens the way, and I walk it red.\""
+icon = ExtResource("2")
+color = Color(0.9098039, 0.27058825, 0.21568628, 1)
+starting_weapon = ExtResource("3")
+twist = "Your roll cuts the foes it passes through"
+price = "Each roll costs 2% of max Health"
+unlocked_by = ExtResource("4")
+starting_perks = Array[ExtResource("5")]([ExtResource("6")])
+max_hp_scale = 1.25

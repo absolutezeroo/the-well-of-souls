@@ -7,7 +7,7 @@ extends Passive
 ## docs/design/builds.md "Rule-bending relics"). Only the roll (the hero's innate skills,
 ## PlayerDef.innate_skills), not a weapon skill's dash.
 
-@export_range(0.0, 0.5, 0.01) var health_cost: float = 0.04
+@export_range(0.0, 0.5, 0.01) var health_cost: float = 0.02
 ## Damage of each cut = the owner's power x this.
 @export var damage_multiplier: float = 1.5
 ## How close to the rolling body an enemy's body must come (past both radii).

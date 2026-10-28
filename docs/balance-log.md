@@ -3,6 +3,43 @@
 Dated entries, newest first: what was measured, what changed and why, before/after numbers, open
 questions. How to measure: [balance.md](balance.md).
 
+## 2026-10-28 - Four starting kits (oaths opened by a feat)
+
+What changed: the Oaths of the Fletcher, the Tempest, the Flayed and the Penitent
+(docs/design/progression.md "Oaths and kits"). Each is a weapon, a twist and a price; measured
+against the default start (the act I expected build, unsworn, on the Katana: `expected_a1`) and
+against the same build with the kit's weapon but no oath (what the Armory already gives: the
+gap the kit itself makes). Boss arena, act I (King Slime, Giant Frog), Normal and Martyr, kite
+and player bots, seed 1, 8 fights each: `--mode=arena --build=expected_a1,kit_fletcher_a1,
+kit_tempest_a1,kit_flayed_a1,kit_penitent_a1 --difficulty=normal,hard --bot=kite,player --plain
+--no-weapons --only=act1`; the unsworn comparisons were temporary builds, not kept.
+
+| Start | Wins of 8 | Hero DPS | Taken | The same weapon, unsworn |
+|---|---|---|---|---|
+| Default: Katana, unsworn | 3 | 21.6 | 107 | - |
+| Fletcher (Bow; roll volley; -20% max Health) | 7 | 34.3 | 66 | 5, 33.4, 78 |
+| Tempest (Spark Wand; storm while moving, on you standing still; +15% speed) | 5 | 28.7 | 82 | 6, 28.2, 98 |
+| Flayed (Battle Axe; Bleeding Stride; +25% max Health), roll price 4% | 1 | 31.7 | 147 | 3, 28.3, 118 |
+| Flayed, roll price 2% (kept) | 3 | 28.9 | 133 | 3, 28.3, 118 |
+| Penitent (Templar Sword; Vampirism; -30% healing; +40% souls) | 4 | 22.1 | 121 | 5, 20.7, 121 |
+
+- The weapon is the gap to the Katana start, as with the Armory (the Bow kills an act I boss in
+  ~44 s, the Katana in ~70 s): a kit is "this weapon, but a rule". Kit against its weapon
+  unsworn: within one or two wins of eight and a few % of DPS, the twist and the price about
+  even, the goal.
+- **Bleeding Stride's price 4% -> 2% of max Health a roll** (the relic too: one passive). The
+  marginal lab never rolls (its blind spot); the arena's bots roll every 2.5-4 s: at 4% the price
+  was 48-102 Health a fight (`ticks`), more than half the hero's Health, and the kit won 1 fight
+  of 8 against its axe's 3. At 2%: 3 of 8, DPS +2%, taken +13% (with +25% max Health). The cut
+  is worth more in packs (rolling through a crowd) than against one boss rolled away from.
+- Fletcher is the strongest (7 of 8, less taken despite -20% max Health: the volley on every
+  roll, a bow kept at range): within the noise of its bow unsworn (5 of 8), watched (roadmap).
+  Tempest pays its storm by standing still, which the kite bot rarely does (one timeout, Martyr,
+  Giant Frog: the bot circled out of reach). Penitent trades in-run healing for souls (+40% at
+  the end): even in the fights.
+- Not measured: the gauntlet (a whole act per kit, its rooms), the packs (Flayed's and the
+  Tempest's twists shine there), and a human's rolls; play-tests on the S23.
+
 ## 2026-10-28 - Five weapon evolutions (made at a forge)
 
 What changed: Stormhowl, Riven Bow, Rimeheart Staff, Ashen Codex and Heartsplitter
@@ -16,6 +53,25 @@ Katana, Riven Bow 62 / 120 like the Bow...), the gifts being procs the model lea
 worth is in the engine's weapon arena (below, when measured) and close to the perk each gift
 copies (Riven Glyph, Burst Veins, Cinder Wake's embers) without its perk slot, against the runes
 melted into it.
+
+Weapon arena (measured with the starting kits' pass below: `--mode=arena --only=act2,act3,normal,
+katana,stormhowl,bow,riven_bow,stick,rimeheart_staff,book,ashen_codex,hammer,heartsplitter
+--plain --seed=1`; each weapon Common on the act's expected build, kite bot, Normal, against the
+ten bosses; no runes, the family not awake, the bot never holds a charged attack):
+
+| Weapon -> its evolution | Wins of 10 | Avg TTK (projected) |
+|---|---|---|
+| Katana -> Stormhowl | 7 -> 6 | 116 s -> 121 s |
+| Bow -> Riven Bow | 9 -> 9 | 68.9 s -> 66.5 s |
+| Frost Staff -> Rimeheart Staff | 9 -> 10 | 77.1 s -> 72.2 s |
+| Ember Tome -> Ashen Codex | 9 -> 9 | 92.7 s -> 89.7 s |
+| War Hammer -> Heartsplitter | 9 -> 8 | 83.0 s -> 81.0 s |
+
+The gifts are worth 3-6% of a boss fight's length (more in packs, which this arena does not
+have): an upgrade, not a new tier, as meant (the runes they cost were worth about as much).
+Stormhowl measures as its Katana within the noise (one fight lost at 107 s against 109 s won):
+the bots never hold the attack, so its Thunderfall Cut (2.0 + 0.8 on one foe, against the Moonless
+Cut's 2.5) is not measured; its storm blows are colour, not damage. Kept.
 
 Also: Leaping Bolt no longer adds +3% crit chance (its card, the longest of the commons with the
 Storm family's box, pushed the perk choice 3 units off a 720-line screen in French: `title.pc`);

@@ -18,6 +18,7 @@ func run_unit() -> void:
 	_test_behaviour_share()
 	_test_twists()
 	_test_evolutions()
+	_test_kits()
 
 
 ## A third of the perks that are not plain staples change how you play (a new action in the
@@ -150,6 +151,62 @@ func _test_evolutions() -> void:
 	check(evolved_copy.runes.is_empty() and evolved_copy.free_sockets() == 2, "...the runes melt into it: its sockets are free")
 	var saved := LootRoller.from_data(LootRoller.to_data(evolved_copy)) as WeaponDef
 	check(saved != null and saved.base_item == storm_form and saved.evolved_from == katana, "...and a saved run keeps it")
+
+
+## The starting kits: oaths opened by a plain feat, each a weapon, a twist and a price; never on
+## the first run; kept through a tree reset; their souls counted.
+func _test_kits() -> void:
+	check(CONTENT.kits.size() >= 3 and CONTENT.kits.size() <= 4, "3-4 starting kits (%d)" % CONTENT.kits.size())
+	var ids := {}
+	for oath in CONTENT.soul_tree.oaths():
+		ids[oath.id] = true
+	var feats := {}
+	for kit in CONTENT.kits:
+		check(not ids.has(kit.id), "%s: an id of its own" % kit.id)
+		ids[kit.id] = true
+		check(kit.is_kit() and CONTENT.achievements.has(kit.unlocked_by) and not kit.unlocked_by.secret, "%s: opened by a feat one can see (%s)" % [kit.id, kit.unlocked_by.id if kit.unlocked_by else &"?"])
+		check(not feats.has(kit.unlocked_by), "%s: its own feat" % kit.id)
+		feats[kit.unlocked_by] = true
+		check(kit.starting_weapon != null and not kit.twist.is_empty() and not kit.starting_perks.is_empty(), "%s: a weapon, a twist, a perk to start with" % kit.id)
+		var gains := kit.effects().filter(func(line: Array) -> bool: return line[1] > 0)
+		var costs := kit.effects().filter(func(line: Array) -> bool: return line[1] < 0)
+		check(not gains.is_empty() and not costs.is_empty(), "%s: \"X, but Y\": its card shows a gain and a cost (%d, %d)" % [kit.id, gains.size(), costs.size()])
+		check(kit.lore.begins_with("\"") and kit.lore.ends_with("\"") and kit.lore.length() <= 120, "%s: its vow is one quoted line" % kit.id)
+		check(not CONTENT.perks.has(kit.starting_perks[0]) or kit.starting_perks[0].twist or kit.starting_perks[0].role != BuildRole.Role.UNSET, "%s: its perk has a purpose" % kit.id)
+	var draw := _perk_at("res://data/perks/kits/fletchers_draw.tres")
+	check(draw != null and not CONTENT.perks.has(draw) and not draw.passives.is_empty(), "a kit's own gift (Fletcher's Draw) does something and is never offered")
+	# Opened by its feat.
+	var saved := Profile.achievements.duplicate()
+	Profile.achievements = {}
+	check(CONTENT.open_kits().is_empty(), "no kit before its feat")
+	var fletcher := CONTENT.kits[0]
+	Profile.achievements[String(fletcher.unlocked_by.id)] = 1
+	check(CONTENT.open_kits() == [fletcher], "its feat done, the kit opens")
+	Profile.oath = fletcher.id
+	check(Game.sworn_oath(CONTENT) == fletcher, "...and can be sworn")
+	var spent := Profile.levels.duplicate()
+	Profile.levels = {}
+	Profile.runs_since_reset = CONTENT.soul_tree.reset_runs
+	Profile.souls = CONTENT.soul_tree.reset_cost
+	Profile.reset_tree(CONTENT.soul_tree)
+	check(Profile.oath == fletcher.id, "resetting the Tree of Souls keeps a kit sworn (it was never the tree's)")
+	Profile.levels = spent
+	Profile.oath = &""
+	Profile.achievements = saved
+	# Its souls.
+	var penitent: OathDef = load("res://data/oaths/kits/penitent.tres")
+	var run := RunState.new()
+	run.config = CONTENT.dungeon
+	run.difficulty = CONTENT.default_difficulty
+	run.kills = 40
+	run.depth = 5
+	var plain := run.souls()
+	run.oath = penitent
+	check(plain > 0 and run.souls() == roundi(plain * penitent.souls_scale), "the Penitent's souls: %d -> %d" % [plain, run.souls()])
+
+
+func _perk_at(path: String) -> PerkDef:
+	return load(path) as PerkDef if ResourceLoader.exists(path) else null
 
 
 func _affix(id: String) -> ItemAffixDef:
@@ -364,7 +421,7 @@ func _test_bleeding_stride(world: World, player: Player) -> void:
 	player.use_skill(0)
 	await _frames(30)
 	_set_move(Vector2.ZERO)
-	check(hp - player.hp == roundi(player.get_max_hp() * 0.04), "Bleeding Stride: a roll costs 4%% of max Health (%d)" % (hp - player.hp))
+	check(hp - player.hp == roundi(player.get_max_hp() * 0.02) and hp > player.hp, "Bleeding Stride: a roll costs 2%% of max Health (%d)" % (hp - player.hp))
 	check(passed.hp < passed.get_max_hp(), "...and cuts the enemy it rolls through")
 	player.hp = 1
 	player.skills.reset_cooldown(player.def.innate_skills[0])
@@ -582,3 +639,52 @@ func run_evolutions(game: Game) -> void:
 	Profile.evolutions = {}
 	await _frames(2)
 
+# --- Starting kits ----------------------------------------------------------------------------
+
+## A run sworn to a kit: its weapon, its gift working, its stats, its name in the history; the
+## very first run never sworn (decision 0010).
+func run_kits() -> void:
+	var fletcher: OathDef = load("res://data/oaths/kits/fletcher.tres")
+	var saved := Profile.achievements.duplicate()
+	Profile.achievements[String(fletcher.unlocked_by.id)] = 1
+	Profile.oath = fletcher.id
+	Profile.runs = 0
+	var first := await _fresh_game()
+	check(first.run.oath == null and first.player.get_weapon().base_item != fletcher.starting_weapon and first.player.get_weapon() != fletcher.starting_weapon, "the very first run starts unsworn, whatever is sworn (decision 0010)")
+	first.queue_free()
+	await _frames(2)
+	Profile.runs = 3
+	var sworn := await _fresh_game()
+	var player := sworn.player
+	check(sworn.run.oath == fletcher, "a later run is sworn to the kit")
+	check(player.get_weapon() == fletcher.starting_weapon, "...starts with its weapon (%s)" % player.get_weapon().id)
+	check(player.perks.stacks_of(fletcher.starting_perks[0]) == 1, "...and its gift")
+	await _clear_monsters(sworn.world)
+	var lane := _clear_lane(sworn.world, player.global_position, 200.0)
+	player.global_position = lane[0]
+	await _stand_still(sworn.world, player)
+	var foe := _dummy(sworn.world, player.global_position + (lane[1] as Vector2) * 150.0)
+	await _frames(30)
+	player.skills.reset_cooldown(player.def.innate_skills[0])
+	var shots := sworn.world.get_node("Projectiles").get_child_count()
+	player.facing = -(lane[1] as Vector2)
+	player.use_skill(0)
+	await _frames(2)
+	check(sworn.world.get_node("Projectiles").get_child_count() >= shots + 3, "its roll looses three shots")
+	await _frames(40)
+	check(foe.hp < foe.get_max_hp(), "...at the nearest foe")
+	sworn._records.record_history()
+	check(not Profile.history.is_empty() and str((Profile.history[0] as Dictionary).get("oath", "")) == fletcher.display_name, "the run history names the kit")
+	sworn.queue_free()
+	await _frames(2)
+	Profile.oath = &""
+	Profile.history = []
+	Profile.achievements = saved
+
+
+func _fresh_game() -> Game:
+	var game := GAME_SCENE.instantiate() as Game
+	game.show_act_cards = false
+	add_child(game)
+	await _frames(5)
+	return game

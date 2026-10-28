@@ -311,7 +311,7 @@ func _begin_run(saved: Dictionary, daily: bool = false) -> void:
 		screen_fx.kick(clampf(float(damage) / player.get_max_hp() * 5.0, 0.3, 1.0)))
 	content.unlocked_items = ShrineUpgrades.unlocked_items(content)
 	if saved.is_empty():
-		if not run.is_daily():
+		if not run.is_daily() and Profile.runs > 0:  # (the very first run starts unsworn: decision 0010)
 			run.oath = sworn_oath(content)
 		ShrineUpgrades.apply_to(player, content, run.difficulty, run.oath, null if run.is_daily() else picked_weapon(content))
 		if run.is_daily():
@@ -461,11 +461,15 @@ static func prepare_first_descent(content_db: ContentDB) -> void:
 		Profile.select_difficulty(content_db.default_difficulty)
 
 
-## The oath chosen for the next run (Profile.oath), if its node was bought; null otherwise.
+## The oath chosen for the next run (Profile.oath), if its node was bought or, a kit, its feat
+## done; null otherwise.
 static func sworn_oath(content_db: ContentDB) -> OathDef:
-	if Profile.oath == &"" or content_db.soul_tree == null:
+	if Profile.oath == &"":
 		return null
-	for oath in content_db.soul_tree.open_oaths():
+	var open: Array[OathDef] = content_db.open_kits()
+	if content_db.soul_tree:
+		open.append_array(content_db.soul_tree.open_oaths())
+	for oath in open:
 		if oath.id == Profile.oath:
 			return oath
 	return null

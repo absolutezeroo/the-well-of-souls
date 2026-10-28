@@ -28,7 +28,7 @@ first return"). Every value multiplies the normal game:
 Pilgrim spares the hero but pays for it, and its card says so in red: about two thirds of the
 souls (x0.65; with its smaller floors, a Pilgrim run pays about 0.6x a Keeper run that ends the
 same way), rarer Magic, Rare and Epic gear (`loot_quality`), and no feats (`counts_feats`): its runs don't move
-achievements, the Tree of Souls' feat nodes (so the oaths), the deepest floor or the victories.
+achievements (so the starting kits they open), the Tree of Souls' feat nodes (so the oaths), the deepest floor or the victories.
 Quests and the bestiary count everywhere. On every card, the souls line is red below x1 and green
 above.
 
@@ -190,8 +190,10 @@ stats, a head start, perk choices, new items, or run rules (kind `RULES`, read b
 heals, gold, loot, the merchant, the minimap). The old shrine's levels carry over as they are.
 
 **Oaths** (`data/oaths/`, `OathDef`): the end of each branch opens one. Once one is open (or the
-Armory), "At the Well's Edge" (`OathPanel`) comes between the difficulty and the run: swear an
-oath or none, and pick the starting weapon (Armory). An oath is an "X, but Y" start (table below).
+Armory, or a starting kit), "At the Well's Edge" (`OathPanel`) comes between the difficulty and
+the run: swear an oath or none, and pick the starting weapon (Armory). An oath is an "X, but Y"
+start (table below). The **starting kits** are oaths too, opened by feats (below, "Oaths and
+kits").
 
 **The Armory** is bought in 5 levels (`data/upgrades/armory.tres`: `armory_weapons`, an ordered
 list, `armory_first` 3 at level 1, `armory_per_level` 2 more each level; costs 90 / 150 / 210 /
@@ -228,6 +230,41 @@ glance. Every oath has at least one of each (a unit check).
 Each oath also keeps its **vow** (`OathDef.lore`): the line a keeper of old swore at the bell
 (docs/lore.md 6), shown dim above the rule when its node is picked at the shrine. Lore only:
 the rule is always the plain list below it.
+
+### Oaths and kits (decision 0013)
+
+The research's heroes-without-new-art: Brotato's characters and Hades' aspects are rule
+changes, not sprites. The tree's four oaths are numbers ("+30% max Health, 15% slower"); the
+**starting kits** (`ContentDB.kits`, `data/oaths/kits/`) are oaths that change how a run is
+played: a weapon, a twist (a perk or a relic the hero starts with, `OathDef.starting_perks`) and
+a price. They are opened by a **feat** (`OathDef.unlocked_by`, an achievement one can see), not
+by souls, and sworn at the Well's Edge like the tree's, after them in the row (one oath a run:
+a kit or a tree oath, never both, since three of the four oaths bring their own weapon).
+
+| Kit | Feat that opens it | Weapon | Twist | Price |
+|---|---|---|---|---|
+| Oath of the Fletcher | Warden Slayer (a first warden) | Bow | the roll looses three shots at the nearest foe (Fletcher's Draw, a gift of its own, never offered) | -20% max Health |
+| Oath of the Tempest | Into the Dark (floor 4) | Spark Wand | the Restless Storm from the start: moving near foes, lightning strikes them; +15% move speed | standing still a second, it strikes you |
+| Oath of the Flayed | Hunter of the Chosen (20 elites) | Battle Axe | the Bleeding Stride from the start: the roll cuts what it passes through; +25% max Health | each roll costs 2% of max Health |
+| Oath of the Penitent | Seeker of Omens (10 encounters) | Templar Sword | Vampirism from the start (kills heal); +40% souls at the run's end (`OathDef.souls_scale`) | every heal 30% weaker (`healing_scale`) |
+
+- The starting perk counts toward its family (Storm, Blood...), so the offers lean to it
+  (`family_bias`): a kit points at a build without forcing it.
+- **The first run is never sworn** (decision 0010: it starts unsworn on the Katana, whatever the
+  profile holds; `Game` swears only from the second run, `Profile.runs > 0`). The kits' feats
+  can't be done before a run anyway; the guard keeps it so.
+- A kit's card lists its weapon, its twist (green), its price (red) and its numbers
+  (`OathDef.effects()`, `twist`, `price`); a locked one says its feat ("Opens with a feat:
+  Defeat a warden of the Well."). Resetting the Tree of Souls never unswears a
+  kit (it was never the tree's).
+- Recorded: the run keeps its oath (`RunState.oath`, saved), the run history its name
+  (`Profile.history[].oath`, the codex's Runs tab: "Oath").
+- Measured against the default start (the act I expected build on the Katana, unsworn) with
+  kit builds (`data/balance/builds/kit_*_a1.tres`, `BalanceBuildDef.oath`), and against their
+  weapon taken unsworn: the weapon makes the gap to the Katana (as the Armory's do), the twist
+  and the price about even each other (balance-log 2026-10-28, "Four starting kits").
+- The cards are 290 units wide so a name holds on one line in French; their height is fixed (the
+  window is full on a 720-line screen), so every card's words must fit it (`title_tests`).
 
 Not in the daily run (everyone starts the same). The run keeps its oath in the save (`RunState.oath`).
 The choice changes only by the player's taps (`Profile.select_oath()`, `select_start_weapon()`):
@@ -427,11 +464,15 @@ with a finger (`TouchScroll`); `CodexRows` builds their rows, with a tick box fo
   first. Reaching it pays souls, with a note at the top of the screen. A **secret** one
   (`AchievementDef.secret`) shows as "???" ("A secret feat. Some doors only open from the other
   side.") until reached: "Laid to Rest at Last" (slay the hidden floor's boss, 50 souls) would
-  give the hidden floor away. "What the Walls Keep": find 5 secret rooms (25 souls).
+  give the hidden floor away. "What the Walls Keep": find 5 secret rooms (25 souls). Four of them
+  also open a starting kit (Warden Slayer, Into the Dark, Hunter of the Chosen, Seeker of Omens:
+  "Oaths and kits" above). Under the achievements, the **weapon evolutions**: the ones made
+  named with their recipe, the others "???" with the smith's hint (docs/design/loot.md "Weapon
+  evolutions").
 - **Runs**: the fastest wins, then the last 20 runs: how each ended (victory, or the floor and
   what slew you), when, the difficulty (with its ascension: "Nightmare +3", one translated
-  sentence), how far (floor N of 12), how long, level, weapon, kills
-  and the souls earned, each fact its name over its value (a value wraps between words, never
+  sentence), how far (floor N of 12), how long, level, weapon, the oath or kit sworn
+  ("Unsworn"; "-" for runs from before it was recorded), kills and the souls earned, each fact its name over its value (a value wraps between words, never
   inside one).
 
 ## The two endings

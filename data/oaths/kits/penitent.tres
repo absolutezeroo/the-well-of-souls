@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="OathDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/soul_tree/oath_def.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/weapons/templar_sword.png" id="2"]
+[ext_resource type="Resource" path="res://data/items/weapons/templar_sword.tres" id="3"]
+[ext_resource type="Resource" path="res://data/achievements/curious.tres" id="4"]
+[ext_resource type="Script" path="res://src/definitions/perk_def.gd" id="5"]
+[ext_resource type="Resource" path="res://data/perks/common/vampirism.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+id = &"penitent"
+display_name = "Oath of the Penitent"
+description = "Start with the Templar Sword and Vampirism: every kill heals you. 40% more souls at the end of the run, but every heal is 30% weaker."
+lore = "\"No draught will mend me. Only the fallen.\""
+icon = ExtResource("2")
+color = Color(1, 0.9529412, 0.6901961, 1)
+starting_weapon = ExtResource("3")
+twist = "Every kill heals you"
+unlocked_by = ExtResource("4")
+starting_perks = Array[ExtResource("5")]([ExtResource("6")])
+healing_scale = 0.7
+souls_scale = 1.4

@@ -258,6 +258,11 @@
 [ext_resource type="Resource" path="res://data/items/weapons/evolved/rimeheart_staff.tres" id="v_rimeheart_staff"]
 [ext_resource type="Resource" path="res://data/items/weapons/evolved/ashen_codex.tres" id="v_ashen_codex"]
 [ext_resource type="Resource" path="res://data/items/weapons/evolved/heartsplitter.tres" id="v_heartsplitter"]
+[ext_resource type="Script" path="res://src/definitions/soul_tree/oath_def.gd" id="v_oath_script"]
+[ext_resource type="Resource" path="res://data/oaths/kits/fletcher.tres" id="v_fletcher"]
+[ext_resource type="Resource" path="res://data/oaths/kits/tempest.tres" id="v_tempest"]
+[ext_resource type="Resource" path="res://data/oaths/kits/flayed.tres" id="v_flayed"]
+[ext_resource type="Resource" path="res://data/oaths/kits/penitent.tres" id="v_penitent"]
 
 [resource]
 script = ExtResource("34_tx8pl")
@@ -281,6 +286,7 @@ floor_events = Array[ExtResource("50_by7se")]([ExtResource("51_hml5q"), ExtResou
 curses = Array[ExtResource("32_bubnr")]([ExtResource("33_ivytu"), ExtResource("34_fk2lo"), ExtResource("35_sfjbe")])
 ascensions = Array[ExtResource("21_15tjo")]([ExtResource("22_q5atc"), ExtResource("23_80whv"), ExtResource("24_ftpue"), ExtResource("25_th6df"), ExtResource("26_vi73k"), ExtResource("27_byg44"), ExtResource("28_by7se"), ExtResource("29_hml5q"), ExtResource("30_5x320"), ExtResource("31_1ai64")])
 achievements = Array[ExtResource("1_3m6vt")]([ExtResource("2_7lncd"), ExtResource("3_l6yv8"), ExtResource("4_xqlpv"), ExtResource("5_lvfra"), ExtResource("6_xu8gq"), ExtResource("7_pkcsl"), ExtResource("8_bwrsx"), ExtResource("9_k2lip"), ExtResource("10_1p0g0"), ExtResource("11_6khne"), ExtResource("12_15tjo"), ExtResource("13_q5atc"), ExtResource("14_80whv"), ExtResource("15_ftpue"), ExtResource("16_th6df"), ExtResource("17_vi73k"), ExtResource("18_byg44"), ExtResource("19_by7se"), ExtResource("20_hml5q"), ExtResource("ach_not_yet"), ExtResource("900_walls"), ExtResource("901_rest"), ExtResource("902_knell"), ExtResource("903_watch")])
+kits = Array[ExtResource("v_oath_script")]([ExtResource("v_fletcher"), ExtResource("v_tempest"), ExtResource("v_flayed"), ExtResource("v_penitent")])
 quests = Array[ExtResource("140_1hx8s")]([ExtResource("141_aa4gc"), ExtResource("142_akxwf"), ExtResource("143_wyplg"), ExtResource("144_agww7"), ExtResource("145_n0ebp"), ExtResource("146_oqqnv"), ExtResource("147_j75or"), ExtResource("148_ilgu2"), ExtResource("149_d676j"), ExtResource("150_gvban"), ExtResource("151_i820p"), ExtResource("152_nrgv6"), ExtResource("153_cwkh5"), ExtResource("154_l46qw"), ExtResource("155_r632x"), ExtResource("156_m0624"), ExtResource("157_lp0ch"), ExtResource("158_hb5w0")])
 cosmetics = Array[ExtResource("950_cosmetic")]([ExtResource("951_aura_divine"), ExtResource("952_aura_dark"), ExtResource("953_aura_demonic")])
 encounters = Array[ExtResource("14_uppjc")]([ExtResource("15_k7n23"), ExtResource("16_iw61m"), ExtResource("17_1nigv"), ExtResource("18_j2x0q")])

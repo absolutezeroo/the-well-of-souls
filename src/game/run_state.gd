@@ -231,7 +231,8 @@ static func _pick_difficulty(content: ContentDB, saved: Dictionary) -> Difficult
 
 ## Souls this run is worth so far (what the shrine gets when it ends).
 func souls() -> int:
-	return config.souls_for_run(kills, depth, bosses_slain, has_won, difficulty.souls) + bonus_souls_worth(bonus_souls)
+	var worth := config.souls_for_run(kills, depth, bosses_slain, has_won, difficulty.souls) + bonus_souls_worth(bonus_souls)
+	return roundi(worth * oath.souls_scale) if oath and oath.souls_scale != 1.0 else worth  # (a kit's +souls)
 
 
 ## What `amount` bonus souls (the hidden floor's hoard...) are worth at the end of this run: the

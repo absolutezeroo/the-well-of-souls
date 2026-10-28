@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="OathDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/soul_tree/oath_def.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/weapons/bow.png" id="2"]
+[ext_resource type="Resource" path="res://data/items/weapons/bow.tres" id="3"]
+[ext_resource type="Resource" path="res://data/achievements/warden_slayer.tres" id="4"]
+[ext_resource type="Script" path="res://src/definitions/perk_def.gd" id="5"]
+[ext_resource type="Resource" path="res://data/perks/kits/fletchers_draw.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+id = &"fletcher"
+display_name = "Oath of the Fletcher"
+description = "Start with the Bow; your roll looses three shots at the nearest foe, but you have 20% less max Health."
+lore = "\"I give ground, and every step I give is paid in arrows.\""
+icon = ExtResource("2")
+color = Color(0.654902, 0.7882353, 0.34117648, 1)
+starting_weapon = ExtResource("3")
+twist = "Your roll looses three shots"
+unlocked_by = ExtResource("4")
+starting_perks = Array[ExtResource("5")]([ExtResource("6")])
+max_hp_scale = 0.8

@@ -303,6 +303,14 @@ static func apply(build: BalanceBuildDef, player: Player, content: ContentDB, di
 				for k in level:
 					for item in u.items:
 						player.pack.store(item)
+	var oath := build.oath
+	if oath:
+		if oath.bonuses:
+			player.base_stats = player.base_stats.plus(oath.bonuses)
+		player.base_stats.max_hp = roundi(player.base_stats.max_hp * oath.max_hp_scale)
+		player.base_stats.move_speed *= oath.move_speed_scale
+	player.healing_scale = oath.healing_scale if oath else 1.0
+	player.crit_damage_bonus = oath.crit_damage_bonus if oath else 0.0
 	if difficulty and difficulty.hero_max_hp != 1.0:
 		player.base_stats.max_hp = roundi(player.base_stats.max_hp * difficulty.hero_max_hp)
 	for i in maxi(build.level - 1, 0):
@@ -327,6 +335,10 @@ static func apply(build: BalanceBuildDef, player: Player, content: ContentDB, di
 			continue
 		for i in clampi(int(build.perks[id]), 0, p.max_stacks):
 			player.perks.add(p)
+	if oath:
+		for p in oath.starting_perks:  # (a kit's twist)
+			if p and player.perks.can_take(p):
+				player.perks.add(p)
 	if not build.suppress_families.is_empty():
 		# The build without a family's bonus (the lab measures what the bonus is worth). Tools only.
 		player.perks._awake.assign(player.perks._awake.filter(func(entry: PerkSet.Entry) -> bool: return not build.suppress_families.has(entry.synergy)))
