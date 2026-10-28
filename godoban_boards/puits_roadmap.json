@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 402,
+  "next_id": 408,
   "tags": [
     "pc",
     "test",
@@ -6061,6 +6061,99 @@
       "tags": [],
       "created_at": 1793117225,
       "updated_at": 1793117225
+    },
+    {
+      "id": "task_402",
+      "title": "Bible de design et garde-fous pour toutes les IA",
+      "description": "Fait le 28/10 après une recherche en 6 volets (map design, interface, game feel, direction artistique, piliers du jeu, comment faire obéir les agents). Ajouté : docs/art-bible.md (sources, grille, palette, ambiance sans teinte, grille import/rejet, liste avant import, captures), règles chiffrées dans design/village.md « Placement rules », interface.md « One skin », presentation.md « Feel limits », nouvelle page design/pillars.md (apprentissage, rythme, contrat d'équité, builds, accessibilité, perf S23, narration, définition de fini), journal docs/decisions/ (0001 à 0006), docs/agent-mistakes.md, règles dures et portes « demander au propriétaire » en tête d'AGENTS.md (lu par Codex/GPT et Claude), sous-agent relecteur art-reviewer pour Claude. Contrôles qui bloquent quel que soit l'agent : tools/design/check.py lancé par tools/run_tests.py (provenance REUSE.toml, palette du monde assets/palette/world.hex, pas de StyleBox hors src/ui/common, médias dans assets/, AGENTS.md < 200 lignes) et unit.village (accès à tout depuis l'arrivée, rien de solide sur les routes ni devant les portes, échelles entières, sol jamais teinté). Outil de captures tools/design/capture.py (1:1, zoom x4, gris). À vérifier : donner une tâche visuelle à l'autre IA et voir si elle respecte les règles.",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_5",
+      "due_date": null,
+      "tags": [
+        "qualité",
+        "visuel",
+        "architecture"
+      ],
+      "created_at": 1793159546,
+      "updated_at": 1793159546
+    },
+    {
+      "id": "task_403",
+      "title": "Donjon : un pixel d'art fait 4,5 pixels d'écran sur le S23 et en 1080p",
+      "description": "Trouvé par le calcul pendant la recherche : à 1080 lignes, l'interface est à x1,5 (PixelGrid) et la caméra du donjon à zoom 1,5 (player.tscn), donc 2 unités x 1,5 x 1,5 = 4,5 pixels d'écran par pixel d'art. Avec le filtre au plus proche, les colonnes alternent 4 et 5 pixels (légère déformation, scintillement au défilement). À 720, 1440 et 2160 lignes, c'est entier (3, 6, 9). Le village (zoom 2) donne 6, entier. L'intérieur du temple (zoom 1,5) a le même souci. Options : au pas x1,5 seulement, zoom 4/3 (4 px, cadrage ~12 % plus large) ou 5/3 (5 px, ~10 % plus serré). DÉCISION DU PROPRIÉTAIRE (cadrage du combat) : regarder d'abord une capture zoomée sur le S23. Aucun agent ne le change seul.",
+      "status": "todo",
+      "priority": "high",
+      "epic_id": "epic_3",
+      "due_date": null,
+      "tags": [
+        "visuel",
+        "android",
+        "pc"
+      ],
+      "created_at": 1793159546,
+      "updated_at": 1793159546
+    },
+    {
+      "id": "task_404",
+      "title": "Comparer automatiquement les captures à des références validées",
+      "description": "Suite de la bible : tools/design/capture.py produit les images, mais rien ne les compare encore. Ajouter des captures de référence (tests/golden/) mises à jour seulement avec l'accord du propriétaire, et une comparaison avec tolérance (à la Playwright). Nécessite un affichage (xvfb) : à brancher dans un hook git ou une CI.",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "due_date": null,
+      "tags": [
+        "qualité",
+        "test",
+        "visuel"
+      ],
+      "created_at": 1793159546,
+      "updated_at": 1793159546
+    },
+    {
+      "id": "task_405",
+      "title": "Passer les anciens StyleBox de l'interface sur le skin commun",
+      "description": "tools/design/check.py tolère 14 fichiers qui construisent encore leurs propres StyleBox (liste STYLEBOX_GRANDFATHERED : HUD, codex, sanctuaire, oaths, classements, cartes d'atouts, chargement, habitants). Les migrer sur src/ui/common/ (UiSkin, OrnateBoard, UiParts) quand on y touche, et retirer chaque fichier de la liste.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "qualité"
+      ],
+      "created_at": 1793159546,
+      "updated_at": 1793159546
+    },
+    {
+      "id": "task_406",
+      "title": "Contrat d'équité : plancher de télégraphe et budget de dégâts",
+      "description": "design/pillars.md propose (sans source publiée, à valider en jeu) : une préparation jamais sous 0,4 s (0,6-1,0 s pour les coups lourds et les boss), quelle que soit la difficulté ; en Gardien un coup ordinaire au plus 15-20 % des PV max, un coup de boss 25-30 %, toutes les attaques télégraphiées simultanées 50 %. DÉCISION DU PROPRIÉTAIRE : valider ou ajuster ces chiffres, puis les transformer en tests d'équilibrage.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "équilibrage",
+        "combat"
+      ],
+      "created_at": 1793159546,
+      "updated_at": 1793159546
+    },
+    {
+      "id": "task_407",
+      "title": "Tailles tactiles et texte sur téléphone selon la bible",
+      "description": "interface.md « One skin » fixe : boutons de combat avec une zone de toucher d'au moins 96x96 unités (~9 mm sur S23), tout élément tactile 64x64, 16 unités d'écart. Les recommandations Xbox donnent sur mobile un texte bien plus grand que la police BODY actuelle. Mesurer les boutons et le texte réels sur le S23, puis décider (taille d'interface par défaut sur téléphone ?).",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "android"
+      ],
+      "created_at": 1793159546,
+      "updated_at": 1793159546
     }
   ]
 }

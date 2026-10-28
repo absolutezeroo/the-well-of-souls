@@ -19,6 +19,7 @@ kept in the log folder (printed at the end) for the engine errors to read (docs/
 """
 
 import argparse
+import importlib.util
 import json
 import os
 import random
@@ -66,6 +67,14 @@ def find_godot(given):
 	sys.exit("run_tests: no Godot binary found (use --godot or $GODOT; docs/testing.md)")
 
 
+def _design_rules():
+	"""tools/design/check.py: the art, UI and provenance rules every agent must keep."""
+	spec = importlib.util.spec_from_file_location("design_check", os.path.join(ROOT, "tools/design/check.py"))
+	module = importlib.util.module_from_spec(spec)
+	spec.loader.exec_module(module)
+	return module.run()
+
+
 def main():
 	parser = argparse.ArgumentParser(description="Runs the test suites in parallel Godot processes.")
 	parser.add_argument("--jobs", "-j", type=int, default=os.cpu_count() or 1, help="processes (default: one per CPU)")
@@ -85,6 +94,8 @@ def main():
 	seed = args.seed if args.seed is not None else random.randrange(1000000)
 	jobs = max(1, args.jobs)
 	print("Seed %d (play the same tests again with --seed %d), %d processes" % (seed, seed, jobs), flush=True)
+	# The design rules (tools/design/check.py, docs/art-bible.md) bind every run, whatever --test says.
+	design = _design_rules()
 	logs = args.logs or tempfile.mkdtemp(prefix="puits_tests_")
 	os.makedirs(logs, exist_ok=True)
 	homes = tempfile.mkdtemp(prefix="puits_users_")
@@ -158,6 +169,8 @@ def main():
 	cpu = usage.ru_utime + usage.ru_stime if usage else 0.0
 	shutil.rmtree(homes, ignore_errors=True)
 
+	failures += len(design)
+	failed_lines = ["FAIL: design: " + line for line in design] + failed_lines
 	for line in failed_lines:
 		print(line)
 	for name in sorted(suites):

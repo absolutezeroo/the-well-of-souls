@@ -1,10 +1,40 @@
 # Agent guide: Le Puits des Âmes
 
 Real-time action roguelike in Godot 4.7, GDScript (statically typed), Compatibility renderer,
-for Android and desktop. Keep this repository a roguelike; a future RPG is a separate project.
-The former prototype is archived (docs/rpg-archive.md), not an active mode to restore.
-Humans start at README.md; the reference is in docs/. Read the docs page
-for a system before changing it.
+for Android and desktop. Humans start at README.md; the reference is in docs/. Read the docs page
+for a system before changing it, and docs/agent-mistakes.md before starting.
+
+## Hard rules (why and details: docs/art-bible.md, docs/decisions/)
+
+1. A real-time action roguelike. Never add or switch to another genre, mode or core loop; the
+   RPG prototype is archived (decision 0001, docs/rpg-archive.md).
+2. World art comes only from Ninja Adventure (or is drawn on its colours); the UI skin is
+   Kenney's. Never import another pack: packs clash in palette, projection and outline (0002).
+3. Every window, panel, dialogue box and button is built from src/ui/common/ (OrnateBoard,
+   RpgWindow, RpgDialog, UiParts) with UiSkin colours. No StyleBoxFlat, no light panels (0003).
+4. Pack art at scale 2 (whole steps only), rotation 0, Nearest, even positions (docs/vfx.md).
+5. Never darken or colour ground art with a tint: grass turns to mud. Mood comes from
+   LightField, recoloured tilesets and dithered fog (0004).
+6. A new asset gets its REUSE.toml entry (source, licence, changes) in the same commit (0005).
+7. Village props follow docs/design/village.md "Placement rules": districts, roads, an owner
+   for every prop. Never scatter props to fill space (0006).
+8. Visual work ends with captures (`python3 tools/design/capture.py`: 1:1, zoomed, grey),
+   compared with the existing art and attached to the roadmap card, which stops at `review`.
+   Tests don't see the game.
+
+`tools/design/check.py` (run by `tools/run_tests.py`) and `unit.village` fail on breaks of 2, 3,
+5, 6 and 7. A failing design check is a rule to follow: never weaken it, never add to its
+grandfathered lists.
+
+## Ask the owner first (stop, write the question on the roadmap card, implement nothing)
+
+- the genre, a game mode, the core loop, the run's structure, the fairness contract
+  (docs/design/pillars.md: telegraph minimums, damage budget)
+- a new asset source, pack, licence, generated art, font, UI frame style or colour token
+- stretch settings, camera zoom, pixel scale, global lighting or colour grading
+- moving Kagari's landmarks or districts
+- deleting or weakening a test or a check, re-taking the palette snapshot, a new dependency
+- anything a docs/decisions/ entry has decided (a decision is replaced, never reopened silently)
 
 ## Commands (from the repo root)
 
@@ -72,6 +102,9 @@ for a system before changing it.
 - The docs/design/ page about the change is updated in the same commit, along with the data texts
   that state a changed number. Balance changes get an entry in docs/balance-log.md.
 - Headless tests don't show what the game looks or feels like: say what you could not check.
+- Design rules hold (`python3 tools/design/check.py`, also run by `tools/run_tests.py`; its palette
+  check needs Pillow). Visual work has its captures; content meets docs/design/pillars.md
+  "Definition of done".
 - Commit messages: what changed for the game on the first line, why in the body.
 - **The roadmap is updated in the same commit** (see "The roadmap" below): the cards you worked
   on moved (In Progress, Review, Done), a card added for every new todo, bug or idea found on
@@ -115,4 +148,15 @@ planned, in progress and done: read it before starting, and keep it true.
 | Android and Windows builds | docs/android.md |
 | Online leaderboards and gameplay statistics (Talo): the access key, the dashboard, the anti-cheat | docs/online.md |
 | Privacy: consent, the policy and its placeholders, Talo retention, Play Data safety, deletions | docs/privacy-ops.md |
-| What each system does | docs/design/ (dungeon, monsters, builds, loot, progression, interface, presentation) |
+| What each system does | docs/design/ (dungeon, monsters, builds, loot, progression, interface, presentation, village) |
+| How the game looks: sources, grid, palette, mood, importing an asset, captures | docs/art-bible.md |
+| What every feature is measured against (fairness, pacing, accessibility, phone) | docs/design/pillars.md |
+| The owner's decisions / the mistakes not to repeat | docs/decisions/ / docs/agent-mistakes.md |
+
+## Code review rules (for an agent reviewing another's work)
+
+Flag, with the safe alternative named in the matching hard rule: a texture outside assets/ or
+without its REUSE.toml entry; a StyleBox or a light panel outside src/ui/common/; a tint on ground
+art; a sprite or prop at a fractional scale; a prop without an owner or on a road; a visual card
+moved past `review`; a removed or weakened check; a change to the genre or loop without a decision.
+Flag only breaks of these rules and the docs, not taste.

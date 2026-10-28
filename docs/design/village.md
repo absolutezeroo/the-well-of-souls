@@ -185,6 +185,39 @@ Residents' homes, stall and lamp appointments are the doors and lamps of those p
 layout lives in `data/village/kagari.tres` (and the residents' files); the layout editor
 moves it by hand.
 
+## Placement rules
+
+Binding for any change to Kagari's layout, by hand, in the layout editor or by an agent (the
+numbers are starting values chosen by the owner, see [the art bible](../art-bible.md)). One tile
+is 32 world units; the S23 shows about 24 x 11 tiles of the village at once, so the village is
+laid out in width, not height.
+
+- **Districts first, then roads, then props.** Every district has a written purpose (above);
+  moving a landmark or a district is the owner's decision.
+- **The Well is the dominant landmark**, seen from the spawn; each district has one secondary
+  landmark (torii, market awning, memorial, each sleeping house).
+- **Roads go where people go.** The avenue and the street are 2-3 tiles wide, lanes 1-2. Every
+  door has a road at its step; every road ends at a door, a service, a square or a junction.
+  Points of interest stand 6 to 12 tiles apart.
+- **Every prop has an owner** (a building, a resident, a district's function) within about 3
+  tiles: crates by the shop, a washing line by Sayo's house, hay by Ren's, a woodpile by the
+  woodcutter's hut. A prop without an owner is removed, not moved.
+- **Props come in small groups** of 3 to 5 around one larger anchor, set against a wall, a fence,
+  a road's edge or the forest; never alone in the middle of a road or a square.
+- **Solid props never stand on a road** (a square may hold a stall and its crates); **nothing
+  solid crowds a door, a home or the spawn**; a passage between two solid things is at least 2
+  tiles wide so the touch stick never catches.
+- **The forest closes the clearing**; no void is visible at the camera's limits.
+- **The hub is calmer than the floors**: fewer props, more open ground. Empty is fixed with a
+  purpose (a plot waiting for a resident, an unlit lamp), never with random filler.
+- **Pack art only, whole scales, no tint** ([art bible](../art-bible.md)).
+
+**Checked** by `VillageTests._test_layout_rules` (unit.village): every service, home, appointment
+and door walkable from the spawn; no solid prop on a road (paths 3 tiles wide or less) or
+crowding a door, home or the spawn; a path at each interior door; whole art scales; the ground
+and room floors never tinted. The rest is checked by looking: `python3 tools/design/capture.py`
+(the `village_map` shot shows the whole square).
+
 ## The temple interior
 
 The **Temple of the Last Flame**, north of the Well, is a red-roofed shrine house from

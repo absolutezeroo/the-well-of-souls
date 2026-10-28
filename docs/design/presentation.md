@@ -190,6 +190,32 @@
   Big monsters and bosses shake the ground when they walk. Under 30% HP a heartbeat plays and the
   music gets muffled (a low-pass filter on the Music bus, lifted when the game is left). The screen fades to black on the stairs.
 
+## Feel limits
+
+Binding caps and invariants for any new attack, monster, skill or effect (sources: Celeste's
+released code, Dead Cells and Sakurai on hitstop, Riot's VFX guide, Xbox and WCAG guidelines;
+the summary is in the owner's research report linked from [the art bible](../art-bible.md)). The
+project's own values already follow them: a hit freezes 0.035 s (a crit 0.07), the hero hurt
+0.08, an elite's death 0.08 then a slow, a boss's death 0.25.
+
+| What | Limit |
+|---|---|
+| Hitstop | 1 to 6 frames (≤ 0.1 s) for hits; longer only for a boss's death or phase change. One freeze per attack, not per target; in a crowd take the largest, never the sum |
+| Freeze and slow | Never a freeze during a slow |
+| Screen shake | Through `Events.screen_shake`/`GameCamera` only (the Screen shake option, 0 respected); trauma capped at 1; along the cause; whole art pixels; never rotation |
+| Input | Read on the first frame; attack, dodge and skill presses buffered 0.1-0.15 s, the buffer keeps counting through hitstop, consumed when used; the dodge cancels an attack's recovery |
+| Telegraph | Every attack that hurts has a wind-up on at least two channels (pose, colour or ground mark, sound), its ground mark equal to the real area, and a way out ([pillars.md](pillars.md)) |
+| Flashes | At most 3 per second over a large area, and behind the Screen flashes option |
+| Haptics | Rare, short and crisp, only for important events (hurt, crit, boss), behind the Vibrations option; nothing on ordinary hits in a crowd |
+| Readability | Threats are the most salient layer; the hero's effects lower and more transparent; ground effects under bodies unless they are threats; damage numbers merge in a crowd |
+| Pixels | Effects on the 2-unit grid, pre-drawn directions, element ramps ([vfx.md](../vfx.md)) |
+
+Checklist for new combat content: telegraph; hit feedback (flash, knockback or a sign of super
+armour, particles, sound); hitstop within the caps; death feedback that stays (body, decal,
+debris); sound with pitch variation; haptics only if important; a busy-screen capture where
+threats stay readable; Screen shake 0 and Screen flashes off respected; no stacking (no freeze in
+a slow, trauma capped, hitstop never eats input).
+
 ## Music
 
 The sound used to be the big gap: four tracks for every place, one boss theme for every warden.

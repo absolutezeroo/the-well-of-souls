@@ -188,6 +188,15 @@ Host-side checks: `GODOT=/path/to/godot python3 -m unittest discover -s tools/te
 runner's error classification and (Linux) forces a real short write with `RLIMIT_FSIZE` in an
 isolated temporary Godot project, verifying that the previous save survives.
 
+**Design rules** (`tools/design/check.py`, [art-bible.md](art-bible.md)): `tools/run_tests.py` runs
+them first, whatever `--test` says, and prints breaks as `FAIL: design: ...`: every file under
+`assets/` has its source in `REUSE.toml` with an approved licence; the world art's pixels are in
+`assets/palette/world.hex` (needs Pillow, skipped with a note without it); no StyleBox built
+outside `src/ui/common/`; no media outside `assets/`; AGENTS.md under 200 lines. The village
+layout rules are `unit.village` (`VillageTests._test_layout_rules`). **Captures** for visual work:
+`python3 tools/design/capture.py [outdir]` (village, whole map, temple, a conversation; 2340x1080,
+1920x1080, 1280x720; each with a x4 zoom and a greyscale copy; needs a display, or xvfb-run).
+
 - **balance** (opt-in: only with `--only=balance`): the balance tools' quick runs against the
   targets of `data/balance/targets.tres`. Some of its checks fail on purpose today (the balance
   work to do): they are printed as `FAIL (KNOWN ...)`.

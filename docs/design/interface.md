@@ -423,6 +423,35 @@ most phones (1080 lines), x2 on 1440.
 - A wrapped line never splits a stat from its number (the HUD's info line uses unbreakable
   spaces).
 
+## One skin (binding)
+
+Every window, panel, dialogue box, card and button of the game wears **one skin**, built only
+from `src/ui/common/`: the wooden `OrnateBoard` with its gold border (under `RpgWindow` and
+`RpgDialog`), the red ribbon for titles, dark insets for lists and text, `UiParts.button()` for
+buttons, and the colours of `UiSkin` ([decision 0003](../decisions/0003-one-ui-skin.md)). No other
+frame exists: no white or light panel, no `StyleBoxFlat`, no box drawn from another asset.
+**Checked**: `tools/design/check.py` fails on a `StyleBoxFlat`/`StyleBoxTexture` built outside
+`src/ui/common/` (the few older files that still do are listed there and only shrink) and on an
+inline StyleBox in a scene. A new frame style or colour token is the owner's decision.
+
+Numbers to hold (sources in [the art bible](../art-bible.md)'s research report):
+
+- **Touch**: combat buttons (attack, dodge, skills) have a touch area of at least **96 x 96**
+  units (about 9 mm on the S23; Android asks 48 dp, about 9 mm); anything else tappable at least
+  **64 x 64**; at least **16** units between targets; nothing tappable in the stick's area;
+  everything anchored inside the safe area (never an absolute x).
+- **Text**: never below `Fonts.SMALL`; French is 20-30 % longer and never cut; at most about 60
+  characters per line and 3 visible lines in a dialogue; sentence case; text contrast 4.5:1
+  (large or disabled 3:1).
+- **Colour is never the only cue** (rarity, danger, affordability get a shape or an icon too).
+- **Feedback**: a pressed state on press, the shared UI sounds, open/close in at most 0.15 s on
+  whole art pixels; nothing to read shakes or blinks.
+- **Pixels**: offsets, sizes and margins in steps of 2 units; Control scale 1 or 2; Nearest.
+
+Before calling a screen done: captures at 2340x1080, 1920x1080 and 1280x720
+(`tools/design/capture.py`), in French and English; the same border, ribbon and insets as the
+other windows; gamepad only, keyboard only, touch only (focus visible, Back closes).
+
 ## Shared pieces (one way to build each)
 
 Every window is built from the same pieces in `src/ui/common/`, so they look and behave alike:

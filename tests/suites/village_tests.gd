@@ -37,6 +37,7 @@ func run_unit() -> void:
 	_test_sequence()
 	_test_conversations()
 	_test_layout_handles()
+	_test_layout_rules()
 	_test_calendar()
 	_test_memorials()
 	var rng := RandomNumberGenerator.new()
@@ -48,6 +49,75 @@ func run_unit() -> void:
 	var resumed := RunState.create(CONTENT, JSON.parse_string(JSON.stringify(first.to_data())), rng)
 	check(resumed.journey_id == first.journey_id, "the receipt identity survives a JSON run save and resume")
 	Profile.reset()
+
+
+## docs/design/village.md "Placement rules" and docs/art-bible.md: what any layout change (by hand,
+## the layout editor or an agent) must keep. A failure names the rule; fix the data, not the check.
+func _test_layout_rules() -> void:
+	Profile.reset()
+	var navigation := VillageNavigation.new()
+	navigation.rebuild(VILLAGE)
+	var places: Dictionary[String, Vector2] = {
+		"the Well": VILLAGE.well + Vector2(0, 48), "the notice board": VILLAGE.noticeboard + Vector2(0, 32),
+		"the memorial": VILLAGE.memorial + Vector2(0, 32),
+	}
+	for resident in VILLAGE.residents:
+		places["%s's home" % resident.id] = resident.position
+		for activity in resident.schedule:
+			if activity.room == null:
+				places["%s: %s" % [resident.id, activity.display_name]] = activity.destination
+	for room in VILLAGE.interiors:
+		places["the door of %s" % room.id] = room.door
+	var unreachable: Array[String] = []
+	for place in places:
+		if places[place].distance_to(VILLAGE.spawn) > VillageNavigation.CELL and navigation.path(VILLAGE.spawn, places[place]).is_empty():
+			unreachable.append(place)
+	check(unreachable.is_empty(), "every service, home, appointment and door is walkable from the spawn (unreachable: %s)" % [unreachable])
+	var roads: Array[Rect2] = []
+	for path in VILLAGE.paths:
+		if minf(path.size.x, path.size.y) <= 3 * VillageGround.CELL:
+			roads.append(path)
+	var blocking: Array[String] = []
+	var crowding: Array[String] = []
+	var odd_scales: Array[String] = []
+	var thresholds: Array[Vector2] = [VILLAGE.spawn]
+	for resident in VILLAGE.residents:
+		thresholds.append(resident.position)
+	for room in VILLAGE.interiors:
+		thresholds.append(room.door)
+	for prop in VILLAGE.props:
+		var label := "%s at %s" % [prop.region, prop.position]
+		if not is_equal_approx(prop.art_scale, roundf(prop.art_scale)) or prop.art_scale < 1.0:
+			odd_scales.append(label)
+		if not prop.collision.has_area():
+			continue
+		var solid := Rect2(prop.position + prop.collision.position, prop.collision.size).grow(-1)
+		if roads.any(func(road: Rect2) -> bool: return road.intersects(solid)):
+			blocking.append(label)
+		if thresholds.any(func(at: Vector2) -> bool: return solid.grow(VillageNavigation.CLEARANCE).has_point(at)):
+			crowding.append(label)
+	check(blocking.is_empty(), "solid props stand beside the roads, never on them; squares may hold stalls (on a road: %s)" % [blocking])
+	check(crowding.is_empty(), "no solid prop crowds a door, a home or the spawn: a body must fit in front of it (too close: %s)" % [crowding])
+	var paths := VillageGround.path_cells(VILLAGE)
+	for room in VILLAGE.interiors:
+		var step := Vector2i((room.door / VillageGround.CELL).floor())
+		check([step, step + Vector2i.DOWN, step + Vector2i.UP].any(func(cell: Vector2i) -> bool: return paths.has(cell)), "a path reaches the door of %s" % room.id)
+		for patch in room.tiles:
+			if not is_equal_approx(patch.art_scale, roundf(patch.art_scale)):
+				odd_scales.append("%s tiles %s" % [room.id, patch.region])
+			check(_neutral_light(patch.tint), "%s's floor is lit, not tinted into another colour (%s): docs/art-bible.md \"Mood\"" % [room.id, patch.tint])
+		for prop in room.props:
+			if not is_equal_approx(prop.art_scale, roundf(prop.art_scale)):
+				odd_scales.append("%s prop %s" % [room.id, prop.region])
+	check(odd_scales.is_empty(), "pack art is drawn at whole scales only, never stretched to fit (%s)" % [odd_scales])
+	check(_neutral_light(VILLAGE.ground_tint), "the ground is never darkened or coloured by a tint: grass turns to mud (%s; docs/art-bible.md \"Mood\")" % VILLAGE.ground_tint)
+
+
+## A tint that only dims a little and keeps the hue: every channel 0.75 or more, within 0.12 of each other.
+static func _neutral_light(tint: Color) -> bool:
+	var low := minf(tint.r, minf(tint.g, tint.b))
+	var high := maxf(tint.r, maxf(tint.g, tint.b))
+	return low >= 0.75 and high - low <= 0.12
 
 
 func _test_layout_handles() -> void:

@@ -27,3 +27,4 @@ export-*.zip
 
 # The online leaderboards access key (docs/online.md): never in git
 /online/talo.cfg
+.captures/

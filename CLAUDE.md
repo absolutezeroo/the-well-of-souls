@@ -2,6 +2,9 @@
 
 ## Claude Code
 
+- Visual or design work (art, assets, village layout, UI screens, effects): when done, have the
+  read-only `art-reviewer` subagent (.claude/agents/) check it against docs/art-bible.md before
+  calling it done, and attach the captures of `tools/design/capture.py`.
 - Balance work ("too strong", "too weak", a balance pass, after adding content): delegate to the
   `game-balancer` subagent (.claude/agents/). It measures with tools/balance and records the pass.
 - Skills in .claude/skills/: `add-content` (new monsters, items, perks, biomes...), `translate`

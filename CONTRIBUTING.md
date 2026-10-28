@@ -19,8 +19,11 @@ tests run. Python 3 (standard library only) runs the translation script.
 4. **Docs follow.** The page of `docs/design/` describing what changed is updated in the same commit,
    with the data texts that state a number (perk, rune and affix descriptions). Balance changes get an
    entry in [docs/balance-log.md](docs/balance-log.md).
-5. **Seen in the game.** For anything visual or about feel, play it (the debug panel takes you there):
-   passing tests don't prove it looks or feels right.
+5. **Design rules hold.** `python3 tools/design/check.py` (also run by `python3 tools/run_tests.py`;
+   its palette check needs Pillow) and [docs/art-bible.md](docs/art-bible.md): one art source, one UI
+   skin, whole scales, no ground tint, every asset in `REUSE.toml`.
+6. **Seen in the game.** For anything visual or about feel, play it (the debug panel takes you there):
+   passing tests don't prove it looks or feels right. Captures: `python3 tools/design/capture.py`.
 
 ## Commits
 

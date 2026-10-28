@@ -24,7 +24,9 @@ are in [../architecture.md](../architecture.md); how to add content is in
 | [loot.md](loot.md) | Item level, rarity and affixes, gold, the merchant, the belt, runes and the forge |
 | [progression.md](progression.md) | Difficulty and ascension, the title screen, the daily run and its online leaderboard, the Tree of Souls and oaths, quests, codex, achievements, run timer |
 | [interface.md](interface.md) | Controls, phone features (saves, options, minimap), the tutorial, the in-run screens |
-| [presentation.md](presentation.md) | Game feel, VFX, shaders, atmosphere, sound, lights, animations and the paper doll |
+| [presentation.md](presentation.md) | Game feel (and its binding limits), VFX, shaders, atmosphere, sound, lights, animations and the paper doll |
+| [village.md](village.md) | Kagari, the hub between descents: districts, placement rules, residents, quests, the temple |
+| [pillars.md](pillars.md) | What every feature is measured against: learning by playing, pacing, the fairness contract, builds, accessibility, phone performance, story, the definition of done |
 
 ## Story and identity
 

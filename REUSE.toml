@@ -1,0 +1,48 @@
+# Where every asset comes from, and under which licence (REUSE 3.3 format, licence text in LICENSES/,
+# https://reuse.software/spec-3.3/; the licence texts stay beside the packs: assets/LICENSE_*.txt,
+# assets/ui/rpg/LICENSE_Kenney_*.txt, assets/fonts/PixelOperator_LICENSE.txt).
+# tools/design/check.py (run by tools/run_tests.py) fails on any file under assets/ that no
+# annotation covers, or whose licence is not in APPROVED_LICENSES there.
+# Adding a source or a licence is the owner's decision (AGENTS.md "Ask the owner first",
+# docs/art-bible.md "Sources"). Never import another pack's art.
+version = 1
+
+[[annotations]]
+path = ["assets/characters/**", "assets/tiles/**", "assets/props/**", "assets/items/**", "assets/weapons/**", "assets/projectiles/**", "assets/fx/**"]
+SPDX-FileCopyrightText = "Pixel-boy and AAA (Ninja Adventure asset pack, https://pixel-boy.itch.io/ninja-adventure-asset-pack)"
+SPDX-License-Identifier = "CC0-1.0"
+SPDX-FileComment = "World art. Pack sheets copied unchanged, or derived from them for this game (recoloured on the pack's ramps, re-sliced, combined; element effects drawn on the element ramps of docs/vfx.md with tools/vfx). Which pack sheet each tile atlas is: docs/art-bible.md \"Sources\"."
+
+[[annotations]]
+path = ["assets/ui/*.png", "assets/ui/emotes/**", "assets/ui/icons/**", "assets/ui/perks/**", "assets/ui/skills/**", "assets/ui/sphere/**", "assets/ui/synergies/**", "assets/ui/wood/**"]
+SPDX-FileCopyrightText = "Pixel-boy and AAA (Ninja Adventure asset pack and its Godot example project)"
+SPDX-License-Identifier = "CC0-1.0"
+SPDX-FileComment = "Icons and small UI pieces from the pack; ui/wood from the pack's Godot example project."
+
+[[annotations]]
+path = ["assets/ui/rpg/**"]
+SPDX-FileCopyrightText = "Kenney (Pixel UI Pack, Fantasy UI Borders, https://kenney.nl)"
+SPDX-License-Identifier = "CC0-1.0"
+SPDX-FileComment = "The game's window skin (UiSkin, OrnateBoard). Licences: assets/ui/rpg/LICENSE_Kenney_*.txt."
+
+[[annotations]]
+path = ["assets/ui/placeholders/**", "assets/ui/scroll/**", "assets/icon/**", "assets/palette/**", "assets/shaders/**", "assets/theme/**"]
+SPDX-FileCopyrightText = "Le Puits des Âmes contributors"
+SPDX-License-Identifier = "CC0-1.0"
+SPDX-FileComment = "Made for this game (placeholders by tools/ui/make_placeholders.py, the scroll bar of docs/design/interface.md, the app icon drawn from the hero sprite, the palette snapshot, shaders, the theme)."
+
+[[annotations]]
+path = ["assets/audio/**"]
+SPDX-FileCopyrightText = "Pixel-boy and AAA (Ninja Adventure); Kenney (Impact Sounds); sounds synthesized for this game"
+SPDX-License-Identifier = "CC0-1.0"
+SPDX-FileComment = "Each audio folder's CREDITS.txt names the source file of every sound and what was done to it."
+
+[[annotations]]
+path = ["assets/fonts/**"]
+SPDX-FileCopyrightText = "Jayvee Enaguas (Pixel Operator), prompt glyphs added in its style"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ["assets/LICENSE_NinjaAdventure.txt", "assets/**/*.import", "assets/**/*.uid", "assets/**/*.txt", "assets/**/*.md", "assets/**/*.regions.txt"]
+SPDX-FileCopyrightText = "See the asset they describe"
+SPDX-License-Identifier = "CC0-1.0"
