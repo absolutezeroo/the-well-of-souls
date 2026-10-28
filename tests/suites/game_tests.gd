@@ -96,6 +96,7 @@ func test_cases() -> Array:
 		["save_and_resume", _on_game(_test_save_and_resume)],
 		["mortal_run", _on_game(_test_mortal_run)],
 		["saves", _on_game(func(game: Game) -> void: await (_borrow(SaveTests.new()) as SaveTests).run_game(game))],
+		["resume_leftovers", _on_game(func(game: Game) -> void: await (_borrow(SaveTests.new()) as SaveTests).run_resume_leftovers(game))],
 		["threshold_lost", _on_game(func(game: Game) -> void: await combat._test_threshold_lost(game))],
 		["abyss_death", _on_game(func(game: Game) -> void: await floor_suite._test_abyss_death(game))],
 		["pc", _on_game(func(game: Game) -> void: await (_borrow(PcTests.new()) as PcTests).run_game(game), true)],

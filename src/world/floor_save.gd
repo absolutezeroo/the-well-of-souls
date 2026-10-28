@@ -4,9 +4,11 @@ extends RefCounted
 ## World.spent_data() and World.restore_spent()). A resumed run rebuilds the floor from its seed,
 ## so the save keeps only what the hero changed on it: chests opened, the merchant's stock, the
 ## secret rooms, the pact, the fragment, the seal's kills, holes filled and cracks given way
-## (HoleField), the floor's own monsters slain or hurt, those that came later, the ambush, and
-## what the FloorLedger counts (items, gold, props, encounters used up). After the rebuild,
-## apply() lays all that back on the new floor, quietly (no sound, no drop, no kill counted).
+## (HoleField), the floor's own monsters slain or hurt, those that came later, the ambush (cleared,
+## or how far its fight went), what came later and lies on the ground (a monster's or a chest's
+## loot, gold, what the hero dropped: left_behind()), and what the FloorLedger counts (items,
+## gold, props, encounters used up). After the rebuild, apply() lays all that back on the new
+## floor, quietly (no sound, no drop, no kill counted).
 ##
 ## The format is the save file's (RunSave.FLOOR_FORMAT): every field is read as a save file may
 ## hold it, and a damaged one is skipped, never a script error.
@@ -70,26 +72,28 @@ func to_data() -> Dictionary:
 		"ambush": ambush_data(),
 		"wounded": wounded_spawns(),
 		"later": later_monsters(),
+		"left": left_behind(),
 	}
 	if world.room_trial and is_instance_valid(world.room_trial):
 		data["trial"] = world.room_trial.save_data()  # (only on a floor with one: the others' saves as they were)
 	if arena_cleared():
 		data["arena_cleared"] = true
-		data["left"] = left_behind()
 	return data
 
 
 ## The warden of this floor fell before quitting (not the bottom of the Well's: its ending
 ## follows at once): the run picks up in his cleared arena, the hidden way open again if the key
-## is still in the bag, what he dropped still lying there (left_behind()).
+## is still in the bag (what he dropped still lies there: left_behind(), as everywhere).
 func arena_cleared() -> bool:
 	var world := _world
 	return world.arena != null and is_instance_valid(world.arena) and world.arena.is_defeated and world.finale == null
 
 
-## What came later and still lies on the floor (a warden's loot, gold he dropped): [kind, data,
-## x, y] with kind "item" (data: LootRoller.to_data()) or "gold" (data: the coins). What the seed
-## laid is the ledger's: laid again on the rebuilt floor, not kept twice.
+## What came later and still lies on the floor, anywhere on it (a monster's or a warden's loot, a
+## chest's or a crate's, gold, what the hero put down from his bag): [kind, data, x, y] with kind
+## "item" (data: LootRoller.to_data()) or "gold" (data: the coins). Without it, loot left on the
+## ground was gone when the run was picked up (roadmap task 199). What the seed laid is the
+## ledger's: laid again on the rebuilt floor, not kept twice.
 func left_behind() -> Array:
 	var world := _world
 	var result: Array = []
@@ -148,7 +152,7 @@ func apply() -> void:
 	restored_chest_cells = cells
 	if data.get("arena_cleared", false) == true and world.arena:
 		world.arena.clear_quietly()
-		restore_left(_array(data, "left"))
+	restore_left(_array(data, "left"))  # (saves before 28 Oct 2026 kept it only for a cleared arena)
 	for node in _entities.get_children():
 		var chest := node as Chest
 		if chest and cells.has(world.map.world_to_cell(chest.global_position)):
@@ -197,31 +201,42 @@ static func _discard(node: Node) -> void:
 		node.tree_entered.connect(node.queue_free, CONNECT_ONE_SHOT)
 
 
-## What the save keeps of the floor's ambush: its room (a guard), cleared or not, its chest's cell.
+## What the save keeps of the floor's ambush: its room (a guard), cleared or not, its chest's cell;
+## a fight under way, how far it went (AmbushRoom.progress_data(): the waves still to come, the
+## wave's monsters still to face).
 func ambush_data() -> Dictionary:
 	var ambush := _world.ambush
 	if ambush == null or not is_instance_valid(ambush):
 		return {}
-	return {
+	var data := {
 		"room": [ambush.room.position.x, ambush.room.position.y, ambush.room.size.x, ambush.room.size.y],
 		"cleared": ambush.state == AmbushRoom.State.CLEARED,
 		"chest": [ambush.reward_cell.x, ambush.reward_cell.y],
 	}
+	if ambush.state == AmbushRoom.State.FIGHTING or ambush.is_resuming():
+		data.merge(ambush.progress_data())
+	return data
 
 
 ## An ambush cleared before quitting stays cleared (its waves don't come back), its chest where it
-## was put down. A saved room that isn't this floor's ambush restores nothing.
+## was put down. One under way waits for the hero again and goes on where it was when he walks
+## back in: the waves beaten stay beaten, the wave under way brings only its monsters still
+## standing (roadmap task 198: quitting no longer started its waves over, kills and gold again).
+## A saved room that isn't this floor's ambush restores nothing.
 func restore_ambush(saved: Variant) -> void:
 	var ambush := _world.ambush
-	if not saved is Dictionary or ambush == null or (saved as Dictionary).get("cleared", false) != true:
+	if not saved is Dictionary or ambush == null:
 		return
 	var room: Variant = (saved as Dictionary).get("room", [])
 	if not room is Array or (room as Array).size() != 4 \
 			or not (room as Array).all(func(n: Variant) -> bool: return n is float or n is int) \
 			or Rect2i(int(room[0]), int(room[1]), int(room[2]), int(room[3])) != ambush.room:
 		return
-	var chest := saved_cells([(saved as Dictionary).get("chest")])
-	ambush.restore_cleared(chest[0] if not chest.is_empty() else DungeonMap.NO_CELL)
+	if (saved as Dictionary).get("cleared", false) == true:
+		var chest := saved_cells([(saved as Dictionary).get("chest")])
+		ambush.restore_cleared(chest[0] if not chest.is_empty() else DungeonMap.NO_CELL)
+	elif (saved as Dictionary).has("waves_left"):
+		ambush.restore_progress(_number(saved, "waves_left"), _array(saved, "wave"))
 
 
 ## `key` of `data` if it is an array, else empty (a damaged save).
@@ -312,14 +327,10 @@ func later_monsters() -> Array:
 			continue
 		if world.arena and not world.arena.is_defeated and world.map.boss_room.has_point(world.map.world_to_cell(monster.global_position)):
 			continue
-		result.append({
-			"def": RunSave.ref(monster.def), "id": String(monster.def.id),
-			"at": [roundi(monster.global_position.x), roundi(monster.global_position.y)],
-			"health": snappedf(float(monster.hp) / monster.get_max_hp(), 0.001),
-			"rank": String(monster.rank.id) if monster.rank else "",
-			"affixes": monster.affixes.map(func(affix: EliteAffixDef) -> String: return String(affix.id)),
-			"summoned": monster.summoned,
-		})
+		var entry := monster_entry(monster)
+		entry["at"] = [roundi(monster.global_position.x), roundi(monster.global_position.y)]
+		entry["summoned"] = monster.summoned
+		result.append(entry)
 	return result
 
 
@@ -327,21 +338,17 @@ func later_monsters() -> Array:
 ## rank or affix the game no longer has, or a damaged entry, is skipped (it doesn't come back).
 func restore_later(saved: Array) -> void:
 	var world := _world
-	var config := world.config()
-	var ranks: Array[MonsterRankDef] = [config.elite_rank]
-	ranks.append_array(config.rare_ranks)
 	for entry: Variant in saved:
 		if not entry is Dictionary:
 			continue
 		var data := entry as Dictionary
-		var path := str(data.get("def", ""))
 		var at: Variant = data.get("at")
 		if not (at is Array and (at as Array).size() == 2):
 			continue
 		if not _coordinate(at[0]) or not _coordinate(at[1]):
 			continue
-		var def := RunSave.load_ref(path) as MonsterDef
-		if def == null or def is BossDef or String(def.id) != str(data.get("id", "")):
+		var def := entry_def(data)
+		if def == null:
 			continue
 		var point := Vector2(float(at[0]), float(at[1]))
 		var room := WorldSpace.room_for(def)
@@ -349,20 +356,52 @@ func restore_later(saved: Array) -> void:
 			point = world.nearest_free_point(point, 12, world.get_actors(), room, room)
 		var monster := world.spawn_monster(def, point)
 		monster.summoned = bool(data.get("summoned", false))
-		var rank_id := str(data.get("rank", ""))
-		var rank: MonsterRankDef = null
-		for candidate in ranks:
-			if candidate and String(candidate.id) == rank_id:
-				rank = candidate
-		if rank:
-			var affixes: Array[EliteAffixDef] = []
-			for affix_id: Variant in data.get("affixes", []):
-				for affix in world.content_db().elite_affixes:
-					if affix and String(affix.id) == str(affix_id):
-						affixes.append(affix)
-			monster.make_ranked(rank, affixes)
-		var share: Variant = data.get("health", 1.0)
-		_set_health_share(monster, float(share) if (share is float or share is int) else 1.0)
+		restore_monster(world, monster, data)
+
+
+## A monster as the save keeps one that came later or waits in an ambush's wave: its kind (its
+## file and id), its rank and affixes, the share of its Health it has left (restore_monster()).
+static func monster_entry(monster: Monster) -> Dictionary:
+	return {
+		"def": RunSave.ref(monster.def), "id": String(monster.def.id),
+		"health": snappedf(float(monster.hp) / monster.get_max_hp(), 0.001),
+		"rank": String(monster.rank.id) if monster.rank else "",
+		"affixes": monster.affixes.map(func(affix: EliteAffixDef) -> String: return String(affix.id)),
+	}
+
+
+## The kind saved in `entry` (monster_entry()): null when the game no longer has it, or the entry
+## is damaged.
+static func entry_def(entry: Variant) -> MonsterDef:
+	if not entry is Dictionary:
+		return null
+	var def := RunSave.load_ref(str((entry as Dictionary).get("def", ""))) as MonsterDef
+	if def == null or def is BossDef or String(def.id) != str((entry as Dictionary).get("id", "")):
+		return null
+	return def
+
+
+## `monster`, just spawned, gets back the rank, affixes and Health share of `entry`
+## (monster_entry()); a rank or an affix the game no longer has is left out.
+static func restore_monster(world: World, monster: Monster, entry: Dictionary) -> void:
+	var config := world.config()
+	var ranks: Array[MonsterRankDef] = [config.elite_rank]
+	ranks.append_array(config.rare_ranks)
+	var rank_id := str(entry.get("rank", ""))
+	var rank: MonsterRankDef = null
+	for candidate in ranks:
+		if candidate and String(candidate.id) == rank_id:
+			rank = candidate
+	if rank:
+		var affixes: Array[EliteAffixDef] = []
+		var saved_affixes: Variant = entry.get("affixes", [])
+		for affix_id: Variant in saved_affixes if saved_affixes is Array else []:
+			for affix in world.content_db().elite_affixes:
+				if affix and String(affix.id) == str(affix_id):
+					affixes.append(affix)
+		monster.make_ranked(rank, affixes)
+	var share: Variant = entry.get("health", 1.0)
+	_set_health_share(monster, float(share) if (share is float or share is int) else 1.0)
 
 
 ## `monster` at `share` of its Health (one at least), its bar told.

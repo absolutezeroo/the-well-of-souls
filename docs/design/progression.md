@@ -292,20 +292,29 @@ away and coming back never hands anything out again.
   encounter's monsters, a campfire's waves, what a slain one split into) come back **where they
   stood**, with their rank, affixes, share of Health and whether they were called in (no reward)
   ("later", by stable reference and id: a kind the game no longer has is skipped). Not an ambush's waves under
-  way (an ambush quit mid-fight starts over), nor what stands in a living warden's arena (the fight
-  starts over, the warden whole), nor statuses (seconds long), nor where the floor's own monsters
-  had wandered.
-- The ambush: cleared, it stays quiet, its chest back on the cell where it was put down.
+  way (below), nor what stands in a living warden's arena (the fight starts over, the warden
+  whole), nor statuses (seconds long), nor where the floor's own monsters had wandered.
+- The ambush: cleared, it stays quiet, its chest back on the cell where it was put down. **Quit
+  mid-fight**, it waits for the hero to walk back in (he comes back at the floor's start) and goes
+  on where it was: the waves beaten stay beaten, the wave under way brings only its monsters still
+  standing, each with its rank, affixes and share of Health, then the waves still to come
+  (`AmbushRoom.progress_data()`: "waves_left" and "wave" in the save's `floor.ambush`). Nothing to
+  farm by quitting: a slain monster never comes back to be slain again (until 28 Oct 2026 the
+  ambush started over, its kills and gold given again; an older save still does).
 - The merchant: his whole stock as it was (rerolled, sold to, locked, less what was bought) and
   his rerolls paid. An entry locked there and not bought also waits for the next merchant, and
   is never in his stock twice.
-- What came later and is no monster (a monster's drop, a chest's loot) isn't saved: it is never
-  laid again either. Except in a warden's cleared arena: a boss floor saved after its boss fell
-  resumes there (`floor.arena_cleared`, `BossArena.clear_quietly()`), the warden gone, the stairs
-  there, nothing given again (relic, heal, souls); what lies on its floor and wasn't laid by the
-  seed (his loot, his gold: `floor.left`) lies there again; the hidden way opens again if the key
-  is still in the bag; on the hidden floor, its hoard stands there again (open if it was). Only
-  the bottom of the Well's fall still goes on at once (`boss_slain`, to its ending).
+- **What came later and lies on the ground** (a monster's or a warden's drop, a chest's or a
+  crate's loot, gold, what the hero put down from his bag) lies there again, where it lay
+  (`floor.left`: [kind, data, x, y], `FloorSave.left_behind()`); what the seed laid is the
+  ledger's, never kept twice. Until 28 Oct 2026 only a warden's cleared arena kept it: loot left
+  on the ground was lost when the app was killed.
+- A warden's cleared arena: a boss floor saved after its boss fell resumes there
+  (`floor.arena_cleared`, `BossArena.clear_quietly()`), the warden gone, the stairs there,
+  nothing given again (relic, heal, souls), his loot still lying there; the hidden way opens
+  again if the key is still in the bag; on the hidden floor, its hoard stands there again (open
+  if it was). Only the bottom of the Well's fall still goes on at once (`boss_slain`, to its
+  ending).
 - The merchant, again from its seed: an entry locked there drops one rolled copy of itself, never
   an ordinary twin (`Merchant.drop_rolled_twins()`).
 - Every kind of floor is restored this way, boss floors and the hidden floor too. A seal broken

@@ -3016,8 +3016,8 @@
     {
       "id": "task_198",
       "title": "Reprise en pleine embuscade : les vagues recommencent",
-      "description": "Trouvé pendant l'audit sauvegarde (24/10). Mise en arrière-plan pendant les vagues : à la reprise l'embuscade attend de nouveau et ses vagues reviennent (les monstres déjà tués ont donné leur XP et leur or) ; on peut donc farmer un peu en recommençant. À voir si ça vaut la peine (compter l'embuscade comme nettoyée, ou garder la vague en cours).",
-      "status": "backlog",
+      "description": "Trouvé pendant l'audit sauvegarde (24/10). Mise en arrière-plan pendant les vagues : à la reprise l'embuscade attend de nouveau et ses vagues reviennent (les monstres déjà tués ont donné leur XP et leur or) ; on peut donc farmer un peu en recommençant. À voir si ça vaut la peine (compter l'embuscade comme nettoyée, ou garder la vague en cours).\n\n28/10 (agent polish) : corrigé. Une embuscade quittée en plein combat attend que le héros revienne (il reprend au début de l'étage), puis continue où elle en était : les vagues battues le restent, la vague en cours ne ramène que ses monstres encore debout (rang, affixes, part de Vie), puis les vagues restantes (AmbushRoom.progress_data, save floor.ambush waves_left/wave ; une ancienne sauvegarde recommence l'embuscade comme avant). Plus rien à farmer en quittant. Test : game.resume_leftovers. À vérifier sur le S23 : mettre l'appli en arrière-plan pendant la 2e vague, la tuer, reprendre : retourner dans la salle, la vague revient incomplète, pas de recommencement.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -3026,13 +3026,13 @@
         "économie"
       ],
       "created_at": 1792815301,
-      "updated_at": 1792815301
+      "updated_at": 1793186902
     },
     {
       "id": "task_199",
       "title": "Reprise : le butin tombé (monstres, coffres, caisses) et pas ramassé est perdu",
-      "description": "Trouvé pendant l'audit sauvegarde (24/10). Ce qui tombe pendant la partie n'a pas de numéro (FloorLedger) et n'est pas sauvé : à la reprise il a disparu. Pas de duplication possible, mais une perte si l'appli est tuée juste après un coffre. Idée : sauver les objets au sol sans numéro (objet + position) avec l'étage.\nRevue 2 : vaut aussi pour ce que le héros pose lui-même au sol (PlayerPack.drop_item → World.spawn_item hors de la pose : sans numéro, perdu à la reprise).\nRoadmap RPG du 26/10/2026 : R2.3 (task_304), docs/rpg-roadmap.md. Étendre/valider le contrat de butin au sol dans toutes les régions, sans déduire un état de bug du seul ancien texte de carte. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
-      "status": "backlog",
+      "description": "Trouvé pendant l'audit sauvegarde (24/10). Ce qui tombe pendant la partie n'a pas de numéro (FloorLedger) et n'est pas sauvé : à la reprise il a disparu. Pas de duplication possible, mais une perte si l'appli est tuée juste après un coffre. Idée : sauver les objets au sol sans numéro (objet + position) avec l'étage.\nRevue 2 : vaut aussi pour ce que le héros pose lui-même au sol (PlayerPack.drop_item → World.spawn_item hors de la pose : sans numéro, perdu à la reprise).\nRoadmap RPG du 26/10/2026 : R2.3 (task_304), docs/rpg-roadmap.md. Étendre/valider le contrat de butin au sol dans toutes les régions, sans déduire un état de bug du seul ancien texte de carte. Statut historique conservé ; voir le nouveau cadrage avant reprise.\n\n28/10 (agent polish) : corrigé. Tout ce qui est venu après la pose de l'étage et traîne au sol (butin de monstre, de coffre, de caisse, or, objet posé par le héros) est sauvé avec l'étage (floor.left, FloorSave.left_behind, avant seulement dans l'arène du gardien vaincue) et remis à sa place à la reprise ; ce que la graine a posé reste au registre (jamais en double). Test : game.resume_leftovers (et game.saves mis à jour : il supposait la perte). À vérifier sur le S23 : ouvrir un coffre sans ramasser, tuer l'appli, reprendre : le butin est là, une seule fois.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -3040,7 +3040,7 @@
         "sauvegarde"
       ],
       "created_at": 1792815301,
-      "updated_at": 1792973386
+      "updated_at": 1793186902
     },
     {
       "id": "task_200",

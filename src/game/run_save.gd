@@ -97,16 +97,19 @@ const SHAPE := {
 		"slain": "array",
 		"spent": "dict",
 		"merchant": "dict",
+		# The ambush: cleared and its chest's cell, or a fight under way's "waves_left" and "wave"
+		# (AmbushRoom.progress_data(); optional: an older save starts the fight over).
 		"ambush": "dict",
 		# The floor's hurt monsters, [floor_index, id, Health share], and those that came later
 		# (World.spent_data()); optional: a save without them restores them whole / not at all.
 		"wounded": ["array"],
 		"later": [{ "def": "string", "id": "string", "at": "array", "health": "number", "rank": "string", "affixes": "array", "summoned": "bool" }],
-		# The warden fell before quitting: the run picks up in his cleared arena, with what lay
-		# there ([kind, data, x, y]; FloorSave.left_behind()).
+		# The warden fell before quitting: the run picks up in his cleared arena.
 		"arena_cleared": "bool",
 		# The floor's room trial: its id and steps done (RoomTrial.save_data()).
 		"trial": "dict",
+		# What came later and lay on the ground, anywhere on the floor ([kind, data, x, y];
+		# FloorSave.left_behind(); saves before 28 Oct 2026 kept it only with arena_cleared).
 		"left": ["array"],
 	},
 }
