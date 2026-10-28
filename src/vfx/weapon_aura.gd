@@ -24,6 +24,8 @@ var elements: Array[VfxElementDef] = []
 var _emitters: PackedVector2Array = PackedVector2Array()
 var _center := Vector2.ZERO
 var _motes: Array[Dictionary] = []
+## Motes that died, kept to be born again (no new dictionary a step: docs/performance.md).
+var _spare: Array[Dictionary] = []
 var _clock := 0.0
 var _tick := 0.0
 
@@ -95,10 +97,14 @@ func _process(delta: float) -> void:
 			_motes.clear()
 			queue_redraw()
 		return
-	for mote in _motes:
+	# Aged and moved, the dead ones taken out in place (a filter built a new array each step).
+	for i in range(_motes.size() - 1, -1, -1):
+		var mote := _motes[i]
 		mote.age += step
 		_move(mote, step)
-	_motes = _motes.filter(func(m: Dictionary) -> bool: return m.age < m.life)
+		if mote.age >= mote.life:
+			_spare.append(mote)
+			_motes.remove_at(i)
 	for i in elements.size():
 		var wanted := FIRST if i == 0 else OTHER
 		var alive := 0
@@ -113,10 +119,13 @@ func _process(delta: float) -> void:
 func _spawn(index: int) -> void:
 	var element := elements[index]
 	var at := _emitters[randi() % _emitters.size()]
-	var mote := {
-		"element": index, "age": 0.0, "life": randf_range(LIFE.x, LIFE.y),
-		"pos": at, "vel": Vector2.ZERO, "angle": randf() * TAU,
-	}
+	var mote: Dictionary = _spare.pop_back() if not _spare.is_empty() else {}
+	mote.element = index
+	mote.age = 0.0
+	mote.life = randf_range(LIFE.x, LIFE.y)
+	mote.pos = at
+	mote.vel = Vector2.ZERO
+	mote.angle = randf() * TAU
 	var away := (at - _center).normalized() if at != _center else Vector2.UP
 	match element.motion:
 		VfxElementDef.Motion.RISE:

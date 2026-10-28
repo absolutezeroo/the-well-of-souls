@@ -45,8 +45,13 @@ var _frame: FocusFrame
 ## Menu (its instance id) -> the controls focused in it lately, the latest last (WeakRefs): when
 ## what covered it closes, or its focused button goes away, the focus comes back to them.
 var _history := {}
-## The menus open on the last frame (instance ids): one not in it has just opened.
+## The menus open (instance id -> the frame they were last seen open, `_tick`): one no longer
+## seen open has just closed. Kept, not built again every frame (docs/performance.md).
 var _open := {}
+var _tick := 0
+## The group's menus as last asked of the tree: asked again only when it changed (a menu came or
+## went), not every frame (a group scan builds an array).
+var _menus: Array[Node] = []
 ## How many controls each menu remembers.
 const HISTORY := 8
 ## The left stick's axes pushed past the dead zone (a stick sends many events: one move a push).
@@ -76,7 +81,8 @@ static func set_first(menu: Control, control: Control) -> void:
 func top_menu() -> Control:
 	var best: Control = null
 	var best_layer := -4096
-	for node in get_tree().get_nodes_in_group(GROUP):
+	_refresh_menus()
+	for node in _menus:
 		var menu := node as Control
 		if menu == null or not menu.is_visible_in_tree():
 			continue
@@ -85,6 +91,20 @@ func top_menu() -> Control:
 			best = menu
 			best_layer = layer_index
 	return best
+
+
+## The group's menus (`_menus`) asked of the tree again only when one came or went: the group
+## counts another number, or one kept is gone or out of the tree.
+func _refresh_menus() -> void:
+	var tree := get_tree()
+	var stale := _menus.size() != tree.get_node_count_in_group(GROUP)
+	if not stale:
+		for node in _menus:
+			if not is_instance_valid(node) or not node.is_inside_tree():
+				stale = true
+				break
+	if stale:
+		_menus = tree.get_nodes_in_group(GROUP)
 
 
 ## Focuses `menu`'s first control (see the class doc); false if it has none.
@@ -111,14 +131,20 @@ func focusables(menu: Control) -> Array[Control]:
 
 
 func _process(_delta: float) -> void:
-	var open := {}
-	for node in get_tree().get_nodes_in_group(GROUP):
+	_tick += 1
+	_refresh_menus()
+	for node in _menus:
 		if node is Control and (node as Control).is_visible_in_tree():
-			open[node.get_instance_id()] = true
+			_open[node.get_instance_id()] = _tick
+	var closed := 0
 	for id: int in _open:
-		if not open.has(id):
-			_history.erase(id)  # closed: it starts afresh next time
-	_open = open
+		if _open[id] != _tick:
+			closed += 1
+	if closed > 0:  # (rare: a list only then)
+		for id: int in _open.keys():
+			if _open[id] != _tick:
+				_open.erase(id)
+				_history.erase(id)  # closed: it starts afresh next time
 	var top := top_menu() if InputDevice.uses_buttons() else null
 	var focus := get_viewport().gui_get_focus_owner()
 	if top != null and (focus == null or not top.is_ancestor_of(focus) or not focus.is_visible_in_tree()):

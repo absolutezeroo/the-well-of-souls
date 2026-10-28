@@ -16,22 +16,58 @@ const JITTER_PX := 3
 var _text := ""
 var _color := Color.WHITE
 var _age := 0.0
+## Where it goes when its life is over (WorldSpawner's pool, docs/performance.md "Pools"); null:
+## freed.
+var pool: NodePool
+## What the last _draw() showed (_draw_key()): drawn again only when it changes.
+var _drawn := -1
 
 
 static func create(at: Vector2, text: String, color: Color) -> FloatingText:
 	var vfx := FloatingText.new()
-	vfx.position = PixelDraw.snap(at) + Vector2(randi_range(-JITTER_PX, JITTER_PX) * PixelDraw.PX, 0.0)
-	vfx._text = text
-	vfx._color = color
+	vfx.restart(at, text, color)
 	vfx.z_index = 10
 	return vfx
+
+
+## Shown again from the start, at `at` (a new one, or one from the pool).
+func restart(at: Vector2, text: String, color: Color) -> void:
+	position = PixelDraw.snap(at) + Vector2(randi_range(-JITTER_PX, JITTER_PX) * PixelDraw.PX, 0.0)
+	_text = text
+	_color = color
+	_age = 0.0
+	_drawn = -1
+	set_process(true)
+	queue_redraw()
+
+
+## Its text changed while it shows (drawn again at once).
+func set_text(text: String) -> void:
+	_text = text
+	queue_redraw()
 
 
 func _process(delta: float) -> void:
 	_age += delta
 	if _age >= LIFETIME:
-		queue_free()
-	queue_redraw()
+		set_process(false)
+		if pool:
+			pool.give(self)
+		else:
+			queue_free()
+		return
+	var key := _draw_key()
+	if key != _drawn:
+		_drawn = key
+		queue_redraw()
+
+
+## What _draw() shows as one number: the rise in whole art pixels, the fade's cut, the pop.
+func _draw_key() -> int:
+	var t := _age / LIFETIME
+	var rise := roundi(RISE * ease(t, 0.5) / PixelDraw.PX)
+	var cut := ceili((1.0 - maxf(t - 0.5, 0.0) * 2.0) * FADE_STEPS)
+	return rise * 64 + cut * 2 + (1 if t < POP_TIME else 0)
 
 
 func _draw() -> void:

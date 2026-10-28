@@ -654,7 +654,12 @@ func splat_count() -> int:
 func spawn_floating_text(at: Vector2, text: String, color: Color) -> void:
 	if not Vfx.shown:
 		return
-	spawn_vfx(FloatingText.create(at, text, color))
+	spawns.floating_text(at, text, color)  # (from its pool: WorldSpawner.text_pool)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE and spawns:
+		spawns.free_pools()  # the shots and numbers kept for later go with the World
 
 
 # --- Holes ------------------------------------------------------------------

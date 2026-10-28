@@ -1350,7 +1350,7 @@
     {
       "id": "task_98",
       "title": "Mesurer les performances sur le S23",
-      "description": "Tous les nouveaux effets, shaders et dialogues n'ont jamais été mesurés sur le téléphone (images/s, mémoire, chauffe).\nRoadmap RPG du 26/10/2026 : R8.4 (task_334), docs/rpg-roadmap.md. Mesures S23 conservées comme exigence de la transformation. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
+      "description": "Tous les nouveaux effets, shaders et dialogues n'ont jamais été mesurés sur le téléphone (images/s, mémoire, chauffe).\nRoadmap RPG du 26/10/2026 : R8.4 (task_334), docs/rpg-roadmap.md. Mesures S23 conservées comme exigence de la transformation. Statut historique conservé ; voir le nouveau cadrage avant reprise.\n\nLe 28/10 : tools/perf/perf_probe.tscn donne maintenant P99 et la part d'images au-delà de 16,7 ms ; projectiles et nombres en pool (task_414). Reste la mesure sur le S23.",
       "status": "backlog",
       "priority": "high",
       "epic_id": "epic_6",
@@ -1360,7 +1360,7 @@
         "perf"
       ],
       "created_at": 1792720000,
-      "updated_at": 1792973386
+      "updated_at": 1793166309
     },
     {
       "id": "task_99",
@@ -6248,8 +6248,8 @@
     {
       "id": "task_414",
       "title": "Performance prouvée sur le S23 : P99, pools, une création lourde par image",
-      "description": "Audit du 28/10 : aucune mesure sur le téléphone (voir task_98). Sur la VM : combat de 40 monstres, moyenne 5,75 ms, P95 11,9 ms, max 23,9 ms ; lancement jusqu'au titre 4,4-4,6 s en headless (cible < 5 s, à risque sur Android). Écarts dans le code : projectiles et nombres de dégâts non mis en pool ; defer_monsters et SummonEffect créent tout un lot dans la même image ; MenuNav._process alloue et scanne un groupe à chaque image ; Tutorial._check_world continue quand tous les indices sont vus ; perf_probe ne donne pas de P99.",
-      "status": "backlog",
+      "description": "Audit du 28/10 : aucune mesure sur le téléphone (voir task_98). Sur la VM : combat de 40 monstres, moyenne 5,75 ms, P95 11,9 ms, max 23,9 ms ; lancement jusqu'au titre 4,4-4,6 s en headless (cible < 5 s, à risque sur Android). Écarts dans le code : projectiles et nombres de dégâts non mis en pool ; defer_monsters et SummonEffect créent tout un lot dans la même image ; MenuNav._process alloue et scanne un groupe à chaque image ; Tutorial._check_world continue quand tous les indices sont vus ; perf_probe ne donne pas de P99.\n\nFait le 28/10 (branche fix/pacing) : projectiles et nombres de dégâts en pool (NodePool : retirés de l'arbre et réutilisés, 48 au plus par monde) ; nombres redessinés seulement quand ils changent ; monstres appelés (coffre piégé, division, invocation) un par image ; MenuNav ne rescanne le groupe « menu » que quand un menu arrive ou part ; Tutorial cesse de chercher ses indices quand tous sont vus ; aura d'arme et cadre d'indice sans allocation par image ; perf_probe donne P99 et la part d'images au-delà de 16,7 ms. Tests : unit.perf et game.perf. Mesures VM dans docs/performance.md. À vérifier sur le S23 : P99 en combat chargé (carte task_98).",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_5",
       "due_date": null,
@@ -6258,7 +6258,7 @@
         "android"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793166309
     },
     {
       "id": "task_415",
@@ -6300,6 +6300,21 @@
       "due_date": null,
       "tags": [
         "niveaux"
+      ],
+      "created_at": 1793166309,
+      "updated_at": 1793166309
+    },
+    {
+      "id": "task_418",
+      "title": "Pools pour les effets courants et les monstres",
+      "description": "Suite de task_414 : projectiles et nombres sont en pool ; restent les effets courants (ImpactVfx, SheetVfx, particules CPU, flashs de lumière) et les monstres d'embuscade et d'invocation (une instanciation par image suffit pour l'instant). À faire si le S23 montre des pics à la création (task_98).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "due_date": null,
+      "tags": [
+        "perf",
+        "android"
       ],
       "created_at": 1793166309,
       "updated_at": 1793166309

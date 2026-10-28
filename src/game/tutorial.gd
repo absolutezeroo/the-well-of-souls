@@ -36,6 +36,9 @@ const ACTIONS: Array[StringName] = [
 const CONDITIONS: Array[StringName] = [&"sealed", &"has_belt_item", &"has_weapon_skill"]
 ## Seconds between two looks at the polled cues.
 const POLL := 0.25
+## The cues _check_world() looks for (nobody signals them).
+const WORLD_CUES: Array[StringName] = [&"low_health", &"cold", &"hot", &"merchant_near", &"forge_near",
+	&"chest_near", &"cracked_wall_near", &"pact_near", &"encounter_near", &"rune_carried", &"gear_carried", &"spell_learned"]
 
 signal hint_shown(hint: HintDef)
 signal hint_closed(hint: HintDef)
@@ -137,7 +140,8 @@ func _process(delta: float) -> void:
 	_poll -= delta
 	if _poll <= 0.0:
 		_poll = POLL
-		_check_world()
+		if _world_cues_left():
+			_check_world()
 	if current:
 		_follow_target()
 		if current.duration > 0.0:
@@ -166,33 +170,51 @@ func _follow_target() -> void:
 		box.set_target(hud.hint_target(current.target))
 
 
-## The cues nobody signals: checked a few times a second.
+## The cues nobody signals: checked a few times a second, each only while a hint it brings is
+## still to see (once every hint is seen, nothing is scanned: docs/performance.md).
 func _check_world() -> void:
-	if player.get_max_hp() > 0 and float(player.hp) / player.get_max_hp() <= def.low_health:
+	if _cue_left(&"low_health") and player.get_max_hp() > 0 and float(player.hp) / player.get_max_hp() <= def.low_health:
 		cue(&"low_health")
 	if player.temperature.value <= -def.temperature:
 		cue(&"cold")
 	elif player.temperature.value >= def.temperature:
 		cue(&"hot")
-	if _near(&"merchants"):
+	if _cue_left(&"merchant_near") and _near(&"merchants"):
 		cue(&"merchant_near")
-	if _near(&"forges"):
+	if _cue_left(&"forge_near") and _near(&"forges"):
 		cue(&"forge_near")
-	if _near(&"chests"):
+	if _cue_left(&"chest_near") and _near(&"chests"):
 		cue(&"chest_near")
-	if _near(&"cracked_walls"):
+	if _cue_left(&"cracked_wall_near") and _near(&"cracked_walls"):
 		cue(&"cracked_wall_near")
-	if _near(&"pact_doors"):
+	if _cue_left(&"pact_near") and _near(&"pact_doors"):
 		cue(&"pact_near")
-	if _near(&"encounters"):
+	if _cue_left(&"encounter_near") and _near(&"encounters"):
 		cue(&"encounter_near")
-	for item in player.inventory.items:
-		if item is RuneDef:
-			cue(&"rune_carried")
-		elif item is EquipmentDef:
-			cue(&"gear_carried")
+	if _cue_left(&"rune_carried") or _cue_left(&"gear_carried"):
+		for item in player.inventory.items:
+			if item is RuneDef:
+				cue(&"rune_carried")
+			elif item is EquipmentDef:
+				cue(&"gear_carried")
 	if player.learned_skill:
 		cue(&"spell_learned")
+
+
+## A hint `cue_name` brings up is still to see (not seen on this profile).
+func _cue_left(cue_name: StringName) -> bool:
+	for hint in def.hints:
+		if hint.cue == cue_name and not Profile.has_seen_hint(hint.id):
+			return true
+	return false
+
+
+## Some hint the world's cues bring up is still to see (_check_world() has something to do).
+func _world_cues_left() -> bool:
+	for cue_name in WORLD_CUES:
+		if _cue_left(cue_name):
+			return true
+	return false
 
 
 func _near(group: StringName) -> bool:

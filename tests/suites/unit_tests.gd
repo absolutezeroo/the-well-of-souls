@@ -65,7 +65,7 @@ func test_cases() -> Array:
 		["text_grid", _test_text_grid],
 		["charged_attacks", _test_charged_attacks],
 		["blows_in_four_directions", _test_blows_in_four_directions],
-		["perf", func() -> void: await _part(PerfTests.new(), func(suite: PerfTests) -> void: suite.run_unit())],
+		["perf", func() -> void: await _part(PerfTests.new(), func(suite: PerfTests) -> void: await suite.run_unit())],
 		["sound", func() -> void: await _part(SoundTests.new(), func(suite: SoundTests) -> void: suite.run())],
 		["vfx", func() -> void: await _part(VfxTests.new(), func(suite: VfxTests) -> void: suite.run())],
 		["level", func() -> void: await _part(LevelTests.new(), func(suite: LevelTests) -> void: suite.run_unit())],
