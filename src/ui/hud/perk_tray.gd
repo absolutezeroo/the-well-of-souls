@@ -21,9 +21,10 @@ func _rebuild() -> void:
 		remove_child(child)
 		child.queue_free()
 	for synergy in _perks.awakened():
-		var badge := Control.new()
+		var badge := Panel.new()
 		badge.custom_minimum_size = ICON_SIZE + Vector2(8, 8)
 		badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		badge.add_theme_stylebox_override("panel", StyleBoxEmpty.new())  # (drawn below, in the skin)
 		# The family's color as the skin's frame around its sign, over a faint wash of it.
 		var color: Color = synergy.color
 		badge.draw.connect(func() -> void:

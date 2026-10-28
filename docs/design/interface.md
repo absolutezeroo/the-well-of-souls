@@ -476,8 +476,10 @@ from `src/ui/common/`: the wooden `OrnateBoard` with its gold border (under `Rpg
 buttons, and the colours of `UiSkin` ([decision 0003](../decisions/0003-one-ui-skin.md)). No other
 frame exists: no white or light panel, no `StyleBoxFlat`, no box drawn from another asset.
 **Checked**: `tools/design/check.py` fails on a `StyleBoxFlat`/`StyleBoxTexture` built outside
-`src/ui/common/` (the few older files that still do are listed there and only shrink) and on an
-inline StyleBox in a scene. A new frame style or colour token is the owner's decision.
+`src/ui/common/` (its list of older files is empty since 28 Oct 2026: rows, slots, notes and
+coloured edges come from `UiSkin.band()`, `slot_frame()`, `note_box()`, `draw_edge()`), on an
+inline StyleBox in a scene, and on an odd separation, margin or minimum size in the interface's
+code. A new frame style or colour token is the owner's decision.
 
 Numbers to hold (sources in [the art bible](../art-bible.md)'s research report):
 
