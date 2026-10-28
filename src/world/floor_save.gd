@@ -72,8 +72,10 @@ func to_data() -> Dictionary:
 		"ambush": ambush_data(),
 		"wounded": wounded_spawns(),
 		"later": later_monsters(),
-		"left": left_behind(),
 	}
+	var left := left_behind()
+	if not left.is_empty():
+		data["left"] = left  # (only when something lies there: a fresh floor's block as it was)
 	if world.room_trial and is_instance_valid(world.room_trial):
 		data["trial"] = world.room_trial.save_data()  # (only on a floor with one: the others' saves as they were)
 	if arena_cleared():
