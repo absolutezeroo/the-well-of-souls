@@ -83,6 +83,8 @@ func run_unit() -> void:
 					if node is Merchant or node is Forge:
 						releases.append(pacing.progress.get(map.room_at(map.world_to_cell((node as Node2D).global_position)), 0.0))
 				for cell in standing:
+					if map.room_at(cell) >= 0 and map.plan(map.room_at(cell)).is_set_piece():
+						continue  # (a signature room's own scenes stand around its columns by design)
 					for pillar: Vector2i in map.pillars:
 						if maxi(absi(cell.x - pillar.x), absi(cell.y - pillar.y)) <= FloorPopulator.PILLAR_CLEARANCE:
 							squeezed.append("%s: %s by the pillar %s" % [case_name, cell, pillar])
@@ -116,9 +118,39 @@ func run_unit() -> void:
 		var mean := float(bodies[difficulty_id]) / maxf(per_floor, 1.0)
 		var wanted := 47.0 if difficulty_id == &"easy" else 97.0
 		check(absf(mean - wanted) <= wanted * 0.25, "%s floors hold about as many monsters as before (%.0f, %.0f before)" % [difficulty_id, mean, wanted])
+	_test_set_pieces_dressed(world)
 	world.clear_floor()
 	remove_child(world)
 	world.free()
+
+
+## A signature room with columns is still dressed with its own scenes (its throne, its rubble):
+## the room kept clear around pillars is not kept from them (FloorDresser.dress() `kept_clear`;
+## the Throne Hall went bare on half its floors when it was).
+func _test_set_pieces_dressed(world: World) -> void:
+	var dungeon := CONTENT.dungeon
+	world.difficulty = CONTENT.get_difficulty(&"normal")
+	var bare: Array[String] = []
+	var made := 0
+	for a in dungeon.acts.size():
+		for biome in dungeon.acts[a].biomes:
+			for piece in biome.set_pieces:
+				if piece.scenes.is_empty() or piece.pillars == RoomShapeDef.Pillars.NONE:
+					continue
+				for s in 3:
+					var forced: BiomeDef = biome.duplicate()
+					forced.set_pieces = [piece] as Array[RoomShapeDef]
+					forced.set_piece_chance = 1.0
+					world.overrides.biome = forced
+					world.rng.seed = hash("pacing-set-piece-%s-%d" % [piece.id, s])
+					world.build_floor(dungeon.first_depth(a) + 1, CONTENT)
+					if not world.map.plans.any(func(plan: RoomPlan) -> bool: return plan.shape == piece):
+						continue
+					made += 1
+					if not piece.scenes.any(func(scene: SceneDef) -> bool: return FloorDresser.last_scenes.has(scene)):
+						bare.append("%s/%d" % [piece.id, s])
+	world.overrides.biome = null
+	check(made >= 10 and bare.is_empty(), "signature rooms with columns keep their own scenes beside the pillars' clearance (%d floors; bare: %s)" % [made, ", ".join(bare)])
 
 
 ## Rooms that hold a fight whatever their monsters: the ambush, the pact door, the sealed trial.

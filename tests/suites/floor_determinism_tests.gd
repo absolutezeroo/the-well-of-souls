@@ -20,10 +20,11 @@ const WORLD_SCENE := "res://src/world/world.tscn"
 ## change those five again; FLOOR_FORMAT 3 protects older saved floors. Decision 0012 (2026-10-28)
 ## recorded all twelve again: rooms 3 cells apart and corridors bent around them, monsters by the
 ## rooms' size, calm rooms, the peak and the release, a chest on every floor, draws without
-## repeats, the spring before every boss; FLOOR_FORMAT 4.
+## repeats, the spring before every boss; FLOOR_FORMAT 4. Then plain_d2 and resumed (their
+## signature room's own scenes no longer kept from its pillars' clearance).
 ## Change only on purpose.
 const EXPECTED := {
-	"plain_d2": 1003714455,
+	"plain_d2": 805182088,
 	"plain_d5": 3019354865,
 	"plain_d8": 1375160831,
 	"boss_act1": 993257950,
@@ -32,7 +33,7 @@ const EXPECTED := {
 	"forced_plain": 194188831,
 	"route": 2643120137,
 	"two_ways": 3547954146,
-	"resumed": 349901043,
+	"resumed": 1241700962,
 	"hidden": 2614939729,
 	"finale": 1063777049,
 }
