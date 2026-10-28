@@ -110,12 +110,14 @@ func _test_floor_kept(game: Game) -> void:
 	var stock_before := _stock_keys(merchant)
 	await _frames(2)
 
+	# What came later lies there again too (task 199: the ambush's and the encounter's drops).
+	var later := _later_items(world)
 	game._save_run()
 	game.resume_run(RunSave.read())
 	await _frames(5)
 	world = game.world
 	player = game.player
-	check(_of(world, &"pickups").size() == pickups_before - 1, "resumed, the item taken isn't lying there again (%d of %d)" % [_of(world, &"pickups").size(), pickups_before])
+	check(_of(world, &"pickups").size() == pickups_before - 1 + later, "resumed, the item taken isn't lying there again, what came later is (%d of %d, %d came later)" % [_of(world, &"pickups").size(), pickups_before, later])
 	check(not _of(world, &"pickups").any(func(n: Node) -> bool: return (n as Node2D).global_position.distance_to(item_at) < 1.0), "...not where it lay")
 	check(world.get_breakable_props().size() == props_before - 1, "the prop broken stays broken (%d of %d)" % [world.get_breakable_props().size(), props_before])
 	check(prop_cells.all(func(cell: Vector2i) -> bool: return not world.nav.is_blocked(cell)), "...its cells free")
@@ -149,13 +151,14 @@ func _test_floor_kept(game: Game) -> void:
 	# Its chest opened, then put away again: open.
 	chests[0].open()
 	await _frames(2)
+	later = _later_items(world)
 	game._save_run()
 	game.resume_run(RunSave.read())
 	await _frames(5)
 	world = game.world
 	chests = _chests_at(world, chest_cell)
 	check(chests.size() == 1 and chests[0].is_open, "the ambush's chest opened stays opened")
-	check(_of(world, &"pickups").size() == pickups_before - 1 and world.get_breakable_props().size() == props_before - 1, "a second resume keeps it all as it was")
+	check(_of(world, &"pickups").size() == pickups_before - 1 + later and world.get_breakable_props().size() == props_before - 1, "a second resume keeps it all as it was (%d of %d, %d came later)" % [_of(world, &"pickups").size(), pickups_before, later])
 	game.player.invincible = false
 	game.player.xp = 0
 
@@ -285,6 +288,128 @@ func _test_cleared_arena(game: Game) -> void:
 		hoards = world.get_node("Entities").get_children().filter(func(n: Node) -> bool: return n is Chest and (n as Chest).def == hidden_def.chest)
 		check(game.run.hidden_floor and world.arena.is_defeated and hoards.size() == 1 and (hoards[0] as Chest).is_open, "picked up below, the hoard stands there again, open as it was left")
 	game.player.invincible = false
+
+
+## Put away in the middle of things (roadmap tasks 198 and 199): an ambush under way goes on where
+## it was when the hero walks back in (the waves beaten stay beaten, the wave under way brings only
+## what still stood, at the Health it had: nothing to farm by quitting), and loot that came later
+## and lay on the ground (a drop, coins, what the hero put down) lies there again, once.
+func run_resume_leftovers(game: Game) -> void:
+	var config := CONTENT.dungeon
+	var kept_chance := config.ambush_chance
+	var kept_waves := config.ambush_waves
+	config.ambush_chance = 1.0
+	config.ambush_waves = maxi(config.ambush_waves, 3)
+	game.start_run()
+	await _frames(3)
+	var player: Player = game.player
+	player.invincible = true
+	player.xp = -1000000  # no level up (and its choice) from the kills below
+	var world: World = game.world
+	for target in range(2, 12):
+		if world.ambush:
+			break
+		game.depth = target
+		game._enter_floor()
+		await _frames(3)
+		world = game.world
+	var ambush := world.ambush
+	check(ambush != null, "a floor with an ambush (depth %d)" % game.depth)
+	if ambush == null:
+		config.ambush_chance = kept_chance
+		config.ambush_waves = kept_waves
+		return
+	# The first wave beaten, the second come in: one of it slain, one hurt.
+	ambush.start()
+	var waves := ambush.waves_left + 1
+	for i in 60 * 30:
+		if ambush.waves_left < waves - 1 and ambush._to_spawn.is_empty() and not ambush._wave.is_empty():
+			break
+		if ambush._to_spawn.is_empty():
+			for monster: Variant in ambush._wave:
+				if is_instance_valid(monster) and not (monster as Monster).is_dead:
+					(monster as Monster).take_hit(Combat.make_secondary_hit(player, 99999))
+		await _frames(1)
+	var standing := ambush._wave.filter(func(m: Variant) -> bool: return is_instance_valid(m) and not (m as Monster).is_dead)
+	check(ambush.state == AmbushRoom.State.FIGHTING and ambush.waves_left == waves - 2 and standing.size() >= 2, "the ambush's second wave stands (%d waves left, %d monsters)" % [ambush.waves_left, standing.size()])
+	if standing.size() < 2:
+		config.ambush_chance = kept_chance
+		config.ambush_waves = kept_waves
+		return
+	(standing[0] as Monster).take_hit(Combat.make_secondary_hit(player, 99999))
+	var hurt := standing[1] as Monster
+	hurt.hp = maxi(1, floori(hurt.get_max_hp() / 3.0))
+	await _frames(2)
+	var hurt_share := float(hurt.hp) / hurt.get_max_hp()  # (as saved: a moss heart may have mended it a little)
+	var waves_left := ambush.waves_left
+	var still := standing.size() - 1
+	# Loot that came later: a drop and coins lying on the floor, away from the ambush.
+	# (In a room far from where the hero comes back, and from the ambush: nothing picks it up.)
+	var spot := world.map.cell_to_world(world.map.start_cell)
+	for room in world.map.rooms:
+		var center := world.map.cell_to_world(room.get_center())
+		if not room.intersects(ambush.room) and center.distance_to(world.map.cell_to_world(world.map.start_cell)) > spot.distance_to(world.map.cell_to_world(world.map.start_cell)):
+			spot = center
+	spot = world.nearest_free_point(spot)
+	player.global_position = world.nearest_free_point(world.map.cell_to_world(ambush.room.get_center()))
+	var drop_id := (load("res://data/items/weapons/hammer.tres") as ItemDef).id
+	world.spawn_item(load("res://data/items/weapons/hammer.tres") as ItemDef, spot)
+	world.spawn_gold(spot + Vector2(0, 32), 23)
+	await _frames(2)
+	var hammers := _lying(world, drop_id).y
+	var coins_before := 0
+	for coins: Node in _of(world, &"gold"):
+		coins_before += (coins as GoldPickup).amount
+	var kills := game.run.kills
+
+	game._save_run()
+	game.resume_run(RunSave.read())
+	await _frames(5)
+	world = game.world
+	player = game.player
+	player.invincible = true
+	player.xp = -1000000
+	ambush = world.ambush
+	check(ambush != null and ambush.state == AmbushRoom.State.WAITING, "resumed, the ambush waits for the hero again")
+	var coins_back := 0
+	for coins: Node in _of(world, &"gold"):
+		coins_back += (coins as GoldPickup).amount
+	check(_lying(world, drop_id).y == hammers and hammers >= 1, "the drop left on the ground lies there again (%d of %d)" % [_lying(world, drop_id).y, hammers])
+	check(coins_back == coins_before and coins_before >= 23, "...and the coins (%d of %d)" % [coins_back, coins_before])
+	# Saved again at once and picked up again: still once, not twice.
+	game._save_run()
+	game.resume_run(RunSave.read())
+	await _frames(5)
+	world = game.world
+	player = game.player
+	player.invincible = true
+	player.xp = -1000000
+	ambush = world.ambush
+	check(_lying(world, drop_id).y == hammers, "saved again, it lies there once (%d of %d)" % [_lying(world, drop_id).y, hammers])
+	if ambush == null:
+		config.ambush_chance = kept_chance
+		config.ambush_waves = kept_waves
+		return
+	ambush.start()
+	for i in 60 * 10:
+		if ambush._to_spawn.is_empty() and ambush._wave.size() >= still:
+			break
+		await _frames(1)
+	var back := ambush._wave.filter(func(m: Variant) -> bool: return is_instance_valid(m) and not (m as Monster).is_dead)
+	check(ambush.waves_left == waves_left, "walked in again, the waves beaten stay beaten (%d left, %d before quitting)" % [ambush.waves_left, waves_left])
+	check(back.size() == still, "the wave under way brings only what still stood (%d of %d)" % [back.size(), still])
+	var shares := back.map(func(m: Variant) -> float: return snappedf(float((m as Monster).hp) / (m as Monster).get_max_hp(), 0.01))
+	check(shares.any(func(share: float) -> bool: return share < 0.9 and absf(share - hurt_share) < 0.1), "...the hurt one about as hurt as it was (%s, %.2f)" % [shares, hurt_share])
+	check(game.run.kills == kills, "no kill counted twice (%d)" % game.run.kills)
+	config.ambush_chance = kept_chance
+	config.ambush_waves = kept_waves
+	game.player.invincible = false
+
+
+## How many items that came later (not laid by the floor's seed) lie on `world`'s floor: what a
+## save keeps in "left" (FloorSave.left_behind()).
+func _later_items(world: World) -> int:
+	return world.floor_save.left_behind().filter(func(entry: Array) -> bool: return entry[0] == "item").size()
 
 
 ## How many items lie on `world`'s floor, and how many of them are `id`.

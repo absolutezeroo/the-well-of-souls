@@ -27,6 +27,7 @@ func enter() -> void:
 		actor.rig.play_cast(_aim, _cast_time, skill.cast_animation)
 	if skill.hurts():
 		Sfx.play_warning(actor.global_position)  # the pose, the mark on the ground, and a sound
+		LaterMark.mark_later_blows(actor, skill, _aim.angle(), _cast_time)  # its later blows' own marks
 
 
 func exit() -> void:
@@ -43,5 +44,6 @@ func physics_update(delta: float) -> void:
 	if _timer <= 0.0:
 		var index := actor.casting_index
 		actor.casting_index = -1
-		actor.skills.try_use(index, actor, _aim)
+		if actor.skills.try_use(index, actor, _aim):
+			actor.keep_skill_tempo(index)  # its rhythm kept under the fairness floor
 		machine.transition_to(&"Chase")

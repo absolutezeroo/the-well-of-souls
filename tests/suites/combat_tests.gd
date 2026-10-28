@@ -119,10 +119,21 @@ func _test_perks_in_game(game: Game, world: World, player: Player) -> void:
 
 	var phoenix := _perk("phoenix_feather")
 	player.perks.add(phoenix)
+	var rig_scale := player.rig.scale
 	_killing_blow(player)
 	check(not player.is_dead and game.threshold.is_open(), "Phoenix Feather survives a killing blow (off to the Threshold)")
 	check(player.perks.get_entry(phoenix).memory.get(&"used", 0) == 1, "the feather is used up")
+	# His soul sinks: the body wavers and thins away on its own pixels, a few lower, never
+	# squashed nor faded by alpha (decision 0007, task 424); whole again in the trial.
+	var sink_scales := {}
+	var sink_gone := 0.0
+	for i in 20:
+		sink_scales[player.rig.scale] = true
+		sink_gone = maxf(sink_gone, player.rig.look.vanished())
+		await _frames(1)
+	check(sink_scales.keys() == [rig_scale] and sink_gone > 0.2, "sinking at the Threshold: the body thins away on its own pixels, never squashed (scales %s, %.2f gone)" % [sink_scales.keys(), sink_gone])
 	check(await _win_trial(game) and not player.is_dead and player.hp >= int(player.get_max_hp() / 3.0), "won, the hero is back on his feet")
+	check(player.rig.look.vanished() == 0.0 and player.rig.scale == rig_scale, "...his body whole again")
 	# Where there is no Threshold (the balance tools' bare arena), a second life heals in place.
 	var in_place := (phoenix.passives[0] as CheatDeathPassive).duplicate() as CheatDeathPassive
 	in_place.trial = null

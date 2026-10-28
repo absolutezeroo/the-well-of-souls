@@ -53,9 +53,18 @@ func _test_boss_fight(game: Game) -> void:
 	boss.skills.set_skills(none)
 	var safe := await _walk_into_hole(world, player, 2)
 	var hp_before_fall := player.hp
+	var scales := {}
+	var vanished := 0.0
 	for frame in int(Actor.FALL_TIME * 60.0) + 6:
 		boss._attack_cooldown = 1.0  # (its blows would blur the fall's cost)
+		if player.is_falling:
+			scales[player.rig.scale] = true
+			vanished = maxf(vanished, player.rig.look.vanished())
 		await _frames(1)
+	# The fall draws the body into the dark on its own pixels (an implosion), never shrunk nor
+	# spun (decision 0007, task 424; it shrank to nothing and spun until 28 Oct 2026).
+	check(scales.keys() == [Vector2.ONE] and vanished > 0.5, "a fall: the body drawn away on its own pixels, never shrunk (scales %s, %.2f gone)" % [scales.keys(), vanished])
+	check(player.rig.look.vanished() == 0.0 and player.rig.rotation == 0.0, "climbed out: the body whole again")
 	check(not game.abyss.is_open() and player.world == world, "the boss floor stays: no Deeps")
 	check(not player.is_falling and player.global_position.distance_to(safe) < 24.0, "the hero climbs out where they stood")
 	check(player.hp < hp_before_fall and player.rig.scale == Vector2.ONE, "falling hurts")

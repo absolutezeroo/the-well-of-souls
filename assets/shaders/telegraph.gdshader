@@ -16,6 +16,11 @@ uniform int lanes = 1;
 uniform float spread = 0.0;
 // Lanes start this far out (the monster's body).
 uniform float inner = 0.0;
+// Lanes cut at the first wall (TelegraphView.clip_to_walls): the first `clip_count` lanes each
+// end at their own reach (lane_reach[k], lane k counted from the fan's first or the ring's aim);
+// 0: every lane `radius` long. A shot stops at a wall: its lane does too (docs/decisions/0008).
+uniform int clip_count = 0;
+uniform float lane_reach[32];
 uniform float progress = 0.0;
 uniform vec4 color : source_color = vec4(1.0, 0.22, 0.2, 1.0);
 uniform float pixel = 2.0;
@@ -51,19 +56,27 @@ void fragment() {
 		// The nearest lane to this pixel, then the distance across it.
 		float angle = atan(p.y, p.x);
 		float lane_angle;
+		float index;
 		if (spread >= 6.2831) {
 			float gap = 6.2831853 / float(lanes);
-			lane_angle = round(angle / gap) * gap;
+			float step_index = round(angle / gap);
+			lane_angle = step_index * gap;
+			index = mod(step_index + float(lanes), float(lanes));
 		} else {
 			float gap = spread / max(float(lanes - 1), 1.0);
 			float first = -spread * 0.5;
-			float index = clamp(round((angle - first) / max(gap, 0.0001)), 0.0, float(lanes - 1));
+			index = clamp(round((angle - first) / max(gap, 0.0001)), 0.0, float(lanes - 1));
 			lane_angle = lanes > 1 ? first + index * gap : 0.0;
+		}
+		float reach = radius;
+		int k = int(index + 0.5);
+		if (k < clip_count && k < 32) {
+			reach = lane_reach[k];
 		}
 		vec2 lane = vec2(cos(lane_angle), sin(lane_angle));
 		float along = dot(p, lane);
 		float off = abs(p.x * lane.y - p.y * lane.x);
-		rim = min(min(radius - along, along - inner), line_width * 0.5 - off);
+		rim = min(min(reach - along, along - inner), line_width * 0.5 - off);
 		depth = (along - inner) / max(radius - inner, 1.0);
 	}
 	if (rim < 0.0) {

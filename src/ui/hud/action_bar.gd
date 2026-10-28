@@ -165,8 +165,8 @@ class SlotFace:
 	func _draw() -> void:
 		var area := Rect2(Vector2.ZERO, size)
 		draw_style_box(ItemSlot.slot_box(), area)
-		draw_rect(area.grow(-8), Color(color, 0.14))
-		var inner := area.grow(-9)
+		draw_rect(area.grow(-ItemSlot.RIM), Color(color, 0.14))
+		var inner := area.grow(-ItemSlot.ICON_ROOM)
 		if icon:
 			draw_texture_rect(icon, ItemSlot.fit(icon, inner), false, icon_tint)
 		elif not label.is_empty():

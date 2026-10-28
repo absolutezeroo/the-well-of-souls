@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 448,
+  "next_id": 451,
   "tags": [
     "pc",
     "test",
@@ -1217,8 +1217,8 @@
     {
       "id": "task_81",
       "title": "La Matrone du Bourbier bat souvent le bot kite en Gardien",
-      "description": "Boss alternatif de l'acte I : kite 4/8, joueur 0/8, face-tank 0/4 (graines 1-8, passe du 23/10). Hors de la cible « le kite gagne en Gardien ». À mesurer (journal des coups, --hits) et corriger ce qui est injuste.",
-      "status": "todo",
+      "description": "Boss alternatif de l'acte I : kite 4/8, joueur 0/8, face-tank 0/4 (graines 1-8, passe du 23/10). Hors de la cible « le kite gagne en Gardien ». À mesurer (journal des coups, --hits) et corriger ce qui est injuste.\n\n28/10 (agent polish) : mesuré avec le tempo gardé, sans changement de ses chiffres : kite 7/8 (graines 1-8 en ligne de commande), 1/4 sur les graines de la suite d'équilibrage (perdu à 0-1 %) : pile ou face (8/12) ; face-tank 0/12. Ce qui coûte : le Saut féroce en phase 3 (2e bond et anneau d'atterrissage sans marque à eux : carte ajoutée). Essai cooldown 4 → 4,5 s abandonné (pas mieux). À jouer sur le S23 avant de toucher ses chiffres.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -1227,13 +1227,13 @@
         "boss"
       ],
       "created_at": 1792715509,
-      "updated_at": 1792715509
+      "updated_at": 1793190065
     },
     {
       "id": "task_82",
       "title": "Le Rônin des Braises bat le bot kite en Gardien",
-      "description": "Acte III : kite 1/4, joueur 0/4 (boss à 24-33 %), face-tank 0/4 (graines 1-4, passe du 23/10). Hors de la cible « le kite gagne en Gardien ». À mesurer (journal des coups) avant de corriger.",
-      "status": "todo",
+      "description": "Acte III : kite 1/4, joueur 0/4 (boss à 24-33 %), face-tank 0/4 (graines 1-4, passe du 23/10). Hors de la cible « le kite gagne en Gardien ». À mesurer (journal des coups) avant de corriger.\n\n28/10 (agent polish) : corrigé. Avec le tempo gardé le kite ne gagnait que 2/8 (graines 1-8) : sa phase 3 (Arc de flammes féroce, 2e coup au même endroit 0,5 s après à x1,3, et sa lame). 2e arc x0,9 (au lieu de x1,3), bonus de Dégâts de phase 3 +2 (au lieu de +3) : kite 7/8, joueur 0/8, face-tank 0/8 (33-55 % restants). Garde : balance.alternates (kite 3/4 au moins). À vérifier sur le S23 : dur mais battable ; le 2e arc a maintenant sa propre marque (voir task_416).",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -1242,7 +1242,7 @@
         "boss"
       ],
       "created_at": 1792715509,
-      "updated_at": 1792715509
+      "updated_at": 1793190065
     },
     {
       "id": "task_83",
@@ -3016,8 +3016,8 @@
     {
       "id": "task_198",
       "title": "Reprise en pleine embuscade : les vagues recommencent",
-      "description": "Trouvé pendant l'audit sauvegarde (24/10). Mise en arrière-plan pendant les vagues : à la reprise l'embuscade attend de nouveau et ses vagues reviennent (les monstres déjà tués ont donné leur XP et leur or) ; on peut donc farmer un peu en recommençant. À voir si ça vaut la peine (compter l'embuscade comme nettoyée, ou garder la vague en cours).",
-      "status": "backlog",
+      "description": "Trouvé pendant l'audit sauvegarde (24/10). Mise en arrière-plan pendant les vagues : à la reprise l'embuscade attend de nouveau et ses vagues reviennent (les monstres déjà tués ont donné leur XP et leur or) ; on peut donc farmer un peu en recommençant. À voir si ça vaut la peine (compter l'embuscade comme nettoyée, ou garder la vague en cours).\n\n28/10 (agent polish) : corrigé. Une embuscade quittée en plein combat attend que le héros revienne (il reprend au début de l'étage), puis continue où elle en était : les vagues battues le restent, la vague en cours ne ramène que ses monstres encore debout (rang, affixes, part de Vie), puis les vagues restantes (AmbushRoom.progress_data, save floor.ambush waves_left/wave ; une ancienne sauvegarde recommence l'embuscade comme avant). Plus rien à farmer en quittant. Test : game.resume_leftovers. À vérifier sur le S23 : mettre l'appli en arrière-plan pendant la 2e vague, la tuer, reprendre : retourner dans la salle, la vague revient incomplète, pas de recommencement.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -3026,13 +3026,13 @@
         "économie"
       ],
       "created_at": 1792815301,
-      "updated_at": 1792815301
+      "updated_at": 1793186902
     },
     {
       "id": "task_199",
       "title": "Reprise : le butin tombé (monstres, coffres, caisses) et pas ramassé est perdu",
-      "description": "Trouvé pendant l'audit sauvegarde (24/10). Ce qui tombe pendant la partie n'a pas de numéro (FloorLedger) et n'est pas sauvé : à la reprise il a disparu. Pas de duplication possible, mais une perte si l'appli est tuée juste après un coffre. Idée : sauver les objets au sol sans numéro (objet + position) avec l'étage.\nRevue 2 : vaut aussi pour ce que le héros pose lui-même au sol (PlayerPack.drop_item → World.spawn_item hors de la pose : sans numéro, perdu à la reprise).\nRoadmap RPG du 26/10/2026 : R2.3 (task_304), docs/rpg-roadmap.md. Étendre/valider le contrat de butin au sol dans toutes les régions, sans déduire un état de bug du seul ancien texte de carte. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
-      "status": "backlog",
+      "description": "Trouvé pendant l'audit sauvegarde (24/10). Ce qui tombe pendant la partie n'a pas de numéro (FloorLedger) et n'est pas sauvé : à la reprise il a disparu. Pas de duplication possible, mais une perte si l'appli est tuée juste après un coffre. Idée : sauver les objets au sol sans numéro (objet + position) avec l'étage.\nRevue 2 : vaut aussi pour ce que le héros pose lui-même au sol (PlayerPack.drop_item → World.spawn_item hors de la pose : sans numéro, perdu à la reprise).\nRoadmap RPG du 26/10/2026 : R2.3 (task_304), docs/rpg-roadmap.md. Étendre/valider le contrat de butin au sol dans toutes les régions, sans déduire un état de bug du seul ancien texte de carte. Statut historique conservé ; voir le nouveau cadrage avant reprise.\n\n28/10 (agent polish) : corrigé. Tout ce qui est venu après la pose de l'étage et traîne au sol (butin de monstre, de coffre, de caisse, or, objet posé par le héros) est sauvé avec l'étage (floor.left, FloorSave.left_behind, avant seulement dans l'arène du gardien vaincue) et remis à sa place à la reprise ; ce que la graine a posé reste au registre (jamais en double). Test : game.resume_leftovers (et game.saves mis à jour : il supposait la perte). À vérifier sur le S23 : ouvrir un coffre sans ramasser, tuer l'appli, reprendre : le butin est là, une seule fois.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -3040,7 +3040,7 @@
         "sauvegarde"
       ],
       "created_at": 1792815301,
-      "updated_at": 1792973386
+      "updated_at": 1793186902
     },
     {
       "id": "task_200",
@@ -6037,8 +6037,8 @@
     {
       "id": "task_400",
       "title": "Temple de Kagari : bandes sombres sur écran large (S23)",
-      "description": "Vu en capture 2340×1080 (toile 1560×720) : à zoom 1,5 la vue fait 1040 unités de large pour une salle de 960 ; des bandes sombres (et un liseré de l’extérieur à gauche) apparaissent de chaque côté. Choisir : salle plus large, zoom calculé pour remplir la largeur, ou bandes assumées. À vérifier sur le téléphone.\n\n28/10 : avec le zoom entier (décision 0007), le temple est dessiné à 4 px par pixel d'art sur le S23 au lieu de 4,5 : la vue fait 1170 unités de large pour la salle de 960, les bandes sombres sur les côtés sont donc un peu plus larges (capture temple_2340x1080 de l'agent art). Le choix reste à faire (salle plus large, ou bandes assumées) ; zoomer pour remplir la largeur reviendrait à un zoom non entier.",
-      "status": "backlog",
+      "description": "Vu en capture 2340×1080 (toile 1560×720) : à zoom 1,5 la vue fait 1040 unités de large pour une salle de 960 ; des bandes sombres (et un liseré de l’extérieur à gauche) apparaissent de chaque côté. Choisir : salle plus large, zoom calculé pour remplir la largeur, ou bandes assumées. À vérifier sur le téléphone.\n\n28/10 : avec le zoom entier (décision 0007), le temple est dessiné à 4 px par pixel d'art sur le S23 au lieu de 4,5 : la vue fait 1170 unités de large pour la salle de 960, les bandes sombres sur les côtés sont donc un peu plus larges (capture temple_2340x1080 de l'agent art). Le choix reste à faire (salle plus large, ou bandes assumées) ; zoomer pour remplir la largeur reviendrait à un zoom non entier.\n\n28/10 (agent polish) : fait (petit, champ de cadrage seul). Les bounds du temple (son fond sombre et les limites de la caméra) vont de -160 à 1120 (1280 unités) : la vue du S23 (1170) et d'un 21:9 1080p (1280) reste sur le fond du temple, plus de bandes rougeâtres ni de bord du village, et ce fond ne recouvre pas Kagari (qui finit à 1440 = 1600 - 160). Les côtés restent sombres (comme au-dessus et en dessous de la salle) : élargir la salle elle-même serait un choix de mise en page (agent Kagari / propriétaire). Test : PcTests._test_temple_framing. Capture temple avant/après.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_3",
       "tags": [
@@ -6047,7 +6047,7 @@
         "playtest"
       ],
       "created_at": 1793076826,
-      "updated_at": 1793163670,
+      "updated_at": 1793191680,
       "due_date": null
     },
     {
@@ -6277,8 +6277,8 @@
     {
       "id": "task_416",
       "title": "Anneaux « féroces » : la seconde vague n'a pas sa propre marque",
-      "description": "Les versions féroces des anneaux de tirs (hailstorm_fierce, toxic_bloom_fierce, fire_ring_fierce, wailing_ring_fierce, coin_storm_fierce...) tirent une seconde vague 0,45 s après la première, décalée d'un demi-écart : elle tombe dans les trous que montrait la marque et n'a pas de marque à elle (TelegraphView ne montre que le premier effet d'une compétence). Proposé : montrer les couloirs de la seconde vague dès que la première part (ou les deux pendant l'incantation), et la compter dans le test unit.fairness.",
-      "status": "todo",
+      "description": "Les versions féroces des anneaux de tirs (hailstorm_fierce, toxic_bloom_fierce, fire_ring_fierce, wailing_ring_fierce, coin_storm_fierce...) tirent une seconde vague 0,45 s après la première, décalée d'un demi-écart : elle tombe dans les trous que montrait la marque et n'a pas de marque à elle (TelegraphView ne montre que le premier effet d'une compétence). Proposé : montrer les couloirs de la seconde vague dès que la première part (ou les deux pendant l'incantation), et la compter dans le test unit.fairness.\n\n28/10 (agent polish) : fait. Chaque coup plus tardif d'un sort de monstre (un effet avec un délai : la 2e salve des anneaux féroces entre les trous de la 1re, le 2e Arc de flammes, une 2e volée) a sa propre marque (LaterMark) dès le début de l'incantation jusqu'à l'impact : pendant l'incantation les deux salves se voient (plus de trou sûr près du lanceur, c'est la vérité), puis seule la 2e reste. Pas encore pour un sort qui déplace le lanceur (sauts : task_450). Tests : game.fairness (later marks). Captures : hail_cast/hail_second avant/après. À vérifier sur le S23 : lisible, pas trop chargé ?",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6287,13 +6287,13 @@
         "vfx"
       ],
       "created_at": 1793165202,
-      "updated_at": 1793165202
+      "updated_at": 1793191680
     },
     {
       "id": "task_417",
       "title": "Équilibrage après les planchers de préparation",
-      "description": "Les planchers (0,4 s / 0,5 s boss) rallongent les préparations des monstres rapides (chauves-souris, ratons, rats, crânes) et des boss en phase 3, et A6/A10 ont perdu un modificateur (A6 plus de « moins de temps pour esquiver », A10 plus de +15 % de Vie) : Cauchemar+10 est un peu plus facile. Repasser les outils d'équilibrage (game-balancer) en Gardien et en Cauchemar+10, et chercher le défi dans les chiffres, la densité et les motifs (décision 0008), pas dans des préparations plus courtes.",
-      "status": "todo",
+      "description": "Les planchers (0,4 s / 0,5 s boss) rallongent les préparations des monstres rapides (chauves-souris, ratons, rats, crânes) et des boss en phase 3, et A6/A10 ont perdu un modificateur (A6 plus de « moins de temps pour esquiver », A10 plus de +15 % de Vie) : Cauchemar+10 est un peu plus facile. Repasser les outils d'équilibrage (game-balancer) en Gardien et en Cauchemar+10, et chercher le défi dans les chiffres, la densité et les motifs (décision 0008), pas dans des préparations plus courtes.\n\n28/10 (agent polish) : mesuré (balance-log 28/10) contre le build d'avant les planchers, mêmes graines. Règle ajoutée (décision 0014) : ce qu'un plancher ajoute à une préparation est retiré de l'attente qui suit (cooldown, jamais sous la récupération) : un rat mord de nouveau toutes les 1,15 s (1,3 s avec le plancher), préparé 0,4 s ; idem chauves-souris, ratons, crânes, phases finales des boss, Cauchemar (x0,7). Boss en Gardien (10 boss, graines 1-2) : bot kite 16/20 avant, 19/20 planchers, 17/20 avec le tempo ; bot joueur 5 → 9 → 10/20 (il lit enfin les préparations : le but du contrat). A10 : « +15 % de Dégâts encore » (au lieu de 10 %) : menace de boss en Cauchemar+10 x4,46-5,48 contre x4,28-5,32 avant les planchers. À vérifier sur le S23 : les monstres rapides (chauves-souris, rats) et les dernières phases restent-ils pressants mais lisibles ? Cauchemar+10 assez dur ?",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6302,7 +6302,7 @@
         "combat"
       ],
       "created_at": 1793165202,
-      "updated_at": 1793165202
+      "updated_at": 1793190065
     },
     {
       "id": "task_418",
@@ -6322,8 +6322,8 @@
     {
       "id": "task_419",
       "title": "Couloirs de tirs dessinés à travers les murs",
-      "description": "Les marques de tirs vont maintenant jusqu'au bout de la portée (décision 0008) ; un mur arrête le tir mais pas sa marque. À voir sur le S23 si cela gêne ; sinon couper le couloir au premier mur (un rayon par couloir au début de la préparation).",
-      "status": "backlog",
+      "description": "Les marques de tirs vont maintenant jusqu'au bout de la portée (décision 0008) ; un mur arrête le tir mais pas sa marque. À voir sur le S23 si cela gêne ; sinon couper le couloir au premier mur (un rayon par couloir au début de la préparation).\n\n28/10 (agent polish) : fait. Les couloirs de tirs s'arrêtent au premier mur (un rayon par couloir au début de la préparation, recalculé seulement si le lanceur ou sa visée bouge ; le shader coupe chaque couloir à sa longueur). Test : game.fairness (lanes at walls). Capture hail_cast avant/après : avant les couloirs traversaient les murs. À vérifier sur le S23.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6332,7 +6332,7 @@
         "combat"
       ],
       "created_at": 1793165202,
-      "updated_at": 1793165202
+      "updated_at": 1793191680
     },
     {
       "id": "task_420",
@@ -6397,8 +6397,8 @@
     },
     {
       "title": "Chute, Seuil, corps avalé : disparitions en fondu dithéré au lieu d'un rétrécissement",
-      "description": "Reste de la décision 0007 (agent art, 28/10) : trois transitions rétrécissent encore l'art du pack et le font disparaître en alpha : la chute dans un trou (Actor, échelle vers 0 et rotation en 0,5 s), l'âme du héros qui s'enfonce au Seuil (Threshold._sink_soul, échelle 0,7 x 0,25) et le corps avalé par un boss qui se relève (BossArena, échelle 0,5). Écrites comme exceptions dans docs/vfx.md §1. Mieux : une disparition dithérée par le shader du corps (BodyLook, comme les morts) ou des images dessinées.",
-      "status": "backlog",
+      "description": "Reste de la décision 0007 (agent art, 28/10) : trois transitions rétrécissent encore l'art du pack et le font disparaître en alpha : la chute dans un trou (Actor, échelle vers 0 et rotation en 0,5 s), l'âme du héros qui s'enfonce au Seuil (Threshold._sink_soul, échelle 0,7 x 0,25) et le corps avalé par un boss qui se relève (BossArena, échelle 0,5). Écrites comme exceptions dans docs/vfx.md §1. Mieux : une disparition dithérée par le shader du corps (BodyLook, comme les morts) ou des images dessinées.\n\n28/10 (agent polish) : fait. Plus de rétrécissement ni de fondu en alpha : la chute dans un trou et le corps avalé par un boss qui se relève implosent en un point sombre (style IMPLODE du shader du corps, rampe de l'ombre), l'âme au Seuil vacille et s'efface en dithering (WISP, rampe de l'esprit), cinq pixels d'art plus bas par pas entiers. BodyLook.vanish/come_back. Exception retirée de docs/vfx.md. Tests : game.boss_fight, game.finale, game.perks. Captures fall_a/fall_b avant/après. À vérifier sur le S23 : le héros devient violet en tombant : lisible comme une chute ?",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_3",
       "tags": [
@@ -6408,12 +6408,12 @@
       "id": "task_424",
       "due_date": null,
       "created_at": 1793165896,
-      "updated_at": 1793165896
+      "updated_at": 1793191680
     },
     {
       "title": "Codex : aperçus des monstres à échelle fractionnaire",
-      "description": "Trouvé par l'agent art en appliquant la décision 0007 (28/10), hors de son périmètre (interface) : la page d'un monstre du codex le dessine à min(échelle voulue, place disponible) (monster_page.gd:230, look_scale quelconque) et l'aperçu d'attaque met la scène à size.x / 260 et un boss à 2,2 (attack_preview.gd:110-115) : pixels de deux tailles dans le codex. Arrondir à un pas entier vers le bas (comme PixelGrid.camera_zoom) et ajouter le cas au test « whole scales ».",
-      "status": "backlog",
+      "description": "Trouvé par l'agent art en appliquant la décision 0007 (28/10), hors de son périmètre (interface) : la page d'un monstre du codex le dessine à min(échelle voulue, place disponible) (monster_page.gd:230, look_scale quelconque) et l'aperçu d'attaque met la scène à size.x / 260 et un boss à 2,2 (attack_preview.gd:110-115) : pixels de deux tailles dans le codex. Arrondir à un pas entier vers le bas (comme PixelGrid.camera_zoom) et ajouter le cas au test « whole scales ».\n\n28/10 (agent polish) : fait. Le codex dessine ses monstres en pixels d'écran entiers par pixel d'art, arrondis vers le bas (MonsterPage.look_scale_for, AttackPreview.whole_body ; PixelGrid.whole_art_scale). Mesuré à 2340x1080 : aperçu de la page avant 5/6 px, après 5 ; aperçu d'attaque avant 4/5, après 4. Test : PcTests._test_codex_whole. À vérifier sur le S23 : monstres un peu plus petits par endroits, nets.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_3",
       "tags": [
@@ -6423,7 +6423,7 @@
       "id": "task_425",
       "due_date": null,
       "created_at": 1793168315,
-      "updated_at": 1793168315
+      "updated_at": 1793191680
     },
     {
       "id": "task_426",
@@ -6488,8 +6488,8 @@
     {
       "id": "task_430",
       "title": "Skin Kenney à 3 unités par pixel d'art : 4,5 pixels d'écran sur le S23",
-      "description": "Les pièces de l'interface (assets/ui/rpg/, Kenney) sont du pixel art 16 px stocké en x3 : 3 unités par pixel d'art, donc 4,5 pixels d'écran à l'échelle x1,5 du téléphone (pixels inégaux, comme le donjon avant la décision 0007). Leurs marges (9, 15, 39, 42) et OrnateBoard.INSET (9) restent des multiples de 3 exprès (exception écrite dans interface.md « One skin », Pixels). Pour des pixels entiers partout : redessiner le skin à 2 ou 4 unités par pixel (x2 ou x4). Décision du propriétaire (art, cadre de l'interface).",
-      "status": "backlog",
+      "description": "Les pièces de l'interface (assets/ui/rpg/, Kenney) sont du pixel art 16 px stocké en x3 : 3 unités par pixel d'art, donc 4,5 pixels d'écran à l'échelle x1,5 du téléphone (pixels inégaux, comme le donjon avant la décision 0007). Leurs marges (9, 15, 39, 42) et OrnateBoard.INSET (9) restent des multiples de 3 exprès (exception écrite dans interface.md « One skin », Pixels). Pour des pixels entiers partout : redessiner le skin à 2 ou 4 unités par pixel (x2 ou x4). Décision du propriétaire (art, cadre de l'interface).\n\n28/10 (agent polish) : fait. Le skin est stocké à 2 unités par pixel d'art (décision 0013 ; tools/ui/rescale_skin.py ramène chaque pièce x3 à ses pixels puis x2, rien de redessiné), comme la police : 3 pixels d'écran par pixel d'art sur le S23. Marges des neuf-cases en pixels d'art entiers (bois 10, encarts 10, cadre 6, ornement 28, INSET 6, ruban 32), mises en page inchangées. Mesuré à 2340x1080 (bord du menu Pause) : avant 4 px 22 % / 5 px 31 % ; après 3 px 63 %, 6 px 20 %. Le ruban garde 48 de haut (sa rangée du milieu se répète) : les mots sont dans la bande. Test : PcTests._test_skin_grid. À vérifier sur le S23 : cadres nets (bois, liseré doré, ruban, plaque du portrait), rien de coupé ni décalé dans le sac, la pause, une conversation.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_4",
       "due_date": null,
@@ -6498,13 +6498,13 @@
         "visuel"
       ],
       "created_at": 1793170158,
-      "updated_at": 1793170158
+      "updated_at": 1793185864
     },
     {
       "id": "task_431",
       "title": "Boutons ronds du HUD : la sphère de 32 px dessinée à une échelle non entière",
-      "description": "ActionButton dessine backgroundwood.png (32x32) à la taille de sa zone de toucher : 144 unités pour l'attaque (4,5 unités par pixel), 120 en taille Grande… Garder la zone de toucher et dessiner l'art au multiple entier inférieur (128, 96…) ou des sphères redessinées aux bonnes tailles. À regarder sur le S23 (rond flou ou pixels inégaux ?).",
-      "status": "backlog",
+      "description": "ActionButton dessine backgroundwood.png (32x32) à la taille de sa zone de toucher : 144 unités pour l'attaque (4,5 unités par pixel), 120 en taille Grande… Garder la zone de toucher et dessiner l'art au multiple entier inférieur (128, 96…) ou des sphères redessinées aux bonnes tailles. À regarder sur le S23 (rond flou ou pixels inégaux ?).\n\n28/10 (agent polish) : fait. ActionButton et le joystick dessinent leur sphère de 32 px au plus grand nombre entier de pixels d'écran par pixel d'art qui tient dans le cercle de toucher (PixelGrid.art_scale, arrondi vers le bas comme les caméras) : sur le S23 l'attaque fait 128 unités (6 px par pixel, avant 6,75), une compétence 85 (4 px, avant 4,5) ; la zone de toucher ne change pas (144, 96). Icônes des boutons et des emplacements au même régime. Mesuré (HUD sur fond uni) : attaque avant 6/7/8 px, après 6 px ; compétence avant 3/4/5, après 3/4. Test : PcTests._test_round_buttons_whole. À vérifier sur le S23 : les boutons ronds paraissent-ils trop petits dans leur zone (surtout l'Interaction, 88 → 85) ?",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_4",
       "due_date": null,
@@ -6513,7 +6513,7 @@
         "visuel"
       ],
       "created_at": 1793170158,
-      "updated_at": 1793170158
+      "updated_at": 1793185864
     },
     {
       "id": "task_432",
@@ -6754,6 +6754,50 @@
       "tags": [],
       "created_at": 1793191224,
       "updated_at": 1793191224
+    },
+    {
+      "id": "task_448",
+      "title": "Suite d'équilibrage : le cas principal s'arrête au chien de garde de 900 s",
+      "description": "Vu le 28/10 (agent polish) : python3 tools/run_tests.py --only balance s'arrête sur « balance still running after 900 s (stuck) » après 69 vérifications, aussi sur le build d'avant cette passe (842a370). Le temps de jeu simulé des duels dépasse TEST_TIMEOUT : ses dernières vérifications (duels des boss justes, Gardien sans fond, courbe) ne tournent plus. Découper run() en plusieurs cas (comme balance.alternates) ou donner à la suite son propre délai.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_5",
+      "due_date": null,
+      "tags": [
+        "tests",
+        "équilibrage"
+      ],
+      "created_at": 1793190065,
+      "updated_at": 1793190065
+    },
+    {
+      "id": "task_449",
+      "title": "Gauntlet à repasser après les planchers et le tempo gardé",
+      "description": "28/10 (agent polish) : la passe d'équilibrage a mesuré les boss (arène, 10 boss, graines 1-2), le modèle et les salles (pack, actes I-II), pas le gauntlet (lent). Vérifier la cible « bot joueur : 75 % des actes gagnés en Gardien » et le coût des étages après la décision 0014.",
+      "status": "todo",
+      "priority": "low",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "équilibrage"
+      ],
+      "created_at": 1793190065,
+      "updated_at": 1793190065
+    },
+    {
+      "id": "task_450",
+      "title": "Marques des coups suivants d'un sort qui déplace le lanceur (sauts, ruées)",
+      "description": "28/10 (agent polish) : LaterMark (task_416) marque les coups plus tardifs d'un sort dès le début de l'incantation, sauf quand le sort déplace le lanceur (Saut féroce de la Matrone et du Thésauriseur, ruées du Wyrm, de Tôma, du Tengu) : la marque suivrait le corps et montrerait le coup au mauvais endroit avant le saut. Proposé : placer ces marques le long de la visée (fin du premier bond, coupée aux murs). C'est ce qui coûte le plus au bot kite contre la Matrone (task_81).",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "combat",
+        "vfx"
+      ],
+      "created_at": 1793190065,
+      "updated_at": 1793190065
     }
   ]
 }

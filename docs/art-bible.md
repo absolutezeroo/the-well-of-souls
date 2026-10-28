@@ -25,7 +25,7 @@ de design et règles IA" (October 2026). Binding pieces of it live here and in:
 | What | Comes from | Licence |
 |---|---|---|
 | World art: tiles, props, characters, monsters, bosses, items, weapons, world effects | **Ninja Adventure** by Pixel-boy and AAA ([itch.io](https://pixel-boy.itch.io/ninja-adventure-asset-pack)), copied unchanged or derived on its colours | CC0 |
-| Window skin: wooden boards, gold border, ribbon, insets, slots | **Kenney** Pixel UI Pack and Fantasy UI Borders (`assets/ui/rpg/`) | CC0 |
+| Window skin: wooden boards, gold border, ribbon, insets, slots | **Kenney** Pixel UI Pack and Fantasy UI Borders (`assets/ui/rpg/`; the pack's x3 pieces rescaled to x2, pixel for pixel) | CC0 |
 | Icons, emotes, small UI pieces, wood widgets | Ninja Adventure and its Godot example project | CC0 |
 | Font | Pixel Operator (`assets/fonts/`) | CC0 |
 | Sound and music | Ninja Adventure, Kenney Impact Sounds (each folder's `CREDITS.txt`) | CC0 |
@@ -76,6 +76,11 @@ temples, statues, banners, furniture, interiors, animated flags, flowers, water 
   by rim, aura and name, a hit by a one-pixel flinch, a smaller flame is a smaller piece
   ([vfx.md](vfx.md) section 1, its listed exceptions). **Checked** for the village (`unit.village`),
   bodies, ranks, props' flames, the Wyrm and plants (`unit.vfx`).
+- The interface keeps the same grid: the UI skin is stored at **2 UI units per art pixel**, like
+  the font (3 screen pixels on the S23), its nine-patch margins whole art pixels; the UI's
+  pictures (round buttons, icons in slots, the codex's monsters) are drawn as big as their room
+  allows with whole screen pixels per art pixel, rounded down (`PixelGrid.art_scale()`,
+  [decision 0015](decisions/0015-ui-skin-two-units.md)). **Checked** (`unit.pc`).
 - Positions of static art on even units; **rotation 0** (pre-drawn directions only, [vfx.md](vfx.md));
   texture filter **Nearest**, no mipmaps (the project default, never overridden).
 - The pack's projection: straight top-down with the front faces of walls and houses visible.

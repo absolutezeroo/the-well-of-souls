@@ -4,12 +4,12 @@ extends PanelContainer
 ## and dialog (RpgWindow full-screen, RpgDialog centred), so both look and change alike. The
 ## border is drawn inside the wood, INSET units in from its edge.
 
-## How far inside the board's edge the ornate border lies: three of the skin's art pixels (it is
-## drawn at 3 units a pixel), so the border's pixels stay in step with the wood's. The one odd
-## value kept on purpose (design/interface.md "One skin", Pixels).
-const INSET := 9.0
-## The border's nine-patch margins (assets/ui/rpg/ornate.png).
-const ORNATE_MARGIN := 42
+## How far inside the board's edge the ornate border lies: three of the skin's art pixels (2
+## units each, UiSkin), so the border's pixels stay in step with the wood's.
+const INSET := 6.0
+## The border's nine-patch margins (assets/ui/rpg/ornate.png: its corner knots, 7 of its pixels
+## of 4 units).
+const ORNATE_MARGIN := 28
 
 static var _ornate: StyleBoxTexture
 

@@ -228,9 +228,11 @@ func _rise(fallen: Monster, def: BossDef) -> void:
 		var mouth := risen.global_position + Vector2(0, -risen.def.head_height * 0.35)
 		var taken := fallen.create_tween().set_parallel()
 		taken.tween_property(fallen, "global_position", mouth, def.rise_time * 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		if fallen.rig:
-			taken.tween_property(fallen.rig, "modulate:a", 0.0, def.rise_time * 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-			taken.tween_property(fallen.rig, "scale", Vector2(0.5, 0.5), def.rise_time * 0.5)
+		if fallen.rig and fallen.rig.look:
+			# Drawn in on its own pixels (an implosion in the shadow's ramp), never shrunk nor
+			# faded by alpha (decision 0007).
+			fallen.rig.look.vanish(DeathLookDef.Style.IMPLODE, VfxElementDef.named(&"shadow"))
+			taken.tween_method(fallen.rig.look.set_vanishing, 0.0, 1.0, def.rise_time * 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		taken.chain().tween_callback(fallen.queue_free)
 	await get_tree().create_timer(def.rise_time * 0.6, false).timeout
 	if not await _still_here(floor_id):

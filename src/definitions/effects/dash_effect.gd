@@ -57,6 +57,10 @@ func _leave_element(user: Actor, dir: Vector2) -> void:
 
 
 ## In the preview, the line it dashes along (the game warns of none).
+func moves_caster() -> bool:
+	return true
+
+
 func show_preview_warning(view: TelegraphView, angle: float, progress: float) -> bool:
 	view.show_shape(TelegraphView.Shape.LINE, distance, angle, progress, 0.0, 14.0)
 	return true

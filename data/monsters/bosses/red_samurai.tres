@@ -85,7 +85,7 @@ shockwave_after_hits = 7
 
 [sub_resource type="Resource" id="Resource_wjga0"]
 script = ExtResource("14_lemr3")
-attack = 3
+attack = 2
 move_speed = 30.0
 
 [sub_resource type="Resource" id="Resource_oqev3"]

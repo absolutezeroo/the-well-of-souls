@@ -88,6 +88,21 @@ func ui_scale() -> float:
 	return _scale
 
 
+## The UI's own pictures (the HUD's round buttons, an item's icon in its slot, a monster in the
+## codex) follow the same rule as the cameras: drawn at most `most` UI units per art pixel, each
+## art pixel on a whole number of screen pixels under a canvas scaled by `scale`, rounded down
+## (at x1.5 a 32-pixel button 144 units across is drawn on 192 screen pixels, 6 a pixel, not 216
+## at 6.75). Below one screen pixel a pixel, `most` itself. In UI units per art pixel.
+static func whole_art_scale(most: float, scale: float) -> float:
+	var pixels := floorf(most * scale + 0.001)
+	return pixels / scale if pixels >= 1.0 else most
+
+
+## whole_art_scale() on this window's canvas.
+func art_scale(most: float) -> float:
+	return whole_art_scale(most, _scale if _scale > 0.0 else 1.0)
+
+
 ## The window's size without the phone's keyboard (its size now when the keyboard is not up).
 func settled_size() -> Vector2i:
 	return _settled

@@ -12,3 +12,4 @@ delayed_blast_knockback = 260.0
 min_monster_windup = 0.4
 min_boss_windup = 0.5
 min_blast_warning = 0.4
+floor_tempo_kept = 1.0

@@ -23,7 +23,14 @@ var reward_cell := DungeonMap.NO_CELL
 var _world: World
 var _gates: RoomGates
 var _to_spawn: Array[MonsterDef] = []
+## Beside each of _to_spawn, what a resumed fight saved of that monster (FloorSave.monster_entry():
+## its rank, its Health); {} for a new one.
+var _to_spawn_saved: Array[Dictionary] = []
 var _wave: Array[Monster] = []
+## A fight under way when the run was saved (restore_progress()): the waves still to come after
+## the one under way (-1: none saved), and that wave's monsters still to face.
+var _resume_waves_left := -1
+var _resume_wave: Array = []
 var _spawn_timer := 0.0
 var _pause_timer := 0.0
 var _elite_in_wave := false
@@ -52,14 +59,17 @@ func start() -> void:
 	Events.ambush_started.emit(self)
 
 
-## The exits close and the first wave comes.
+## The exits close and the first wave comes (or, on a resumed floor, the wave that was under way).
 func _begin_fight() -> void:
 	state = State.FIGHTING
 	waves_left = _wave_count()
 	_gates.close()
 	Sfx.play_world(Sfx.bank.ambush, _world.player.global_position)
 	Events.screen_shake.emit(0.6)
-	_queue_wave()
+	if _resume_waves_left >= 0:
+		_resume_fight()
+	else:
+		_queue_wave()
 
 
 func _wave_count() -> int:
@@ -95,7 +105,7 @@ func _physics_process(delta: float) -> void:
 				_spawn_timer -= delta
 				if _spawn_timer <= 0.0:
 					_spawn_timer = _world.config().ambush_spawn_interval
-					_spawn_one(_to_spawn.pop_back())
+					_spawn_one(_to_spawn.pop_back(), _to_spawn_saved.pop_back() if not _to_spawn_saved.is_empty() else {})
 			elif _is_wave_dead():
 				if waves_left <= 0:
 					_finish()
@@ -123,12 +133,18 @@ func _queue_wave() -> void:
 		var def := _world.pick_monster()
 		if def:
 			_to_spawn.append(def)
+			_to_spawn_saved.append({})
 	_spawn_timer = 0.0
 
 
-func _spawn_one(def: MonsterDef) -> void:
+## `saved`: what a resumed fight kept of this monster (its rank and Health), {} for a new one.
+func _spawn_one(def: MonsterDef, saved: Dictionary = {}) -> void:
 	var monster := _world.spawn_monster(def, _spawn_point())
-	if _spawns_elite():
+	if not saved.is_empty():
+		FloorSave.restore_monster(_world, monster, saved)
+		if saved.get("lead", false) == true:
+			_world.make_elite(monster)
+	elif _spawns_elite():
 		_world.make_elite(monster)
 	monster.target = _world.player
 	Vfx.puff(_world, monster.global_position)
@@ -179,6 +195,66 @@ func _finish() -> void:
 ## `monster` is one of the waves it is sending (an ambush under way).
 func holds(monster: Monster) -> bool:
 	return state == State.FIGHTING and _wave.has(monster)
+
+
+## How far its fight went, for the floor's save (FloorSave.ambush_data(), while FIGHTING or still
+## to go on after a resume: is_resuming()): the
+## waves still to come after the one under way, and that wave's monsters still to face, those
+## standing (FloorSave.monster_entry(): rank, Health) and those not come yet (the one that will
+## lead the last wave as an elite marked "lead"). The slain ones are not in it: picked up again, the fight never hands
+## out the same kills twice.
+func progress_data() -> Dictionary:
+	if state == State.WAITING:
+		# Resumed, not walked into yet: what was saved, still to come (saved again as it was).
+		return { "waves_left": _resume_waves_left, "wave": _resume_wave.duplicate(true) } if is_resuming() else {}
+	var wave: Array = []
+	for monster: Variant in _wave:
+		if is_instance_valid(monster) and not (monster as Monster).is_dead and not (monster as Monster).def.resource_path.is_empty():
+			wave.append(FloorSave.monster_entry(monster as Monster))
+	for i in range(_to_spawn.size() - 1, -1, -1):  # (in the order they come: popped from the back)
+		var saved := _to_spawn_saved[i] if i < _to_spawn_saved.size() else {}
+		if not saved.is_empty():
+			wave.append(saved)
+			continue
+		var entry := { "def": RunSave.ref(_to_spawn[i]), "id": String(_to_spawn[i].id), "health": 1.0, "rank": "", "affixes": [] }
+		if _elite_in_wave and i == _to_spawn.size() - 1:
+			entry["lead"] = true  # the next to come leads the last wave (_spawns_elite()): an elite
+		wave.append(entry)
+	return { "waves_left": waves_left, "wave": wave }
+
+
+## A fight saved under way waits to go on (restore_progress()): the hero hasn't walked back in.
+func is_resuming() -> bool:
+	return state == State.WAITING and _resume_waves_left >= 0
+
+
+## A resumed floor: its fight was under way when the run was saved (progress_data() as a save file
+## reads it). It waits for the hero to walk in again, then goes on from there (_resume_fight()).
+func restore_progress(saved_waves_left: int, wave: Array) -> void:
+	if state != State.WAITING:
+		return
+	_resume_waves_left = maxi(saved_waves_left, 0)
+	_resume_wave = wave.duplicate(true)
+
+
+## The fight saved goes on: the wave under way with only what was still to face, then the waves
+## that were still to come. A kind the game no longer has is left out; an elite keeps its rank and
+## affixes, the one still to lead the last wave comes as an elite.
+func _resume_fight() -> void:
+	waves_left = _resume_waves_left
+	_resume_waves_left = -1
+	_wave.clear()
+	_to_spawn.clear()
+	_to_spawn_saved.clear()
+	_elite_in_wave = false
+	for i in range(_resume_wave.size() - 1, -1, -1):  # the first saved comes first
+		var entry: Variant = _resume_wave[i]
+		var def := FloorSave.entry_def(entry)
+		if def:
+			_to_spawn.append(def)
+			_to_spawn_saved.append(entry as Dictionary)
+	_resume_wave.clear()
+	_spawn_timer = 0.0
 
 
 ## A resumed floor: it was cleared before quitting. It stays quiet, its chest back where it was

@@ -253,6 +253,32 @@ func set_dying(progress: float) -> void:
 	_param(&"dissolve", progress)
 
 
+## The body leaves the world without dying (a fall into a hole, the hero's soul sinking at the
+## Threshold, a body drawn into a risen boss's mouth): taken away in `style` (a death's
+## DeathLookDef.Style: IMPLODE into one dark point, WISP...) in `element`'s ramp, on its own art
+## pixels, never shrunk nor faded by alpha (decision 0007, docs/vfx.md section 1). Then
+## set_vanishing(0..1); come_back() puts it whole again (the hero climbing out of the hole).
+func vanish(style: DeathLookDef.Style, element: VfxElementDef) -> void:
+	_param(&"death_style", int(style))
+	_param(&"death_row", row(element))
+
+
+## How far it has gone (0: whole, 1: gone).
+func set_vanishing(progress: float) -> void:
+	_param(&"dissolve", progress)
+
+
+## Whole again after vanish() (nothing left of it on the body: at rest, it may share again).
+func come_back() -> void:
+	_param(&"dissolve", 0.0)
+	_param(&"death_style", 0)
+
+
+## How far the body has gone (a death or a vanishing; the tests).
+func vanished() -> float:
+	return float(_set.get(&"dissolve", 0.0))
+
+
 ## `other` (a layer's own material, the same shader) wears what this body wears from now on:
 ## flash, statuses, deaths; its own frame when `own_frame` (a weapon's frames aren't the body's).
 func follow(other: ShaderMaterial, own_frame: bool = false) -> void:

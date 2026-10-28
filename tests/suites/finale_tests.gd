@@ -125,11 +125,19 @@ func _test_finale(game: Game) -> void:
 	check(world.get_node("Entities").get_children().all(func(n: Node) -> bool: return not n is Stairs), "no stairs")
 	# Polled, not a fixed wait: a level-up or an offer opening on the way pauses the game for a
 	# few frames.
+	var toma_scales := {}
+	var toma_gone := 0.0
 	for i in ceili((finale.boss.rise_time + 4.0) * 60.0):
 		_close_offers(game)
+		if is_instance_valid(toma) and toma.rig and toma.rig.look:
+			toma_scales[toma.rig.scale] = true
+			toma_gone = maxf(toma_gone, toma.rig.look.vanished())
 		await _frames(1)
 		if i >= ceili((finale.boss.rise_time + 0.6) * 60.0) and arena.boss != toma and is_instance_valid(arena.boss) and not arena.boss.dormant:
 			break
+	# Drawn into its mouth on its own pixels (an implosion), never shrunk nor faded by alpha
+	# (decision 0007, task 424).
+	check(toma_scales.keys().size() == 1 and toma_gone > 0.3, "the Maw draws Tôma's body in on its own pixels, never shrunk (scales %s, %.2f gone)" % [toma_scales.keys(), toma_gone])
 	_close_offers(game)
 	var maw := arena.boss
 	var risen := maw != toma and maw.def == finale.boss.next_boss and not maw.dormant and maw.target == player

@@ -2,9 +2,13 @@ class_name ActionButton
 extends TouchScreenButton
 ## Round on-screen button bound to an input action (set `action` in the inspector).
 ## TouchScreenButton supports multi-touch, so you can move and attack at the same time.
+## Its 32-pixel sphere is drawn as big as the touch circle allows with every art pixel on a whole
+## number of screen pixels (PixelGrid.art_scale(), decision 0007): the attack button, 144 units
+## across, shows its sphere 128 across on a phone (6 screen pixels a pixel, not 6.75); the touch
+## circle keeps its size.
 
-## The touch area's radius, and the art's (UI units). The HUD sets it from its layout times
-## the buttons size (Settings.controls_scale): the touch circle follows.
+## The touch area's radius (UI units). The HUD sets it from its layout times the buttons size
+## (Settings.controls_scale): the touch circle follows; the art fits inside it (art_radius()).
 @export var radius := 56.0:
 	set(value):
 		if value != radius:
@@ -64,21 +68,29 @@ func _ready() -> void:
 	shape = circle
 	pressed.connect(queue_redraw)
 	released.connect(queue_redraw)
+	PixelGrid.scale_changed.connect(queue_redraw)
 
 
 const BASE: Texture2D = preload("res://assets/ui/sphere/backgroundwood.png")
 const BASE_PRESSED: Texture2D = preload("res://assets/ui/sphere/backgroundiron.png")
 
 
+## The radius the sphere is drawn at (UI units): the touch radius rounded down to whole screen
+## pixels per art pixel.
+func art_radius() -> float:
+	return BASE.get_size().x * PixelGrid.art_scale(radius * 2.0 / BASE.get_size().x) * 0.5
+
+
 func _draw() -> void:
-	var size := Vector2(radius, radius) * 2.0
+	var art := art_radius()
+	var size := Vector2(art, art) * 2.0
 	var tint := color.lerp(Color.WHITE, 0.55)
 	tint.a = 0.9
 	draw_texture_rect(BASE_PRESSED if is_pressed() else BASE, Rect2(-size * 0.5, size), false, tint)
 
 	if icon:
-		# Pixel icons: scale by a whole number so pixels stay square.
-		var icon_scale := maxf(1.0, floorf(radius * 1.1 / maxf(icon.get_width(), icon.get_height())))
+		# Pixel icons: whole screen pixels per pixel, so pixels stay square and even.
+		var icon_scale := PixelGrid.art_scale(maxf(1.0, radius * 1.1 / maxf(icon.get_width(), icon.get_height())))
 		var icon_size := icon.get_size() * icon_scale
 		var offset := Vector2(0, 2) if is_pressed() else Vector2.ZERO
 		draw_texture_rect(icon, Rect2(-icon_size * 0.5 + offset, icon_size), false, icon_tint)
@@ -93,7 +105,7 @@ func _draw() -> void:
 		_draw_charge()
 
 	if counter >= 0:
-		var badge := Vector2(radius * 0.7, -radius * 0.7)
+		var badge := Vector2(art * 0.7, -art * 0.7)
 		PixelDraw.disc(self, badge, 14.0, Color("2b1d24"))
 		PixelDraw.ring(self, badge, 14.0, Color("e9a85a"))
 		var count_text := str(counter)
@@ -103,7 +115,7 @@ func _draw() -> void:
 ## The time left as shade over the face, the art's pixels: a disc whose rows from the top cover
 ## `cooldown_ratio` of it, falling a row at a time (as the action bar's slots, ActionBar).
 func _draw_cooldown() -> void:
-	var r := maxf((radius - 6.0) / PixelDraw.PX, 1.0)
+	var r := maxf((art_radius() - 6.0) / PixelDraw.PX, 1.0)
 	var top := -floori(r)
 	var rows := floori(r) * 2 + 1
 	var shaded := ceili(rows * cooldown_ratio)
@@ -120,7 +132,7 @@ func _draw_charge() -> void:
 	const BLOCK := 6.0
 	var lit := STEPS if charge_full else floori(charge_ratio * STEPS)
 	var beat := charge_full and fmod(Time.get_ticks_msec() * 0.001 * 2.5, 1.0) < 0.5
-	var rim := radius - BLOCK * 0.5
+	var rim := art_radius() - BLOCK * 0.5
 	for step in STEPS:
 		for k in 3:
 			var turn := (step + (k + 0.5) / 3.5) / STEPS

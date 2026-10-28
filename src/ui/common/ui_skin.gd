@@ -1,7 +1,10 @@
 class_name UiSkin
 ## The look of the game's big panels (bag, forge...): warm wood, dark insets, item slots with a
-## frame in the item's rarity, a red ribbon for titles. Pixel art at the UI's scale (x3), from
-## Kenney's "Pixel UI Pack" and "Fantasy UI Borders" (CC0, assets/ui/rpg/).
+## frame in the item's rarity, a red ribbon for titles. Kenney's "Pixel UI Pack" and "Fantasy UI
+## Borders" (CC0, assets/ui/rpg/), stored at 2 UI units per art pixel like the font and the world's
+## art (tools/ui/rescale_skin.py): whole screen pixels at every canvas scale (x1.5 on a phone: 3).
+## Every texture margin below counts whole art pixels (even units), so pieces laid over each
+## other keep their pixels in step (design/interface.md "One skin", Pixels).
 
 const DIR := "res://assets/ui/rpg/"
 const PANEL: Texture2D = preload("res://assets/ui/rpg/panel.png")
@@ -37,23 +40,27 @@ static func backdrop(alpha: float) -> Color:
 	return Color(BACKDROP, alpha)
 
 
-## The big wood panel (an ornate gold border is drawn over it by OrnatePanel).
+## The big wood panel (an ornate gold border is drawn over it by OrnatePanel). Its edge is 5 art
+## pixels.
 static func panel() -> StyleBoxTexture:
-	return _box(PANEL, 15, 22)
+	return _box(PANEL, 10, 22)
 
 
 ## A dark recess in the wood (lists, details).
 static func inset() -> StyleBoxTexture:
-	return _box(INSET, 15, 16)
+	return _box(INSET, 10, 16)
 
 
-## The red ribbon under a title.
+## The red ribbon under a title. Its ends (16 art pixels, their folds and stripes) and its rows
+## over and under the middle one (the band's inside, the 9th of its 16 rows) keep their art; in
+## between, its columns and that row are all alike and repeat to the title's width and a line's
+## height: no pixel stretched, the words inside the band, 48 tall as before.
 static func ribbon() -> StyleBoxTexture:
 	var box := _box(RIBBON, 0, 0)
-	box.texture_margin_left = 39
-	box.texture_margin_right = 39
-	box.texture_margin_top = 18
-	box.texture_margin_bottom = 18
+	box.texture_margin_left = 32
+	box.texture_margin_right = 32
+	box.texture_margin_top = 16
+	box.texture_margin_bottom = 14
 	box.content_margin_left = 48
 	box.content_margin_right = 48
 	box.content_margin_top = 10  # a BODY line, its capitals on the ribbon's middle, 48 high as the art
@@ -66,14 +73,14 @@ static func bar_frame() -> StyleBoxTexture:
 	if _bar_frame == null:
 		_bar_frame = StyleBoxTexture.new()
 		_bar_frame.texture = BAR
-		_bar_frame.set_texture_margin_all(9)
+		_bar_frame.set_texture_margin_all(6)
 	return _bar_frame
 
 
 ## A slot's wood (ItemSlot's) holding a picture `content` units in from its edge (the shrine's
 ## upgrades, a rank's icon).
 static func slot_frame(content: int) -> StyleBoxTexture:
-	var box := _box(SLOT, 15, content)
+	var box := _box(SLOT, 10, content)
 	box.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
 	box.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
 	return box
@@ -121,13 +128,15 @@ static func style_loading_bar(bar: ProgressBar) -> void:
 	bar.add_theme_stylebox_override("fill", fill)
 
 
-## A small plaque (counts, gold).
+## A small plaque (a portrait's frame). Its corners (7 art pixels, rivets in them) stay whole;
+## between them its rows and columns are all alike, so it stretches to any size without uneven
+## pixels.
 static func plaque() -> StyleBoxTexture:
 	var box := _box(PLAQUE, 0, 0)
-	box.texture_margin_left = 15
-	box.texture_margin_right = 15
-	box.texture_margin_top = 15
-	box.texture_margin_bottom = 15
+	box.texture_margin_left = 14
+	box.texture_margin_right = 14
+	box.texture_margin_top = 14
+	box.texture_margin_bottom = 14
 	box.content_margin_left = 16
 	box.content_margin_right = 16
 	box.content_margin_top = 6

@@ -21,6 +21,8 @@ owner first" lists what needs a new decision.
 | [0012](0012-luck-and-roles.md) | Bad-luck protection, a heal before bosses, no repeats, roles, floor pacing | 2026-10-28 |
 | [0013](0013-kagari-pays-once.md) | Kagari pays each rescue once, in line with depth; a home opens when its sleeper wakes | 2026-10-28 |
 | [0014](0014-run-variety.md) | Behaviour perks, one rule-bending relic per warden's choice, weapon evolutions at the forge, starting kits opened by feats | 2026-10-28 |
+| [0015](0015-ui-skin-two-units.md) | The UI skin at 2 units per art pixel; UI pictures on whole screen pixels | 2026-10-28 |
+| [0016](0016-tempo-under-the-floors.md) | What a wind-up floor adds comes off the wait after it: the tempo is kept | 2026-10-28 |
 
 Template for a new one (`NNNN-short-name.md`): **Status** (accepted / replaced by NNNN),
 **Context** (what made it necessary), **Decision** (one or two sentences), **Consequences** (what

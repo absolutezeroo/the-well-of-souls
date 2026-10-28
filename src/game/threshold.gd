@@ -189,14 +189,23 @@ func _sink_soul() -> void:
 		_rig_scale = rig.scale
 		_rig_saved = true
 		var sink := create_tween().set_parallel()
-		sink.tween_property(rig, "modulate", Color(trial.color, 0.0), trial.sink_time + trial.fade_time * 0.5)
-		sink.tween_property(rig, "position", _rig_position + Vector2(0, 10), trial.sink_time + trial.fade_time * 0.5)
-		sink.tween_property(rig, "scale", Vector2(_rig_scale.x * 0.7, _rig_scale.y * 0.25), trial.sink_time + trial.fade_time * 0.5).set_ease(Tween.EASE_IN)
+		# The body wavers and thins away into the floor, dithered on its own pixels in the souls'
+		# cold light, its last pixels five lower (never squashed nor faded by alpha: decision 0007).
+		if rig.look:
+			rig.look.vanish(DeathLookDef.Style.WISP, VfxElementDef.named(&"spirit"))
+			sink.tween_method(rig.look.set_vanishing, 0.0, 1.0, trial.sink_time + trial.fade_time * 0.5).set_ease(Tween.EASE_IN)
+		sink.tween_method(_sink_rig.bind(rig), 0.0, 1.0, trial.sink_time + trial.fade_time * 0.5)
 	var soul := SinkingSoul.new()
 	soul.color = trial.color
 	soul.position = _hero.global_position + Vector2(0, -18)
 	add_child(soul)
 	soul.play(trial.sink_time + trial.fade_time)
+
+
+## The rig `t` of the way down (0..1): lower by whole art pixels, five at most (10 units).
+func _sink_rig(t: float, rig: Node2D) -> void:
+	if is_instance_valid(rig):
+		rig.position = _rig_position + Vector2(0, floorf(t * 5.0) * PixelGrid.ART_PIXEL)
 
 
 ## Under the veil: the world he fell in leaves the tree as it is, the limbo takes the hero.
@@ -304,6 +313,8 @@ func _restore_rig() -> void:
 		_hero.rig.position = _rig_position
 		_hero.rig.scale = _rig_scale
 		_hero.rig.modulate = Color.WHITE
+		if _hero.rig.look:
+			_hero.rig.look.come_back()
 
 
 ## Dead in there some other way (giving up from the pause menu): straight home, no ceremony.

@@ -128,6 +128,78 @@ run (the last full pass put the act II perk median near +10%):
 Open: the lab measures rolls and shots on no build (a ranged expected build or a rolling bot in
 the marginal mode would show Cinder Wake, Riven Glyph, Blazing Roll and Hydra's Quiver).
 
+## 2026-10-28 - After the wind-up floors: the tempo kept, the Ember Ronin, Nightmare+10
+
+Measured the floors' effect (decision 0008) against the build just before them (commit 64026a4^)
+with the same seeds, then changed rules and data, never a warning under its floor.
+
+**The rule: the tempo is kept** ([decision 0016](decisions/0016-tempo-under-the-floors.md)). What a
+floor adds to a wind-up or a cast now comes off the wait after it (`floor_tempo_kept` 1 in
+`combat_rules.tres`; never below the blow's recovery). A rat (0.25 s wind-up written, a bite every
+0.9 s) bit every 1.3 s with the floor, 1.15 s again now, warned 0.4 s; the same for bats, racoons,
+skulls (0.2-0.25 s written), every monster held at the floor on Nightmare (x0.7) and every boss's
+last phase. The pack mode (acts I-II, Keeper, face-tank and kite, seed 1) can't see it: the
+expected builds kill these monsters in 0.3-0.8 s and take 0-5% of their Health a room before the
+floors, with them and with the tempo kept alike; the gain is for a fresh hero on the first floors.
+
+Boss fights, Keeper, the act's expected build, the 10 bosses of the acts, seeds 1-2
+(`--mode=arena --difficulty=normal --bot=kite,player --plain --build=expected_a1..a4`):
+
+| | Before the floors | Floors | Floors + tempo kept |
+|---|---|---|---|
+| Kite bot wins | 16 of 20 | 19 of 20 | 17 of 20 |
+| Player bot (0.3 s reaction) wins | 5 of 20 | 9 of 20 | 10 of 20 |
+| Damage taken, kite (mean of the bosses' means) | 156 | 137 | 145 |
+| Damage taken, player | 240 | 224 | 225 |
+
+The floors' easing is mostly the player bot reading what it couldn't before (the contract's
+purpose); the tempo gives back half of what the kite bot stopped taking. Left there on purpose:
+the gauntlet's target for an average player on Keeper is 75% of the acts won, and he still wins
+only half of these duels.
+
+**The Mire Matron (`giant_frog`, roadmap task 81)**: a coin toss for the kite bot. With the tempo
+kept and no change of her own: 7 of 8 on the command line's seeds 1-8 (4 of 8 in the last pass),
+1 of 4 on the balance suite's seeds (two lost with her at 0-1%): 8 of 12. Player 1 of 8,
+face-tank 0 of 12 (34-56% left). What costs the most: the fierce Frog Leap in her last phase
+(8 hits in 8 kite fights, 117 Health), its second leg and landing ring, which come with no mark
+of their own (a cast that moves its caster: roadmap), then her blows near the pit's edge. Tried
+and dropped: its cooldown 4 -> 4.5 s (suite 3 of 4, command line 4 of 8: no better). Left as it
+is, to play-test.
+
+**The Ember Ronin (`red_samurai`, task 82)**: with the tempo kept the kite bot won 2 of 8 (seeds
+1-8; it lost with the Ronin at 3-23%). His last phase did it: the fierce Flame Arc (24 hits,
+695 Health over the 8 fights, its second blow 0.5 s after the first, the same arc, at x1.3) and
+his blade (25 hits, 673). Changed: the second arc hits **x0.9** (was x1.3: it catches a hero who
+stepped back in, it no longer doubles the blow), his last phase's Damage bonus **+2** (was +3).
+
+| Ember Ronin, Keeper, seeds 1-8 | Kite | Player | Face-tank |
+|---|---|---|---|
+| Floors + tempo kept | 2 of 8 | 0 of 8 | 0 of 8 (33-55% left) |
+| Second arc x0.9 | 5 of 8 (lost at 1-2%) | 0 of 8 | 0 of 8 |
+| ...and last phase +2 Damage (kept) | **7 of 8** (lost at 2%) | 0 of 8 | 0 of 8 |
+
+**Nightmare+10** lost A10's +15% monster Health (one twist per ascension). **A10 The Well's
+Heart** is now "Monsters deal 15% more damage again" (was 10%): one twist, in numbers. The
+model's boss threat at Nightmare+10 against Keeper (acts I-IV):
+
+| | Act I | Act II | Act III | Act IV |
+|---|---|---|---|---|
+| Before the floors (A10 +15% Health, +10% damage) | x4.28 | x4.96 | x5.32 | x5.20 |
+| Floors (A10 +10% damage) | x4.21 | x4.85 | x5.20 | x5.11 |
+| A10 +15% damage (kept) | x4.46 | x5.07 | x5.48 | x5.40 |
+
+A little over the old numbers on purpose: the model doesn't see the floors, which make every
+Nightmare fight a little more readable. Target x3-12: kept. +20% read x4.54-5.73: more than
+needed.
+
+Guards: `game.fairness` (a rat's wait after a bite is its cooldown less what the floor added);
+balance suite, its own case `balance.alternates`: the Ember Ronin's kite wins on Keeper (3 of 4
+at least; 3 of 4 now) and face-tank losses. Open: the player bot loses the Mire Matron 7 of 8 and
+the Ember Ronin 8 of 8 (both act alternates; to play-test before more numbers move); the
+gauntlet not re-run (slow); the balance suite's main case stops at its 900 s watchdog before its
+end, on the build before this pass too (it ran to its end on 2026-10-23): its later checks don't
+run (roadmap).
+
 ## 2026-10-28 - The fairness contract: wind-up floors, one twist per ascension (decision 0008)
 
 What changed: no wind-up of an attack that hurts goes under **0.4 s** (a boss's **0.5 s**; a

@@ -328,7 +328,10 @@ floor's, made whole on every screen ([decision 0007](../decisions/0007-whole-pix
 `PixelGrid.camera_zoom()`): an art pixel is a whole number of screen pixels, the framing rounded
 down to the wider view. The surface shows 6 screen pixels per art pixel at 1080 lines (4 at 720,
 5 at 1600×900); the temple 4 at 1080 (3 at 720 and 1600×900), as the dungeon. A smaller interface
-size never changes the framing. Exterior camera framing and bounds return when leaving. A room visit never overwrites a suspended dungeon save.
+size never changes the framing. A room's `bounds` (its dark backdrop and the camera's limits) is
+wider than its walls so the widest common view never leaves it (the temple's 1280 units: the
+S23 sees 1170, a 21:9 1080p screen 1280) and never reaches the village beside it
+(`PcTests._test_temple_framing()`). Exterior camera framing and bounds return when leaving. A room visit never overwrites a suspended dungeon save.
 
 `VillageInteriorDef` owns doorway/return position, world offset, camera and walk bounds,
 spawn/exit, shrine interaction, light, tiles, wall collisions and props. `VillageTilePatchDef`

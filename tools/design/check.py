@@ -149,7 +149,7 @@ def check_ui_skin():
 
 ## A layout value set in code: a separation or margin override, a content margin, a literal
 ## minimum size. On the UI's 2-unit grid it is even (docs/design/interface.md "One skin",
-## Pixels); the Kenney skin's texture margins (multiples of 3) are its own art grid.
+## Pixels), as the skin's own texture margins are (2 units per art pixel, decision 0015).
 UI_GRID = re.compile(r'(?:add_theme_constant_override\("(?:separation|h_separation|v_separation|margin_(?:left|right|top|bottom))", |content_margin_(?:left|right|top|bottom) = |set_content_margin_all\(|custom_minimum_size(?:\.[xy])? = (?:Vector2\()?)(-?\d+)(?:\.0)?\b')
 
 

@@ -23,6 +23,8 @@ const SHINY_COLOR := CodexCard.SHINY_COLOR
 ## LOOK_MAX_HEIGHT (or the column) at that scale is drawn smaller (MonsterPage._look()).
 const MONSTER_LOOK_SCALE := 3.5
 const BOSS_LOOK_SCALE := 2.2
+## (Its static helpers: on the script, not the autoload.)
+const PixelGridScript := preload("res://src/autoload/pixel_grid.gd")
 const LOOK_MIN_HEIGHT := 104.0
 const LOOK_MAX_HEIGHT := 220.0
 const LOOK_PADDING := 6.0
@@ -227,7 +229,7 @@ func _look() -> Control:
 	var room := Vector2(width, LOOK_MAX_HEIGHT) - Vector2.ONE * LOOK_PADDING * 2.0
 	# (A warden on a common body's art, the Nameless Keeper on the hero's, is drawn as big as one.)
 	var big := _monster is BossDef and art.size.y > SMALL_ART
-	var look_scale := minf(BOSS_LOOK_SCALE if big else MONSTER_LOOK_SCALE, minf(room.x / art.size.x, room.y / art.size.y))
+	var look_scale := look_scale_for(art.size, room, big, PixelGrid.ui_scale())
 	var height := maxf(LOOK_MIN_HEIGHT, ceilf(art.size.y * look_scale + LOOK_PADDING * 2.0))
 	box.custom_minimum_size = Vector2(width, height)
 	sprite.scale = Vector2.ONE * look_scale
@@ -240,6 +242,15 @@ func _look() -> Control:
 		sprite.modulate = Color(0, 0, 0, 0.8)
 	box.add_child(sprite)
 	return box
+
+
+## The look's scale (UI units per art pixel): as big as wanted (MONSTER_LOOK_SCALE, a big
+## warden BOSS_LOOK_SCALE) and as `room` allows for art of `art` pixels, rounded down to a whole
+## number of screen pixels per art pixel on a canvas scaled `ui_scale` (decision 0007, task 425:
+## 3.5 was 5.25 screen pixels a pixel on a phone, 2.2 was 3.3).
+static func look_scale_for(art: Vector2, room: Vector2, big: bool, ui_scale: float) -> float:
+	var most := minf(BOSS_LOOK_SCALE if big else MONSTER_LOOK_SCALE, minf(room.x / maxf(art.x, 1.0), room.y / maxf(art.y, 1.0)))
+	return PixelGridScript.whole_art_scale(most, ui_scale)
 
 
 ## Where the look's art is drawn on screen (its frames' painted pixels, in the viewport's

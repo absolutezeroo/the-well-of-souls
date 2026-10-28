@@ -57,6 +57,11 @@ func as_boss_skill(carried: Array[VfxElementDef], _dive_width_max: float) -> Eff
 	return dressed_for_skill(carried) if not carried.is_empty() else self
 
 
+## It carries its user along (a dash, a leap): what comes after it lands where the body will be.
+func moves_caster() -> bool:
+	return false
+
+
 ## How a boss warns of it (see Telegraph).
 func telegraph_kind() -> Telegraph:
 	return Telegraph.OTHER
