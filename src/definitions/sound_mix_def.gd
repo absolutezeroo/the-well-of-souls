@@ -55,6 +55,12 @@ extends Resource
 @export var crowd_start: int = 6
 @export var crowd_db_per_voice: float = -0.6
 @export var crowd_max_db: float = -6.0
+## The wind-up warning (Sfx.play_warning()): a crowd winding up together makes a few cues, not a
+## din: at most this many at once, one every `warning_gap` seconds at most, `warning_db` under
+## the other fight sounds.
+@export var warning_voices: int = 2
+@export var warning_gap: float = 0.1
+@export var warning_db: float = -3.0
 ## Distance (pixels) where a positional sound fades out, and how steep the fade is (1 = linear,
 ## higher = far sounds quieter sooner): a fight off screen should not add to the one at hand.
 @export var max_distance: float = 1100.0

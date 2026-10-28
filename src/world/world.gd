@@ -645,10 +645,14 @@ func splat_count() -> int:
 	return _splats.count() if _splats and is_instance_valid(_splats) and not _splats.is_queued_for_deletion() else 0
 
 
-func spawn_floating_text(at: Vector2, text: String, color: Color) -> void:
+## A rising number or word at `at`; returns it (null when nothing is shown: a simulation), so a
+## blow's number can take the next ones (HitFeedback merges a crowd's numbers).
+func spawn_floating_text(at: Vector2, text: String, color: Color) -> FloatingText:
 	if not Vfx.shown:
-		return
-	spawn_vfx(FloatingText.create(at, text, color))
+		return null
+	var floating := FloatingText.create(at, text, color)
+	spawn_vfx(floating)
+	return floating
 
 
 # --- Holes ------------------------------------------------------------------
@@ -807,6 +811,11 @@ func get_hostiles(faction: Actor.Faction) -> Array[Actor]:
 	elif player and not player.is_dead:
 		result.append(player)
 	return result
+
+
+## The shots in flight (read only: the layer's children, walked by index, never copied).
+func projectile_layer() -> Node2D:
+	return _projectiles
 
 
 ## Every living actor, whatever its side (traps and explosions hurt everyone).

@@ -252,9 +252,29 @@ func get_move_speed() -> float:
 	return speed
 
 
-## Wind-ups and casts last longer on easy, shorter on hard (and in late boss phases).
+## Wind-ups and casts last longer on easy, shorter on hard (and in late boss phases), never under
+## the fairness floor (windup_for()).
 func get_telegraph_scale() -> float:
 	return _windup_multiplier
+
+
+## How long a wind-up or a warning written `seconds` lasts here: times the difficulty's, the
+## ascension's and its phases' multipliers, never under the floor of a monster's attack (a
+## boss's for a boss: CombatRulesDef.monster_windup(), docs/decisions/0008). Every wind-up of a
+## monster is asked here (its blow, its warned pulse, a maw's bite).
+func windup_for(seconds: float) -> float:
+	return Combat.RULES.monster_windup(seconds * _windup_multiplier, is_boss())
+
+
+## A warning it gives as written (a strike's fuse on the ground: GroundStrike), held to the floor.
+func floor_windup(seconds: float) -> float:
+	return Combat.RULES.monster_windup(seconds, is_boss())
+
+
+## How long its cast of `skill` lasts (SkillDef.monster_cast_time()): its own times
+## get_telegraph_scale(), at least the floor when it hurts; 0 for an instant one that hurts no one.
+func skill_cast_time(skill: SkillDef) -> float:
+	return skill.monster_cast_time(_windup_multiplier, is_boss()) if skill else 0.0
 
 
 ## Its wind-ups and casts last `factor` times as long from now on (a boss phase: BossBrain).
@@ -414,9 +434,9 @@ func casting_skill() -> SkillDef:
 	return skills.skills[casting_index] if casting_index >= 0 and casting_index < skills.skills.size() else null
 
 
-## Telegraph time before attacking (shorter in later boss phases).
+## Telegraph time before attacking (shorter in later boss phases, never under the floor).
 func get_attack_windup() -> float:
-	return def.attack_windup * _windup_multiplier
+	return windup_for(def.attack_windup)
 
 
 ## The debug panel's No AI: it stands where it is (its StateMachine thinks no more, its traits
@@ -481,8 +501,12 @@ func _on_damaged(hit: HitInfo, _damage: int) -> void:
 	if hit.source and is_hostile_to(hit.source):
 		target = hit.source
 	if hit.source is Player and not hit.is_secondary:
+		# One freeze and one lean per blow, however many it strikes (HitStop takes the longest,
+		# GameCamera the strongest push of a frame); only a crit buzzes the phone, never an
+		# ordinary hit (in a crowd it would drone).
 		HitStop.freeze(0.07 if hit.is_crit else 0.035)
-		Settings.vibrate(0.15 if hit.is_crit else 0.05)
+		if hit.is_crit:
+			Settings.vibrate(0.15)
 		# The blow lands: the camera leans into it.
 		var push := hit.knockback.normalized() if hit.knockback != Vector2.ZERO else hit.source.global_position.direction_to(global_position)
 		Events.camera_kick.emit(push, 6.0 if hit.is_crit else 3.5)
@@ -535,6 +559,8 @@ func _on_died(killer: Actor) -> void:
 			drops.pay_xp(killer)
 		world.spawn_floating_text(global_position, tr("Fell!"), Palette.GOLD)
 		return
+	if is_boss():
+		Settings.vibrate(0.8)  # a warden falls: one of the few things the phone buzzes for
 	if is_boss() and free_on_death:
 		Vfx.boss_death(world, global_position + Vector2(0, -head_height * 0.5), radius * 1.5)
 		HitStop.freeze(0.25)

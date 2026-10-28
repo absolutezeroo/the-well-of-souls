@@ -3,6 +3,36 @@
 Dated entries, newest first: what was measured, what changed and why, before/after numbers, open
 questions. How to measure: [balance.md](balance.md).
 
+## 2026-10-28 - The fairness contract: wind-up floors, one twist per ascension (decision 0008)
+
+What changed: no wind-up of an attack that hurts goes under **0.4 s** (a boss's **0.5 s**; a
+shockwave's, a burst's, a fuse's or a trap's warning **0.4 s**) after the difficulty's, an
+ascension's and the phases' multipliers (`data/combat/combat_rules.tres`, "Fairness contract").
+Before (the audit of 28 October, its raw data in the session's `audit_feel/fragments.md`): on
+Keeper 18 of 49 monsters wound up under 0.4 s (bats and racoons 0.20 s from floor 1, rats and
+skulls 0.25), every boss's third phase 0.29-0.39 s, the roar's shockwave 0.35 s, Nightmare+10
+down to 0.13 s; the monsters' Volley (Eye, Sorcerer, Horned Augur) had no wind-up at all. Now:
+every one of them at its floor on every difficulty, Volley 0.5 s (`cast_time`), the spike plate
+0.4 s (was 0.35), the arrow plate 0.4 s (was 0.3). What is above the floor keeps its own and its
+difficulty's share (Nightmare still x0.7 of a long wind-up).
+
+Ascensions: **A6 Swift Stalkers** is now only "monsters 8% faster" (its "x0.9 time to dodge"
+went: the floor would have taken most of it back, and two twists in one level read badly);
+**A10 The Well's Heart** is only "+10% damage again" (its +15% monster Health went). At
+Nightmare+10 monsters have x1.32 -> x1.15 Health from the ascensions and x1.21 damage as
+before. Not re-measured with the bots: the expected effect is easier Keeper fights against
+the fastest monsters (bats, racoons, rats, boss third phases) and a slightly easier
+Nightmare+10; the challenge stays in numbers, density and patterns (the decision).
+
+Damage budget, now a check (`unit.fairness`): on Keeper the expected hero's worst ordinary hit
+is 13.3% of his max Health (a beast's charge at depth 7: 28 of 210), the worst boss hit 17.7%
+(the Giant Frog's fierce leap at depth 3: 23 of 130), at the top of the hits' roll; budget 20% /
+30%. Unchanged by this pass.
+
+Feel numbers (presentation.md "Feel limits"): one input buffer of 0.12 s (was an attack-only
+0.3 s, counted in game time) for the attack, the roll and the skills, in real time
+(`PlayerDef.input_buffer`; core_tests' pin updated with it).
+
 ## 2026-10-27 - Heal share only where the hero was hurt (tools only)
 
 The heal share targets (arena "heal share", model "heal share") now judge only fights where the

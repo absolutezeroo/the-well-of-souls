@@ -580,7 +580,7 @@ func _test_difficulty_words() -> void:
 ## setting in exactly one tab, where a player would look for it; nothing outside the tabs.
 func _test_options_tabs(options: OptionsPanel) -> void:
 	var where := {
-		OptionsPanel.Tab.GAMEPLAY: ["EnglishButton", "FrenchButton", "AutoLootAll", "AutoLootBetter", "AutoLootOff", "StoriesFull", "StoriesShort", "StoriesOff", "RunTimerCheck", "ShakeSlider", "VibrationsCheck", "TutorialCheck", "ReplayTutorialButton"],
+		OptionsPanel.Tab.GAMEPLAY: ["EnglishButton", "FrenchButton", "AutoLootAll", "AutoLootBetter", "AutoLootOff", "StoriesFull", "StoriesShort", "StoriesOff", "RunTimerCheck", "ShakeSlider", "VibrationsCheck", "TapChargeCheck", "TutorialCheck", "ReplayTutorialButton"],
 		OptionsPanel.Tab.GRAPHICS: ["UiSizeBig", "UiSizeMedium", "UiSizeSmall", "ControlsSlider", "FixedStickCheck", "FewerEffectsCheck", "FlashesCheck", "BatteryCheck"],
 		OptionsPanel.Tab.AUDIO: ["MasterSlider", "MusicSlider", "InterfaceSlider", "CombatSlider", "AmbienceSlider"],
 		OptionsPanel.Tab.CONTROLS: [],

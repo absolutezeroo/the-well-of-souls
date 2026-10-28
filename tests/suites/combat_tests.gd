@@ -747,7 +747,7 @@ func _test_bestiary(world: World, player: Player) -> void:
 	flam.die(null)
 	check(player.hp == hp_before, "the burst waits (time to step away)")
 	var burst := flam.get_trait(DeathBurstTrait) as DeathBurstTrait
-	await _frames(int(burst.fuse * 60.0) + 4)
+	await _frames(int(Combat.RULES.blast_warning(burst.fuse) * 60.0) + 4)  # (held to the fairness floor)
 	check(player.hp < hp_before, "a dying flame spirit explodes")
 	player.statuses.clear()
 
@@ -774,7 +774,9 @@ func _test_difficulty_in_game(_game: Game, world: World, player: Player) -> void
 	await _frames(1)
 	check(nightmare_one.get_max_hp() > normal_one.get_max_hp() and easy_one.get_max_hp() < normal_one.get_max_hp(), "monster HP follows the difficulty")
 	check(nightmare_one.get_power() > normal_one.get_power() and easy_one.get_power() < normal_one.get_power(), "monster damage follows the difficulty")
-	check(nightmare_one.get_attack_windup() < normal_one.get_attack_windup() and easy_one.get_attack_windup() > normal_one.get_attack_windup(), "less time to dodge on harder difficulties")
+	# (A wind-up long enough to stay over the fairness floor shows the difficulty's share.)
+	check(nightmare_one.windup_for(1.0) < normal_one.windup_for(1.0) and easy_one.windup_for(1.0) > normal_one.windup_for(1.0), "less time to dodge on harder difficulties")
+	check(nightmare_one.get_attack_windup() >= Combat.RULES.min_monster_windup, "...never under the fairness floor (decision 0008: %.2f s)" % nightmare_one.get_attack_windup())
 	for monster in [normal_one, nightmare_one, easy_one]:
 		monster.queue_free()
 	await _frames(2)

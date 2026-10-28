@@ -14,7 +14,6 @@ const LOOP := 3.0
 ## At most this share of the stage's height for the monster's art.
 const STAGE_ART_SHARE := 0.8
 const START := 0.35
-const MIN_WARNING := 0.5
 const FLOOR_COLOR := Color(0.12, 0.1, 0.14)
 const GRID_COLOR := Color(1, 1, 1, 0.04)
 const SHOT_COLOR := Color(1.0, 0.75, 0.35)
@@ -154,7 +153,7 @@ func _process(delta: float) -> void:
 	var warning := _warning_time()
 	if not _released:
 		if _time >= START:
-			_show_warning(clampf((_time - START) / warning, 0.0, 1.0))
+			_show_warning(clampf((_time - START) / maxf(warning, 0.001), 0.0, 1.0))
 		if _time >= START + warning:
 			_release()
 	else:
@@ -172,10 +171,18 @@ func _process(delta: float) -> void:
 		_restart()
 
 
+## The wind-up as it comes in a fight on Keeper: its own, never under the fairness floor
+## (SkillDef.monster_cast_time(), CombatRulesDef.monster_windup(): decision 0008).
 func _warning_time() -> float:
-	if _attack is SkillDef:
-		return maxf((_attack as SkillDef).cast_time, MIN_WARNING)
-	return maxf(_monster.attack_windup, MIN_WARNING)
+	return warning_time(_monster, _attack)
+
+
+## How long `attack` (a WeaponDef or a SkillDef) of `monster` warns on Keeper (tests).
+static func warning_time(monster: MonsterDef, attack: Resource) -> float:
+	var boss := monster is BossDef
+	if attack is SkillDef:
+		return (attack as SkillDef).monster_cast_time(1.0, boss)
+	return Combat.RULES.monster_windup(monster.attack_windup, boss)
 
 
 # --- The warning ----------------------------------------------------------------
@@ -205,7 +212,8 @@ func _show_warning(progress: float) -> void:
 		else:
 			_telegraph.show_shape(TelegraphView.Shape.CONE, reach, aim, progress, deg_to_rad(weapon.arc_degrees) * 0.5)
 	else:
-		_telegraph.show_shape(TelegraphView.Shape.LINE, weapon.reach * 0.6, aim, progress, 0.0, 8.0)
+		# The path of its shots as far as they fly, as in a fight (MonsterOverlay).
+		_telegraph.show_shots(weapon.reach, aim, progress, weapon.projectile_count, weapon.spread_degrees, weapon.projectile_radius, _monster.radius)
 
 
 # --- What it does ------------------------------------------------------------------

@@ -4,7 +4,7 @@ extends Control
 ## switched by a tap, a click, Q / E or LB / RB: MenuNav), each a page of grouped options with
 ## their name and a short line saying what it does:
 ## - Gameplay: the language, auto loot, boss stories, in a run (run timer, screen shake,
-##   vibrations), the tutorial (hints, Replay tutorial);
+##   vibrations, charging without holding), the tutorial (hints, Replay tutorial);
 ## - Graphics: the screen (fullscreen on a computer, interface size), the touch controls (buttons
 ##   size, fixed joystick), effects and battery (fewer effects, screen flashes, battery saver);
 ## - Audio: the five volumes;
@@ -16,7 +16,7 @@ extends Control
 ## PrivacyPage).
 ## Built in code; every control is reachable as %Name from the panel (%EnglishButton,
 ## %FrenchButton, %MasterSlider, %MusicSlider, %InterfaceSlider, %CombatSlider, %AmbienceSlider,
-## %ShakeSlider, %ControlsSlider, %VibrationsCheck, %FixedStickCheck, %BatteryCheck,
+## %ShakeSlider, %ControlsSlider, %VibrationsCheck, %TapChargeCheck, %FixedStickCheck, %BatteryCheck,
 ## %FewerEffectsCheck, %FlashesCheck, %RunTimerCheck, %TutorialCheck, %ReplayTutorialButton, %AutoLootAll, %AutoLootBetter,
 ## %AutoLootOff, %StoriesFull, %StoriesShort, %StoriesOff, %FullscreenCheck (computers),
 ## %UiSizeBig, %UiSizeMedium, %UiSizeSmall, the tabs %GameplayTab, %GraphicsTab, %AudioTab,
@@ -339,7 +339,8 @@ func _build_gameplay(body: VBoxContainer) -> Control:
 	var in_run := OptionRows.section(right, tr("In a run"))
 	_checks[OptionRows.check(self, in_run, tr("Run timer"), tr("The run's time, under the map."), "RunTimerCheck")] = &"run_timer"
 	_shake = OptionRows.slider(self, in_run, tr("Screen shake"), tr("On big hits."), 0.0, 1.5, 0.1, "ShakeSlider")
-	_vibrations = OptionRows.check(self, in_run, tr("Vibrations"), tr("The phone buzzes on big hits and critical hits."), "VibrationsCheck")
+	_vibrations = OptionRows.check(self, in_run, tr("Vibrations"), tr("The phone buzzes when you are hurt, on critical hits and when a warden turns or falls."), "VibrationsCheck")
+	_checks[OptionRows.check(self, in_run, tr("Charge without holding"), tr("Attack twice quickly to charge, once more to unleash."), "TapChargeCheck")] = &"tap_to_charge"
 	var tutorial := OptionRows.section(right, tr("Tutorial"))
 	_tutorial = OptionRows.check(self, tutorial, tr("Tutorial hints"), tr("Short tips during your first runs."), "TutorialCheck")
 	_checks[_tutorial] = &"tutorial_hints"
@@ -370,7 +371,7 @@ func _build_graphics(body: VBoxContainer) -> Control:
 	_checks[OptionRows.check(self, controls, tr("Fixed joystick"), tr("Stays in its corner instead of following your thumb."), "FixedStickCheck")] = &"fixed_joystick"
 	var effects := OptionRows.section(right, tr("Effects and battery"))
 	_checks[OptionRows.check(self, effects, tr("Fewer effects"), tr("Half the particles, no heat haze nor glow: smoother on older phones."), "FewerEffectsCheck")] = &"fewer_effects"
-	_checks[OptionRows.check(self, effects, tr("Screen flashes"), tr("Lightning lights up the whole screen for an instant."), "FlashesCheck")] = &"screen_flashes"
+	_checks[OptionRows.check(self, effects, tr("Screen flashes"), tr("Lightning lights up the whole screen, the edges flash red when you are hurt."), "FlashesCheck")] = &"screen_flashes"
 	_checks[OptionRows.check(self, effects, tr("Battery saver"), tr("30 FPS: the phone stays cooler."), "BatteryCheck")] = &"battery_saver"
 	return page_node
 

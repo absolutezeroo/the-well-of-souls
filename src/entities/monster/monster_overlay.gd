@@ -118,9 +118,11 @@ func _update_telegraph() -> void:
 			# The blow's real zone: toward the pose's direction, swept to the locked aim (Blow).
 			var cone := Blow.of_weapon(monster.global_position, monster.facing, weapon).cone(deg_to_rad(weapon.arc_degrees) * 0.5)
 			_telegraph.show_shape(TelegraphView.Shape.CONE, reach, cone.x, telegraph, cone.y)
+	elif weapon:
+		# The path of its shots, as far as they fly (Combat.spec_from_weapon: the weapon's reach).
+		_telegraph.show_shots(weapon.reach, angle, telegraph, weapon.projectile_count, weapon.spread_degrees, weapon.projectile_radius, monster.radius)
 	else:
-		var length := (weapon.reach if weapon else 200.0) * 0.6
-		_telegraph.show_shape(TelegraphView.Shape.LINE, length, angle, telegraph, 0.0, 8.0)
+		_telegraph.visible = false
 
 
 ## Pulsing rings of the rank's color at its feet (more rings for rarer ranks), and for the

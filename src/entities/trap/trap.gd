@@ -41,7 +41,7 @@ func _ready() -> void:
 	var shape := RectangleShape2D.new()
 	shape.size = Vector2(SIZE, SIZE) * 0.8
 	($CollisionShape2D as CollisionShape2D).shape = shape
-	_timer = def.idle_time - fmod(cycle_offset, def.idle_time + def.warning_time + def.active_time)
+	_timer = def.idle_time - fmod(cycle_offset, def.idle_time + def.warning_seconds() + def.active_time)
 	if def.trigger == TrapDef.Trigger.STEP:
 		_timer = 0.0
 	if _timer < 0.0:
@@ -119,7 +119,10 @@ func _enter(next: Phase) -> void:
 		Phase.IDLE:
 			_timer = def.idle_time
 		Phase.WARNING:
-			_timer = def.warning_time
+			_timer = def.warning_seconds()
+			# A plate stepped on clicks: the warning's sound (a timed trap's rhythm is its own).
+			if def.trigger == TrapDef.Trigger.STEP:
+				Sfx.play_warning(global_position)
 		Phase.ACTIVE:
 			_timer = def.active_time
 			_hit_this_time.clear()

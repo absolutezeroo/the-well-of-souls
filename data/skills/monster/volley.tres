@@ -26,5 +26,6 @@ color = Color(0.823529, 0.290196, 0.52549, 1)
 cooldown = 7.0
 effects = Array[ExtResource("1_xl88n")]([SubResource("Resource_5gsui")])
 sound = ExtResource("5_ui03f")
+cast_time = 0.5
 ai_min_range = 80.0
 ai_max_range = 340.0

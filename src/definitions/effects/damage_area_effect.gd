@@ -111,7 +111,7 @@ func apply(user: Actor, aim: Vector2) -> void:
 	# body's pose.
 	aim = blow.facing
 	var center := blow.drawn_center(offset)
-	var base := flat_damage + roundi(user.get_skill_power() * damage_multiplier)
+	var base := hit_amount(user)
 	if blow.facing != blow.aim and offset > 0.0:
 		Combat.damage_blow_area(user.world, user, blow, offset, radius, base, knockback, status, element)
 	else:
@@ -153,3 +153,12 @@ func show_warning(view: TelegraphView, angle: float, progress: float, _body_radi
 
 func play_preview(preview: EffectPreview) -> void:
 	preview.ring(offset, radius, color, true)
+
+
+func hurts() -> bool:
+	return true
+
+
+## Its flat damage plus the user's skill power times its multiplier.
+func hit_amount(user: Actor) -> int:
+	return flat_damage + roundi(user.get_skill_power() * damage_multiplier)

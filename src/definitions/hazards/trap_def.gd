@@ -34,6 +34,12 @@ enum Trigger {
 @export var sound: AudioStream
 
 
+## How long it really warns: `warning_time`, never under the fairness floor of a trap
+## (CombatRulesDef.blast_warning(), docs/decisions/0008). Trap asks here, the one place.
+func warning_seconds() -> float:
+	return Combat.RULES.blast_warning(warning_time)
+
+
 ## Damage of one activation on this floor (depth and difficulty included).
 func damage_on(world: World) -> int:
 	return world.rules.dungeon_damage(damage)

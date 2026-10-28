@@ -87,8 +87,9 @@ func _spring() -> void:
 	var can_explode := def.explosion_radius > 0.0
 	var can_spawn := def.trap_monsters > 0
 	if can_explode and (not can_spawn or world.rng.randf() < 0.5):
-		_fuse = def.fuse_time
-		world.spawn_vfx(RingVfx.create(global_position, def.explosion_radius, Color(1.0, 0.3, 0.2, 0.8)))
+		# Its fuse (never under the fairness floor), its blast's whole area marked until it goes.
+		_fuse = Combat.RULES.blast_warning(def.fuse_time)
+		world.spawn_vfx(FuseMark.create(global_position, def.explosion_radius, _fuse))
 	elif can_spawn:
 		world.spawns.defer_monsters([], def.trap_monsters, global_position, 40.0, world.player)
 

@@ -35,7 +35,7 @@ extends Effect
 func apply(user: Actor, aim: Vector2) -> void:
 	var world := user.world
 	var first := _first_spot(user, aim)
-	var amount := flat_damage + roundi(user.get_skill_power() * damage_multiplier)
+	var amount := hit_amount(user)
 	var spots: Array[Vector2] = [first]
 	var tries := 0
 	while spots.size() < count and tries < count * 12:
@@ -75,3 +75,12 @@ func with_hit_status(new_status: OnHitStatus) -> Effect:
 	var copy := copied() as GroundStrikeEffect
 	copy.status = new_status
 	return copy
+
+
+func hurts() -> bool:
+	return true
+
+
+## Its flat damage plus the user's skill power times its multiplier.
+func hit_amount(user: Actor) -> int:
+	return flat_damage + roundi(user.get_skill_power() * damage_multiplier)

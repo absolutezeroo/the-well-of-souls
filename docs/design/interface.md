@@ -38,11 +38,16 @@ the bag casts no skill as the fight resumes (the hero reads no new press on the 
 a pause, `PlayerControls._presses_muted`).
 
 **Attack: tap or hold.** A tap (or a press) is one basic attack at once, aimed at the closest
-enemy; a press while the weapon is still swinging waits for it (0.3 s), so quick taps are never
-lost. Holding no longer repeats the attack: past 0.22 s it charges the weapon's charged attack
+enemy; a press of the attack, the roll or a skill that can't go yet (the weapon still swinging,
+a cooldown about to end) waits for it 0.12 s (`PlayerDef.input_buffer`, real seconds: a hit stop
+neither eats nor stretches it), the newest press taking the place of an older one, so quick taps
+are never lost and never fire late. Holding no longer repeats the attack: past 0.22 s it charges the weapon's charged attack
 (builds.md, "Charged attacks"), shown at the hero's feet and as twelve steps lighting up around
 the attack button's rim (its thumb may hide the hero), in the element the weapon carries; full,
-they beat. Letting go full unleashes it; a roll cancels it.
+they beat. Letting go full unleashes it; a roll cancels it. **Without holding** (Options >
+Gameplay > Charge without holding, `Settings.tap_to_charge`, decision 0011): two attacks within
+0.3 s (`PlayerDef.double_tap_window`) start the charge, which fills with the button up (as does a
+held charge let go early), and the next attack unleashes it once it is full; holding still works.
 
 ## Devices: touch, keyboard and mouse, gamepad
 
@@ -311,8 +316,8 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   option's name flips it too; a choice of a few (language, auto loot, boss stories, interface
   size) is a row of buttons under its name, the one in use pressed:
   - **Gameplay** (opens first): Language (first, for a player who can't read the one in use),
-    Loot (auto loot), Story (boss stories); In a run (run timer, screen shake, vibrations),
-    Tutorial (hints, Replay tutorial).
+    Loot (auto loot), Story (boss stories); In a run (run timer, screen shake, vibrations,
+    charge without holding), Tutorial (hints, Replay tutorial).
   - **Graphics**: Screen (fullscreen on a computer, interface size), Touch controls (buttons
     size, fixed joystick); Effects and battery (fewer effects, screen flashes, battery saver).
   - **Audio**: the five volumes, long sliders in one column.

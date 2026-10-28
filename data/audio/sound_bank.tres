@@ -33,6 +33,7 @@
 [ext_resource type="AudioStream" path="res://data/audio/drop.tres" id="snd_drop"]
 [ext_resource type="AudioStream" path="res://data/audio/dismantle.tres" id="snd_dismantle"]
 [ext_resource type="AudioStream" path="res://data/audio/fragment_found.tres" id="snd_fragment_found"]
+[ext_resource type="AudioStream" path="res://data/audio/telegraph.tres" id="snd_telegraph"]
 
 [resource]
 script = ExtResource("13_j8m74")
@@ -47,6 +48,7 @@ monster_death = ExtResource("7_lqsaf")
 monster_alert = ExtResource("6_r7xlo")
 projectile_impact = ExtResource("12_gdxse")
 explosion = ExtResource("2_s2fju")
+telegraph = ExtResource("snd_telegraph")
 pickup = ExtResource("9_7ru6g")
 coin = ExtResource("5_rbjxk")
 equip = ExtResource("1_es6rg")

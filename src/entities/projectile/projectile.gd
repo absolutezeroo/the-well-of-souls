@@ -56,6 +56,16 @@ func setup(shooter: Actor, direction: Vector2, spec: ProjectileSpec) -> void:
 	collision_mask = Layers.WORLD | (Layers.MONSTERS if _faction == Actor.Faction.PLAYER else Layers.PLAYER)
 
 
+## Flying toward `target` and able to hurt it (an enemy's shot, a trap's arrow): the HUD points
+## at it while it is out of sight (ThreatMarkers).
+func threatens(target: Actor) -> bool:
+	if _done or target == null:
+		return false
+	if not _hits_everyone and _faction == target.faction:
+		return false
+	return _direction.dot(target.global_position - global_position) > 0.0
+
+
 ## A shot fired by the dungeon itself (arrow traps): hits players and monsters.
 func setup_trap(world: World, direction: Vector2, spec: ProjectileSpec) -> void:
 	_world = world

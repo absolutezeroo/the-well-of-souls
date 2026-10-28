@@ -78,6 +78,8 @@ func test_cases() -> Array:
 		["belt_and_balance", _on_sturdy_game(func(game: Game) -> void: await floor_suite._test_belt_and_balance(game))],
 		["monster_behaviours", _on_sturdy_game(func(game: Game) -> void: await combat._test_monster_behaviours(game))],
 		["ai_movement", _on_sturdy_game(func(game: Game) -> void: await combat._test_ai_movement(game))],
+		["fairness", _on_sturdy_game(func(game: Game) -> void: await (_borrow(FairnessTests.new()) as FairnessTests).run_game(game))],
+		["feel_limits", _on_sturdy_game(func(game: Game) -> void: await (_borrow(FeelTests.new()) as FeelTests).run_game(game))],
 		["climate", _on_sturdy_game(func(game: Game) -> void: await floor_suite._test_climate(game))],
 		["spacing", _on_sturdy_game(func(game: Game) -> void: await floor_suite._test_spacing(game))],
 		["review_fixes", _on_sturdy_game(func(game: Game) -> void: await combat._test_review_fixes(game))],

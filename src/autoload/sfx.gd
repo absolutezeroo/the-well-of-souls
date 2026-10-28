@@ -46,6 +46,9 @@ var _world: Array[AudioStreamPlayer2D] = []
 var _ui: Array[AudioStreamPlayer] = []
 var _next_ui := 0
 var _recent := {}  # AudioStream -> PackedFloat64Array of start times
+## When the last wind-up warning was let through (seconds, real time), and how many were (tests).
+var _last_warning := -1000.0
+var warnings_played := 0
 var _source := {}  # player -> the AudioStream it was asked to play (not the picked variation)
 
 
@@ -93,6 +96,29 @@ func play_at(stream: AudioStream, position: Vector2, volume_db: float = 0.0, pit
 ## A sound of the place or its things at `position` (World bus, under the Ambience slider).
 func play_world(stream: AudioStream, position: Vector2, volume_db: float = 0.0, pitch: float = 1.0) -> void:
 	_play_2d(_world, stream, position, volume_db, pitch, false)
+
+
+## The short cue at the start of a monster's wind-up, a blast's fuse or a trap's click, at
+## `position` (Combat bus): every warning has a sound as well as its pose and its mark on the
+## ground (docs/decisions/0008). A crowd winding up together makes a few cues, not a din: one
+## every mix.warning_gap seconds (real time: a hit stop doesn't bunch them), mix.warning_voices
+## at most at once. Returns whether it was let through.
+func play_warning(position: Vector2) -> bool:
+	if bank.telegraph == null:
+		return false
+	var now := Time.get_ticks_msec() / 1000.0
+	if now - _last_warning < mix.warning_gap:
+		return false
+	var playing := 0
+	for player: AudioStreamPlayer2D in _combat:
+		if player.playing and _source.get(player) == bank.telegraph:
+			playing += 1
+	if playing >= mix.warning_voices:
+		return false
+	_last_warning = now
+	warnings_played += 1
+	play_at(bank.telegraph, position, mix.warning_db)
+	return true
 
 
 ## Plays a non-positional sound (menus, jingles) on the UI bus.

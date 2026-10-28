@@ -405,7 +405,9 @@ func _on_damaged(hit: HitInfo, damage: int) -> void:
 	if damage > 0 and world.rng.randf() < 0.6:
 		world.add_splat(global_position + Vector2(0, 3), VfxElementDef.named(&"blood").mark, 0.35, hit.knockback.normalized())
 	HitStop.freeze(0.08)
-	camera.shake(clampf(float(damage) / get_max_hp() * 3.0, 0.25, 0.8))
+	var weight := clampf(float(damage) / get_max_hp() * 3.0, 0.25, 0.8)
+	camera.shake(weight)
+	Settings.vibrate(weight)  # hurt: one of the few things the phone buzzes for
 	if hit.knockback != Vector2.ZERO:
 		camera.kick(hit.knockback.normalized(), 7.0)
 
@@ -422,6 +424,7 @@ func _on_died(killer: Actor) -> void:
 	if aura and is_instance_valid(aura):
 		aura.hide()  # (the soul gone, its light with it)
 	camera.shake(1.0)
+	Settings.vibrate(1.0)
 	Vfx.death(world, global_position, def.color)
 
 

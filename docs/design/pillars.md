@@ -31,10 +31,15 @@ decision ([decisions/](../decisions/README.md)).
   never from confusion. Every attack that hurts has a wind-up on at least two channels (pose,
   colour or ground mark, sound) and a way out; nothing hurts on the frame it appears; threats off
   screen get an edge marker.
-- *(start, owner's decision)* A wind-up never goes under 0.4 s (0.6-1.0 s for heavy and boss
-  attacks), whatever the difficulty or ascension; on Keeper an ordinary hit takes at most 15-20 %
-  of max Health, a boss hit 25-30 %, all simultaneous telegraphed attacks together 50 %.
-- Each ascension level adds exactly one readable modifier that keeps this contract.
+- ([decision 0008](../decisions/0008-fairness-contract.md); numbers to tune by playing) A
+  monster's wind-up never goes under **0.4 s**, a boss's under **0.5 s**, a shockwave's, a
+  blast's or a trap's warning under **0.4 s**, whatever the difficulty, ascension or phase (the
+  floors in `data/combat/combat_rules.tres`, applied after every multiplier; heavier blows may
+  wind up longer); on Keeper the expected hero loses at most **20 %** of his max Health to an
+  ordinary hit and **30 %** to a boss's (all simultaneous telegraphed attacks together 50 %,
+  not measured yet). `unit.fairness` holds both (docs/design/monsters.md "Warnings").
+- Each ascension level adds exactly one readable modifier that keeps this contract (none
+  shortens the time to dodge: `unit.fairness`).
 - Help without judgement: like Hades' God Mode (20 % damage resistance, +2 % per death) and
   Celeste's Assist Mode, an easier way is offered plainly, never mocked.
 - Luck is engineered: bad-luck protection on rarity, critical resources guaranteed (a heal before

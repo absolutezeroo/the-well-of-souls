@@ -38,7 +38,7 @@ static func is_cosmetic(node: Node) -> bool:
 	return node is CPUParticles2D or node is ImpactVfx or node is SheetVfx or node is RingVfx or node is BeamVfx \
 		or node is SwingVfx or node is SwingMatter or node is FloatingText or node is BloodDrainVfx or node is AfterimageVfx \
 		or node is FootprintVfx or node is DeathPiecesVfx or node is BlastVfx or node is ComposedVfx or node is ShockwaveVfx \
-		or node is EmoteVfx or node is LightFlash
+		or node is EmoteVfx or node is LightFlash or node is FuseMark
 
 
 ## Particles of `scene` at `at`: sparks, chunks, smoke and fire in the air (over the actors);
