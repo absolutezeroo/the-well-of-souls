@@ -210,12 +210,18 @@ laid out in width, not height.
 - **The forest closes the clearing**; no void is visible at the camera's limits.
 - **The hub is calmer than the floors**: fewer props, more open ground. Empty is fixed with a
   purpose (a plot waiting for a resident, an unlit lamp), never with random filler.
-- **Pack art only, whole scales, no tint** ([art bible](../art-bible.md)).
+- **Pack art only, whole scales, even positions, no tint** ([art bible](../art-bible.md),
+  [decision 0009](../decisions/0009-world-tints.md)). A darker or other-coloured look is the
+  pack's own piece or a recolour on its ramps, never a multiply: the Well's roots are the pack's
+  dead trees in their own colours (gnarled dead wood smothering the sleeping houses), an unlit
+  lamp is the pack's empty stone lantern (`VillagePropDef.unlit`, TilesetDungeon), the Well is
+  the pack's well recoloured onto the grey stone of the pack's grey statues (`assets/props/well.png`).
 
 **Checked** by `VillageTests._test_layout_rules` (unit.village): every service, home, appointment
 and door walkable from the spawn; no solid prop on a road (paths 3 tiles wide or less) or
 crowding a door, home or the spawn; a path at each interior door; whole art scales; the ground
-and room floors never tinted. The rest is checked by looking: `python3 tools/design/capture.py`
+and room floors never tinted; no prop tinted, every prop on even units, unlit lamps on their own
+piece (and `title.village`: the Well untinted). The rest is checked by looking: `python3 tools/design/capture.py`
 (the `village_map` shot shows the whole square).
 
 ## The temple interior

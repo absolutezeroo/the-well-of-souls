@@ -6158,8 +6158,8 @@
     {
       "id": "task_408",
       "title": "Teintes sur l'art du monde : donjon et racines de Kagari",
-      "description": "Audit du 28/10 : 10 thèmes de donjon sur 12 multiplient sols, murs et plateau au-delà du seuil de la bible (canaux ≥ 0,75, écart ≤ 0,12) via dungeon_view.gd:89-103 (Seuil 0,50 ; Fond du Puits 0,62 ; Ossuaire 0,68). L'étalonnage d'écran par biome (screen.gdshader) s'y ajoute. À Kagari, les racines du Puits sont des arbres du pack teintés en violet-noir (0,32 ; 0,2 ; 0,38) et le Puits est teinté. Proposé : thèmes en blanc et tilesets recolorés (recolor.py) ; étalonnage borné par un test sur AmbienceDef, avec les exceptions narratives (Lune de sang, Tréfonds, Seuil) consignées dans une décision (le propriétaire tranche la nuance de la règle) ; de vraies racines dessinées sur la palette.\n\n28/10 (décision 0009, agent art) : donjon fait. Les 7 thèmes hors seuil passent à une atténuation neutre (Ossuaire 0,84/0,88/0,92 ; Catacombes, Cavernes noyées, Archives, Ruines, Temple, Tombeau : écart ≤ 0,08, canal ≥ 0,84) ; l'identité du biome reste dans ses tuiles, sa lumière (LightingDef propre à chaque biome) et son étalonnage. Exceptions narratives écrites dans les données (narrative_exception) : thèmes du Seuil, des Tréfonds et du Fond du Puits ; ambiances du Seuil, des Tréfonds, de la Lune de sang et des malédictions (Souffle de cendre, Givre). Test unit.vfx « tints » : teinte des thèmes et cumul thème x étalonnage ≥ 0,6 sur les tons moyens (0,25 à 0,5), exceptions limitées à la liste de la décision. Captures avant/après des 11 biomes à 1920x1080 par l'agent art : biomes toujours reconnaissables. Kagari : commit suivant.",
-      "status": "in_progress",
+      "description": "Audit du 28/10 : 10 thèmes de donjon sur 12 multiplient sols, murs et plateau au-delà du seuil de la bible (canaux ≥ 0,75, écart ≤ 0,12) via dungeon_view.gd:89-103 (Seuil 0,50 ; Fond du Puits 0,62 ; Ossuaire 0,68). L'étalonnage d'écran par biome (screen.gdshader) s'y ajoute. À Kagari, les racines du Puits sont des arbres du pack teintés en violet-noir (0,32 ; 0,2 ; 0,38) et le Puits est teinté. Proposé : thèmes en blanc et tilesets recolorés (recolor.py) ; étalonnage borné par un test sur AmbienceDef, avec les exceptions narratives (Lune de sang, Tréfonds, Seuil) consignées dans une décision (le propriétaire tranche la nuance de la règle) ; de vraies racines dessinées sur la palette.\n\n28/10 (décision 0009, agent art) : donjon fait. Les 7 thèmes hors seuil passent à une atténuation neutre (Ossuaire 0,84/0,88/0,92 ; Catacombes, Cavernes noyées, Archives, Ruines, Temple, Tombeau : écart ≤ 0,08, canal ≥ 0,84) ; l'identité du biome reste dans ses tuiles, sa lumière (LightingDef propre à chaque biome) et son étalonnage. Exceptions narratives écrites dans les données (narrative_exception) : thèmes du Seuil, des Tréfonds et du Fond du Puits ; ambiances du Seuil, des Tréfonds, de la Lune de sang et des malédictions (Souffle de cendre, Givre). Test unit.vfx « tints » : teinte des thèmes et cumul thème x étalonnage ≥ 0,6 sur les tons moyens (0,25 à 0,5), exceptions limitées à la liste de la décision. Captures avant/après des 11 biomes à 1920x1080 par l'agent art : biomes toujours reconnaissables. Kagari : commit suivant.\n\nKagari (même jour) : aucune teinte sur les objets du village. Les racines du Puits sont les arbres morts du pack dans leurs propres couleurs (bois mort noueux qui étouffe les maisons endormies ; la teinte violet-noire est retirée). Le Puits n'est plus teinté : c'est le puits du pack recoloré pierre grise, couleur pour couleur, sur la rampe des statues grises du pack (assets/props/well.png, noté dans REUSE.toml et la bible). Les lampes éteintes montrent la lanterne de pierre vide du pack (TilesetDungeon) au lieu de la lanterne allumée assombrie ; allumées, plus de teinte jaune x1,3. Tests unit.village (aucune teinte, positions paires, lampe éteinte = sa propre image) et title.village (Puits sans teinte). À vérifier sur le S23 : les racines se lisent-elles comme des ronces/racines mortes autour des maisons ? Le Puits gris convient-il ? (le puits ocre du pack sans recoloration est l'autre choix, une ligne à changer). Captures village, carte et temple par l'agent art (1:1, x4, gris).",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_3",
       "due_date": null,
@@ -6167,7 +6167,7 @@
         "visuel"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793166484
+      "updated_at": 1793167513
     },
     {
       "id": "task_409",
@@ -6263,7 +6263,7 @@
     {
       "id": "task_415",
       "title": "Corriger les erreurs de doc trouvées par l'audit",
-      "description": "vfx.md §1 et village.md disent « 3 pixels d'écran » par pixel d'art : faux à 1080 lignes (4,5 dans le donjon, 6 au village) ; dungeon.md a deux fois la section « Room trials » (l. 516-545 et 546-575) et dit « a couple of minutes » par étage (cible 3-6 min). Positions impaires à Kagari (temple 747, racine 1225, deux décors) ; alpha non binaire de cracks.png et spike_holes.png.",
+      "description": "vfx.md §1 et village.md disent « 3 pixels d'écran » par pixel d'art : faux à 1080 lignes (4,5 dans le donjon, 6 au village) ; dungeon.md a deux fois la section « Room trials » (l. 516-545 et 546-575) et dit « a couple of minutes » par étage (cible 3-6 min). Positions impaires à Kagari (temple 747, racine 1225, deux décors) ; alpha non binaire de cracks.png et spike_holes.png.\n\n28/10 (agent art) : positions impaires de Kagari corrigées (temple 748, racine 1224, décors 1104 et 1176) et testées (unit.village).",
       "status": "in_progress",
       "priority": "low",
       "epic_id": "epic_5",
@@ -6272,7 +6272,7 @@
         "qualité"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793163670
+      "updated_at": 1793167513
     },
     {
       "title": "Chute, Seuil, corps avalé : disparitions en fondu dithéré au lieu d'un rétrécissement",

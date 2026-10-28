@@ -80,6 +80,32 @@ func _test_layout_rules() -> void:
 	var blocking: Array[String] = []
 	var crowding: Array[String] = []
 	var odd_scales: Array[String] = []
+	# Decision 0009: no tint on Kagari's props (the Well's roots are pack art, not tinted trees);
+	# static art on even units (docs/art-bible.md "Grid and scale").
+	var tinted: Array[String] = []
+	var odd_spots: Array[String] = []
+	var all_props: Array[VillagePropDef] = VILLAGE.props.duplicate()
+	for room in VILLAGE.interiors:
+		all_props.append_array(room.props)
+	for prop in all_props:
+		if prop.tint != Color.WHITE:
+			tinted.append("%s at %s: %s" % [prop.region, prop.position, prop.tint])
+		if fposmod(prop.position.x, 2.0) != 0.0 or fposmod(prop.position.y, 2.0) != 0.0:
+			odd_spots.append("%s at %s" % [prop.region, prop.position])
+	for spot: Vector2 in [VILLAGE.well, VILLAGE.noticeboard, VILLAGE.memorial]:
+		if fposmod(spot.x, 2.0) != 0.0 or fposmod(spot.y, 2.0) != 0.0:
+			odd_spots.append("a landmark at %s" % spot)
+	check(tinted.is_empty(), "Kagari's props are drawn in the pack's own colours, never tinted (%s; decision 0009)" % [tinted])
+	check(odd_spots.is_empty(), "Kagari's static art stands on even units (%s; docs/art-bible.md)" % [odd_spots])
+	for prop in all_props:
+		if prop.lit_by == null:
+			continue
+		var view := VillagePropView.new()
+		view.def = prop
+		add_child(view)
+		var sprite := view.get_child(0) as Sprite2D
+		check(prop.unlit != null and sprite.texture == prop.unlit and sprite.modulate == Color.WHITE, "an unlit lamp shows the pack's unlit piece, not the lit one darkened (decision 0009)")
+		view.free()
 	var thresholds: Array[Vector2] = [VILLAGE.spawn]
 	for resident in VILLAGE.residents:
 		thresholds.append(resident.position)
@@ -346,6 +372,7 @@ func run_title() -> void:
 	check(hub.spots.size() == 10 and hub.walker != null and not hub.walker.blocked, "Kagari opens with a controllable hero, surface/temple places and four residents")
 	await _test_temple(hub)
 	await _test_framing(hub)
+	_test_untinted_well(hub)
 	var sleeper := hub.view.actor_for(VILLAGE.residents[2])
 	var sleeper_position := sleeper.position
 	await _frames(300)
@@ -547,6 +574,13 @@ func _test_framing(hub: VillageHub) -> void:
 	await _frames(3)
 	check(hub.walker.camera.zoom.is_equal_approx(Vector2.ONE * PixelGrid.camera_zoom(VillageWalker.SURFACE_ZOOM)), "the framing follows the window back")
 	hub.walker.position = VILLAGE.spawn
+
+
+## Decision 0009: the Well is drawn in the pack's colours (its grey stone is a recoloured piece,
+## not a multiply), like every prop of Kagari.
+func _test_untinted_well(hub: VillageHub) -> void:
+	var wells := hub.view.find_children("*", "Sprite2D", true, false).filter(func(sprite: Node) -> bool: return (sprite as Sprite2D).texture == VILLAGE.well_icon)
+	check(wells.size() == 1 and (wells[0] as Sprite2D).modulate == Color.WHITE and (wells[0] as Sprite2D).self_modulate == Color.WHITE, "the Well is drawn in its art's own colours, never tinted (decision 0009)")
 
 
 func _test_temple(hub: VillageHub) -> void:

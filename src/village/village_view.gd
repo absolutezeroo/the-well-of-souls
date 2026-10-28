@@ -74,7 +74,6 @@ func refresh() -> void:
 	well_sprite.texture = def.well_icon
 	well_sprite.scale = Vector2(3, 3)
 	well_sprite.position.y = -12
-	well_sprite.modulate = Color(0.55, 0.65, 0.72)
 	well_body.add_child(well_sprite)
 	var board := VillageNoticeboard.new()
 	board.position = def.noticeboard

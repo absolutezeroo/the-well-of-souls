@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" path="res://assets/tiles/nature.png" id="nature"]
 [ext_resource type="Texture2D" path="res://assets/tiles/desert.png" id="desert"]
 [ext_resource type="Texture2D" path="res://assets/props/lantern.png" id="lantern"]
+[ext_resource type="Texture2D" path="res://assets/tiles/dungeon.png" id="dungeon_tiles"]
+[ext_resource type="Texture2D" path="res://assets/props/well.png" id="well_art"]
 [ext_resource type="Resource" path="res://data/village/keeper.tres" id="keeper"]
 [ext_resource type="Resource" path="res://data/village/sayo.tres" id="sayo"]
 [ext_resource type="Resource" path="res://data/village/ren.tres" id="ren"]
@@ -21,6 +23,10 @@
 [ext_resource type="Resource" path="res://data/village/clock.tres" id="clock"]
 
 [ext_resource type="Resource" path="res://data/village/atmosphere.tres" id="atmosphere"]
+
+[sub_resource type="AtlasTexture" id="lantern_unlit"]
+atlas = ExtResource("dungeon_tiles")
+region = Rect2(32, 48, 16, 16)
 
 [sub_resource type="Resource" id="prop_0"]
 script = ExtResource("prop_script")
@@ -41,7 +47,7 @@ collision = Rect2(-50, -55, 100, 55)
 [sub_resource type="Resource" id="prop_2"]
 script = ExtResource("prop_script")
 texture = ExtResource("house")
-position = Vector2(747, 320)
+position = Vector2(748, 320)
 art_scale = 3.0
 region = Rect2(192, 0, 64, 48)
 collision = Rect2(-96, -138, 192, 128)
@@ -124,7 +130,6 @@ texture = ExtResource("nature")
 position = Vector2(1060, 300)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
-tint = Color(0.32, 0.2, 0.38, 1)
 collision = Rect2(-14, -15, 28, 30)
 cleared_by = ExtResource("quest")
 
@@ -134,17 +139,15 @@ texture = ExtResource("nature")
 position = Vector2(1050, 360)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
-tint = Color(0.32, 0.2, 0.38, 1)
 collision = Rect2(-14, -15, 28, 30)
 cleared_by = ExtResource("quest")
 
 [sub_resource type="Resource" id="prop_14"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(1225, 300)
+position = Vector2(1224, 300)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
-tint = Color(0.32, 0.2, 0.38, 1)
 collision = Rect2(-14, -15, 28, 30)
 cleared_by = ExtResource("quest")
 
@@ -154,7 +157,6 @@ texture = ExtResource("nature")
 position = Vector2(1232, 362)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
-tint = Color(0.32, 0.2, 0.38, 1)
 collision = Rect2(-14, -15, 28, 30)
 cleared_by = ExtResource("quest")
 
@@ -164,6 +166,7 @@ texture = ExtResource("lantern")
 position = Vector2(216, 624)
 art_scale = 2.0
 lit_by = ExtResource("market")
+unlit = SubResource("lantern_unlit")
 
 [sub_resource type="Resource" id="prop_17"]
 script = ExtResource("prop_script")
@@ -171,6 +174,7 @@ texture = ExtResource("lantern")
 position = Vector2(424, 624)
 art_scale = 2.0
 lit_by = ExtResource("market")
+unlit = SubResource("lantern_unlit")
 
 [sub_resource type="Resource" id="prop_18"]
 script = ExtResource("prop_script")
@@ -178,6 +182,7 @@ texture = ExtResource("lantern")
 position = Vector2(1016, 624)
 art_scale = 2.0
 lit_by = ExtResource("memorial")
+unlit = SubResource("lantern_unlit")
 
 [sub_resource type="Resource" id="prop_19"]
 script = ExtResource("prop_script")
@@ -185,6 +190,7 @@ texture = ExtResource("lantern")
 position = Vector2(1224, 624)
 art_scale = 2.0
 lit_by = ExtResource("memorial")
+unlit = SubResource("lantern_unlit")
 
 [sub_resource type="Resource" id="west_roots_0"]
 script = ExtResource("prop_script")
@@ -192,7 +198,6 @@ texture = ExtResource("nature")
 position = Vector2(228, 300)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
-tint = Color(0.32, 0.2, 0.38, 1)
 collision = Rect2(-14, -15, 28, 30)
 cleared_by = ExtResource("sayo_quest")
 
@@ -202,7 +207,6 @@ texture = ExtResource("nature")
 position = Vector2(220, 362)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
-tint = Color(0.32, 0.2, 0.38, 1)
 collision = Rect2(-14, -15, 28, 30)
 cleared_by = ExtResource("sayo_quest")
 
@@ -212,7 +216,6 @@ texture = ExtResource("nature")
 position = Vector2(392, 300)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
-tint = Color(0.32, 0.2, 0.38, 1)
 collision = Rect2(-14, -15, 28, 30)
 cleared_by = ExtResource("sayo_quest")
 
@@ -222,13 +225,8 @@ texture = ExtResource("nature")
 position = Vector2(398, 362)
 art_scale = 2.0
 region = Rect2(64, 0, 32, 32)
-tint = Color(0.32, 0.2, 0.38, 1)
 collision = Rect2(-14, -15, 28, 30)
 cleared_by = ExtResource("sayo_quest")
-
-[sub_resource type="AtlasTexture" id="well_icon"]
-atlas = ExtResource("desert")
-region = Rect2(0, 48, 32, 32)
 
 [sub_resource type="Resource" id="deco_0"]
 script = ExtResource("prop_script")
@@ -374,7 +372,7 @@ region = Rect2(0, 176, 16, 16)
 [sub_resource type="Resource" id="deco_18"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(1105, 748)
+position = Vector2(1104, 748)
 art_scale = 2.0
 region = Rect2(96, 176, 16, 16)
 
@@ -388,7 +386,7 @@ region = Rect2(48, 176, 16, 16)
 [sub_resource type="Resource" id="deco_20"]
 script = ExtResource("prop_script")
 texture = ExtResource("nature")
-position = Vector2(1175, 740)
+position = Vector2(1176, 740)
 art_scale = 2.0
 region = Rect2(96, 176, 16, 16)
 
@@ -529,7 +527,7 @@ region = Rect2(0, 80, 48, 32)
 [resource]
 script = ExtResource("script")
 atmosphere = ExtResource("atmosphere")
-well_icon = SubResource("well_icon")
+well_icon = ExtResource("well_art")
 path_texture = ExtResource("ground")
 path_region = Rect2(16, 128, 16, 16)
 display_name = "Kagari"
