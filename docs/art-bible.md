@@ -86,7 +86,8 @@ temples, statues, banners, furniture, interiors, animated flags, flowers, water 
 - New art is drawn or recoloured onto those colours (`tools/vfx/recolor.py`). The snapshot is
   only re-taken by the owner (`tools/design/check.py --snapshot-palette <pack folder>`).
 - Effects use their element's ramp ([vfx.md](vfx.md), checked by `tools/vfx/check.py`).
-- Alpha is binary (fully opaque or fully transparent), fades are dithered.
+- Alpha is binary (fully opaque or fully transparent), fades are dithered. **Checked** for the
+  world art and `assets/fx` (`tools/design/check.py`).
 
 ## Mood: darken with light, never by multiplying
 

@@ -39,6 +39,7 @@ func run() -> void:
 	_test_no_squared_colors()
 	_test_whole_scales()
 	_test_world_tints()
+	_test_hazards_at_rest()
 	_test_simulation()
 
 
@@ -806,6 +807,28 @@ static func _graded(color: Color, mood: AmbienceDef) -> Color:
 	var tint := mood.grade_shadows.lerp(mood.grade_highlights, t)
 	var strength := mood.grade_strength
 	return Color(color.r * lerpf(1.0, tint.r, strength), color.g * lerpf(1.0, tint.g, strength), color.b * lerpf(1.0, tint.b, strength))
+
+
+## A hazard at rest stands out from the floor (docs/design/pillars.md, the audit's L18): the
+## crumbling floor's cracks and the spike trap's holes are drawn opaque, alpha 1-bit like all the
+## world's art (they were 24 % to 78 % see-through, the cracks drawn at 55 % on top of it).
+func _test_hazards_at_rest() -> void:
+	var crumbling := load("res://data/hazards/crumbling_floor.tres") as PitDef
+	var spikes := load("res://data/hazards/spikes.tres") as TrapDef
+	for texture: Texture2D in [crumbling.crack_texture, spikes.base_texture]:
+		var image := texture.get_image()
+		var opaque := 0
+		var partial := 0
+		for y in image.get_height():
+			for x in image.get_width():
+				var alpha := image.get_pixel(x, y).a
+				if alpha >= 1.0:
+					opaque += 1
+				elif alpha > 0.0:
+					partial += 1
+		check(partial == 0 and opaque > 0, "hazards: %s is opaque or empty, pixel by pixel (%d half-transparent)" % [texture.resource_path.get_file(), partial])
+	var source := FileAccess.get_file_as_string("res://src/entities/hazards/crumbling_floor.gd")
+	check(not source.contains("color.a") and not source.contains("Color(1, 1, 1, 0.") and not source.contains("Color(0, 0, 0, 0."), "hazards: the crumbling floor draws its cracks opaque and darkens by dithering, never see-through")
 
 
 ## Every .tres under `dir` and its subfolders.

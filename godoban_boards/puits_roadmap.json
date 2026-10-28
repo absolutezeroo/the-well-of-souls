@@ -6263,7 +6263,7 @@
     {
       "id": "task_415",
       "title": "Corriger les erreurs de doc trouvées par l'audit",
-      "description": "vfx.md §1 et village.md disent « 3 pixels d'écran » par pixel d'art : faux à 1080 lignes (4,5 dans le donjon, 6 au village) ; dungeon.md a deux fois la section « Room trials » (l. 516-545 et 546-575) et dit « a couple of minutes » par étage (cible 3-6 min). Positions impaires à Kagari (temple 747, racine 1225, deux décors) ; alpha non binaire de cracks.png et spike_holes.png.\n\n28/10 (agent art) : positions impaires de Kagari corrigées (temple 748, racine 1224, décors 1104 et 1176) et testées (unit.village).",
+      "description": "vfx.md §1 et village.md disent « 3 pixels d'écran » par pixel d'art : faux à 1080 lignes (4,5 dans le donjon, 6 au village) ; dungeon.md a deux fois la section « Room trials » (l. 516-545 et 546-575) et dit « a couple of minutes » par étage (cible 3-6 min). Positions impaires à Kagari (temple 747, racine 1225, deux décors) ; alpha non binaire de cracks.png et spike_holes.png.\n\n28/10 (agent art) : positions impaires de Kagari corrigées (temple 748, racine 1224, décors 1104 et 1176) et testées (unit.village).\n\nAlpha binaire : les fissures du sol qui s'effondre (cracks.png) et les trous du piège à pointes (spike_holes.png) sont opaques (le reflet clair des fissures, à 24 %, est retiré : le noir seul se lit sur tous les sols) ; le sol qui s'effondre n'est plus dessiné à 55 % au repos, il tremble par pixels entiers et s'assombrit en tramage. tools/design/check.py vérifie maintenant l'alpha binaire de tout l'art du monde et des effets ; test unit.vfx « hazards ». À voir sur le S23 : les fissures au repos sont-elles assez visibles sans être criardes ?",
       "status": "in_progress",
       "priority": "low",
       "epic_id": "epic_5",
@@ -6272,7 +6272,7 @@
         "qualité"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793167513
+      "updated_at": 1793168171
     },
     {
       "title": "Chute, Seuil, corps avalé : disparitions en fondu dithéré au lieu d'un rétrécissement",

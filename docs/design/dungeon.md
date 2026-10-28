@@ -34,6 +34,9 @@
     loses 15% of his max Health (`PitDef.fall_damage`). Rolling carries you over; flying monsters
     (bats, ghosts...) don't care. Walking monsters steer around holes, so knock them in.
   - **Crumbling floor**: cracked tiles that hold until someone stands on them, then give way.
+    Its cracks are drawn opaque, darker than any floor's own marks, so it reads at rest; giving
+    way, they jolt by whole art pixels and the cell darkens by dithering. (The spike trap's holes
+    are opaque too.)
     A crack that gave way is saved with the floor (`World.spent_data()` "collapsed"): a resumed
     run finds the hole there, not the crack again.
   - **Quicksand** (ruins) and **mud** (caves): very slow to cross, and they hurt if you stay.

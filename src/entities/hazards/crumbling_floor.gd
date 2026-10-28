@@ -5,6 +5,9 @@ extends Node2D
 
 enum State { SOLID, CRACKING }
 
+## The cell darkens to the cracks' own dark as it gives way.
+const SINKING := Color("141012")
+
 var def: PitDef
 var world: World
 var cell: Vector2i
@@ -54,16 +57,23 @@ func collapse(quiet: bool = false) -> void:
 	Vfx.dust(world, global_position, 1.5)
 
 
+## Its cracks drawn whole and opaque (alpha 1-bit, docs/art-bible.md "Palette"): a danger stands
+## out from the floor at rest (it was drawn at 55 % before). Giving way, they jolt by whole art
+## pixels and the cell darkens by dithering, never by a see-through veil.
 func _draw() -> void:
 	if def.crack_texture == null:
 		return
 	var half := world.map.tile_size * 0.5
-	var color := Color(1, 1, 1, 0.55)
 	var offset := Vector2.ZERO
 	if state == State.CRACKING:
 		var t := 1.0 - _time_left / maxf(def.crumble_time, 0.01)
-		color.a = 0.7 + 0.3 * t
-		offset = Vector2(randf_range(-1.5, 1.5), randf_range(-1.0, 1.0)) * (1.0 + 2.0 * t)
-		# The edges darken as the floor sinks.
-		draw_rect(Rect2(-half, -half, half * 2.0, half * 2.0), Color(0, 0, 0, 0.35 * t))
-	draw_texture_rect(def.crack_texture, Rect2(Vector2(-half, -half) + offset, Vector2(half, half) * 2.0), false, color)
+		offset = PixelDraw.snap(Vector2(randf_range(-1.5, 1.5), randf_range(-1.0, 1.0)) * (1.0 + 2.0 * t))
+		# The cell darkens as the floor sinks.
+		var cells := roundi(half * 2.0 / PixelDraw.PX)
+		var corner := PixelDraw.cell_of(Vector2(-half, -half))
+		for y in cells:
+			for x in cells:
+				var at := corner + Vector2i(x, y)
+				if PixelDraw.dither(at, 0.35 * t):
+					PixelDraw.cell(self, at, SINKING)
+	draw_texture_rect(def.crack_texture, Rect2(Vector2(-half, -half) + offset, Vector2(half, half) * 2.0), false)
