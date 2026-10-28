@@ -580,6 +580,8 @@ func _tick_timers(delta: float) -> void:
 	_invulnerable_time = maxf(_invulnerable_time - delta, 0.0)
 	_flash_time = maxf(_flash_time - delta, 0.0)
 	skills.tick(delta * cooldown_speed)
+	if perks.has_ticking():
+		perks.tick(self, delta)  # passives acting over time (a ring of ice, a trail of embers)
 	if ward > 0:
 		_ward_time -= delta
 		if _ward_time <= 0.0:

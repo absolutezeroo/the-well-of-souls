@@ -101,6 +101,24 @@ static func take_rune(player: Player, weapon: EquipmentDef, index: int, price: i
 	return true
 
 
+## Tempers `weapon` into its evolved form `into` (WeaponEvolution: its sockets all hold the
+## family's runes, the family awake). The runes melt into it; the profile remembers the evolution
+## (the codex, the recipe at the forge). Returns the new weapon, or null if it can't.
+static func evolve(player: Player, weapon: EquipmentDef, into: WeaponDef) -> EquipmentDef:
+	if not WeaponEvolution.is_ready(weapon, into, player.perks):
+		return null
+	var bag := player.inventory
+	if bag.items.has(weapon) and bag.count_of(weapon) > 1 and bag.is_compartment_full(bag.compartment_of(weapon)):
+		Events.log_message(bag.full_text(weapon), Palette.DANGER)
+		return null
+	var evolved := WeaponEvolution.evolve(weapon, into)
+	_put_back(player, weapon, evolved)
+	Profile.record_evolution(into.id)
+	Events.run_marked.emit("evolved")
+	Events.log_message(TranslationServer.tr("The runes melt into the steel: %s.") % TranslationServer.tr(evolved.display_name), evolved.rarity_color())
+	return evolved
+
+
 ## `worked` takes `weapon`'s place, worn or in the bag, and the hero feels the change.
 static func _put_back(player: Player, weapon: EquipmentDef, worked: EquipmentDef) -> void:
 	if player.equipment.get_item(EquipmentDef.Slot.WEAPON) == weapon:

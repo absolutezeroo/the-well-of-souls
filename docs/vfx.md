@@ -409,12 +409,19 @@ goes down the ramp of its color (`VfxElementDef.or_color`) and dithers out.
 
 ## 8. Where each element stands
 
-Frost is the reference kit, done in full. The foundation (grid helpers, ramps, palette swap,
-slicer, element exports) serves the others; what each still needs:
+Frost is the reference kit, done in full (Rime Halo's shards circling the hero are its own shot,
+drawn by `FrostOrbitVfx` in the row facing the way each travels, in the air over the bodies;
+Heart of Winter's reach glints as a sparse ring of its pieces, `Vfx.riding`, every 1.2 s while
+a foe is in it).
+The foundation (grid helpers, ramps, palette swap, slicer, element exports) serves the others;
+what each still needs:
 
 - **Fire** (done, `tools/vfx/fire.py`): every fire shot, Flame Arc (licks sweeping across the
   front), Fire Touch's burning claw, the eye beam's rays, Blazing Roll, the Inferno family, the
-  burn look, the campfire, flame vents and braziers (`FlameVfx`). Ghost Flame stays fire (the
+  burn look, the campfire, flame vents and braziers (`FlameVfx`). Cinder Wake's trail of embers
+  (`EmberTrail`) is the brazier's small flames (`fire_flicker.png`) dropped every 14 units on the
+  GROUND layer with a light of its own, sinking to their bottom third (embers) for their last
+  0.6 s, going out oldest first. Funeral Pyre's blasts on every kill are the Inferno family's. Ghost Flame stays fire (the
   Ghost Lantern, the Ember Heart); the Soul Moth throws Soul Flames (spirit), the Gilded Moth, the Moss Heart and the Sand
   Drummer shoot their own element (holy, poison, earth; holy has no shot sheet: a dot). Left: candles
   still burn with particles; `fireball.png`, `fire_flames.png`, `flame.png` and `explosion.png`
@@ -429,7 +436,8 @@ slicer, element exports) serves the others; what each still needs:
 - **Storm** (done): stays electric violet-white (holy owns gold); the Storm synergy, Thunder,
   its tome, Spark Wand, Spark Nova, Thunderclap, Shock Roll, Frenzy wear the storm's color.
   Thunder, Spark Wand/Nova, chain lightning (synergy, Spark Rune, Thundering), Thunderclap,
-  Shock Roll and the Gale Rune are storm. A storm hit crackles over the body (section 9). Left:
+  Shock Roll, Leaping Bolt (a crit's leap: the chain's beam), Restless Storm (Thunder's bolt
+  falling on the foe, or on the hero standing still) and the Gale Rune are storm. A storm hit crackles over the body (section 9). Left:
   no shock status yet;
   `thunder.png` and the skill icons are unused/untouched art.
 - **Holy** (done): Smite, Holy Light, Holy Shield, holy heals; `Vfx.magic` is the holy sigil
@@ -447,13 +455,15 @@ slicer, element exports) serves the others; what each still needs:
 - **Shadow** (done): shadow_staff (Sorcerer), its Volley, the Octopus's Ink Bolt and Ink Ring,
   the Shaman's Hex Bolt fire the shadow knot; Shadow Step bursts into shadow, leaves smoke and
   its kunai land in shadow. Left: curses have no effects of their own.
-- **Arcane** (done): Arcane Bolt and the Arcane synergy's ring fire the arcane missile; the
-  arcane perks wear its color. Left: no arcane area or charge-up uses the rune piece yet.
+- **Arcane** (done): Arcane Bolt, the Arcane synergy's ring and Riven Glyph's split bolts fire
+  the arcane missile; the arcane perks wear its color. Left: no arcane area or charge-up uses the rune piece yet.
 - **Blood** (done, `tools/vfx/blood.py`): claws raking in three gashes (16 rows), a spurt with a
   stain, jets for its novas. Claws (spider, racoons, moles, owl), Battle Cry (`BuffEffect.element`),
   a broken pact, splats (`MonsterDef.splat_color`, `Palette.BLOOD` = its accent), the blood moon's
   ash (`PixelMotes`: grid flakes that tumble by shape), drinking blood (`BloodDrainVfx`: Vampiric
-  elites and affix, Leech Rune, Vampirism, Bloodlust), Executioner's and Bloodrage's blows. No
+  elites and affix, Leech Rune, Vampirism, Bloodlust), Executioner's and Bloodrage's blows; Burst
+  Veins' burst out of a body is blood's jets ringing it (`Vfx.nova`), its spurt and a stain;
+  Bleeding Stride's roll leaves blood's pieces along its path (`Vfx.trail`) and cuts in blood. No
   bleed status exists. Left: `bite` (rats, bats, skulls) is still a warm claw sheet.
 - **Spirit** (done, `tools/vfx/spirit.py`): wisp, hollow ring, curling pale flame, spectral claws
   (16 rows), the `haunt` look (a wail slows with a pale flicker, never rime). Cold Touch, Wailing

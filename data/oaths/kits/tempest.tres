@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="OathDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/soul_tree/oath_def.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/weapons/magic_wand.png" id="2"]
+[ext_resource type="Resource" path="res://data/items/weapons/magic_wand.tres" id="3"]
+[ext_resource type="Resource" path="res://data/achievements/into_the_dark.tres" id="4"]
+[ext_resource type="Script" path="res://src/definitions/perk_def.gd" id="5"]
+[ext_resource type="Resource" path="res://data/perks/relics/restless_storm.tres" id="6"]
+
+[resource]
+script = ExtResource("1")
+id = &"tempest"
+display_name = "Oath of the Tempest"
+description = "Start with the Spark Wand and the Restless Storm: while you move near foes, lightning strikes them; stand still and it strikes you. You move 15% faster."
+lore = "\"I do not stand still. Let the sky strike whoever does.\""
+icon = ExtResource("2")
+color = Color(0.788235, 0.721569, 1, 1)
+starting_weapon = ExtResource("3")
+twist = "Moving, lightning strikes the foes near you"
+price = "Standing still, it strikes you"
+unlocked_by = ExtResource("4")
+starting_perks = Array[ExtResource("5")]([ExtResource("6")])
+move_speed_scale = 1.15

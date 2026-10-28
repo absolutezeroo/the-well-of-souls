@@ -89,6 +89,20 @@ enum BackKind {
 ## Magic shots glow in their color and burst on impact; 0 for plain things (shurikens, arrows).
 @export_range(0.0, 1.0) var projectile_glow: float = 1.0
 
+@export_group("Evolution")
+## What the weapon does by itself while worn (an evolved weapon's gift: arrows that split, kills
+## that burst...): joined to the wearer's perks like an affix's (PerkSet.set_gear).
+@export var carried: Array[Passive] = []
+## The weapon this one is the evolution of (null: a weapon of its own). It is made at a forge
+## from that weapon, its sockets all holding runes of `evolution_family` while that family is
+## awake (WeaponEvolution, docs/design/loot.md "Weapon evolutions"); never found or bought.
+@export var evolved_from: WeaponDef
+## The family it asks for: awake, and its runes in every socket of the weapon.
+@export var evolution_family: SynergyDef
+## What the smith says of a weapon that could become this one, while the player has never made
+## it (a hint, in quotes; the codex shows "???" with it).
+@export_multiline var evolution_hint: String
+
 
 func _init() -> void:
 	slot = Slot.WEAPON

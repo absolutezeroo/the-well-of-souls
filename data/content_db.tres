@@ -243,6 +243,26 @@
 [ext_resource type="Resource" path="res://data/elites/frenzied.tres" id="affix_frenzied"]
 [ext_resource type="Resource" path="res://data/elites/vengeful.tres" id="affix_vengeful"]
 [ext_resource type="Resource" path="res://data/elites/unstable.tres" id="affix_unstable"]
+[ext_resource type="Resource" path="res://data/perks/common/cinder_wake.tres" id="v_cinder_wake"]
+[ext_resource type="Resource" path="res://data/perks/common/riven_glyph.tres" id="v_riven_glyph"]
+[ext_resource type="Resource" path="res://data/perks/common/leaping_bolt.tres" id="v_leaping_bolt"]
+[ext_resource type="Resource" path="res://data/perks/common/burst_veins.tres" id="v_burst_veins"]
+[ext_resource type="Resource" path="res://data/perks/common/rime_halo.tres" id="v_rime_halo"]
+[ext_resource type="Resource" path="res://data/perks/relics/bleeding_stride.tres" id="v_bleeding_stride"]
+[ext_resource type="Resource" path="res://data/perks/relics/starving_litany.tres" id="v_starving_litany"]
+[ext_resource type="Resource" path="res://data/perks/relics/restless_storm.tres" id="v_restless_storm"]
+[ext_resource type="Resource" path="res://data/perks/relics/funeral_pyre.tres" id="v_funeral_pyre"]
+[ext_resource type="Resource" path="res://data/perks/relics/heart_of_winter.tres" id="v_heart_of_winter"]
+[ext_resource type="Resource" path="res://data/items/weapons/evolved/stormhowl.tres" id="v_stormhowl"]
+[ext_resource type="Resource" path="res://data/items/weapons/evolved/riven_bow.tres" id="v_riven_bow"]
+[ext_resource type="Resource" path="res://data/items/weapons/evolved/rimeheart_staff.tres" id="v_rimeheart_staff"]
+[ext_resource type="Resource" path="res://data/items/weapons/evolved/ashen_codex.tres" id="v_ashen_codex"]
+[ext_resource type="Resource" path="res://data/items/weapons/evolved/heartsplitter.tres" id="v_heartsplitter"]
+[ext_resource type="Script" path="res://src/definitions/soul_tree/oath_def.gd" id="v_oath_script"]
+[ext_resource type="Resource" path="res://data/oaths/kits/fletcher.tres" id="v_fletcher"]
+[ext_resource type="Resource" path="res://data/oaths/kits/tempest.tres" id="v_tempest"]
+[ext_resource type="Resource" path="res://data/oaths/kits/flayed.tres" id="v_flayed"]
+[ext_resource type="Resource" path="res://data/oaths/kits/penitent.tres" id="v_penitent"]
 
 [resource]
 script = ExtResource("34_tx8pl")
@@ -251,8 +271,8 @@ dungeon = ExtResource("1_q2vv8")
 sounds = ExtResource("35_vxbuw")
 story = ExtResource("81_du3p3")
 narrative = ExtResource("90_narrative")
-items = Array[ExtResource("2_cewcx")]([ExtResource("3_kwdc3"), ExtResource("4_7ya5d"), ExtResource("5_pbmnr"), ExtResource("6_m0rk7"), ExtResource("7_ecbkd"), ExtResource("8_m5vms"), ExtResource("9_8li55"), ExtResource("10_ng0jj"), ExtResource("11_te2ty"), ExtResource("12_prpil"), ExtResource("13_q2763"), ExtResource("14_3wmne"), ExtResource("15_rjx6h"), ExtResource("16_h0egv"), ExtResource("17_hbtgr"), ExtResource("18_jjy75"), ExtResource("19_lnxyg"), ExtResource("20_vfprf"), ExtResource("21_nlt3e"), ExtResource("22_7cyc7"), ExtResource("23_dianq"), ExtResource("53_q206c"), ExtResource("54_xvm7b"), ExtResource("55_ptr0g"), ExtResource("56_h4mc1"), ExtResource("38_1b8ag"), ExtResource("37_gyds2"), ExtResource("59_f7s8q"), ExtResource("60_ilejg"), ExtResource("61_g2ao2"), ExtResource("62_y455n"), ExtResource("63_xepax"), ExtResource("64_uppjc")])
-perks = Array[ExtResource("33_lnxyg")]([ExtResource("34_vfprf"), ExtResource("35_nlt3e"), ExtResource("36_7cyc7"), ExtResource("37_2j2up"), ExtResource("38_urwiy"), ExtResource("39_sw1r8"), ExtResource("40_qfpny"), ExtResource("40_bldrg"), ExtResource("41_d3nxt"), ExtResource("42_yjg1c"), ExtResource("43_dianq"), ExtResource("44_kqkbc"), ExtResource("45_xx7nh"), ExtResource("46_6esje"), ExtResource("47_bx8nx"), ExtResource("48_tx8pl"), ExtResource("49_vxbuw"), ExtResource("50_qapwd"), ExtResource("58_e0sb6"), ExtResource("59_y15mf"), ExtResource("60_5rwny"), ExtResource("61_mmfdi"), ExtResource("134_nrgv6"), ExtResource("135_cwkh5"), ExtResource("136_l46qw"), ExtResource("137_r632x"), ExtResource("138_m0624"), ExtResource("139_lp0ch")])
+items = Array[ExtResource("2_cewcx")]([ExtResource("3_kwdc3"), ExtResource("4_7ya5d"), ExtResource("5_pbmnr"), ExtResource("6_m0rk7"), ExtResource("7_ecbkd"), ExtResource("8_m5vms"), ExtResource("9_8li55"), ExtResource("10_ng0jj"), ExtResource("11_te2ty"), ExtResource("12_prpil"), ExtResource("13_q2763"), ExtResource("14_3wmne"), ExtResource("15_rjx6h"), ExtResource("16_h0egv"), ExtResource("17_hbtgr"), ExtResource("18_jjy75"), ExtResource("19_lnxyg"), ExtResource("20_vfprf"), ExtResource("21_nlt3e"), ExtResource("22_7cyc7"), ExtResource("23_dianq"), ExtResource("53_q206c"), ExtResource("54_xvm7b"), ExtResource("55_ptr0g"), ExtResource("56_h4mc1"), ExtResource("38_1b8ag"), ExtResource("37_gyds2"), ExtResource("59_f7s8q"), ExtResource("60_ilejg"), ExtResource("61_g2ao2"), ExtResource("62_y455n"), ExtResource("63_xepax"), ExtResource("64_uppjc"), ExtResource("v_stormhowl"), ExtResource("v_riven_bow"), ExtResource("v_rimeheart_staff"), ExtResource("v_ashen_codex"), ExtResource("v_heartsplitter")])
+perks = Array[ExtResource("33_lnxyg")]([ExtResource("34_vfprf"), ExtResource("35_nlt3e"), ExtResource("36_7cyc7"), ExtResource("37_2j2up"), ExtResource("38_urwiy"), ExtResource("39_sw1r8"), ExtResource("40_qfpny"), ExtResource("40_bldrg"), ExtResource("41_d3nxt"), ExtResource("42_yjg1c"), ExtResource("43_dianq"), ExtResource("44_kqkbc"), ExtResource("45_xx7nh"), ExtResource("46_6esje"), ExtResource("47_bx8nx"), ExtResource("48_tx8pl"), ExtResource("49_vxbuw"), ExtResource("50_qapwd"), ExtResource("58_e0sb6"), ExtResource("59_y15mf"), ExtResource("60_5rwny"), ExtResource("61_mmfdi"), ExtResource("134_nrgv6"), ExtResource("135_cwkh5"), ExtResource("136_l46qw"), ExtResource("137_r632x"), ExtResource("138_m0624"), ExtResource("139_lp0ch"), ExtResource("v_cinder_wake"), ExtResource("v_riven_glyph"), ExtResource("v_leaping_bolt"), ExtResource("v_burst_veins"), ExtResource("v_rime_halo"), ExtResource("v_bleeding_stride"), ExtResource("v_starving_litany"), ExtResource("v_restless_storm"), ExtResource("v_funeral_pyre"), ExtResource("v_heart_of_winter")])
 bestiary = ExtResource("32_f6o1n")
 synergies = Array[ExtResource("168_hb5w0")]([ExtResource("169_dt2yx"), ExtResource("170_ac1fq"), ExtResource("171_f6o1n"), ExtResource("172_hs025"), ExtResource("173_lrag7")])
 difficulties = Array[ExtResource("2_rjcke")]([ExtResource("3_v3gsm"), ExtResource("1_p1yhy"), ExtResource("4_s1peu"), ExtResource("5_du3p3")])
@@ -266,6 +286,7 @@ floor_events = Array[ExtResource("50_by7se")]([ExtResource("51_hml5q"), ExtResou
 curses = Array[ExtResource("32_bubnr")]([ExtResource("33_ivytu"), ExtResource("34_fk2lo"), ExtResource("35_sfjbe")])
 ascensions = Array[ExtResource("21_15tjo")]([ExtResource("22_q5atc"), ExtResource("23_80whv"), ExtResource("24_ftpue"), ExtResource("25_th6df"), ExtResource("26_vi73k"), ExtResource("27_byg44"), ExtResource("28_by7se"), ExtResource("29_hml5q"), ExtResource("30_5x320"), ExtResource("31_1ai64")])
 achievements = Array[ExtResource("1_3m6vt")]([ExtResource("2_7lncd"), ExtResource("3_l6yv8"), ExtResource("4_xqlpv"), ExtResource("5_lvfra"), ExtResource("6_xu8gq"), ExtResource("7_pkcsl"), ExtResource("8_bwrsx"), ExtResource("9_k2lip"), ExtResource("10_1p0g0"), ExtResource("11_6khne"), ExtResource("12_15tjo"), ExtResource("13_q5atc"), ExtResource("14_80whv"), ExtResource("15_ftpue"), ExtResource("16_th6df"), ExtResource("17_vi73k"), ExtResource("18_byg44"), ExtResource("19_by7se"), ExtResource("20_hml5q"), ExtResource("ach_not_yet"), ExtResource("900_walls"), ExtResource("901_rest"), ExtResource("902_knell"), ExtResource("903_watch")])
+kits = Array[ExtResource("v_oath_script")]([ExtResource("v_fletcher"), ExtResource("v_tempest"), ExtResource("v_flayed"), ExtResource("v_penitent")])
 quests = Array[ExtResource("140_1hx8s")]([ExtResource("141_aa4gc"), ExtResource("142_akxwf"), ExtResource("143_wyplg"), ExtResource("144_agww7"), ExtResource("145_n0ebp"), ExtResource("146_oqqnv"), ExtResource("147_j75or"), ExtResource("148_ilgu2"), ExtResource("149_d676j"), ExtResource("150_gvban"), ExtResource("151_i820p"), ExtResource("152_nrgv6"), ExtResource("153_cwkh5"), ExtResource("154_l46qw"), ExtResource("155_r632x"), ExtResource("156_m0624"), ExtResource("157_lp0ch"), ExtResource("158_hb5w0")])
 cosmetics = Array[ExtResource("950_cosmetic")]([ExtResource("951_aura_divine"), ExtResource("952_aura_dark"), ExtResource("953_aura_demonic")])
 encounters = Array[ExtResource("14_uppjc")]([ExtResource("15_k7n23"), ExtResource("16_iw61m"), ExtResource("17_1nigv"), ExtResource("18_j2x0q")])

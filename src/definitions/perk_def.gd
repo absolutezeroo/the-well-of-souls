@@ -21,6 +21,11 @@ enum Rarity { COMMON, RARE }
 ## A staple (a solid pick in any build) or a build-around (asks for its family, which it names
 ## in `synergies`): BuildRole. Force, Precision, Fortune and the War Banner: staples, no family.
 @export var role: BuildRole.Role = BuildRole.Role.UNSET
+## A relic that bends a rule of the game, with a price or a twist (Bleeding Stride: the roll is an
+## attack that costs Health). Offered only by a warden: one card of its relics (OfferQueue
+## .add_relic, ContentDB.pick_perks), never by a level up, a pact, a trial or an encounter, and
+## never the daily run's relic. docs/design/builds.md "Rule-bending relics".
+@export var twist: bool = false
 
 @export_group("Effects (per stack)")
 @export var bonuses: StatBlock

@@ -32,13 +32,13 @@ static func floor_seed(day: int, depth: int) -> int:
 
 ## The weapon everyone starts that day with (among the weapons that can be found).
 static func weapon(content: ContentDB, day: int) -> WeaponDef:
-	var choices := content.items.filter(func(item: ItemDef) -> bool: return item is WeaponDef and not content.locked_items.has(item))
+	var choices := content.items.filter(func(item: ItemDef) -> bool: return item is WeaponDef and (item as WeaponDef).evolved_from == null and not content.locked_items.has(item))  # (an evolved weapon is made, never a start)
 	return _pick(choices, day, 1) as WeaponDef
 
 
 ## The relic everyone starts that day with.
 static func relic(content: ContentDB, day: int) -> PerkDef:
-	var choices := content.perks.filter(func(perk: PerkDef) -> bool: return perk.rarity == PerkDef.Rarity.RARE)
+	var choices := content.perks.filter(func(perk: PerkDef) -> bool: return perk.rarity == PerkDef.Rarity.RARE and not perk.twist)  # a plain relic: the day is the same for everyone, not a twist
 	return _pick(choices, day, 2) as PerkDef
 
 

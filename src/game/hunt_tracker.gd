@@ -70,6 +70,8 @@ func kill_context(monster: Monster) -> Dictionary:
 	var base: WeaponDef = weapon
 	if weapon and weapon.base_item is WeaponDef:
 		base = weapon.base_item as WeaponDef
+	if base and base.evolved_from:
+		base = base.evolved_from  # an evolved Katana still meets the Katana's challenges
 	var max_hp := maxi(player.get_max_hp(), 1) if player else 1
 	return {
 		"elite": monster.is_elite(),

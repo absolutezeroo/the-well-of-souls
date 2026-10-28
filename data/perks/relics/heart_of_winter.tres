@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="PerkDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/items/tome_frost.png" id="1_icon"]
+[ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="2_passive"]
+[ext_resource type="Script" path="res://src/definitions/passives/winter_aura_passive.gd" id="3_aura"]
+[ext_resource type="Script" path="res://src/definitions/effects/on_hit_status.gd" id="4_status"]
+[ext_resource type="Script" path="res://src/definitions/stat_block.gd" id="4_stats"]
+[ext_resource type="Script" path="res://src/definitions/perk_def.gd" id="5_perk"]
+[ext_resource type="Script" path="res://src/definitions/synergy_def.gd" id="6_synergy"]
+[ext_resource type="Resource" path="res://data/perks/synergies/frost.tres" id="7_frost"]
+[ext_resource type="Resource" path="res://data/vfx/elements/frost.tres" id="vfx_frost"]
+
+[sub_resource type="Resource" id="Resource_slower"]
+script = ExtResource("4_stats")
+move_speed = -34.0
+
+[sub_resource type="Resource" id="Resource_chill"]
+script = ExtResource("4_status")
+slow = 0.35
+slow_duration = 0.4
+
+[sub_resource type="Resource" id="Resource_aura"]
+script = ExtResource("3_aura")
+status = SubResource("Resource_chill")
+element = ExtResource("vfx_frost")
+
+[resource]
+script = ExtResource("5_perk")
+role = 2
+twist = true
+id = &"heart_of_winter"
+display_name = "Heart of Winter"
+description = "Foes within three steps of you are slowed by 35%, but the cold slows you too (20%)."
+icon = ExtResource("1_icon")
+color = Color(0.5568628, 0.7921569, 0.9019608, 1)
+rarity = 1
+max_stacks = 1
+synergies = Array[ExtResource("6_synergy")]([ExtResource("7_frost")])
+bonuses = SubResource("Resource_slower")
+passives = Array[ExtResource("2_passive")]([SubResource("Resource_aura")])

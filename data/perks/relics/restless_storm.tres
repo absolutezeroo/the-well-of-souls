@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="PerkDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/items/tome_thunder.png" id="1_icon"]
+[ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="2_passive"]
+[ext_resource type="Script" path="res://src/definitions/passives/restless_storm_passive.gd" id="3_storm"]
+[ext_resource type="Script" path="res://src/definitions/perk_def.gd" id="5_perk"]
+[ext_resource type="Script" path="res://src/definitions/synergy_def.gd" id="6_synergy"]
+[ext_resource type="Resource" path="res://data/perks/synergies/storm.tres" id="7_storm"]
+[ext_resource type="Resource" path="res://data/vfx/elements/storm.tres" id="vfx_storm"]
+[ext_resource type="Script" path="res://src/definitions/vfx/vfx_sheet_def.gd" id="vfx_sheet"]
+[ext_resource type="Texture2D" path="res://assets/fx/storm/storm_bolt.png" id="vfx_bolt"]
+
+[sub_resource type="Resource" id="bolt"]
+script = ExtResource("vfx_sheet")
+layer = 2
+texture = ExtResource("vfx_bolt")
+frames = 7
+fps = 20.0
+anchor = Vector2(0, -40)
+linger = 0.12
+flash_frames = PackedInt32Array(1)
+halo = 8.0
+halo_at = Vector2(0, 40)
+
+[sub_resource type="Resource" id="Resource_storm"]
+script = ExtResource("3_storm")
+strike = SubResource("bolt")
+element = ExtResource("vfx_storm")
+
+[resource]
+script = ExtResource("5_perk")
+role = 2
+twist = true
+id = &"restless_storm"
+display_name = "Restless Storm"
+description = "While foes are near, lightning strikes the nearest every 0.7 s as you move; stand still a second and it strikes you."
+icon = ExtResource("1_icon")
+color = Color(0.788235, 0.721569, 1, 1)
+rarity = 1
+max_stacks = 1
+synergies = Array[ExtResource("6_synergy")]([ExtResource("7_storm")])
+passives = Array[ExtResource("2_passive")]([SubResource("Resource_storm")])

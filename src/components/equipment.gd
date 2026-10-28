@@ -43,6 +43,15 @@ func runes() -> Array[RuneDef]:
 	return result
 
 
+## The worn weapon, when it does something by itself (WeaponDef.carried: an evolved weapon).
+func carried() -> Array[WeaponDef]:
+	var result: Array[WeaponDef] = []
+	for item: EquipmentDef in _slots.values():
+		if item is WeaponDef and not (item as WeaponDef).carried.is_empty():
+			result.append(item as WeaponDef)
+	return result
+
+
 ## Something worn changed in place (a rune set or taken out at the forge).
 func refresh() -> void:
 	changed.emit()

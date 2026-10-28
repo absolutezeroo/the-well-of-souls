@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="PerkDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/ui/icons/fireball.png" id="1_icon"]
+[ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="2_passive"]
+[ext_resource type="Script" path="res://src/definitions/passives/ember_trail_passive.gd" id="3_trail"]
+[ext_resource type="Script" path="res://src/definitions/effects/on_hit_status.gd" id="4_status"]
+[ext_resource type="Script" path="res://src/definitions/perk_def.gd" id="5_perk"]
+[ext_resource type="Script" path="res://src/definitions/synergy_def.gd" id="6_synergy"]
+[ext_resource type="Resource" path="res://data/perks/synergies/inferno.tres" id="7_inferno"]
+[ext_resource type="Resource" path="res://data/vfx/elements/fire.tres" id="vfx_fire"]
+
+[sub_resource type="Resource" id="Resource_burn"]
+script = ExtResource("4_status")
+burn_damage = 2
+
+[sub_resource type="Resource" id="Resource_trail"]
+script = ExtResource("3_trail")
+status = SubResource("Resource_burn")
+element = ExtResource("vfx_fire")
+
+[resource]
+script = ExtResource("5_perk")
+role = 2
+id = &"cinder_wake"
+display_name = "Cinder Wake"
+description = "Rolling leaves a trail of embers for 3 s: enemies in it catch fire and take a little damage every half second."
+icon = ExtResource("1_icon")
+color = Color(1, 0.54901963, 0.25882354, 1)
+max_stacks = 2
+weight = 6
+synergies = Array[ExtResource("6_synergy")]([ExtResource("7_inferno")])
+passives = Array[ExtResource("2_passive")]([SubResource("Resource_trail")])

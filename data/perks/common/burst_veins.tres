@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PerkDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/ui/icons/explosion.png" id="1_icon"]
+[ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="2_passive"]
+[ext_resource type="Script" path="res://src/definitions/passives/overkill_burst_passive.gd" id="3_burst"]
+[ext_resource type="Script" path="res://src/definitions/perk_def.gd" id="5_perk"]
+[ext_resource type="Script" path="res://src/definitions/synergy_def.gd" id="6_synergy"]
+[ext_resource type="Resource" path="res://data/perks/synergies/blood.tres" id="7_blood"]
+[ext_resource type="Resource" path="res://data/vfx/elements/blood.tres" id="vfx_blood"]
+
+[sub_resource type="Resource" id="Resource_burst"]
+script = ExtResource("3_burst")
+element = ExtResource("vfx_blood")
+
+[resource]
+script = ExtResource("5_perk")
+role = 2
+id = &"burst_veins"
+display_name = "Burst Veins"
+description = "A killing blow's excess damage bursts onto nearby enemies (at least 50% of your Damage per level, twice it at most)."
+icon = ExtResource("1_icon")
+color = Color(0.9098039, 0.27058825, 0.21568628, 1)
+weight = 6
+synergies = Array[ExtResource("6_synergy")]([ExtResource("7_blood")])
+passives = Array[ExtResource("2_passive")]([SubResource("Resource_burst")])

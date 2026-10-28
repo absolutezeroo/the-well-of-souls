@@ -154,13 +154,49 @@ consumables between the two ("To belt" / "To bag"). The merchant buys from the b
   Rare 2, Epic 3). A rune works like a perk while its weapon is worn (`RuneDef.passives`, through
   `PerkSet.set_gear`); two identical runes count twice. Set runes show on the weapon's details,
   with its empty sockets, and are saved with it.
-- **The forge** (`data/forge/smith.tres`, `ForgeDef`, `Forge`, `ForgePanel`): Brann the Smith,
+- **The forge** (`data/forge/smith.tres`, `ForgeDef`, `Forge`, `ForgePanel`; it also tempers
+  weapons into their evolved forms, below): Brann the Smith,
   his anvil and glowing coals, in a quiet room of some floors (`forge_chance` 30%, +15% for each
   floor without one, never on boss floors). Stand by him and tap Interact (**Forge**): pick a weapon (the worn one or one
   in the bag), set runes from the bag into its free sockets for free, or pick a socket and take
   its rune back out, intact, for gold (`removal_price` + `removal_price_per_depth`). A plain
   weapon becomes its own copy the first time a rune goes in. Debug panel: "Forge here", "Every rune".
 
+
+## Weapon evolutions
+
+Vampire Survivors' evolutions (a weapon at its fullest plus the matching passive becomes a new
+weapon) gave its runs their goals; the Well's weapons don't level, so "at its fullest" is the
+investment it has: **every socket of the weapon holds a rune of one family, and that family is
+awake** (three of its perks). Then, at a forge, Brann tempers it into its evolved form
+(`Forge.evolve`, `WeaponEvolution`): the runes melt into the steel (its sockets are free again),
+its rarity, affixes and item level are kept. A Common weapon (one socket) takes one rune; an
+Epic one (three) takes three: the better weapon asks more, and gives back its sockets.
+
+| Weapon | Family | Evolved form | What it does |
+|---|---|---|---|
+| Katana | Storm | **Stormhowl** | its blows land in lightning (storm element); its held attack, Thunderfall Cut, is the crescent (x2.0) then lightning leaping from the nearest foe to three more (x0.8, -30% a leap) |
+| Bow | Arcane | **Riven Bow** | each arrow that strikes a foe splits into three arcane bolts flying on (Riven Glyph's split, `WeaponDef.carried`); arcane element |
+| Frost Staff | Frost | **Rimeheart Staff** | its shards burst where they strike: a frost nova (radius 48, 50% of Damage) hurts and chills (30%) the foes around (`ShotNovaPassive`) |
+| Ember Tome | Inferno | **Ashen Codex** | its embers set the floor alight where they strike a foe: two embers burning 2 s (`ShotEmbersPassive`, Cinder Wake's embers) |
+| War Hammer | Blood | **Heartsplitter** | what a blow deals past a foe's last Health bursts onto the foes around (Burst Veins' burst, up to 3x Damage, radius 64); blood element |
+
+- **Where**: at a forge, the weapon picked (worn or in the bag). The smith says it, in his line
+  at the top (the forge is full on a 720-line screen; his line is where there is room): his hint
+  in quotes while the player has never made that evolution ("That blade hums when the sky cracks. It wants
+  storm, all of it."), then what is missing ("Becomes the Stormhowl: Fill its sockets with Storm
+  runes (1 of 2)."); ready, **Temper into Stormhowl** takes the take-out button's place (a socket
+  picked brings that one back). Not at a warden's remains: the forge is where runes are set, so
+  the last rune and the tempering are one visit.
+- **What it carries** (`WeaponDef.carried`): passives joined to the hero's perks while it is
+  worn, like an affix's (`PerkSet.set_gear`, tagged `weapon:<id>`); its art is its weapon's (the
+  same icon, sheets and sprite at rest), its element shows on it as any carried element does.
+- **Remembered**: the profile keeps the evolutions made (`Profile.evolutions`); the codex lists
+  them under the achievements (the weapon, its recipe, what it does), the others as "???" with
+  the smith's hint.
+- The evolved weapons are items with no spawn weight (`data/items/weapons/evolved/`): never
+  found, sold, a daily start or an Armory pick. A hunt's "with this weapon" challenge counts an
+  evolved weapon as the one it came from. The balance tools measure them beside their weapon.
 
 ## Exactly-once ground transfers
 

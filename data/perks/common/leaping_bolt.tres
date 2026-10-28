@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="PerkDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/ui/skills/cleave.png" id="1_icon"]
+[ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="2_passive"]
+[ext_resource type="Script" path="res://src/definitions/passives/crit_leap_passive.gd" id="3_leap"]
+[ext_resource type="Script" path="res://src/definitions/perk_def.gd" id="5_perk"]
+[ext_resource type="Script" path="res://src/definitions/synergy_def.gd" id="6_synergy"]
+[ext_resource type="Resource" path="res://data/perks/synergies/storm.tres" id="7_storm"]
+[ext_resource type="Resource" path="res://data/vfx/elements/storm.tres" id="vfx_storm"]
+
+[sub_resource type="Resource" id="Resource_leap"]
+script = ExtResource("3_leap")
+element = ExtResource("vfx_storm")
+
+[resource]
+script = ExtResource("5_perk")
+role = 2
+id = &"leaping_bolt"
+display_name = "Leaping Bolt"
+description = "A critical hit leaps as lightning to the nearest other enemy for 70% of it (one more leap per level)."
+icon = ExtResource("1_icon")
+color = Color(0.788235, 0.721569, 1, 1)
+max_stacks = 2
+weight = 6
+synergies = Array[ExtResource("6_synergy")]([ExtResource("7_storm")])
+passives = Array[ExtResource("2_passive")]([SubResource("Resource_leap")])

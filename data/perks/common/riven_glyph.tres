@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="PerkDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/ui/skills/kunai_fan.png" id="1_icon"]
+[ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="2_passive"]
+[ext_resource type="Script" path="res://src/definitions/passives/split_shot_passive.gd" id="3_split"]
+[ext_resource type="Script" path="res://src/definitions/perk_def.gd" id="5_perk"]
+[ext_resource type="Script" path="res://src/definitions/synergy_def.gd" id="6_synergy"]
+[ext_resource type="Resource" path="res://data/perks/synergies/arcane.tres" id="7_arcane"]
+[ext_resource type="Resource" path="res://data/vfx/elements/arcane.tres" id="vfx_arcane"]
+
+[sub_resource type="Resource" id="Resource_split"]
+script = ExtResource("3_split")
+element = ExtResource("vfx_arcane")
+
+[resource]
+script = ExtResource("5_perk")
+role = 2
+id = &"riven_glyph"
+display_name = "Riven Glyph"
+description = "A shot that strikes an enemy splits into 3 arcane bolts (+2 per level) that fly on, each dealing 30% of the hit."
+icon = ExtResource("1_icon")
+color = Color(0.941176, 0.478431, 0.847059, 1)
+max_stacks = 2
+weight = 6
+synergies = Array[ExtResource("6_synergy")]([ExtResource("7_arcane")])
+passives = Array[ExtResource("2_passive")]([SubResource("Resource_split")])

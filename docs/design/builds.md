@@ -20,6 +20,10 @@ The hero has **4 skill buttons**:
 | Mage | Spark Wand, Frost Staff (its shards chill: 20% slower for 1 s), Ember Tome | Spark Nova, Arcane Bolt, Frost Nova (slow), Ice Shards (slow), Fireball, Fire Wave (burn) |
 | Paladin | Templar Sword | Smite (damage + heal), Holy Shield (Armor + heal; both heal half during a boss fight) |
 
+Five weapons (Katana, Bow, Frost Staff, Ember Tome, War Hammer) **evolve** at a forge once
+their sockets all hold the runes of one family and that family is awake: Stormhowl, Riven Bow,
+Rimeheart Staff, Ashen Codex, Heartsplitter ([loot.md](loot.md#weapon-evolutions)).
+
 The weapon in the hero's hand is animated frame by frame with the attack. For weapons without a
 hand-drawn sheet, the sheet is baked from the item sprite rotated around its handle (a swing,
 a heavy swing, a thrust, a lash or an aim; 4 directions x 4 frames, `assets/weapons/attack/`).
@@ -100,6 +104,7 @@ charge and moving slower meanwhile. A weapon carrying an element unleashes it in
 | Frost Staff | Glacial Lance | a great ice shard (drawn bigger, 16 directions) shattering into a frost nova (radius 64) that slows 50% for 2 s (2.7 vs 1.05) | 2.57 | 1.0 | 50% |
 | Spark Wand | Forked Wrath | a bolt from the hand to the closest enemy ahead, leaping to 3 more (each 70% of the last; 2.1 vs 0.85) | 2.47 | 0.85 | 55% |
 | Ember Tome | Pyre Heart | a great fireball exploding (radius 64), burning (4.0 vs 3 x 0.6) | 2.22 | 1.05 | 50% |
+| Stormhowl (evolved Katana) | Thunderfall Cut | the crescent (2.0), then lightning from the nearest foe leaping to 3 more (0.8, -30% a leap) | 2.8 | 0.8 | 55% |
 
 Shown: a gauge of twelve steps on the floor around his feet and on the attack button's rim, in
 the element the weapon carries (steel when plain), the weapon held up in his hand with the
@@ -146,7 +151,8 @@ Saved titles/subtitles are English message keys, with the level stored separatel
 happens when shown, so changing language also changes waiting offers. Older rendered titles are
 recovered through the installed translations when possible.
 Taking a perk again levels it up (up to its `max_stacks`). Bosses drop a choice of **relics** (rare
-perks), and so does a kept pact (pact doors, see [dungeon.md](dungeon.md)).
+perks), one of them a relic that bends a rule (below, "Rule-bending relics"), and so does a kept
+pact, without one (pact doors, see [dungeon.md](dungeon.md)).
 
 **What waits, what comes by itself** (`OfferQueue.Offer.on_demand`). Level ups wait: they come
 mid-fight, where a window over the screen broke the fight's flow. Relics (a boss', a kept pact's,
@@ -195,6 +201,20 @@ A `PerkDef` (in `data/perks/`) is stat bonuses + a list of `Passive`s, both mult
 | `ExecutePassive` | before a hit | Executioner |
 | `ExtraProjectilesPassive` | every volley | Hydra's Quiver |
 | `CheatDeathPassive` | before dying (opens the Threshold, see below) | Phoenix Feather (and Death Denied's) |
+| `EmberTrailPassive` | on dash (an `EmberTrail` on the floor) | Cinder Wake |
+| `SplitShotPassive` | on hit, a direct shot (`HitInfo.shot`) | Riven Glyph |
+| `CritLeapPassive` | on hit (crits) | Leaping Bolt |
+| `OverkillBurstPassive` | before a hit (Health left), on hit (the killing blow) | Burst Veins |
+| `FrostOrbitPassive` | every frame (`Passive.tick`, shards drawn by `FrostOrbitVfx`) | Rime Halo |
+| `RollStrikePassive` | on skill (the roll: pays), every frame while rolling (cuts) | Bleeding Stride |
+| `SkillHungerPassive` | every frame (holds the cooldowns, `SkillSet.wind`), on kill, on hit (a boss) | Starving Litany |
+| `RestlessStormPassive` | every frame (moving or standing still near a foe) | Restless Storm |
+| `PyreKillPassive` (a `KillBurstPassive`) | on kill (a blast; the owner in it pays) | Funeral Pyre |
+| `WinterAuraPassive` | every frame (a chill pulse every 0.25 s) | Heart of Winter |
+
+**Acting over time** (`Passive.ticks()` / `tick()`): a passive that does something by itself
+(shards circling the hero) says so, and only those are called each physics frame
+(`PerkSet.tick()`, from `Actor._tick_timers()`); the others cost nothing there.
 
 Damage caused by a passive (burn, thorns, shockwaves, chains, Ice Shards' shards, the Arcane
 ring of bolts: `ProjectileSpec.secondary`) is a *secondary* hit: it never triggers other on-hit
@@ -267,11 +287,11 @@ perks** of a family wakes its bonus for the rest of the run: a change in how you
 
 | Family | Perks and relics | Awake |
 |---|---|---|
-| **Inferno** | Ignite, Kindling, Blazing Roll, Burning Thorns, Phoenix Feather | enemies that die burning explode and set everything around on fire |
-| **Frost** | Frostbite, Cold Snap, Ice Shards, Frost Armor, Guardian Ring | slowed enemies take +50%, crits freeze them |
-| **Blood** | Vampirism, Vitality, Bloodrage, Devotion, Executioner | below half Health +40% damage, every kill heals 4% max Health |
-| **Storm** | Frenzy, Thunderclap, Shock Roll, Swiftness | attacks 15% faster; every 3rd hit, lightning jumps to 3 enemies |
-| **Arcane** | Arcane Focus, Arcane Power, Devotion, Echo, Sage's Codex, Hydra's Quiver | every skill also fires a ring of 8 bolts |
+| **Inferno** | Ignite, Kindling, Blazing Roll, Burning Thorns, Cinder Wake, Phoenix Feather, Funeral Pyre | enemies that die burning explode and set everything around on fire |
+| **Frost** | Frostbite, Cold Snap, Ice Shards, Frost Armor, Rime Halo, Guardian Ring, Heart of Winter | slowed enemies take +50%, crits freeze them |
+| **Blood** | Vampirism, Vitality, Bloodrage, Devotion, Burst Veins, Executioner, Bleeding Stride | below half Health +40% damage, every kill heals 4% max Health |
+| **Storm** | Frenzy, Thunderclap, Shock Roll, Swiftness, Leaping Bolt, Restless Storm | attacks 15% faster; every 3rd hit, lightning jumps to 3 enemies |
+| **Arcane** | Arcane Focus, Arcane Power, Devotion, Echo, Riven Glyph, Sage's Codex, Hydra's Quiver, Starving Litany | every skill also fires a ring of 8 bolts |
 
 A perk sits in a family only if its effect plainly belongs to it (Inferno: fire and burning;
 Frost: cold, slows, freezing; Blood: health, life drain, low-health power; Storm: lightning,
@@ -290,10 +310,62 @@ perk, relic or affix without a role, or a build-around without a family.
 |---|---|---|
 | Staple, no family | Strength, Precision, Fortune, War Banner | Brutal, Ironbound, Light, Unerring, Sharp, Stalwart, Swift, Venomous, of Fury, of Haste, of Sorcery, of the Bear, of the Fox, of the Titan, of Thorns |
 | Staple, in a family | Arcane Focus, Arcane Power, Sage's Codex (Arcane); Frenzy, Swiftness (Storm); Vitality (Blood); Guardian Ring (Frost) | |
-| Build-around | Ignite, Kindling, Blazing Roll, Burning Thorns, Phoenix Feather (Inferno); Frostbite, Cold Snap, Ice Shards, Frost Armor (Frost); Vampirism, Bloodrage, Devotion, Executioner (Blood); Thunderclap, Shock Roll (Storm); Echo, Devotion, Hydra's Quiver (Arcane) | Burning, of Embers (Inferno); Frozen, Shattering (Frost); Thundering (Storm); Vampiric (Blood); of Echoes (Arcane) |
+| Build-around | Ignite, Kindling, Blazing Roll, Burning Thorns, Cinder Wake, Phoenix Feather (Inferno); Frostbite, Cold Snap, Ice Shards, Frost Armor, Rime Halo (Frost); Vampirism, Bloodrage, Devotion, Burst Veins, Executioner (Blood); Thunderclap, Shock Roll, Leaping Bolt (Storm); Echo, Devotion, Riven Glyph, Hydra's Quiver (Arcane); the five relics that bend a rule, one per family | Burning, of Embers (Inferno); Frozen, Shattering (Frost); Thundering (Storm); Vampiric (Blood); of Echoes (Arcane) |
 
 A new perk, relic or affix declares its role with its numbers: a staple is plain numbers or a
 modest effect worth taking anywhere; a build-around's effect plainly belongs to its family.
+
+### Rule-bending relics
+
+Isaac's and Gungeon's best items change a rule rather than a number, with a price or a twist.
+Five relics do (`PerkDef.twist`), one per family, each readable in one line:
+
+| Relic | Family | The rule bent | The price |
+|---|---|---|---|
+| **Bleeding Stride** | Blood | the roll cuts every enemy it passes through for 150% of your Damage | each roll costs 2% of max Health (was 4%: the kit arena, balance-log 2026-10-28) |
+| **Starving Litany** | Arcane | skills (not the roll) recharge only by slaying: a quarter of their wait a kill, 3% a blow on a warden; +60% skill damage | no recharge with time |
+| **Restless Storm** | Storm | while foes are near and you move, lightning strikes the nearest every 0.7 s (your Damage) | standing still a second, it strikes you (3% max Health a second) |
+| **Funeral Pyre** | Inferno | every foe you slay explodes (120% of your Damage, radius 72, sets on fire) | the blast burns you too if you stand in it (6% max Health) |
+| **Heart of Winter** | Frost | foes within three steps (100) are slowed by 35% (it feeds the Frost family) | you move 20% slower (-34) |
+
+- **Only wardens offer them**, one card of the three of every warden's relics while some are left
+  (`OfferQueue.add_relic`, `Offer.twists`, `ContentDB.pick_perks(..., twists)`); a reroll keeps one,
+  banishing it brings another. Level ups, pacts, trials and encounters' gifts never offer one,
+  nor is one the daily run's relic (the day is the same for everyone). The card says
+  "Relic that bends a rule" in the danger color.
+- **A relic's own price never deals the last blow**: it leaves 1 Health, and it is a tick (no hit
+  stop, no free invulnerability: standing still under the storm must not shelter the hero). A
+  roll's invulnerability spares him the pyre's blast; the storm rages only with a foe within
+  150 (a shop, a talk, a quiet room are left alone).
+- The Nameless Keeper never wears them (his relics are a list of plain ones, `kept_perks`).
+
+### Behaviour perks (the audit of 2026-10-28)
+
+Players' first complaint about roguelikes that feel the same run after run is perks that "just
+add stats" (research, "Ce qui manque au roguelike"). Past the four staples, a perk should make
+something happen in the world that changes how you play: where you roll, what you shoot first,
+whether you dive into the pack. The audit sorted the 24 perks and relics past the staples:
+
+| Kind | Perks | |
+|---|---|---|
+| Numbers only | Arcane Focus, Arcane Power, Frenzy, Vitality, Sage's Codex | staples of their family: kept as they are |
+| A number under a condition | Kindling, Bloodrage, Executioner, Swiftness | the families' payoffs (burning, low Health, wounded foes, after a roll): kept |
+| A status or a heal on a hook | Ignite, Frostbite, Vampirism, Devotion, Burning Thorns | |
+| Something happens in the world | Blazing Roll, Cold Snap, Shock Roll (a wave on the roll), Thunderclap (a wave on a crit), Ice Shards (shards from a kill), Frost Armor (a wave when hurt), Hydra's Quiver, Echo, Phoenix Feather, Guardian Ring | three of them the same wave on the roll |
+
+So five perks were added, one per family, each a new kind of behaviour (a new `Passive`, no
+branch in `Actor`): **Cinder Wake** (Inferno: the roll leaves a trail of embers for 3 s that
+burns what stands in it, so you roll around a pack and fight at the trail's edge), **Riven
+Glyph** (Arcane: a shot that strikes splits into 3 bolts flying on, +2 a level, 30% of the hit
+each: the archer aims at the front of a crowd), **Leaping Bolt** (Storm: a crit leaps to the
+nearest other enemy for 70% of it, one more leap a level: the enemy standing apart), **Burst
+Veins** (Blood: a killing blow's damage past the Health left bursts onto the enemies around,
+50% of your Damage a level at least, twice your Damage at most: heavy blows on weak foes clear
+packs) and **Rime Halo** (Frost: 2 shards of ice circle you, +1 a level, cutting and chilling
+what they pass through, each enemy once every 0.6 s: you stay close and circle). All are
+build-arounds of weight 6, like the others; their hits are secondary (no on-hit perks, nothing
+loops). Now 15 of the 29 perks and relics past the staples acted in the world (`unit.variety`
+keeps it at a third at least); the five rule-bending relics above made it 20 of 34.
 
 ### Choosing: reroll, banish, families first
 

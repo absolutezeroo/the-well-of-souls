@@ -47,6 +47,19 @@ func on_floor_started(_owner: Actor, _perk: PerkSet.Entry) -> void:
 	pass
 
 
+## Whether it acts by itself over time (tick()): something circling the owner, a trail left
+## burning, a storm that strikes while he moves. Only the passives that say so are called each
+## frame (PerkSet.tick()); the others cost nothing there.
+func ticks() -> bool:
+	return false
+
+
+## Every physics frame while the owner is alive and on its feet (ticks() true only).
+## Runs every frame: no allocation here (docs/performance.md, "No allocation in a hot path").
+func tick(_owner: Actor, _delta: float, _perk: PerkSet.Entry) -> void:
+	pass
+
+
 ## The owner died (monsters with the "explosive" elite affix blow up...).
 func on_died(_owner: Actor, _perk: PerkSet.Entry) -> void:
 	pass
@@ -63,3 +76,25 @@ func prevent_death(_owner: Actor, _perk: PerkSet.Entry) -> bool:
 ## those that are an element without saying so (drinking blood, arcane echoes).
 func look_element() -> VfxElementDef:
 	return null
+
+
+## A relic's price paid in Health (`share` of the owner's max Health, docs/design/builds.md
+## "Rule-bending relics"): never the last blow (it leaves 1 Health), the whole of it through his
+## armor (a price is a price), as a tick (no hit stop, no free invulnerability: a price must not
+## shelter him). `unavoidable`: paid even while invulnerable (a roll's price); else a roll spares
+## him. Returns the Health taken.
+static func pay_health(owner: Actor, share: float, cause: StringName, element: VfxElementDef = null, unavoidable: bool = true) -> int:
+	var cost := mini(roundi(owner.get_max_hp() * share), owner.hp - 1)
+	if cost <= 0:
+		return 0
+	var defense := owner.get_stats().defense
+	var amount := Combat.hit_for(cost, defense)
+	while amount > 1 and Combat.mitigate(amount, defense) > owner.hp - 1:
+		amount -= 1
+	var price := Combat.make_tick(null, amount)
+	price.unavoidable = unavoidable
+	price.cause = cause
+	price.element = element
+	var before := owner.hp
+	owner.take_hit(price)
+	return before - owner.hp

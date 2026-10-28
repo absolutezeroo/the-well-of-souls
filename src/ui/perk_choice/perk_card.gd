@@ -6,6 +6,8 @@ extends Button
 ## The card grows to fit its text (never less than its base size), so nothing spills out.
 
 const RARE_COLOR := Palette.GOLD
+## A relic that bends a rule says so in the danger color (its price is part of it).
+const TWIST_COLOR := UiSkin.BAD
 
 @onready var _rarity: Label = %Rarity
 @onready var _icon: TextureRect = %Icon
@@ -20,8 +22,9 @@ var completes := false
 
 func show_perk(perk: PerkDef, owned: PerkSet) -> void:
 	var owned_stacks := owned.stacks_of(perk)
-	_rarity.text = tr("Relic") if perk.rarity == PerkDef.Rarity.RARE else ""
-	_rarity.visible = perk.rarity == PerkDef.Rarity.RARE
+	_rarity.text = tr("Relic that bends a rule") if perk.twist else tr("Relic") if perk.rarity == PerkDef.Rarity.RARE else ""
+	_rarity.visible = perk.rarity == PerkDef.Rarity.RARE or perk.twist
+	_rarity.add_theme_color_override("font_color", TWIST_COLOR if perk.twist else RARE_COLOR)
 	_icon.texture = perk.icon
 	_name.text = tr(perk.display_name)
 	_name.add_theme_color_override("font_color", perk.color.lerp(Color.WHITE, 0.4))

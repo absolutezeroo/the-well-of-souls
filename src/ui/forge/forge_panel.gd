@@ -4,6 +4,10 @@ extends Control
 ## on top; on the left the weapons you can work on (the worn one first) and the picked one's
 ## rune sockets, big; on the right the runes in your bag. Pick a rune to read it and set it into
 ## the first free socket (free); pick a socket to take its rune back out, intact, for gold.
+## A weapon that has an evolved form says so where the smith speaks (WeaponEvolution; the window
+## is full on a 720-line screen, his line is where there is room): his hint until the player has
+## made it once, then what it needs; ready, Temper (in the take-out button's place while no socket
+## is picked) makes it.
 ## The game is paused while it is open.
 
 signal closed
@@ -16,6 +20,8 @@ const RUNE_COLUMNS := 4
 
 var _forge: Forge
 var _player: Player
+## The game's content (the evolved weapons are among its items).
+var _content: ContentDB
 var _weapon: EquipmentDef
 ## The socket picked on the weapon (-1: none): its rune can be taken out.
 var _socket := -1
@@ -26,6 +32,8 @@ var _window: RpgWindow
 var _portrait: TextureRect
 var _name: Label
 var _greeting: Label
+## What the smith says on opening (back when the weapon picked has no evolved form).
+var _opening := ""
 var _gold: Label
 var _weapons: HBoxContainer
 var _weapon_slot: ItemSlot
@@ -37,6 +45,8 @@ var _runes: GridContainer
 var _rune_name: Label
 var _rune_text: Label
 var _set_button: Button
+## The button that tempers the picked weapon into its evolved form (WeaponEvolution).
+var _evolve_button: Button
 
 
 func _ready() -> void:
@@ -46,11 +56,13 @@ func _ready() -> void:
 	_build()
 
 
-func open(forge: Forge, player: Player) -> void:
+func open(forge: Forge, player: Player, content: ContentDB = null) -> void:
 	_forge = forge
 	_player = player
+	_content = content if content else load("res://data/content_db.tres") as ContentDB
 	_name.text = tr(forge.def.display_name)
-	_greeting.text = tr("\"%s\"") % forge.def.opening_line()
+	_opening = tr("\"%s\"") % forge.def.opening_line()
+	_greeting.text = _opening
 	_portrait.texture = forge.def.portrait
 	var weapons := Forge.weapons_of(player)
 	_weapon = weapons[0] if not weapons.is_empty() else null
@@ -112,6 +124,20 @@ func set_rune(rune: RuneDef) -> bool:
 	return true
 
 
+## Tempers the picked weapon into its evolved form (WeaponEvolution).
+func evolve() -> bool:
+	var into := WeaponEvolution.of(_content, _weapon)
+	var evolved := Forge.evolve(_player, _weapon, into) if into else null
+	if evolved == null:
+		return false
+	_weapon = evolved
+	_socket = -1
+	_forge.strike(false)
+	Vfx.sparkles(_player.world, _player.global_position, into.color)
+	_refresh()
+	return true
+
+
 ## Takes the picked socket's rune back out, for gold.
 func take_rune() -> bool:
 	if not Forge.take_rune(_player, _weapon, _socket, _forge.removal_cost()):
@@ -155,7 +181,32 @@ func _refresh() -> void:
 		for i in _weapon.socket_count():
 			_sockets.add_child(_socket_slot(i))
 		_refresh_action()
+	_refresh_evolution()
 	_fill_runes()
+
+
+## The picked weapon's evolved form, in the smith's line: his own words when it has none; his
+## hint until it was ever made; then what it needs; ready, the Temper button.
+func _refresh_evolution() -> void:
+	var into := WeaponEvolution.of(_content, _weapon)
+	_evolve_button.hide()
+	_greeting.add_theme_color_override("font_color", UiSkin.TEXT)
+	if into == null:
+		_greeting.text = _opening
+		return
+	if WeaponEvolution.is_ready(_weapon, into, _player.perks):
+		_greeting.text = tr("Its runes are ready to melt into it: it can become the %s.") % tr(into.display_name)
+		_greeting.add_theme_color_override("font_color", UiSkin.GOLD)
+		# In the take-out button's place (the window is full on a 720-line screen); a socket
+		# picked brings that one back.
+		if _socket < 0:
+			_evolve_button.text = tr("Temper into %s") % tr(into.display_name)
+			_evolve_button.show()
+			_action.hide()
+	elif Profile.has_evolved(into.id):
+		_greeting.text = tr("Becomes the {name}: {needs}").format({ "name": tr(into.display_name), "needs": WeaponEvolution.missing(_weapon, into, _player.perks) })
+	else:
+		_greeting.text = tr("\"%s\"") % tr(into.evolution_hint)
 
 
 func _refresh_action() -> void:
@@ -247,6 +298,7 @@ func _build() -> void:
 	_name = UiSkin.label(tr("Smith"), Fonts.BODY, Color(1, 0.7, 0.35))
 	words.add_child(_name)
 	_greeting = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
+	_greeting.name = "SmithLine"
 	words.add_child(_greeting)
 
 	var columns := HBoxContainer.new()
@@ -286,6 +338,11 @@ func _build() -> void:
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	left.column.add_child(spacer)
+	_evolve_button = _button("", evolve)
+	_evolve_button.name = "TemperButton"
+	_evolve_button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_evolve_button.hide()
+	left.column.add_child(_evolve_button)
 	_action = _button("", take_rune)
 	_action.name = "TakeOutButton"
 	# Its words may say why the rune can't come out (« Plus de place pour les runes : ... »):

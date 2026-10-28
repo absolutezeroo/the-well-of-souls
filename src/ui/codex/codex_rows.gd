@@ -165,6 +165,33 @@ static func achievement_row(achievement: AchievementDef) -> Control:
 	return box
 
 
+## A weapon evolution (WeaponEvolution) in the Achievements tab: once made, the evolved weapon,
+## the one it comes from and what it takes; before, "???" and the smith's hint.
+static func evolution_row(evolved: WeaponDef) -> Control:
+	var known := Profile.has_evolved(evolved.id)
+	var box := row_box()
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 14)
+	box.add_child(row)
+	row.add_child(icon(evolved.icon, 44, not known))
+	var text := VBoxContainer.new()
+	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text.alignment = BoxContainer.ALIGNMENT_CENTER
+	text.add_theme_constant_override("separation", 0)
+	row.add_child(text)
+	var family := TranslationServer.tr(evolved.evolution_family.display_name) if evolved.evolution_family else ""
+	var from := TranslationServer.tr(evolved.evolved_from.display_name) if evolved.evolved_from else ""
+	if known:
+		text.add_child(UiSkin.label(TranslationServer.tr(evolved.display_name), Fonts.BODY, UiSkin.GOLD))
+		text.add_child(UiSkin.label(TranslationServer.tr("{weapon}, every socket a {family} rune, the {family} family awake, at a forge.").format({ "weapon": from, "family": family }), Fonts.BODY, UiSkin.TEXT, true))
+		text.add_child(UiSkin.label(TranslationServer.tr(evolved.description), Fonts.BODY, UiSkin.DIM, true))
+	else:
+		text.add_child(UiSkin.label("???", Fonts.BODY, UiSkin.TEXT))
+		text.add_child(UiSkin.label(TranslationServer.tr("A {weapon} could become something else. The smith says: \"{hint}\"").format({ "weapon": from, "hint": TranslationServer.tr(evolved.evolution_hint) }), Fonts.BODY, UiSkin.DIM, true))
+	row.add_child(check(known))
+	return box
+
+
 # --- Runs -----------------------------------------------------------------------------
 
 ## A finished run (Profile.history): how it ended, then when, how hard, how far, how long...
@@ -207,6 +234,8 @@ static func run_row(entry: Dictionary, content: ContentDB) -> Control:
 		stacked_fact(TranslationServer.tr("Earned"), souls(int(entry.get("souls", 0))), SOUL),
 		stacked_fact(TranslationServer.tr("Hero level"), str(int(entry.get("level", 1)))),
 		stacked_fact(TranslationServer.tr("Weapon"), TranslationServer.tr(str(entry.get("weapon", "?")))),
+		# The oath or kit sworn (older entries: none recorded, "-").
+		stacked_fact(TranslationServer.tr("Oath"), TranslationServer.tr(str(entry.oath)) if not str(entry.get("oath", "")).is_empty() else (TranslationServer.tr("Unsworn") if entry.has("oath") else "-")),
 	]
 	for i in cells.size():
 		(cells[i] as Control).custom_minimum_size.x = RUN_COLUMNS[i % RUN_COLUMNS.size()]

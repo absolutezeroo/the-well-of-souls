@@ -368,12 +368,31 @@ func _test_title_screen() -> void:
 	await _frames(1)
 	var oath_cards: HBoxContainer = oaths.get_node("%OathCards")
 	var order := CONTENT.soul_tree.oaths()
-	check(oaths.visible and oath_cards.get_child_count() == order.size() + 1, "a card per oath, and Unsworn")
+	# (the starting kits follow the tree's oaths, locked until their feat: progression.md "Oaths and kits")
+	var locked_kits := CONTENT.kits.filter(func(k: OathDef) -> bool: return not k.is_unlocked()).size()
+	check(oaths.visible and oath_cards.get_child_count() == order.size() + CONTENT.kits.size() + 1, "a card per oath and kit, and Unsworn")
 	var colossus_index := order.find(CONTENT.soul_tree.find(&"oath_colossus").oath) + 1
-	check(not (oath_cards.get_child(colossus_index) as Button).disabled and order.size() == 4 and oath_cards.get_children().filter(func(c: Node) -> bool: return (c as Button).disabled).size() == 3, "the oath bought is open, the others locked")
+	check(not (oath_cards.get_child(colossus_index) as Button).disabled and order.size() == 4 and oath_cards.get_children().filter(func(c: Node) -> bool: return (c as Button).disabled).size() == 3 + locked_kits, "the oath bought is open, the others locked")
 	(oath_cards.get_child(colossus_index) as Button).pressed.emit()
 	await _frames(1)
 	check(Profile.oath == &"colossus" and Game.sworn_oath(CONTENT) != null, "tapping a card swears the oath")
+	# Every card's words fit inside it, in English and in French: the row clips what spills over
+	# (the window is full on a 720-line screen, the cards can't grow; a locked kit's feat, the
+	# tree's branch, a name on two lines all count).
+	for language in ["en", "fr"]:
+		TranslationServer.set_locale(language)
+		oaths.open(CONTENT)
+		await _frames(2)
+		var spilled: Array[String] = []
+		for card: Control in oath_cards.get_children():
+			var column := card.get_child(0) as Control
+			var room := card.size.y - column.offset_top + column.offset_bottom
+			if column.get_combined_minimum_size().y > room + 0.5:
+				spilled.append("%s %d > %d" % [_texts(card)[0] if not _texts(card).is_empty() else "?", column.get_combined_minimum_size().y, room])
+		check(spilled.is_empty(), "every oath and kit card's words fit inside it (%s: %s)" % [language, spilled])
+	TranslationServer.set_locale("en")
+	oaths.open(CONTENT)
+	await _frames(1)
 	var weapon_row: HBoxContainer = oaths.get_node("%WeaponRow")
 	var armory: UpgradeDef = CONTENT.soul_tree.find(&"armory").upgrade
 	var level_one := armory.armory_weapons.slice(0, armory.armory_count(1))
@@ -476,7 +495,8 @@ func _test_title_screen() -> void:
 	check(codex.get_node("%QuestsTab").get_parent() is TabRow and title.leaderboards.get_node("%TollTab").get_parent() is TabRow, "the codex's and the leaderboards' tabs are TabRows, like every window's")
 	codex.show_tab(CodexPanel.Tab.ACHIEVEMENTS)
 	await _frames(1)
-	check(list.get_child_count() == CONTENT.achievements.size() and not (codex.get_node("%QuestsTab") as Button).button_pressed, "the achievements are listed")
+	# (then the weapons' evolutions: a line and a row each, loot.md "Weapon evolutions")
+	check(list.get_child_count() == CONTENT.achievements.size() + 1 + WeaponEvolution.all(CONTENT).size() and not (codex.get_node("%QuestsTab") as Button).button_pressed, "the achievements are listed, then the evolutions")
 	check(_texts(list.get_child(0)).any(func(t: String) -> bool: return t.begins_with("+") and t.ends_with("souls")), "an achievement shows its reward")
 	Profile.add_history({ "depth": 3, "cause": "Skeleton", "won": false, "time": 1760000000, "duration": 600000 })
 	codex.show_tab(CodexPanel.Tab.RUNS)

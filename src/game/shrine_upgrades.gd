@@ -69,6 +69,9 @@ static func apply_to(player: Player, content: ContentDB, difficulty: DifficultyD
 		player.base_stats.move_speed *= oath.move_speed_scale
 		if oath.starting_weapon:
 			weapon = oath.starting_weapon
+		for perk in oath.starting_perks:  # (a kit's twist)
+			if perk:
+				player.perks.add(perk)
 	if weapon:
 		player.equipment.equip(weapon)
 	if hp_scale != 1.0:

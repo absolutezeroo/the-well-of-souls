@@ -59,6 +59,7 @@ Bosses, monsters, perks and affixes are named the same way: the `id` in the `.tr
 | `--difficulty=` | `easy`, `normal`, `hard`, `nightmare`, `nightmare+N` (Nightmare with its first N ascensions); default all of easy..nightmare+10 (`--quick`: normal; the gauntlet: easy, normal, hard) |
 | `--build=`, `--boss=`, `--bot=` | restrict the builds (`data/balance/builds/<name>.tres`), bosses, bots (`face_tank`, `kite`, `player`; the gauntlet runs `kite,player` unless told) |
 | `--acts=2,4` | marginal values, rooms and the gauntlet: acts measured (default all) |
+| `--picks=ignite,cinder_wake` | marginal values: only these picks (perk, relic, family, rune, affix ids), a new pick next to a few known ones; the "vs median" ratio then compares them among themselves |
 | `--seed=N` | every measure starts from this seed (default 1): the same command gives the same numbers |
 | `--all-pairs` | arena: every build against every boss, not only its act's |
 | `--timeout=240` | arena and gauntlet: game seconds before a boss fight is a timeout |

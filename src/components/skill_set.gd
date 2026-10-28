@@ -47,6 +47,20 @@ func cooldown_ratio(index: int) -> float:
 	return _cooldowns[index] / _durations[index]
 
 
+## Puts `seconds` back on the running cooldown of slot `index` (never past its length; a ready
+## skill stays ready): what holds a cooldown still (the Starving Litany: skills recharge only by
+## slaying, SkillHungerPassive). Negative `seconds` take time off it (a kill recharging it).
+func wind(index: int, seconds: float) -> void:
+	if index < 0 or index >= _cooldowns.size() or _cooldowns[index] <= 0.0:
+		return
+	_cooldowns[index] = clampf(_cooldowns[index] + seconds, 0.0, maxf(_durations[index], 0.0))
+
+
+## Seconds left before slot `index` is ready (0: ready).
+func cooldown_left(index: int) -> float:
+	return _cooldowns[index] if index >= 0 and index < _cooldowns.size() else 0.0
+
+
 ## Ready again at once (an echoing perk).
 func reset_cooldown(skill: SkillDef) -> void:
 	var index := skills.find(skill)

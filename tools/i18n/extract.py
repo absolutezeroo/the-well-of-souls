@@ -60,6 +60,10 @@ TEXT_FIELDS = {
     "accept_label", "hand_in_label", "pending_text", "return_text",
     "locked_text", "offer_text", "reward_text", "restored_text",
     "accepted_text", "found_text", "prompt", "reply",
+    # Weapon evolutions (WeaponDef): what the smith says of a weapon that could evolve.
+    "evolution_hint",
+    # Starting kits (OathDef): their rule and their price, one line each on the card.
+    "twist", "price",
 }
 LIST_FIELDS = {"intro_pages", "death_lines", "greetings", "branches", "branch_texts", "rank_names", "tips", "lines", "ambient_before", "ambient_after",
                "key_words", "mouse_glyphs"}

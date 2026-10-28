@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="ChargedAttackDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/vfx/slash_def.gd" id="1_slash_def"]
+[ext_resource type="Script" path="res://src/definitions/effects/damage_area_effect.gd" id="2_damage_area_effect"]
+[ext_resource type="Script" path="res://src/definitions/effects/effect.gd" id="3_effect"]
+[ext_resource type="AudioStream" path="res://data/audio/slash_heavy.tres" id="4_slash_heavy"]
+[ext_resource type="Script" path="res://src/definitions/items/charged_attack_def.gd" id="5_charged_attack_def"]
+[ext_resource type="Script" path="res://src/definitions/effects/chain_lightning_effect.gd" id="6_chain"]
+[ext_resource type="Resource" path="res://data/vfx/elements/storm.tres" id="7_storm"]
+
+[sub_resource type="Resource" id="crescent"]
+script = ExtResource("1_slash_def")
+arc_degrees = 200.0
+thickness = 28.0
+strokes = 2
+reach_scale = 1.0
+duration = 0.16
+trail = 0.8
+
+[sub_resource type="Resource" id="cut"]
+script = ExtResource("2_damage_area_effect")
+follows_facing = true
+radius = 62.0
+damage_multiplier = 2.0
+offset = 22.0
+knockback = 260.0
+slash = SubResource("crescent")
+
+[sub_resource type="Resource" id="bolt"]
+script = ExtResource("6_chain")
+element = ExtResource("7_storm")
+delay = 0.12
+max_range = 110.0
+cone_degrees = 200.0
+damage_multiplier = 0.8
+jumps = 3
+jump_reach = 150.0
+jump_falloff = 0.7
+
+[resource]
+script = ExtResource("5_charged_attack_def")
+id = &"stormhowl"
+display_name = "Thunderfall Cut"
+description = "A wide double crescent, then lightning leaps from the nearest foe to three more."
+charge_time = 0.8
+move_speed_scale = 0.55
+effects = Array[ExtResource("3_effect")]([SubResource("cut"), SubResource("bolt")])
+sound = ExtResource("4_slash_heavy")

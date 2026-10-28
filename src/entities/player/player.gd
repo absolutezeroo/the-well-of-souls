@@ -132,8 +132,8 @@ func setup(player_def: PlayerDef) -> void:
 	rebuild_skills(0.0)
 	equipment.changed.connect(rebuild_skills.bind(def.swap_cooldown))
 	equipment.changed.connect(charge.cancel)  # a weapon swap loses the charge
-	equipment.changed.connect(func() -> void: perks.set_gear(equipment.affixes(), equipment.runes()))
-	perks.set_gear(equipment.affixes(), equipment.runes())
+	equipment.changed.connect(func() -> void: perks.set_gear(equipment.affixes(), equipment.runes(), equipment.carried()))
+	perks.set_gear(equipment.affixes(), equipment.runes(), equipment.carried())
 	invalidate_stats()
 	hp = get_max_hp()
 

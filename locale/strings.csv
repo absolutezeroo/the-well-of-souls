@@ -125,6 +125,9 @@ Ranged weapon,Ranged weapon,Arme à distance
 ", %d projectiles",", %d projectiles",", %d projectiles"
 ", pierces %d",", pierces %d",", perce %d"
 Skills: %s,Skills: %s,Compétences : %s
+Fill its sockets with {family} runes ({have} of {sockets}) and wake the {family} family.,Fill its sockets with {family} runes ({have} of {sockets}) and wake the {family} family.,Remplis ses emplacements de runes de la famille {family} ({have} sur {sockets}) et éveille la famille {family}.
+Fill its sockets with {family} runes ({have} of {sockets}).,Fill its sockets with {family} runes ({have} of {sockets}).,Remplis ses emplacements de runes de la famille {family} ({have} sur {sockets}).
+Wake the {family} family (3 of its perks).,Wake the {family} family (3 of its perks).,Éveille la famille {family} (3 de ses atouts).
 {prefix} {item} {suffix},{prefix} {item} {suffix},{item} {prefix} {suffix}
 {prefix} {item},{prefix} {item},{item} {prefix}
 {item} {suffix},{item} {suffix},{item} {suffix}
@@ -164,6 +167,8 @@ Starts with the %s,Starts with the %s,Commence avec : %s
 %+d Damage,%+d Damage,%+d Dégâts
 %+d Armor,%+d Armor,%+d Armure
 Critical hits deal x%s (instead of x%s),Critical hits deal x%s (instead of x%s),Critiques à x%s (au lieu de x%s)
+%+d%% healing,%+d%% healing,%+d %% de soins
+%+d%% souls,%+d%% souls,%+d %% d'âmes
 %+d%% gold,%+d%% gold,%+d %% d'or
 %+d%% chance of better gear,%+d%% chance of better gear,%+d %% de chances d'objets meilleurs
 Merchant prices %+d%%,Merchant prices %+d%%,Prix du marchand %+d %%
@@ -189,6 +194,7 @@ a fall,a fall,une chute
 the dungeon,the dungeon,le donjon
 %s set into %s,%s set into %s,%s serti dans %s
 %s taken out of %s,%s taken out of %s,%s retiré de %s
+The runes melt into the steel: %s.,The runes melt into the steel: %s.,Les runes fondent dans l'acier : %s.
 Forge,Forge,Forger
 Trap!,Trap!,Piège !
 Bought %s,Bought %s,Acheté : %s
@@ -363,6 +369,7 @@ floors %d to %d,floors %d to %d,étages %d à %d
 %s     %d of %d slain,%s     %d of %d slain,%s     %d sur %d abattus
 under the holes of every floor     %d of %d slain,under the holes of every floor     %d of %d slain,sous les trous de chaque étage     %d sur %d abattus
 Achievements: %d of %d     Souls earned from them: %d,Achievements: %d of %d     Souls earned from them: %d,Succès : %d sur %d     Âmes gagnées grâce à eux : %d
+Weapon evolutions: %d of %d,Weapon evolutions: %d of %d,Évolutions d'armes : %d sur %d
 Runs: %d     Wins: %d     Deepest floor: %d,Runs: %d     Wins: %d     Deepest floor: %d,Parties : %d     Victoires : %d     Étage le plus profond : %d
 No descent finished yet. The Well is waiting.,No descent finished yet. The Well is waiting.,Aucune descente achevée. Le Puits t'attend.
 Fastest wins:   %s,Fastest wins:   %s,Victoires les plus rapides :   %s
@@ -382,7 +389,7 @@ Voices,Voices,Paroles
 Tips,Tips,Conseils
 Track your village requests and bounties here. Return recovered items to the resident who asked for them. Spend your souls at the village Shrine. Daily and weekly bounties follow real-world dates.,Track your village requests and bounties here. Return recovered items to the resident who asked for them. Spend your souls at the village Shrine. Daily and weekly bounties follow real-world dates.,Retrouve ici les demandes du village et les primes. Rapporte les objets à leur propriétaire. Dépense tes âmes au sanctuaire du village. Les primes quotidiennes et hebdomadaires suivent les dates réelles.
 "Every monster you meet goes in here. Slay more of a kind to raise your hunter rank with it: each rank pays souls, and Mastered also gives +%d%% damage against that kind for good. Choose a monster for its attacks and challenges.","Every monster you meet goes in here. Slay more of a kind to raise your hunter rank with it: each rank pays souls, and Mastered also gives +%d%% damage against that kind for good. Choose a monster for its attacks and challenges.","Chaque monstre rencontré est consigné ici. Abats-en d'une même espèce pour monter ton rang de chasseur : chaque rang rapporte des âmes, et Maîtrisé donne aussi +%d %% de Dégâts contre cette espèce, pour toujours. Choisis un monstre pour voir ses attaques et ses défis."
-Big goals across all your runs. Reaching one pays its souls at once.,Big goals across all your runs. Reaching one pays its souls at once.,"De grands objectifs, sur toutes tes parties. En atteindre un rapporte ses âmes aussitôt."
+"Big goals across all your runs. Reaching one pays its souls at once. Below them, the weapons you can evolve at a forge.","Big goals across all your runs. Reaching one pays its souls at once. Below them, the weapons you can evolve at a forge.","De grands objectifs, sur toutes tes parties. En atteindre un rapporte ses âmes aussitôt. En dessous, les armes que tu peux faire évoluer à une forge."
 "Your last runs, newest first. Gold is lost when a run ends; souls are kept.","Your last runs, newest first. Gold is lost when a run ends; souls are kept.","Tes dernières parties, les plus récentes d'abord. L'or est perdu à la fin d'une partie ; les âmes sont conservées."
 "What the Vigil-Keeper and the keepers of the Well told you, kept here. They say more as your descents go deeper.","What the Vigil-Keeper and the keepers of the Well told you, kept here. They say more as your descents go deeper.","Ce que la Veilleuse et les gardiens du Puits t'ont confié, gardé ici. Ils en disent davantage à mesure que tes descentes s'enfoncent."
 "Every tip the tutorial gave you, to read again.","Every tip the tutorial gave you, to read again.","Chaque conseil du tutoriel, à relire."
@@ -391,6 +398,8 @@ Done!,Done!,Accompli !
 Received,Received,Reçu
 Reward,Reward,Récompense
 A secret feat. Some doors only open from the other side.,A secret feat. Some doors only open from the other side.,Un exploit secret. Certaines portes ne s'ouvrent que de l'autre côté.
+"{weapon}, every socket a {family} rune, the {family} family awake, at a forge.","{weapon}, every socket a {family} rune, the {family} family awake, at a forge.","{weapon}, une rune de la famille {family} dans chaque emplacement, la famille {family} éveillée, à une forge."
+"A {weapon} could become something else. The smith says: ""{hint}""","A {weapon} could become something else. The smith says: ""{hint}""",Une arme ({weapon}) pourrait devenir autre chose. Le forgeron dit : « {hint} »
 Died on floor %d,Died on floor %d,Mort à l'étage %d
 Reached the bottom of the Well,Reached the bottom of the Well,A touché le fond du Puits
 "Won, then slain by %s","Won, then slain by %s","Victoire, puis tué par %s"
@@ -400,6 +409,8 @@ Slain,Slain,Abattus
 "%d monsters, %d boss","%d monsters, %d boss","%d monstres, %d boss"
 "%d monsters, %d bosses","%d monsters, %d bosses","%d monstres, %d boss"
 Earned,Earned,Gagné
+Oath,Oath,Serment
+Unsworn,Unsworn,Sans serment
 "{month} {day}, {time}","{month} {day}, {time}","{day} {month}, {time}"
 floor %d (endless),floor %d (endless),étage %d (sans fin)
 floor %d of %d,floor %d of %d,étage %d sur %d
@@ -513,6 +524,9 @@ No weapon to work on,No weapon to work on,Aucune arme à travailler
 %d rune socket,%d rune socket,%d emplacement de rune
 {damage} damage  -  {sockets},{damage} damage  -  {sockets},{damage} Dégâts  -  {sockets}
 Worn  -  {details},Worn  -  {details},Équipée  -  {details}
+Its runes are ready to melt into it: it can become the %s.,Its runes are ready to melt into it: it can become the %s.,Ses runes sont prêtes à fondre dans l'acier : elle peut devenir %s.
+Temper into %s,Temper into %s,Tremper en %s
+Becomes the {name}: {needs},Becomes the {name}: {needs},Devient {name} : {needs}
 Pick a socket to take its rune out,Pick a socket to take its rune out,Choisis un emplacement pour en retirer la rune
 Take out %s  (%d gold),Take out %s  (%d gold),Retirer %s  (%d or)
 {type}  -  {description},{type}  -  {description},{type}  -  {description}
@@ -818,6 +832,7 @@ Press again to end the run. Anything else to cancel.,Press again to end the run.
 This descent: %s,This descent: %s,Cette descente : %s
 Lower it for the rest of this descent only. It then sets no records and goes on no leaderboard; souls and achievements still count.,Lower it for the rest of this descent only. It then sets no records and goes on no leaderboard; souls and achievements still count.,La baisser pour le reste de cette descente seulement. Elle n'établit alors plus de record et n'entre dans aucun classement ; les âmes et les succès comptent toujours.
 Nothing is gentler than this.,Nothing is gentler than this.,Rien n'est plus clément.
+Relic that bends a rule,Relic that bends a rule,Relique : brise une règle
 New perk,New perk,Nouvel atout
 New perk  (up to level %d),New perk  (up to level %d),Nouvel atout  (jusqu'au niveau %d)
 Level %d > %d  (max %d),Level %d > %d  (max %d),Niveau %d > %d  (max %d)
@@ -933,8 +948,8 @@ Choose one to begin the descent. Harder ones pay more souls.,Choose one to begin
 Nightmare ascension,Nightmare ascension,Ascension du Cauchemar
 Armory level %d (max): %d weapons.,Armory level %d (max): %d weapons.,Armurerie niveau %d (max) : %d armes.
 Armory level %d: %d weapons. More in the Tree of Souls.,Armory level %d: %d weapons. More in the Tree of Souls.,Armurerie niveau %d : %d armes. D'autres dans l'Arbre des Âmes.
-Unsworn,Unsworn,Sans serment
 "The usual start: the Katana, no rule changed.","The usual start: the Katana, no rule changed.","Le départ habituel : le Katana, aucune règle changée."
+Opens with a feat: %s,Opens with a feat: %s,S'ouvre avec un exploit : %s
 "Opens at the end of the %s branch of the Tree of Souls, at the shrine.","Opens at the end of the %s branch of the Tree of Souls, at the shrine.","S'ouvre au bout de la branche %s de l'Arbre des Âmes, au Sanctuaire."
 Sworn,Sworn,Juré
 "Your starting weapon (Armory): your oath brings its own, the %s. Without the oath, pick one below.","Your starting weapon (Armory): your oath brings its own, the %s. Without the oath, pick one below.","Ton arme de départ (Armurerie) : ton serment apporte la sienne, %s. Sans serment, choisis-en une ci-dessous."
@@ -1443,6 +1458,21 @@ Templar Sword,Templar Sword,Épée de Templier
 The blessed blade of a templar whose order is long gone. Its skills are holy.,The blessed blade of a templar whose order is long gone. Its skills are holy.,La lame bénie d'un templier dont l'ordre a disparu. Ses compétences sont sacrées.
 Whip,Whip,Fouet
 "Long reach, thin and stinging. Keep them at a distance.","Long reach, thin and stinging. Keep them at a distance.","Longue allonge, fin et cinglant. Garde-les à distance."
+Ashen Codex,Ashen Codex,Codex des Cendres
+Its embers set the floor alight where they strike a foe: whoever stands in the fire burns.,Its embers set the floor alight where they strike a foe: whoever stands in the fire burns.,Ses braises embrasent le sol là où elles frappent un ennemi : quiconque se tient dans le feu brûle.
+"The pages still smoulder. Feed them every ember you find, and something to burn for.","The pages still smoulder. Feed them every ember you find, and something to burn for.","Les pages couvent encore. Nourris-les de chaque braise que tu trouves, et d'une raison de brûler."
+Heartsplitter,Heartsplitter,Fend-Cœur
+What its blow deals past a foe's last Health bursts out of the body onto the foes around.,What its blow deals past a foe's last Health bursts out of the body onto the foes around.,Ce que son coup inflige au-delà de la Vie restante d'un ennemi jaillit du corps sur les ennemis alentour.
+It drinks when it lands. Wet its runes in blood and see.,It drinks when it lands. Wet its runes in blood and see.,"Il boit quand il frappe. Trempe ses runes dans le sang, et tu verras."
+Rimeheart Staff,Rimeheart Staff,Bâton Cœur-de-Givre
+Its shards burst where they strike: a nova of frost hurts and chills the foes around.,Its shards burst where they strike: a nova of frost hurts and chills the foes around.,Ses éclats se brisent là où ils frappent : une nova de givre blesse et ralentit les ennemis alentour.
+"Cold enough to crack stone. Colder still, if you feed it frost.","Cold enough to crack stone. Colder still, if you feed it frost.","Assez froid pour fendre la pierre. Plus froid encore, si tu le nourris de givre."
+Riven Bow,Riven Bow,Arc Fendu
+A bow strung with a riven glyph: each arrow that strikes a foe splits into three arcane bolts that fly on.,A bow strung with a riven glyph: each arrow that strikes a foe splits into three arcane bolts that fly on.,Un arc tendu d'un glyphe fendu : chaque flèche qui frappe un ennemi se fend en trois traits arcaniques qui poursuivent leur course.
+Those glyphs on the limbs want to split. Give it every rune of the arcane.,Those glyphs on the limbs want to split. Give it every rune of the arcane.,Ces glyphes sur les branches veulent se fendre. Donne-lui toutes les runes des Arcanes.
+Stormhowl,Stormhowl,Hurle-Tempête
+"A katana a storm sleeps in: its blows land in lightning, and its held cut calls lightning onto the foes it strikes.","A katana a storm sleeps in: its blows land in lightning, and its held cut calls lightning onto the foes it strikes.","Un katana où dort une tempête : ses coups frappent en éclairs, et sa taille chargée appelle la foudre sur les ennemis qu'elle touche."
+"That blade hums when the sky cracks. It wants storm, all of it.","That blade hums when the sky cracks. It wants storm, all of it.","Cette lame bourdonne quand le ciel se fend. Elle veut la tempête, tout entière."
 Acid Spit,Acid Spit,Crachat Acide
 Bite,Bite,Morsure
 Claws,Claws,Griffes
@@ -1684,6 +1714,24 @@ Oath of the Vulture,Oath of the Vulture,Serment du Vautour
 Oath of the Heretic,Oath of the Heretic,Serment Hérétique
 "Start with the Book: skills deal 50% more damage, but your attacks are 20% slower.","Start with the Book: skills deal 50% more damage, but your attacks are 20% slower.","Commence avec le Grimoire : les compétences infligent 50 % de Dégâts en plus, mais tes attaques sont 20 % plus lentes."
 """I take up the words the shrine kept silent, and bear their weight.""","""I take up the words the shrine kept silent, and bear their weight.""","« Je reprends les mots que le sanctuaire a tus, et j'en porte le poids. »"
+Oath of the Flayed,Oath of the Flayed,Serment de l'Écorché
+"Start with the Battle Axe and the Bleeding Stride: your roll cuts every foe it passes through, but each roll costs 2% of your max Health. 25% more max Health.","Start with the Battle Axe and the Bleeding Stride: your roll cuts every foe it passes through, but each roll costs 2% of your max Health. 25% more max Health.","Commence avec la Hache de Guerre et la Foulée Sanglante : ta roulade tranche chaque ennemi traversé, mais chaque roulade coûte 2 % de ta Vie max. 25 % de Vie max en plus."
+"""My blood opens the way, and I walk it red.""","""My blood opens the way, and I walk it red.""","« Mon sang ouvre la voie, et je la foule rouge. »"
+Your roll cuts the foes it passes through,Your roll cuts the foes it passes through,Ta roulade tranche les ennemis traversés
+Each roll costs 2% of max Health,Each roll costs 2% of max Health,Chaque roulade coûte 2 % de Vie max
+Oath of the Fletcher,Oath of the Fletcher,Serment de l'Archer
+"Start with the Bow; your roll looses three shots at the nearest foe, but you have 20% less max Health.","Start with the Bow; your roll looses three shots at the nearest foe, but you have 20% less max Health.","Commence avec l'Arc ; ta roulade décoche trois traits sur l'ennemi le plus proche, mais tu as 20 % de Vie max en moins."
+"""I give ground, and every step I give is paid in arrows.""","""I give ground, and every step I give is paid in arrows.""","« Je cède du terrain, et chaque pas cédé se paie en flèches. »"
+Your roll looses three shots,Your roll looses three shots,Ta roulade décoche trois traits
+Oath of the Penitent,Oath of the Penitent,Serment du Pénitent
+"Start with the Templar Sword and Vampirism: every kill heals you. 40% more souls at the end of the run, but every heal is 30% weaker.","Start with the Templar Sword and Vampirism: every kill heals you. 40% more souls at the end of the run, but every heal is 30% weaker.","Commence avec l'Épée de Templier et le Vampirisme : chaque ennemi abattu te soigne. 40 % d'âmes en plus à la fin de la partie, mais chaque soin est 30 % plus faible."
+"""No draught will mend me. Only the fallen.""","""No draught will mend me. Only the fallen.""",« Nul breuvage ne me guérira. Seuls les morts. »
+Every kill heals you,Every kill heals you,Chaque ennemi abattu te soigne
+Oath of the Tempest,Oath of the Tempest,Serment de la Tempête
+"Start with the Spark Wand and the Restless Storm: while you move near foes, lightning strikes them; stand still and it strikes you. You move 15% faster.","Start with the Spark Wand and the Restless Storm: while you move near foes, lightning strikes them; stand still and it strikes you. You move 15% faster.","Commence avec la Baguette d'Étincelles et la Tempête sans Repos : quand tu bouges près des ennemis, la foudre les frappe ; reste immobile et c'est toi qu'elle frappe. Tu te déplaces 15 % plus vite."
+"""I do not stand still. Let the sky strike whoever does.""","""I do not stand still. Let the sky strike whoever does.""",« Je ne reste pas immobile. Que le ciel frappe qui le fait. »
+"Moving, lightning strikes the foes near you","Moving, lightning strikes the foes near you","En mouvement, la foudre frappe les ennemis"
+"Standing still, it strikes you","Standing still, it strikes you","Immobile, elle te frappe"
 Bug,Bug,Bug
 "What happened, what were you doing, what did you expect?","What happened, what were you doing, what did you expect?","Que s'est-il passé, que faisais-tu, qu'attendais-tu ?"
 Idea,Idea,Idée
@@ -1745,6 +1793,10 @@ Blazing Roll,Blazing Roll,Roulade Embrasée
 Rolling bursts into flames that hurt and set enemies around on fire.,Rolling bursts into flames that hurt and set enemies around on fire.,Ta roulade s'embrase : les flammes blessent et enflamment les ennemis alentour.
 Bloodrage,Bloodrage,Rage Sanguinaire
 "Below half Health, you deal 20% more damage per level.","Below half Health, you deal 20% more damage per level.","Sous la moitié de ta Vie, tu infliges 20 % de Dégâts en plus par niveau."
+Burst Veins,Burst Veins,Veines Éclatées
+"A killing blow's excess damage bursts onto nearby enemies (at least 50% of your Damage per level, twice it at most).","A killing blow's excess damage bursts onto nearby enemies (at least 50% of your Damage per level, twice it at most).","L'excédent d'un coup fatal éclabousse les ennemis proches (au moins 50 % de tes Dégâts par niveau, deux fois au plus)."
+Cinder Wake,Cinder Wake,Sillage de Braises
+Rolling leaves a trail of embers for 3 s: enemies in it catch fire and take a little damage every half second.,Rolling leaves a trail of embers for 3 s: enemies in it catch fire and take a little damage every half second.,Ta roulade laisse des braises 3 s : les ennemis qui s'y tiennent s'enflamment et subissent quelques dégâts.
 Cold Snap,Cold Snap,Coup de Froid
 Rolling releases a wave of cold that hurts and slows enemies around by 50%.,Rolling releases a wave of cold that hurts and slows enemies around by 50%.,Ta roulade libère une vague de froid qui blesse et ralentit de 50 % les ennemis alentour.
 Devotion,Devotion,Dévotion
@@ -1763,8 +1815,14 @@ Frost Armor,Frost Armor,Armure de Givre
 Getting hit releases a wave of cold: enemies around you are thrown back and slowed by 40% (once every 3 s).,Getting hit releases a wave of cold: enemies around you are thrown back and slowed by 40% (once every 3 s).,Être touché libère une vague de froid : les ennemis autour de toi sont repoussés et ralentis de 40 % (une fois toutes les 3 s).
 Kindling,Kindling,Amadou
 Burning enemies take 20% more damage per level.,Burning enemies take 20% more damage per level.,Les ennemis en feu subissent 20 % de Dégâts en plus par niveau.
+Leaping Bolt,Leaping Bolt,Foudre Bondissante
+A critical hit leaps as lightning to the nearest other enemy for 70% of it (one more leap per level).,A critical hit leaps as lightning to the nearest other enemy for 70% of it (one more leap per level).,Un coup critique bondit en éclair sur l'ennemi le plus proche pour 70 % de sa force (un bond de plus par niveau).
 Precision,Precision,Précision
 Your first blow on an unhurt enemy is always a critical hit.,Your first blow on an unhurt enemy is always a critical hit.,Ton premier coup sur un ennemi indemne est toujours un coup critique.
+Rime Halo,Rime Halo,Nimbe de Givre
+"2 shards of ice circle you (+1 per level), hurting the enemies they pass through and slowing them by 30%.","2 shards of ice circle you (+1 per level), hurting the enemies they pass through and slowing them by 30%.",2 éclats de glace tournent autour de toi (+1 par niveau) : ils blessent les ennemis qu'ils traversent et les ralentissent de 30 %.
+Riven Glyph,Riven Glyph,Glyphe Fendu
+"A shot that strikes an enemy splits into 3 arcane bolts (+2 per level) that fly on, each dealing 30% of the hit.","A shot that strikes an enemy splits into 3 arcane bolts (+2 per level) that fly on, each dealing 30% of the hit.","Un tir qui frappe un ennemi se fend en 3 traits arcaniques (+2 par niveau) qui poursuivent leur course, chacun infligeant 30 % du coup."
 Shock Roll,Shock Roll,Roulade de Choc
 Rolling releases a shockwave that hurts and pushes enemies away.,Rolling releases a shockwave that hurts and pushes enemies away.,Ta roulade libère une onde de choc qui blesse et repousse les ennemis.
 Strength,Strength,Force
@@ -1777,15 +1835,27 @@ Critical hits release a shockwave that hurts the enemies around the target.,Crit
 Vampirism,Vampirism,Vampirisme
 Slaying an enemy heals 3 Health per level (summoned monsters don't count).,Slaying an enemy heals 3 Health per level (summoned monsters don't count).,Abattre un ennemi rend 3 de Vie par niveau (les monstres invoqués ne comptent pas).
 Vitality,Vitality,Vitalité
+Fletcher's Draw,Fletcher's Draw,Tir de l'Archer
+Your roll looses three shots at the nearest foe.,Your roll looses three shots at the nearest foe.,Ta roulade décoche trois traits sur l'ennemi le plus proche.
+Bleeding Stride,Bleeding Stride,Foulée Sanglante
+"Your roll cuts every enemy you pass through for 150% of your Damage, but each roll costs 2% of your max Health.","Your roll cuts every enemy you pass through for 150% of your Damage, but each roll costs 2% of your max Health.","Ta roulade tranche chaque ennemi traversé pour 150 % de tes Dégâts, mais chaque roulade coûte 2 % de ta Vie max."
 Executioner,Executioner,Bourreau
 +75% damage per level against enemies below 35% Health.,+75% damage per level against enemies below 35% Health.,+75 % de Dégâts par niveau contre les ennemis sous 35 % de Vie.
+Funeral Pyre,Funeral Pyre,Bûcher Funèbre
+"Every foe you slay explodes in flames that burn those around, but the blast burns you too if you stand in it (6% of your max Health).","Every foe you slay explodes in flames that burn those around, but the blast burns you too if you stand in it (6% of your max Health).","Chaque ennemi que tu abats explose en flammes qui brûlent ceux alentour, mais l'explosion te brûle aussi si tu t'y tiens (6 % de ta Vie max)."
 Guardian Ring,Guardian Ring,Anneau du Gardien
 Every floor starts with a shell of frost that soaks up 20 damage.,Every floor starts with a shell of frost that soaks up 20 damage.,Chaque étage commence avec une carapace de givre qui absorbe 20 Dégâts.
+Heart of Winter,Heart of Winter,Cœur de l'Hiver
+"Foes within three steps of you are slowed by 35%, but the cold slows you too (20%).","Foes within three steps of you are slowed by 35%, but the cold slows you too (20%).","Les ennemis à moins de trois pas de toi sont ralentis de 35 %, mais le froid te ralentit aussi (20 %)."
 Hydra's Quiver,Hydra's Quiver,Carquois de l'Hydre
 "Everything you shoot fires 1 more projectile per level, fireballs included (2 more at most with Prism runes; the volley shares its damage).","Everything you shoot fires 1 more projectile per level, fireballs included (2 more at most with Prism runes; the volley shares its damage).","Tout ce que tu tires part avec 1 projectile de plus par niveau, boules de feu comprises (2 de plus au maximum avec les runes Prisme ; la salve partage ses Dégâts)."
 Phoenix Feather,Phoenix Feather,Plume de Phénix
 "Once per level, a killing blow sends you to the Threshold: slay 8 foes in 25 s (more in later acts) to return where you fell, at half Health (a quarter in a boss fight).","Once per level, a killing blow sends you to the Threshold: slay 8 foes in 25 s (more in later acts) to return where you fell, at half Health (a quarter in a boss fight).","Une fois par niveau, un coup fatal t'envoie au Seuil : abats 8 ennemis en 25 s (plus aux actes suivants) pour revenir où tu es tombé, à la moitié de ta Vie (un quart en combat de boss)."
+Restless Storm,Restless Storm,Tempête sans Repos
+"While foes are near, lightning strikes the nearest every 0.7 s as you move; stand still a second and it strikes you.","While foes are near, lightning strikes the nearest every 0.7 s as you move; stand still a second and it strikes you.","Près des ennemis, la foudre frappe le plus proche toutes les 0,7 s quand tu bouges ; immobile une seconde, c'est toi qu'elle frappe."
 Sage's Codex,Sage's Codex,Codex du Sage
+Starving Litany,Starving Litany,Litanie Affamée
+"Skills no longer recharge with time, only by slaying: a quarter of their wait a kill, 3% a blow on a warden. Not the roll.","Skills no longer recharge with time, only by slaying: a quarter of their wait a kill, 3% a blow on a warden. Not the roll.","Les compétences ne se rechargent qu'en tuant : un quart de leur attente par ennemi abattu, 3 % par coup sur un gardien. Pas la roulade."
 War Banner,War Banner,Bannière de Guerre
 Arcane,Arcane,Arcanes
 Using a skill also fires a ring of 8 arcane bolts.,Using a skill also fires a ring of 8 arcane bolts.,Utiliser une compétence tire aussi un anneau de 8 traits arcaniques.
@@ -1940,6 +2010,8 @@ Bladed Gale,Bladed Gale,Bourrasque d'Acier
 A fan of seven stars that pierce a first enemy.,A fan of seven stars that pierce a first enemy.,Un éventail de sept étoiles qui transpercent un premier ennemi.
 Glacial Lance,Glacial Lance,Lance Glaciaire
 A great ice shard that shatters into a frost nova: enemies around are slowed.,A great ice shard that shatters into a frost nova: enemies around are slowed.,Un grand éclat de glace qui se brise en nova de givre : les ennemis autour sont ralentis.
+Thunderfall Cut,Thunderfall Cut,Taille du Tonnerre
+"A wide double crescent, then lightning leaps from the nearest foe to three more.","A wide double crescent, then lightning leaps from the nearest foe to three more.","Un large double croissant, puis la foudre bondit de l'ennemi le plus proche sur trois autres."
 Judgement,Judgement,Jugement
 A wide blessed crescent in front of you.,A wide blessed crescent in front of you.,Un large croissant béni devant toi.
 Flaying Arc,Flaying Arc,Arc Écorcheur
@@ -3231,6 +3303,11 @@ grammar:gender:Shuriken,grammar:gender:Shuriken,m
 grammar:gender:Frost Staff,grammar:gender:Frost Staff,m
 grammar:gender:Templar Sword,grammar:gender:Templar Sword,f
 grammar:gender:Whip,grammar:gender:Whip,m
+grammar:gender:Ashen Codex,grammar:gender:Ashen Codex,m
+grammar:gender:Heartsplitter,grammar:gender:Heartsplitter,m
+grammar:gender:Rimeheart Staff,grammar:gender:Rimeheart Staff,m
+grammar:gender:Riven Bow,grammar:gender:Riven Bow,m
+grammar:gender:Stormhowl,grammar:gender:Stormhowl,m
 grammar:gender:Ash Lizard,grammar:gender:Ash Lizard,m
 grammar:gender:Gloom Bat,grammar:gender:Gloom Bat,f
 grammar:gender:Horned Beast,grammar:gender:Horned Beast,f

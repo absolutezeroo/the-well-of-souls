@@ -10,7 +10,8 @@ extends RefCounted
 const ALL_DIFFICULTIES := ["easy", "normal", "hard", "nightmare", "nightmare+5", "nightmare+10"]
 ## Folders scanned for every kind of content (and checked against ContentDB).
 const FOLDERS := {
-	"weapons": "res://data/items/weapons/",
+	# (the evolved weapons, made at a forge: measured beside the weapon they come from)
+	"weapons": ["res://data/items/weapons/", "res://data/items/weapons/evolved/"],
 	"armors": "res://data/items/armors/",
 	"perks": ["res://data/perks/common/", "res://data/perks/relics/"],
 	"families": "res://data/perks/synergies/",
@@ -215,7 +216,7 @@ static func roles(monster: MonsterDef) -> PackedStringArray:
 ## Every player weapon (data/items/weapons/, not monster/), sorted by id.
 static func weapons() -> Array[WeaponDef]:
 	var result: Array[WeaponDef] = []
-	for w: Variant in scan(FOLDERS.weapons):
+	for w: Variant in scan_all(FOLDERS.weapons):
 		if w is WeaponDef:
 			result.append(w)
 	return result

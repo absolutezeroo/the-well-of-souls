@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="BalanceBuildDef" format=3]
+
+[ext_resource type="Script" path="res://tools/balance/balance_build_def.gd" id="1"]
+[ext_resource type="Script" path="res://src/definitions/items/armor_def.gd" id="2"]
+[ext_resource type="Resource" path="res://data/items/weapons/axe.tres" id="3"]
+[ext_resource type="Resource" path="res://data/items/armors/leather_armor.tres" id="4"]
+[ext_resource type="Resource" path="res://data/oaths/kits/flayed.tres" id="oath"]
+
+[resource]
+script = ExtResource("1")
+name = "kit_flayed_a1"
+description = "The act I expected build (expected_a1: level 6, its perks, a Magic weapon, leather armor, the shrine) sworn to the flayed kit instead of the unsworn Katana start: its weapon (Magic, Sharp), its stats and its starting perk. Measured against expected_a1 (balance-log 2026-10-28)."
+tags = PackedStringArray("kit")
+act = 1
+level = 6
+weapon = ExtResource("3")
+weapon_rarity = 1
+weapon_affixes = PackedStringArray("sharp")
+runes = PackedStringArray()
+armors = Array[ExtResource("2")]([ExtResource("4")])
+armor_rarities = PackedInt32Array(0)
+armor_affixes = PackedStringArray("")
+perks = {
+"frenzy": 1,
+"iron_skin": 1,
+"precision": 1,
+"strength": 1,
+"vitality": 1
+}
+upgrades = {
+"might": 1,
+"vitality": 1
+}
+oath = ExtResource("oath")

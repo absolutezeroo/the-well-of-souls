@@ -107,6 +107,10 @@ func test_cases() -> Array:
 		["assist", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_assist(game))],
 		["lower_difficulty", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_lower_difficulty(game))],
 		["hints", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_hints(game))],
+		["behaviour_perks", _on_game(func(game: Game) -> void: await (_borrow(VarietyTests.new()) as VarietyTests).run_behaviour_perks(game))],
+		["twist_relics", _on_game(func(game: Game) -> void: await (_borrow(VarietyTests.new()) as VarietyTests).run_twist_relics(game))],
+		["evolutions", _on_game(func(game: Game) -> void: await (_borrow(VarietyTests.new()) as VarietyTests).run_evolutions(game))],
+		["kits", _test_kits],
 	]
 
 
@@ -160,6 +164,17 @@ func _on_sturdy_game(body: Callable) -> Callable:
 		game.player.base_stats.defense = 999
 		game.player.invalidate_stats()
 		await body.call(game))
+
+
+## Starting kits (VarietyTests.run_kits): games of their own, since a sworn kit applies when a run
+## starts (and the very first run is never sworn).
+func _test_kits() -> void:
+	privacy.consent_on_fake()
+	var suite := _borrow(VarietyTests.new()) as VarietyTests
+	await suite.run_kits()
+	_borrowed.erase(suite)
+	suite.queue_free()
+	await _frames(2)
 
 
 ## The game every game test begins on: a new Game (its first run on floor 1), no act cards (tested
