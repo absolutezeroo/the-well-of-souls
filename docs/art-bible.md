@@ -59,6 +59,12 @@ temples, statues, banners, furniture, interiors, animated flags, flowers, water 
 
 - A tile is **16 art pixels**; **1 art pixel = 2 world units**; the village's ground cell is 32
   units (`VillageGround.CELL`).
+- On screen an art pixel is always a **whole number of screen pixels**: a world camera's zoom is
+  its designed framing rounded down to the nearest whole size, the wider view (dungeon and
+  temple: 3 at 720 lines, 4 at 1080 and on the S23, 6 at 1440, 9 at 2160; the village 6 at 1080).
+  Never 4.5: columns of 4 and 5 alternate and shimmer when the view scrolls
+  ([decision 0007](decisions/0007-whole-pixels-on-screen.md), `PixelGrid.camera_zoom()`).
+  **Checked** (`unit.pc`).
 - Pack art is shown at **scale 2**. A whole step (3 for a building that must read larger, like
   the temple) is allowed; **never 1.5, 2.5, 0.95** or any fraction to make something fit (it
   makes "mixels": pixels of different sizes side by side). **Checked** for the village.

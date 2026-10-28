@@ -13,7 +13,10 @@ its element's shapes.
 ## 1. The pixel grid
 
 The art is 16x16 pixel art drawn at 2x (`ActorRig`'s Visual node, scale 2): **1 art pixel =
-2 world units** (3 screen pixels at the camera's 1.5 zoom). An effect whose pixels are smaller
+2 world units**, and on screen always a **whole number of screen pixels**: in the dungeon 3 at
+720 lines, 4 at 1080 (the phone), 6 at 1440, 9 at 2160; 6 in the village at 1080 (the camera's
+zoom is made whole by `PixelGrid.camera_zoom()`, [decision 0007](decisions/0007-whole-pixels-on-screen.md)).
+An effect whose pixels are smaller
 (a "mixel"), stretched by 6.9x, or turned 37 degrees is a different game pasted over ours.
 
 - **Positions and sizes snap to 2 units.** `PixelDraw.snap(v)`, `PixelDraw.snap_length(r)`.
@@ -425,7 +428,7 @@ slicer, element exports) serves the others; what each still needs:
   spill of daylight dithering out in front of it, a `GlowHalo`, and its own daylight-white
   `LightSource` (so the floor around it reads white in the Deeps' red, not as more embers). The
   arrow toward it (`AbyssHud.Arrow`) is UI: a holy wedge with a dark rim, cut in whole art pixels
-  (3 screen pixels) at the nearest of 16 directions, circling the hero. Demons rising in the
+  (3 interface units) at the nearest of 16 directions, circling the hero. Demons rising in the
   Deeps: shadow's pop and nova.
 - **Shadow** (done): shadow_staff (Sorcerer), its Volley, the Octopus's Ink Bolt and Ink Ring,
   the Shaman's Hex Bolt fire the shadow knot; Shadow Step bursts into shadow, leaves smoke and

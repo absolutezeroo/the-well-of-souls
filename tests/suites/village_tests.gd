@@ -532,19 +532,20 @@ func _test_descent(kept: String) -> void:
 
 
 ## On a screen where PixelGrid's rounding takes scale off (1600x900: x1, not x1.25), the surface
-## and the temple keep their framing, as a floor does (GameCamera): no void around the temple.
+## and the temple keep their framing, as a floor does (GameCamera), made whole: every art pixel on
+## a whole number of screen pixels, the framing rounded toward the wider view (decision 0007).
 func _test_framing(hub: VillageHub) -> void:
 	var room := VILLAGE.interiors[0]
 	var window := get_tree().root.size
 	get_tree().root.size = Vector2i(1600, 900)
 	await _frames(3)
-	var grown := PixelGrid.world_zoom()
-	check(grown > 1.0 and hub.walker.camera.zoom.is_equal_approx(Vector2(2, 2) * grown), "the village's camera zooms by what the canvas's rounding took off (x%s)" % grown)
-	check(hub.enter_room(room) and hub.walker.camera.zoom.is_equal_approx(Vector2.ONE * room.camera_zoom * grown), "the temple keeps its authored framing on any screen")
+	var screen_pixels := func() -> float: return PixelDraw.PX * hub.walker.camera.zoom.x * PixelGrid.ui_scale()
+	check(is_equal_approx(screen_pixels.call(), 5.0), "on 1600x900 the village's camera draws an art pixel on 5 whole screen pixels, its framing at x1.25 (%s)" % screen_pixels.call())
+	check(hub.enter_room(room) and is_equal_approx(screen_pixels.call(), 3.0), "the temple, designed at 1.5, on 3 whole screen pixels there (3.75 rounded down: a little more of the room, never less; %s)" % screen_pixels.call())
 	check(hub.leave_room(), "back outside after the framing check")
 	get_tree().root.size = window
 	await _frames(3)
-	check(hub.walker.camera.zoom.is_equal_approx(Vector2(2, 2) * PixelGrid.world_zoom()), "the framing follows the window back")
+	check(hub.walker.camera.zoom.is_equal_approx(Vector2.ONE * PixelGrid.camera_zoom(VillageWalker.SURFACE_ZOOM)), "the framing follows the window back")
 	hub.walker.position = VILLAGE.spawn
 
 
