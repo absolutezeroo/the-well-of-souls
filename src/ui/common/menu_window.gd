@@ -82,8 +82,8 @@ static func badge(text: String, font_size: int, color: Color) -> PanelContainer:
 	style.set_corner_radius_all(3)
 	style.content_margin_left = 8
 	style.content_margin_right = 8
-	style.content_margin_top = 1
-	style.content_margin_bottom = 3
+	style.content_margin_top = 0
+	style.content_margin_bottom = 4
 	box.add_theme_stylebox_override("panel", style)
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(UiSkin.label(text, font_size, color))

@@ -25,27 +25,28 @@ var _card_on := false
 var _outline := Color(0.01, 0.02, 0.06)
 
 
+## The banner's edge (set_banner_color()).
+var _edge := Color(0, 0, 0, 0)
+
 func _init_card_hud(outline: Color) -> void:
 	_outline = outline
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	mouse_filter = MOUSE_FILTER_IGNORE
 
 
-## The banner at the top centre (`panel_color` behind, its edge set by set_banner_color()):
+## The banner at the top centre: the skin's dark inset (`panel_color` darkens it a touch, the
+## event's hue), its edge the rarity frame's art in the event's color (set_banner_color()):
 ## returns the row its labels go in.
 func _build_banner(node_name: String, panel_color: Color) -> HBoxContainer:
 	_banner = PanelContainer.new()
 	_banner.name = node_name
 	_banner.mouse_filter = MOUSE_FILTER_IGNORE
-	var style := StyleBoxFlat.new()
-	style.bg_color = panel_color
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(6)
-	style.content_margin_left = 22
-	style.content_margin_right = 22
-	style.content_margin_top = 2
-	style.content_margin_bottom = 4
+	var style := UiSkin.note_box(22, 22, 6, 8)
+	style.modulate_color = Color(1, 1, 1).lerp(Color(panel_color, 1.0), 0.25)
 	_banner.add_theme_stylebox_override("panel", style)
+	_banner.draw.connect(func() -> void:
+		if _edge.a > 0.0:
+			UiSkin.draw_edge(_banner, Rect2(Vector2.ZERO, _banner.size), _edge))
 	_banner.set_anchors_and_offsets_preset(PRESET_CENTER_TOP)
 	_banner.grow_horizontal = GROW_DIRECTION_BOTH
 	_banner.offset_top = 10.0
@@ -92,7 +93,8 @@ func _label(font_size: int) -> Label:
 
 ## The banner's edge in the place's color.
 func set_banner_color(color: Color) -> void:
-	(_banner.get_theme_stylebox("panel") as StyleBoxFlat).border_color = Color(color, 0.8)
+	_edge = Color(color, 0.8)
+	_banner.queue_redraw()
 
 
 ## The name and rule across the screen: in, CARD_TIME, out.

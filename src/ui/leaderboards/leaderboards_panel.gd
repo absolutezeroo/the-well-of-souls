@@ -489,12 +489,7 @@ func _row(entry: BoardBackend.Entry, mine: bool, compact: bool = false) -> Contr
 	if not mine:
 		return row
 	var box := PanelContainer.new()
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.65, 0.95, 1.0, 0.14)
-	style.set_corner_radius_all(3)
-	style.content_margin_left = 4
-	style.content_margin_right = 4
-	box.add_theme_stylebox_override("panel", style)
+	box.add_theme_stylebox_override("panel", UiSkin.band(Color(0.65, 0.95, 1.0, 0.14), 4, 0))
 	box.add_child(row)
 	return box
 

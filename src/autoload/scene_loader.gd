@@ -128,16 +128,7 @@ func _build() -> void:
 	_bar = ProgressBar.new()
 	_bar.show_percentage = false
 	_bar.custom_minimum_size = Vector2(560, 18)
-	var under := StyleBoxFlat.new()
-	under.bg_color = Color(0.04, 0.03, 0.06)
-	under.border_color = Color(0.62, 0.42, 0.22)
-	under.set_border_width_all(2)
-	var fill := StyleBoxFlat.new()
-	fill.bg_color = Color(0.55, 0.95, 0.95, 0.85)
-	fill.set_border_width_all(2)
-	fill.border_color = Color(0, 0, 0, 0)
-	_bar.add_theme_stylebox_override("background", under)
-	_bar.add_theme_stylebox_override("fill", fill)
+	UiSkin.style_loading_bar(_bar)
 	column.add_child(_bar)
 	_tip = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
 	_tip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

@@ -10,6 +10,8 @@ Each failure says what to do instead. A failure is a rule to follow, never a che
   project's approved recolours). Another pack's art fails here.
 - UI skin: no new StyleBoxFlat/StyleBoxTexture built outside src/ui/common/ (OrnateBoard,
   RpgWindow, RpgDialog, UiParts, UiSkin draw every frame, docs/design/interface.md).
+- UI grid: separations, margins and literal minimum sizes set in the interface's code are even
+  (steps of 2 units).
 - Media stays in assets/: no image, sound or font referenced from anywhere else.
 - AGENTS.md stays short (agents follow fewer rules the longer it gets).
 
@@ -30,15 +32,10 @@ MEDIA = re.compile(r'res://[^"\s)]+\.(?:png|jpg|jpeg|webp|svg|ogg|wav|mp3|ttf|ot
 MEDIA_OUTSIDE_OK = {"res://icon.svg"}
 CODE_DIRS = ["src", "data", "tests", "tools"]
 STYLEBOX = re.compile(r"StyleBox(?:Flat|Texture)\.new\(")
-## Files that built their own boxes before this rule. Move them onto src/ui/common/ when touched;
-## never add a file here (the count may only go down).
-STYLEBOX_GRANDFATHERED = {
-	"src/ui/hud/hud_event_card.gd": 1, "src/ui/hud/perk_tray.gd": 1, "src/ui/hud/action_bar.gd": 1,
-	"src/ui/hud/stat_bar.gd": 1, "src/ui/codex/codex_rows.gd": 1, "src/ui/codex/codex_card.gd": 2,
-	"src/ui/title/upgrade_row.gd": 2, "src/ui/title/shrine_panel.gd": 1, "src/ui/title/difficulty_card.gd": 1,
-	"src/ui/title/oath_panel.gd": 1, "src/ui/leaderboards/leaderboards_panel.gd": 1,
-	"src/ui/perk_choice/perk_card.gd": 1, "src/autoload/scene_loader.gd": 2, "src/village/village_resident.gd": 1,
-}
+## Files that built their own boxes before this rule (path -> how many). All fourteen moved onto
+## src/ui/common/ on 28 Oct 2026 (UiSkin.band(), slot_frame(), note_box(), draw_edge(),
+## bar_frame()...): it stays empty. Never add a file here.
+STYLEBOX_GRANDFATHERED = {}
 AGENTS_MAX_LINES = 200
 
 
@@ -133,6 +130,29 @@ def check_ui_skin():
 	return failures
 
 
+## A layout value set in code: a separation or margin override, a content margin, a literal
+## minimum size. On the UI's 2-unit grid it is even (docs/design/interface.md "One skin",
+## Pixels); the Kenney skin's texture margins (multiples of 3) are its own art grid.
+UI_GRID = re.compile(r'(?:add_theme_constant_override\("(?:separation|h_separation|v_separation|margin_(?:left|right|top|bottom))", |content_margin_(?:left|right|top|bottom) = |set_content_margin_all\(|custom_minimum_size(?:\.[xy])? = (?:Vector2\()?)(-?\d+)(?:\.0)?\b')
+
+
+UI_SIZE = re.compile(r'custom_minimum_size = Vector2\((-?\d+)(?:\.0)?, (-?\d+)(?:\.0)?\)')
+
+
+def check_ui_grid():
+	failures = []
+	for folder in ("src/ui", "src/village"):
+		for path in sorted((ROOT / folder).rglob("*.gd")):
+			for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+				numbers = [match.group(1) for match in UI_GRID.finditer(line)]
+				for match in UI_SIZE.finditer(line):
+					numbers.append(match.group(2))
+				for value in numbers:
+					if int(value) % 2:
+						failures.append("%s:%d: an odd layout value (%s). Offsets, sizes and margins go by steps of 2 units: whole screen pixels at x1.5 (docs/design/interface.md \"One skin\", Pixels)." % (path.relative_to(ROOT).as_posix(), number, value))
+	return failures
+
+
 def check_media_paths():
 	failures = []
 	for folder in CODE_DIRS:
@@ -153,7 +173,7 @@ def check_agents_length():
 
 
 def run():
-	return check_provenance() + check_palette() + check_ui_skin() + check_media_paths() + check_agents_length()
+	return check_provenance() + check_palette() + check_ui_skin() + check_ui_grid() + check_media_paths() + check_agents_length()
 
 
 def snapshot_palette(pack):

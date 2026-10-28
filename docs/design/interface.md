@@ -509,6 +509,13 @@ Numbers to hold (sources in [the art bible](../art-bible.md)'s research report):
   seconds, gold in the bag) flashes pixel brackets round its still words (`TextCue`), the perk
   button a ring, the temperature bar stays lighter at the extreme instead of blinking.
 - **Pixels**: offsets, sizes and margins in steps of 2 units; Control scale 1 or 2; Nearest.
+  **The exception: the Kenney skin's own grid.** Its pieces (`assets/ui/rpg/`) are 16-pixel art
+  stored at x3, so they are drawn at 3 units per art pixel; their nine-patch margins (9, 15, 39,
+  42) and `OrnateBoard.INSET` (9: three art pixels in from the wood's edge) are multiples of 3,
+  never moved to even values: two textures laid over each other would then have their pixels out
+  of step. Everything placed around them (offsets, sizes, separations, content margins) is even.
+  On a phone (x1.5) a skin pixel is 4.5 screen pixels, uneven whatever its place: making it whole
+  means redrawing the skin at 2 or 4 units per pixel, an art decision (roadmap).
 
 Before calling a screen done: captures at 2340x1080, 1920x1080 and 1280x720
 (`tools/design/capture.py`), in French and English; the same border, ribbon and insets as the

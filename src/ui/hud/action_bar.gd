@@ -199,21 +199,17 @@ class InteractPrompt:
 	const HEIGHT := 40.0
 
 	var source: InteractButton
+	## Its edge: the thing's color.
+	var _edge := UiSkin.GOLD
 	var _glyph: PromptGlyph
 	var _icon: TextureRect
 	var _verb: Label
 
 	func _ready() -> void:
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var style := StyleBoxFlat.new()
-		style.bg_color = Color(0.1, 0.06, 0.07, 0.85)
-		style.border_color = UiSkin.GOLD
-		style.set_border_width_all(2)
-		style.content_margin_left = 8
-		style.content_margin_right = 12
-		style.content_margin_top = 4
-		style.content_margin_bottom = 4
-		add_theme_stylebox_override("panel", style)
+		# The skin's dark recess, its edge in the thing's color (drawn over it).
+		add_theme_stylebox_override("panel", UiSkin.note_box())
+		draw.connect(func() -> void: UiSkin.draw_edge(self, Rect2(Vector2.ZERO, size), _edge))
 		var row := HBoxContainer.new()
 		row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		row.add_theme_constant_override("separation", 8)
@@ -244,9 +240,9 @@ class InteractPrompt:
 			size = Vector2.ZERO  # shrink to the new words
 		_icon.texture = source.icon
 		_icon.modulate = source.icon_tint
-		var style := get_theme_stylebox("panel") as StyleBoxFlat
-		if style.border_color != source.color:
-			style.border_color = source.color
+		if _edge != source.color:
+			_edge = source.color
+			queue_redraw()
 
 	func caption() -> String:
 		return _verb.text if _verb else ""

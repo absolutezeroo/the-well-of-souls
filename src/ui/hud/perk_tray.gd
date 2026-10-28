@@ -21,18 +21,17 @@ func _rebuild() -> void:
 		remove_child(child)
 		child.queue_free()
 	for synergy in _perks.awakened():
-		var badge := Panel.new()
-		badge.custom_minimum_size = ICON_SIZE + Vector2(6, 6)
+		var badge := Control.new()
+		badge.custom_minimum_size = ICON_SIZE + Vector2(8, 8)
 		badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var frame := StyleBoxFlat.new()
-		frame.bg_color = Color(synergy.color, 0.25)
-		frame.border_color = synergy.color
-		frame.set_border_width_all(2)
-		frame.set_corner_radius_all(4)
-		badge.add_theme_stylebox_override("panel", frame)
+		# The family's color as the skin's frame around its sign, over a faint wash of it.
+		var color: Color = synergy.color
+		badge.draw.connect(func() -> void:
+			badge.draw_rect(Rect2(Vector2.ZERO, badge.size), Color(color, 0.25))
+			UiSkin.draw_edge(badge, Rect2(Vector2.ZERO, badge.size), color))
 		var icon := TextureRect.new()
 		icon.texture = synergy.icon
-		icon.position = Vector2(3, 3)
+		icon.position = Vector2(4, 4)
 		icon.size = ICON_SIZE
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED

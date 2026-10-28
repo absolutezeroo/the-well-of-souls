@@ -108,13 +108,14 @@ func _card(oath: OathDef, is_open: bool) -> Control:
 	var card := Button.new()
 	card.custom_minimum_size = CARD_SIZE
 	card.disabled = not is_open
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(1.0, 0.8, 0.35, 0.16) if chosen else Color(0, 0, 0, 0.22)
-	style.border_color = UiSkin.GOLD if chosen else Color(0, 0, 0, 0.4)
-	style.set_border_width_all(3 if chosen else 1)
-	style.set_corner_radius_all(6)
+	# A dark recess; the sworn one wears a gold frame over it, over a faint gold wash.
+	var style := UiSkin.inset()
 	for state in ["normal", "hover", "pressed", "disabled", "hover_pressed"]:
 		card.add_theme_stylebox_override(state, style)
+	if chosen:
+		card.draw.connect(func() -> void:
+			card.draw_rect(Rect2(Vector2.ZERO, card.size).grow(-6), Color(1.0, 0.8, 0.35, 0.16))
+			UiSkin.draw_edge(card, Rect2(Vector2.ZERO, card.size), UiSkin.GOLD))
 	card.pressed.connect(func() -> void:
 		Sfx.play_ui(Sfx.bank.ui_click)
 		choose_oath(oath))
@@ -124,7 +125,7 @@ func _card(oath: OathDef, is_open: bool) -> Control:
 	column.offset_right = -12
 	column.offset_top = 10
 	column.offset_bottom = -10
-	column.add_theme_constant_override("separation", 3)
+	column.add_theme_constant_override("separation", 2)
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.add_child(column)
 	var icon := TextureRect.new()

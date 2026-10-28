@@ -27,14 +27,8 @@ func _init(def: MonsterDef, rules: BestiaryRules) -> void:
 	var none := StyleBoxEmpty.new()
 	for state in ["normal", "hover", "pressed", "disabled", "focus", "hover_pressed"]:
 		add_theme_stylebox_override(state, none)
-	_slot = StyleBoxTexture.new()
-	_slot.texture = UiSkin.SLOT
-	_slot.set_texture_margin_all(15)
-	_frame = StyleBoxTexture.new()
-	_frame.texture = UiSkin.FRAME
-	_frame.draw_center = false
-	_frame.set_texture_margin_all(9)
-	_frame.modulate_color = UiSkin.GOLD
+	_slot = ItemSlot.slot_box().duplicate() as StyleBoxTexture  # (its own: dimmed or lit as the card is)
+	_frame = ItemSlot.frame_box(UiSkin.GOLD)
 
 	var kills := Profile.kill_count(def.id)
 	var rank := Bestiary.rank_of(def, rules) if rules else (1 if kills > 0 else Bestiary.UNSEEN)
@@ -47,7 +41,7 @@ func _init(def: MonsterDef, rules: BestiaryRules) -> void:
 	inside.offset_top = 14
 	inside.offset_bottom = -20
 	inside.alignment = BoxContainer.ALIGNMENT_CENTER
-	inside.add_theme_constant_override("separation", 1)
+	inside.add_theme_constant_override("separation", 0)  # (even units: art-bible, steps of 2)
 	inside.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(inside)
 	var picture := CodexRows.icon(CodexPanel.portrait(def), 64)
@@ -82,7 +76,7 @@ func _init(def: MonsterDef, rules: BestiaryRules) -> void:
 	var room := MarginContainer.new()
 	room.add_theme_constant_override("margin_left", 8)
 	room.add_theme_constant_override("margin_right", 8)
-	room.add_theme_constant_override("margin_top", 3)
+	room.add_theme_constant_override("margin_top", 4)
 	room.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	room.add_child(meter)
 	inside.add_child(room)

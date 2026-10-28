@@ -21,7 +21,6 @@ const GLOW_TIME := 0.35
 var _value := 1.0
 var _max_value := 1.0
 var _text := ""
-var _frame: StyleBoxTexture
 var _trail := 1.0
 var _trail_delay := 0.0
 var _glow := 0.0
@@ -29,9 +28,6 @@ var _shown := false  # the first values just show, no trail
 
 
 func _ready() -> void:
-	_frame = StyleBoxTexture.new()
-	_frame.texture = preload("res://assets/ui/wood/nine_path_bg.png")
-	_frame.set_texture_margin_all(9)
 	set_process(false)
 
 
@@ -71,7 +67,7 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	var rect := Rect2(Vector2.ZERO, size)
-	draw_style_box(_frame, rect)
+	draw_style_box(UiSkin.bar_frame(), rect)
 	var inner := rect.grow(-4.0)
 	var ratio := clampf(_value / _max_value, 0.0, 1.0)
 	var trail_ratio := clampf(_trail / _max_value, 0.0, 1.0)

@@ -140,13 +140,7 @@ static func number(value: float, decimals: int = 2) -> String:
 ## The gold frame of the last choice (fainter around the keyboard's focus).
 func _draw() -> void:
 	if _selected or has_focus():
-		var frame := StyleBoxTexture.new()
-		frame.texture = UiSkin.FRAME
-		frame.modulate_color = Color(1.0, 0.85, 0.35, 1.0 if _selected else 0.45)
-		frame.draw_center = false
-		for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
-			frame.set_texture_margin(side, 9)
-		draw_style_box(frame, Rect2(Vector2.ZERO, size).grow(2))
+		UiSkin.draw_edge(self, Rect2(Vector2.ZERO, size).grow(2), Color(1.0, 0.85, 0.35, 1.0 if _selected else 0.45))
 
 
 func _build() -> void:
@@ -158,7 +152,7 @@ func _build() -> void:
 	add_child(margin)
 	var column := VBoxContainer.new()
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	column.add_theme_constant_override("separation", 5)
+	column.add_theme_constant_override("separation", 4)
 	margin.add_child(column)
 	_name = UiSkin.label("", Fonts.TITLE)
 	_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

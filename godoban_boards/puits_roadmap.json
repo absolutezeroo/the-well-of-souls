@@ -6113,8 +6113,8 @@
     {
       "id": "task_405",
       "title": "Passer les anciens StyleBox de l'interface sur le skin commun",
-      "description": "tools/design/check.py tolère 14 fichiers qui construisent encore leurs propres StyleBox (liste STYLEBOX_GRANDFATHERED : HUD, codex, sanctuaire, oaths, classements, cartes d'atouts, chargement, habitants). Les migrer sur src/ui/common/ (UiSkin, OrnateBoard, UiParts) quand on y touche, et retirer chaque fichier de la liste.",
-      "status": "backlog",
+      "description": "tools/design/check.py tolère 14 fichiers qui construisent encore leurs propres StyleBox (liste STYLEBOX_GRANDFATHERED : HUD, codex, sanctuaire, oaths, classements, cartes d'atouts, chargement, habitants). Les migrer sur src/ui/common/ (UiSkin, OrnateBoard, UiParts) quand on y touche, et retirer chaque fichier de la liste.\n\nFait le 28/10 (branche fix/ui) : les 14 fichiers sortis de la liste de tolérance de tools/design/check.py (elle est vide) ; leurs cadres viennent de src/ui/common : UiSkin.band() (bandes des listes), slot_frame(), note_box() (encart serré), draw_edge() (le cadre de rareté dans une couleur : bannière du Seuil et des Tréfonds, familles d'atouts, invite d'Interact, serment choisi, bulle des habitants), bar_frame(), style_loading_bar(). Une nouvelle règle refuse les valeurs de mise en page impaires dans l'interface. À regarder : la bannière du Seuil/des Tréfonds (encart sombre au lieu d'un fond bleu/rouge arrondi), les pastilles de famille du HUD et des cartes d'atout (cadre du skin au lieu d'un trait arrondi), les cartes de serment, les bulles des habitants de Kagari.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_4",
       "due_date": null,
@@ -6123,7 +6123,7 @@
         "qualité"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793159546
+      "updated_at": 1793166834
     },
     {
       "id": "task_406",

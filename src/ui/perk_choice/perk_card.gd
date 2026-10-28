@@ -51,13 +51,10 @@ static func family_box(synergy: SynergyDef, owned: PerkSet, perk: PerkDef) -> Pa
 	var after := have + (1 if perk and owned.stacks_of(perk) == 0 else 0)
 	var wakes := perk != null and owned.would_complete(perk, synergy)
 	var awake := owned.is_awake(synergy)
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(synergy.color, 0.28 if wakes else 0.14)
-	style.border_color = synergy.color if wakes or awake else Color(synergy.color, 0.55)
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(4)
-	style.set_content_margin_all(6)
-	box.add_theme_stylebox_override("panel", style)
+	# A wash of the family's color, its edge the skin's frame in that color.
+	box.add_theme_stylebox_override("panel", UiSkin.band(Color(synergy.color, 0.28 if wakes else 0.14), 6, 6))
+	var edge: Color = synergy.color if wakes or awake else Color(synergy.color, 0.55)
+	box.draw.connect(func() -> void: UiSkin.draw_edge(box, Rect2(Vector2.ZERO, box.size), edge))
 	var column := VBoxContainer.new()
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_theme_constant_override("separation", 2)

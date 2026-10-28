@@ -12,6 +12,8 @@ const RIBBON: Texture2D = preload("res://assets/ui/rpg/ribbon.png")
 const PLAQUE: Texture2D = preload("res://assets/ui/rpg/plaque.png")
 const ORNATE: Texture2D = preload("res://assets/ui/rpg/ornate.png")
 const SOCKET: Texture2D = preload("res://assets/ui/rpg/socket.png")
+## The bars' frame (wood widgets of Ninja Adventure's example project).
+const BAR: Texture2D = preload("res://assets/ui/wood/nine_path_bg.png")
 
 ## Text on the wood: light, gold titles, dim notes. The one place the interface's colors are
 ## named (gold is the game's Palette.GOLD): panels use these, never their own copies.
@@ -24,6 +26,10 @@ const BAD := Color(1.0, 0.4, 0.32)
 ## The near-black violet laid over the game behind a window (see backdrop()).
 const BACKDROP := Color(0.03, 0.02, 0.05)
 const ORNATE_TINT := Color(1.0, 0.8, 0.45, 0.9)
+## A list row's band on an inset (band()).
+const BAND := Color(0.05, 0.03, 0.02, 0.32)
+
+static var _bar_frame: StyleBoxTexture
 
 
 ## The dim behind a window or dialog, `alpha` thick.
@@ -53,6 +59,66 @@ static func ribbon() -> StyleBoxTexture:
 	box.content_margin_top = 10  # a BODY line, its capitals on the ribbon's middle, 48 high as the art
 	box.content_margin_bottom = 14
 	return box
+
+
+## The HUD's bars' dark wooden frame (Health, experience, a boss: StatBar).
+static func bar_frame() -> StyleBoxTexture:
+	if _bar_frame == null:
+		_bar_frame = StyleBoxTexture.new()
+		_bar_frame.texture = BAR
+		_bar_frame.set_texture_margin_all(9)
+	return _bar_frame
+
+
+## A slot's wood (ItemSlot's) holding a picture `content` units in from its edge (the shrine's
+## upgrades, a rank's icon).
+static func slot_frame(content: int) -> StyleBoxTexture:
+	var box := _box(SLOT, 15, content)
+	box.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	box.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	return box
+
+
+## A faint band behind a row of a list on an inset: darker so rows read apart (BAND), or a light
+## tint for the player's own row. Square (the pixel grid has no rounded corners), no border.
+static func band(color: Color = BAND, margin_x := 12, margin_y := 8) -> StyleBoxFlat:
+	var box := StyleBoxFlat.new()
+	box.bg_color = color
+	box.content_margin_left = margin_x
+	box.content_margin_right = margin_x
+	box.content_margin_top = margin_y
+	box.content_margin_bottom = margin_y
+	return box
+
+
+## A small dark recess for a prompt or a note over the game (the inset, tight around its words).
+static func note_box(left := 8, right := 12, top := 4, bottom := 4) -> StyleBoxTexture:
+	var box := inset()
+	box.content_margin_left = left
+	box.content_margin_right = right
+	box.content_margin_top = top
+	box.content_margin_bottom = bottom
+	return box
+
+
+## A colored edge over `rect` of `canvas` (in its _draw or its draw signal): the rarity frame's
+## art in `color` (an event's banner, a perk family, the Interact prompt, a chosen card).
+static func draw_edge(canvas: CanvasItem, rect: Rect2, color: Color) -> void:
+	canvas.draw_style_box(ItemSlot.frame_box(color), rect)
+
+
+## The loading screen's bar: a dark groove with a wooden edge, filled in the souls' pale blue.
+static func style_loading_bar(bar: ProgressBar) -> void:
+	var under := StyleBoxFlat.new()
+	under.bg_color = Color(0.04, 0.03, 0.06)
+	under.border_color = Color(0.62, 0.42, 0.22)
+	under.set_border_width_all(2)
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = Color(0.55, 0.95, 0.95, 0.85)
+	fill.set_border_width_all(2)
+	fill.border_color = Color(0, 0, 0, 0)
+	bar.add_theme_stylebox_override("background", under)
+	bar.add_theme_stylebox_override("fill", fill)
 
 
 ## A small plaque (counts, gold).

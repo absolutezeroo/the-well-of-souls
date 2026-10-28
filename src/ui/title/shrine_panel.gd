@@ -213,12 +213,7 @@ func _build() -> void:
 	head.add_theme_constant_override("separation", 12)
 	column.add_child(head)
 	var frame := PanelContainer.new()
-	var slot := StyleBoxTexture.new()
-	slot.texture = UiSkin.SLOT
-	for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
-		slot.set_texture_margin(side, 15)
-		slot.set_content_margin(side, 10)
-	frame.add_theme_stylebox_override("panel", slot)
+	frame.add_theme_stylebox_override("panel", UiSkin.slot_frame(10))
 	frame.custom_minimum_size = Vector2(68, 68)
 	head.add_child(frame)
 	_icon = TextureRect.new()

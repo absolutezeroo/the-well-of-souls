@@ -44,15 +44,10 @@ func _ready() -> void:
 	sprite.material = def.appearance
 	add_child(sprite)
 	refresh_progress()
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.06, 0.08, 0.11, 0.94)
-	style.border_color = def.speaker.color
-	style.set_border_width_all(1)
-	style.content_margin_left = 8
-	style.content_margin_right = 8
-	style.content_margin_top = 6
-	style.content_margin_bottom = 6
-	bubble.add_theme_stylebox_override("panel", style)
+	# The skin's dark recess, its edge in the speaker's color.
+	bubble.add_theme_stylebox_override("panel", UiSkin.note_box(8, 8, 6, 6))
+	var edge: Color = def.speaker.color
+	bubble.draw.connect(func() -> void: UiSkin.draw_edge(bubble, Rect2(Vector2.ZERO, bubble.size), edge))
 	bubble.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bubble.custom_minimum_size.x = 240
 	bubble.scale = Vector2(0.5, 0.5)

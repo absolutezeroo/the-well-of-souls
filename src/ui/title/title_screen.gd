@@ -486,7 +486,7 @@ func _build_remote_notes() -> void:
 	style.content_margin_left = 14
 	style.content_margin_right = 14
 	style.content_margin_top = 8
-	style.content_margin_bottom = 13
+	style.content_margin_bottom = 14
 	event_plaque.add_theme_stylebox_override("panel", style)
 	event_plaque.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	(%RecordsPlaque as Control).get_parent().add_child(event_plaque)

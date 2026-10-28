@@ -48,15 +48,7 @@ static func check(done: bool, center := true) -> Control:
 ## A row of a list: a slightly darker band on the inset, so rows read apart.
 static func row_box() -> PanelContainer:
 	var box := PanelContainer.new()
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.05, 0.03, 0.02, 0.32)
-	style.border_color = Color(1.0, 0.85, 0.6, 0.08)
-	style.set_border_width_all(1)
-	style.content_margin_left = 12
-	style.content_margin_right = 12
-	style.content_margin_top = 8
-	style.content_margin_bottom = 8
-	box.add_theme_stylebox_override("panel", style)
+	box.add_theme_stylebox_override("panel", UiSkin.band())
 	box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	return box
 

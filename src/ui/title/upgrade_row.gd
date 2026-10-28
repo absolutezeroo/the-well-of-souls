@@ -155,24 +155,14 @@ static func status_text(def: UpgradeDef, level: int, content: ContentDB = null) 
 # --- Building -----------------------------------------------------------------------
 
 func _build() -> void:
-	_background = StyleBoxFlat.new()
-	_background.bg_color = Color(0.0, 0.0, 0.0, 0.16)
-	_background.set_content_margin_all(8)
-	_background.content_margin_left = 10
-	_background.content_margin_right = 10
-	_background.set_corner_radius_all(4)
+	_background = UiSkin.band(Color(0.0, 0.0, 0.0, 0.16), 10, 8)
 	add_theme_stylebox_override("panel", _background)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 14)
 	add_child(row)
 
 	var frame := PanelContainer.new()
-	var slot := StyleBoxTexture.new()
-	slot.texture = UiSkin.SLOT
-	for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
-		slot.set_texture_margin(side, 15)
-		slot.set_content_margin(side, 10)
-	frame.add_theme_stylebox_override("panel", slot)
+	frame.add_theme_stylebox_override("panel", UiSkin.slot_frame(10))
 	frame.custom_minimum_size = Vector2(ICON_SIDE, ICON_SIDE)
 	frame.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	row.add_child(frame)
