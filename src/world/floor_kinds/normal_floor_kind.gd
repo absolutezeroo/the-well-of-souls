@@ -2,7 +2,8 @@ class_name NormalFloorKind
 extends FloorKind
 ## A floor of the dungeon with no warden: a generated map (the floor's size from the difficulty),
 ## its own twist rolled (a curse, or an event, from the second floor on; the Dawn Knell's omen
-## over it), stairs sealed until enough of its monsters fall, and everything FloorPopulator lays.
+## over it), stairs sealed until enough of its monsters fall, and everything FloorPopulator lays
+## (on the first runs' first floor, FirstSteps' slow first monster in the next room).
 
 
 func twist(world: World, content: ContentDB) -> FloorRoute:
@@ -28,6 +29,8 @@ func generate(world: World, content: ContentDB) -> DungeonMap:
 func lay(world: World, content: ContentDB) -> void:
 	var exits := world.spawn_exits()
 	FloorPopulator.populate(world, content, world.depth)
+	if world.first_steps:
+		world.first_steps.lay(world)  # (the first runs: one slow monster next door instead)
 	world.secrets = SecretRoom.spawn_all(world)
 	world.seal.reset(world.monster_count(), content.dungeon.seal_share, content.dungeon.seal_reveal_left, content.dungeon.seal_max)
 	world.seal_exits(exits)

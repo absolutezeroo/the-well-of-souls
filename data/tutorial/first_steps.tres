@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FirstStepsDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/first_steps_def.gd" id="1_first"]
+[ext_resource type="Resource" path="res://data/monsters/slime.tres" id="2_slime"]
+[ext_resource type="Script" path="res://src/definitions/stat_block.gd" id="3_stats"]
+
+[sub_resource type="Resource" id="Stats_first"]
+script = ExtResource("3_stats")
+max_hp = 10
+move_speed = 40.0
+
+[resource]
+script = ExtResource("1_first")
+runs = 3
+depth = 1
+move_distance = 110.0
+monster = ExtResource("2_slime")
+stats = SubResource("Stats_first")
+attack_windup = 0.8
+attack_recovery = 0.6
+detect_radius = 200.0

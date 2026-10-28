@@ -80,6 +80,10 @@ var ambush: AmbushRoom
 ## Tells a warden's story when the hero walks into its arena, before it wakes (the Game's
 ## BossMeeting; null: the fight starts at once). Not owned by the World.
 var storyteller: Storyteller
+## The first runs' gentle start on this floor (the Game's FirstSteps; null: none): the floor kind
+## lets it lay the first monster, the monsters ask it whether the hero is sheltered (shelters()).
+## Not owned by the World.
+var first_steps: FirstSteps
 ## The floor's pact door, if it has one.
 var pact: PactRoom
 ## The floor's room trial (RoomTrial: the Souls of Kagari, the Unbound Seal...), if it has one.
@@ -249,6 +253,12 @@ func clear_floor() -> void:
 			if child != player:
 				layer.remove_child(child)
 				child.queue_free()
+
+
+## The hero stands sheltered in his first room on one of the first runs (FirstSteps): monsters
+## don't notice him there yet (Monster.notice_target()).
+func shelters(actor: Actor) -> bool:
+	return first_steps != null and first_steps.shelters(actor)
 
 
 func place_player(new_player: Player) -> void:

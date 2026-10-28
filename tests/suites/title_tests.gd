@@ -28,6 +28,7 @@ func test_cases() -> Array:
 		["tap", func() -> void: await _part(TapTests.new(), func(suite: TapTests) -> void: await suite.run_title())],
 		["dialogue", func() -> void: await _part(DialogueTests.new(), func(suite: DialogueTests) -> void: await suite.run_title())],
 		["wardrobe", func() -> void: await _part(CosmeticTests.new(), func(suite: CosmeticTests) -> void: await suite.run_title())],
+		["first_run", func() -> void: await _part(FirstRunTests.new(), func(suite: FirstRunTests) -> void: await suite.run_title())],
 	]
 
 

@@ -213,6 +213,9 @@ func _reset() -> void:
 	for action in InputMap.get_actions():
 		Input.action_release(action)
 	RunSave.erase()
+	# The first runs' sheltered first room and slow first monster (FirstSteps) would change every
+	# fight the tests stage on floor 1 of a fresh profile: off, but in their own tests.
+	FirstSteps.enabled = false
 
 
 ## A script's own variables on `node` (not the private ones): name -> value.

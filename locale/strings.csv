@@ -536,6 +536,7 @@ Souls are kept between runs. Spend them at the Shrine (title screen) on upgrades
 Kept between runs: spend them at the Shrine.,Kept between runs: spend them at the Shrine.,Gardées d'une partie à l'autre : dépense-les au Sanctuaire.
 Gold was only for this run.,Gold was only for this run.,L'or ne valait que pour cette partie.
 Keep going (endless),Keep going (endless),Continuer (sans fin)
+Descend again,Descend again,Redescendre
 Title screen,Title screen,Écran titre
 "Keep going: endless floors, harder and harder. Your win is already counted.","Keep going: endless floors, harder and harder. Your win is already counted.","Continuer : des étages sans fin, de plus en plus durs. Ta victoire est déjà comptée."
 Find the Dawn Breach. The demons will not wait.,Find the Dawn Breach. The demons will not wait.,Trouve la Brèche de l'Aube. Les démons n'attendront pas.
@@ -944,6 +945,7 @@ The Shrine: Tree of Souls,The Shrine: Tree of Souls,Le Sanctuaire : l'Arbre des 
 The node,The node,Le nœud
 "Gold ring: bought. Glowing: you can buy it. Dark: buy a node above it first. ""or"": pick one of the two. ?: a feat opens it.","Gold ring: bought. Glowing: you can buy it. Dark: buy a node above it first. ""or"": pick one of the two. ?: a feat opens it.",Anneau doré : acheté. Lumineux : tu peux l'acheter. Sombre : achète d'abord un nœud au-dessus. « ou » : choisis l'un des deux. ? : un exploit l'ouvre.
 or,or,ou
+Descend,Descend,Descendre
 Enter Kagari,Enter Kagari,Entrer dans Kagari
 Resume the descent,Resume the descent,Reprendre la descente
 "Floor %d, level %d","Floor %d, level %d","Étage %d, niveau %d"
@@ -1030,7 +1032,6 @@ A voice caught in the lantern's light.,A voice caught in the lantern's light.,Un
 %s — restored,%s — restored,%s — restauré
 %s — complete %s first,%s — complete %s first,%s — termine d’abord %s
 Choose a descent here. Your village and its memories remain when a run ends.,Choose a descent here. Your village and its memories remain when a run ends.,Choisis ta descente ici. Ton village et ses souvenirs restent lorsque la tentative s’achève.
-Descend,Descend,Descendre
 Daily Descent,Daily Descent,Descente quotidienne
 A descent is already saved,A descent is already saved,Une descente est déjà sauvegardée
 Starting another descent replaces the saved run. You can resume it instead.,Starting another descent replaces the saved run. You can resume it instead.,Commencer une autre descente remplace la partie sauvegardée. Tu peux aussi la reprendre.

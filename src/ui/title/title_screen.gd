@@ -2,7 +2,10 @@ class_name TitleScreen
 extends Control
 ## First screen: play (or today's daily run, see DailyRun), visit the shrine (permanent
 ## upgrades bought with souls), read the story, see your records. No class to pick: you become
-## who you want with what you find in the dungeon. The very first run starts with the story.
+## who you want with what you find in the dungeon. The very first run starts with the story, then
+## goes straight down the Well (decision 0010: Descend, on Keeper, no Kagari nor choices before
+## it; they come at the first return); later, Play enters Kagari. The privacy questions come
+## first: Play waits for them when they are still to be asked.
 ## The Daily Descent button says what it is (same dungeon for everyone today, the day's weapon and
 ## relic, your score); the records sit on a plaque under the buttons; the Shrine button shows a
 ## badge when an upgrade can be bought. The Vigil-Keeper stands by the Well (ShrineKeeper): a
@@ -67,6 +70,8 @@ var event_plaque: PanelContainer
 var event_title: Label
 var event_details: Label
 var message_line: Label
+## Play was pressed while the privacy questions were still to be asked: it goes on once they are.
+var _play_after_consent := false
 
 
 ## The shrine's music (SoundBank.title_music: Kagari asleep above the Well), and its bell tolled
@@ -113,7 +118,7 @@ func _ready() -> void:
 	(%RecordsPlaque as PanelContainer).add_theme_stylebox_override("panel", plaque_style)
 	(%RecordsPlaque as PanelContainer).custom_minimum_size.x = 250
 	_setup_continue()
-	(%PlayButton as Button).text = tr("Enter Kagari")
+	(%PlayButton as Button).text = tr("Descend") if Game.first_descent_due() else tr("Enter Kagari")
 	%PlayButton.pressed.connect(play)
 	# Once the tree opened an oath or the Armory: "At the Well's Edge" between the two.
 	oath_panel = OathPanel.new()
@@ -141,8 +146,9 @@ func _ready() -> void:
 	daily_dialog.hide()
 	add_child(daily_dialog)
 	daily_dialog.accepted.connect(func() -> void:
+		Sfx.play_ui(Sfx.bank.ui_click)
 		VillageHub.daily_requested = true
-		play())
+		_go(VILLAGE_SCENE))
 	_build_leaderboards()
 	_build_credits()
 	_build_wardrobe()
@@ -174,12 +180,32 @@ func _ready() -> void:
 	(%PlayButton as Button).grab_focus()
 
 
+## Play: the privacy questions first if they are still to be asked; then, for a profile with no
+## run yet, the first descent at once (on Keeper: Game.prepare_first_descent()); otherwise Kagari.
+## The story before either, the first time.
 func play() -> void:
 	Sfx.play_ui(Sfx.bank.ui_click)
+	if Privacy.ask_on_title and Privacy.should_ask():
+		_play_after_consent = true
+		ask_privacy()
+		return
+	_go(play_scene())
+
+
+## Where Play leads now: the game (the first descent) or Kagari.
+func play_scene() -> String:
+	if Game.first_descent_due():
+		Game.prepare_first_descent(content)
+		return GAME_SCENE
+	return VILLAGE_SCENE
+
+
+## `scene`, after the story the first time.
+func _go(scene: String) -> void:
 	if not Profile.seen_intro and content.story and not content.story.intro_pages.is_empty():
-		tell_story(VILLAGE_SCENE)
+		tell_story(scene)
 	else:
-		Loader.go(VILLAGE_SCENE)
+		Loader.go(scene)
 
 
 ## The run in progress, if the app was closed during one.
@@ -393,7 +419,10 @@ func _build_consent() -> void:
 	consent.name = "ConsentDialog"
 	add_child(consent)
 	consent.finished.connect(func() -> void:
-		if InputDevice.uses_buttons():
+		if _play_after_consent:
+			_play_after_consent = false
+			play()
+		elif InputDevice.uses_buttons():
 			(%PlayButton as Button).grab_focus())
 	if Privacy.ask_on_title and Privacy.should_ask():
 		get_tree().create_timer(PRIVACY_DELAY).timeout.connect(ask_privacy)

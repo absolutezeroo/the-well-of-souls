@@ -6172,8 +6172,8 @@
     {
       "id": "task_409",
       "title": "Premières minutes : premier combat en moins de 30 s, premier contact protégé",
-      "description": "Audit du 28/10 : il faut 60 à 120 s avant le premier combat pour un joueur qui lit (titre, consentement, intro de 6 pages, Kagari, chercher la Veilleuse au temple, Puits, difficulté, descente, deux chargements). Immobile dans la salle de départ, le héros est repéré et touché dans 7 départs sur 33 (17-26 s). 42 % des premiers monstres sont rapides (rat, chauve-souris, serpent, préparation 0,2-0,3 s) ; les monstres lents demandent 6 à 10 coups. Proposé (décision du propriétaire sur le parcours) : au tout premier lancement, l'étage 1 directement après une page d'intro, Kagari et la Veilleuse au premier retour ; salle 0 protégée tant que le héros n'a pas bougé et attaqué ; un premier monstre lent posé dans la salle voisine.",
-      "status": "todo",
+      "description": "Audit du 28/10 : il faut 60 à 120 s avant le premier combat pour un joueur qui lit (titre, consentement, intro de 6 pages, Kagari, chercher la Veilleuse au temple, Puits, difficulté, descente, deux chargements). Immobile dans la salle de départ, le héros est repéré et touché dans 7 départs sur 33 (17-26 s). 42 % des premiers monstres sont rapides (rat, chauve-souris, serpent, préparation 0,2-0,3 s) ; les monstres lents demandent 6 à 10 coups. Proposé (décision du propriétaire sur le parcours) : au tout premier lancement, l'étage 1 directement après une page d'intro, Kagari et la Veilleuse au premier retour ; salle 0 protégée tant que le héros n'a pas bougé et attaqué ; un premier monstre lent posé dans la salle voisine.\n\nFait (branche fix/flow, décision 0010) : le tout premier Jouer (profil sans partie ni sauvegarde) dit « Descendre » : questions de confidentialité d'abord si elles sont dues, puis l'histoire (passable), puis l'étage 1 en Gardien, sans Kagari, Puits ni choix ; Kagari et la Veilleuse au premier retour (sa ligne de première mort sur l'écran de mort, la quête de la boîte à braises inchangée, cf. village.md « The first return »). Trois premières parties : salle de départ protégée tant que le héros n'a pas marché 110 px ET frappé ; la salle voisine (la première salle à monstres) ne garde qu'une Gelée lente (40 px/s, préparation 0,8 s, 10 PV, 2-3 coups de katana), data/tutorial/first_steps.tres. Écran de mort : « Redescendre ». Test : lancement → premier monstre qui repère le héros ≈ 15 s de temps de jeu (histoire passée), limite 30 s.\nÀ vérifier sur le S23 : (1) premier lancement réel (désinstaller ou effacer les données) : temps jusqu'au premier combat avec les vrais chargements ; (2) on peut lire le premier indice sans être touché ; (3) la première Gelée se lit bien (lente, préparation visible) et tombe en 2-3 coups ; (4) premier retour à Kagari après la mort : la Veilleuse et l'objectif ont du sens ; (5) Redescendre relance bien une descente avec la même difficulté.",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_7",
       "due_date": null,
@@ -6182,7 +6182,7 @@
         "combat"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793166835
     },
     {
       "id": "task_410",

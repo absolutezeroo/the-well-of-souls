@@ -6,6 +6,8 @@ extends Node
 ## wait in an OfferQueue (a level up's until the player opens them: open_offers()); the panels
 ## live in GameMenus; the merchant, the forge, encounters and pacts open through the Interactor
 ## (the HUD's Interact button), never by walking up to them.
+## The first runs start gently (FirstSteps); the end screen's Descend again starts the next
+## descent at once (descend_again()).
 ## What the run says and shows (banners, toasts, the souls, the clock, the log's lines) is the
 ## RunAnnouncer's, listening to Events: the Game emits and keeps to the flow. Its debug entry
 ## points are GameDebug's (`debug`). Every floor is reached through transition_to_floor().
@@ -110,6 +112,8 @@ var choices := GameOffers.new()
 ## shown once an ending is chosen.
 var _ending_earned := 0
 var _ending_record := false
+## The first runs' gentle start on their first floor (decision 0010).
+var first_steps := FirstSteps.new()
 
 
 func _ready() -> void:
@@ -131,6 +135,8 @@ func _ready() -> void:
 	meeting.narrative = content.narrative
 	add_child(meeting)
 	world.storyteller = meeting
+	first_steps.name = "FirstSteps"
+	add_child(first_steps)
 	hidden.name = "HiddenPassage"
 	hidden.game = self
 	hidden.def = content.dungeon.hidden_floor
@@ -190,6 +196,7 @@ func _connect_menus() -> void:
 	menus.fragment.closed.connect(_on_menu_closed)
 	encounter_panel.closed.connect(_on_menu_closed)
 	game_over_panel.restart_requested.connect(return_to_village)
+	game_over_panel.descend_requested.connect(descend_again)
 	game_over_panel.continue_requested.connect(_on_continue_endless)
 	game_over_panel.title_requested.connect(return_to_title)
 
@@ -427,6 +434,22 @@ func _give_daily_start() -> void:
 	player.hp = player.get_max_hp()
 
 
+## A profile with no run yet and no run saved (decision 0010): Play goes straight down the Well,
+## Kagari and its choices waiting for the first return.
+static func first_descent_due() -> bool:
+	return Profile.runs == 0 and RunSave.read().is_empty()
+
+
+## The first descent is on Keeper (ContentDB.default_difficulty), whatever an older profile held;
+## never a Dawn Knell.
+static func prepare_first_descent(content_db: ContentDB) -> void:
+	daily_requested = false
+	resume_requested = false
+	VillageHub.daily_requested = false
+	if content_db.default_difficulty and Profile.difficulty != content_db.default_difficulty.id:
+		Profile.select_difficulty(content_db.default_difficulty)
+
+
 ## The oath chosen for the next run (Profile.oath), if its node was bought; null otherwise.
 static func sworn_oath(content_db: ContentDB) -> OathDef:
 	if Profile.oath == &"" or content_db.soul_tree == null:
@@ -636,6 +659,7 @@ func _enter_floor(resumed: bool = false) -> void:
 		world.next_routes = [content.dungeon.finale.route()] as Array[FloorRoute]  # one way: down
 	else:
 		world.next_routes = FloorRoute.offer(content, depth + 1, difficulty, run.route_seed(depth + 1), run.tuning)
+	first_steps.begin_floor(FirstSteps.wanted(content, run), player, world)  # (before the floor is laid)
 	world.build_floor(depth, content, _route_to(depth))
 	world.place_player(player)
 	if resumed and world.arena and world.arena.is_defeated:
@@ -904,6 +928,20 @@ func return_to_village() -> void:
 	RunSave.erase()
 	_set_paused(false)
 	Loader.go(VILLAGE_SCENE)
+
+
+## The death screen's Descend again (decision 0010): the next descent at once, as the Well would
+## start it (the difficulty, ascension and oath chosen there; a Dawn Knell again, as practice, if
+## this one was), without the walk back through Kagari. The run that ended is recorded and its
+## save erased first, as when returning to the village.
+func descend_again() -> void:
+	if run == null or (Profile.held and not DebugCheats.debug_run):
+		return
+	var daily := run.is_daily()
+	_records.record_history()
+	RunSave.erase()
+	Profile.save_profile()
+	start_run(daily)
 
 
 ## The end screen's Title button ends the run as Return to village does: the won (or lost) run

@@ -305,11 +305,11 @@ func wake_up(new_target: Actor, intro := true) -> void:
 func notice_target() -> bool:
 	if dormant:
 		return false
-	if target != null and is_instance_valid(target) and not target.is_dead and DebugCheats.can_be_noticed(target):
+	if target != null and is_instance_valid(target) and not target.is_dead and DebugCheats.can_be_noticed(target) and not world.shelters(target):
 		return true
 	target = null
 	var player := world.player
-	if player and not player.is_dead and DebugCheats.can_be_noticed(player) and can_see(player, detect_radius()):
+	if player and not player.is_dead and DebugCheats.can_be_noticed(player) and not world.shelters(player) and can_see(player, detect_radius()):
 		target = player
 		_noticed(player)
 		return true

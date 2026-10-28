@@ -564,8 +564,13 @@ stones lit in their runes' colors. The selected slot pulses gold.
   perk button; Back does the same), coming in softly (the world dims, the board rises, 0.2 s)
   instead of cutting over the fight; each pause button says what it does, with
   what gold and souls are for; the end screen shows the run's numbers (`RunState.summary_rows()`),
-  the souls earned and what they buy. After a death, the Vigil-Keeper's tale and advice sit under
-  the title in her `DialogueBox` (presentation.md); with nothing for her to say, the story's line.
+  the souls earned and what they buy. After a death, the
+  Vigil-Keeper's tale and advice sit under the title in her `DialogueBox` (presentation.md); with
+  nothing for her to say, the story's line. A death's buttons: **Descend again** (straight into the
+  next descent, as the Well would start it: the difficulty, ascension and oath chosen there, a Dawn
+  Knell again as practice; the run that ended recorded and its save erased first; no walk through
+  Kagari, `Game.descend_again()`), Return to village, Title screen. A victory keeps Keep going
+  (endless), Return to village, Title screen.
 - **Keepers' words**: the shop and the forge open on a line of the merchant's or the smith's
   (their dialogue's, else a greeting) in quotes beside their face; the grinning spirit's line
   shows in place of its encounter's description, in its color (the panel keeps its height on a
@@ -577,7 +582,11 @@ stones lit in their runes' colors. The selected slot pulses gold.
 
 ## Active product and input ownership
 
-The active F5/export path is TitleScreen → story/Kagari → the Well → new or resumed Game. Shrine, daily runs,
+The active F5/export path is TitleScreen → story/Kagari → the Well → new or resumed Game. The
+very first Play (a profile with no run and none saved, `Game.first_descent_due()`) goes title →
+the privacy questions if still due → the story (skippable) → the Game on floor 1 at Keeper, with
+no Kagari, Well or choice before it (decision 0010); the button says **Descend** then, **Enter
+Kagari** afterwards. Shrine, daily runs,
 perk choices, end of run, records and options keep their normal roles. The standalone RPG
 campaign/menu is [archived for a separate project](../rpg-archive.md).
 
@@ -589,7 +598,8 @@ hero is still valid before disconnecting signals.
 
 ## Village interaction
 
-[Kagari](village.md) replaces direct run launch with walking to the central well. Approach an
+[Kagari](village.md) replaces direct run launch with walking to the central well (but for the
+very first descent, which starts from the title: village.md "The first return"). Approach an
 inhabitant, shrine or statue and press the normal Interact action; touch uses the existing stick
 and ActionButton. Conversations, restoration purchases and memorials use the scrollable Ninja Adventure
 VillagePanel and stop walking. The conversation sits low on screen with its portrait, readable

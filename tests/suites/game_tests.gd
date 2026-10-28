@@ -100,6 +100,8 @@ func test_cases() -> Array:
 		["bag", _on_game(func(game: Game) -> void: await (_borrow(BagTests.new()) as BagTests).run_bag_game(game), true)],
 		["story", _on_game(func(game: Game) -> void: await (_borrow(StoryTests.new()) as StoryTests).run_game(game), true)],
 		["dialogue", _on_game(func(game: Game) -> void: await (_borrow(DialogueTests.new()) as DialogueTests).run_game(game), true)],
+		["first_steps", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_first_steps(game))],
+		["descend_again", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_descend_again(game))],
 		["hints", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_hints(game))],
 	]
 

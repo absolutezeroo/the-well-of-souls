@@ -2,8 +2,9 @@
 
 ## Difficulty
 
-Pressing Descend asks for a difficulty (`data/difficulties/`, `DifficultyDef`). Every value multiplies
-the normal game:
+Pressing Descend at the Well asks for a difficulty (`data/difficulties/`, `DifficultyDef`); the very
+first descent of a profile skips the question and is on Keeper (decision 0010, village.md "The
+first return"). Every value multiplies the normal game:
 
 | | Pilgrim | Keeper | Martyr | Nightmare |
 |---|---|---|---|---|

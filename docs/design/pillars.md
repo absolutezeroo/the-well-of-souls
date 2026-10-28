@@ -15,8 +15,12 @@ decision ([decisions/](../decisions/README.md)).
   later floor), never in a combat pause, with the active device's glyph (`Prompts.pick()`), and
   can be read again in the codex's Tips (interface.md "Tutorial").
 - First run *(start)*: a fight within 30 s of launching, a perk choice within 3 min, a moment of
-  story at the first death (the Vigil-Keeper). The first room has no damage until the hero has
-  moved and attacked; the first monster is slow, clearly telegraphed, dead in 2-3 hits.
+  story at the first death (the Vigil-Keeper). The first launch goes straight from the story to
+  floor 1 on Keeper, Kagari and its choices at the first return (decision 0010, village.md "The
+  first return"); `FirstRunTests` measures launch to the first monster noticing the hero, story
+  skipped, at about 15 s of game time (the phone's loading times on top). On the first three
+  runs the first room shelters the hero until he has moved and attacked, and the first monster
+  is slow, clearly telegraphed, dead in 2-3 hits (dungeon.md "First steps").
 
 ## Pacing
 
@@ -24,7 +28,7 @@ decision ([decisions/](../decisions/README.md)).
   *(start: 3-6 min)*, saved at its start and when the app goes to the background.
 - Each floor builds up, peaks (an elite, an arena, an event) and releases (a reward, the shop, a
   shrine); a calm room before every boss. At most 2-3 fights in a row without a breather.
-- From the death screen, going down again never forces a walk through Kagari.
+- From the death screen, going down again never forces a walk through Kagari (**Descend again**).
 
 ## The fairness contract
 
