@@ -75,8 +75,8 @@ been **returned** (task_377):
 The chain's rewards grow with the floor they send the hero to: 15 souls (floor 2), 20 (floor 4),
 25 (floor 5), each once; `unit.village` checks every request waits for the one before, lies
 deeper and pays in line (30 at most). A garden that paid souls every day was considered and
-refused: souls are Kagari's people brought back, and a garden cannot grow them; the reward of
-the place is the place.
+refused ([decision 0013](../decisions/0013-kagari-pays-once.md)): souls are Kagari's people
+brought back, and a garden cannot grow them; the reward of the place is the place.
 
 The three fronts are independent: each return removes only its own roots. A sleeper stays an
 echo until their own quest is returned. **The Well's roots creep** from the Well's square toward
