@@ -17,21 +17,24 @@ const WORLD_SCENE := "res://src/world/world.tscn"
 ## stamp (the game's version) was left out of it (0.3.1), and when the room trials came (plain_d5
 ## and route hold one). Pestilent adds a weighted affix from depth four (2026-10-25): the
 ## five affected floors were recorded again. The four further modular affixes (same date)
-## change those five again; FLOOR_FORMAT 3 protects older saved floors.
+## change those five again; FLOOR_FORMAT 3 protects older saved floors. Decision 0012 (2026-10-28)
+## recorded all twelve again: rooms 3 cells apart and corridors bent around them, monsters by the
+## rooms' size, calm rooms, the peak and the release, a chest on every floor, draws without
+## repeats, the spring before every boss; FLOOR_FORMAT 4.
 ## Change only on purpose.
 const EXPECTED := {
-	"plain_d2": 1045983556,
-	"plain_d5": 494867724,
-	"plain_d8": 1169579058,
-	"boss_act1": 1577078614,
-	"boss_act2": 229918303,
-	"forced_curse": 1588131217,
-	"forced_plain": 2882203726,
-	"route": 1039070886,
-	"two_ways": 174426613,
-	"resumed": 870587092,
-	"hidden": 1109123916,
-	"finale": 1179196937,
+	"plain_d2": 1003714455,
+	"plain_d5": 3019354865,
+	"plain_d8": 1375160831,
+	"boss_act1": 993257950,
+	"boss_act2": 2469845449,
+	"forced_curse": 3659472505,
+	"forced_plain": 194188831,
+	"route": 2643120137,
+	"two_ways": 3547954146,
+	"resumed": 349901043,
+	"hidden": 2614939729,
+	"finale": 1063777049,
 }
 
 

@@ -13,7 +13,10 @@ its element's shapes.
 ## 1. The pixel grid
 
 The art is 16x16 pixel art drawn at 2x (`ActorRig`'s Visual node, scale 2): **1 art pixel =
-2 world units** (3 screen pixels at the camera's 1.5 zoom). An effect whose pixels are smaller
+2 world units**, and on screen always a **whole number of screen pixels**: in the dungeon 3 at
+720 lines, 4 at 1080 (the phone), 6 at 1440, 9 at 2160; 6 in the village at 1080 (the camera's
+zoom is made whole by `PixelGrid.camera_zoom()`, [decision 0007](decisions/0007-whole-pixels-on-screen.md)).
+An effect whose pixels are smaller
 (a "mixel"), stretched by 6.9x, or turned 37 degrees is a different game pasted over ours.
 
 - **Positions and sizes snap to 2 units.** `PixelDraw.snap(v)`, `PixelDraw.snap_length(r)`.
@@ -26,6 +29,19 @@ The art is 16x16 pixel art drawn at 2x (`ActorRig`'s Visual node, scale 2): **1 
   as it is. A long thing that points somewhere (a shard, an arrow) is **drawn in 16 directions**
   (`VfxSheetDef.Orient.ROWS`: the frost shard), or at worst turned to the nearest of 16 angles
   (`SNAPPED`: old arrows and slashes). Never `rotation = direction.angle()`.
+- **No fractional scale of pack art** ([decision 0007](decisions/0007-whole-pixels-on-screen.md)):
+  bodies, props and their flames stay at the art's 2x. A rank shows by its rim, aura and name,
+  never by a bigger body (`MonsterRankDef.radius_multiplier` widens the gameplay body only); a
+  hit drops the body one art pixel for 0.12 s (`ActorRig.FLINCH_TIME`), never a squash; a
+  candle's flame is a smaller particle scene, never a scaled one; the Wyrm's wings fold by whole
+  rows of their art (rows left out), its tail turns by quarter turns only; a plant leans by
+  moving each row of its art by whole pixels (`DecorLayer.row_shift`), never a skew; a body
+  without death frames falls over by a quarter turn in one step. Checked by `unit.vfx`
+  ("whole scales"). **Exceptions**, transitions of half a second or less where the body leaves
+  the world and the pack has no frames for it: a fall into a hole (`Actor`, shrinks and spins
+  away), the hero's soul sinking at the Threshold (`Threshold._sink_soul`), a body drawn into a
+  risen boss's mouth (`BossArena`). They also fade by alpha; redrawing them as dithered
+  dissolves is on the roadmap.
 - **A melee blow is drawn in the body's four directions.** Bodies, armor and the weapon in hand
   exist facing down, up, left and right only, so everything drawn for a melee blow (its arc or
   streak, a smash, a claw or bite sheet, the crescents and slams of charged blows and blade
@@ -240,7 +256,8 @@ bits on the rim).
 | `GasPoolVfx` | `src/vfx/gas_pool_vfx.gd` | `create(at, radius, element)`: a nova lying as one pool of its matter on the GROUND (an element with `pool`: poison), its `pool_bubble` welling in it; `Vfx.nova` picks it. `along_line(from, to, element, duration)` and `along_arc(at, radius, facing, element, sweep)`: the same gas along a trail or a sweep, picked by `ComposedVfx.line` / `arc` (so `Vfx.trail` and `Vfx.arc`) for such an element |
 | `ComposedVfx` | `src/vfx/composed_vfx.gd` | `ring(at, radius, element)`, `arc(at, radius, facing, element)` (a sweep across the front: an area with `fx_follow_aim` and no sheet), `line(from, to, element)`: any size from pieces at 2x; standing pieces are nodes of their own among the actors (`StandingPiece`) |
 | `ImpactVfx`, `RingVfx`, `BlastVfx` | `src/vfx/` | a hit's flash (`ImpactVfx.sparks`: bits only), a ring (GROUND), a burst: all in an element's ramp and bits |
-| `TelegraphView` | `src/vfx/telegraph_view.gd`, `telegraph.gdshader` | CIRCLE, CONE, LINE, LANES (one per shot of a fan or ring); `show_skill(skill, angle, progress, body_radius)` picks the shape from the skill (radius, shots, dash, area) |
+| `TelegraphView` | `src/vfx/telegraph_view.gd`, `telegraph.gdshader` | CIRCLE, CONE, LINE, LANES (one per shot of a fan or ring); `show_skill(skill, angle, progress, body_radius)` picks the shape from the skill (radius, shots, dash, area); `show_shots()` draws shots as far as they fly and as wide as the shot (the real area, decision 0008); a line shades only its own box |
+| `FuseMark` | `src/vfx/fuse_mark.gd` | a blast to come (a shockwave, a burst after death, a fuse): the telegraph's circle over its whole area, filling for the whole fuse, following a boss that moves |
 | Particles | `src/vfx/particles/`, `src/vfx/ambient/`, `pixel_particles.gdshader(.inc)` | materials `pixel_particles` (dither per art pixel), `_motes` (whole motes come and go), `_glow` (added light, stepped brightness); `PixelMotes` (`src/vfx/ambient/pixel_motes.gd`) simulates ambient motes by hand on the grid |
 | `StatusLookDef`, `StatusFx` | `data/vfx/status_looks/`, `src/vfx/status_fx.gd` | particle, motes (EMBER, BUBBLE, CHIP), crust (rime), mist, burst, all at texel 2 in the element's ramp; `body` (HEAT, RIME, WAVE, FLICKER: what the body shader paints), `heavy_at` |
 | `BodyLook`, `flash.gdshader` | `src/vfx/body_look.gd`, `assets/shaders/flash.gdshader` | the body shader (section 9): statuses, a storm hit's crackle, an elite's rim, deaths; `BodyLook.ramps()` / `row(element)`, `warm_up(parent)`; the rig's `look` |
@@ -425,7 +442,7 @@ slicer, element exports) serves the others; what each still needs:
   spill of daylight dithering out in front of it, a `GlowHalo`, and its own daylight-white
   `LightSource` (so the floor around it reads white in the Deeps' red, not as more embers). The
   arrow toward it (`AbyssHud.Arrow`) is UI: a holy wedge with a dark rim, cut in whole art pixels
-  (3 screen pixels) at the nearest of 16 directions, circling the hero. Demons rising in the
+  (3 interface units) at the nearest of 16 directions, circling the hero. Demons rising in the
   Deeps: shadow's pop and nova.
 - **Shadow** (done): shadow_staff (Sorcerer), its Volley, the Octopus's Ink Bolt and Ink Ring,
   the Shaman's Hex Bolt fire the shadow knot; Shadow Step bursts into shadow, leaves smoke and

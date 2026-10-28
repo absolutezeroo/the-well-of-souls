@@ -316,7 +316,7 @@ func _try_bite(monster: Monster) -> void:
 	if hero.global_position.distance_to(mouth) > bite_radius + hero.radius:
 		return
 	var damage := maxi(1, roundi(monster.get_power() * bite_power))
-	var bite := GroundStrike.create(monster.world, monster, mouth, bite_radius, bite_windup * monster.get_telegraph_scale(), damage, bite_knockback, bite_element)
+	var bite := GroundStrike.create(monster.world, monster, mouth, bite_radius, monster.windup_for(bite_windup), damage, bite_knockback, bite_element)
 	bite.shake = 0.5
 	bite.sound = bite_sound if bite_sound else monster.def.hurt_sound
 	# A method with weak references, not a lambda holding them (conventions.md).

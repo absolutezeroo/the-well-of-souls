@@ -91,11 +91,12 @@ func _unstick(aim: Vector2) -> void:
 	actor.move_direction = _sidestep
 
 
-## Telegraphed skills go through the Cast state, instant ones fire right away.
+## Telegraphed skills go through the Cast state (every one that hurts: Monster.skill_cast_time()),
+## instant ones (a summon, a ward, a step) fire right away.
 func _use_skill(index: int, aim: Vector2) -> void:
 	actor.facing = aim
 	actor.move_direction = Vector2.ZERO
-	if actor.skills.skills[index].cast_time > 0.0:
+	if actor.skill_cast_time(actor.skills.skills[index]) > 0.0:
 		actor.casting_index = index
 		machine.transition_to(&"Cast")
 	else:

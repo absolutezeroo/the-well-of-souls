@@ -5,7 +5,7 @@ extends TestSuite
 ## (kills, level ups, stairs, the bag, death and restart), the daily run, saving and resuming, a
 ## mortal run deeper, then the other game suites' parts (CombatTests, FloorTests, LevelTests,
 ## SecretTests, BossTests, FinaleTests, CoreTests, DebugTests, SaveTests, PcTests, BagTests,
-## StoryTests, DialogueTests). Every Game is set up the same way (_new_game()): no merchant,
+## StoryTests, DialogueTests, FirstRunTests). Every Game is set up the same way (_new_game()): no merchant,
 ## encounter, ambush, curse or special floor popping up (they have their own tests), no act
 ## cards, the gameplay statistics accepted on a fake server.
 
@@ -78,6 +78,8 @@ func test_cases() -> Array:
 		["belt_and_balance", _on_sturdy_game(func(game: Game) -> void: await floor_suite._test_belt_and_balance(game))],
 		["monster_behaviours", _on_sturdy_game(func(game: Game) -> void: await combat._test_monster_behaviours(game))],
 		["ai_movement", _on_sturdy_game(func(game: Game) -> void: await combat._test_ai_movement(game))],
+		["fairness", _on_sturdy_game(func(game: Game) -> void: await (_borrow(FairnessTests.new()) as FairnessTests).run_game(game))],
+		["feel_limits", _on_sturdy_game(func(game: Game) -> void: await (_borrow(FeelTests.new()) as FeelTests).run_game(game))],
 		["climate", _on_sturdy_game(func(game: Game) -> void: await floor_suite._test_climate(game))],
 		["spacing", _on_sturdy_game(func(game: Game) -> void: await floor_suite._test_spacing(game))],
 		["review_fixes", _on_sturdy_game(func(game: Game) -> void: await combat._test_review_fixes(game))],
@@ -100,6 +102,11 @@ func test_cases() -> Array:
 		["bag", _on_game(func(game: Game) -> void: await (_borrow(BagTests.new()) as BagTests).run_bag_game(game), true)],
 		["story", _on_game(func(game: Game) -> void: await (_borrow(StoryTests.new()) as StoryTests).run_game(game), true)],
 		["dialogue", _on_game(func(game: Game) -> void: await (_borrow(DialogueTests.new()) as DialogueTests).run_game(game), true)],
+		["first_steps", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_first_steps(game))],
+		["descend_again", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_descend_again(game))],
+		["assist", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_assist(game))],
+		["lower_difficulty", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_lower_difficulty(game))],
+		["hints", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_hints(game))],
 	]
 
 

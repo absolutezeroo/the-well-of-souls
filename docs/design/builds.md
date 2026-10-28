@@ -278,6 +278,23 @@ Frost: cold, slows, freezing; Blood: health, life drain, low-health power; Storm
 chains, speed of the strike; Arcane: skills, spells, cooldowns). Plain-number perks (Strength,
 Precision, Fortune, War Banner) belong to none. Why: [balance.md](../balance.md) and the [balance log](../balance-log.md).
 
+### Roles
+
+Every perk, relic and affix has a purpose (decision 0012; Slay the Spire's "every card has a
+purpose"): `role` (`BuildRole`) is **staple**, a solid pick in any build, or **build-around**,
+something that changes how you play and asks for its family. A build-around always belongs to a
+family (`PerkDef.synergies`, `ItemAffixDef.family`); a staple may or may not. `unit.roles` refuses a
+perk, relic or affix without a role, or a build-around without a family.
+
+| Role | Perks and relics | Affixes |
+|---|---|---|
+| Staple, no family | Strength, Precision, Fortune, War Banner | Brutal, Ironbound, Light, Unerring, Sharp, Stalwart, Swift, Venomous, of Fury, of Haste, of Sorcery, of the Bear, of the Fox, of the Titan, of Thorns |
+| Staple, in a family | Arcane Focus, Arcane Power, Sage's Codex (Arcane); Frenzy, Swiftness (Storm); Vitality (Blood); Guardian Ring (Frost) | |
+| Build-around | Ignite, Kindling, Blazing Roll, Burning Thorns, Phoenix Feather (Inferno); Frostbite, Cold Snap, Ice Shards, Frost Armor (Frost); Vampirism, Bloodrage, Devotion, Executioner (Blood); Thunderclap, Shock Roll (Storm); Echo, Devotion, Hydra's Quiver (Arcane) | Burning, of Embers (Inferno); Frozen, Shattering (Frost); Thundering (Storm); Vampiric (Blood); of Echoes (Arcane) |
+
+A new perk, relic or affix declares its role with its numbers: a staple is plain numbers or a
+modest effect worth taking anywhere; a build-around's effect plainly belongs to its family.
+
 ### Choosing: reroll, banish, families first
 
 Under the cards, **Reroll** deals three other cards and **Banish** (then tap a card) removes that

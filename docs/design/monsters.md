@@ -82,6 +82,32 @@ of the nearby cells only (docs/performance.md). Idle and chase think every secon
 monster on its own beat (`StateMachine.THINK_EVERY`); a strike's wind-up, a cast and bosses every
 frame.
 
+### Warnings: the fairness contract in play
+
+Every attack that hurts warns ([decision 0008](../decisions/0008-fairness-contract.md),
+[pillars.md](pillars.md) "The fairness contract"), on three channels: the pose (a wind-up or cast
+animation), the red mark on the ground and a short **warning sound** (`Sfx.play_warning()`,
+`SoundBank.telegraph`: two of the game's own sounds made into one cue, at most one every 0.1 s and
+two at once, so a pack winding up together is not a din). The numbers live in
+`data/combat/combat_rules.tres` (`CombatRulesDef`, "Fairness contract") and are applied in one place
+per mechanism, **after** the difficulty's, an ascension's and the boss phases' multipliers:
+
+| What | At least | Where it is asked |
+|---|---|---|
+| A monster's blow, a cast that hurts (an instant one too: Volley now winds up 0.5 s) | 0.4 s | `Monster.get_attack_windup()`, `Monster.skill_cast_time()` (`SkillDef.monster_cast_time()`) |
+| A boss's blow, cast, bite (the Maw), strike on the ground | 0.5 s | the same, `Monster.windup_for()`, `GroundStrike.create()` |
+| A warned pulse (Vengeful, Unstable), a maw's bite | the monster's floor | `Monster.windup_for()` |
+| A shockwave, a burst after death, a bomb's or a barrel's fuse, a trapped chest | 0.4 s | `Combat.shockwave()`, `Combat.delayed_blast()`, `Prop`, `Chest` (`CombatRulesDef.blast_warning()`) |
+| A trap's click (spikes, an arrow plate) | 0.4 s | `TrapDef.warning_seconds()` |
+
+The mark covers the real area and lasts until the hit: a shot's lane is drawn as far as it flies
+and as wide as the shot (`TelegraphView.show_shots()`; a ranged monster's shot too), a ring of
+shots (Hailstorm, Toxic Bloom, Sandstorm) by its lanes, not a small circle; a blast's mark
+(`FuseMark`) fills up for its whole fuse and follows a boss that moves. The bestiary's preview
+plays the same wind-up. An awake monster winding up off screen, or an enemy shot flying in from
+off screen, gets an arrow at the screen's edge (`ThreatMarkers`, the HUD). `unit.fairness` walks
+every MonsterDef and BossDef x difficulty (Nightmare at its last ascension too) x phase.
+
 ## Monster ranks: Elite, Fell, Legendary, Celestial
 
 Any monster can come at a rank (`MonsterRankDef`, `data/monster_ranks/`; `DungeonConfig.elite_rank`
@@ -93,6 +119,12 @@ and `rare_ranks`, rarest first, each with its own chance from its depth, times t
 | **Fell** (from depth 3) | 2, listed over its name | - / x6.3 / x9 | x1.2 | two purple rings | x6 XP, 2 extra drops, x8 gold |
 | **Legendary** (from depth 5) | 3 | - / x8.5 / x11.5 | x1.3 | golden rings and a crown of rays | x10 XP, 3 extra drops of high quality, x15 gold |
 | **Celestial** (1 in 400, any depth) | none | x3.3 / x3.9 / x4.8 | x1 | other colors (hue shift), a gleam sweeping its body, sparkles | x8 XP, 3 extra drops, x25 gold; joins the bestiary's Celestial collection |
+
+Every rank also shows a rim of its color around the body (`BodyLook.outline`) and its name over
+the monster. Its body is wider (`radius_multiplier`: x1.125 Elite, x1.175 Fell, x1.225
+Legendary, x1.075 Celestial: collision, reach, shadow, aura), but its art is never enlarged:
+pack art stays at scale 2 ([decision 0007](../decisions/0007-whole-pixels-on-screen.md); the
+ranks were drawn x1.15 to x1.45 before, pixels of two sizes side by side).
 
 A rank's Health grows with depth (`hp_multiplier` + `hp_multiplier_per_depth` per floor): the
 hero's power grows faster than the monsters' own depth scaling, so a deeper Elite needs more
@@ -148,7 +180,7 @@ higher limits for Fell/Legendary). No rank or original affix numbers were change
 Vengeful and Unstable share `WarnedPulseTrait`: per-owner timers, hit count and one pending
 `GroundStrike`. Warnings are placed at the monster's position and stay there when it moves;
 the existing red ground telegraph precedes the spirit/fire nova. Warning time is multiplied by
-`get_telegraph_scale()` as for other monster attacks. A live hostile target within 180 px and
+`get_telegraph_scale()` as for other monster attacks, never under the floor (`Monster.windup_for()`). A live hostile target within 180 px and
 in sight is needed to begin a pulse. Dormancy and absence of a target pause the periodic clock;
 sleeping monsters retain the game's existing sleep policy. Secondary hits/ticks, fully absorbed
 hits and lethal blows never charge a riposte; hits during cooldown are discarded. A pending
@@ -169,14 +201,16 @@ in the middle; walking in closes the exits with spikes and wakes it up (boss mus
 with its portrait). A `BossDef` is a `MonsterDef` plus:
 
 - **phases**: three per boss, full life, two thirds (`hp_ratio` 0.66) and one third (0.33). Each
-  phase adds stats, swaps in new attack patterns, shortens the wind-up and the cooldowns
+  phase adds stats, swaps in new attack patterns, shortens the wind-up (never under a boss's
+  0.5 s: see "Warnings" above) and the cooldowns
   (`cooldown_multiplier`) and tints the boss; the last one uses fierce versions of its skills
   (`<skill>_fierce`: a second wave, rings shifted into the gaps of the first, more summons).
   Entering a phase, the boss **roars**: untouchable for a moment (`phase_roar_time`) and a
   shockwave throws the hero off. Notches on the boss bar show where the next phases start;
 - **no face-tanking**: hit it too many times in a row (`shockwave_after_hits`, fewer in later
   phases) and it answers with the same shockwave (`Combat.shockwave`), which hits as hard as its
-  blows (`shockwave_power`, a share of its power): roll through the red ring or stop hitting;
+  blows (`shockwave_power`, a share of its power): roll through the red ring (its whole area,
+  filling up until it lands, following the boss) or stop hitting;
 - **cast skills**: rings of projectiles, ground quakes (red circle), summons (`SummonEffect`), dashes;
   every warning tells the truth (unit-checked on every boss, numbers in
   `data/balance/targets.tres`): a dive or leap warns at least 0.45 s in the boss' last phase on

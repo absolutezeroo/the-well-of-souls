@@ -2,14 +2,15 @@
 
 ## Difficulty
 
-Pressing Descend asks for a difficulty (`data/difficulties/`, `DifficultyDef`). Every value multiplies
-the normal game:
+Pressing Descend at the Well asks for a difficulty (`data/difficulties/`, `DifficultyDef`); the very
+first descent of a profile skips the question and is on Keeper (decision 0010, village.md "The
+first return"). Every value multiplies the normal game:
 
 | | Pilgrim | Keeper | Martyr | Nightmare |
 |---|---|---|---|---|
 | Monster HP | x0.7 | x1 | x1.3 | x1.7 |
 | Monster damage (attacks, skills, traps, bursts) | x0.6 | x1 | x1.35 | x1.8 |
-| Time to dodge (wind-ups, casts) | x1.35 | x1 | x0.85 | x0.7 |
+| Time to dodge (wind-ups, casts; never under 0.4 s, a boss's 0.5 s: decision 0008) | x1.35 | x1 | x0.85 | x0.7 |
 | Monster speed | x0.9 | x1 | x1.05 | x1.15 |
 | How far monsters spot you (`detect_range`) | x0.85 | x1 | x1.2 | x1.4 |
 | Extra monsters per room | 0 | 0 | +1 | +2 |
@@ -32,21 +33,49 @@ Quests and the bestiary count everywhere. On every card, the souls line is red b
 above.
 
 Bigger floors get more of everything with their rooms: monsters, chests, hazards, encounters and
-items lying around. A floor starts with at most `max_monsters_per_floor` (110) monsters, so the
-phone keeps up on Nightmare; the seal never asks for more than `seal_max` (50) kills.
+items lying around. A floor starts with at most `max_monsters_per_floor` (130, an elite or a big
+body counting 2: about 100 monsters), so the phone keeps up on Nightmare; the seal never asks for
+more than `seal_max` (50) kills. How the monsters spread over the rooms: dungeon.md "Pacing".
 
 Pilgrim, Keeper and Martyr are open; **Nightmare unlocks after a win on Martyr** (`unlocked_by`).
 **Ascension**: a Nightmare win opens **Nightmare +1**, a +1 win opens +2, up to +10
 (`data/ascension/`, `AscensionDef`, picked on a strip under the difficulty cards, which lists every
-twist up to the chosen level, the next one and the souls multiplier). Each level adds its twist
-on top of the ones below: tougher monsters, harder hits, more elites, higher prices, one more
-monster per room, faster monsters, tougher bosses, darker floors, less max HP... and 10% more
-souls per level.
+twist up to the chosen level, the next one and the souls multiplier). Each level adds exactly
+one readable twist on top of the ones below (pillars.md): tougher monsters, harder hits, more
+elites, higher prices, one more monster per room, faster monsters, tougher bosses, darker floors,
+less max HP, harder hits again... and 10% more souls per level. None shortens the time to dodge
+(the fairness floor would take it back anyway).
 The last choice is remembered (gold frame), shown in the HUD and on the end-of-run screen.
 The difficulty window (`DifficultyPanel`, one `DifficultyCard` each) says what changes in plain
 words, compared with Keeper (`DifficultyCard.effects()`: "Monster health +30%", "Time to dodge
 -15%", "+1 monster per room", "Monsters spot you sooner", "Bigger floors (+20%)"...; green helps,
 red makes it harder), the souls it pays, and for a locked one what unlocks it.
+
+### Help without judgement (decision 0011)
+
+Like Hades' God Mode and Celeste's Assist Mode, an easier way is offered plainly, never mocked:
+
+- **The Souls' Aid** (*Aide des âmes*, Options > Gameplay > Difficulty; `AssistDef`,
+  `data/player/assist.tres`): the hero takes **20 % less damage**, **2 % more after each death with
+  it on** (`Profile.assist_deaths`), **80 % at most**. It is taken off each hit in one place, after
+  Armor and before a ward soaks the rest (`Combat.mitigate()` → `Player._incoming_damage()` → the
+  debug panel's armor step → the ward), never down to 0 (at least 1). It is the profile's
+  (`Profile.assist`, saved with it and with the online save), not a device setting; turned on or
+  off in a run, the hero follows at once.
+- **Lowering the difficulty in a run**: the pause menu's **Difficulty** lists the lower ones only
+  (`RunState.lower_difficulties()`: those before the run's in the list, and its own without its
+  ascension levels); a pick holds for the rest of the run (the remote settings it began with apply
+  to it too), the floor's rules, the monsters standing (their Health share, blows, speed, wind-ups
+  and sight: `Monster.follow_rules()`) and its light follow at once, the next floors are built on
+  it, the save keeps it. The Well's choice for the next runs doesn't change.
+- **An aided run** (`RunState.assisted`, saved in the run as `"assisted"`): the aid was on at any
+  moment of it, or its difficulty was lowered. It goes on **no online leaderboard**
+  (`RunSummary.assisted`, `Leaderboards.record()`) and sets **no record**: no fastest win nor
+  splits (the first win's and the bottom of the Well's: `RunState.ranked()`), no Dawn Knell score.
+  Everything else counts as on its difficulty: souls, the story and the codex, achievements, quests,
+  the bestiary, the deepest floor and the victories (feats follow the difficulty played:
+  `counts_feats`), the difficulties a win opens. The end screen says "Records: none, an aided
+  descent".
 
 ## Between runs
 
@@ -93,7 +122,7 @@ are unavailable). **Off until the player chooses to publish**: before that, noth
 the boards aren't even read.
 
 - **The Dawn Knell's board** (`data/leaderboards/boards/daily_challenge.tres`): the day's
-  official attempt only (never practice, never a debug run), its points, one entry per player and
+  official attempt only (never practice, never a debug run, never an aided run), its points, one entry per player and
   day, highest first. Tabs **Today** and **Yesterday**. The score is sent when the run ends (a
   death, or a win; a win then the endless floors sends the better one), queued while there is no
   network (`user://leaderboards.json`, not the save) and tried again after a minute, then less
@@ -454,7 +483,8 @@ with the run, so quitting and coming back doesn't reset it.
   began) is a longer race and has its own record ("normal/bottom", "nightmare/a3/bottom"): its
   splits race the last run to the bottom, and a first win's record stays the first win's.
   (Profiles from before kept a win at the bottom under the first win's key: it stays there.)
-  Daily runs keep none (their own race).
+  Daily runs keep none (their own race), nor aided runs (the Souls' Aid, a difficulty lowered:
+  "Help without judgement" above).
 - **Where it shows**: the end screens (the time, then "New record!" or the record to beat), the
   log, and the Codex > Runs (each run's time; the fastest wins, then the fastest to the Well's
   Bottom on their own line).

@@ -13,6 +13,7 @@ cooldown_reduction = 0.1
 
 [resource]
 script = ExtResource("4_5urh8")
+role = 1
 id = &"arcane_focus"
 display_name = "Arcane Focus"
 icon = ExtResource("2_a73wc")

@@ -1,8 +1,11 @@
 class_name Tutorial
 extends Node
 ## Shows the tutorial's hints (TutorialDef) in a HintBox: the first steps of the first run, then
-## a note the first time something new comes up. Each hint shows once ever (Profile), never over
-## a menu, one at a time with a short gap. Settings.tutorial_hints turns them all off.
+## a note the first time something new comes up. Each hint shows once ever (Profile) once read: a
+## tap on it, or what it asks done. One whose time runs out unread comes back on a later floor
+## (TutorialDef.unread_returns times: _ran_out), and the hints after it in its chain get in line
+## again then. Never over a menu, one at a time with a short gap. Settings.tutorial_hints turns
+## them all off.
 ##
 ## Cues bring hints up: the Game calls cue() (a run or a floor starts, a perk is picked), signals
 ## of the hero and the world call it (a monster noticed the hero, a boss, an ambush, the seal
@@ -36,6 +39,9 @@ const ACTIONS: Array[StringName] = [
 const CONDITIONS: Array[StringName] = [&"sealed", &"has_belt_item", &"has_weapon_skill"]
 ## Seconds between two looks at the polled cues.
 const POLL := 0.25
+## The cues _check_world() looks for (nobody signals them).
+const WORLD_CUES: Array[StringName] = [&"low_health", &"cold", &"hot", &"merchant_near", &"forge_near",
+	&"chest_near", &"cracked_wall_near", &"pact_near", &"encounter_near", &"rune_carried", &"gear_carried", &"spell_learned"]
 
 signal hint_shown(hint: HintDef)
 signal hint_closed(hint: HintDef)
@@ -57,6 +63,9 @@ var _gap := 0.0
 var _poll := 0.0
 var _walked := 0.0
 var _last_position := Vector2.INF
+## Hints whose time ran out unread, this session: id -> [how many times, the World.floor_id it
+## last did on]. Not again on that floor; seen once it has run out more than unread_returns times.
+var _ran_out := {}
 
 
 func _ready() -> void:
@@ -107,10 +116,15 @@ func bind(new_player: Player, new_world: World, new_hud: Hud) -> void:
 	_last_position = Vector2.INF
 
 
-## Something happened: the hints it brings up get in line (once ever each).
+## Something happened: the hints it brings up get in line (once ever each). A new floor also
+## brings back the chained hints (no cue of their own) that ran out unread.
 func cue(cue_name: StringName) -> void:
 	if not is_enabled():
 		return
+	if cue_name == &"floor_start":
+		for hint in def.hints:
+			if hint.cue == &"" and hint.after != &"" and _ran_out.has(hint.id) and Profile.has_seen_hint(hint.after) and _wants(hint):
+				_add(hint)
 	for hint in def.hints:
 		if hint.cue == cue_name and _wants(hint):
 			if hint.after == &"" or Profile.has_seen_hint(hint.after):
@@ -137,13 +151,14 @@ func _process(delta: float) -> void:
 	_poll -= delta
 	if _poll <= 0.0:
 		_poll = POLL
-		_check_world()
+		if _world_cues_left():
+			_check_world()
 	if current:
 		_follow_target()
 		if current.duration > 0.0:
 			_time_left -= delta
 			if _time_left <= 0.0:
-				_close(true)
+				_run_out()
 		return
 	_gap -= delta
 	if _gap <= 0.0 and not _queue.is_empty() and not is_blocked.call():
@@ -166,33 +181,51 @@ func _follow_target() -> void:
 		box.set_target(hud.hint_target(current.target))
 
 
-## The cues nobody signals: checked a few times a second.
+## The cues nobody signals: checked a few times a second, each only while a hint it brings is
+## still to see (once every hint is seen, nothing is scanned: docs/performance.md).
 func _check_world() -> void:
-	if player.get_max_hp() > 0 and float(player.hp) / player.get_max_hp() <= def.low_health:
+	if _cue_left(&"low_health") and player.get_max_hp() > 0 and float(player.hp) / player.get_max_hp() <= def.low_health:
 		cue(&"low_health")
 	if player.temperature.value <= -def.temperature:
 		cue(&"cold")
 	elif player.temperature.value >= def.temperature:
 		cue(&"hot")
-	if _near(&"merchants"):
+	if _cue_left(&"merchant_near") and _near(&"merchants"):
 		cue(&"merchant_near")
-	if _near(&"forges"):
+	if _cue_left(&"forge_near") and _near(&"forges"):
 		cue(&"forge_near")
-	if _near(&"chests"):
+	if _cue_left(&"chest_near") and _near(&"chests"):
 		cue(&"chest_near")
-	if _near(&"cracked_walls"):
+	if _cue_left(&"cracked_wall_near") and _near(&"cracked_walls"):
 		cue(&"cracked_wall_near")
-	if _near(&"pact_doors"):
+	if _cue_left(&"pact_near") and _near(&"pact_doors"):
 		cue(&"pact_near")
-	if _near(&"encounters"):
+	if _cue_left(&"encounter_near") and _near(&"encounters"):
 		cue(&"encounter_near")
-	for item in player.inventory.items:
-		if item is RuneDef:
-			cue(&"rune_carried")
-		elif item is EquipmentDef:
-			cue(&"gear_carried")
+	if _cue_left(&"rune_carried") or _cue_left(&"gear_carried"):
+		for item in player.inventory.items:
+			if item is RuneDef:
+				cue(&"rune_carried")
+			elif item is EquipmentDef:
+				cue(&"gear_carried")
 	if player.learned_skill:
 		cue(&"spell_learned")
+
+
+## A hint `cue_name` brings up is still to see (not seen on this profile).
+func _cue_left(cue_name: StringName) -> bool:
+	for hint in def.hints:
+		if hint.cue == cue_name and not Profile.has_seen_hint(hint.id):
+			return true
+	return false
+
+
+## Some hint the world's cues bring up is still to see (_check_world() has something to do).
+func _world_cues_left() -> bool:
+	for cue_name in WORLD_CUES:
+		if _cue_left(cue_name):
+			return true
+	return false
 
 
 func _near(group: StringName) -> bool:
@@ -214,7 +247,21 @@ func _near(group: StringName) -> bool:
 
 
 func _wants(hint: HintDef) -> bool:
-	return not Profile.has_seen_hint(hint.id) and hint != current and not _queue.has(hint)
+	return not Profile.has_seen_hint(hint.id) and hint != current and not _queue.has(hint) and not _ran_out_here(hint)
+
+
+## Its time ran out unread on this floor: it waits for another.
+func _ran_out_here(hint: HintDef) -> bool:
+	return _ran_out.has(hint.id) and world != null and int(_ran_out[hint.id][1]) == world.floor_id
+
+
+## The hint on screen stayed its whole time without a tap or its action: unread, it comes back
+## on a later floor, unless it already did unread_returns times (then it counts as seen).
+func _run_out() -> void:
+	var hint := current
+	var times := int(_ran_out.get(hint.id, [0, 0])[0]) + 1
+	_ran_out[hint.id] = [times, world.floor_id if world else 0]
+	_close(times > def.unread_returns)
 
 
 func _add(hint: HintDef) -> void:

@@ -73,7 +73,7 @@ func _start(monster: Monster, state: PulseState) -> void:
 		return
 	if not monster.can_see(monster.target, trigger_range):
 		return
-	var warning := fuse * monster.get_telegraph_scale()
+	var warning := monster.windup_for(fuse)  # the difficulty's and phases' share, never under the floor
 	var pulse := GroundStrike.create(monster.world, monster, monster.global_position, radius, warning,
 		monster.world.rules.dungeon_damage(damage), knockback, element)
 	pulse.status = status

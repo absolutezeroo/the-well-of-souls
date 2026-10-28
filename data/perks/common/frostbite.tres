@@ -14,6 +14,7 @@ element = ExtResource("vfx_frost")
 
 [resource]
 script = ExtResource("4_r0d64")
+role = 2
 id = &"frostbite"
 display_name = "Frostbite"
 description = "Your hits chill: enemies are 15% slower per level for 2 s."

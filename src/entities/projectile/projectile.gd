@@ -41,9 +41,13 @@ const BEHIND_SHOOTER := 30.0
 
 ## World units of flight left behind the shooter's body (0: drawn over the bodies).
 var _behind_left := 0.0
+## Where it goes when it lands (WorldSpawner.shot_pool, docs/performance.md "Pools"): taken out
+## of the tree and fired again later, set up anew (_reset()); null: freed.
+var pool: NodePool
 
 
 func setup(shooter: Actor, direction: Vector2, spec: ProjectileSpec) -> void:
+	_reset()
 	_via = Actor.heal_source
 	_world = shooter.world
 	_shooter = shooter
@@ -56,12 +60,48 @@ func setup(shooter: Actor, direction: Vector2, spec: ProjectileSpec) -> void:
 	collision_mask = Layers.WORLD | (Layers.MONSTERS if _faction == Actor.Faction.PLAYER else Layers.PLAYER)
 
 
+## Flying toward `target` and able to hurt it (an enemy's shot, a trap's arrow): the HUD points
+## at it while it is out of sight (ThreatMarkers).
+func threatens(target: Actor) -> bool:
+	if _done or target == null:
+		return false
+	if not _hits_everyone and _faction == target.faction:
+		return false
+	return _direction.dot(target.global_position - global_position) > 0.0
+
+
 ## A shot fired by the dungeon itself (arrow traps): hits players and monsters.
 func setup_trap(world: World, direction: Vector2, spec: ProjectileSpec) -> void:
+	_reset()
 	_world = world
 	_hits_everyone = true
 	_configure(direction, spec)
 	collision_mask = Layers.WORLD | Layers.MONSTERS | Layers.PLAYER
+
+
+## A shot fired again from the pool: as a new one (its flight, its hits, its looks gone).
+func _reset() -> void:
+	_shooter = null
+	_hits_everyone = false
+	_crit_chance = 0.0
+	_via = &""
+	_travelled = 0.0
+	_age = 0.0
+	_done = false
+	_already_hit.clear()
+	_trail.clear()
+	_behind_left = 0.0
+	_sheet = null
+	_rides = null
+	_second = null
+	_phase = 0
+	z_index = 0
+	visible = true
+	set_physics_process(true)
+	for child in get_children():
+		if child is GlowHalo or child is DistortionStamp:
+			remove_child(child)
+			child.queue_free()
 
 
 func _configure(direction: Vector2, spec: ProjectileSpec) -> void:
@@ -69,9 +109,12 @@ func _configure(direction: Vector2, spec: ProjectileSpec) -> void:
 	_direction = direction.normalized()
 	_pierce_left = spec.pierce
 	collision_layer = 0
-	var shape := CircleShape2D.new()
+	var holder := $CollisionShape2D as CollisionShape2D
+	var shape := holder.shape as CircleShape2D
+	if shape == null:
+		shape = CircleShape2D.new()
+		holder.shape = shape
 	shape.radius = spec.radius
-	($CollisionShape2D as CollisionShape2D).shape = shape
 	# Its look: its own drawn sheet or sprite, else its element's shot, else a dot in its color.
 	if spec.sheet:
 		_sheet = spec.sheet
@@ -183,7 +226,12 @@ func _finish() -> void:
 		_world.spawn_vfx(ImpactVfx.create(global_position, _direction, _element.color(), false, _element if _spec.element else null))
 	elif _travelled >= _spec.max_distance and _rides:
 		_world.spawn_vfx(ImpactVfx.sparks(global_position, _direction, _rides))  # its flames go out
-	queue_free()
+	set_physics_process(false)
+	visible = false
+	if pool:
+		pool.give(self)  # out of the tree at the frame's end, fired again later
+	else:
+		queue_free()
 
 
 func _explode() -> void:

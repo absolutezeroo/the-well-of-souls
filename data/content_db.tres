@@ -208,6 +208,8 @@
 [ext_resource type="Resource" path="res://data/runes/echo.tres" id="909_rune"]
 [ext_resource type="Resource" path="res://data/runes/prism.tres" id="910_rune"]
 [ext_resource type="Resource" path="res://data/tutorial/tutorial.tres" id="950_tutorial"]
+[ext_resource type="Resource" path="res://data/player/assist.tres" id="960_assist"]
+[ext_resource type="Resource" path="res://data/tutorial/first_steps.tres" id="961_first_steps"]
 [ext_resource type="Resource" path="res://data/upgrades/regeneration.tres" id="st_regeneration"]
 [ext_resource type="Resource" path="res://data/upgrades/blood_pact.tres" id="st_blood_pact"]
 [ext_resource type="Resource" path="res://data/upgrades/precision_training.tres" id="st_precision_training"]
@@ -270,3 +272,5 @@ encounters = Array[ExtResource("14_uppjc")]([ExtResource("15_k7n23"), ExtResourc
 item_affixes = Array[ExtResource("14_y455n")]([ExtResource("15_xepax"), ExtResource("16_uppjc"), ExtResource("17_k7n23"), ExtResource("18_iw61m"), ExtResource("19_1nigv"), ExtResource("20_j2x0q"), ExtResource("21_go5c6"), ExtResource("22_vqxcy"), ExtResource("23_yb7ug"), ExtResource("24_ud7y0"), ExtResource("25_f8vur"), ExtResource("26_cnpc5"), ExtResource("27_38uwr"), ExtResource("28_riqfl"), ExtResource("29_vv2q4"), ExtResource("30_xabxg"), ExtResource("78_ac1fq"), ExtResource("79_f6o1n"), ExtResource("80_hs025"), ExtResource("81_lrag7"), ExtResource("82_ts1c5"), ExtResource("83_qlf7a")])
 runes = Array[ExtResource("900_runedef")]([ExtResource("901_rune"), ExtResource("902_rune"), ExtResource("903_rune"), ExtResource("904_rune"), ExtResource("905_rune"), ExtResource("906_rune"), ExtResource("907_rune"), ExtResource("908_rune"), ExtResource("909_rune"), ExtResource("910_rune")])
 tutorial = ExtResource("950_tutorial")
+assist = ExtResource("960_assist")
+first_steps = ExtResource("961_first_steps")

@@ -107,7 +107,7 @@ func apply(user: Actor, aim: Vector2) -> void:
 	# Stop short of walls.
 	var length := Combat.clear_length(world, start, aim, distance, user.radius)
 	var end := start + aim * length
-	var amount := flat_damage + roundi(user.get_skill_power() * damage_multiplier)
+	var amount := hit_amount(user)
 	if blow.facing != blow.aim:
 		Combat.damage_blow_segment(world, user, blow, distance, width, amount, knockback, status, element)
 	else:
@@ -137,3 +137,12 @@ func show_warning(view: TelegraphView, angle: float, progress: float, _body_radi
 func play_preview(preview: EffectPreview) -> void:
 	preview.lunge(distance, duration)
 	preview.line(distance, width, fx_tint if fx else Color(1, 0.9, 0.7))
+
+
+func hurts() -> bool:
+	return true
+
+
+## Its flat damage plus the user's skill power times its multiplier.
+func hit_amount(user: Actor) -> int:
+	return flat_damage + roundi(user.get_skill_power() * damage_multiplier)

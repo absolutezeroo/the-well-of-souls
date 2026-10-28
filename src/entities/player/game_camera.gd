@@ -4,8 +4,8 @@ extends Camera2D
 ## direction that springs back (the weight of a blow, a shot's recoil), apart from the shake.
 ## A boss too big for the view makes it lean toward it (lean_toward()).
 ## Both scale with the Screen shake option.
-## Its zoom (the scene's) grows by what PixelGrid's rounding of the canvas's scale took off, so a
-## floor fills any screen the same way (PixelGrid.world_zoom()).
+## Its zoom is the scene's framing made whole: every art pixel on a whole number of screen pixels
+## on any window, the framing rounded toward the wider view (PixelGrid.camera_zoom(), decision 0007).
 
 const MAX_OFFSET := 10.0
 const DECAY := 2.5
@@ -20,13 +20,17 @@ const LEAN_RATE := 3.0
 
 var _trauma := 0.0
 var _kick := Vector2.ZERO
+## The physics frame of the last kick, the kick before that frame's, and that frame's strongest.
+var _kick_frame := -1
+var _kick_before := Vector2.ZERO
+var _frame_kick := 0.0
 ## A boss too big for the view (BossDef.camera_lean): the view leans toward it, so both it and
 ## the hero stay on screen. `_lean_at`: its middle, above its feet.
 var _lean_target: Node2D
 var _lean_share := 0.0
 var _lean_height := 0.0
 var _lean := Vector2.ZERO
-## The zoom set in the scene, before PixelGrid's share.
+## The zoom set in the scene: the framing designed at 1280x720 (PixelGrid makes it whole).
 var _base_zoom := Vector2.ONE
 
 
@@ -39,16 +43,26 @@ func _ready() -> void:
 	fit_zoom()
 
 
-## Also when the debug panel's zoom step changes (DebugCheats.zoom()).
+## Also when the debug panel's zoom step changes (DebugCheats.zoom(): a tool, its steps may leave
+## the whole grid).
 func fit_zoom() -> void:
-	zoom = _base_zoom * PixelGrid.world_zoom() * DebugCheats.zoom()
+	zoom = Vector2.ONE * PixelGrid.camera_zoom(_base_zoom.x) * DebugCheats.zoom()
 
 
-## Pushes the view `pixels` along `direction`; it springs back.
+## Pushes the view `pixels` along `direction`; it springs back. One blow striking a crowd kicks
+## once: within a physics frame only the strongest push counts, never their sum.
 func kick(direction: Vector2, pixels: float) -> void:
 	if direction == Vector2.ZERO:
 		return
-	_kick = (_kick + direction.normalized() * pixels * Settings.screen_shake).limit_length(MAX_KICK)
+	var frame := Engine.get_physics_frames()
+	if frame != _kick_frame:
+		_kick_frame = frame
+		_kick_before = _kick
+		_frame_kick = 0.0
+	elif pixels <= _frame_kick:
+		return
+	_frame_kick = pixels
+	_kick = (_kick_before + direction.normalized() * pixels * Settings.screen_shake).limit_length(MAX_KICK)
 
 
 ## The view leans toward `target` (its point `height` above its feet) by `share` of the way
@@ -64,12 +78,15 @@ func kick_offset() -> Vector2:
 	return _kick
 
 
-## amount: 0..1. Shakes add up but are capped.
+## amount: 0..1. Shakes add up but are capped. (It buzzes nothing: the phone buzzes only for
+## what matters, said where it happens: Settings.vibrate().)
 func shake(amount: float) -> void:
 	_trauma = minf(_trauma + amount * Settings.screen_shake, 1.0)
-	# Big shakes (hits taken, explosions, bosses) buzz the phone too.
-	if amount >= 0.2:
-		Settings.vibrate(amount)
+
+
+## The shake's trauma now (0..1; tests).
+func trauma() -> float:
+	return _trauma
 
 
 func _process(delta: float) -> void:
@@ -87,6 +104,9 @@ func _process(delta: float) -> void:
 	if _trauma <= 0.0:
 		offset = _kick.round() + lean
 		return
-	_trauma = maxf(_trauma - DECAY * delta, 0.0)
+	# Real time too: a hit stop must not hold the shake.
+	_trauma = maxf(_trauma - DECAY * real, 0.0)
 	var strength := _trauma * _trauma
-	offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * MAX_OFFSET * strength + _kick.round() + lean
+	# Whole art pixels (the world moves by its own pixels, never half of one).
+	var jolt := (Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * MAX_OFFSET * strength / PixelDraw.PX).round() * PixelDraw.PX
+	offset = jolt + _kick.round() + lean

@@ -32,10 +32,14 @@ extends Resource
 
 @export_group("Atmosphere")
 ## Color grading of the whole picture: shadows pulled toward one color, highlights toward
-## another (white = unchanged), by `grade_strength`.
+## another (white = unchanged), by `grade_strength`. With the floor's tint, a mid-tone keeps
+## every channel at 0.6 or more (decision 0009), unless `narrative_exception`.
 @export var grade_shadows: Color = Color.WHITE
 @export var grade_highlights: Color = Color.WHITE
 @export_range(0.0, 1.0) var grade_strength: float = 0.0
+## A mood meant to feel wrong (decision 0009: the Threshold, the Deeps, the Blood Moon, curses):
+## its grading may go past the bound. The hero, threats and telegraphs must still read.
+@export var narrative_exception: bool = false
 @export_range(0.0, 2.0) var saturation: float = 1.12
 @export_range(0.5, 1.5) var contrast: float = 1.06
 ## Bright things (fire, lights, gold) bleed a little glow around them.

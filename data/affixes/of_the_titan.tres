@@ -9,6 +9,7 @@ max_hp = 25
 
 [resource]
 script = ExtResource("2_3p1uj")
+role = 1
 is_prefix = false
 bonuses = SubResource("Resource_eliba")
 id = &"of_the_titan"

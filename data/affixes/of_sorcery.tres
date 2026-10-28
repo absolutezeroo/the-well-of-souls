@@ -9,6 +9,7 @@ skill_power = 0.15
 
 [resource]
 script = ExtResource("2_3vnlk")
+role = 1
 is_prefix = false
 bonuses = SubResource("Resource_qw5v6")
 id = &"of_sorcery"

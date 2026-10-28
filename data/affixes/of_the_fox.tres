@@ -9,6 +9,7 @@ crit_chance = 0.06
 
 [resource]
 script = ExtResource("2_gwb11")
+role = 1
 is_prefix = false
 bonuses = SubResource("Resource_k3xcd")
 id = &"of_the_fox"

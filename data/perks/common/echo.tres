@@ -12,6 +12,7 @@ script = ExtResource("3_lwncy")
 
 [resource]
 script = ExtResource("4_3nis2")
+role = 2
 id = &"echo"
 display_name = "Echo"
 description = "Using a skill has a 15% chance per level to leave it ready again at once (an echo can't echo; all echoes together: 45% at most)."

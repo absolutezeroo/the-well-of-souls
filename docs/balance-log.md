@@ -3,6 +3,73 @@
 Dated entries, newest first: what was measured, what changed and why, before/after numbers, open
 questions. How to measure: [balance.md](balance.md).
 
+## 2026-10-28 - The fairness contract: wind-up floors, one twist per ascension (decision 0008)
+
+What changed: no wind-up of an attack that hurts goes under **0.4 s** (a boss's **0.5 s**; a
+shockwave's, a burst's, a fuse's or a trap's warning **0.4 s**) after the difficulty's, an
+ascension's and the phases' multipliers (`data/combat/combat_rules.tres`, "Fairness contract").
+Before (the audit of 28 October, its raw data in the session's `audit_feel/fragments.md`): on
+Keeper 18 of 49 monsters wound up under 0.4 s (bats and racoons 0.20 s from floor 1, rats and
+skulls 0.25), every boss's third phase 0.29-0.39 s, the roar's shockwave 0.35 s, Nightmare+10
+down to 0.13 s; the monsters' Volley (Eye, Sorcerer, Horned Augur) had no wind-up at all. Now:
+every one of them at its floor on every difficulty, Volley 0.5 s (`cast_time`), the spike plate
+0.4 s (was 0.35), the arrow plate 0.4 s (was 0.3). What is above the floor keeps its own and its
+difficulty's share (Nightmare still x0.7 of a long wind-up).
+
+Ascensions: **A6 Swift Stalkers** is now only "monsters 8% faster" (its "x0.9 time to dodge"
+went: the floor would have taken most of it back, and two twists in one level read badly);
+**A10 The Well's Heart** is only "+10% damage again" (its +15% monster Health went). At
+Nightmare+10 monsters have x1.32 -> x1.15 Health from the ascensions and x1.21 damage as
+before. Not re-measured with the bots: the expected effect is easier Keeper fights against
+the fastest monsters (bats, racoons, rats, boss third phases) and a slightly easier
+Nightmare+10; the challenge stays in numbers, density and patterns (the decision).
+
+Damage budget, now a check (`unit.fairness`): on Keeper the expected hero's worst ordinary hit
+is 13.3% of his max Health (a beast's charge at depth 7: 28 of 210), the worst boss hit 17.7%
+(the Giant Frog's fierce leap at depth 3: 23 of 130), at the top of the hits' roll; budget 20% /
+30%. Unchanged by this pass.
+
+Feel numbers (presentation.md "Feel limits"): one input buffer of 0.12 s (was an attack-only
+0.3 s, counted in game time) for the attack, the roll and the skills, in real time
+(`PlayerDef.input_buffer`; core_tests' pin updated with it).
+
+## 2026-10-28 - Floor pacing, bad-luck protection, a heal before bosses (decision 0012)
+
+**Monsters by the room's size.** A fight room's share is now `room_cells` (70) open cells per
+`monsters_per_room` (2) on the first floor, plus the floor's extra ones per 70 cells too
+(`FloorRules.room_monsters()`), between 1 and `max_monsters_per_room` (9, was 6: a great hall may
+hold more, a side room fewer); an elite or a big body (radius 14+) counts 2 (`tough_cost`); the
+floor's cap counts the same way (`max_monsters_per_floor` 130, was 110 bodies: about 100 bodies).
+Calm rooms on the way (`max_fights_in_a_row` 3) hold none. `room_cells` was set so a floor holds
+what it did: measured on the same 960 floors (`tools/levels/floor_report.py`, 20 seeds, every
+floor, the four difficulties), monsters a floor 47 / 65 / 86 / 97 before, 49 / 68 / 90 / 97 after
+(Pilgrim / Keeper / Martyr / Nightmare), elites and big bodies counted twice 55 / 80 / 108 / 125
+before, 57 / 83 / 113 / 123 after: the same fight, spread by size (r(open cells, monsters) 0.02 ->
+0.64). The seal (70% of the floor's monsters) follows. The balance tools' room (`BalanceLab.
+room_size()`) is a room of `room_cells` cells: what a room held before, except the deepest rooms on
+Normal and up, now one monster more where the old cap of 6 cut them (model, `--mode=model`: same
+rooms to floor 6, then +1 where capped).
+
+**Chests**: one a floor at least (`chests_min` 1, `chests_max` 1, times the floor's size: two on
+Martyr and Nightmare floors), was 0-2: 1.56 a floor before, 1.60 after, never none (35% of floors
+had none).
+
+**An elite at the peak** (from floor 2) on floors whose ambush or pact door isn't there: about
+0.3 more elites a floor on average, within the counts above (it counts 2 in its room).
+
+**Bad-luck protection** (`pity_after` 20, `pity_growth` 1): simulated on the plain odds (Rare or
+better 5.7% on floor 1, 10% around floor 5, 15% around floor 9), the share of Rare finds becomes
+7.4% / 10.8% / 15.4% (+30% / +8% / +3%) and the longest run without one 230 / 103 / 55 finds ->
+38 / 34 / 29. Kept gentle on purpose: it cuts the long droughts, not the odds.
+
+**A heal before every boss**: the Spring of the Last Vigil heals whole in the boss floor's first
+room on every difficulty (Pilgrim already healed 25% on each new floor). The balance tools' boss
+fights already start from a set Health (`BalanceArena`), so their measures don't move; in play a
+hero who drinks meets the boss whole, whatever the floor before cost him.
+
+Open: the floor's real length (3-6 min on the phone, telemetry `floor_times`), the density and the
+calm rooms' share to tune by playing (roadmap).
+
 ## 2026-10-27 - Heal share only where the hero was hurt (tools only)
 
 The heal share targets (arena "heal share", model "heal share") now judge only fights where the
@@ -1957,3 +2024,21 @@ After Ren's request is returned, Sayo offers a second one-time rescue with evide
 Manual return awards 20 souls, wakes Sayo and clears the western roots. Both village requests
 together award 35 souls once per profile; neither can be repeated for farming or collected on
 a daily descent. No new combat benefits or shop prices are introduced.
+
+## 2026-10-28 — The first minutes and help without judgement (decisions 0010, 0011)
+
+Not measured with the balance tools (no target moves): numbers set from the decisions and the
+audit's probes, to check on the S23.
+
+- **First steps** (`data/tutorial/first_steps.tres`): on floor 1 of a profile's first three runs,
+  the start room shelters the hero until he has walked 110 px and swung once (the audit: hit
+  standing still in 7 starts of 33, 17-26 s in); the nearest room with monsters holds one Slime
+  instead of its pack: 10 Health, no Armor (the kind: 28 and 1), 40 px/s (55), wind-up 0.8 s
+  (0.5), recovery 0.6 s (0.4). The starting katana (5 Damage, ±15 %) kills it in 2 or 3 ordinary
+  blows. Floor 1 of those runs has that room's other monsters fewer, so its seal asks a few kills
+  less.
+- **The Souls' Aid** (`data/player/assist.tres`): 20 % less damage taken, +2 % after each death
+  with it on, 80 % at most (Hades' God Mode's numbers), after Armor, at least 1. Aided runs go on
+  no leaderboard and set no record; their souls are those of their difficulty.
+- **Lowering the difficulty in a run** keeps the remote settings the run began with; its souls
+  are the lower difficulty's from then on (paid at the end on the difficulty the run ends on).

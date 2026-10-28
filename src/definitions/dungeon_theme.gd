@@ -8,7 +8,13 @@ extends Resource
 ## upper part) over its bottom (the face's foot), two tiles of the same face that join. A wall
 ## one cell thick (floor right above it) shows the plateau's short edge (`wall_bottom`).
 
+## Multiplies the floor's tiles, walls and plateau: a neutral dim at most, every channel 0.75 or
+## more and within 0.12 of each other (decision 0009: a multiply turns the pack's colours to mud;
+## a biome's identity comes from its tileset, props and light).
 @export var tint: Color = Color.WHITE
+## A place meant to feel wrong (decision 0009: the Threshold, the Deeps, the Well's Bottom): its
+## tint may go past the neutral dim. The hero, threats and telegraphs must still read.
+@export var narrative_exception: bool = false
 ## How the floor is lit: its own light, and the colors of the light as it fades (LightField).
 @export var lighting: LightingDef
 @export var music: AudioStream

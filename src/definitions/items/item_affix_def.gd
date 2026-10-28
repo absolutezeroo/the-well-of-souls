@@ -21,6 +21,12 @@ const BODY := 4
 ## Armor: worn, the piece's hem turns into a row of steel points (of Thorns: what hits you up
 ## close gets hurt). Its elements show by themselves (ItemLook); this is for an affix without one.
 @export var worn_teeth: bool = false
+## A staple (plain numbers, good in any build) or a build-around (an element's effect: burning,
+## freezing, lightning, life drain, echoes): BuildRole. A build-around names its element's family.
+@export var role: BuildRole.Role = BuildRole.Role.UNSET
+## Its element's family (Inferno for Burning and of Embers, Frost for Frozen and Shattering...),
+## as a rune names its own (RuneDef.family): where it belongs in a build. A tag: it wakes nothing.
+@export var family: SynergyDef
 
 
 func fits(item: EquipmentDef) -> bool:

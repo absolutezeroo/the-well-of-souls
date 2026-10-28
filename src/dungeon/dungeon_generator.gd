@@ -1,6 +1,8 @@
 class_name DungeonGenerator
 ## Builds a DungeonMap: random non-overlapping rooms chained by wide corridors.
-## Each room connects to the previous one, so every room is reachable. A room may take one of
+## Each room connects to the previous one, so every room is reachable; rooms keep
+## DungeonConfig.room_gap cells of rock between them (closer, smooth() would open the wall and
+## merge them), and a corridor bends the way that cuts through fewer other rooms. A room may take one of
 ## its biome's shapes (RoomShapeDef: round, pillared, a ring, a chasm crossed by walkways...):
 ## its outline is carved first, the corridors cut through it, then its core and pillars are laid
 ## and anything that would cut floor off is taken back (_finish).
@@ -27,14 +29,14 @@ static func generate(config: DungeonConfig, rng: RandomNumberGenerator, size_sca
 		var room := Rect2i(
 			Vector2i(rng.randi_range(2, width - size.x - 2), rng.randi_range(2, height - size.y - 2)),
 			size)
-		if _overlaps_any(room, map.rooms):
+		if _overlaps_any(room, map.rooms, config.room_gap):
 			shaper.missed(shape)
 			continue
 
 		var room_plan := shaper.plan(room, shape)
 		_carve_room(map, room_plan)
 		if not map.rooms.is_empty():
-			_carve_corridor(map, map.rooms.back().get_center(), room.get_center(), config.corridor_width, rng)
+			_carve_corridor(map, map.rooms.back().get_center(), room.get_center(), config.corridor_width, rng, map.rooms)
 		map.rooms.append(room)
 		map.plans.append(room_plan)
 		shaper.placed(shape)
@@ -514,9 +516,10 @@ static func _is_pinch(map: DungeonMap, cell: Vector2i) -> bool:
 	return false
 
 
-static func _overlaps_any(room: Rect2i, rooms: Array[Rect2i]) -> bool:
+## `room` comes closer than `gap` cells to one of `rooms`.
+static func _overlaps_any(room: Rect2i, rooms: Array[Rect2i], gap: int = 2) -> bool:
 	for other in rooms:
-		if room.grow(2).intersects(other):
+		if room.grow(gap).intersects(other):
 			return true
 	return false
 
@@ -527,11 +530,37 @@ static func _carve_rect(map: DungeonMap, rect: Rect2i) -> void:
 			map.set_floor(Vector2i(x, y))
 
 
-## L-shaped corridor: horizontal then vertical, or the other way round.
-static func _carve_corridor(map: DungeonMap, from: Vector2i, to: Vector2i, corridor_width: int, rng: RandomNumberGenerator) -> void:
-	var corner := Vector2i(to.x, from.y) if rng.randf() < 0.5 else Vector2i(from.x, to.y)
+## L-shaped corridor: horizontal then vertical, or the other way round. With `rooms` (the ones
+## already laid), the bend that cuts through fewer of the other rooms' cells (or brushes their
+## walls: smooth() would open the thin rock between and merge them); the dice when both cross as
+## many.
+static func _carve_corridor(map: DungeonMap, from: Vector2i, to: Vector2i, corridor_width: int, rng: RandomNumberGenerator, rooms: Array[Rect2i] = []) -> void:
+	var across := Vector2i(to.x, from.y)
+	var down := Vector2i(from.x, to.y)
+	var corner := across if rng.randf() < 0.5 else down
+	if not rooms.is_empty():
+		var through_across := _cells_through(from, across, to, corridor_width, rooms)
+		var through_down := _cells_through(from, down, to, corridor_width, rooms)
+		if through_across != through_down:
+			corner = across if through_across < through_down else down
 	_carve_line(map, from, corner, corridor_width)
 	_carve_line(map, corner, to, corridor_width)
+
+
+## Cells of a corridor from `from` by `corner` to `to`, a cell wider each side, inside one of
+## `rooms` other than the ones holding `from` and `to`.
+static func _cells_through(from: Vector2i, corner: Vector2i, to: Vector2i, corridor_width: int, rooms: Array[Rect2i]) -> int:
+	var count := 0
+	var half := floori(corridor_width / 2.0) + 1
+	for room in rooms:
+		if room.has_point(from) or room.has_point(to):
+			continue
+		for leg: Array in [[from, corner], [corner, to]]:
+			var a: Vector2i = leg[0]
+			var b: Vector2i = leg[1]
+			var band := Rect2i(a.min(b) - Vector2i.ONE * half, (a - b).abs() + Vector2i.ONE * (half * 2 + 1))
+			count += band.intersection(room).get_area()
+	return count
 
 
 static func _carve_line(map: DungeonMap, from: Vector2i, to: Vector2i, corridor_width: int) -> void:

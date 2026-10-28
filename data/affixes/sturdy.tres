@@ -9,6 +9,7 @@ defense = 2
 
 [resource]
 script = ExtResource("2_57mdl")
+role = 1
 slots = 6
 bonuses = SubResource("Resource_vqv2y")
 id = &"sturdy"

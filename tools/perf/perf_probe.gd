@@ -5,7 +5,9 @@ extends TestSuite
 ##    a digest of each floor (tiles, monsters, props, items), so a change that should only be
 ##    faster can be checked to lay exactly the same floors.
 ## 2. A heavy fight: a bot fights a pack of monsters kept at 40 around it (its Health refilled),
-##    and every frame's process and physics times are kept: average and 95th percentile.
+##    and every frame's process and physics times are kept: average, 95th and 99th percentile (a
+##    phone's frame rate is judged on its worst frames, P99: docs/design/pillars.md), the worst,
+##    and the share of frames over 16.7 ms (60 fps missed).
 ## Exit code 0. The numbers depend on the machine: compare runs made on the same one.
 ## (It extends TestSuite for its bot and helpers; it checks nothing.)
 
@@ -60,10 +62,10 @@ func _ready() -> void:
 	var generation := await _measure_generation(game, floors)
 	var fight := await _measure_fight(game, fight_frames)
 	print("\n== perf probe (%s) ==" % ("main thread CPU time" if _cpu_clock else "wall clock"))
-	print("generation: %d floors, avg %.1f ms, p95 %.1f ms, max %.1f ms" % [generation.size(), _avg(generation), _pct(generation, 0.95), _pct(generation, 1.0)])
+	print("generation: %d floors, avg %.1f ms, p95 %.1f ms, p99 %.1f ms, max %.1f ms" % [generation.size(), _avg(generation), _pct(generation, 0.95), _pct(generation, 0.99), _pct(generation, 1.0)])
 	for key: String in ["process", "physics", "both", "frame"]:
 		var values: PackedFloat32Array = fight[key]
-		print("fight %-8s avg %.2f ms, p95 %.2f ms, max %.2f ms" % [key, _avg(values), _pct(values, 0.95), _pct(values, 1.0)])
+		print("fight %-8s avg %.2f ms, p95 %.2f ms, p99 %.2f ms, max %.2f ms, over 16.7 ms: %.1f%%" % [key, _avg(values), _pct(values, 0.95), _pct(values, 0.99), _pct(values, 1.0), _over(values, 1000.0 / 60.0) * 100.0])
 	print("fight: %d frames, %d kills, %d awake monsters on average, digest %d" % [fight["frames"], fight["kills"], fight["awake"], fight["digest"]])
 	RunSave.erase()
 	get_tree().quit(0)
@@ -201,6 +203,15 @@ func _avg(values: PackedFloat32Array) -> float:
 	for value in values:
 		total += value
 	return total / maxf(1.0, float(values.size()))
+
+
+## The share of `values` over `limit`.
+func _over(values: PackedFloat32Array, limit: float) -> float:
+	var count := 0
+	for value in values:
+		if value > limit:
+			count += 1
+	return float(count) / maxf(values.size(), 1.0)
 
 
 ## The `share` percentile (1.0: the largest).

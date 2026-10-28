@@ -9,6 +9,9 @@ extends RefCounted
 
 ## Keep facing the aim direction this long after attacking.
 const AIM_HOLD_TIME := 0.35
+## What waits in the input buffer: nothing, the attack, or else a skill slot (0: the roll).
+const NO_PRESS := -2
+const ATTACK_PRESS := -1
 ## The skill and belt buttons' input actions, by slot (read every frame: no name formatted).
 const SKILL_ACTIONS: Array[StringName] = PlayerCommand.SKILL_ACTIONS
 const BELT_ACTIONS: Array[StringName] = PlayerCommand.BELT_ACTIONS
@@ -22,8 +25,18 @@ var _player: Player
 var _source: PlayerCommandSource = LocalPlayerInput.new()
 ## Controller-owned snapshot; neither a source nor another hero can edit it during execution.
 var _command := PlayerCommand.new()
-## A press of the attack button not yet turned into a swing (PlayerDef.attack_buffer).
-var _attack_buffer := 0.0
+## The newest press not yet carried out (ATTACK_PRESS, a skill slot, NO_PRESS) and the real
+## seconds it still waits (PlayerDef.input_buffer): one buffer for the attack, the roll and the
+## skills, the newest press taking the place of an older one, used up when carried out.
+var _buffered := NO_PRESS
+var _buffer_left := 0.0
+## Tap to charge (Settings.tap_to_charge): the charge goes on with the button up (a double tap
+## started it, or the hold that started it was let go early), the next tap unleashes it once it
+## is full, and the real seconds since the last plain tap (a second within
+## PlayerDef.double_tap_window starts a charge).
+var _latched := false
+var _release_queued := false
+var _since_tap := INF
 ## The game just came out of a pause: the press that closed the menu (a gamepad's B closes and
 ## is skill 2 too) belongs to the menu, so the first frame after it reads no new press.
 var _presses_muted := false
@@ -39,7 +52,9 @@ func set_source(source: PlayerCommandSource) -> void:
 	_command.clear()
 	move_direction = Vector2.ZERO
 	aim_hold = 0.0
-	_attack_buffer = 0.0
+	_buffered = NO_PRESS
+	_buffer_left = 0.0
+	_unlatch()
 	_player.charge.cancel()
 
 
@@ -71,11 +86,20 @@ func act(delta: float) -> void:
 	var player := _player
 	var fresh := not _presses_muted  # (a press that closed a menu: see _presses_muted)
 	_presses_muted = false
+	# The buffer counts real seconds: a hit stop neither eats a press nor stretches its wait.
+	var real := HitStop.real_delta(delta)
+	_buffer_left = maxf(_buffer_left - real, 0.0)
+	if _buffer_left <= 0.0:
+		_buffered = NO_PRESS
+	_since_tap += real
 	update_attack(delta, fresh)
 
 	for i in mini(player.skills.skills.size(), SKILL_ACTIONS.size()):  # (one per skill slot: Player.SKILL_COUNT)
 		if fresh and player.skills.skills[i] and (_command.skills_pressed & (1 << i)) != 0:
-			use_skill(i)
+			_buffer_press(i)
+	# A skill (the roll first) waiting in the buffer goes as soon as it is ready.
+	if _buffered >= 0 and player.skills.is_ready(_buffered):
+		use_skill(_buffered)
 
 	if fresh and _command.quick_item_pressed:
 		player.pack.use_quick_item()
@@ -86,32 +110,56 @@ func act(delta: float) -> void:
 
 ## The attack button: a tap swings (or shoots) once, aimed at the closest enemy; holding it
 ## no longer repeats the swing, it charges the weapon's charged attack (AttackCharge), unleashed
-## when the button is let go with the charge full (docs/design/interface.md). `fresh` false:
-## a press seen now closed a menu, it doesn't swing (held on, it charges).
+## when the button is let go with the charge full (docs/design/interface.md). With Tap to charge
+## (Settings.tap_to_charge, decision 0011: an alternative to holding) a double tap starts the
+## charge too, a charge let go early keeps filling, and a tap unleashes it once full. `fresh`
+## false: a press seen now closed a menu, it doesn't swing (held on, it charges).
 func update_attack(delta: float, fresh: bool = true) -> void:
 	var player := _player
 	var charge := player.charge
 	var weapon := player.get_weapon()
 	var charged := weapon.charged if weapon else null
-	_attack_buffer = maxf(_attack_buffer - delta, 0.0)
+	var tap_mode := Settings.tap_to_charge and charged != null
+	if _latched and (not tap_mode or not charge.is_charging()):
+		_unlatch()  # cancelled meanwhile (a roll, a swap, a fall), or the option turned off
+	var skip_delay := false
 	if fresh and _command.attack_pressed:
-		_attack_buffer = player.tuning().attack_buffer
-		charge.press()
+		if tap_mode and _latched:
+			_release_queued = true  # unleashed as soon as it is full
+			_since_tap = INF
+		elif tap_mode and _since_tap <= player.def.double_tap_window:
+			# The second tap of a double tap: no swing, the charge starts and fills by itself.
+			_latched = true
+			skip_delay = true
+			_since_tap = INF
+			charge.press()
+		else:
+			_buffer_press(ATTACK_PRESS)
+			_since_tap = 0.0
+			charge.press()
 	if player.is_falling:
 		charge.cancel()  # a fall loses the charge (a roll or a dash: start_dash)
-	if _command.attack_held:
+	# Tap to charge: a charge let go before it is full keeps filling (never wasted).
+	if tap_mode and not _latched and not _command.attack_held and charge.state == AttackCharge.State.CHARGING:
+		_latched = true
+	if _command.attack_held or _latched:
 		if charged:
-			match charge.hold(delta, player.def.charge_delay, charged.charge_time):
+			match charge.hold(delta, 0.0 if skip_delay else player.def.charge_delay, charged.charge_time):
 				AttackCharge.State.CHARGING:
 					player.charge_started.emit()
 				AttackCharge.State.FULL:
 					Sfx.play_at(player.def.charge_full_sound, player.global_position)
 					player.charge_full.emit()
+		if _latched and _release_queued and charge.is_full():
+			_unlatch()
+			if charge.release() and weapon:
+				player.unleash(weapon, charged)
 	elif charge.state != AttackCharge.State.IDLE:
 		if charge.release() and charged and weapon:
 			player.unleash(weapon, charged)
 	if charge.is_charging():
-		_attack_buffer = 0.0
+		if _buffered == ATTACK_PRESS:
+			_buffered = NO_PRESS  # (a press that started a charge never swings after it)
 		# Winding up toward the closest enemy; with none in sight, the way he walks.
 		var target := aim_target(player.tuning().skill_aim_range)
 		if target:
@@ -121,22 +169,45 @@ func update_attack(delta: float, fresh: bool = true) -> void:
 		hold_aim()
 	if player.rig:
 		player.rig.show_charge(weapon if charge.is_charging() else null)
-	if _attack_buffer > 0.0 and player.can_attack():
-		_attack_buffer = 0.0
+	if _buffered == ATTACK_PRESS and player.can_attack():
+		_buffered = NO_PRESS
 		if player.attack(aim_direction(_auto_aim_range())):
 			player.attacked.emit()
 		hold_aim()
 
 
-## Skill button `index` (0: the roll), aimed at the closest enemy in a skill's range.
-func use_skill(index: int) -> void:
+## Skill button `index` (0: the roll), aimed at the closest enemy in a skill's range. Returns
+## whether it went off (then any older press waiting in the buffer is dropped: the newest wins).
+func use_skill(index: int) -> bool:
 	var player := _player
 	var aim := aim_direction(player.tuning().skill_aim_range)
-	if player.skills.try_use(index, player, aim):
-		player.charge.cancel()  # a skill (the roll first) loses the charge
-		player.facing = aim
-		hold_aim()
-		player.skill_used.emit(index)
+	if not player.skills.try_use(index, player, aim):
+		return false
+	_buffered = NO_PRESS
+	_unlatch()
+	player.charge.cancel()  # a skill (the roll first) loses the charge
+	player.facing = aim
+	hold_aim()
+	player.skill_used.emit(index)
+	return true
+
+
+## A press of the attack (ATTACK_PRESS) or of skill slot `press`: the newest press, it takes the
+## buffer's place for PlayerDef.input_buffer real seconds (carried out at once when it can be).
+func _buffer_press(press: int) -> void:
+	_buffered = press
+	_buffer_left = _player.tuning().input_buffer
+
+
+## What waits in the input buffer (ATTACK_PRESS, a skill slot, NO_PRESS; tests).
+func buffered_press() -> int:
+	return _buffered
+
+
+## Tap to charge: the charge no longer goes on by itself.
+func _unlatch() -> void:
+	_latched = false
+	_release_queued = false
 
 
 ## Direction to the closest visible enemy in range, or the current facing.

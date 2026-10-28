@@ -46,6 +46,7 @@
 [ext_resource type="Resource" path="res://data/hazards/pit.tres" id="x_chasm"]
 [ext_resource type="Resource" path="res://data/biomes/pools/deep_water.tres" id="x_pool"]
 [ext_resource type="Resource" path="res://data/props/furniture/stone_pillar.tres" id="x_pillar"]
+[ext_resource type="Resource" path="res://data/encounters/vigil_spring.tres" id="x_vigil_spring"]
 
 [resource]
 script = ExtResource("1_qfnhp")
@@ -59,6 +60,19 @@ acts = Array[ExtResource("1_oi5f6")]([ExtResource("2_pngbb"), ExtResource("3_bf2
 width = 72
 height = 72
 max_rooms = 15
+room_gap = 3
+room_cells = 70
+monsters_per_room = 2.0
+max_monsters_per_room = 9
+max_monsters_per_floor = 130
+tough_cost = 2
+tough_radius = 14.0
+chests_min = 1
+chests_max = 1
+max_fights_in_a_row = 3
+peak_from = 0.6
+peak_to = 0.8
+peak_elite_min_depth = 2
 souls_per_kill = 0.1
 souls_per_floor = 4
 souls_per_boss = 10
@@ -73,6 +87,7 @@ ambush_chest = ExtResource("5_bf2ay")
 merchant = ExtResource("7_0biys")
 elite_rank = ExtResource("8_hbupn")
 rare_ranks = Array[ExtResource("10_ityvi")]([ExtResource("11_o115v"), ExtResource("12_52qi6"), ExtResource("13_wlvxj")])
+boss_spring = ExtResource("x_vigil_spring")
 arenas = Array[ExtResource("7_e6twt")]([ExtResource("8_uw7qy"), ExtResource("9_vkpge"), ExtResource("10_2bt8q"), ExtResource("11_wqelh"), ExtResource("12_avhkh")])
 monster_hp_scale_per_depth = 0.32
 monster_attack_per_depth = 1.0

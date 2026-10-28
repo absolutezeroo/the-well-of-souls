@@ -264,7 +264,10 @@ func _test_hints(game: Game) -> void:
 	check(tutorial.current != null and tutorial.current.id == &"elite", "an elite: its hint")
 	check(not game.hint_box.target.has_area(), "no control to point at")
 	await _frames(int(tutorial.current.duration * 60) + 5)
-	check(tutorial.current == null and Profile.has_seen_hint(&"elite"), "it goes on its own")
+	# Its time over, nobody tapped it: gone, but not seen yet (it comes back on a later floor once:
+	# FirstRunTests.run_hints()).
+	check(tutorial.current == null and not Profile.has_seen_hint(&"elite"), "it goes on its own, unread: not seen yet")
+	Profile.mark_hint(&"elite")  # (its return is not looked at here)
 	elite.queue_free()
 
 	# Several at once: one at a time, the most important first. (A level up: its choice waits.)

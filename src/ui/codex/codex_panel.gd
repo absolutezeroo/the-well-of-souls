@@ -1,18 +1,19 @@
 class_name CodexPanel
 extends Control
-## The codex (title screen and pause menu), in the game's skin (RpgWindow): four tabs in the
+## The codex (title screen and pause menu), in the game's skin (RpgWindow): six tabs in the
 ## header. Quests: today's and this week's goals and the souls they pay. Bestiary: every monster
 ## and boss, act by act (CodexCard: unknown, seen or slain, your hunter rank); tap one for its
 ## page (MonsterPage). Achievements: goals across all runs, with progress. Runs: the last runs and
 ## the fastest wins. Voices: what the Vigil-Keeper and the keepers said, by speaker (their lines
-## kept: DialogueLineDef.remembered, Narrative.told_lines()). Each tab opens with a line saying
-## what it is for. Built in code.
+## kept: DialogueLineDef.remembered, Narrative.told_lines()). Tips: the tutorial's hints already
+## seen (Profile.hints_seen), to read again, in the device's words. Each tab opens with a line
+## saying what it is for. Built in code.
 
 const MenuNavScript := preload("res://src/autoload/menu_nav.gd")  # its static helpers are called on the script, not the autoload
 
-enum Tab { QUESTS, BESTIARY, ACHIEVEMENTS, RUNS, VOICES }
+enum Tab { QUESTS, BESTIARY, ACHIEVEMENTS, RUNS, VOICES, TIPS }
 
-const TAB_NAMES := ["Quests", "Bestiary", "Achievements", "Runs", "Voices"]  # i18n
+const TAB_NAMES := ["Quests", "Bestiary", "Achievements", "Runs", "Voices", "Tips"]  # i18n
 ## What each tab is for, under its summary.
 const TAB_HELP := [
 	"Track your village requests and bounties here. Return recovered items to the resident who asked for them. Spend your souls at the village Shrine. Daily and weekly bounties follow real-world dates.",  # i18n
@@ -20,6 +21,7 @@ const TAB_HELP := [
 	"Big goals across all your runs. Reaching one pays its souls at once.",  # i18n
 	"Your last runs, newest first. Gold is lost when a run ends; souls are kept.",  # i18n
 	"What the Vigil-Keeper and the keepers of the Well told you, kept here. They say more as your descents go deeper.",  # i18n
+	"Every tip the tutorial gave you, to read again.",  # i18n
 ]
 ## A speaker's face in the Voices tab (a 38-pixel faceset at x2, a 16-pixel picture at x4).
 const VOICE_FACE := 76.0
@@ -82,6 +84,8 @@ func show_tab(tab: int) -> void:
 			_fill_runs()
 		Tab.VOICES:
 			_fill_voices()
+		Tab.TIPS:
+			_fill_tips()
 	var help: String = tr(TAB_HELP[_tab])
 	if _tab == Tab.BESTIARY:
 		help = help % roundi((_content.bestiary.mastery_damage if _content.bestiary else 0.1) * 100.0)
@@ -442,6 +446,27 @@ func _fill_voices() -> void:
 	_summary.text = tr("Words kept: %d of %d") % [heard, total]
 
 
+# --- Tips --------------------------------------------------------------------------
+
+## The tutorial's hints already seen, in the tutorial's order: each title in gold over its line,
+## in the words of the device in hand (HintDef.shown_text()).
+func _fill_tips() -> void:
+	var hints: Array[HintDef] = []
+	if _content.tutorial:
+		hints = _content.tutorial.hints
+	var seen := hints.filter(func(hint: HintDef) -> bool: return Profile.has_seen_hint(hint.id))
+	_summary.text = tr("Tips seen: %d of %d") % [seen.size(), hints.size()]
+	if seen.is_empty():
+		_list.add_child(UiSkin.label(tr("No tip yet: they come as you play."), Fonts.BODY, UiSkin.DIM))
+	for hint: HintDef in seen:
+		var row := VBoxContainer.new()
+		row.name = "Tip_%s" % hint.id
+		row.add_theme_constant_override("separation", 0)
+		row.add_child(UiSkin.label(tr(hint.title), Fonts.BODY, UiSkin.GOLD))
+		row.add_child(UiSkin.label(hint.shown_text(), Fonts.BODY, UiSkin.TEXT, true))
+		_list.add_child(row)
+
+
 # --- Building ---------------------------------------------------------------------
 
 func _build() -> void:
@@ -459,20 +484,24 @@ func _build() -> void:
 	_tabs.picked.connect(func(i: int) -> void:
 		if _tab != i or _page.visible:
 			show_tab(i))
-	_souls = UiSkin.label("", Fonts.BODY, CodexRows.SOUL)
-	_souls.name = "Souls"
-	_souls.tooltip_text = tr("Souls are kept between runs. Spend them at the Shrine.")
-	_window.header_right.add_child(_souls)
-	_own(_souls)
-
-	# What the tab shows, in a line and a sentence.
+	# What the tab shows, in a line and a sentence; the souls at the end of the line (the header
+	# holds the six tabs and Close, on a 1280-wide screen in French too).
 	_intro = VBoxContainer.new()
 	_intro.add_theme_constant_override("separation", 2)
 	_window.body.add_child(_intro)
+	var line := HBoxContainer.new()
+	line.add_theme_constant_override("separation", 14)
+	_intro.add_child(line)
 	_summary = UiSkin.label("", Fonts.BODY, UiSkin.GOLD)
 	_summary.name = "Summary"
-	_intro.add_child(_summary)
+	_summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	line.add_child(_summary)
 	_own(_summary)
+	_souls = UiSkin.label("", Fonts.BODY, CodexRows.SOUL)
+	_souls.name = "Souls"
+	_souls.tooltip_text = tr("Souls are kept between runs. Spend them at the Shrine.")
+	line.add_child(_souls)
+	_own(_souls)
 	_help = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
 	_help.name = "Help"
 	_intro.add_child(_help)

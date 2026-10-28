@@ -78,7 +78,7 @@ func _test_world_objects(_game: Game, world: World, player: Player) -> void:
 	victim.dormant = true
 	await _frames(1)
 	var victim_hp := victim.hp
-	var cycle := spikes.idle_time + spikes.warning_time + 0.2
+	var cycle := spikes.idle_time + spikes.warning_seconds() + 0.2
 	var saw_warning := false
 	for i in int(cycle * 60.0):
 		saw_warning = saw_warning or trap.phase == Trap.Phase.WARNING
@@ -100,7 +100,7 @@ func _test_world_objects(_game: Game, world: World, player: Player) -> void:
 	player.invalidate_stats()
 	player._invulnerable_time = 0.0
 	player.global_position = plate_trap.global_position
-	await _frames(int((plate.warning_time + 0.1) * 60.0) + 2)
+	await _frames(int((plate.warning_seconds() + 0.1) * 60.0) + 2)  # (its click, held to the fairness floor)
 	check(player.hp < hp_before, "stepping on a plate fires its spikes")
 	player.hp = player.get_max_hp()
 	plate_trap.queue_free()
@@ -776,7 +776,7 @@ func _test_hazards(game: Game, world: World, player: Player) -> void:
 	var target := world.spawn_monster(slime_def, arrow_trap.global_position)
 	target.dormant = true
 	var target_hp := target.hp
-	await _frames(int((arrows.warning_time + 0.2) * 60.0) + 40)
+	await _frames(int((arrows.warning_seconds() + 0.2) * 60.0) + 40)
 	check(not is_instance_valid(target) or target.hp < target_hp, "monsters on the plate get shot")
 	if is_instance_valid(target):
 		target.queue_free()
@@ -813,7 +813,7 @@ func _test_hazards(game: Game, world: World, player: Player) -> void:
 	player.inventory.changed.emit()
 	await _frames(2)
 
-	# Elites: an affix, more HP, a name, bigger, and their perk works.
+	# Elites: an affix, more HP, a name, a wider body (not bigger art), and their perk works.
 	var elite := world.spawn_monster(slime_def, world.map.cell_to_world(_open_cell_near(world, player.global_position, 1)))
 	elite.dormant = true
 	var base_hp := elite.get_max_hp()
@@ -855,7 +855,8 @@ func _test_hazards(game: Game, world: World, player: Player) -> void:
 	for rare in ranked:
 		if is_instance_valid(rare) and not rare.is_dead:
 			rare.queue_free()
-	check(elite.display_name.begins_with("Vampiric") and elite.rig.scale.x > 1.0, "elites have a name and are bigger")
+	check(elite.display_name.begins_with("Vampiric") and elite.radius > elite.def.radius and elite.rig.look.outline == elite.rank_color(), "elites have a name, a rim of their color and a wider body")
+	check(elite.rig.scale == Vector2.ONE and ranked.all(func(m: Monster) -> bool: return not is_instance_valid(m) or m.rig.scale == Vector2.ONE), "a rank never enlarges the art: pack art stays at scale 2 (decision 0007)")
 	elite.hp = 1
 	elite.perks.on_hit_dealt(elite, player, HitInfo.new(), 10)
 	check(elite.hp > 1, "vampiric elites heal when they hit")

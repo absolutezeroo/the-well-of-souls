@@ -50,6 +50,7 @@ Which pack sheet each project atlas is (byte-identical unless said):
 | `assets/tiles/nature.png`, `ruins.png` | `Backgrounds/Tilesets/TilesetNature.png`, `TilesetVillageAbandoned.png` (same layout, retouched for the game) |
 | `assets/tiles/furniture.png` | the pack's interior furniture (barrels, crates, sacks, washing line, hay), from an earlier version of the pack |
 | water pools, `assets/tiles/ceiling/*` | drawn for the game from the biome tilesets, on the world palette |
+| `assets/props/well.png` | `Backgrounds/Tilesets/TilesetDesert.png`, the well at (0, 48), recoloured colour for colour onto the grey stone of TilesetHouse's grey statues (the pack's own sand-to-grey twins) |
 | `assets/characters/**`, `assets/items/**`, `assets/weapons/**` | `Actor/`, `Items/` (most unchanged; hero wear, runes, fragments and new bosses drawn for the game on the pack's colours) |
 
 Before anything else, **look in the pack**: it has 45+ characters, 20+ monsters, houses, shops,
@@ -59,9 +60,18 @@ temples, statues, banners, furniture, interiors, animated flags, flowers, water 
 
 - A tile is **16 art pixels**; **1 art pixel = 2 world units**; the village's ground cell is 32
   units (`VillageGround.CELL`).
+- On screen an art pixel is always a **whole number of screen pixels**: a world camera's zoom is
+  its designed framing rounded down to the nearest whole size, the wider view (dungeon and
+  temple: 3 at 720 lines, 4 at 1080 and on the S23, 6 at 1440, 9 at 2160; the village 6 at 1080).
+  Never 4.5: columns of 4 and 5 alternate and shimmer when the view scrolls
+  ([decision 0007](decisions/0007-whole-pixels-on-screen.md), `PixelGrid.camera_zoom()`).
+  **Checked** (`unit.pc`).
 - Pack art is shown at **scale 2**. A whole step (3 for a building that must read larger, like
   the temple) is allowed; **never 1.5, 2.5, 0.95** or any fraction to make something fit (it
-  makes "mixels": pixels of different sizes side by side). **Checked** for the village.
+  makes "mixels": pixels of different sizes side by side), not even for a moment: a rank shows
+  by rim, aura and name, a hit by a one-pixel flinch, a smaller flame is a smaller piece
+  ([vfx.md](vfx.md) section 1, its listed exceptions). **Checked** for the village (`unit.village`),
+  bodies, ranks, props' flames, the Wyrm and plants (`unit.vfx`).
 - Positions of static art on even units; **rotation 0** (pre-drawn directions only, [vfx.md](vfx.md));
   texture filter **Nearest**, no mipmaps (the project default, never overridden).
 - The pack's projection: straight top-down with the front faces of walls and houses visible.
@@ -76,7 +86,8 @@ temples, statues, banners, furniture, interiors, animated flags, flowers, water 
 - New art is drawn or recoloured onto those colours (`tools/vfx/recolor.py`). The snapshot is
   only re-taken by the owner (`tools/design/check.py --snapshot-palette <pack folder>`).
 - Effects use their element's ramp ([vfx.md](vfx.md), checked by `tools/vfx/check.py`).
-- Alpha is binary (fully opaque or fully transparent), fades are dithered.
+- Alpha is binary (fully opaque or fully transparent), fades are dithered. **Checked** for the
+  world art and `assets/fx` (`tools/design/check.py`).
 
 ## Mood: darken with light, never by multiplying
 
@@ -93,7 +104,9 @@ ground, paths and props collapses, so the scene also reads worse.
 | Dark-fantasy composition with pack pieces: bones, chains, cracked stone, dead trees, candles, banners, the Well's roots | Allowed |
 | Dithered fog or vignette on its own `CanvasLayer` | Allowed |
 | The village clock's `CanvasModulate` (day/night) | Tolerated: a gentle grade, actors and UI readable |
-| `modulate`/`self_modulate`/a tint on ground tiles or per room | **Forbidden** beyond a light, neutral dim: every channel ≥ 0.75 and within 0.12 of each other. **Checked** for the village ground and room floors |
+| A floor's screen grading (`AmbienceDef`, `screen.gdshader`) | Allowed to colour a biome, if with the theme's tint a mid-tone keeps every channel ≥ 0.6 ([decision 0009](decisions/0009-world-tints.md)). **Checked** (`unit.vfx`, "tints") |
+| `modulate`/`self_modulate`/a tint on ground tiles, per room, on a dungeon theme (`DungeonTheme.tint`) or on a village prop | **Forbidden** beyond a light, neutral dim: every channel ≥ 0.75 and within 0.12 of each other; none at all on Kagari's props. **Checked** for the village ground, room floors and props (`unit.village`) and the dungeon themes (`unit.vfx`) |
+| A narrative exception listed by [decision 0009](decisions/0009-world-tints.md): the Threshold, the Deeps, the Well's Bottom, the Blood Moon, curses | May go further, flagged in its data (`narrative_exception` on the theme or the mood); the hero, threats and telegraphs still read in the greyscale capture |
 
 **Readability is value, not colour**: look at the greyscale capture. Ground is the least
 contrasted layer, obstacles in between, interactive things, NPCs and threats the most. A
@@ -142,7 +155,7 @@ A "no" means: stop, and ask the owner (AGENTS.md "Ask the owner first").
 6. Same projection, outline and light as the pack (look at the zoomed capture).
 7. Not more detailed than its neighbours.
 8. Placed beside the hero and a door: plausible proportions.
-9. No new tint on world art (**checked** for the village).
+9. No new tint on world art (**checked** for the village and the dungeon's themes).
 10. Greyscale capture: hero, monsters, telegraphs and interactive things still stand out.
 11. Captures before/after attached to the roadmap card, with what could not be checked.
 

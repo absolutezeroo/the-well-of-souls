@@ -14,6 +14,7 @@ cooldown_reduction = 0.15
 
 [resource]
 script = ExtResource("4_rdk66")
+role = 1
 id = &"sages_codex"
 display_name = "Sage's Codex"
 icon = ExtResource("2_a5oos")

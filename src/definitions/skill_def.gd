@@ -42,6 +42,25 @@ enum AllyNeed { NONE, HURT_ALLY, ALLY_NEAR }
 var _dressed := {}
 
 
+## One of its effects hurts (Effect.hurts()): a monster's cast of it is a wind-up the fairness
+## contract holds to its floor (docs/decisions/0008).
+func hurts() -> bool:
+	for effect in effects:
+		if effect and effect.hurts():
+			return true
+	return false
+
+
+## How long a monster's cast of it lasts: `cast_time` times `scale` (the difficulty's, an
+## ascension's and a boss's phases' multipliers: Monster.get_telegraph_scale()), never under the
+## fairness floor of a monster's attack (`boss`: a boss's) when it hurts, even one written instant
+## (CombatRulesDef.monster_windup()); one that hurts no one (a summon, a heal, a step) keeps its
+## own, 0 for instant.
+func monster_cast_time(scale: float, boss: bool) -> float:
+	var seconds := cast_time * scale
+	return Combat.RULES.monster_windup(seconds, boss) if hurts() else seconds
+
+
 func activate(user: Actor, aim: Vector2) -> void:
 	Sfx.play_at(sound, user.global_position)
 	Effect.apply_all(effects_for(user), user, aim)

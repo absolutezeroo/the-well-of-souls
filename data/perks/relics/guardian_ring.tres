@@ -18,6 +18,7 @@ script = ExtResource("4_ifdsv")
 
 [resource]
 script = ExtResource("4_55n66")
+role = 1
 id = &"guardian_ring"
 display_name = "Guardian Ring"
 description = "Every floor starts with a shell of frost that soaks up 20 damage."

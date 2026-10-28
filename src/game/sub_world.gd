@@ -60,6 +60,7 @@ func cross(world: PocketWorld) -> void:
 	world.process_mode = Node.PROCESS_MODE_PAUSABLE
 	world.difficulty = home.difficulty
 	world.boons = home.boons
+	world.luck = home.luck
 	host.add_child(world)
 	host.move_child(world, _home_index)
 

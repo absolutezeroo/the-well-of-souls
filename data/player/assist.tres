@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AssistDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/assist_def.gd" id="1_assist"]
+
+[resource]
+script = ExtResource("1_assist")
+resistance = 0.2
+per_death = 0.02
+most = 0.8

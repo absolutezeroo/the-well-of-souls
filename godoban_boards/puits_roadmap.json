@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 420,
+  "next_id": 434,
   "tags": [
     "pc",
     "test",
@@ -1350,7 +1350,7 @@
     {
       "id": "task_98",
       "title": "Mesurer les performances sur le S23",
-      "description": "Tous les nouveaux effets, shaders et dialogues n'ont jamais été mesurés sur le téléphone (images/s, mémoire, chauffe).\nRoadmap RPG du 26/10/2026 : R8.4 (task_334), docs/rpg-roadmap.md. Mesures S23 conservées comme exigence de la transformation. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
+      "description": "Tous les nouveaux effets, shaders et dialogues n'ont jamais été mesurés sur le téléphone (images/s, mémoire, chauffe).\nRoadmap RPG du 26/10/2026 : R8.4 (task_334), docs/rpg-roadmap.md. Mesures S23 conservées comme exigence de la transformation. Statut historique conservé ; voir le nouveau cadrage avant reprise.\n\nLe 28/10 : tools/perf/perf_probe.tscn donne maintenant P99 et la part d'images au-delà de 16,7 ms ; projectiles et nombres en pool (task_414). Reste la mesure sur le S23.",
       "status": "backlog",
       "priority": "high",
       "epic_id": "epic_6",
@@ -1360,7 +1360,7 @@
         "perf"
       ],
       "created_at": 1792720000,
-      "updated_at": 1792973386
+      "updated_at": 1793166309
     },
     {
       "id": "task_99",
@@ -1434,7 +1434,7 @@
         "ui"
       ],
       "created_at": 1792720000,
-      "updated_at": 1793168012
+      "updated_at": 1793170158
     },
     {
       "id": "task_91",
@@ -4219,7 +4219,7 @@
     {
       "id": "task_277",
       "title": "Idée SPD : mémoire de partie pour limiter les répétitions de salles et récompenses",
-      "description": "Favoriser la variété entre étages avec historique borné ou paquets pondérés, état de partie sauvegardé par ids stables. Shattered remet ses salles utilisées en fin de file et décrémente certains poids de butin. Dans le Puits, limites actuelles par étage, flux propre à SecretRoom et rattrapage de forge existent déjà ; les préserver. Filtrer biome/profondeur, assainir contenus retirés, garder flux RNG isolé et déterminisme du quotidien. Aucun dessin ; effort moyen. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.\nRoadmap RPG du 26/10/2026 : R3.6 (task_312), docs/rpg-roadmap.md. La mémoire de tirage concerne surtout les donjons renouvelables ; conserver la géographie permanente. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
+      "description": "Favoriser la variété entre étages avec historique borné ou paquets pondérés, état de partie sauvegardé par ids stables. Shattered remet ses salles utilisées en fin de file et décrémente certains poids de butin. Dans le Puits, limites actuelles par étage, flux propre à SecretRoom et rattrapage de forge existent déjà ; les préserver. Filtrer biome/profondeur, assainir contenus retirés, garder flux RNG isolé et déterminisme du quotidien. Aucun dessin ; effort moyen. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.\nRoadmap RPG du 26/10/2026 : R3.6 (task_312), docs/rpg-roadmap.md. La mémoire de tirage concerne surtout les donjons renouvelables ; conserver la géographie permanente. Statut historique conservé ; voir le nouveau cadrage avant reprise.\n\nLe 28/10 (décision 0012) : la partie « tirages sans remise » est faite pour événements, malédictions, rencontres, pactes et épreuves (RunLuck, sauvegardé avec la partie, rejouable à l'identique à la reprise). Reste de cette idée : mémoire des formes de salles et poids de butin.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -4228,7 +4228,7 @@
         "contenu"
       ],
       "created_at": 1792965288,
-      "updated_at": 1792973386,
+      "updated_at": 1793166309,
       "due_date": null
     },
     {
@@ -6037,7 +6037,7 @@
     {
       "id": "task_400",
       "title": "Temple de Kagari : bandes sombres sur écran large (S23)",
-      "description": "Vu en capture 2340×1080 (toile 1560×720) : à zoom 1,5 la vue fait 1040 unités de large pour une salle de 960 ; des bandes sombres (et un liseré de l’extérieur à gauche) apparaissent de chaque côté. Choisir : salle plus large, zoom calculé pour remplir la largeur, ou bandes assumées. À vérifier sur le téléphone.",
+      "description": "Vu en capture 2340×1080 (toile 1560×720) : à zoom 1,5 la vue fait 1040 unités de large pour une salle de 960 ; des bandes sombres (et un liseré de l’extérieur à gauche) apparaissent de chaque côté. Choisir : salle plus large, zoom calculé pour remplir la largeur, ou bandes assumées. À vérifier sur le téléphone.\n\n28/10 : avec le zoom entier (décision 0007), le temple est dessiné à 4 px par pixel d'art sur le S23 au lieu de 4,5 : la vue fait 1170 unités de large pour la salle de 960, les bandes sombres sur les côtés sont donc un peu plus larges (capture temple_2340x1080 de l'agent art). Le choix reste à faire (salle plus large, ou bandes assumées) ; zoomer pour remplir la largeur reviendrait à un zoom non entier.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_3",
@@ -6047,7 +6047,7 @@
         "playtest"
       ],
       "created_at": 1793076826,
-      "updated_at": 1793076826,
+      "updated_at": 1793163670,
       "due_date": null
     },
     {
@@ -6081,8 +6081,8 @@
     {
       "id": "task_403",
       "title": "Donjon : un pixel d'art fait 4,5 pixels d'écran sur le S23 et en 1080p",
-      "description": "Trouvé par le calcul pendant la recherche : à 1080 lignes, l'interface est à x1,5 (PixelGrid) et la caméra du donjon à zoom 1,5 (player.tscn), donc 2 unités x 1,5 x 1,5 = 4,5 pixels d'écran par pixel d'art. Avec le filtre au plus proche, les colonnes alternent 4 et 5 pixels (légère déformation, scintillement au défilement). À 720, 1440 et 2160 lignes, c'est entier (3, 6, 9). Le village (zoom 2) donne 6, entier. L'intérieur du temple (zoom 1,5) a le même souci. Options : au pas x1,5 seulement, zoom 4/3 (4 px, cadrage ~12 % plus large) ou 5/3 (5 px, ~10 % plus serré). DÉCISION DU PROPRIÉTAIRE (cadrage du combat) : regarder d'abord une capture zoomée sur le S23. Aucun agent ne le change seul.\n\nAudit du 28/10 : confirmé par mesure à 1920x1080 (plages de 4 px à 37 %, de 5 px à 38 %). Autres échelles fractionnaires du même ordre : élites agrandies à 1,15-1,45 (MonsterRankDef.scale), squash x1,25/x0,8 à chaque coup (actor_rig.gd:380), flamme des bougies 0,55, ailes du Wyrm ; plantes cisaillées et queue du Wyrm tournée librement. Doc fausse à corriger : vfx.md §1 et village.md annoncent 3 px d'écran.",
-      "status": "todo",
+      "description": "Trouvé par le calcul pendant la recherche : à 1080 lignes, l'interface est à x1,5 (PixelGrid) et la caméra du donjon à zoom 1,5 (player.tscn), donc 2 unités x 1,5 x 1,5 = 4,5 pixels d'écran par pixel d'art. Avec le filtre au plus proche, les colonnes alternent 4 et 5 pixels (légère déformation, scintillement au défilement). À 720, 1440 et 2160 lignes, c'est entier (3, 6, 9). Le village (zoom 2) donne 6, entier. L'intérieur du temple (zoom 1,5) a le même souci. Options : au pas x1,5 seulement, zoom 4/3 (4 px, cadrage ~12 % plus large) ou 5/3 (5 px, ~10 % plus serré). DÉCISION DU PROPRIÉTAIRE (cadrage du combat) : regarder d'abord une capture zoomée sur le S23. Aucun agent ne le change seul.\n\nAudit du 28/10 : confirmé par mesure à 1920x1080 (plages de 4 px à 37 %, de 5 px à 38 %). Autres échelles fractionnaires du même ordre : élites agrandies à 1,15-1,45 (MonsterRankDef.scale), squash x1,25/x0,8 à chaque coup (actor_rig.gd:380), flamme des bougies 0,55, ailes du Wyrm ; plantes cisaillées et queue du Wyrm tournée librement. Doc fausse à corriger : vfx.md §1 et village.md annoncent 3 px d'écran.\n\n28/10 (décision 0007, agent art) : le zoom des caméras du monde est maintenant entier (PixelGrid.camera_zoom) : le cadrage voulu arrondi vers le bas, la vue plus large. Donjon et temple : 3 px d'écran par pixel d'art en 720, 4 en 1080 et sur le S23 (au lieu de 4,5 : la vue montre environ 12 % de plus du combat, 30 tuiles de large en 16:9), 6 en 1440, 9 en 2160 ; village : 6 en 1080 (inchangé), 5 en 1600x900. Mesuré sur captures 1920x1080 et 2340x1080 : 92-98 % des plages de couleur sont des multiples de 4 dans le donjon (avant : 37-40 %), 100 % dans le temple et le village. Test unit.pc (_test_whole_art_pixels).\n\n28/10, suite (agent art) : plus aucune échelle fractionnaire sur l'art du pack. Les rangs ne grossissent plus le corps : un élite se lit par son liseré de couleur, son aura au sol (anneaux, rayons pour le Légendaire) et son nom ; seul le corps de jeu reste plus large (MonsterRankDef.radius_multiplier, mêmes chiffres qu'avant : portée et collision inchangées). Un coup reçu fait descendre le corps d'un pixel d'art pendant 0,12 s au lieu du squash x1,25. Flamme des bougies : une scène de particules plus petite à l'échelle 1 (plus de 0,55). Wyrm : ailes repliées par rangées entières de leur dessin, queue tournée par quarts de tour seulement. Plantes : chaque rangée décalée d'un nombre entier de pixels (plus de cisaillement). Un monstre sans image de mort bascule d'un quart de tour d'un coup. Exceptions écrites dans vfx.md §1 (chute dans un trou, âme qui s'enfonce au Seuil, corps avalé par un boss : transitions de 0,5 s au plus). Test unit.vfx « whole scales ». À vérifier sur le S23 : les élites se reconnaissent-ils assez sans leur taille ?\n\nFini côté agent art (28/10), captures dans le dossier fix_art de la session (donjon avant/après en 1920x1080 et 2340x1080, rangs, coup, Wyrm, bougie, temple, village). À regarder sur le S23 : le combat cadré plus large (environ 12 % de plus) reste-t-il lisible ? Plus de scintillement en défilant ? Les élites se reconnaissent-ils sans grossir ?",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_3",
       "due_date": null,
@@ -6092,7 +6092,7 @@
         "pc"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793161745
+      "updated_at": 1793168315
     },
     {
       "id": "task_404",
@@ -6113,7 +6113,7 @@
     {
       "id": "task_405",
       "title": "Passer les anciens StyleBox de l'interface sur le skin commun",
-      "description": "tools/design/check.py tolère 14 fichiers qui construisent encore leurs propres StyleBox (liste STYLEBOX_GRANDFATHERED : HUD, codex, sanctuaire, oaths, classements, cartes d'atouts, chargement, habitants). Les migrer sur src/ui/common/ (UiSkin, OrnateBoard, UiParts) quand on y touche, et retirer chaque fichier de la liste.\n\nFait le 28/10 (branche fix/ui) : les 14 fichiers sortis de la liste de tolérance de tools/design/check.py (elle est vide) ; leurs cadres viennent de src/ui/common : UiSkin.band() (bandes des listes), slot_frame(), note_box() (encart serré), draw_edge() (le cadre de rareté dans une couleur : bannière du Seuil et des Tréfonds, familles d'atouts, invite d'Interact, serment choisi, bulle des habitants), bar_frame(), style_loading_bar(). Une nouvelle règle refuse les valeurs de mise en page impaires dans l'interface. À regarder : la bannière du Seuil/des Tréfonds (encart sombre au lieu d'un fond bleu/rouge arrondi), les pastilles de famille du HUD et des cartes d'atout (cadre du skin au lieu d'un trait arrondi), les cartes de serment, les bulles des habitants de Kagari.",
+      "description": "tools/design/check.py tolère 14 fichiers qui construisent encore leurs propres StyleBox (liste STYLEBOX_GRANDFATHERED : HUD, codex, sanctuaire, oaths, classements, cartes d'atouts, chargement, habitants). Les migrer sur src/ui/common/ (UiSkin, OrnateBoard, UiParts) quand on y touche, et retirer chaque fichier de la liste.\n\nFait le 28/10 (branche fix/ui) : les 14 fichiers sortis de la liste de tolérance de tools/design/check.py (elle est vide) ; leurs cadres viennent de src/ui/common : UiSkin.band() (bandes des listes), slot_frame(), note_box() (encart serré), draw_edge() (le cadre de rareté dans une couleur : bannière du Seuil et des Tréfonds, familles d'atouts, invite d'Interact, serment choisi, bulle des habitants), bar_frame(), style_loading_bar(). Une nouvelle règle refuse les valeurs de mise en page impaires dans l'interface. À regarder : la bannière du Seuil/des Tréfonds (encart sombre au lieu d'un fond bleu/rouge arrondi), les pastilles de famille du HUD et des cartes d'atout, les cartes de serment, les bulles des habitants de Kagari.",
       "status": "review",
       "priority": "low",
       "epic_id": "epic_4",
@@ -6123,13 +6123,13 @@
         "qualité"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793166834
+      "updated_at": 1793170158
     },
     {
       "id": "task_406",
       "title": "Contrat d'équité : plancher de télégraphe et budget de dégâts",
-      "description": "design/pillars.md propose (sans source publiée, à valider en jeu) : une préparation jamais sous 0,4 s (0,6-1,0 s pour les coups lourds et les boss), quelle que soit la difficulté ; en Gardien un coup ordinaire au plus 15-20 % des PV max, un coup de boss 25-30 %, toutes les attaques télégraphiées simultanées 50 %. DÉCISION DU PROPRIÉTAIRE : valider ou ajuster ces chiffres, puis les transformer en tests d'équilibrage.\n\nAudit du 28/10 : aucun plancher dans le code. En Gardien, 18 monstres sur 49 préparent en moins de 0,4 s (chauve-souris et ratons 0,2 s dès l'étage 1 ; défaut MonsterDef 0,35 s) ; les 14 boss passent sous 0,4 s en phase 3 (0,295 s au pire) ; 0,13 s en Cauchemar+10 ; « volley » n'a aucune préparation ; aucune attaque n'a de son de préparation ; l'anneau des ondes de choc s'efface avant le coup. Le budget de dégâts, lui, est tenu (pire coup ordinaire 13 %, pire coup de boss 18 % des PV du héros attendu).",
-      "status": "todo",
+      "description": "design/pillars.md propose (sans source publiée, à valider en jeu) : une préparation jamais sous 0,4 s (0,6-1,0 s pour les coups lourds et les boss), quelle que soit la difficulté ; en Gardien un coup ordinaire au plus 15-20 % des PV max, un coup de boss 25-30 %, toutes les attaques télégraphiées simultanées 50 %. DÉCISION DU PROPRIÉTAIRE : valider ou ajuster ces chiffres, puis les transformer en tests d'équilibrage.\n\nAudit du 28/10 : aucun plancher dans le code. En Gardien, 18 monstres sur 49 préparent en moins de 0,4 s (chauve-souris et ratons 0,2 s dès l'étage 1 ; défaut MonsterDef 0,35 s) ; les 14 boss passent sous 0,4 s en phase 3 (0,295 s au pire) ; 0,13 s en Cauchemar+10 ; « volley » n'a aucune préparation ; aucune attaque n'a de son de préparation ; l'anneau des ondes de choc s'efface avant le coup. Le budget de dégâts, lui, est tenu (pire coup ordinaire 13 %, pire coup de boss 18 % des PV du héros attendu).\n\nFait (branche fix/feel, 28/10) : planchers en données (data/combat/combat_rules.tres) appliqués après difficulté, ascension et phase, en un seul endroit par mécanisme : 0,4 s pour un coup de monstre, 0,5 s pour un boss, 0,4 s pour les ondes de choc, explosions, mèches et pièges ; « volley » prépare 0,5 s (pose + couloirs) ; un son de préparation court au début de chaque préparation (2 à la fois au plus, 1 toutes les 0,1 s) ; marques = zone réelle (couloirs de tirs jusqu'au bout de leur portée, anneaux de 16 tirs en couloirs au lieu d'un petit cercle, tir à distance tracé sur toute la portée, onde de choc et explosions marquées pendant toute la mèche, en suivant le boss) ; flèche de bord pour une menace hors écran ; A6 et A10 n'ajoutent plus qu'un modificateur ; aperçu du bestiaire au vrai temps. Tests : unit.fairness (tous les monstres × difficultés, Cauchemar+10 compris, × phases ; budget de dégâts 13,3 % / 17,7 %), game.fairness.\nÀ VÉRIFIER SUR LE S23 : les anneaux de couloirs d'un boss (beaucoup de rouge à l'écran : lisible ?), le son de préparation (timbre, volume, pas de cacophonie dans une foule : fichier fait à partir de deux sons du jeu, jamais écouté), les flèches de bord (taille, couleur, pas sous le pouce ni sous le bouton d'attaque dans les coins), le ressenti des chauves-souris, ratons et rats plus lents, la phase 3 des boss.\nCaptures (1280x720 et 2340x1080, dans le dossier de session scratchpad/fix_feel/caps) : anneau de couloirs du Wyrm azur (ring_lanes), marque d'onde de choc à mi-mèche (shockwave_mark), tir à distance tracé sur toute sa portée (ranged_line), flèches de bord vers des rats hors écran (threat_arrows : la flèche du coin bas-droit touche le bouton d'attaque).",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6138,12 +6138,12 @@
         "combat"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793161745
+      "updated_at": 1793166783
     },
     {
       "id": "task_407",
       "title": "Tailles tactiles et texte sur téléphone selon la bible",
-      "description": "interface.md « One skin » fixe : boutons de combat avec une zone de toucher d'au moins 96x96 unités (~9 mm sur S23), tout élément tactile 64x64, 16 unités d'écart. Les recommandations Xbox donnent sur mobile un texte bien plus grand que la police BODY actuelle. Mesurer les boutons et le texte réels sur le S23, puis décider (taille d'interface par défaut sur téléphone ?).\n\nAudit du 28/10 (mesuré dans le moteur à 2340x1080) : compétences et esquive Ø 92 unités (8,3 mm) au lieu de 96 ; les 50 contrôles des options sous 64 unités ; écarts de 4 à 14 unités ; le curseur « Taille des boutons » à 0,7 passe sous tous les seuils et à 1,3 fait chevaucher « Prendre » et la compétence 4 ; zone sûre jamais lue (get_display_safe_area) ; texte courant à 32 % de la cible Xbox mobile, sans option pour l'agrandir ; bouton désactivé à 1,64:1 de contraste.\n\nFait le 28/10 (branche fix/ui) : boutons de combat Ø 96 (attaque 144), ceinture 64, Interact 88, 16 unités d'écart, rien à moins de 16 unités de la zone du stick ; « Taille des boutons » devient Normale / Grande (paliers entiers 1 et 1,25, jamais sous les seuils, vérifiés à 2340x1080, 1920x1080 et 1280x720 : test U4 PcTests._test_touch_targets) ; « Prendre » se place à gauche des compétences ou en haut au milieu ; tout ce qui se touche dans la pause, les options, le sac, le marchand, la forge et les conversations du village fait 64x64 au moins, à 16 d'écart (pause sur 3 colonnes, sac et marchand en 3 colonnes, onglets du sac sur 2 rangées) ; zone sûre (SafeArea) lue sur le HUD, le HUD du village, les fenêtres et la zone du stick ; option « Grand texte » (texte de lecture en TITLE, activée par défaut sur téléphone : tous les panneaux tiennent, mesuré en français) ; bouton désactivé à 3,6:1.\nÀ vérifier sur le S23 : la taille des boutons en Normale et Grande (atteinte du pouce, Interact plus à gauche qu'avant), l'encoche réelle (rien de caché, en paysage des deux côtés), le Grand texte par défaut (lisible sans être trop gros ?), les captures dans scratchpad/fix_ui.\nCaptures : /tmp/claude-0/-home-claude/d124b88d-9642-5f48-896d-092820964a06/scratchpad/fix_ui/shots (HUD Normale/Grande, pause, options, sac, sanctuaire et conseil en Grand texte, fragment, encoche simulée, conversation du village) à 2340x1080, 1920x1080 et 1280x720. Retouches après captures : le panneau « Prendre » et un conseil en Grand texte se placent entre les stats et la colonne de la carte (sans les cacher) ; les choix du village sont dans un encart sombre.",
+      "description": "interface.md « One skin » fixe : boutons de combat avec une zone de toucher d'au moins 96x96 unités (~9 mm sur S23), tout élément tactile 64x64, 16 unités d'écart. Les recommandations Xbox donnent sur mobile un texte bien plus grand que la police BODY actuelle. Mesurer les boutons et le texte réels sur le S23, puis décider (taille d'interface par défaut sur téléphone ?).\n\nAudit du 28/10 (mesuré dans le moteur à 2340x1080) : compétences et esquive Ø 92 unités (8,3 mm) au lieu de 96 ; les 50 contrôles des options sous 64 unités ; écarts de 4 à 14 unités ; le curseur « Taille des boutons » à 0,7 passe sous tous les seuils et à 1,3 fait chevaucher « Prendre » et la compétence 4 ; zone sûre jamais lue (get_display_safe_area) ; texte courant à 32 % de la cible Xbox mobile, sans option pour l'agrandir ; bouton désactivé à 1,64:1 de contraste.\n\nFait le 28/10 (branche fix/ui) : boutons de combat Ø 96 (attaque 144), ceinture 64, Interact 88, 16 unités d'écart, rien à moins de 16 unités de la zone du stick ; « Taille des boutons » devient Normale / Grande (paliers entiers 1 et 1,25, jamais sous les seuils, vérifiés à 2340x1080, 1920x1080 et 1280x720 : test U4 PcTests._test_touch_targets) ; « Prendre » se place à gauche des compétences ou en haut, entre les stats et la colonne de la carte ; tout ce qui se touche dans la pause, les options, le sac, le marchand, la forge et les conversations du village fait 64x64 au moins, à 16 d'écart (pause sur 3 colonnes, sac et marchand en 3 colonnes, onglets du sac sur 2 rangées) ; zone sûre (SafeArea) lue sur le HUD, le HUD du village, les fenêtres et la zone du stick ; option « Grand texte » (texte de lecture en TITLE, activée par défaut sur téléphone : tous les panneaux tiennent, mesuré en français) ; bouton désactivé à 3,6:1 ; pas de mots grisés ou rouges sur le bois nu.\nÀ vérifier sur le S23 : la taille des boutons en Normale et Grande (atteinte du pouce, Interact plus à gauche qu'avant), l'encoche réelle (rien de caché, en paysage des deux côtés), le Grand texte par défaut (lisible sans être trop gros ?).\nCaptures : /tmp/claude-0/-home-claude/d124b88d-9642-5f48-896d-092820964a06/scratchpad/fix_ui/shots (HUD Normale/Grande, pause, options, sac, sanctuaire et conseil en Grand texte, fragment, encoche simulée, conversation du village) à 2340x1080, 1920x1080 et 1280x720.",
       "status": "review",
       "priority": "medium",
       "epic_id": "epic_4",
@@ -6153,13 +6153,13 @@
         "android"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793168012
+      "updated_at": 1793170158
     },
     {
       "id": "task_408",
       "title": "Teintes sur l'art du monde : donjon et racines de Kagari",
-      "description": "Audit du 28/10 : 10 thèmes de donjon sur 12 multiplient sols, murs et plateau au-delà du seuil de la bible (canaux ≥ 0,75, écart ≤ 0,12) via dungeon_view.gd:89-103 (Seuil 0,50 ; Fond du Puits 0,62 ; Ossuaire 0,68). L'étalonnage d'écran par biome (screen.gdshader) s'y ajoute. À Kagari, les racines du Puits sont des arbres du pack teintés en violet-noir (0,32 ; 0,2 ; 0,38) et le Puits est teinté. Proposé : thèmes en blanc et tilesets recolorés (recolor.py) ; étalonnage borné par un test sur AmbienceDef, avec les exceptions narratives (Lune de sang, Tréfonds, Seuil) consignées dans une décision (le propriétaire tranche la nuance de la règle) ; de vraies racines dessinées sur la palette.",
-      "status": "todo",
+      "description": "Audit du 28/10 : 10 thèmes de donjon sur 12 multiplient sols, murs et plateau au-delà du seuil de la bible (canaux ≥ 0,75, écart ≤ 0,12) via dungeon_view.gd:89-103 (Seuil 0,50 ; Fond du Puits 0,62 ; Ossuaire 0,68). L'étalonnage d'écran par biome (screen.gdshader) s'y ajoute. À Kagari, les racines du Puits sont des arbres du pack teintés en violet-noir (0,32 ; 0,2 ; 0,38) et le Puits est teinté. Proposé : thèmes en blanc et tilesets recolorés (recolor.py) ; étalonnage borné par un test sur AmbienceDef, avec les exceptions narratives (Lune de sang, Tréfonds, Seuil) consignées dans une décision (le propriétaire tranche la nuance de la règle) ; de vraies racines dessinées sur la palette.\n\n28/10 (décision 0009, agent art) : donjon fait. Les 7 thèmes hors seuil passent à une atténuation neutre (Ossuaire 0,84/0,88/0,92 ; Catacombes, Cavernes noyées, Archives, Ruines, Temple, Tombeau : écart ≤ 0,08, canal ≥ 0,84) ; l'identité du biome reste dans ses tuiles, sa lumière (LightingDef propre à chaque biome) et son étalonnage. Exceptions narratives écrites dans les données (narrative_exception) : thèmes du Seuil, des Tréfonds et du Fond du Puits ; ambiances du Seuil, des Tréfonds, de la Lune de sang et des malédictions (Souffle de cendre, Givre). Test unit.vfx « tints » : teinte des thèmes et cumul thème x étalonnage ≥ 0,6 sur les tons moyens (0,25 à 0,5), exceptions limitées à la liste de la décision. Captures avant/après des 11 biomes à 1920x1080 par l'agent art : biomes toujours reconnaissables. Kagari : commit suivant.\n\nKagari (même jour) : aucune teinte sur les objets du village. Les racines du Puits sont les arbres morts du pack dans leurs propres couleurs (bois mort noueux qui étouffe les maisons endormies ; la teinte violet-noire est retirée). Le Puits n'est plus teinté : c'est le puits du pack recoloré pierre grise, couleur pour couleur, sur la rampe des statues grises du pack (assets/props/well.png, noté dans REUSE.toml et la bible). Les lampes éteintes montrent la lanterne de pierre vide du pack (TilesetDungeon) au lieu de la lanterne allumée assombrie ; allumées, plus de teinte jaune x1,3. Tests unit.village (aucune teinte, positions paires, lampe éteinte = sa propre image) et title.village (Puits sans teinte). À vérifier sur le S23 : les racines se lisent-elles comme des ronces/racines mortes autour des maisons ? Le Puits gris convient-il ? (le puits ocre du pack sans recoloration est l'autre choix, une ligne à changer). Captures village, carte et temple par l'agent art (1:1, x4, gris).",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_3",
       "due_date": null,
@@ -6167,13 +6167,13 @@
         "visuel"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793167513
     },
     {
       "id": "task_409",
       "title": "Premières minutes : premier combat en moins de 30 s, premier contact protégé",
-      "description": "Audit du 28/10 : il faut 60 à 120 s avant le premier combat pour un joueur qui lit (titre, consentement, intro de 6 pages, Kagari, chercher la Veilleuse au temple, Puits, difficulté, descente, deux chargements). Immobile dans la salle de départ, le héros est repéré et touché dans 7 départs sur 33 (17-26 s). 42 % des premiers monstres sont rapides (rat, chauve-souris, serpent, préparation 0,2-0,3 s) ; les monstres lents demandent 6 à 10 coups. Proposé (décision du propriétaire sur le parcours) : au tout premier lancement, l'étage 1 directement après une page d'intro, Kagari et la Veilleuse au premier retour ; salle 0 protégée tant que le héros n'a pas bougé et attaqué ; un premier monstre lent posé dans la salle voisine.",
-      "status": "todo",
+      "description": "Audit du 28/10 : il faut 60 à 120 s avant le premier combat pour un joueur qui lit (titre, consentement, intro de 6 pages, Kagari, chercher la Veilleuse au temple, Puits, difficulté, descente, deux chargements). Immobile dans la salle de départ, le héros est repéré et touché dans 7 départs sur 33 (17-26 s). 42 % des premiers monstres sont rapides (rat, chauve-souris, serpent, préparation 0,2-0,3 s) ; les monstres lents demandent 6 à 10 coups. Proposé (décision du propriétaire sur le parcours) : au tout premier lancement, l'étage 1 directement après une page d'intro, Kagari et la Veilleuse au premier retour ; salle 0 protégée tant que le héros n'a pas bougé et attaqué ; un premier monstre lent posé dans la salle voisine.\n\nFait (branche fix/flow, décision 0010) : le tout premier Jouer (profil sans partie ni sauvegarde) dit « Descendre » : questions de confidentialité d'abord si elles sont dues, puis l'histoire (passable), puis l'étage 1 en Gardien, sans Kagari, Puits ni choix ; Kagari et la Veilleuse au premier retour (sa ligne de première mort sur l'écran de mort, la quête de la boîte à braises inchangée, cf. village.md « The first return »). Trois premières parties : salle de départ protégée tant que le héros n'a pas marché 110 px ET frappé ; la salle voisine (la première salle à monstres) ne garde qu'une Gelée lente (40 px/s, préparation 0,8 s, 10 PV, 2-3 coups de katana), data/tutorial/first_steps.tres. Écran de mort : « Redescendre ». Test : lancement → premier monstre qui repère le héros ≈ 15 s de temps de jeu (histoire passée), limite 30 s.\nÀ vérifier sur le S23 : (1) premier lancement réel (désinstaller ou effacer les données) : temps jusqu'au premier combat avec les vrais chargements ; (2) on peut lire le premier indice sans être touché ; (3) la première Gelée se lit bien (lente, préparation visible) et tombe en 2-3 coups ; (4) premier retour à Kagari après la mort : la Veilleuse et l'objectif ont du sens ; (5) Redescendre relance bien une descente avec la même difficulté.",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_7",
       "due_date": null,
@@ -6182,13 +6182,13 @@
         "combat"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793166835
     },
     {
       "id": "task_410",
       "title": "Rythme des étages : répits, monstres selon la surface, trésor garanti",
-      "description": "Audit du 28/10 (960 étages générés) : sur le trajet vers l'escalier, médiane de 4 salles de combat d'affilée (max 9, 55 % des étages au-delà de 3) ; 9 % seulement de salles sans monstre ; nombre de monstres sans lien avec la taille de la salle (corrélation 0,02, floor_populator.gd:156) ; 35 % des étages sans coffre, coffres en cul-de-sac 6 % ; 37 % des espaces ouverts fusionnés au-delà d'un écran (salles à 2 cases d'écart fusionnées par smooth()). Proposé : effectif selon la surface (1 monstre pour 25-35 cases, plafonné), une salle calme toutes les 2-3 sur le chemin, pic vers 60-80 % puis relâche, au moins un trésor, écart de 3 cases entre salles ; tests sur graines fixes. Durée réelle d'un étage à mesurer (télémétrie floor_times ; cible 3-6 min).",
-      "status": "todo",
+      "description": "Audit du 28/10 (960 étages générés) : sur le trajet vers l'escalier, médiane de 4 salles de combat d'affilée (max 9, 55 % des étages au-delà de 3) ; 9 % seulement de salles sans monstre ; nombre de monstres sans lien avec la taille de la salle (corrélation 0,02, floor_populator.gd:156) ; 35 % des étages sans coffre, coffres en cul-de-sac 6 % ; 37 % des espaces ouverts fusionnés au-delà d'un écran (salles à 2 cases d'écart fusionnées par smooth()). Proposé : effectif selon la surface (1 monstre pour 25-35 cases, plafonné), une salle calme toutes les 2-3 sur le chemin, pic vers 60-80 % puis relâche, au moins un trésor, écart de 3 cases entre salles ; tests sur graines fixes. Durée réelle d'un étage à mesurer (télémétrie floor_times ; cible 3-6 min).\n\nFait le 28/10 (décision 0012, branche fix/pacing) : salles à 3 cases d'écart (smooth() ne les fusionne plus), couloirs coudés du côté qui traverse le moins de salles ; monstres selon la surface ouverte (70 cases pour 2 au premier étage, plus les supplémentaires de la profondeur et de la difficulté ; élite ou gros corps compte double) ; au plus 3 salles de combat d'affilée sur le chemin de chaque escalier (une salle calme ensuite : source, autel, coffre ou rien) ; embuscade et pacte vers 60-80 % du chemin, sinon une élite (dès l'étage 2) ; marchand et forge après (80 % et plus) ; un coffre par étage au moins, d'abord en cul-de-sac ; 2 cases libres autour des piliers. Mesuré sur 960 étages (tools/levels/floor_report.py) : combats d'affilée médiane 4 / max 9 → 3 au plus ; étages sans coffre 35 % → 0 % ; corrélation surface/monstres 0,02 → 0,64 ; espaces ouverts à 2 salles 30 % → 22 % ; monstres par étage inchangés à ±5 %. Tests : unit.pacing. À vérifier sur le S23 : le rythme ressenti (salles calmes, pic, relâche), la densité des grandes salles (jusqu'à 9), la durée d'un étage (cible 3-6 min).",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6197,13 +6197,13 @@
         "équilibrage"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793166309
     },
     {
       "id": "task_411",
       "title": "Sensations : tampon d'entrée, gel pendant un ralenti, vibrations, menaces hors écran",
-      "description": "Audit du 28/10 : tampon d'attaque 0,3 s (règle : 0,1-0,15 s), aucun tampon pour l'esquive et les compétences, décompte en temps de jeu (figé pendant un gel) ; HitStop.freeze gèle aussi pendant un ralenti ; un gel, un kick et une vibration par cible touchée ; le téléphone vibre à chaque coup ordinaire et aux pas des boss ; la vignette rouge de dégâts ignore l'option Flashs ; nombres de dégâts non fusionnés en foule ; aucune flèche pour une menace hors écran. Proposé : tampon unique de 0,12 s en temps réel, consommé à l'usage (core_tests.gd:34 à mettre à jour avec l'accord du propriétaire) ; garde « pas de gel pendant un ralenti » ; un retour par attaque ; vibration seulement pour blessure, critique et boss ; vignette derrière l'option ; flèche de bord.",
-      "status": "todo",
+      "description": "Audit du 28/10 : tampon d'attaque 0,3 s (règle : 0,1-0,15 s), aucun tampon pour l'esquive et les compétences, décompte en temps de jeu (figé pendant un gel) ; HitStop.freeze gèle aussi pendant un ralenti ; un gel, un kick et une vibration par cible touchée ; le téléphone vibre à chaque coup ordinaire et aux pas des boss ; la vignette rouge de dégâts ignore l'option Flashs ; nombres de dégâts non fusionnés en foule ; aucune flèche pour une menace hors écran. Proposé : tampon unique de 0,12 s en temps réel, consommé à l'usage (core_tests.gd:34 à mettre à jour avec l'accord du propriétaire) ; garde « pas de gel pendant un ralenti » ; un retour par attaque ; vibration seulement pour blessure, critique et boss ; vignette derrière l'option ; flèche de bord.\n\nFait (branche fix/feel, 28/10) : un seul tampon de 0,12 s en temps réel pour l'attaque, la roulade et les compétences, l'appui le plus récent gagne (core_tests mis à jour, décision 0008) ; option « Charger sans maintenir » (Options > Jeu : deux attaques rapprochées chargent, une de plus libère ; décision 0011) ; plus de gel pendant un ralenti ; un gel et un kick par coup, pas par cible ; tremblement en pixels d'art entiers et décroissance en temps réel ; vibration seulement pour une blessure, un critique, une phase ou la mort d'un boss (et la carte de malédiction) ; vignette rouge derrière l'option Flashs, 3 par seconde au plus avec la foudre ; nombres de dégâts fusionnés par cible sur 0,3 s ; flèches de bord (voir task_406). Tests : unit.feel_limits, game.feel_limits.\nÀ VÉRIFIER SUR LE S23 : le tampon (attaques rapides, roulade juste avant la fin de sa recharge), l'option de charge au pouce, les vibrations (rares et nettes), les nombres fusionnés dans une foule, la vignette avec Flashs coupés.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6212,13 +6212,13 @@
         "android"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793165202
     },
     {
       "id": "task_412",
       "title": "Chance et choix : pitié, soin avant boss, pas de répétition, rôles déclarés",
-      "description": "Audit du 28/10 : aucune protection contre la malchance sur la rareté (loot_roller.gd) ; pas de soin garanti avant un boss sauf en Pèlerin ; tirages avec remise pour événements, malédictions, rencontres, pactes et épreuves (voir task_277) ; aucun rôle (pilier ou « à construire ») déclaré sur les atouts et affixes, 0 affixe sur 22 relié à une famille (Brûlant et des Braises → Brasier, Gelé et Fracassant → Givre, Électrique → Orage, Vampirique → Sang, des Échos → Arcane). Décision du propriétaire : le sort des 4 atouts sans famille (Force, Précision, Fortune, Bannière de guerre).",
-      "status": "backlog",
+      "description": "Audit du 28/10 : aucune protection contre la malchance sur la rareté (loot_roller.gd) ; pas de soin garanti avant un boss sauf en Pèlerin ; tirages avec remise pour événements, malédictions, rencontres, pactes et épreuves (voir task_277) ; aucun rôle (pilier ou « à construire ») déclaré sur les atouts et affixes, 0 affixe sur 22 relié à une famille (Brûlant et des Braises → Brasier, Gelé et Fracassant → Givre, Électrique → Orage, Vampirique → Sang, des Échos → Arcane). Décision du propriétaire : le sort des 4 atouts sans famille (Force, Précision, Fortune, Bannière de guerre).\n\nFait le 28/10 (décision 0012, branche fix/pacing) : protection contre la malchance (après 20 objets d'équipement sans Rare ou mieux, Rare et Épique pèsent +100 % par objet de plus ; compteur sauvegardé avec la partie, RunLuck) ; Source de la Dernière Veille (soin complet, sans coût ni risque) dans la salle de départ de chaque étage de boss, à toutes les difficultés ; tirages sans remise dans une partie pour événements, malédictions (y compris les deux chemins, qui n'en partagent plus), rencontres, pactes et épreuves, identiques à la reprise ; rôle déclaré (pilier ou « à construire ») sur les 28 atouts et reliques et les 22 affixes ; Force, Précision, Fortune et Bannière de guerre piliers hors famille ; Brûlant et des Braises → Brasier, Gelé et Fracassant → Givre, Électrique → Orage, Vampirique → Sang, des Échos → Arcane (étiquette ItemAffixDef.family). Tests : unit.luck. À vérifier sur le S23 : la source avant chaque boss (visible, lisible), et qu'aucun événement ne revient trop tôt.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6227,12 +6227,12 @@
         "économie"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793166309
     },
     {
       "id": "task_413",
       "title": "Accessibilité de base : maintien, difficulté en partie, mode assisté, texte qui saute",
-      "description": "Audit du 28/10, niveau Basic des Game Accessibility Guidelines exigé par pillars.md : l'attaque chargée se fait seulement en maintenant (pas d'option bascule) ; difficulté non modifiable en partie (game.gd:274) ; pas de mode assisté façon Hades/Celeste ; les mots sautent de ligne pendant la frappe du dialogue (VC_CHARS_BEFORE_SHAPING, dialogue_box.gd:219, cinematic_view.gd:280) ; pas de réglage de vitesse du texte ; pas de bouton « Redescendre » sur l'écran de mort (Kagari obligatoire) ; indices de 3 lignes au lieu d'une et non relisibles (pas d'onglet Conseils au codex). Décisions du propriétaire : mode assisté, et si changer de difficulté en partie sort la partie des records.\n\nPartie interface faite le 28/10 (branche fix/ui, à vérifier) : les mots ne sautent plus de ligne pendant la frappe (VC_CHARS_AFTER_SHAPING sur DialogueBox, village et cinématiques), réglage « Vitesse du texte » (Lente / Normale / Rapide / Immédiate), dialogue du sanctuaire à 60 caractères par ligne au plus et 3 lignes par page (les pages trop longues se coupent). Le reste (charge sans maintien, difficulté en partie, mode assisté, Redescendre) relève des autres chantiers.",
+      "description": "Audit du 28/10, niveau Basic des Game Accessibility Guidelines exigé par pillars.md : l'attaque chargée se fait seulement en maintenant (pas d'option bascule) ; difficulté non modifiable en partie (game.gd:274) ; pas de mode assisté façon Hades/Celeste ; les mots sautent de ligne pendant la frappe du dialogue (VC_CHARS_BEFORE_SHAPING, dialogue_box.gd:219, cinematic_view.gd:280) ; pas de réglage de vitesse du texte ; pas de bouton « Redescendre » sur l'écran de mort (Kagari obligatoire) ; indices de 3 lignes au lieu d'une et non relisibles (pas d'onglet Conseils au codex). Décisions du propriétaire : mode assisté, et si changer de difficulté en partie sort la partie des records.\n\nPartie interface faite le 28/10 (branche fix/ui, à vérifier) : les mots ne sautent plus de ligne pendant la frappe (VC_CHARS_AFTER_SHAPING sur DialogueBox, village et cinématiques), réglage « Vitesse du texte » (Lente / Normale / Rapide / Immédiate), dialogue du sanctuaire à 60 caractères par ligne au plus et 3 lignes par page (les pages trop longues se coupent).",
       "status": "todo",
       "priority": "medium",
       "epic_id": "epic_4",
@@ -6243,13 +6243,13 @@
         "android"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793166239
+      "updated_at": 1793170158
     },
     {
       "id": "task_414",
       "title": "Performance prouvée sur le S23 : P99, pools, une création lourde par image",
-      "description": "Audit du 28/10 : aucune mesure sur le téléphone (voir task_98). Sur la VM : combat de 40 monstres, moyenne 5,75 ms, P95 11,9 ms, max 23,9 ms ; lancement jusqu'au titre 4,4-4,6 s en headless (cible < 5 s, à risque sur Android). Écarts dans le code : projectiles et nombres de dégâts non mis en pool ; defer_monsters et SummonEffect créent tout un lot dans la même image ; MenuNav._process alloue et scanne un groupe à chaque image ; Tutorial._check_world continue quand tous les indices sont vus ; perf_probe ne donne pas de P99.",
-      "status": "backlog",
+      "description": "Audit du 28/10 : aucune mesure sur le téléphone (voir task_98). Sur la VM : combat de 40 monstres, moyenne 5,75 ms, P95 11,9 ms, max 23,9 ms ; lancement jusqu'au titre 4,4-4,6 s en headless (cible < 5 s, à risque sur Android). Écarts dans le code : projectiles et nombres de dégâts non mis en pool ; defer_monsters et SummonEffect créent tout un lot dans la même image ; MenuNav._process alloue et scanne un groupe à chaque image ; Tutorial._check_world continue quand tous les indices sont vus ; perf_probe ne donne pas de P99.\n\nFait le 28/10 (branche fix/pacing) : projectiles et nombres de dégâts en pool (NodePool : retirés de l'arbre et réutilisés, 48 au plus par monde) ; nombres redessinés seulement quand ils changent ; monstres appelés (coffre piégé, division, invocation) un par image ; MenuNav ne rescanne le groupe « menu » que quand un menu arrive ou part ; Tutorial cesse de chercher ses indices quand tous sont vus ; aura d'arme et cadre d'indice sans allocation par image ; perf_probe donne P99 et la part d'images au-delà de 16,7 ms. Tests : unit.perf et game.perf. Mesures VM dans docs/performance.md. À vérifier sur le S23 : P99 en combat chargé (carte task_98).",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_5",
       "due_date": null,
@@ -6258,13 +6258,13 @@
         "android"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793166309
     },
     {
       "id": "task_415",
       "title": "Corriger les erreurs de doc trouvées par l'audit",
-      "description": "vfx.md §1 et village.md disent « 3 pixels d'écran » par pixel d'art : faux à 1080 lignes (4,5 dans le donjon, 6 au village) ; dungeon.md a deux fois la section « Room trials » (l. 516-545 et 546-575) et dit « a couple of minutes » par étage (cible 3-6 min). Positions impaires à Kagari (temple 747, racine 1225, deux décors) ; alpha non binaire de cracks.png et spike_holes.png.",
-      "status": "todo",
+      "description": "vfx.md §1 et village.md disent « 3 pixels d'écran » par pixel d'art : faux à 1080 lignes (4,5 dans le donjon, 6 au village) ; dungeon.md a deux fois la section « Room trials » (l. 516-545 et 546-575) et dit « a couple of minutes » par étage (cible 3-6 min). Positions impaires à Kagari (temple 747, racine 1225, deux décors) ; alpha non binaire de cracks.png et spike_holes.png.\n\n28/10 (agent art) : positions impaires de Kagari corrigées (temple 748, racine 1224, décors 1104 et 1176) et testées (unit.village).\n\nAlpha binaire : les fissures du sol qui s'effondre (cracks.png) et les trous du piège à pointes (spike_holes.png) sont opaques (le reflet clair des fissures, à 24 %, est retiré : le noir seul se lit sur tous les sols) ; le sol qui s'effondre n'est plus dessiné à 55 % au repos, il tremble par pixels entiers et s'assombrit en tramage. tools/design/check.py vérifie maintenant l'alpha binaire de tout l'art du monde et des effets ; test unit.vfx « hazards ». À voir sur le S23 : les fissures au repos sont-elles assez visibles sans être criardes ?\n\nDoc : vfx.md §1 et village.md donnent maintenant les vrais chiffres (entiers, décision 0007) ; la section « Room trials » en double dans dungeon.md est retirée (la copie était identique, ligne pour ligne). Reste « a couple of minutes » par étage dans dungeon.md : laissé à l'agent du rythme des étages (task_410), qui fixe la durée cible.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_5",
       "due_date": null,
@@ -6272,10 +6272,221 @@
         "qualité"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793168280
     },
     {
       "id": "task_416",
+      "title": "Anneaux « féroces » : la seconde vague n'a pas sa propre marque",
+      "description": "Les versions féroces des anneaux de tirs (hailstorm_fierce, toxic_bloom_fierce, fire_ring_fierce, wailing_ring_fierce, coin_storm_fierce...) tirent une seconde vague 0,45 s après la première, décalée d'un demi-écart : elle tombe dans les trous que montrait la marque et n'a pas de marque à elle (TelegraphView ne montre que le premier effet d'une compétence). Proposé : montrer les couloirs de la seconde vague dès que la première part (ou les deux pendant l'incantation), et la compter dans le test unit.fairness.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "combat",
+        "vfx"
+      ],
+      "created_at": 1793165202,
+      "updated_at": 1793165202
+    },
+    {
+      "id": "task_417",
+      "title": "Équilibrage après les planchers de préparation",
+      "description": "Les planchers (0,4 s / 0,5 s boss) rallongent les préparations des monstres rapides (chauves-souris, ratons, rats, crânes) et des boss en phase 3, et A6/A10 ont perdu un modificateur (A6 plus de « moins de temps pour esquiver », A10 plus de +15 % de Vie) : Cauchemar+10 est un peu plus facile. Repasser les outils d'équilibrage (game-balancer) en Gardien et en Cauchemar+10, et chercher le défi dans les chiffres, la densité et les motifs (décision 0008), pas dans des préparations plus courtes.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "équilibrage",
+        "combat"
+      ],
+      "created_at": 1793165202,
+      "updated_at": 1793165202
+    },
+    {
+      "id": "task_418",
+      "title": "Budget de dégâts : attaques simultanées et élites",
+      "description": "Le test unit.fairness tient le budget d'un coup ordinaire (≤ 20 %) et d'un coup de boss (≤ 30 %) sur Gardien pour les monstres simples. Pas encore mesuré : toutes les attaques télégraphiées simultanées ensemble ≤ 50 % (pillars.md) et les élites (×1,15, Légendaire ×1,3 : 15 % et 17 % au pire selon l'audit).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "équilibrage",
+        "tests"
+      ],
+      "created_at": 1793165202,
+      "updated_at": 1793165202
+    },
+    {
+      "id": "task_419",
+      "title": "Couloirs de tirs dessinés à travers les murs",
+      "description": "Les marques de tirs vont maintenant jusqu'au bout de la portée (décision 0008) ; un mur arrête le tir mais pas sa marque. À voir sur le S23 si cela gêne ; sinon couper le couloir au premier mur (un rayon par couloir au début de la préparation).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "vfx",
+        "combat"
+      ],
+      "created_at": 1793165202,
+      "updated_at": 1793165202
+    },
+    {
+      "id": "task_420",
+      "title": "Aide sans jugement : Aide des âmes, difficulté en partie, indices relisibles",
+      "description": "Partie de task_413 faite sur la branche fix/flow (décision 0011 ; le maintien de la charge et le texte qui saute sont à d'autres branches). Options > Jouabilité > Difficulté : « Aide des âmes » (20 % de dégâts en moins, +2 % par mort avec l'aide, 80 % au plus ; data/player/assist.tres ; gardée dans le profil). Menu pause > « Difficulté » : seulement plus bas, pour la partie en cours (les monstres présents suivent). Une partie aidée (aide activée à un moment, ou difficulté baissée) est notée dans la sauvegarde, n'entre dans aucun classement, n'établit aucun record (temps, Fond du Puits, score du Glas de l'aube) ; âmes, histoire, codex, succès comptent. Indices : une ligne chacun (anglais et français, les 33 réécrits), cadre à la largeur de la ligne qui évite les coins du HUD ; un indice qui expire sans être lu revient une fois à un étage suivant ; onglet « Conseils » au codex.\nÀ vérifier sur le S23 : (1) l'option se trouve et se comprend ; (2) avec l'aide, un coup ordinaire fait bien moins mal ; (3) Pause > Difficulté baisse bien et le HUD affiche la nouvelle ; (4) les indices tiennent sur une ligne en français et ne cachent pas la barre de vie ; (5) l'onglet Conseils au codex.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "android",
+        "records"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793166835
+    },
+    {
+      "id": "task_421",
+      "title": "Menu pause plein à 720 lignes (8 boutons)",
+      "description": "Avec « Difficulté », le menu pause a huit lignes de 54 unités et remplit l'écran à 1280x720 (planche de y 30 à 705). Si les boutons passent à 64 unités (task_407), retirer la ligne d'aide du bas (or et âmes) ou regrouper deux boutons.\n\n28/10 (fusion de fix/ui) : la pause passe sur une grille de 3 colonnes dans un encart (boutons 340x64, leur note dessous, 16 unités d'écart) : les 8 boutons (3, 3, 2) et la ligne d'aide tiennent à 720 lignes en français avec la place d'une rangée de plus (vérifié par PcTests). À voir sur le S23.",
+      "status": "review",
+      "priority": "low",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793170158
+    },
+    {
+      "id": "task_422",
+      "title": "Statistiques de jeu : marquer les parties aidées",
+      "description": "Les statistiques de jeu (Talo) ne savent pas qu'une partie était aidée (Aide des âmes, difficulté baissée) : les mesures d'équilibrage les mélangent. Ajouter le drapeau aux propriétés envoyées demande de mettre à jour docs/privacy-ops.md et la fiche Data safety (ce qui est envoyé). Idée, à décider.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "en ligne",
+        "équilibrage"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793166835
+    },
+    {
+      "id": "task_423",
+      "title": "Cadre des indices : coins du HUD en dur",
+      "description": "HintBox.CLEAR_LEFT (452) et CLEAR_RIGHT (244) recopient la mise en page de hud.tscn (barres à gauche jusqu'à 436, sac/pause/minicarte dans les 236 de droite). Si le HUD bouge (zone sûre, tailles tactiles), mettre ces valeurs à jour ou les demander au HUD.\n\n28/10 (fusion de fix/ui) : HintBox reçoit Hud.top_room() (l'espace réel entre les stats et la colonne de la carte, zone sûre comprise) et s'y centre quand il y tient ; CLEAR_LEFT/CLEAR_RIGHT ne servent plus que de repli (écran de 1280 de large).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "qualité"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793170158
+    },
+    {
+      "title": "Chute, Seuil, corps avalé : disparitions en fondu dithéré au lieu d'un rétrécissement",
+      "description": "Reste de la décision 0007 (agent art, 28/10) : trois transitions rétrécissent encore l'art du pack et le font disparaître en alpha : la chute dans un trou (Actor, échelle vers 0 et rotation en 0,5 s), l'âme du héros qui s'enfonce au Seuil (Threshold._sink_soul, échelle 0,7 x 0,25) et le corps avalé par un boss qui se relève (BossArena, échelle 0,5). Écrites comme exceptions dans docs/vfx.md §1. Mieux : une disparition dithérée par le shader du corps (BodyLook, comme les morts) ou des images dessinées.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_3",
+      "tags": [
+        "visuel",
+        "vfx"
+      ],
+      "id": "task_424",
+      "due_date": null,
+      "created_at": 1793165896,
+      "updated_at": 1793165896
+    },
+    {
+      "title": "Codex : aperçus des monstres à échelle fractionnaire",
+      "description": "Trouvé par l'agent art en appliquant la décision 0007 (28/10), hors de son périmètre (interface) : la page d'un monstre du codex le dessine à min(échelle voulue, place disponible) (monster_page.gd:230, look_scale quelconque) et l'aperçu d'attaque met la scène à size.x / 260 et un boss à 2,2 (attack_preview.gd:110-115) : pixels de deux tailles dans le codex. Arrondir à un pas entier vers le bas (comme PixelGrid.camera_zoom) et ajouter le cas au test « whole scales ».",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_3",
+      "tags": [
+        "visuel",
+        "ui"
+      ],
+      "id": "task_425",
+      "due_date": null,
+      "created_at": 1793168315,
+      "updated_at": 1793168315
+    },
+    {
+      "id": "task_426",
+      "title": "Rythme des étages : régler les chiffres en jouant sur le S23",
+      "description": "Suite de task_410. Les chiffres du rythme sont des valeurs de départ (dungeon_config.tres > Population, Pacing) : 70 cases pour 2 monstres au premier étage, 9 au plus par salle, 3 combats d'affilée au plus, pic à 60-80 % du chemin, élite au pic dès l'étage 2. À jouer en Pèlerin et en Martyr, puis ajuster ; mesurer la durée réelle d'un étage (télémétrie floor_times, cible 3-6 min).",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "niveaux",
+        "playtest",
+        "équilibrage"
+      ],
+      "created_at": 1793166309,
+      "updated_at": 1793166309
+    },
+    {
+      "id": "task_427",
+      "title": "Couloirs qui fusionnent encore les salles (22 % des espaces ouverts)",
+      "description": "Après l'écart de 3 cases (task_410), 22 % des espaces ouverts tiennent encore 2 salles ou plus (30 % avant), surtout par des couloirs parallèles à 1-2 cases que smooth() ouvre en bandes larges. Piste : relier chaque salle à la plus proche, ou refuser un couloir à moins de 3 cases d'un autre. Change la topologie des étages : à décider en jouant.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "niveaux"
+      ],
+      "created_at": 1793166309,
+      "updated_at": 1793166309
+    },
+    {
+      "id": "task_428",
+      "title": "Pools pour les effets courants et les monstres",
+      "description": "Suite de task_414 : projectiles et nombres sont en pool ; restent les effets courants (ImpactVfx, SheetVfx, particules CPU, flashs de lumière) et les monstres d'embuscade et d'invocation (une instanciation par image suffit pour l'instant). À faire si le S23 montre des pics à la création (task_98).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "due_date": null,
+      "tags": [
+        "perf",
+        "android"
+      ],
+      "created_at": 1793166309,
+      "updated_at": 1793166309
+    },
+    {
+      "id": "task_429",
+      "title": "Montrer la famille d'un affixe sur la fiche d'objet",
+      "description": "Les affixes à thème déclarent leur famille (ItemAffixDef.family, décision 0012) mais la fiche d'objet ne la montre pas encore (comme « Rune de Brasier »). Idée d'interface, à valider.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "ui"
+      ],
+      "created_at": 1793166309,
+      "updated_at": 1793166309
+    },
+    {
+      "id": "task_430",
       "title": "Skin Kenney à 3 unités par pixel d'art : 4,5 pixels d'écran sur le S23",
       "description": "Les pièces de l'interface (assets/ui/rpg/, Kenney) sont du pixel art 16 px stocké en x3 : 3 unités par pixel d'art, donc 4,5 pixels d'écran à l'échelle x1,5 du téléphone (pixels inégaux, comme le donjon avant la décision 0007). Leurs marges (9, 15, 39, 42) et OrnateBoard.INSET (9) restent des multiples de 3 exprès (exception écrite dans interface.md « One skin », Pixels). Pour des pixels entiers partout : redessiner le skin à 2 ou 4 unités par pixel (x2 ou x4). Décision du propriétaire (art, cadre de l'interface).",
       "status": "backlog",
@@ -6286,11 +6497,11 @@
         "ui",
         "visuel"
       ],
-      "created_at": 1793168012,
-      "updated_at": 1793168012
+      "created_at": 1793170158,
+      "updated_at": 1793170158
     },
     {
-      "id": "task_417",
+      "id": "task_431",
       "title": "Boutons ronds du HUD : la sphère de 32 px dessinée à une échelle non entière",
       "description": "ActionButton dessine backgroundwood.png (32x32) à la taille de sa zone de toucher : 144 unités pour l'attaque (4,5 unités par pixel), 120 en taille Grande… Garder la zone de toucher et dessiner l'art au multiple entier inférieur (128, 96…) ou des sphères redessinées aux bonnes tailles. À regarder sur le S23 (rond flou ou pixels inégaux ?).",
       "status": "backlog",
@@ -6301,13 +6512,13 @@
         "ui",
         "visuel"
       ],
-      "created_at": 1793168012,
-      "updated_at": 1793168012
+      "created_at": 1793170158,
+      "updated_at": 1793170158
     },
     {
-      "id": "task_418",
+      "id": "task_432",
       "title": "Contrôle tactile U4 sur tous les écrans",
-      "description": "PcTests._test_touch_targets / _test_menu_targets vérifient 64x64 et 16 unités d'écart sur le HUD, la pause, les options, le sac, le marchand, la forge et une conversation du village. Le bouton de fabrique (MenuWindow.button, UiParts.button) impose déjà 64 de haut partout, mais les écarts ne sont pas vérifiés sur l'écran titre, le sanctuaire, le codex, les classements, le compte, le consentement, la difficulté, les serments et le panneau de debug : étendre le test et corriger ce qu'il trouve.",
+      "description": "PcTests._test_touch_targets / _test_menu_targets vérifient 64x64 et 16 unités d'écart sur le HUD, la pause, les options, le sac, le marchand, la forge et une conversation du village. Le bouton de fabrique (MenuWindow.button, UiParts.button) impose déjà 64 de haut partout, mais les écarts ne sont pas vérifiés sur l'écran titre, le sanctuaire, le codex, les classements, le compte, le consentement, la difficulté (et RunDifficultyDialog), les serments et le panneau de debug : étendre le test et corriger ce qu'il trouve.",
       "status": "todo",
       "priority": "medium",
       "epic_id": "epic_4",
@@ -6316,23 +6527,23 @@
         "ui",
         "tests"
       ],
-      "created_at": 1793168012,
-      "updated_at": 1793168012
+      "created_at": 1793170158,
+      "updated_at": 1793170158
     },
     {
-      "id": "task_419",
-      "title": "Conseils du tutoriel trop longs en Grand texte",
-      "description": "Avec le Grand texte (par défaut sur téléphone), un conseil de 3 lignes en BODY devient 5 lignes en TITLE dans un panneau de 760 unités en haut de l'écran : il tient (vérifié) mais couvre le haut du combat. pillars.md veut des conseils d'une ligne : les raccourcir (chantier des premières minutes) ou les paginer ; à juger sur le S23.",
+      "id": "task_433",
+      "title": "Conseils du tutoriel en Grand texte : place en haut de l'écran",
+      "description": "Avec le Grand texte (par défaut sur téléphone), un conseil passe en TITLE dans un panneau jusqu'à 880 unités entre les stats et la colonne de la carte : il tient (vérifié) mais couvre plus du haut du combat ; à juger sur le S23 avec les conseils d'une ligne.",
       "status": "todo",
-      "priority": "medium",
+      "priority": "low",
       "epic_id": "epic_4",
       "due_date": null,
       "tags": [
         "ui",
         "android"
       ],
-      "created_at": 1793168012,
-      "updated_at": 1793168012
+      "created_at": 1793170158,
+      "updated_at": 1793170158
     }
   ]
 }

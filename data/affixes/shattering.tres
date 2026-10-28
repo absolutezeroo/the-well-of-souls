@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="1_k8npm"]
 [ext_resource type="Script" path="res://src/definitions/passives/status_damage_passive.gd" id="2_tp020"]
 [ext_resource type="Script" path="res://src/definitions/items/item_affix_def.gd" id="3_h5by6"]
+[ext_resource type="Resource" path="res://data/perks/synergies/frost.tres" id="role_family"]
 
 [sub_resource type="Resource" id="Resource_wqfp2"]
 script = ExtResource("2_tp020")
@@ -11,6 +12,8 @@ bonus_per_stack = 0.25
 
 [resource]
 script = ExtResource("3_h5by6")
+role = 2
+family = ExtResource("role_family")
 slots = 1
 passives = Array[ExtResource("1_k8npm")]([SubResource("Resource_wqfp2")])
 id = &"shattering"

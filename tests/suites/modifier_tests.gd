@@ -145,11 +145,11 @@ func run_game(game: Game) -> void:
 	# Invoke the module hook directly, keeping loot/rank randomness out of the fuse regression.
 	burst.on_died(found, null, false, true)
 	check(not player.statuses.has(&"poison"), "a toxic death warns before its payload lands")
-	await _frames(ceili(burst.fuse * 60.0) + 5)
+	await _frames(ceili(Combat.RULES.blast_warning(burst.fuse) * 60.0) + 5)
 	check(player.statuses.has(&"poison"), "the delayed toxic burst applies poison after its warning")
 	player.statuses.clear()
 	burst.on_died(found, null, true, true)
-	await _frames(ceili(burst.fuse * 60.0) + 5)
+	await _frames(ceili(Combat.RULES.blast_warning(burst.fuse) * 60.0) + 5)
 	check(not player.statuses.has(&"poison"), "falling into a hole never releases the modifier's toxic burst")
 	await _test_new_combat(game)
 
@@ -218,7 +218,7 @@ func _test_new_combat(game: Game) -> void:
 	player._invulnerable_time = 0.0
 	cold.on_died(glacial, null, false, true)
 	check(is_equal_approx(player.statuses.speed_multiplier(), 1.0), "Glacial's death burst warns before slowing")
-	await _frames(ceili(cold.fuse * 60) + 5)
+	await _frames(ceili(Combat.RULES.blast_warning(cold.fuse) * 60) + 5)
 	check(is_equal_approx(player.statuses.speed_multiplier(), 0.75), "Glacial's death burst delivers its cold payload")
 	player.statuses.clear()
 	glacial.free()
@@ -266,7 +266,7 @@ func _test_new_combat(game: Game) -> void:
 	player.hp = player.get_max_hp()
 	player._invulnerable_time = 0.0
 	health = player.hp
-	await _frames(ceili(pulse.fuse * vengeful.get_telegraph_scale() * 60) + 5)
+	await _frames(ceili(vengeful.windup_for(pulse.fuse) * 60) + 5)
 	check(player.hp < health, "the warned riposte actually deals damage after its fuse")
 	pulse.on_damaged(vengeful, hit, 1)
 	check(not is_instance_valid(state.pending) and state.hits == 0, "the riposte cooldown prevents an immediate new charge")
@@ -302,7 +302,7 @@ func _test_new_combat(game: Game) -> void:
 	player._invulnerable_time = 0.0
 	health = player.hp
 	unstable.is_falling = true
-	await _frames(ceili(pulse.fuse * unstable.get_telegraph_scale() * 60) + 5)
+	await _frames(ceili(unstable.windup_for(pulse.fuse) * 60) + 5)
 	check(player.hp == health, "a falling source cannot land a pending pulse")
 	unstable.is_falling = false
 	unstable.global_position = player.global_position
@@ -313,7 +313,7 @@ func _test_new_combat(game: Game) -> void:
 	world.floor_id += 1
 	player._invulnerable_time = 0.0
 	health = player.hp
-	await _frames(ceili(pulse.fuse * unstable.get_telegraph_scale() * 60) + 5)
+	await _frames(ceili(unstable.windup_for(pulse.fuse) * 60) + 5)
 	check(player.hp == health and not is_instance_valid(pending), "leaving the source floor cancels a pending pulse")
 	unstable.free()
 	player.statuses.clear()

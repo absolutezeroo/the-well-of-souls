@@ -41,7 +41,6 @@ func _ready() -> void:
 	if def.flame:
 		var flame := def.flame.instantiate() as Node2D
 		flame.position = Vector2(0, SIZE * Vector2(def.footprint).y * 0.5) + def.flame_offset
-		flame.scale = Vector2.ONE * def.flame_scale
 		flame.z_index = LightField.Z + 1  # a flame is its own light
 		add_child(flame)
 	_light.visible = def.light_level > 0
@@ -60,7 +59,10 @@ func take_hit(hit: HitInfo) -> void:
 		return
 	_breaker = hit.source if is_instance_valid(hit.source) else null
 	if def.is_explosive():
-		_fuse = def.fuse_time
+		# Its fuse (never under the fairness floor), its blast's area marked on the ground.
+		_fuse = Combat.RULES.blast_warning(def.fuse_time)
+		world.spawn_vfx(FuseMark.create(global_position, def.explosion_radius, _fuse))
+		Sfx.play_warning(global_position)
 	else:
 		_break()
 

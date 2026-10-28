@@ -126,8 +126,9 @@ func make_elite(affix: EliteAffixDef, config: DungeonConfig) -> void:
 	make_ranked(config.elite_rank, list)
 
 
-## Raises the monster to `new_rank` with `new_affixes` (their perks): more HP, bigger, more XP,
-## better loot, its aura and name. A boss keeps its size and gets its rank's boss HP.
+## Raises the monster to `new_rank` with `new_affixes` (their perks): more HP, a wider body, more
+## XP, better loot, its rim, aura and name (its art keeps scale 2: decision 0007). A boss keeps
+## its size and gets its rank's boss HP.
 func make_ranked(new_rank: MonsterRankDef, new_affixes: Array[EliteAffixDef]) -> void:
 	if new_rank == null or rank != null:
 		return  # ranking is a spawn-time operation; repeated calls must not stack rewards/stats
@@ -157,11 +158,10 @@ func make_ranked(new_rank: MonsterRankDef, new_affixes: Array[EliteAffixDef]) ->
 	invalidate_stats()
 	hp = get_max_hp()
 	if not is_boss():
-		head_height *= rank.scale
-		set_body_radius(radius * lerpf(1.0, rank.scale, 0.5))
+		# A wider body (gameplay), the same art: pack art is never stretched (decision 0007).
+		set_body_radius(radius * rank.radius_multiplier)
 		if rig:
 			rig.position = Vector2(0, _feet_y())
-			rig.scale = Vector2.ONE * rank.scale
 		drops.xp_multiplier = rank.xp_multiplier
 	drops.bonus_drops = rank.bonus_drops
 	if rig and (rank.hue_shift > 0.0 or rank.shimmer):
@@ -252,9 +252,29 @@ func get_move_speed() -> float:
 	return speed
 
 
-## Wind-ups and casts last longer on easy, shorter on hard (and in late boss phases).
+## Wind-ups and casts last longer on easy, shorter on hard (and in late boss phases), never under
+## the fairness floor (windup_for()).
 func get_telegraph_scale() -> float:
 	return _windup_multiplier
+
+
+## How long a wind-up or a warning written `seconds` lasts here: times the difficulty's, the
+## ascension's and its phases' multipliers, never under the floor of a monster's attack (a
+## boss's for a boss: CombatRulesDef.monster_windup(), docs/decisions/0008). Every wind-up of a
+## monster is asked here (its blow, its warned pulse, a maw's bite).
+func windup_for(seconds: float) -> float:
+	return Combat.RULES.monster_windup(seconds * _windup_multiplier, is_boss())
+
+
+## A warning it gives as written (a strike's fuse on the ground: GroundStrike), held to the floor.
+func floor_windup(seconds: float) -> float:
+	return Combat.RULES.monster_windup(seconds, is_boss())
+
+
+## How long its cast of `skill` lasts (SkillDef.monster_cast_time()): its own times
+## get_telegraph_scale(), at least the floor when it hurts; 0 for an instant one that hurts no one.
+func skill_cast_time(skill: SkillDef) -> float:
+	return skill.monster_cast_time(_windup_multiplier, is_boss()) if skill else 0.0
 
 
 ## Its wind-ups and casts last `factor` times as long from now on (a boss phase: BossBrain).
@@ -305,11 +325,11 @@ func wake_up(new_target: Actor, intro := true) -> void:
 func notice_target() -> bool:
 	if dormant:
 		return false
-	if target != null and is_instance_valid(target) and not target.is_dead and DebugCheats.can_be_noticed(target):
+	if target != null and is_instance_valid(target) and not target.is_dead and DebugCheats.can_be_noticed(target) and not world.shelters(target):
 		return true
 	target = null
 	var player := world.player
-	if player and not player.is_dead and DebugCheats.can_be_noticed(player) and can_see(player, detect_radius()):
+	if player and not player.is_dead and DebugCheats.can_be_noticed(player) and not world.shelters(player) and can_see(player, detect_radius()):
 		target = player
 		_noticed(player)
 		return true
@@ -322,6 +342,23 @@ func _noticed(other: Actor) -> void:
 		noticed_frame = Engine.get_physics_frames()
 		Profile.mark_seen(def.id)
 		Events.monster_noticed.emit(self)
+
+
+## The run's difficulty changed in the middle of the floor (lowered from the pause menu: World):
+## its Health, blows, speed, wind-ups and sight follow `after` as a share of `before` (an elite's
+## rank or a boss phase keep their own), its Health keeping its share.
+func follow_rules(before: FloorRules, after: FloorRules) -> void:
+	var boss := def is BossDef
+	var share := float(hp) / maxf(float(get_max_hp()), 1.0)
+	base_stats = base_stats.duplicate()
+	base_stats.max_hp = maxi(1, roundi(base_stats.max_hp * after.monster_hp(boss) / maxf(before.monster_hp(boss), 0.01)))
+	base_stats.move_speed *= after.monster_speed() / maxf(before.monster_speed(), 0.01)
+	_damage_multiplier *= after.monster_damage(boss) / maxf(before.monster_damage(boss), 0.01)
+	_windup_multiplier *= after.telegraph_time() / maxf(before.telegraph_time(), 0.01)
+	_detect_multiplier *= after.detect_range() / maxf(before.detect_range(), 0.01)
+	invalidate_stats()
+	hp = clampi(roundi(get_max_hp() * share), 1, get_max_hp())
+	health_changed.emit(hp, get_max_hp())
 
 
 ## How far it spots the hero: its kind's reach, times the difficulty's.
@@ -414,9 +451,9 @@ func casting_skill() -> SkillDef:
 	return skills.skills[casting_index] if casting_index >= 0 and casting_index < skills.skills.size() else null
 
 
-## Telegraph time before attacking (shorter in later boss phases).
+## Telegraph time before attacking (shorter in later boss phases, never under the floor).
 func get_attack_windup() -> float:
-	return def.attack_windup * _windup_multiplier
+	return windup_for(def.attack_windup)
 
 
 ## The debug panel's No AI: it stands where it is (its StateMachine thinks no more, its traits
@@ -481,8 +518,12 @@ func _on_damaged(hit: HitInfo, _damage: int) -> void:
 	if hit.source and is_hostile_to(hit.source):
 		target = hit.source
 	if hit.source is Player and not hit.is_secondary:
+		# One freeze and one lean per blow, however many it strikes (HitStop takes the longest,
+		# GameCamera the strongest push of a frame); only a crit buzzes the phone, never an
+		# ordinary hit (in a crowd it would drone).
 		HitStop.freeze(0.07 if hit.is_crit else 0.035)
-		Settings.vibrate(0.15 if hit.is_crit else 0.05)
+		if hit.is_crit:
+			Settings.vibrate(0.15)
 		# The blow lands: the camera leans into it.
 		var push := hit.knockback.normalized() if hit.knockback != Vector2.ZERO else hit.source.global_position.direction_to(global_position)
 		Events.camera_kick.emit(push, 6.0 if hit.is_crit else 3.5)
@@ -535,6 +576,8 @@ func _on_died(killer: Actor) -> void:
 			drops.pay_xp(killer)
 		world.spawn_floating_text(global_position, tr("Fell!"), Palette.GOLD)
 		return
+	if is_boss():
+		Settings.vibrate(0.8)  # a warden falls: one of the few things the phone buzzes for
 	if is_boss() and free_on_death:
 		Vfx.boss_death(world, global_position + Vector2(0, -head_height * 0.5), radius * 1.5)
 		HitStop.freeze(0.25)

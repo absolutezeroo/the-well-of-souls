@@ -38,11 +38,16 @@ the bag casts no skill as the fight resumes (the hero reads no new press on the 
 a pause, `PlayerControls._presses_muted`).
 
 **Attack: tap or hold.** A tap (or a press) is one basic attack at once, aimed at the closest
-enemy; a press while the weapon is still swinging waits for it (0.3 s), so quick taps are never
-lost. Holding no longer repeats the attack: past 0.22 s it charges the weapon's charged attack
+enemy; a press of the attack, the roll or a skill that can't go yet (the weapon still swinging,
+a cooldown about to end) waits for it 0.12 s (`PlayerDef.input_buffer`, real seconds: a hit stop
+neither eats nor stretches it), the newest press taking the place of an older one, so quick taps
+are never lost and never fire late. Holding no longer repeats the attack: past 0.22 s it charges the weapon's charged attack
 (builds.md, "Charged attacks"), shown at the hero's feet and as twelve steps lighting up around
 the attack button's rim (its thumb may hide the hero), in the element the weapon carries; full,
-they beat. Letting go full unleashes it; a roll cancels it.
+they beat. Letting go full unleashes it; a roll cancels it. **Without holding** (Options >
+Gameplay > Charge without holding, `Settings.tap_to_charge`, decision 0011): two attacks within
+0.3 s (`PlayerDef.double_tap_window`) start the charge, which fills with the button up (as does a
+held charge let go early), and the next attack unleashes it once it is full; holding still works.
 
 ## Devices: touch, keyboard and mouse, gamepad
 
@@ -157,9 +162,11 @@ shows to the device in hand.
   shape (`canvas_items`, expand). Its scale is rounded down to a step of 0.5 (x1 from 720 to 1079
   lines, x1.5 at 1080, x2 at 1440, x3 at 2160), where BODY letters keep whole pixels, and the canvas
   takes the rest (1366x768 lays out at 1366x768, 21:9 at 1720x720, 16:10 at 1280x800). A screen too
-  small for x1 (1024x768) keeps its own scale (x0.8: letters a little uneven). The camera zooms in
-  by what the rounding took off, so a floor is framed as before on every screen
-  (`PixelGrid.world_zoom()`, `GameCamera`).
+  small for x1 (1024x768) keeps its own scale (x0.8: letters a little uneven). The world's cameras
+  keep their framing whatever the interface's scale, made whole: their zoom draws every art pixel
+  on a whole number of screen pixels, the designed framing rounded down to the wider view
+  ([decision 0007](../decisions/0007-whole-pixels-on-screen.md); `PixelGrid.camera_zoom()`,
+  `GameCamera`, `VillageWalker`).
 - **Typing on a phone** (`SoftKeyboard`, every `LineEdit` / `TextEdit`: the feedback form, the
   pseudonym): Godot's Android activity is `adjustResize`, so the phone's keyboard shrinks the
   game's window to the strip above it (2340x1080 to about 2340x480 held sideways). Read as a new
@@ -294,10 +301,13 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   perk choices still waiting, the one on screen with its cards). Dying erases it. "Save and quit" in the pause menu does the same on purpose.
   Never during the trial of the Threshold: quit in there, and the run picks up as it was before
   the killing blow.
-- **Pause menu** (the II button, Escape, a gamepad's Start, or the phone's back button): resume, options, bestiary,
-  **Send feedback**, save and quit, give up the run (two taps). Coming back to the app, the game waits paused.
-  Three columns in a dark inset, each button (340x64) with what it does under it, 16 units and
-  more between them: room for a row more on a 720-line screen in French.
+- **Pause menu** (the II button, Escape, a gamepad's Start, or the phone's back button): resume, options,
+  **Difficulty** (lower it for the rest of this run only, never raise it: `RunDifficultyDialog`, a
+  button per lower difficulty with its description, and Back; the run is then aided, see
+  progression.md "Help without judgement"), bestiary, **Send feedback**, save and quit, give up the
+  run (two taps). Coming back to the app, the game waits paused. Three columns in a dark inset,
+  each button (340x64) with what it does under it, 16 units and more between them: the eight rows
+  (3, 3, 2) and the help line fit a 720-line screen in French, with room for one more.
 - **Options** (`Settings` autoload, `user://settings.cfg`), on the title screen and in the pause menu:
   five volumes (**General**, **Music**, **Interface**, **Combat**, **Ambience**: which sounds
   each one sets is in presentation.md, SFX; a slider follows the finger or the mouse smoothly (a
@@ -318,16 +328,18 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   By hand, three buttons, the picked one's rule spelled out under them; see design/loot.md),
   **boss stories** (Full / Short / Off, three buttons the same way: the cinematic before a
   warden's fight, presentation.md "Boss stories"),
-  **tutorial hints** (on/off) and **Replay tutorial**, on a computer **fullscreen**, the
+  **tutorial hints** (on/off) and **Replay tutorial**, the **Souls' Aid** (*Aide des âmes*: on/off,
+  its line saying what it takes away now and that its runs set no records; kept in the Profile, not
+  in Settings, like a save file's own setting: progression.md), on a computer **fullscreen**, the
 **interface size** (Big / Medium / Small), and the **language** (English / Français,
   see Languages). The window (`OptionsPanel`, built in code on `MenuWindow`) has five tabs, each
   option with a one-line "what it does"; on/off options are big switches, and tapping an
   option's name flips it too; a choice of a few (language, auto loot, boss stories, interface
   size) is a row of buttons under its name, the one in use pressed:
   - **Gameplay** (opens first): Language (first, for a player who can't read the one in use),
-    Loot (auto loot), Story (boss stories); In a run (run timer, screen shake, vibrations),
-    Reading (large text, text speed: Slow / Normal / Fast / At once), Tutorial (hints, Replay
-    tutorial).
+    Loot (auto loot), Story (boss stories); Difficulty (the Souls' Aid), In a run (run timer,
+    screen shake, vibrations, charge without holding), Reading (large text, text speed: Slow /
+    Normal / Fast / At once), Tutorial (hints, Replay tutorial).
   - **Graphics**: Screen (fullscreen on a computer, interface size), Touch controls (buttons
     size: Normal / Large, fixed joystick); Effects and battery (fewer effects, screen flashes,
     battery saver).
@@ -368,10 +380,19 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
 ## Tutorial
 
 No separate tutorial level: the first run teaches as it goes. A small wooden board comes up at the
-top of the screen (`HintBox`), says what to do, and, when it is about a control, a gold ring pulses
-around it with an arrow. Each hint shows **once ever** (`Profile.hints_seen`), one at a time, never
-over a menu or a big banner. A tap or a click (or OK) closes it. A hint about a control says it
-in the device's words ("Tap the big button" / "Press [Space]", `HintDef.button_text`).
+top of the screen (`HintBox`), its title in gold over **one line** saying what to do, and, when it
+is about a control, a gold ring pulses around it with an arrow. The board is as wide as its line,
+up to 640 units of text (`HintBox.MAX_TEXT`: every hint fits that in English and French, by touch,
+keys and gamepad, `FirstRunTests.run_hints()`; a longer key name wraps); it keeps clear of the
+HUD's top corners where the screen allows (centred in the room between the stats and the map's
+column, `Hud.top_room()`, on a phone; against the right one at 1280 wide, the Health numbers in
+sight). Its line sits in a dark inset and is reading text: with Large text it is TITLE and the
+board may grow to that room (at most 880), then wraps. A hint shows **once ever** once read (`Profile.hints_seen`):
+a tap or a click (or OK) on it, or what it asks done. One whose time runs out unread comes back on
+a later floor, once (`TutorialDef.unread_returns`), the next steps of its chain with it; then it
+counts as seen. One at a time, never over a menu or a big banner. A hint about a control says it
+in the device's words ("Tap the big button" / "Press [Space]", `HintDef.button_text`). The
+codex's **Tips** tab lists the hints seen, to read again, in the device's words.
 
 - **First steps**: move (it stays until you have walked a few tiles), then the sealed stairs; when
   a monster first sees you, attack (tap; until you swing), then roll, then the weapon's two
@@ -631,20 +652,30 @@ stones lit in their runes' colors. The selected slot pulses gold.
   perk button; Back does the same), coming in softly (the world dims, the board rises 12 units on
   even steps, 0.15 s)
   instead of cutting over the fight; each pause button says what it does, with
-  what gold and souls are for; the end screen shows the run's numbers (`RunState.summary_rows()`),
-  the souls earned and what they buy. After a death, the Vigil-Keeper's tale and advice sit under
-  the title in her `DialogueBox` (presentation.md); with nothing for her to say, the story's line.
+  what gold and souls are for; the end screen shows the run's numbers (`RunState.summary_rows()`;
+  an aided run says it sets no records), the souls earned and what they buy. After a death, the
+  Vigil-Keeper's tale and advice sit under the title in her `DialogueBox` (presentation.md); with
+  nothing for her to say, the story's line. A death's buttons: **Descend again** (straight into the
+  next descent, as the Well would start it: the difficulty, ascension and oath chosen there, a Dawn
+  Knell again as practice; the run that ended recorded and its save erased first; no walk through
+  Kagari, `Game.descend_again()`), Return to village, Title screen. A victory keeps Keep going
+  (endless), Return to village, Title screen.
 - **Keepers' words**: the shop and the forge open on a line of the merchant's or the smith's
   (their dialogue's, else a greeting) in quotes beside their face; the grinning spirit's line
   shows in place of its encounter's description, in its color (the panel keeps its height on a
   720-line screen), and the outcome takes its place when a choice is made.
 - **Codex, Voices** (*Paroles*): what each speaker said and is kept, by speaker, and how many
-  lines are still to hear.
+  lines are still to hear. **Tips** (*Conseils*): the tutorial's hints seen, title and line. With
+  six tabs the header holds the tabs and Close; the souls sit at the end of the tab's summary line.
 
 
 ## Active product and input ownership
 
-The active F5/export path is TitleScreen → story/Kagari → the Well → new or resumed Game. Shrine, daily runs,
+The active F5/export path is TitleScreen → story/Kagari → the Well → new or resumed Game. The
+very first Play (a profile with no run and none saved, `Game.first_descent_due()`) goes title →
+the privacy questions if still due → the story (skippable) → the Game on floor 1 at Keeper, with
+no Kagari, Well or choice before it (decision 0010); the button says **Descend** then, **Enter
+Kagari** afterwards. Shrine, daily runs,
 perk choices, end of run, records and options keep their normal roles. The standalone RPG
 campaign/menu is [archived for a separate project](../rpg-archive.md).
 
@@ -656,7 +687,8 @@ hero is still valid before disconnecting signals.
 
 ## Village interaction
 
-[Kagari](village.md) replaces direct run launch with walking to the central well. Approach an
+[Kagari](village.md) replaces direct run launch with walking to the central well (but for the
+very first descent, which starts from the title: village.md "The first return"). Approach an
 inhabitant, shrine or statue and press the normal Interact action; touch uses the existing stick
 and ActionButton. Conversations, restoration purchases and memorials use the scrollable Ninja Adventure
 VillagePanel and stop walking. The conversation sits low on screen with its portrait, readable

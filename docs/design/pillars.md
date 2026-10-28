@@ -11,11 +11,16 @@ decision ([decisions/](../decisions/README.md)).
 
 - A new mechanic is **introduced** where the player can't really fail, **developed**, then
   **twisted** deeper down (Nintendo's kishōtenketsu): three placements by depth.
-- Hints are one line, once per profile, never in a combat pause, with the active device's glyph
-  (`Prompts.pick()`), and can be read again in the codex.
+- Hints are one line, once per profile once read (one that runs out unread comes back once, on a
+  later floor), never in a combat pause, with the active device's glyph (`Prompts.pick()`), and
+  can be read again in the codex's Tips (interface.md "Tutorial").
 - First run *(start)*: a fight within 30 s of launching, a perk choice within 3 min, a moment of
-  story at the first death (the Vigil-Keeper). The first room has no damage until the hero has
-  moved and attacked; the first monster is slow, clearly telegraphed, dead in 2-3 hits.
+  story at the first death (the Vigil-Keeper). The first launch goes straight from the story to
+  floor 1 on Keeper, Kagari and its choices at the first return (decision 0010, village.md "The
+  first return"); `FirstRunTests` measures launch to the first monster noticing the hero, story
+  skipped, at about 15 s of game time (the phone's loading times on top). On the first three
+  runs the first room shelters the hero until he has moved and attacked, and the first monster
+  is slow, clearly telegraphed, dead in 2-3 hits (dungeon.md "First steps").
 
 ## Pacing
 
@@ -23,7 +28,7 @@ decision ([decisions/](../decisions/README.md)).
   *(start: 3-6 min)*, saved at its start and when the app goes to the background.
 - Each floor builds up, peaks (an elite, an arena, an event) and releases (a reward, the shop, a
   shrine); a calm room before every boss. At most 2-3 fights in a row without a breather.
-- From the death screen, going down again never forces a walk through Kagari.
+- From the death screen, going down again never forces a walk through Kagari (**Descend again**).
 
 ## The fairness contract
 
@@ -31,12 +36,19 @@ decision ([decisions/](../decisions/README.md)).
   never from confusion. Every attack that hurts has a wind-up on at least two channels (pose,
   colour or ground mark, sound) and a way out; nothing hurts on the frame it appears; threats off
   screen get an edge marker.
-- *(start, owner's decision)* A wind-up never goes under 0.4 s (0.6-1.0 s for heavy and boss
-  attacks), whatever the difficulty or ascension; on Keeper an ordinary hit takes at most 15-20 %
-  of max Health, a boss hit 25-30 %, all simultaneous telegraphed attacks together 50 %.
-- Each ascension level adds exactly one readable modifier that keeps this contract.
+- ([decision 0008](../decisions/0008-fairness-contract.md); numbers to tune by playing) A
+  monster's wind-up never goes under **0.4 s**, a boss's under **0.5 s**, a shockwave's, a
+  blast's or a trap's warning under **0.4 s**, whatever the difficulty, ascension or phase (the
+  floors in `data/combat/combat_rules.tres`, applied after every multiplier; heavier blows may
+  wind up longer); on Keeper the expected hero loses at most **20 %** of his max Health to an
+  ordinary hit and **30 %** to a boss's (all simultaneous telegraphed attacks together 50 %,
+  not measured yet). `unit.fairness` holds both (docs/design/monsters.md "Warnings").
+- Each ascension level adds exactly one readable modifier that keeps this contract (none
+  shortens the time to dodge: `unit.fairness`).
 - Help without judgement: like Hades' God Mode (20 % damage resistance, +2 % per death) and
-  Celeste's Assist Mode, an easier way is offered plainly, never mocked.
+  Celeste's Assist Mode, an easier way is offered plainly, never mocked: the Souls' Aid and
+  lowering the difficulty in a run (decision 0011, progression.md "Help without judgement"); aided
+  runs stay off the leaderboards and records, everything else counts.
 - Luck is engineered: bad-luck protection on rarity, critical resources guaranteed (a heal before
   a boss), draws without repeats in a run, honest odds when shown.
 
@@ -54,8 +66,9 @@ decision ([decisions/](../decisions/README.md)).
 
 The Game Accessibility Guidelines' **Basic** level is required: remappable controls, large
 targets, readable font and contrast, never colour or sound alone, separate volumes, subtitles,
-no flicker, saved settings, a wide choice of difficulty. Also: an alternative to held buttons, no
-required simultaneous presses, autosave, difficulty changeable in a run. Screen shake (0-100 %),
+no flicker, saved settings, a wide choice of difficulty (and the Souls' Aid). Also: an alternative
+to held buttons, no required simultaneous presses, autosave, difficulty changeable in a run (the
+pause menu lowers it). Screen shake (0-100 %),
 Screen flashes and Vibrations are options every effect respects.
 
 How the interface holds it (numbers and checks: [interface.md "One skin"](interface.md#one-skin-binding)):

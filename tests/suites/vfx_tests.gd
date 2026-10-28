@@ -37,6 +37,9 @@ func run() -> void:
 	_test_body_shader()
 	_test_shaders()
 	_test_no_squared_colors()
+	_test_whole_scales()
+	_test_world_tints()
+	_test_hazards_at_rest()
 	_test_simulation()
 
 
@@ -686,6 +689,157 @@ func _test_grid_rule_breaks() -> void:
 		states[warning.is_lit()] = true
 	check(states.size() == 2, "grid: the cell warning blinks on and off (no smooth pulse)")
 	warning.free()
+
+
+## Decision 0007: pack art is never drawn at a fractional scale (pixels of two sizes side by
+## side). A rig's art stays at 2 through a hit (it drops one art pixel, no squash x1.25); a rank
+## has no art scale (rim, aura and name show it); a prop's flame is a scene at its own size; a
+## wyrm's wings fold by whole rows of their art and its tail turns by quarter turns; a plant
+## leans by whole art pixels, row by row.
+func _test_whole_scales() -> void:
+	var rig := (load("res://src/entities/rig/actor_rig.tscn") as PackedScene).instantiate() as ActorRig
+	add_child(rig)
+	rig.setup(load("res://data/visuals/monsters/bat.tres") as SpriteFrames, Vector2.ZERO)
+	rig.play_hurt()
+	rig._process(0.016)
+	check(rig.visual.scale == Vector2(2, 2) and rig.squash_node.scale == Vector2.ONE and rig.visual.position == Vector2(0, PixelDraw.PX),
+		"whole scales: a hit drops the body one art pixel, its art kept at scale 2 (Visual %s, Squash %s)" % [rig.visual.scale, rig.squash_node.scale])
+	rig._process(ActorRig.FLINCH_TIME)
+	check(rig.visual.position == Vector2.ZERO and rig.squash_node.scale == Vector2.ONE, "whole scales: the flinch over, the body is back on its feet")
+	rig.free()
+	for file in DirAccess.get_files_at("res://data/monster_ranks"):
+		var rank := load("res://data/monster_ranks".path_join(file)) as MonsterRankDef
+		if rank:
+			check(rank.get("scale") == null and rank.radius_multiplier >= 1.0, "whole scales: rank %s has no art scale, only a wider body" % rank.id)
+	var props := 0
+	for path in _resources_under("res://data/props"):
+		var prop := load(path) as PropDef
+		if prop == null:
+			continue
+		props += 1
+		check(prop.get("flame_scale") == null, "whole scales: %s has no flame scale" % prop.id)
+		if prop.flame:
+			var flame := prop.flame.instantiate()
+			var odd: Array[String] = []
+			for node: Node in [flame] + flame.find_children("*", "Node2D", true, false):
+				var scale := (node as Node2D).scale if node is Node2D else Vector2.ONE
+				if not is_equal_approx(scale.x, roundf(scale.x)) or not is_equal_approx(scale.y, roundf(scale.y)) or absf(scale.x) < 1.0 or absf(scale.y) < 1.0:
+					odd.append("%s %s" % [node.name, scale])
+			check(odd.is_empty(), "whole scales: %s's flame is drawn at its own size, never scaled (%s)" % [prop.id, odd])
+			flame.free()
+	check(props >= 10, "whole scales: every prop checked (%d)" % props)
+	var turns := {}
+	for i in 32:
+		var turn := WyrmBody.tail_turn(Vector2.ZERO, Vector2.from_angle(TAU * i / 32.0))
+		turns[snappedf(fposmod(turn, TAU), 0.001)] = true
+		check(is_equal_approx(fposmod(turn, PI * 0.5), 0.0) or is_equal_approx(fposmod(turn, PI * 0.5), PI * 0.5), "whole scales: the wyrm's tail turns by quarter turns only (%s)" % turn)
+	check(turns.size() == 4, "whole scales: the tail points four ways")
+	var rows_ok := true
+	for shown in range(34, 58):
+		var last := -1
+		for row in shown:
+			var source := WyrmBody._wing_row(row, shown, 57)
+			rows_ok = rows_ok and source > last and source < 57
+			last = source
+	check(rows_ok, "whole scales: a folded wing shows whole rows of its art, in order, none twice")
+	var shifts := PackedInt32Array()
+	for row in 16:
+		shifts.append(DecorLayer.row_shift(row, 16, 0.55))
+	check(shifts[0] == -9 and shifts[15] == 0, "whole scales: a plant bent hard moves its top row 9 art pixels, its foot none (%s)" % shifts)
+	var monotonic := true
+	for row in 15:
+		monotonic = monotonic and shifts[row] <= shifts[row + 1]
+	check(monotonic, "whole scales: each row of a leaning plant moves less than the one above it")
+
+
+## Decision 0009: a dungeon theme's tint is a neutral dim (every channel 0.75 or more, within
+## 0.12 of each other: a multiply turns the pack's colours to mud), and with any floor's screen
+## grading (AmbienceDef) a mid-tone keeps every channel at 0.6 or more. Only the places the
+## decision lists may go further, flagged in their data (`narrative_exception`): the Threshold,
+## the Deeps, the Well's Bottom, the Blood Moon and the curses.
+func _test_world_tints() -> void:
+	var listed: Array[String] = ["res://data/threshold/limbo_theme.tres", "res://data/abyss/abyss_theme.tres",
+		"res://data/dungeon/themes/well_bottom.tres", "res://data/threshold/limbo_ambience.tres",
+		"res://data/abyss/abyss_ambience.tres", "res://data/dungeon/ambience/blood_moon.tres"]
+	for path in _resources_under("res://data/curses"):
+		var curse := load(path) as CurseDef
+		if curse and curse.ambience:
+			listed.append(curse.ambience.resource_path)
+	var themes: Array[DungeonTheme] = []
+	var moods: Array[AmbienceDef] = []
+	for dir: String in ["res://data/dungeon", "res://data/abyss", "res://data/threshold"]:
+		for path in _resources_under(dir):
+			var resource := load(path)
+			if resource is DungeonTheme:
+				themes.append(resource)
+			elif resource is AmbienceDef:
+				moods.append(resource)
+	check(themes.size() >= 13 and moods.size() >= 15, "tints: every theme and mood checked (%d, %d)" % [themes.size(), moods.size()])
+	for theme in themes:
+		if theme.narrative_exception:
+			check(listed.has(theme.resource_path), "tints: %s is no exception decision 0009 lists" % theme.resource_path)
+			continue
+		var low := minf(theme.tint.r, minf(theme.tint.g, theme.tint.b))
+		var high := maxf(theme.tint.r, maxf(theme.tint.g, theme.tint.b))
+		check(low >= 0.75 and high - low <= 0.12, "tints: %s dims the floor neutrally, its biome shown by its tiles and light (%s)" % [theme.resource_path.get_file(), theme.tint])
+	var dull: Array[String] = []
+	for mood in moods:
+		if mood.narrative_exception:
+			check(listed.has(mood.resource_path), "tints: %s is no exception decision 0009 lists" % mood.resource_path)
+			continue
+		for theme in themes:
+			if theme.narrative_exception:
+				continue
+			for mid: float in [0.25, 0.35, 0.5]:
+				var graded := _graded(Color(mid, mid, mid) * theme.tint, mood)
+				var lowest := minf(graded.r, minf(graded.g, graded.b)) / mid
+				if lowest < 0.6:
+					dull.append("%s x %s at %.2f: %.2f" % [theme.resource_path.get_file(), mood.resource_path.get_file(), mid, lowest])
+	check(dull.is_empty(), "tints: a theme's tint and a floor's grading together keep a mid-tone's every channel at 0.6 or more (%s)" % [dull])
+
+
+## `color` after the screen's grading by `mood` (screen.gdshader: shadows and highlights pulled
+## toward two tints by the grade's strength).
+static func _graded(color: Color, mood: AmbienceDef) -> Color:
+	var gray := color.r * 0.299 + color.g * 0.587 + color.b * 0.114
+	var t := clampf((gray - 0.12) / (0.7 - 0.12), 0.0, 1.0)
+	t = t * t * (3.0 - 2.0 * t)
+	var tint := mood.grade_shadows.lerp(mood.grade_highlights, t)
+	var strength := mood.grade_strength
+	return Color(color.r * lerpf(1.0, tint.r, strength), color.g * lerpf(1.0, tint.g, strength), color.b * lerpf(1.0, tint.b, strength))
+
+
+## A hazard at rest stands out from the floor (docs/design/pillars.md, the audit's L18): the
+## crumbling floor's cracks and the spike trap's holes are drawn opaque, alpha 1-bit like all the
+## world's art (they were 24 % to 78 % see-through, the cracks drawn at 55 % on top of it).
+func _test_hazards_at_rest() -> void:
+	var crumbling := load("res://data/hazards/crumbling_floor.tres") as PitDef
+	var spikes := load("res://data/hazards/spikes.tres") as TrapDef
+	for texture: Texture2D in [crumbling.crack_texture, spikes.base_texture]:
+		var image := texture.get_image()
+		var opaque := 0
+		var partial := 0
+		for y in image.get_height():
+			for x in image.get_width():
+				var alpha := image.get_pixel(x, y).a
+				if alpha >= 1.0:
+					opaque += 1
+				elif alpha > 0.0:
+					partial += 1
+		check(partial == 0 and opaque > 0, "hazards: %s is opaque or empty, pixel by pixel (%d half-transparent)" % [texture.resource_path.get_file(), partial])
+	var source := FileAccess.get_file_as_string("res://src/entities/hazards/crumbling_floor.gd")
+	check(not source.contains("color.a") and not source.contains("Color(1, 1, 1, 0.") and not source.contains("Color(0, 0, 0, 0."), "hazards: the crumbling floor draws its cracks opaque and darkens by dithering, never see-through")
+
+
+## Every .tres under `dir` and its subfolders.
+func _resources_under(dir: String) -> Array[String]:
+	var found: Array[String] = []
+	for file in DirAccess.get_files_at(dir):
+		if file.ends_with(".tres"):
+			found.append(dir.path_join(file))
+	for sub in DirAccess.get_directories_at(dir):
+		found.append_array(_resources_under(dir.path_join(sub)))
+	return found
 
 
 ## One source for the interface's colors (UiSkin; gold is Palette.GOLD): no panel keeps its own

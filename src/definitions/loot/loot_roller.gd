@@ -8,13 +8,17 @@ const LEVELS: ItemLevelRules = preload("res://data/items/item_levels.tres")
 
 
 ## `item` at the level of `depth` (itself on floor 1 if Common), or a better rolled copy of it.
-## `min_rarity`: never below it (the Trophy Hunter node's Magic).
-static func roll(item: ItemDef, depth: int, quality: float, config: DungeonConfig, affixes: Array[ItemAffixDef], rng: RandomNumberGenerator, min_rarity: int = ItemRarity.COMMON) -> ItemDef:
+## `min_rarity`: never below it (the Trophy Hunter node's Magic). `luck`: a find the run's
+## bad-luck protection counts (its drought raises the odds of Rare and Epic, a Rare or better ends
+## it: RunLuck.rare_drought); null for the merchant's stock and what a floor's seed lays.
+static func roll(item: ItemDef, depth: int, quality: float, config: DungeonConfig, affixes: Array[ItemAffixDef], rng: RandomNumberGenerator, min_rarity: int = ItemRarity.COMMON, luck: RunLuck = null) -> ItemDef:
 	var equipment := item as EquipmentDef
 	if equipment == null or equipment.is_rolled():
 		return item
 	var level := maxi(depth, 1)
-	var rarity := maxi(pick_rarity(depth, quality, config, rng), min_rarity)
+	var rarity := maxi(pick_rarity(depth, quality, config, rng, luck.rare_drought if luck else 0), min_rarity)
+	if luck:
+		luck.found_equipment(rarity)
 	if rarity == ItemRarity.COMMON:
 		return item if level <= 1 else make(equipment, rarity, [], [], level)
 	var fitting := affixes.filter(func(affix: ItemAffixDef) -> bool: return affix.fits(equipment) and affix.min_depth <= depth)
@@ -30,8 +34,9 @@ static func roll(item: ItemDef, depth: int, quality: float, config: DungeonConfi
 	return make(equipment, rarity, picked, [], level)
 
 
-static func pick_rarity(depth: int, quality: float, config: DungeonConfig, rng: RandomNumberGenerator) -> int:
-	var weights := rarity_weights(depth, quality, config)
+## `drought`: finds since the last Rare or better (RunLuck.rare_drought, the pity).
+static func pick_rarity(depth: int, quality: float, config: DungeonConfig, rng: RandomNumberGenerator, drought: int = 0) -> int:
+	var weights := rarity_weights(depth, quality, config, drought)
 	var pick := rng.randf() * _total(weights)
 	for rarity in weights.size():
 		pick -= weights[rarity]
@@ -43,14 +48,24 @@ static func pick_rarity(depth: int, quality: float, config: DungeonConfig, rng: 
 ## The weight of each rarity (ItemRarity order: Common, Magic, Rare, Epic) for equipment found at
 ## `depth` from a source of `quality` (DungeonConfig > Loot): what pick_rarity() rolls on, and
 ## what anything telling the odds (an encounter, the balance tools) reads, so they never disagree.
-static func rarity_weights(depth: int, quality: float, config: DungeonConfig) -> PackedFloat64Array:
+## `drought`: finds since the last Rare or better; past DungeonConfig.pity_after, Rare and Epic
+## grow by pity_growth for each one more (decision 0012: bad luck doesn't last).
+static func rarity_weights(depth: int, quality: float, config: DungeonConfig, drought: int = 0) -> PackedFloat64Array:
 	var levels := depth - 1
+	var pity := pity_scale(drought, config)
 	return PackedFloat64Array([
 		config.common_weight,
 		(config.magic_weight + config.magic_weight_per_depth * levels) * quality,
-		(config.rare_weight + config.rare_weight_per_depth * levels) * quality,
-		(config.epic_weight + config.epic_weight_per_depth * levels) * quality,
+		(config.rare_weight + config.rare_weight_per_depth * levels) * quality * pity,
+		(config.epic_weight + config.epic_weight_per_depth * levels) * quality * pity,
 	])
+
+
+## What `drought` finds without a Rare or better multiply the Rare and Epic weights by (1: none).
+static func pity_scale(drought: int, config: DungeonConfig) -> float:
+	if config.pity_after <= 0 or drought < config.pity_after:
+		return 1.0
+	return 1.0 + config.pity_growth * (drought - config.pity_after + 1)
 
 
 ## The chance that equipment found at `depth` from a source of `quality` is Rare or better

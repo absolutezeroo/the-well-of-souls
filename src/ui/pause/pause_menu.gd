@@ -1,16 +1,19 @@
 class_name PauseMenu
 extends Control
-## Pause, in the game's skin (RpgDialog): resume, options, the bestiary (attacks and challenges
-## of the monsters met), send feedback (a bug, an idea: FeedbackDialog, with this run's details),
-## save and quit (Continue on the title screen), or give up the run; each button says what it
-## does, under it. Below, what gold and souls are for. Three columns in a dark inset (notes are
-## never dim words on the bare wood), each button a finger's size with 16 units around it: room
-## for more on a 720-line screen in French. The options and the bestiary open over it
-## (instanced in the scene), the feedback form too (made here).
+## Pause, in the game's skin (RpgDialog): resume, options, the difficulty (lower it for this run:
+## RunDifficultyDialog, decision 0011), the bestiary (attacks and challenges of the monsters met),
+## send feedback (a bug, an idea: FeedbackDialog, with this run's details), save and quit
+## (Continue on the title screen), or give up the run; each button says what it does, under it.
+## Below, what gold and souls are for. Three columns in a dark inset (notes are never dim words on
+## the bare wood), each button a finger's size with 16 units around it: eight rows fit a 720-line
+## screen in French. The options and the bestiary open over it (instanced in the scene), the
+## feedback form and the difficulty too (made here).
 
 signal resume_requested
 signal quit_requested
 signal abandon_requested
+## A lower difficulty was picked for the run (the Game applies it: Game.lower_difficulty()).
+signal difficulty_lowered(difficulty: DifficultyDef)
 
 const ABANDON_TEXT := "Give up the run"  # i18n
 const CONFIRM_TEXT := "Really? Tap again"  # i18n
@@ -33,6 +36,11 @@ var content: ContentDB
 var run_info: Callable
 ## The feedback form, over the menu.
 var feedback: FeedbackDialog
+## Set by the game: the run's difficulty (DifficultyDef) and the ones it may be lowered to
+## (Array[DifficultyDef]); the dialog that offers them, over the menu.
+var run_difficulty: Callable
+var lower_options: Callable
+var difficulty: RunDifficultyDialog
 
 var _dialog: RpgDialog
 ## The rows (button and what it does), in COLUMNS columns.
@@ -62,6 +70,7 @@ func open() -> void:
 	_options.hide()
 	_codex.hide()
 	feedback.hide()
+	difficulty.hide()
 	show()
 
 
@@ -73,6 +82,8 @@ func back() -> void:
 		_codex.back()
 	elif feedback.visible:
 		feedback.back()
+	elif difficulty.visible:
+		difficulty.back()
 	else:
 		resume_requested.emit()
 
@@ -99,6 +110,7 @@ func _build() -> void:
 	_row(tr("Options"), "OptionsButton", tr("Sound, music, button size, effects."), func() -> void:
 		Sfx.play_ui(Sfx.bank.ui_open)
 		_options.open())
+	_row(tr("Difficulty"), "DifficultyButton", tr("Lower it for this descent."), open_difficulty)
 	_row(tr("Bestiary"), "BestiaryButton", tr("The monsters you have met: how they attack and how to beat them."), func() -> void:
 		Sfx.play_ui(Sfx.bank.ui_open)
 		if content:
@@ -127,6 +139,25 @@ func _build() -> void:
 	feedback.finished.connect(func() -> void:
 		if InputDevice.uses_buttons():
 			(get_node("%FeedbackButton") as Button).grab_focus())
+	difficulty = RunDifficultyDialog.new()
+	difficulty.name = "RunDifficultyDialog"
+	add_child(difficulty)
+	difficulty.chosen.connect(func(lower: DifficultyDef) -> void: difficulty_lowered.emit(lower))
+	difficulty.closed.connect(func() -> void:
+		if InputDevice.uses_buttons():
+			(get_node("%DifficultyButton") as Button).grab_focus())
+
+
+## The run's difficulty and the lower ones (RunDifficultyDialog), over the menu.
+func open_difficulty() -> void:
+	var lower: Array[DifficultyDef] = []
+	if lower_options.is_valid():
+		lower = lower_options.call()
+	var current: DifficultyDef = run_difficulty.call() if run_difficulty.is_valid() else null
+	if current == null:
+		return
+	Sfx.play_ui(Sfx.bank.ui_open)
+	difficulty.open(current, lower)
 
 
 func _on_abandon() -> void:

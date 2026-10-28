@@ -6,6 +6,10 @@ extends Node
 ## wait in an OfferQueue (a level up's until the player opens them: open_offers()); the panels
 ## live in GameMenus; the merchant, the forge, encounters and pacts open through the Interactor
 ## (the HUD's Interact button), never by walking up to them.
+## The first runs start gently (FirstSteps); the Souls' Aid (AssistDef) follows the profile, and
+## the pause menu may lower the run's difficulty (lower_difficulty()): both make the run aided
+## (RunState.assisted: no records, no leaderboards). The end screen's Descend again starts the
+## next descent at once (descend_again()).
 ## What the run says and shows (banners, toasts, the souls, the clock, the log's lines) is the
 ## RunAnnouncer's, listening to Events: the Game emits and keeps to the flow. Its debug entry
 ## points are GameDebug's (`debug`). Every floor is reached through transition_to_floor().
@@ -110,6 +114,8 @@ var choices := GameOffers.new()
 ## shown once an ending is chosen.
 var _ending_earned := 0
 var _ending_record := false
+## The first runs' gentle start on their first floor (decision 0010).
+var first_steps := FirstSteps.new()
 
 
 func _ready() -> void:
@@ -131,6 +137,8 @@ func _ready() -> void:
 	meeting.narrative = content.narrative
 	add_child(meeting)
 	world.storyteller = meeting
+	first_steps.name = "FirstSteps"
+	add_child(first_steps)
 	hidden.name = "HiddenPassage"
 	hidden.game = self
 	hidden.def = content.dungeon.hidden_floor
@@ -154,6 +162,7 @@ func _ready() -> void:
 	choices.bind_panel()
 	_connect_menus()
 	_connect_events()
+	Profile.changed.connect(_follow_assist)
 	var village := VillageExpedition.new()
 	village.game = self
 	add_child(village)
@@ -183,6 +192,9 @@ func _connect_menus() -> void:
 		pause_menu.hide()
 		_set_paused(false)
 		player.give_up())
+	pause_menu.run_difficulty = func() -> DifficultyDef: return run.difficulty if run else null
+	pause_menu.lower_options = _lower_options
+	pause_menu.difficulty_lowered.connect(lower_difficulty)
 	inventory_panel.closed.connect(_on_menu_closed)
 	shop_panel.closed.connect(_on_menu_closed)
 	menus.forge.closed.connect(_on_menu_closed)
@@ -190,6 +202,7 @@ func _connect_menus() -> void:
 	menus.fragment.closed.connect(_on_menu_closed)
 	encounter_panel.closed.connect(_on_menu_closed)
 	game_over_panel.restart_requested.connect(return_to_village)
+	game_over_panel.descend_requested.connect(descend_again)
 	game_over_panel.continue_requested.connect(_on_continue_endless)
 	game_over_panel.title_requested.connect(return_to_title)
 
@@ -265,6 +278,8 @@ func _begin_run(saved: Dictionary, daily: bool = false) -> void:
 		world.rng.seed = DailyRun.seed_of(day)  # the same bosses all day
 	RemoteTuning.run_starting()  # (a safe point: the remote settings read meanwhile apply now, then wait)
 	session.enter_expedition(RunState.create(content, saved, world.rng, day), world)
+	if saved.is_empty():
+		run.assisted = Profile.assist  # (a saved run keeps its own: RunState)
 	var ticket := session.capture()
 	world.tuning = run.tuning
 	if day >= 0:
@@ -273,6 +288,7 @@ func _begin_run(saved: Dictionary, daily: bool = false) -> void:
 			Profile.start_daily(day)
 	world.difficulty = run.difficulty
 	world.run_bosses = run.bosses
+	world.luck = run.luck
 	world.clear_floor()  # the last run's merchant must not pass its locked stock on
 	world.floors_without_forge = int(saved.get("floors_without_forge", 0))
 	world.kept_stock.clear()
@@ -313,6 +329,7 @@ func _begin_run(saved: Dictionary, daily: bool = false) -> void:
 	world.boons = RunBoons.build(content, run.oath) if not run.is_daily() else RunBoons.new()
 	player.healing_scale = world.boons.healing_scale
 	player.crit_damage_bonus = world.boons.crit_damage_bonus
+	_follow_assist()
 	_records.bind(run, player)
 	Events.run_started.emit(run, player)  # (whatever follows a whole run: the gameplay statistics)
 	run_timer.run = run
@@ -428,6 +445,22 @@ func _give_daily_start() -> void:
 	player.hp = player.get_max_hp()
 
 
+## A profile with no run yet and no run saved (decision 0010): Play goes straight down the Well,
+## Kagari and its choices waiting for the first return.
+static func first_descent_due() -> bool:
+	return Profile.runs == 0 and RunSave.read().is_empty()
+
+
+## The first descent is on Keeper (ContentDB.default_difficulty), whatever an older profile held;
+## never a Dawn Knell.
+static func prepare_first_descent(content_db: ContentDB) -> void:
+	daily_requested = false
+	resume_requested = false
+	VillageHub.daily_requested = false
+	if content_db.default_difficulty and Profile.difficulty != content_db.default_difficulty.id:
+		Profile.select_difficulty(content_db.default_difficulty)
+
+
 ## The oath chosen for the next run (Profile.oath), if its node was bought; null otherwise.
 static func sworn_oath(content_db: ContentDB) -> OathDef:
 	if Profile.oath == &"" or content_db.soul_tree == null:
@@ -456,11 +489,42 @@ func run_souls() -> int:
 
 func _award_souls(won_now: bool) -> int:
 	var earned := run.award_souls(won_now, content.ascensions.size())
-	if run.daily_official:
-		Profile.finish_daily(run.daily_day, DailyRun.score(run))
+	if run.daily_official and run.ranked():
+		Profile.finish_daily(run.daily_day, DailyRun.score(run))  # (an aided Dawn Knell scores nothing)
 	_records.check_achievements()
 	_records.report_end()  # (the online leaderboards: Leaderboards)
 	return earned
+
+
+## The Souls' Aid as the profile has it now (the Options, title or pause): the hero takes its
+## share less of each hit, and a run it is on in is aided for good (RunState.assisted).
+func _follow_assist() -> void:
+	if run == null or player == null or not is_instance_valid(player):
+		return
+	if Profile.assist:
+		run.assisted = true
+	player.aid = content.assist.resistance_after(Profile.assist_deaths) if Profile.assist and content.assist else 0.0
+
+
+## The difficulties the pause menu may lower the run to (RunState.lower_difficulties()).
+func _lower_options() -> Array[DifficultyDef]:
+	var options: Array[DifficultyDef] = []
+	if run:
+		options = run.lower_difficulties(content)
+	return options
+
+
+## The pause menu's Difficulty (decision 0011): the run goes on at `lower` (RunState), aided from
+## now on; the floor, its monsters and its light follow at once (World.lower_difficulty()), the
+## next floors are built on it, and the save keeps it. False if `lower` isn't lower.
+func lower_difficulty(lower: DifficultyDef) -> bool:
+	if run == null or player == null or not run.lower_difficulty(content, lower):
+		return false
+	world.lower_difficulty(run.difficulty)
+	player.invalidate_stats()  # (the HUD's line names the difficulty)
+	_save_run()
+	Events.log_message(tr("The descent goes on as %s. It sets no records now.") % run.difficulty.shown_name(), Palette.GOLD)
+	return true
 
 
 # --- Menus -------------------------------------------------------------------
@@ -636,7 +700,8 @@ func _enter_floor(resumed: bool = false) -> void:
 	if run.leads_to_finale():
 		world.next_routes = [content.dungeon.finale.route()] as Array[FloorRoute]  # one way: down
 	else:
-		world.next_routes = FloorRoute.offer(content, depth + 1, difficulty, run.route_seed(depth + 1), run.tuning)
+		world.next_routes = _offer(depth + 1)
+	first_steps.begin_floor(FirstSteps.wanted(content, run), player, world)  # (before the floor is laid)
 	world.build_floor(depth, content, _route_to(depth))
 	world.place_player(player)
 	if resumed and world.arena and world.arena.is_defeated:
@@ -691,9 +756,19 @@ func _fight_act() -> ActDef:
 func _route_to(floor_depth: int) -> FloorRoute:
 	if not run.routes.has(floor_depth):
 		return null
-	var offered := FloorRoute.offer(content, floor_depth, difficulty, run.route_seed(floor_depth), run.tuning)
+	var offered := _offer(floor_depth)
 	var index: int = run.routes[floor_depth]
 	return offered[index] if index >= 0 and index < offered.size() else null
+
+
+## The ways down to floor `floor_depth`, offered on the floor above it: the same whenever they are
+## asked (when that floor is laid, when the next one rebuilds the way taken), so the curses and
+## events they leave out (RunLuck: no repeats) are those of the floors above the one showing them,
+## and that floor's own twist when a way led to it (recorded when its stairs were taken).
+func _offer(floor_depth: int) -> Array[FloorRoute]:
+	var shown_on := floor_depth - 1
+	var below := shown_on + 1 if run.routes.has(shown_on) else shown_on
+	return FloorRoute.offer(content, floor_depth, difficulty, run.route_seed(floor_depth), run.tuning, run.luck, below)
 
 
 func _on_stairs_reached(route: int = 0) -> void:
@@ -704,6 +779,9 @@ func _on_stairs_reached(route: int = 0) -> void:
 		hidden.spend_key()
 	elif world.next_routes.size() >= 2:
 		run.routes[depth + 1] = clampi(route, 0, world.next_routes.size() - 1)
+		var way := world.next_routes[run.routes[depth + 1]]
+		run.luck.record(RunLuck.CURSE, way.curse, depth + 1)  # (what the next floor's offer leaves out)
+		run.luck.record(RunLuck.EVENT, way.floor_event, depth + 1)
 	Sfx.play_ui(Sfx.bank.stairs)
 	_transitioning = true
 	# Fade to black, build the next floor, fade back in.
@@ -829,7 +907,7 @@ func _on_boss_defeated(boss: Monster) -> void:
 		if bottom and run.meets_keeper():
 			Profile.record_keeper_freed(run.keeper)  # (the codex's list of the Keepers freed)
 		_split(run.split_depth())
-		new_record = Profile.record_time(run.record_key(), run.finish_time, run.splits)
+		new_record = run.ranked() and Profile.record_time(run.record_key(), run.finish_time, run.splits)
 		if new_record:
 			Events.log_message(tr("New record: %s!") % TimeText.of(run.finish_time), Palette.GOLD)
 		earned = _award_souls(true)
@@ -905,6 +983,20 @@ func return_to_village() -> void:
 	RunSave.erase()
 	_set_paused(false)
 	Loader.go(VILLAGE_SCENE)
+
+
+## The death screen's Descend again (decision 0010): the next descent at once, as the Well would
+## start it (the difficulty, ascension and oath chosen there; a Dawn Knell again, as practice, if
+## this one was), without the walk back through Kagari. The run that ended is recorded and its
+## save erased first, as when returning to the village.
+func descend_again() -> void:
+	if run == null or (Profile.held and not DebugCheats.debug_run):
+		return
+	var daily := run.is_daily()
+	_records.record_history()
+	RunSave.erase()
+	Profile.save_profile()
+	start_run(daily)
 
 
 ## The end screen's Title button ends the run as Return to village does: the won (or lost) run
@@ -988,6 +1080,8 @@ func _on_player_died(_actor: Actor) -> void:
 	end_facts = RunFacts.of_death(run, player, content, world, abyss.holds(player))
 	RunSave.erase()
 	offers.clear()
+	if Profile.assist:
+		Profile.count_assist_death()  # (the aid weighs a little more from the next hit)
 	# Souls and history right away (the app may be closed during the pause below).
 	var earned := _award_souls(false)
 	_records.record_history()

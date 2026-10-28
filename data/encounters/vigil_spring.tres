@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="EncounterDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/encounters/encounter_choice.gd" id="1_choice"]
+[ext_resource type="Script" path="res://src/definitions/encounters/encounter_outcome.gd" id="2_outcome"]
+[ext_resource type="Texture2D" path="res://assets/props/spring.png" id="3_icon"]
+[ext_resource type="Script" path="res://src/definitions/encounters/encounter_def.gd" id="4_def"]
+
+[sub_resource type="Resource" id="Resource_whole"]
+script = ExtResource("2_outcome")
+weight = 100
+text = "The water closes every wound. The warden waits."
+color = Color(0.43137255, 0.90588236, 0.5294118, 1)
+heal_ratio = 1.0
+
+[sub_resource type="Resource" id="Resource_drink"]
+script = ExtResource("1_choice")
+label = "Drink"
+outcomes = Array[ExtResource("2_outcome")]([SubResource("Resource_whole")])
+
+[resource]
+script = ExtResource("4_def")
+choices = Array[ExtResource("1_choice")]([SubResource("Resource_drink")])
+verb = "Drink"
+id = &"vigil_spring"
+display_name = "Spring of the Last Vigil"
+description = "Still water at the warden's door: the one mercy the Well grants before the fight."
+icon = ExtResource("3_icon")
+color = Color(0.5568628, 0.7921569, 0.9019608, 1)

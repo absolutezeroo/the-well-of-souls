@@ -30,7 +30,7 @@ func rebuild() -> void:
 	_preview.owner = self
 	for field: StringName in [&"spawn", &"well", &"noticeboard", &"memorial"]:
 		var point := _point(village, field, String(field).capitalize())
-		if field == &"well": _sprite(point, village.well_icon, Rect2(), 3.0, Vector2(0, -12), Color(0.55, 0.65, 0.72))
+		if field == &"well": _sprite(point, village.well_icon, Rect2(), 3.0, Vector2(0, -12))
 	for i in village.paths.size():
 		var path := _point(village, &"paths", "Path_%02d" % i, Vector2.ZERO, i)
 		path.collision = Rect2(Vector2.ZERO, village.paths[i].size)

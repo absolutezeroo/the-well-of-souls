@@ -41,6 +41,7 @@ fog_speed = Vector2(14, 3)
 grade_shadows = Color(0.7, 0.85, 1.1, 1)
 grade_highlights = Color(0.95, 1, 1.08, 1)
 grade_strength = 0.55
+narrative_exception = true
 saturation = 0.85
 mist_color = Color(0.9, 0.95, 1, 0.12)
 mist_speed = Vector2(14, 3)

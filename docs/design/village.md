@@ -2,15 +2,32 @@
 
 Le Puits des Âmes remains an action roguelike. Kagari is a small persistent, walkable hub,
 not the archived RPG campaign. F5 still opens the title (privacy, account, options and records).
-**Enter Kagari** tells the introduction once, then brings the hero to the square. Resume and
+The very first Play (**Descend**: a profile with no run, none saved) tells the introduction, then
+goes straight down the Well (see "The first return" below). Afterwards **Enter Kagari** brings
+the hero to the square (the introduction first, if it was never told). Resume and
 Daily requests also lead here. Walk to the central Well and interact to choose/resume a descent;
 difficulty, ascensions, oaths and the daily explanation retain their normal rules. A new descent
 asks before replacing an existing run. Closing that question or leaving the village loses nothing.
 
 The pause menu's **Return to village** saves the current descent; the Well can resume it at its
 saved floor, with its hero and equipment. After death/victory, **Return to village** closes that
-expedition and leaves no resumable finished run. The optional endless continuation is retained.
+expedition and leaves no resumable finished run. After a death, **Descend again** starts the next
+descent at once, as the Well would (its difficulty, ascension and oath), without the walk back. The optional endless continuation is retained.
 A village visit does not heal, equip or otherwise mutate a suspended dungeon hero.
+
+## The first return
+
+Decision 0010: a new player's first minutes are a fight, not a village. The first descent starts
+from the title, after the privacy questions and the (skippable) story, on floor 1 at Keeper, with
+no Kagari, Well cinematic, difficulty or oath before it. Kagari, the Vigil-Keeper and the choices
+come at the first return: the death screen opens on her first-death line (`vigil_tale`,
+`first_death`: "There you are, child. I never sleep: I was waiting for you."), and **Return to
+village** brings the hero to the square for the first time. Nothing there assumed an earlier
+visit: the HUD's objective is the first quest's offer ("Find the Vigil-Keeper at the Well or in
+the temple."), her greeting ("There you are, child. Ren will not wake...") follows her line on the
+death screen, the ember-box was never laid on floor 2 (no quest accepted yet: VillageExpedition
+lays evidence only for an accepted one), and the Well offers the difficulty and oath choices from
+then on. A first run left from the pause menu, or won, returns the same way.
 
 ## The first chapter
 
@@ -210,12 +227,18 @@ laid out in width, not height.
 - **The forest closes the clearing**; no void is visible at the camera's limits.
 - **The hub is calmer than the floors**: fewer props, more open ground. Empty is fixed with a
   purpose (a plot waiting for a resident, an unlit lamp), never with random filler.
-- **Pack art only, whole scales, no tint** ([art bible](../art-bible.md)).
+- **Pack art only, whole scales, even positions, no tint** ([art bible](../art-bible.md),
+  [decision 0009](../decisions/0009-world-tints.md)). A darker or other-coloured look is the
+  pack's own piece or a recolour on its ramps, never a multiply: the Well's roots are the pack's
+  dead trees in their own colours (gnarled dead wood smothering the sleeping houses), an unlit
+  lamp is the pack's empty stone lantern (`VillagePropDef.unlit`, TilesetDungeon), the Well is
+  the pack's well recoloured onto the grey stone of the pack's grey statues (`assets/props/well.png`).
 
 **Checked** by `VillageTests._test_layout_rules` (unit.village): every service, home, appointment
 and door walkable from the spawn; no solid prop on a road (paths 3 tiles wide or less) or
 crowding a door, home or the spawn; a path at each interior door; whole art scales; the ground
-and room floors never tinted. The rest is checked by looking: `python3 tools/design/capture.py`
+and room floors never tinted; no prop tinted, every prop on even units, unlit lamps on their own
+piece (and `title.village`: the Well untinted). The rest is checked by looking: `python3 tools/design/capture.py`
 (the `village_map` shot shows the whole square).
 
 ## The temple interior
@@ -240,11 +263,13 @@ Rooms occupy separate world coordinates in the same VillageHub. There is no scen
 second clock, combat actor, additional profile file or RunState change. A new launch returns
 to the village spawn as before; the hero's room is session state, not new saved progression.
 Time continues while walking inside and freezes in menus. The room has steady warm lighting,
-while outside still follows the day/night gradient. Its fixed camera shows the whole room;
-2× atlas art at a 1.5× camera zoom keeps source pixels on a 3× grid. Like a floor's camera, both
-zooms grow by what PixelGrid's rounding of the canvas's scale took off (`world_zoom()`), so
-1600×900 or a smaller interface size frames Kagari as 1280×720 does. Exterior camera framing
-and bounds return when leaving. A room visit never overwrites a suspended dungeon save.
+while outside still follows the day/night gradient. Its fixed camera shows the whole room.
+Both cameras are designed at 1280×720 (the surface at zoom 2, the temple at 1.5) and, like a
+floor's, made whole on every screen ([decision 0007](../decisions/0007-whole-pixels-on-screen.md),
+`PixelGrid.camera_zoom()`): an art pixel is a whole number of screen pixels, the framing rounded
+down to the wider view. The surface shows 6 screen pixels per art pixel at 1080 lines (4 at 720,
+5 at 1600×900); the temple 4 at 1080 (3 at 720 and 1600×900), as the dungeon. A smaller interface
+size never changes the framing. Exterior camera framing and bounds return when leaving. A room visit never overwrites a suspended dungeon save.
 
 `VillageInteriorDef` owns doorway/return position, world offset, camera and walk bounds,
 spawn/exit, shrine interaction, light, tiles, wall collisions and props. `VillageTilePatchDef`

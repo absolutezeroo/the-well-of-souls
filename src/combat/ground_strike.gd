@@ -28,9 +28,12 @@ var _world: World
 var _floor_id := 0
 var _time := 0.0
 var _view: TelegraphView
+## Its warning sound was played (when the mark first shows: a monster's only).
+var _warned := false
 
 
-## A strike of `source` on `at` (World.spawn_vfx puts it on the ground).
+## A strike of `source` on `at` (World.spawn_vfx puts it on the ground), warning `warning`
+## seconds: a monster's never under the fairness floor (Monster.floor_windup(), decision 0008).
 static func create(world: World, from: Actor, at: Vector2, area: float, warning: float, amount: int, push: float, made_of: VfxElementDef = null) -> GroundStrike:
 	var node := GroundStrike.new()
 	node._world = world
@@ -38,7 +41,7 @@ static func create(world: World, from: Actor, at: Vector2, area: float, warning:
 	node.source = from
 	node.position = at
 	node.radius = area
-	node.fuse = maxf(warning, 0.05)
+	node.fuse = (from as Monster).floor_windup(warning) if from is Monster else maxf(warning, 0.05)
 	node.damage = amount
 	node.knockback = push
 	node.element = made_of
@@ -58,6 +61,10 @@ func _process(delta: float) -> void:
 		return
 	var fraction := clampf((_time - delay) / fuse, 0.0, 1.0)
 	_view.show_shape(TelegraphView.Shape.CIRCLE, radius, 0.0, fraction)
+	if not _warned:
+		_warned = true
+		if source is Monster:
+			Sfx.play_warning(global_position)
 	if fraction >= 1.0:
 		_land()
 

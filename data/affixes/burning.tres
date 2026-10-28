@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://src/definitions/effects/on_hit_status.gd" id="1_wbisx"]
 [ext_resource type="Script" path="res://src/definitions/items/item_affix_def.gd" id="2_h8dtc"]
+[ext_resource type="Resource" path="res://data/perks/synergies/inferno.tres" id="role_family"]
 
 [sub_resource type="Resource" id="Resource_ajbpc"]
 script = ExtResource("1_wbisx")
@@ -9,6 +10,8 @@ burn_damage = 3
 
 [resource]
 script = ExtResource("2_h8dtc")
+role = 2
+family = ExtResource("role_family")
 slots = 1
 on_hit = SubResource("Resource_ajbpc")
 id = &"burning"

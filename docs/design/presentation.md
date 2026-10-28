@@ -4,7 +4,8 @@
 
 - **Weight of a blow**: every hit you land pushes the camera a few pixels along the blow, a shot
   recoils it back, a hit taken knocks it away (`GameCamera.kick`, `Events.camera_kick`, springing
-  back in real time, apart from the shake; both follow the Screen shake option). A killing blow
+  back in real time, apart from the shake; both follow the Screen shake option). A blow striking a
+  crowd kicks once (the strongest push of the physics frame, never their sum). A killing blow
   stops the world a moment longer; killing an elite or better slows it down for a beat
   (`HitStop.slow`).
 - **What monsters are made of** (`ImpactMaterialDef`, `data/materials/`: flesh, bone, slime,
@@ -31,7 +32,11 @@
   (`src/vfx/particles/*.tscn`, edit them in the inspector; `pixel_particles.gdshader` keeps them
   whole art pixels on the grid, their fades dithered), dash afterimages (dithered, in the dash's
   element; plain rushes like a beast's Charge also kick up dust), animated projectiles,
-  squash on hit, popping damage numbers, red vignette when hurt or low on HP.
+  a one-art-pixel flinch on hit (never a squash: whole pixels, decision 0007), popping damage
+  numbers (one per body in a crowd: its hits of one color within 0.3 s add up into the number
+  already rising, `HitFeedback.show_damage()`), red vignette when hurt (a screen flash: off with
+  Screen flashes, three a second at most counting the lightning's, `ScreenEffects.take_flash()`)
+  or low on HP.
 - **Atmosphere** (`AmbienceDef` > Atmosphere, one per biome and curse): the whole picture takes
   the biome's colors (`screen.gdshader`: shadows and highlights graded toward two tints,
   saturation, contrast), bright things **bloom** (a flat rim of light one art pixel wide around
@@ -60,7 +65,11 @@
   Monster warnings (`TelegraphView`, `telegraph.gdshader`): zone, cone, line or the lanes of a
   fan or ring of shots (so the gaps read), with crawling hazard stripes and a solid rim, filling
   up from the monster as the attack comes, flashing just before it lands; every monster shot
-  and dash now warns (lanes, line). Shots leave a glowing streak.
+  and dash warns (lanes, line), as far as it flies and as wide as the shot; a blast's mark
+  (`FuseMark`: a shockwave, a burst after death, a fuse) fills up for the whole fuse and follows
+  a boss that moves; a short sound starts every wind-up (`Sfx.play_warning()`), and an arrow at
+  the screen's edge points at a threat winding up out of sight (`ThreatMarkers`; all in
+  monsters.md "Warnings"). Shots leave a glowing streak.
 - **Light, space and screen** (docs/vfx.md, "Shaders"): glowing cores have a stepped **halo**
   (two flat bands of added light in their element's darker steps, sparser on bright floors):
   fire's heart in braziers and campfires, magic shots, Smite's column foot, Thunder's strike, a
@@ -173,7 +182,8 @@
   Spectres rise out of a hollow ring of pale flames (the spirit element): the act's monsters blended 60% toward pale blue
   (`ActorRig.pallor`, under the hit flash) and a little see-through. Won, the bell again and a
   pale veil, and the hero is back with the feather's golden burst; lost, the bell and a dark veil.
-- **Hit stop**: a few frames of freeze on impacts (`HitStop.freeze(seconds)`).
+- **Hit stop**: a few frames of freeze on impacts (`HitStop.freeze(seconds)`), never inside a slow
+  (`HitStop.slow`: Celeste's guard), the longest of a frame's, never their sum.
 - **Light**: in steps, tile by tile (see [Lights](#lights)): the hero's torch, room lanterns, braziers,
   campfires, glowing shots and explosions light up each floor's own darkness.
 - **Shaders**: everything stays on the art's pixel grid. The rig shader flashes actors when hit,
@@ -195,8 +205,16 @@
 Binding caps and invariants for any new attack, monster, skill or effect (sources: Celeste's
 released code, Dead Cells and Sakurai on hitstop, Riot's VFX guide, Xbox and WCAG guidelines;
 the summary is in the owner's research report linked from [the art bible](../art-bible.md)). The
-project's own values already follow them: a hit freezes 0.035 s (a crit 0.07), the hero hurt
-0.08, an elite's death 0.08 then a slow, a boss's death 0.25.
+project's own values follow them: a hit freezes 0.035 s (a crit 0.07), the hero hurt 0.08, an
+elite's death 0.08 then a slow (no freeze inside it), a boss's death 0.25; one press buffer of
+0.12 s for the attack, the roll and the skills, counted in real time, the newest press winning
+(`PlayerDef.input_buffer`, `PlayerControls`); the shake moves the view by whole art pixels and
+fades in real time; the phone buzzes for the hero hurt, a crit, a boss's turn and fall (and a
+curse's card), never for an ordinary hit, a shake or a footstep (`Settings.vibrate()`); wind-ups
+of 0.4 s at least, a boss's 0.5 s ([decision 0008](../decisions/0008-fairness-contract.md)). The
+charged attack can be played without holding (Options > Gameplay > Charge without holding: a
+double tap charges, a tap unleashes; decision 0011). `unit.feel_limits` and `game.feel_limits`
+check these (the wind-ups: `unit.fairness`).
 
 | What | Limit |
 |---|---|
@@ -204,7 +222,7 @@ project's own values already follow them: a hit freezes 0.035 s (a crit 0.07), t
 | Freeze and slow | Never a freeze during a slow |
 | Screen shake | Through `Events.screen_shake`/`GameCamera` only (the Screen shake option, 0 respected); trauma capped at 1; along the cause; whole art pixels; never rotation |
 | Input | Read on the first frame; attack, dodge and skill presses buffered 0.1-0.15 s, the buffer keeps counting through hitstop, consumed when used; the dodge cancels an attack's recovery |
-| Telegraph | Every attack that hurts has a wind-up on at least two channels (pose, colour or ground mark, sound), its ground mark equal to the real area, and a way out ([pillars.md](pillars.md)) |
+| Telegraph | Every attack that hurts has a wind-up on at least two channels (pose, colour or ground mark, sound: `Sfx.play_warning()`), its ground mark equal to the real area and lasting until the hit, a way out, and an edge arrow when it comes from off screen; at least 0.4 s (a boss's 0.5 s) after every multiplier ([pillars.md](pillars.md), monsters.md "Warnings") |
 | Flashes | At most 3 per second over a large area, and behind the Screen flashes option |
 | Haptics | Rare, short and crisp, only for important events (hurt, crit, boss), behind the Vibrations option; nothing on ordinary hits in a crowd |
 | Readability | Threats are the most salient layer; the hero's effects lower and more transparent; ground effects under bodies unless they are threats; damage numbers merge in a crowd |
@@ -334,7 +352,7 @@ Every actor (player and monsters) has a **rig**: `src/entities/rig/actor_rig.tsc
 ```
 Rig                  at the actor's feet
 └── Visual           body shader (flash.gdshader: flash, statuses, rim, deaths), scaled 2x (units = art pixels)
-    └── Squash       squash & stretch on hits
+    └── Squash       lunges (moved, never scaled; a hit drops the Visual one art pixel)
         ├── Body       AnimatedSprite2D: the character (SpriteFrames from the data)
         ├── BodyArmor  AnimatedSprite2D: worn body armor, same animation and frame as Body
         ├── Helmet     AnimatedSprite2D: worn helmet, same animation and frame as Body

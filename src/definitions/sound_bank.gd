@@ -22,6 +22,9 @@ extends Resource
 @export_group("Combat")
 @export var projectile_impact: AudioStream
 @export var explosion: AudioStream
+## The short cue at the start of a monster's wind-up, a blast's fuse, a trap's click
+## (Sfx.play_warning(): every warning has a sound, docs/decisions/0008).
+@export var telegraph: AudioStream
 
 @export_group("Items")
 @export var pickup: AudioStream

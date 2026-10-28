@@ -13,6 +13,7 @@ attack_speed = 0.1
 
 [resource]
 script = ExtResource("4_1bsir")
+role = 1
 id = &"war_banner"
 display_name = "War Banner"
 icon = ExtResource("2_bfpgt")

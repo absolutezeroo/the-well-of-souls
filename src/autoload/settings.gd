@@ -1,7 +1,8 @@
 extends Node
 ## Player options (autoload "Settings"): volumes, screen shake, vibrations, size of the touch
 ## controls (whole steps: CONTROLS_SIZES), large text and the text speed (reading), fixed or
-## floating joystick, battery saver (30 FPS), fewer effects, screen flashes, tutorial hints, run timer,
+## floating joystick, tap to charge, battery saver (30 FPS), fewer effects, screen flashes, tutorial
+## hints, run timer,
 ## boss stories (full, short, off), on a computer fullscreen or a window (F11, Alt+Enter), the
 ## interface's size (PixelGrid),
 ## language (English or French: TranslationServer's locale, see locale/strings.csv), and the
@@ -24,7 +25,7 @@ const VOLUME_BUSES := {
 const OLD_SOUND_KEY := "sound_volume"
 const SPLIT_SOUND_KEYS: Array[String] = ["ui_volume", "combat_volume", "ambience_volume"]
 const MIN_VIBRATION_GAP_MS := 50
-const KEYS: Array[String] = ["master_volume", "music_volume", "ui_volume", "combat_volume", "ambience_volume", "screen_shake", "vibrations", "controls_scale", "large_text", "text_speed", "fixed_joystick", "battery_saver", "fewer_effects", "screen_flashes", "tutorial_hints", "run_timer", "language", "auto_loot", "boss_stories", "fullscreen", "ui_size"]
+const KEYS: Array[String] = ["master_volume", "music_volume", "ui_volume", "combat_volume", "ambience_volume", "screen_shake", "vibrations", "controls_scale", "large_text", "text_speed", "fixed_joystick", "battery_saver", "fewer_effects", "screen_flashes", "tutorial_hints", "run_timer", "language", "auto_loot", "boss_stories", "fullscreen", "ui_size", "tap_to_charge"]
 ## Frames per second: normal (0 = no cap), and with the battery saver.
 const FPS := 0
 const SAVER_FPS := 30
@@ -85,13 +86,17 @@ var fixed_joystick := false
 var battery_saver := false
 ## Half the particles (sparks, chunks, dust), no heat haze nor glow: for older phones.
 var fewer_effects := false
-## Lightning lights the whole screen for one frame (never more than 3 times a second). Off for
-## players sensitive to flashes.
+## Lightning lights the whole screen for one frame, the edges flash red when the hero is hurt
+## (together never more than 3 times a second: ScreenEffects.take_flash()). Off for players
+## sensitive to flashes.
 var screen_flashes := true
 ## Tutorial hints (see Tutorial): on until turned off.
 var tutorial_hints := true
 ## The run's time on the HUD, with the splits of each floor (for speedrunners).
 var run_timer := true
+## The charged attack without holding (decision 0011): a double tap starts it, it fills by itself,
+## a tap unleashes it once full (PlayerControls.update_attack()). Holding still works.
+var tap_to_charge := false
 ## "en" or "fr". On first launch, the phone's language (French if it is French, else English).
 var language := device_language()
 ## LOOT_ALL, LOOT_BETTER or LOOT_OFF. "Better only" by default: on a phone, stopping to tap
@@ -110,6 +115,8 @@ var ui_size := UI_BIG
 var bindings := {}
 
 var _last_vibration := 0
+## Buzzes let through so far, on a phone or not (the tests count what makes the phone buzz).
+var buzzes := 0
 ## Takes F11 and Alt+Enter before anything else (WindowKeys).
 var _window_keys := WindowKeys.new()
 
@@ -234,14 +241,19 @@ static func device_language() -> String:
 
 
 ## A short buzz on phones (0..1). Does nothing on computers or when vibrations are off.
+## Only for what matters (docs/design/presentation.md, "Feel limits"): the hero hurt, a critical
+## hit, a boss's turn or fall; never an ordinary hit or a footstep.
 func vibrate(strength: float) -> void:
-	if not vibrations or not OS.has_feature("mobile"):
+	if not vibrations:
 		return
 	# Many hits in a row make one buzz, not a drone.
 	var now := Time.get_ticks_msec()
 	if now - _last_vibration < MIN_VIBRATION_GAP_MS:
 		return
 	_last_vibration = now
+	buzzes += 1
+	if not OS.has_feature("mobile"):
+		return
 	strength = clampf(strength, 0.0, 1.0)
 	Input.vibrate_handheld(roundi(lerpf(12.0, 70.0, strength)), lerpf(0.25, 1.0, strength))
 
@@ -285,6 +297,7 @@ func load_settings() -> void:
 	screen_flashes = bool(file.get_value("options", "screen_flashes", screen_flashes))
 	tutorial_hints = bool(file.get_value("options", "tutorial_hints", tutorial_hints))
 	run_timer = bool(file.get_value("options", "run_timer", run_timer))
+	tap_to_charge = bool(file.get_value("options", "tap_to_charge", tap_to_charge))
 	language = str(file.get_value("options", "language", language))
 	if not language in LANGUAGES:
 		language = device_language()

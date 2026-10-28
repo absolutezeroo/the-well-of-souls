@@ -105,6 +105,8 @@ var action_bar := ActionBar.new()
 var mouse_controls := MouseControls.new()
 ## On the Bag button while a compartment of the bag is full (built in code).
 var bag_full_mark := BagFullMark.new()
+## Arrows at the screen's edge toward threats out of sight (built in code).
+var threat_markers := ThreatMarkers.new()
 
 
 func _ready() -> void:
@@ -148,6 +150,8 @@ func _ready() -> void:
 	safe_area.resized.connect(loot_prompt.place)
 	_add_action_bar()
 	_add_key_badges()
+	# Arrows at the edge toward threats out of sight (over the whole HUD: ThreatMarkers).
+	add_child(threat_markers)
 	mouse_controls.name = "MouseControls"
 	add_child(mouse_controls)
 	InputDevice.changed.connect(_apply_device)
@@ -456,6 +460,7 @@ func bind_player(player: Player) -> void:
 	_weapon_shown = null
 	_temp_shown = Vector4(NAN, NAN, NAN, NAN)
 	loot_prompt.player = player
+	threat_markers.player = player
 	bag_full_mark.watch(player.inventory)
 	_player.health_changed.connect(_on_health_changed)
 	_vignette.reset()

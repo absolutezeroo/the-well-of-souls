@@ -34,6 +34,7 @@ var difficulty: DifficultyDef:
 		difficulty = value
 		if rules:
 			rules = FloorRules.make(rules.config, value, floor_event, depth, curse)
+			rules.boons = boons
 ## Boss floors only: the arena and its boss (null on normal floors), and its plan (ArenaDef).
 var arena: BossArena
 var arena_plan: ArenaDef
@@ -70,6 +71,9 @@ var boons := RunBoons.new():
 		if rules:
 			rules.boons = value  # the floor's drops and gold ask its rules (FloorRules.boons)
 
+## The run's engineered luck (RunLuck: no repeats, bad-luck protection on drops), set by the Game;
+## a floor's draws record into it as it is laid.
+var luck := RunLuck.new()
 ## The floor's light color and brightness (its difficulty, curse and event): relight().
 var _light_tint := Color.WHITE
 ## The boss of each act for this run (an act may have several; the game draws one per run).
@@ -80,6 +84,10 @@ var ambush: AmbushRoom
 ## Tells a warden's story when the hero walks into its arena, before it wakes (the Game's
 ## BossMeeting; null: the fight starts at once). Not owned by the World.
 var storyteller: Storyteller
+## The first runs' gentle start on this floor (the Game's FirstSteps; null: none): the floor kind
+## lets it lay the first monster, the monsters ask it whether the hero is sheltered (shelters()).
+## Not owned by the World.
+var first_steps: FirstSteps
 ## The floor's pact door, if it has one.
 var pact: PactRoom
 ## The floor's room trial (RoomTrial: the Souls of Kagari, the Unbound Seal...), if it has one.
@@ -178,9 +186,12 @@ func build_floor(new_depth: int, content: ContentDB, taken: FloorRoute = null) -
 	_content = content
 	DeathPiecesVfx.warm_content(content)
 	var kind := FloorKind.choose(self, content, taken)
+	luck.forget(new_depth)  # (laid again from its seed: its draws come out the same)
 	var twist := kind.twist(self, content)
 	curse = twist.curse if twist else null
 	floor_event = twist.floor_event if twist else null
+	luck.record(RunLuck.CURSE, curse, depth)
+	luck.record(RunLuck.EVENT, floor_event, depth)
 	# The world first: its rooms take its shapes (BiomeDef.room_shapes).
 	biome = kind.pick_biome(self, content)
 	arena_plan = kind.pick_arena(self, content)
@@ -249,6 +260,28 @@ func clear_floor() -> void:
 			if child != player:
 				layer.remove_child(child)
 				child.queue_free()
+
+
+## The hero stands sheltered in his first room on one of the first runs (FirstSteps): monsters
+## don't notice him there yet (Monster.notice_target()).
+func shelters(actor: Actor) -> bool:
+	return first_steps != null and first_steps.shelters(actor)
+
+
+## The run's difficulty was lowered in the middle of this floor (the pause menu, RunState): the
+## floor's rules follow it (its boons kept), and so do the monsters already standing (their
+## Health, blows, speed, wind-ups and sight: Monster.follow_rules()) and the floor's light.
+func lower_difficulty(lower: DifficultyDef) -> void:
+	var before := rules
+	difficulty = lower
+	if before == null:
+		return
+	for node in get_tree().get_nodes_in_group("monsters"):
+		var monster := node as Monster
+		if monster and monster.world == self and not monster.is_dead:
+			monster.follow_rules(before, rules)
+	_light_tint = rules.ambient_light()
+	relight()
 
 
 func place_player(new_player: Player) -> void:
@@ -555,7 +588,7 @@ func drop_trophy(at: Vector2) -> void:
 	for i in 20:
 		var item := pick_random_item() as EquipmentDef
 		if item:
-			spawn_item(LootRoller.roll(item, depth, rules.drop_quality(), config(), _content.item_affixes, rng, ItemRarity.MAGIC), at)
+			spawn_item(LootRoller.roll(item, depth, rules.drop_quality(), config(), _content.item_affixes, rng, ItemRarity.MAGIC, luck), at)
 			return
 
 
@@ -645,10 +678,17 @@ func splat_count() -> int:
 	return _splats.count() if _splats and is_instance_valid(_splats) and not _splats.is_queued_for_deletion() else 0
 
 
-func spawn_floating_text(at: Vector2, text: String, color: Color) -> void:
+## A rising number or word at `at`; returns it (null when nothing is shown: a simulation), so a
+## blow's number can take the next ones (HitFeedback merges a crowd's numbers).
+func spawn_floating_text(at: Vector2, text: String, color: Color) -> FloatingText:
 	if not Vfx.shown:
-		return
-	spawn_vfx(FloatingText.create(at, text, color))
+		return null
+	return spawns.floating_text(at, text, color)  # (from its pool: WorldSpawner.text_pool)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE and spawns:
+		spawns.free_pools()  # the shots and numbers kept for later go with the World
 
 
 # --- Holes ------------------------------------------------------------------
@@ -807,6 +847,11 @@ func get_hostiles(faction: Actor.Faction) -> Array[Actor]:
 	elif player and not player.is_dead:
 		result.append(player)
 	return result
+
+
+## The shots in flight (read only: the layer's children, walked by index, never copied).
+func projectile_layer() -> Node2D:
+	return _projectiles
 
 
 ## Every living actor, whatever its side (traps and explosions hurt everyone).

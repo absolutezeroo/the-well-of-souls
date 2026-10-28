@@ -15,6 +15,7 @@ element = ExtResource("vfx_fire")
 
 [resource]
 script = ExtResource("4_m7xef")
+role = 2
 id = &"kindling"
 display_name = "Kindling"
 description = "Burning enemies take 20% more damage per level."

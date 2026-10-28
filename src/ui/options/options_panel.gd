@@ -3,8 +3,10 @@ extends Control
 ## Options window (title screen and pause menu), in the game's skin (MenuWindow). Five tabs (TABS,
 ## switched by a tap, a click, Q / E or LB / RB: MenuNav), each a page of grouped options with
 ## their name and a short line saying what it does:
-## - Gameplay: the language, auto loot, boss stories, in a run (run timer, screen shake,
-##   vibrations), reading (large text, text speed), the tutorial (hints, Replay tutorial);
+## - Gameplay: the language, auto loot, boss stories, the Souls' Aid (AssistDef: less damage
+##   taken, no records; kept in the Profile), in a run (run timer, screen shake, vibrations,
+##   charging without holding), reading (large text, text speed), the tutorial (hints, Replay
+##   tutorial);
 ## - Graphics: the screen (fullscreen on a computer, interface size), the touch controls (buttons
 ##   size: Normal or Large, fixed joystick), effects and battery (fewer effects, screen flashes,
 ##   battery saver);
@@ -18,7 +20,8 @@ extends Control
 ## Built in code; every control is reachable as %Name from the panel (%EnglishButton,
 ## %FrenchButton, %MasterSlider, %MusicSlider, %InterfaceSlider, %CombatSlider, %AmbienceSlider,
 ## %ShakeSlider, %ControlsNormal, %ControlsLarge, %LargeTextCheck, %TextSlow, %TextNormal,
-## %TextFast, %TextInstant, %VibrationsCheck, %FixedStickCheck, %BatteryCheck,
+## %TextFast, %TextInstant, %VibrationsCheck, %TapChargeCheck, %AssistCheck, %FixedStickCheck,
+## %BatteryCheck,
 ## %FewerEffectsCheck, %FlashesCheck, %RunTimerCheck, %TutorialCheck, %ReplayTutorialButton, %AutoLootAll, %AutoLootBetter,
 ## %AutoLootOff, %StoriesFull, %StoriesShort, %StoriesOff, %FullscreenCheck (computers),
 ## %UiSizeBig, %UiSizeMedium, %UiSizeSmall, the tabs %GameplayTab, %GraphicsTab, %AudioTab,
@@ -42,6 +45,8 @@ enum Tab { GAMEPLAY, GRAPHICS, AUDIO, CONTROLS, PRIVACY }
 ## Each tab's name (translated where shown), also its nodes' names: %<name>Tab, %<name>Page.
 ## The Settings autoload's script, for its static functions.
 const SettingsScript := preload("res://src/autoload/settings.gd")
+## The Souls' Aid's numbers (ContentDB.assist), for its line.
+const ASSIST: AssistDef = preload("res://data/player/assist.tres")
 const TAB_NAMES := {
 	Tab.GAMEPLAY: "Gameplay",  # i18n
 	Tab.GRAPHICS: "Graphics",  # i18n
@@ -63,6 +68,9 @@ var _vibrations: CheckButton
 var _checks := {}
 var _replay: Button
 var _tutorial: CheckButton
+## The Souls' Aid (the Profile's, not Settings'), and its line (what it takes away now).
+var _assist: CheckButton
+var _assist_note: Label
 ## Language code -> its button.
 var _languages := {}
 ## Auto loot: Settings.LOOT_* -> its button, and the line saying what the picked one does.
@@ -128,6 +136,10 @@ func _wire() -> void:
 			Sfx.play_ui(Sfx.bank.ui_click)
 			_show_ui_size())
 	_tabs.picked.connect(func(tab: int) -> void: show_tab(tab as Tab))
+	_assist.toggled.connect(func(on: bool) -> void:
+		Profile.set_assist(on)
+		Sfx.play_ui(Sfx.bank.ui_click)
+		_show_assist())
 	# Every hint shows again, from the first steps (and the hints come back on).
 	_replay.pressed.connect(func() -> void:
 		Profile.reset_hints()
@@ -146,6 +158,8 @@ func open() -> void:
 	for check: CheckButton in _checks:
 		check.set_pressed_no_signal(Settings.get(_checks[check]))
 	_replay.text = tr("Replay tutorial")
+	_assist.set_pressed_no_signal(Profile.assist)
+	_show_assist()
 	for code: String in _languages:
 		(_languages[code] as Button).set_pressed_no_signal(code == Settings.language)
 	_show_loot_mode()
@@ -215,6 +229,15 @@ func _pick_language(code: String) -> void:
 	_wire()
 	open()
 	language_changed.emit()
+
+
+## The Souls' Aid's line: what it takes away now (it grows with each death while on), and that its
+## runs set no records.
+func _show_assist() -> void:
+	if _assist_note == null:
+		return
+	var now := roundi(ASSIST.resistance_after(Profile.assist_deaths) * 100.0)
+	_assist_note.text = tr("%d%% less damage taken, +%d%% each death (up to %d%%). No records or leaderboards.") % [now, roundi(ASSIST.per_death * 100.0), roundi(ASSIST.most * 100.0)]
 
 
 func _pick_loot_mode(mode: int) -> void:
@@ -361,10 +384,14 @@ func _build_gameplay(body: VBoxContainer) -> Control:
 	_build_languages(OptionRows.section(left, tr("Language")))
 	_build_loot(OptionRows.section(left, tr("Loot")))
 	_build_stories(OptionRows.section(left, tr("Story")))
+	var aid := OptionRows.section(right, tr("Difficulty"))
+	_assist = OptionRows.check(self, aid, tr("Souls' Aid"), "", "AssistCheck")
+	_assist_note = OptionRows.note_of(_assist.get_parent().get_child(0) as VBoxContainer)
 	var in_run := OptionRows.section(right, tr("In a run"))
 	_checks[OptionRows.check(self, in_run, tr("Run timer"), tr("The run's time, under the map."), "RunTimerCheck")] = &"run_timer"
 	_shake = OptionRows.slider(self, in_run, tr("Screen shake"), tr("On big hits."), 0.0, 1.5, 0.1, "ShakeSlider")
-	_vibrations = OptionRows.check(self, in_run, tr("Vibrations"), tr("The phone buzzes on big hits and critical hits."), "VibrationsCheck")
+	_vibrations = OptionRows.check(self, in_run, tr("Vibrations"), tr("The phone buzzes when you are hurt, on critical hits and when a warden turns or falls."), "VibrationsCheck")
+	_checks[OptionRows.check(self, in_run, tr("Charge without holding"), tr("Attack twice quickly to charge, once more to unleash."), "TapChargeCheck")] = &"tap_to_charge"
 	_build_reading(OptionRows.section(right, tr("Reading")))
 	var tutorial := OptionRows.section(right, tr("Tutorial"))
 	_tutorial = OptionRows.check(self, tutorial, tr("Tutorial hints"), tr("Short tips during your first runs."), "TutorialCheck")
@@ -401,7 +428,7 @@ func _build_graphics(body: VBoxContainer) -> Control:
 	_checks[OptionRows.check(self, controls, tr("Fixed joystick"), tr("Stays in its corner instead of following your thumb."), "FixedStickCheck")] = &"fixed_joystick"
 	var effects := OptionRows.section(right, tr("Effects and battery"))
 	_checks[OptionRows.check(self, effects, tr("Fewer effects"), tr("Half the particles, no heat haze nor glow: smoother on older phones."), "FewerEffectsCheck")] = &"fewer_effects"
-	_checks[OptionRows.check(self, effects, tr("Screen flashes"), tr("Lightning lights up the whole screen for an instant."), "FlashesCheck")] = &"screen_flashes"
+	_checks[OptionRows.check(self, effects, tr("Screen flashes"), tr("Lightning lights up the whole screen, the edges flash red when you are hurt."), "FlashesCheck")] = &"screen_flashes"
 	_checks[OptionRows.check(self, effects, tr("Battery saver"), tr("30 FPS: the phone stays cooler."), "BatteryCheck")] = &"battery_saver"
 	return page_node
 

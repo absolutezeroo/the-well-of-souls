@@ -12,6 +12,7 @@ script = ExtResource("3_4dmd0")
 
 [resource]
 script = ExtResource("4_uf1m7")
+role = 2
 id = &"multishot"
 display_name = "Hydra's Quiver"
 description = "Everything you shoot fires 1 more projectile per level, fireballs included (2 more at most with Prism runes; the volley shares its damage)."
