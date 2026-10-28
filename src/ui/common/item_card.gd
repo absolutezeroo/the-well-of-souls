@@ -45,7 +45,7 @@ static func build(column: VBoxContainer, slot_size: float) -> ItemCard:
 	details_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	details_column.add_theme_constant_override("separation", 4)
 	card.details_scroll.add_child(details_column)
-	card.details = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
+	card.details = UiSkin.reading_label("")  # (bigger with Large text: the box scrolls)
 	card.details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	details_column.add_child(card.details)
 	card.compare_title = UiSkin.label("", Fonts.BODY, UiSkin.GOLD, true)
@@ -63,6 +63,7 @@ func show_empty(title: String, hint: String, details_text: String = "") -> void:
 	item_name.text = title
 	item_name.add_theme_color_override("font_color", UiSkin.GOLD)
 	item_type.text = hint
+	UiSkin.set_reading_style(details)
 	details.text = details_text
 	clear_compare()
 
@@ -74,6 +75,7 @@ func show_item(item: ItemDef, count: int = 1) -> void:
 	item_name.text = tr(item.display_name)
 	item_name.add_theme_color_override("font_color", item.rarity_color())
 	item_type.text = item.get_type_label()
+	UiSkin.set_reading_style(details)
 	details.text = item.get_details()
 	clear_compare()
 	details_scroll.scroll_vertical = 0

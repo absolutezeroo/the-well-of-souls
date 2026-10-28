@@ -29,7 +29,7 @@ func on_skill_used(owner: Actor, skill: SkillDef, _perk: PerkSet.Entry) -> void:
 		return
 	owner.set_meta(STATE, { "skill": skill, "frame": frame, "spent": false })
 	owner.skills.reset_cooldown(skill)
-	owner.world.spawn_floating_text(owner.head_position(), tr("ECHO"), color)
+	owner.world.spawn_floating_text(owner.head_position(), tr("Echo"), color)
 
 
 ## The chance a cast of `owner` echoes: every echo source he has (perks, runes, affixes, each

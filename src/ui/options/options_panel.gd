@@ -4,9 +4,10 @@ extends Control
 ## switched by a tap, a click, Q / E or LB / RB: MenuNav), each a page of grouped options with
 ## their name and a short line saying what it does:
 ## - Gameplay: the language, auto loot, boss stories, in a run (run timer, screen shake,
-##   vibrations), the tutorial (hints, Replay tutorial);
+##   vibrations), reading (large text, text speed), the tutorial (hints, Replay tutorial);
 ## - Graphics: the screen (fullscreen on a computer, interface size), the touch controls (buttons
-##   size, fixed joystick), effects and battery (fewer effects, screen flashes, battery saver);
+##   size: Normal or Large, fixed joystick), effects and battery (fewer effects, screen flashes,
+##   battery saver);
 ## - Audio: the five volumes;
 ## - Controls: what does what on the device in use (its keys, buttons or touch, ControlsPage);
 ## - Privacy: online (with a server in the build: the leaderboards' name and switch, the gameplay
@@ -16,7 +17,8 @@ extends Control
 ## PrivacyPage).
 ## Built in code; every control is reachable as %Name from the panel (%EnglishButton,
 ## %FrenchButton, %MasterSlider, %MusicSlider, %InterfaceSlider, %CombatSlider, %AmbienceSlider,
-## %ShakeSlider, %ControlsSlider, %VibrationsCheck, %FixedStickCheck, %BatteryCheck,
+## %ShakeSlider, %ControlsNormal, %ControlsLarge, %LargeTextCheck, %TextSlow, %TextNormal,
+## %TextFast, %TextInstant, %VibrationsCheck, %FixedStickCheck, %BatteryCheck,
 ## %FewerEffectsCheck, %FlashesCheck, %RunTimerCheck, %TutorialCheck, %ReplayTutorialButton, %AutoLootAll, %AutoLootBetter,
 ## %AutoLootOff, %StoriesFull, %StoriesShort, %StoriesOff, %FullscreenCheck (computers),
 ## %UiSizeBig, %UiSizeMedium, %UiSizeSmall, the tabs %GameplayTab, %GraphicsTab, %AudioTab,
@@ -52,7 +54,10 @@ const TAB_NAMES := {
 ## Volume sliders: Settings key -> slider (general, music, interface, combat, ambience).
 var _volumes := {}
 var _shake: HSlider
-var _controls: HSlider
+## Buttons size: each step of Settings.CONTROLS_SIZES -> its button.
+var _control_sizes := {}
+## Text speed: Settings.TEXT_* -> its button.
+var _text_speeds := {}
 var _vibrations: CheckButton
 ## Plain on/off options: check -> Settings key.
 var _checks := {}
@@ -94,7 +99,16 @@ func _wire() -> void:
 	for key: StringName in _volumes:
 		_bind_slider(_volumes[key], key)
 	_bind_slider(_shake, &"screen_shake")
-	_bind_slider(_controls, &"controls_scale")
+	for step: float in _control_sizes:
+		(_control_sizes[step] as Button).pressed.connect(func() -> void:
+			Settings.set_option(&"controls_scale", step)
+			Sfx.play_ui(Sfx.bank.ui_click)
+			_show_choices())
+	for speed: int in _text_speeds:
+		(_text_speeds[speed] as Button).pressed.connect(func() -> void:
+			Settings.set_option(&"text_speed", speed)
+			Sfx.play_ui(Sfx.bank.ui_click)
+			_show_choices())
 	_vibrations.toggled.connect(func(on: bool) -> void:
 		Settings.set_option(&"vibrations", on)
 		if on:
@@ -124,7 +138,7 @@ func _wire() -> void:
 
 
 func open() -> void:
-	for slider: HSlider in _volumes.values() + [_shake, _controls]:
+	for slider: HSlider in _volumes.values() + [_shake]:
 		var key: StringName = slider.get_meta(&"option")
 		slider.set_value_no_signal(Settings.get(key))
 		_show_value(slider)
@@ -137,6 +151,7 @@ func open() -> void:
 	_show_loot_mode()
 	_show_story_mode()
 	_show_ui_size()
+	_show_choices()
 	_privacy.refresh()
 	show_tab(Tab.GAMEPLAY)
 	show()
@@ -191,6 +206,8 @@ func _pick_language(code: String) -> void:
 	_loot_modes.clear()
 	_story_modes.clear()
 	_ui_sizes.clear()
+	_control_sizes.clear()
+	_text_speeds.clear()
 	_tabs = null
 	_pages.clear()
 	_privacy = null
@@ -216,6 +233,14 @@ func _show_loot_mode() -> void:
 func _show_ui_size() -> void:
 	for ui_size: int in _ui_sizes:
 		(_ui_sizes[ui_size] as Button).set_pressed_no_signal(ui_size == Settings.ui_size)
+
+
+## The buttons size and the text speed in use, pressed.
+func _show_choices() -> void:
+	for step: float in _control_sizes:
+		(_control_sizes[step] as Button).set_pressed_no_signal(is_equal_approx(step, Settings.controls_scale))
+	for speed: int in _text_speeds:
+		(_text_speeds[speed] as Button).set_pressed_no_signal(speed == Settings.text_speed)
 
 
 func _pick_story_mode(mode: int) -> void:
@@ -297,7 +322,7 @@ func _build() -> void:
 	# In a run, the menus already built keep their words until the next run: say so.
 	var in_run := _language_changed and not get_tree().current_scene is TitleScreen
 	var note := tr("Language changed: some menus follow from the next run.") if in_run else tr("Every change is saved right away.")
-	var saved := UiSkin.label(note, Fonts.BODY, UiSkin.DIM, true)
+	var saved := UiSkin.label(note, Fonts.BODY, UiSkin.TEXT, true)  # (on the wood: never dim)
 	saved.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	saved.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	window.header_left.add_child(saved)
@@ -340,6 +365,7 @@ func _build_gameplay(body: VBoxContainer) -> Control:
 	_checks[OptionRows.check(self, in_run, tr("Run timer"), tr("The run's time, under the map."), "RunTimerCheck")] = &"run_timer"
 	_shake = OptionRows.slider(self, in_run, tr("Screen shake"), tr("On big hits."), 0.0, 1.5, 0.1, "ShakeSlider")
 	_vibrations = OptionRows.check(self, in_run, tr("Vibrations"), tr("The phone buzzes on big hits and critical hits."), "VibrationsCheck")
+	_build_reading(OptionRows.section(right, tr("Reading")))
 	var tutorial := OptionRows.section(right, tr("Tutorial"))
 	_tutorial = OptionRows.check(self, tutorial, tr("Tutorial hints"), tr("Short tips during your first runs."), "TutorialCheck")
 	_checks[_tutorial] = &"tutorial_hints"
@@ -366,7 +392,12 @@ func _build_graphics(body: VBoxContainer) -> Control:
 		_checks[OptionRows.check(self, screen, tr("Fullscreen"), tr("The whole screen, or a window you can resize (F11, Alt+Enter)."), "FullscreenCheck")] = &"fullscreen"
 	_build_ui_size(screen)
 	var controls := OptionRows.section(left, tr("Touch controls"))
-	_controls = OptionRows.slider(self, controls, tr("Buttons size"), tr("Joystick and buttons."), 0.7, 1.3, 0.05, "ControlsSlider")
+	# Whole steps that keep every button big enough to tap and clear of the joystick (Hud).
+	var size_names := { 1.0: [tr("Normal"), "ControlsNormal"], 1.25: [tr("Large"), "ControlsLarge"] }
+	var size_entries := []
+	for step: float in Settings.CONTROLS_SIZES:
+		size_entries.append([step, size_names[step][0], size_names[step][1]])
+	_control_sizes = OptionRows.choice(self, controls, tr("Buttons size"), tr("Joystick and buttons."), size_entries)
 	_checks[OptionRows.check(self, controls, tr("Fixed joystick"), tr("Stays in its corner instead of following your thumb."), "FixedStickCheck")] = &"fixed_joystick"
 	var effects := OptionRows.section(right, tr("Effects and battery"))
 	_checks[OptionRows.check(self, effects, tr("Fewer effects"), tr("Half the particles, no heat haze nor glow: smoother on older phones."), "FewerEffectsCheck")] = &"fewer_effects"
@@ -428,6 +459,17 @@ func _build_stories(section: VBoxContainer) -> void:
 		InputDevice.changed.connect(_say_story_note)
 	_story_help = UiSkin.label("", Fonts.BODY, UiSkin.GOLD, true)
 	section.add_child(_story_help)
+
+
+## Reading: large text (an on/off switch) and the text speed (four buttons, one pressed).
+func _build_reading(section: VBoxContainer) -> void:
+	_checks[OptionRows.check(self, section, tr("Large text"), tr("Dialogue, hints and descriptions one size bigger."), "LargeTextCheck")] = &"large_text"
+	_text_speeds = OptionRows.choice(self, section, tr("Text speed"), tr("How fast the words of someone speaking are written."), [
+		[Settings.TEXT_SLOW, tr("Slow"), "TextSlow"],
+		[Settings.TEXT_NORMAL, tr("Normal"), "TextNormal"],
+		[Settings.TEXT_FAST, tr("Fast"), "TextFast"],
+		[Settings.TEXT_INSTANT, tr("At once"), "TextInstant"],
+	])
 
 
 ## Interface size: its name, three buttons (one stays pressed).

@@ -277,7 +277,7 @@ func gain_xp(amount: int) -> void:
 		health_changed.emit(hp, get_max_hp())
 		Events.log_message(tr("Level up! You are now level %d") % level, Palette.GOLD)
 		# A moment in the world, never a pause: the perk choice waits behind the HUD's button.
-		world.spawn_floating_text(head_position() + Vector2(0, -10), tr("LEVEL UP"), Palette.GOLD)
+		world.spawn_floating_text(head_position() + Vector2(0, -10), tr("Level up"), Palette.GOLD)
 		Vfx.magic(world, global_position, Palette.GOLD)
 		LevelUpVfx.attach(self)
 		Sfx.play_ui(Sfx.bank.level_up)

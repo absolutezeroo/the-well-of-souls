@@ -55,7 +55,7 @@
 
 The bag (`Inventory`) is split into **compartments**, one per kind of thing, each with its own
 places (`BagCategoryDef.capacity` in `data/items/bag_categories.tres`): **Weapons** 16,
-**Armors** 16, **Runes** 16, **Tomes & Scrolls** 16 (the tomes and the Scroll of Fire),
+**Armors** 16, **Runes** 16, **Tomes & scrolls** 16 (the tomes and the Scroll of Fire),
 **Consumables** 16 and **Other** 8 (keys, and anything no other compartment claims). Which one an
 item goes to is its class (a weapon is a `WeaponDef`, an armor an `ArmorDef`...) or, for a few,
 its id. A compartment fills on its own: sixteen weapons never stop a rune from coming in. "Is

@@ -127,7 +127,7 @@ func _on_boss_defeated(boss: Monster) -> void:
 	var rerolls := game.content.dungeon.rerolls_per_boss
 	if rerolls > 0:
 		Events.log_message(tr("+%d reroll for the perk choices.") % rerolls, Palette.GOLD)
-	hud.show_banner(tr("Victory Achieved"))
+	hud.show_banner(tr("Victory achieved"))
 	Sfx.play_ui(Sfx.bank.boss_defeated)
 	Events.log_message(tr("%s falls. The way down lies open.") % tr(boss.display_name), Palette.GOLD)
 

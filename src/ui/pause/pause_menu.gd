@@ -3,7 +3,9 @@ extends Control
 ## Pause, in the game's skin (RpgDialog): resume, options, the bestiary (attacks and challenges
 ## of the monsters met), send feedback (a bug, an idea: FeedbackDialog, with this run's details),
 ## save and quit (Continue on the title screen), or give up the run; each button says what it
-## does. Below, what gold and souls are for. The options and the bestiary open over it
+## does, under it. Below, what gold and souls are for. Three columns in a dark inset (notes are
+## never dim words on the bare wood), each button a finger's size with 16 units around it: room
+## for more on a 720-line screen in French. The options and the bestiary open over it
 ## (instanced in the scene), the feedback form too (made here).
 
 signal resume_requested
@@ -16,8 +18,14 @@ const CONFIRM_TEXT_BUTTONS := "Really? Press again"  # i18n
 const ABANDON_NOTE := "Ends this run now. You keep the souls earned so far."  # i18n
 const CONFIRM_NOTE := "Tap again to end the run. Anything else to cancel."  # i18n
 const CONFIRM_NOTE_BUTTONS := "Press again to end the run. Anything else to cancel."  # i18n
-const BUTTON_SIZE := Vector2(320, 54)
-const NOTE_WIDTH := 460.0
+## Give up's words: a dark red that keeps 4.5:1 on the orange button (pressed, the theme's light
+## words on the dark one).
+const GIVE_UP_COLOR := Color(0.32, 0.03, 0.03)
+const BUTTON_SIZE := Vector2(340, 64)
+const NOTE_WIDTH := 340.0
+## The columns, and the room between them (two things to tap: MenuWindow.TOUCH_GAP or more).
+const COLUMNS := 3
+const COLUMN_GAP := 32
 
 ## Set by the game (the bestiary needs it).
 var content: ContentDB
@@ -27,6 +35,8 @@ var run_info: Callable
 var feedback: FeedbackDialog
 
 var _dialog: RpgDialog
+## The rows (button and what it does), in COLUMNS columns.
+var _rows: GridContainer
 var _abandon_note: Label
 ## Built nodes reachable as %Name once the panel is built.
 var _named := ExposedNodes.new()
@@ -71,6 +81,16 @@ func _build() -> void:
 	_dialog = RpgDialog.new(tr("Paused"), 0.0, 0.75)
 	add_child(_dialog)
 	move_child(_dialog, 0)  # under the options and the bestiary
+	var inset := UiSkin.section()
+	_dialog.body.add_child(inset)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", MenuWindow.TOUCH_GAP)
+	inset.add_child(column)
+	_rows = GridContainer.new()
+	_rows.columns = COLUMNS
+	_rows.add_theme_constant_override("h_separation", COLUMN_GAP)
+	_rows.add_theme_constant_override("v_separation", MenuWindow.TOUCH_GAP)
+	column.add_child(_rows)
 	var resume := _row(tr("Resume"), "ResumeButton", tr("Back to the fight."), func() -> void:
 		Sfx.play_ui(Sfx.bank.ui_close)
 		resume_requested.emit())
@@ -95,11 +115,11 @@ func _build() -> void:
 		quit_requested.emit())
 	# Giving up takes two taps, so it never happens by accident.
 	var give_up := _row(tr(ABANDON_TEXT), "AbandonButton", tr(ABANDON_NOTE), _on_abandon)
-	for state in ["font_color", "font_hover_color", "font_pressed_color"]:
-		give_up.add_theme_color_override(state, Color(0.55, 0.06, 0.06))
+	for state in ["font_color", "font_hover_color"]:
+		give_up.add_theme_color_override(state, GIVE_UP_COLOR)
 
-	# Keep this help compact so seven touch-sized actions also fit a 720-pixel screen.
-	_dialog.body.add_child(UiParts.text(tr("Gold lasts for one descent: spend it at the merchant or forge. Souls are kept; spend them at the village Shrine on permanent upgrades."), Fonts.BODY, UiSkin.DIM, BUTTON_SIZE.x + NOTE_WIDTH))
+	# What gold and souls are for, across both columns.
+	column.add_child(UiParts.text(tr("Gold lasts for one descent: spend it at the merchant or forge. Souls are kept; spend them at the village Shrine on permanent upgrades."), Fonts.BODY, UiSkin.DIM, BUTTON_SIZE.x * COLUMNS + COLUMN_GAP * (COLUMNS - 1)))
 	_named.expose_to(self)
 	feedback = FeedbackDialog.new()
 	feedback.name = "FeedbackDialog"
@@ -131,17 +151,17 @@ func is_armed() -> bool:
 	return _armed
 
 
-## A button and what it does, beside it.
+## A button and what it does, under it.
 func _row(text: String, node_name: String, note: String, action: Callable) -> Button:
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 16)
-	_dialog.body.add_child(row)
+	var row := VBoxContainer.new()
+	row.add_theme_constant_override("separation", 4)
+	_rows.add_child(row)
 	var button := UiParts.button(text, action, BUTTON_SIZE, Fonts.BODY)
+	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # a long French word wraps, the column keeps its width
 	button.name = node_name
 	row.add_child(button)
 	_named.add(button)
 	var words := UiParts.text(note, Fonts.BODY, UiSkin.DIM, NOTE_WIDTH)
-	words.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	words.name = node_name + "Note"
 	row.add_child(words)
 	_named.add(words)

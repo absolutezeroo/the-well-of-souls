@@ -24,6 +24,8 @@ const DANGER_COLOR := Color(1, 0.3, 0.3)
 const PACT_COLOR := Color(0.95, 0.2, 0.3)
 const SPENT_COLOR := Color(0.55, 0.5, 0.5)
 const REDRAW_INTERVAL := 0.1
+## How long a tap's pressed frame shows (seconds).
+const PRESS_TIME := 0.15
 
 @export var whole_floor := false
 ## Pixels per cell around the hero (the small map).
@@ -33,6 +35,12 @@ var _world: World
 var _image: Image
 var _texture: ImageTexture
 var _redraw_timer := 0.0
+## A tap's pressed look: 1 as the finger lands, fading out in PRESS_TIME (a gold frame).
+var _press := 0.0:
+	set(value):
+		_press = value
+		queue_redraw()
+var _press_tween: Tween
 
 
 func bind_world(world: World) -> void:
@@ -90,6 +98,7 @@ func _process(delta: float) -> void:
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.is_pressed() and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
 		accept_event()
+		_show_press()
 		tapped.emit()
 
 
@@ -117,6 +126,17 @@ func _draw() -> void:
 			draw_texture_rect_region(_texture, Rect2(origin + view.position * factor, view.size * factor), view)
 		_draw_markers(origin, factor)
 	draw_rect(Rect2(Vector2.ZERO, size), BORDER, false, 2.0)
+	if _press > 0.0:
+		draw_rect(Rect2(Vector2.ONE * 2.0, size - Vector2.ONE * 4.0), Color(Palette.GOLD, _press), false, 4.0)
+
+
+## Pressed: a bright gold frame inside the border, gone in PRESS_TIME.
+func _show_press() -> void:
+	if _press_tween:
+		_press_tween.kill()
+	_press = 1.0
+	_press_tween = create_tween()
+	_press_tween.tween_property(self, "_press", 0.0, PRESS_TIME)
 
 
 func _draw_markers(origin: Vector2, factor: float) -> void:

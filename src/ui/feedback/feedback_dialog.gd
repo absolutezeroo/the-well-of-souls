@@ -40,6 +40,9 @@ var _info_text: Label
 var _sign: CheckButton
 var _send: Button
 var _kinds: Array[Button] = []
+## The form's right column (the switches and what is sent), and the inset holding the form.
+var _right: VBoxContainer
+var _inside: VBoxContainer
 
 
 func _init() -> void:
@@ -181,13 +184,32 @@ static func show_toast(from: Node, voice: String, plain: String) -> CanvasLayer:
 func _build() -> void:
 	var lore := UiSkin.label(tr("Speak, and your words will rise out of the Well. A bug, an idea, a thought: those who watch over it read them all."), Fonts.BODY, UiSkin.DIM, true)
 	lore.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	body.add_child(lore)
+	# The words and the form's notes in a dark inset (never dim or red words on the bare wood).
+	var recess := UiSkin.section()
+	body.add_child(recess)
+	_inside = VBoxContainer.new()
+	_inside.add_theme_constant_override("separation", 10)
+	recess.add_child(_inside)
+	_inside.add_child(lore)
+	# Two columns (what is written | what goes with it), so the form with finger-sized controls
+	# fits a 720-line screen in French.
+	var columns := HBoxContainer.new()
+	columns.add_theme_constant_override("separation", 24)
+	_inside.add_child(columns)
+	var left := VBoxContainer.new()
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left.add_theme_constant_override("separation", 10)
+	columns.add_child(left)
+	_right = VBoxContainer.new()
+	_right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_right.add_theme_constant_override("separation", 10)
+	columns.add_child(_right)
 	var kinds := HBoxContainer.new()
-	kinds.add_theme_constant_override("separation", 12)
-	body.add_child(kinds)
+	kinds.add_theme_constant_override("separation", MenuWindow.TOUCH_GAP)
+	left.add_child(kinds)
 	var group := ButtonGroup.new()
 	for def in Feedback.config.categories:
-		var kind := MenuWindow.button(tr(def.display_name), Fonts.BODY, 48)
+		var kind := MenuWindow.button(tr(def.display_name), Fonts.BODY, MenuWindow.TOUCH_MIN)
 		kind.toggle_mode = true
 		kind.button_group = group
 		kind.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -212,32 +234,33 @@ func _build() -> void:
 	_text.virtual_keyboard_enabled = true
 	_text.set_meta(SoftKeyboard.MAX_META, Feedback.config.max_length)  # (over the phone's keyboard: SoftKeyboard)
 	_text.text_changed.connect(_on_text_changed)
-	body.add_child(_text)
+	left.add_child(_text)
 	MenuWindow.expose(_text, "Text", self)
 	_problem = UiSkin.label("", Fonts.BODY, UiSkin.BAD, true)
-	body.add_child(_problem)
+	left.add_child(_problem)
 	MenuWindow.expose(_problem, "Problem", self)
 	_info = _switch(tr("Include game info"), "InfoSwitch")
 	_info_text = UiSkin.label("", Fonts.BODY, UiSkin.DIM, true)
-	body.add_child(_info_text)
+	_right.add_child(_info_text)
 	MenuWindow.expose(_info_text, "InfoText", self)
 	_info.toggled.connect(func(_on: bool) -> void: _info_text.text = _info_words())
 	_sign = _switch("", "SignSwitch")
-	body.add_child(UiSkin.label(tr("Sent to Talo (the game's online service), linked to this device's random ID; your name only if you sign. More in the privacy policy."), Fonts.BODY, UiSkin.DIM, true))
+	# Where it goes: across both columns (two lines, not five).
+	_inside.add_child(UiSkin.label(tr("Sent to Talo (the game's online service), linked to this device's random ID; your name only if you sign. More in the privacy policy."), Fonts.BODY, UiSkin.DIM, true))
 	var buttons := HBoxContainer.new()
-	buttons.add_theme_constant_override("separation", 14)
+	buttons.add_theme_constant_override("separation", MenuWindow.TOUCH_GAP)
 	body.add_child(buttons)
 	var link := UiParts.button(tr("Privacy policy"), func() -> void:
 		Sfx.play_ui(Sfx.bank.ui_open)
-		policy.open(), Vector2(0, 52), Fonts.BODY)
+		policy.open(), Vector2(0, MenuWindow.TOUCH_MIN), Fonts.BODY)
 	link.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	buttons.add_child(link)
 	MenuWindow.expose(link, "PolicyButton", self)
-	var cancel := UiParts.button(tr("Cancel"), back, Vector2(0, 52), Fonts.BODY)
+	var cancel := UiParts.button(tr("Cancel"), back, Vector2(0, MenuWindow.TOUCH_MIN), Fonts.BODY)
 	cancel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	buttons.add_child(cancel)
 	MenuWindow.expose(cancel, "CancelButton", self)
-	_send = UiParts.button(tr("Send"), func() -> void: send(), Vector2(0, 52), Fonts.BODY)
+	_send = UiParts.button(tr("Send"), func() -> void: send(), Vector2(0, MenuWindow.TOUCH_MIN), Fonts.BODY)
 	_send.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	buttons.add_child(_send)
 	MenuWindow.expose(_send, "SendButton", self)
@@ -250,10 +273,11 @@ func _switch(words: String, node_name: String) -> CheckButton:
 	var check := CheckButton.new()
 	check.text = words
 	check.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED  # (given translated; the pseudonym stays as it is)
-	check.custom_minimum_size = Vector2(0, 40)
+	check.custom_minimum_size = Vector2(0, MenuWindow.TOUCH_MIN)
+	check.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # a long pseudonym never widens the form
 	MenuWindow.style_switch(check)
 	check.toggled.connect(func(_on: bool) -> void: Sfx.play_ui(Sfx.bank.ui_click))
-	body.add_child(check)
+	_right.add_child(check)
 	MenuWindow.expose(check, node_name, self)
 	return check
 

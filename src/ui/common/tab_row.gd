@@ -8,9 +8,10 @@ extends HBoxContainer
 
 signal picked(index: int)
 
-## Every tab's least size (a long name makes its tab wider).
-const SIZE := Vector2(136, 44)
-const SEPARATION := 8
+## Every tab's least size (a long name makes its tab wider), and the room between two: a
+## finger's (MenuWindow.TOUCH_MIN, TOUCH_GAP).
+const SIZE := Vector2(112, 64)
+const SEPARATION := 16
 
 var buttons: Array[Button] = []
 ## Click when the player picks another tab (off where the window plays its own).

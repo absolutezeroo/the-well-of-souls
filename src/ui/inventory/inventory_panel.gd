@@ -25,8 +25,16 @@ const MenuNavScript := preload("res://src/autoload/menu_nav.gd")  # its static h
 signal closed
 
 const NO_SLOT := -1
-const BAG_COLUMNS := 4
+## Three columns of finger-sized slots 16 units apart (four would widen the bag past a 1280-wide
+## screen in French); the grid scrolls.
+const BAG_COLUMNS := 3
 const BAG_SLOT := 66.0
+## Room between two slots or buttons: a finger's (MenuWindow.TOUCH_GAP).
+const GAP := MenuWindow.TOUCH_GAP
+## The compartments' tabs per row.
+const TAB_COLUMNS := 3
+## The bag's grid width (its tabs, its notes share it).
+const BAG_WIDTH := BAG_COLUMNS * BAG_SLOT + (BAG_COLUMNS - 1) * GAP
 const GEAR_SLOT := 74.0
 ## The pictogram an empty equipment slot shows.
 const GEAR_PLACEHOLDERS := {
@@ -595,10 +603,10 @@ func _on_dismantled(_items: Array[ItemDef], gold: int) -> void:
 		return
 	var from := _dismantle_button.get_global_rect().get_center() if _dismantle_button.is_visible_in_tree() else _item_grid.get_global_rect().get_center()
 	GoldBurst.play(self, from, _gold.get_global_rect().get_center(), gold)
-	var tween := create_tween()
-	_gold.pivot_offset = _gold.size * 0.5
-	tween.tween_property(_gold, "scale", Vector2.ONE * 1.3, 0.12).set_delay(0.6)
-	tween.tween_property(_gold, "scale", Vector2.ONE, 0.2)
+	# As the coins land: brackets flash round the count (its words never swell).
+	get_tree().create_timer(0.6, true, false, true).timeout.connect(func() -> void:
+		if is_instance_valid(_gold):
+			TextCue.ping(_gold, UiSkin.GOLD, 0.35))
 
 
 # --- Building ----------------------------------------------------------------
@@ -611,7 +619,7 @@ func _build() -> void:
 	_window.header_right.add_child(_gold)
 	_perks_button = Button.new()
 	_perks_button.text = tr("Perks")
-	_perks_button.custom_minimum_size = Vector2(140, 48)
+	_perks_button.custom_minimum_size = Vector2(140, MenuWindow.TOUCH_MIN)
 	_perks_button.pressed.connect(open_build)
 	_window.header_right.add_child(_perks_button)
 	_build_window = BuildWindow.new()
@@ -638,7 +646,7 @@ func _build_hero(columns: HBoxContainer) -> void:
 	(hero.box as Control).custom_minimum_size.x = 330
 	columns.add_child(hero.box)
 	var gear_row := HBoxContainer.new()
-	gear_row.add_theme_constant_override("separation", 8)
+	gear_row.add_theme_constant_override("separation", GAP)
 	hero.column.add_child(gear_row)
 	_portrait = HeroPortrait.new()
 	_portrait.name = "Portrait"
@@ -657,10 +665,10 @@ func _build_hero(columns: HBoxContainer) -> void:
 		_slot_buttons[slot] = button
 	hero.column.add_child(UiSkin.label(tr("Belt"), Fonts.BODY, UiSkin.GOLD))
 	var belt_row := HBoxContainer.new()
-	belt_row.add_theme_constant_override("separation", 8)
+	belt_row.add_theme_constant_override("separation", GAP)
 	hero.column.add_child(belt_row)
 	for i in Belt.SLOTS:
-		var button := ItemSlot.new(62.0)
+		var button := ItemSlot.new(MenuWindow.TOUCH_MIN)
 		button.caption = str(i + 1)
 		button.name = "BeltSlot%d" % (i + 1)
 		button.pressed.connect(_select_belt.bind(i, true))
@@ -685,11 +693,19 @@ func _build_bag(columns: HBoxContainer) -> void:
 	_tab_row = TabRow.new(false)
 	_tab_row.name = "BagTabs"
 	_tab_row.sound = false  # show_category() clicks
-	_tab_row.add_theme_constant_override("separation", 4)
-	_tab_row.custom_minimum_size.x = BAG_COLUMNS * (BAG_SLOT + 6) - 2
+	_tab_row.custom_minimum_size.x = BAG_WIDTH
 	bag.column.add_child(_tab_row)
+	# Two rows of finger-sized tabs, 16 units apart: six in one row would widen the bag past a
+	# 1280-wide screen.
+	var tab_grid := GridContainer.new()
+	tab_grid.columns = TAB_COLUMNS
+	tab_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tab_grid.add_theme_constant_override("h_separation", GAP)
+	tab_grid.add_theme_constant_override("v_separation", GAP)
+	_tab_row.add_child(tab_grid)
 	for i in CATEGORIES.categories.size():
 		var bag_tab := BagTab.new(CATEGORIES.categories[i])
+		tab_grid.add_child(bag_tab)
 		_tab_row.add_button(bag_tab)
 		_tabs.append(bag_tab)
 		_named.add(bag_tab)
@@ -708,25 +724,25 @@ func _build_bag(columns: HBoxContainer) -> void:
 	naming.add_child(PromptGlyph.make(&"menu_next_tab"))
 	_over_note = UiSkin.label(tr("More than it has room for: make room before anything new goes in."), Fonts.BODY, UiSkin.BAD, true)
 	_over_note.name = "OverNote"
-	_over_note.custom_minimum_size.x = BAG_COLUMNS * (BAG_SLOT + 6) - 2
+	_over_note.custom_minimum_size.x = BAG_WIDTH
 	_over_note.hide()
 	_named.add(_over_note)
 	bag.column.add_child(_over_note)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.custom_minimum_size.x = BAG_COLUMNS * (BAG_SLOT + 6) + 4
+	scroll.custom_minimum_size.x = BAG_WIDTH + 6
 	bag.column.add_child(scroll)
 	_item_grid = GridContainer.new()
 	_item_grid.columns = BAG_COLUMNS
 	_item_grid.name = "ItemGrid"
-	_item_grid.add_theme_constant_override("h_separation", 6)
-	_item_grid.add_theme_constant_override("v_separation", 6)
+	_item_grid.add_theme_constant_override("h_separation", GAP)
+	_item_grid.add_theme_constant_override("v_separation", GAP)
 	_named.add(_item_grid)
 	scroll.add_child(_item_grid)
 	_worse_button = _button(tr("Dismantle the worse (%d)") % 0, "DismantleWorseButton", _on_worse_pressed)
 	_worse_button.add_theme_font_size_override("font_size", Fonts.BODY)
-	_worse_button.custom_minimum_size = Vector2(0, 50)
+	_worse_button.custom_minimum_size = Vector2(0, MenuWindow.TOUCH_MIN)
 	_worse_button.size_flags_horizontal = Control.SIZE_FILL
 	_worse_button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # French is long: two lines, not a wider bag
 	bag.column.add_child(_worse_button)
@@ -770,7 +786,7 @@ func _build_card(columns: HBoxContainer) -> void:
 	# screen: Use, To belt, Drop) goes to a second row instead of widening the window.
 	var actions := HFlowContainer.new()
 	actions.name = "Actions"
-	actions.add_theme_constant_override("h_separation", 8)
+	actions.add_theme_constant_override("h_separation", GAP)
 	actions.add_theme_constant_override("v_separation", 16)
 	card.column.add_child(actions)
 	for action in _actions:
@@ -793,7 +809,7 @@ func _build_confirm() -> void:
 
 ## A card's button (three in a row on a 16:9 phone: Equip, Drop, Dismantle).
 func _button(text: String, node_name: String, callback: Callable) -> Button:
-	var button := UiParts.button(text, callback, Vector2(96, 52))
+	var button := UiParts.button(text, callback, Vector2(96, MenuWindow.TOUCH_MIN))
 	button.name = node_name
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_named.add(button)

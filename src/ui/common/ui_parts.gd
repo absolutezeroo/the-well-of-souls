@@ -5,10 +5,10 @@ class_name UiParts
 
 
 ## A plain button (the game's default look: MenuWindow.button, the one factory) doing `action`;
-## keys and gamepads reach it (MenuNav).
-static func button(words: String, action: Callable, min_size := Vector2(0, 52), font_size := Fonts.BODY) -> Button:
+## keys and gamepads reach it (MenuNav). At least MenuWindow.TOUCH_MIN on each side.
+static func button(words: String, action: Callable, min_size := Vector2(0, MenuWindow.TOUCH_MIN), font_size := Fonts.BODY) -> Button:
 	var result := MenuWindow.button(words, font_size, min_size.y)
-	result.custom_minimum_size = min_size
+	result.custom_minimum_size = Vector2(maxf(min_size.x, MenuWindow.TOUCH_MIN), maxf(min_size.y, MenuWindow.TOUCH_MIN))
 	if action.is_valid():
 		result.pressed.connect(action)
 	return result

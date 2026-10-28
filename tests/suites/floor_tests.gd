@@ -1351,8 +1351,9 @@ func _test_comfort(game: Game) -> void:
 	var combat_db := AudioServer.get_bus_volume_db(AudioServer.get_bus_index(&"Combat"))
 	check(is_equal_approx(Settings.combat_volume, 0.5) and absf(combat_db - linear_to_db(0.5) - Sfx.mix.gain_db(&"Combat")) < 0.01 and is_equal_approx(Settings.ui_volume, 1.0), "the combat slider sets the combat bus alone")
 	Settings.set_option(&"combat_volume", 1.0)
-	(options.get_node("%ControlsSlider") as HSlider).value = 1.2
-	check(is_equal_approx((hud.get_node("%Controls") as Control).scale.x, 1.2), "the buttons size option scales the controls")
+	(options.get_node("%ControlsLarge") as Button).pressed.emit()
+	var attack_button := hud.get_node("%AttackButton") as ActionButton
+	check(is_equal_approx(Settings.controls_scale, 1.25) and is_equal_approx(attack_button.radius, 90.0) and (hud.get_node("%Controls") as Control).scale == Vector2.ONE, "the buttons size option grows the controls a whole step (radii and places, not the Control's scale)")
 	var battery: CheckButton = options.get_node("%BatteryCheck")
 	battery.button_pressed = true
 	check(Settings.battery_saver and Engine.max_fps == Settings.SAVER_FPS, "the battery saver caps the frame rate")
@@ -2645,7 +2646,7 @@ func _walled_off_cells(world: World) -> Array[Vector2i]:
 
 func _test_debug_panel(game: Game) -> void:
 	var debug := game.menus.debug
-	check(debug != null and game.hud.has_node("DebugButton"), "debug builds have the debug panel and its DBG button")
+	check(debug != null and game.hud.has_node("%DebugButton"), "debug builds have the debug panel and its DBG button")
 	if debug == null:
 		return
 	var depth_before := game.depth

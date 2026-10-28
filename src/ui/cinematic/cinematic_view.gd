@@ -104,7 +104,7 @@ func begin_text(heading: String, is_new: bool) -> void:
 
 ## A line under the others, empty-looking until the director writes it out.
 func add_line(text: String, color: Color) -> Label:
-	var label := UiSkin.label(text, Fonts.BODY, color, true)
+	var label := UiSkin.typed(UiSkin.label(text, Fonts.BODY, color, true))
 	label.custom_minimum_size.x = _text_width()
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.visible_characters = 0
@@ -277,7 +277,7 @@ func _build() -> void:
 	_new_mark = MenuWindow.badge(tr("New"), Fonts.SMALL, UiSkin.GOLD)
 	_new_mark.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_heading_row.add_child(_new_mark)
-	_speech = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
+	_speech = UiSkin.typed(UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true))
 	_speech.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_speech.hide()
 	_text_box.add_child(_speech)

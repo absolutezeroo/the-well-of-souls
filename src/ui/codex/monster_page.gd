@@ -143,7 +143,7 @@ func _fill_identity(column: VBoxContainer, rank: int, rules: BestiaryRules) -> v
 		_add_shiny(column)
 		return
 	if not _monster.description.is_empty():
-		column.add_child(UiSkin.label(tr(_monster.description), Fonts.BODY, UiSkin.TEXT, true))
+		column.add_child(UiSkin.reading_label(tr(_monster.description)))  # (bigger with Large text; the column scrolls)
 	var home := _home()
 	if not home.is_empty():
 		column.add_child(CodexRows.fact(tr("Lives in"), home))

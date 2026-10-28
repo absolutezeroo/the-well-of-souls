@@ -144,11 +144,17 @@ func _choice_card(choice: EncounterChoice, index: int, depth: int) -> Control:
 func _build() -> void:
 	_dialog = RpgDialog.new("", WIDTH, 0.8)
 	add_child(_dialog)
+	# Tighter than a dialog's 10 (the choices' insets keep their buttons 16 apart): the words' inset
+	# and finger-sized buttons fit a 720-line screen in French.
+	_dialog.body.add_theme_constant_override("separation", 6)
 	_dialog.title_label.name = "Title"
 	_named.add(_dialog.title_label)
+	# What it is and what it says in a dark inset (never dim or red words on the bare wood).
+	var recess := UiSkin.section()
+	_dialog.body.add_child(recess)
 	var top := HBoxContainer.new()
 	top.add_theme_constant_override("separation", 16)
-	_dialog.body.add_child(top)
+	recess.add_child(top)
 	_icon = TextureRect.new()
 	_icon.custom_minimum_size = Vector2(72, 72)
 	_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -183,7 +189,7 @@ func _build() -> void:
 	_choices = HBoxContainer.new()
 	_choices.name = "Choices"
 	_choices.alignment = BoxContainer.ALIGNMENT_CENTER
-	_choices.add_theme_constant_override("separation", 14)
+	_choices.add_theme_constant_override("separation", MenuWindow.TOUCH_GAP)
 	_named.add(_choices)
 	_dialog.body.add_child(_choices)
 
@@ -191,12 +197,12 @@ func _build() -> void:
 	_leave_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	_leave_row.add_theme_constant_override("separation", 14)
 	_dialog.body.add_child(_leave_row)
-	_leave = UiParts.button(tr("Leave"), close, Vector2(200, 52), Fonts.BODY)
+	_leave = UiParts.button(tr("Leave"), close, Vector2(200, MenuWindow.TOUCH_MIN), Fonts.BODY)
 	_leave.name = "LeaveButton"
 	_named.add(_leave)
 	_leave_row.add_child(_leave)
 	PromptGlyph.badge(_leave, &"ui_cancel", PromptGlyph.Place.INSIDE)  # Back leaves too
-	_leave_note = UiSkin.label(tr("Nothing happens. You can come back later."), Fonts.BODY, UiSkin.DIM)
+	_leave_note = UiSkin.label(tr("Nothing happens. You can come back later."), Fonts.BODY, UiSkin.TEXT)
 	_leave_row.add_child(_leave_note)
 	_named.expose_to(self)
 

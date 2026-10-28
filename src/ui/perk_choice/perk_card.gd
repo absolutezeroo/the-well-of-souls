@@ -20,7 +20,7 @@ var completes := false
 
 func show_perk(perk: PerkDef, owned: PerkSet) -> void:
 	var owned_stacks := owned.stacks_of(perk)
-	_rarity.text = tr("RELIC") if perk.rarity == PerkDef.Rarity.RARE else ""
+	_rarity.text = tr("Relic") if perk.rarity == PerkDef.Rarity.RARE else ""
 	_rarity.visible = perk.rarity == PerkDef.Rarity.RARE
 	_icon.texture = perk.icon
 	_name.text = tr(perk.display_name)

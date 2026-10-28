@@ -52,7 +52,14 @@ func _input(event: InputEvent) -> void:
 func _in_zone(local: Vector2) -> bool:
 	if fixed:
 		return local.distance_to(home()) <= max_distance * 1.6
-	return local.x < size.x * zone_width and local.y > size.y * zone_top
+	return zone().has_point(local)
+
+
+## Where a touch starts the floating joystick, in its own units (it fills the HUD's safe area):
+## its left part under the top. Nothing else to tap lies in it (Hud, PcTests U4); the fixed
+## joystick's corner is inside it.
+func zone() -> Rect2:
+	return Rect2(0.0, size.y * zone_top, size.x * zone_width, size.y * (1.0 - zone_top))
 
 
 ## Where it rests (and stays, when fixed).

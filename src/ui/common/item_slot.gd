@@ -2,10 +2,22 @@ class_name ItemSlot
 extends Button
 ## A square item slot (bag, equipment, belt, rune sockets): a wooden slot, the item's icon,
 ## a frame in its rarity (or its rune family's) color, how many there are, the rune sockets of
-## a weapon. Empty, it shows what goes there, faint: a pictogram (`placeholder`, not an item of
+## a weapon. Never color alone: gear wears its rarity's pips too (Magic one, Rare two, Epic
+## three, bottom right) and a rune its family's sign (top left: a flame, a snowflake, a drop, a
+## bolt, a star), drawn on the 2-unit grid. Empty, it shows what goes there, faint: a pictogram (`placeholder`, not an item of
 ## the game) or else a word (`caption`). Tap it like a button.
 
 const EMPTY_TEXT := Color(1, 0.92, 0.8, 0.45)
+## A rune family's sign (SynergyDef.id): 5x5 pixels of the UI's grid, "#" lit.
+const FAMILY_SIGNS := {
+	&"inferno": ["..#..", ".##..", ".###.", "#####", ".###."],
+	&"frost": ["..#..", "#.#.#", ".###.", "#.#.#", "..#.."],
+	&"blood": ["..#..", ".###.", "#####", "#####", ".###."],
+	&"storm": ["..##.", ".##..", "####.", "..##.", ".##.."],
+	&"arcane": ["..#..", ".#.#.", "#...#", ".#.#.", "..#.."],
+}
+## The UI's pixel for the pips and signs.
+const PX := 2.0
 
 var item: ItemDef:
 	set(value):
@@ -56,6 +68,9 @@ func _init(side: float = 60.0) -> void:
 	var none := StyleBoxEmpty.new()
 	for state in ["normal", "hover", "pressed", "disabled", "focus", "hover_pressed"]:
 		add_theme_stylebox_override(state, none)
+	# Pressed shows at once, while the finger is on it (design/interface.md "One skin").
+	button_down.connect(queue_redraw)
+	button_up.connect(queue_redraw)
 
 
 ## Hidden (a closed panel: they are made once and kept), it doesn't run at all, and starts again
@@ -95,11 +110,16 @@ func _draw() -> void:
 	draw_style_box(slot_box(), area)
 	if is_hovered() and not disabled:
 		draw_rect(area.grow(-9), Color(1, 0.9, 0.6, 0.08))
+	if is_pressed() and not disabled and not toggle_mode:
+		# Pressed: the slot sinks (a shade over it, its icon a UI pixel lower below).
+		draw_rect(area.grow(-9), Color(0.0, 0.0, 0.0, 0.3))
 	if item:
 		var frame_color := _frame_color()
 		if frame_color.a > 0.0:
 			draw_rect(area.grow(-9), Color(frame_color, 0.16))  # a glow of its rarity inside
 		var inner := area.grow(-9)
+		if is_pressed() and not disabled and not toggle_mode:
+			inner.position.y += 2.0
 		if item.icon:
 			var icon_rect := fit(item.icon, inner)
 			draw_texture_rect(item.icon, icon_rect, false, item.icon_tint if not disabled else Color(item.icon_tint, 0.4))
@@ -109,6 +129,8 @@ func _draw() -> void:
 			draw_style_box(frame_box(frame_color), area.grow(-3))
 		_draw_sockets(area)
 		_draw_level()
+		_draw_rarity_pips()
+		_draw_family_sign()
 		if count > 1:
 			_text("x%d" % count, Vector2(size.x - 6, size.y - 6), HORIZONTAL_ALIGNMENT_RIGHT, Fonts.BODY, Color.WHITE)
 	elif placeholder:
@@ -152,6 +174,48 @@ func _frame_color() -> Color:
 	if equipment and equipment.rarity > ItemRarity.COMMON:
 		return ItemRarity.COLORS[equipment.rarity]
 	return Color(0, 0, 0, 0)
+
+
+## Gear's rarity as pips in the bottom-right corner, as many as its affixes (Magic 1, Rare 2,
+## Epic 3): Magic and Rare differ by more than their blue and gold.
+func _draw_rarity_pips() -> void:
+	var pips := pip_count(item)
+	if pips == 0 or size.x < 44.0:
+		return
+	var color: Color = ItemRarity.COLORS[(item as EquipmentDef).rarity]
+	var right := floorf((size.x - 8.0) / PX) * PX
+	var bottom := floorf((size.y - 8.0) / PX) * PX
+	for i in pips:
+		var at := Vector2(right - (i + 1) * PX * 4.0, bottom - PX * 3.0)
+		_draw_pixels([".#.", "###", ".#."], at, color)
+
+
+## How many rarity pips `thing` wears: gear's rarity (Magic 1, Rare 2, Epic 3), 0 otherwise.
+static func pip_count(thing: ItemDef) -> int:
+	var equipment := thing as EquipmentDef
+	return equipment.rarity if equipment and equipment.rarity > ItemRarity.COMMON else 0
+
+
+## A rune's family sign in the top-left corner (its color is the frame's).
+func _draw_family_sign() -> void:
+	var rune := item as RuneDef
+	if rune == null or rune.family == null or not FAMILY_SIGNS.has(rune.family.id) or size.x < 44.0:
+		return
+	_draw_pixels(FAMILY_SIGNS[rune.family.id], Vector2(PX * 3.0, PX * 3.0), rune.family.color)
+
+
+## `rows` of pixels ("#" lit) at `at` (top left), each lit pixel in `color` with a dark rim.
+func _draw_pixels(rows: Array, at: Vector2, color: Color) -> void:
+	for y in rows.size():
+		var row: String = rows[y]
+		for x in row.length():
+			if row[x] == "#":
+				draw_rect(Rect2(at + Vector2(x - 1, y - 1) * PX, Vector2.ONE * PX * 3.0), Fonts.OUTLINE)
+	for y in rows.size():
+		var row: String = rows[y]
+		for x in row.length():
+			if row[x] == "#":
+				draw_rect(Rect2(at + Vector2(x, y) * PX, Vector2.ONE * PX), color)
 
 
 ## Equipment's item level in the top-left corner ("Lv 7"): deeper finds are stronger.

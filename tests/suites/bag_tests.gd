@@ -393,7 +393,10 @@ func _test_touch(game: Game) -> void:
 	var shown := _shown_items(grid)
 	check(shown.size() == 2 and grid.get_child_count() == 2 + free and free == 14, "the weapons' tab shows its 2 stacks, then its own 14 free places (%d slots)" % grid.get_child_count())
 	check(shown == [items.rare, items.common], "the rare one first, then the commons' stack")
-	check(panel.tab(0).get_parent() is TabRow and panel.tab(0).is_in_group(MenuNav.TABS), "the bag's compartments are a TabRow, like every window's tabs")
+	var tab_row := panel.tab(0).get_parent()
+	while tab_row and not tab_row is TabRow:
+		tab_row = tab_row.get_parent()  # (the tabs sit in a grid of two rows inside their row)
+	check(tab_row is TabRow and (tab_row as TabRow).buttons.has(panel.tab(0)) and panel.tab(0).is_in_group(MenuNav.TABS), "the bag's compartments are a TabRow, like every window's tabs")
 	check(panel.tab(weapons).count == 3 and panel.tab(armor).count == 1 and panel.tab(runes).count == 2 and panel.tab(scrolls).count == 2 and panel.tab(consumables).count == 1, "each tab counts its items (3, 1, 2, 2, 1)")
 	check(not panel.tab(_tab_of(&"other")).visible, "the keys' tab hides while it holds nothing")
 	check((panel.get_node("%CategoryName") as Label).text == "Weapons  2 / 16", "the tab's name and its own places under the tabs")

@@ -4,6 +4,10 @@ extends Control
 ## game's skin (OrnateBoard, UiSkin, the shared wood buttons) like every other window and the
 ## DialogueBox. Services use the same presenter with more height. Choices only emit requests;
 ## progression belongs to the hub.
+## The words are reading text (UiSkin.reading_size()) in a dark inset, typed like the
+## DialogueBox's (the speaker's pace times Settings.text_speed, laid out first so no word jumps
+## a line); a tap on them writes them out. The shared interface sounds: opening, a choice,
+## Close.
 
 signal picked(action: StringName, payload: Resource)
 var list: VBoxContainer
@@ -18,6 +22,9 @@ var _face_frame := PanelContainer.new()
 var _message := VBoxContainer.new()
 var _row := HBoxContainer.new()
 var _scroll := UiParts.scroll()
+## Letters typed so far, and how many a second (the speaker's, else the DialogueBox's).
+var _letters := 0.0
+var _pace := 45.0
 
 
 func _init() -> void:
@@ -36,7 +43,7 @@ func _init() -> void:
 		margin.add_theme_constant_override(side, 10)
 	card.add_child(margin)
 	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 12)
+	column.add_theme_constant_override("separation", MenuWindow.TOUCH_GAP)
 	margin.add_child(column)
 	var header := HBoxContainer.new()
 	column.add_child(header)
@@ -45,7 +52,7 @@ func _init() -> void:
 	header.add_child(_heading)
 	close_button = _button(tr("Close"))
 	close_button.custom_minimum_size.x = 120
-	close_button.pressed.connect(hide)
+	close_button.pressed.connect(close)
 	header.add_child(close_button)
 	_row.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_row.add_theme_constant_override("separation", 24)
@@ -69,27 +76,33 @@ func _init() -> void:
 	var recess := PanelContainer.new()
 	recess.add_theme_stylebox_override("panel", UiSkin.inset())
 	recess.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	recess.gui_input.connect(_on_words_input)
 	_message.add_child(recess)
 	var speech_scroll := UiParts.scroll()
+	speech_scroll.gui_input.connect(_on_words_input)
 	recess.add_child(speech_scroll)
-	words = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
+	words = UiSkin.typed(UiSkin.reading_label(""))
 	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	speech_scroll.add_child(words)
 	_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_row.add_child(_scroll)
 	list = VBoxContainer.new()
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	list.add_theme_constant_override("separation", 10)
+	list.add_theme_constant_override("separation", MenuWindow.TOUCH_GAP)
 	_scroll.add_child(list)
 	resized.connect(_layout)
 	hide()
 
 
 func open(heading: String, message: String) -> void:
+	if not visible:
+		Sfx.play_ui(Sfx.bank.ui_open)
 	UiParts.clear(list)
 	conversation = false
 	_heading.text = heading
+	UiSkin.set_reading_style(words)
 	words.text = message
+	_type_from_start(45.0)
 	_face_frame.hide()
 	_subtitle.hide()
 	_scroll.scroll_vertical = 0
@@ -100,6 +113,7 @@ func open(heading: String, message: String) -> void:
 
 func speak(resident: VillageResidentDef, message: String, activity: String) -> void:
 	open(tr(resident.speaker.display_name), message)
+	_pace = resident.speaker.letters_per_second
 	conversation = true
 	portrait.texture = resident.speaker.portrait
 	portrait.material = resident.appearance
@@ -113,9 +127,51 @@ func choice(label_text: String, action: StringName, payload: Resource = null, en
 	var button := _button(label_text)
 	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	button.disabled = not enabled
-	button.pressed.connect(func() -> void: picked.emit(action, payload))
+	button.pressed.connect(func() -> void:
+		Sfx.play_ui(Sfx.bank.ui_click)
+		picked.emit(action, payload))
 	list.add_child(button)
 	return button
+
+
+## Close (its button): the shared close sound, then away.
+func close() -> void:
+	Sfx.play_ui(Sfx.bank.ui_close)
+	hide()
+
+
+## Still typing the words (a tap writes them out).
+func is_typing() -> bool:
+	return visible and words.visible_characters >= 0 and words.visible_characters < words.get_total_character_count()
+
+
+## Writes the words out at once.
+func write_out() -> void:
+	words.visible_characters = -1
+
+
+func _type_from_start(pace: float) -> void:
+	_pace = pace
+	_letters = 0.0
+	words.visible_characters = -1 if is_inf(Settings.text_speed_factor()) else 0
+
+
+func _process(delta: float) -> void:
+	if not is_typing():
+		return
+	_letters += delta * _pace * Settings.text_speed_factor()
+	words.visible_characters = mini(int(_letters), words.get_total_character_count())
+	if words.visible_characters >= words.get_total_character_count():
+		words.visible_characters = -1
+
+
+## A tap or a click on the words writes them out.
+func _on_words_input(event: InputEvent) -> void:
+	var press := (event is InputEventScreenTouch and (event as InputEventScreenTouch).pressed) \
+			or (event is InputEventMouseButton and (event as InputEventMouseButton).pressed and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT)
+	if press and is_typing():
+		write_out()
+		accept_event()
 
 
 func _layout() -> void:

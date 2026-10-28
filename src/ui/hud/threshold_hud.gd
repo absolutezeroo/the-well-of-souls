@@ -2,7 +2,7 @@ class_name ThresholdHud
 extends HudEventCard
 ## The trial of the Threshold on screen (see Threshold): its name and rule across the screen when
 ## the hero arrives (HudEventCard), then at the top a big countdown and the spectres slain so
-## far. The countdown turns red and beats in its last seconds. Built in code; the Hud shows it
+## far. The countdown turns red in its last seconds, brackets flashing round it each second. Built in code; the Hud shows it
 ## while the trial is on.
 
 ## Seconds left when the countdown turns red.
@@ -54,7 +54,7 @@ func counters() -> Control:
 func set_progress(kills: int, needed: int) -> void:
 	_kills_label.text = tr("Slain %d / %d") % [kills, needed]
 	if kills > 0:
-		_pop(_kills_label, 1.25, 0.2)
+		_pop(_kills_label, 0.3)
 
 
 func _process(_delta: float) -> void:
@@ -73,5 +73,5 @@ func _refresh_time() -> void:
 	var urgent := threshold.time_left <= URGENT
 	_time_label.add_theme_color_override("font_color", Palette.DANGER if urgent else Color(0.95, 0.97, 1.0))
 	if urgent and threshold.is_fighting() and seconds > 0:
-		# Each second of the last ten beats.
-		_pop(_time_label, 1.3, 0.3, Tween.TRANS_BACK)
+		# Each second of the last ten flashes brackets round the count (it stays still).
+		_pop(_time_label, 0.4)

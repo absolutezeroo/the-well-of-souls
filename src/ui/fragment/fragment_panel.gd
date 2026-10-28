@@ -4,10 +4,18 @@ extends Control
 ## ribbon, its picture, who wrote it and where, its lines, and whose chronicle keeps it now.
 ## The game is paused while it is open; a tap anywhere (or Back, or the button) closes it.
 ## The codex opens the same panel to read a found fragment again. Built in code.
+## Its words are in a dark inset, its lines reading text (UiSkin.reading_size(): wider with Large
+## text); one too long for the screen scrolls, and a touch on the words then scrolls instead of
+## closing (Close, Back or a tap outside them still close it).
 
 signal closed
 
 const WIDTH := 780.0
+## The board's width with Large text.
+const LARGE_WIDTH := 1100.0
+## Room the board keeps for its ribbon, margins, Close and the inset around the words: the words'
+## box is at most the screen's height less this.
+const ROOM_AROUND := 300.0
 ## Taps this few frames after it opened are not for it (about a quarter of a second).
 const OPEN_GRACE_FRAMES := 15
 
@@ -18,6 +26,9 @@ var _place: Label
 var _lines: VBoxContainer
 var _kept: Label
 var _close: Button
+## The words' box (scrolls when the fragment is longer than the screen) and what it holds.
+var _scroll: ScrollContainer
+var _words_box: VBoxContainer
 ## Built nodes reachable as %Name once the panel is built.
 var _named := ExposedNodes.new()
 var _gate := TapGate.new(TapGate.Keys.ANY, OPEN_GRACE_FRAMES)
@@ -42,7 +53,10 @@ func open(fragment: FragmentDef, boss: BossDef, first_time: bool = false) -> voi
 	_place.visible = not fragment.place.is_empty()
 	UiParts.clear(_lines)
 	for line in fragment.lines:
-		_lines.add_child(UiSkin.label(tr(line), Fonts.BODY, UiSkin.TEXT, true))
+		_lines.add_child(UiSkin.reading_label(tr(line)))
+	_dialog.set_board_width(LARGE_WIDTH if UiSkin.reading_size() > Fonts.BODY else WIDTH)
+	_scroll.scroll_vertical = 0
+	_fit_words.call_deferred()
 	_kept.visible = boss != null
 	if boss:
 		var boss_name := tr(boss.display_name)
@@ -69,10 +83,38 @@ func board_rect() -> Rect2:
 	return _dialog.board_rect()
 
 
+## The words' box as tall as they are, at most the screen's height less ROOM_AROUND (then it
+## scrolls).
+func _fit_words() -> void:
+	var most := maxf(get_viewport_rect().size.y - ROOM_AROUND, 120.0)
+	_scroll.custom_minimum_size.y = minf(_words_box.get_combined_minimum_size().y, most)
+
+
+## `event` is a touch, a drag or a click over the words while they scroll.
+func _over_scrolling_words(event: InputEvent) -> bool:
+	var at := Vector2.INF
+	if event is InputEventScreenTouch:
+		at = (event as InputEventScreenTouch).position
+	elif event is InputEventScreenDrag:
+		at = (event as InputEventScreenDrag).position
+	elif event is InputEventMouseButton:
+		at = (event as InputEventMouseButton).position
+	else:
+		return false
+	return _scrolls() and _scroll.get_global_rect().has_point(at)
+
+
+## The words are longer than their box.
+func _scrolls() -> bool:
+	return _words_box.get_combined_minimum_size().y > _scroll.size.y + 1.0
+
+
 ## Any tap, click or key closes it (not in its first moments: the tap that opened it).
 ## (TapGate: never the wheel; the touch and the click made of it are one press, and the twin
 ## that comes after the panel closed is swallowed too, so it never presses a HUD button.)
 func _input(event: InputEvent) -> void:
+	if visible and _over_scrolling_words(event):
+		return  # (a finger or the wheel over words that scroll: it scrolls them)
 	var read := _gate.read(event, visible)
 	if read == TapGate.IGNORE:
 		return
@@ -85,9 +127,18 @@ func _build() -> void:
 	_dialog = RpgDialog.new("", WIDTH)
 	_dialog.mouse_filter = Control.MOUSE_FILTER_PASS
 	add_child(_dialog)
+	var inset := UiSkin.section()
+	_dialog.body.add_child(inset)
+	_scroll = UiParts.scroll()
+	_scroll.name = "WordsScroll"
+	inset.add_child(_scroll)
+	_words_box = VBoxContainer.new()
+	_words_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_words_box.add_theme_constant_override("separation", 10)
+	_scroll.add_child(_words_box)
 	var top := HBoxContainer.new()
 	top.add_theme_constant_override("separation", 16)
-	_dialog.body.add_child(top)
+	_words_box.add_child(top)
 	_icon = TextureRect.new()
 	_icon.custom_minimum_size = Vector2(64, 64)
 	_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -114,8 +165,8 @@ func _build() -> void:
 	words.add_child(_lines)
 	_kept = UiSkin.label("", Fonts.BODY, UiSkin.GOLD, true)
 	_kept.name = "Kept"
-	_dialog.body.add_child(_kept)
-	_close = MenuWindow.button(tr("Close"), Fonts.BODY, 48)
+	_words_box.add_child(_kept)
+	_close = MenuWindow.button(tr("Close"), Fonts.BODY, MenuWindow.TOUCH_MIN)
 	_close.name = "CloseButton"
 	_close.custom_minimum_size.x = 200
 	_close.size_flags_horizontal = Control.SIZE_SHRINK_CENTER

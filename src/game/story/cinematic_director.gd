@@ -133,14 +133,17 @@ func _write(label: Label, typed: bool) -> void:
 		label.visible_characters = -1
 		label.modulate.a = 1.0
 		return
-	if typed and def.chars_per_second > 0.0:
+	if typed and def.chars_per_second > 0.0 and not is_inf(Settings.text_speed_factor()):
 		label.visible_characters = 0
 		var shown := 0.0
 		while shown < count and not hurried and not ended and _playing:
 			await get_tree().process_frame
-			shown += get_process_delta_time() * def.chars_per_second
+			shown += get_process_delta_time() * def.chars_per_second * Settings.text_speed_factor()  # (the player's text speed)
 			label.visible_characters = mini(int(shown), count)
 		label.visible_characters = -1
+	elif typed and def.chars_per_second > 0.0:
+		label.visible_characters = -1  # (text speed "at once")
+		label.modulate.a = 1.0
 	else:
 		label.visible_characters = -1
 		label.modulate.a = 0.0

@@ -23,8 +23,6 @@ var _card_tween: Tween
 var _card_on := false
 ## The color under the labels' outline (a near-black of the place's own hue).
 var _outline := Color(0.01, 0.02, 0.06)
-## Each label's pop (a kill, a second beating), so a new one never fights the last.
-var _pops := {}
 
 
 func _init_card_hud(outline: Color) -> void:
@@ -131,14 +129,7 @@ func is_card_showing() -> bool:
 	return visible and _card_on
 
 
-## `label` swells to `factor` and settles back in `time` (one pop at a time: a new one replaces
-## the last, never two tweens on its scale).
-func _pop(label: Label, factor: float, time: float, trans: Tween.TransitionType = Tween.TRANS_LINEAR) -> void:
-	var last: Tween = _pops.get(label)
-	if last:
-		last.kill()
-	label.pivot_offset = label.size * 0.5
-	label.scale = Vector2.ONE * factor
-	var pop := create_tween()
-	pop.tween_property(label, "scale", Vector2.ONE, time).set_trans(trans)
-	_pops[label] = pop
+## `label` says it changed: brackets flash round its words for `time` seconds, in its color (its
+## words never swell: nothing to read moves, design/interface.md "One skin").
+func _pop(label: Label, time: float) -> void:
+	TextCue.ping(label, label.get_theme_color(&"font_color"), time)

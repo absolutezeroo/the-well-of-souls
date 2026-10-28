@@ -1,12 +1,17 @@
 class_name HintBox
 extends Control
-## A tutorial hint on screen (see Tutorial): a small wooden board at the top, its title in gold,
-## what to do, an OK button; when the hint is about a control of the HUD, a ring pulses around
-## that control and an arrow points at it.
+## A tutorial hint on screen (see Tutorial): a small wooden board at the top, its title in gold
+## and what to do in a dark inset (reading text: bigger with Large text, the board wider), an OK
+## button; when the hint is about a control of the HUD, a ring pulses around that control and an
+## arrow points at it.
 
 signal dismissed
 
 const WIDTH := 560.0
+## The board's width with Large text (TITLE words: a hint stays a few lines).
+const LARGE_WIDTH := 880.0
+## The board's room around the words (its wood, the OK button and the inset's margins).
+const SIDE_ROOM := 172.0
 const TOP := 12.0
 ## Lower, when the boss bar takes the top of the screen.
 const TOP_UNDER_BOSS_BAR := 84.0
@@ -46,22 +51,26 @@ func _init() -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 14)
 	_board.add_child(row)
+	var recess := UiSkin.section()
+	recess.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	recess.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(recess)
 	var column := VBoxContainer.new()
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override("separation", 2)
 	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.add_child(column)
+	recess.add_child(column)
 	_title = UiSkin.label("", Fonts.BODY, UiSkin.GOLD)
 	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(_title)
-	_text = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
-	_text.custom_minimum_size.x = WIDTH - 140.0  # wraps at the board's width from the start
+	_text = UiSkin.reading_label("")
+	_text.custom_minimum_size.x = WIDTH - SIDE_ROOM  # wraps at the board's width from the start
 	_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(_text)
 	var ok := Button.new()
 	ok.text = tr("OK")
 	ok.focus_mode = Control.FOCUS_NONE
-	ok.custom_minimum_size = Vector2(72, 48)
+	ok.custom_minimum_size = Vector2(72, MenuWindow.TOUCH_MIN)
 	ok.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	ok.pressed.connect(func() -> void: dismissed.emit())
 	row.add_child(ok)
@@ -80,6 +89,8 @@ func _ready() -> void:
 func show_hint(hint: HintDef, at: Rect2) -> void:
 	_hint = hint
 	_title.text = tr(hint.title)
+	UiSkin.set_reading_style(_text)
+	_text.custom_minimum_size.x = _width() - SIDE_ROOM
 	_text.text = hint.shown_text()
 	target = at
 	_time = 0.0
@@ -89,7 +100,7 @@ func show_hint(hint: HintDef, at: Rect2) -> void:
 		_tween.kill()
 	_board.modulate.a = 0.0
 	_tween = create_tween()
-	_tween.tween_property(_board, "modulate:a", 1.0, 0.2)
+	_tween.tween_property(_board, "modulate:a", 1.0, 0.15)
 	Sfx.play_ui(Sfx.bank.ui_open, -8.0)
 	queue_redraw()
 
@@ -112,9 +123,15 @@ func shown_text() -> String:
 	return _text.text
 
 
+## The board's width: wider with Large text.
+func _width() -> float:
+	return LARGE_WIDTH if UiSkin.reading_size() > Fonts.BODY else WIDTH
+
+
 func _place() -> void:
-	_board.size = Vector2(WIDTH, _board.get_combined_minimum_size().y)
-	_board.position = Vector2(roundf((size.x - WIDTH) * 0.5), TOP_UNDER_BOSS_BAR if lowered else TOP)
+	var width := _width()
+	_board.size = Vector2(width, _board.get_combined_minimum_size().y)
+	_board.position = Vector2(roundf((size.x - width) * 0.5), TOP_UNDER_BOSS_BAR if lowered else TOP)
 
 
 func _process(delta: float) -> void:

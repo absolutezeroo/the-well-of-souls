@@ -12,8 +12,11 @@ signal closed
 
 const STOCK_COLUMNS := 3
 const STOCK_SLOT := 72.0
-const BAG_COLUMNS := 4
-const BAG_SLOT := 62.0
+## Three columns of finger-sized slots 16 units apart (MenuWindow.TOUCH_MIN, TOUCH_GAP).
+const BAG_COLUMNS := 3
+const BAG_SLOT := 64.0
+## Room between two slots side by side.
+const GAP := MenuWindow.TOUCH_GAP
 const CARD_SLOT := 84.0
 
 enum Pick { NONE, STOCK, OWN }
@@ -344,12 +347,12 @@ func _build() -> void:
 	columns.add_child(sale.box)
 	var sale_scroll := UiParts.scroll()
 	sale_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	sale_scroll.custom_minimum_size.x = STOCK_COLUMNS * (STOCK_SLOT + 8)
+	sale_scroll.custom_minimum_size.x = STOCK_COLUMNS * (STOCK_SLOT + GAP)
 	sale.column.add_child(sale_scroll)
 	_for_sale = GridContainer.new()
 	_for_sale.columns = STOCK_COLUMNS
 	_for_sale.name = "ForSale"
-	_for_sale.add_theme_constant_override("h_separation", 8)
+	_for_sale.add_theme_constant_override("h_separation", GAP)
 	_for_sale.add_theme_constant_override("v_separation", 6)
 	_named.add(_for_sale)
 	sale_scroll.add_child(_for_sale)
@@ -359,7 +362,7 @@ func _build() -> void:
 	_reroll.expand_icon = false
 	_named.add(_reroll)
 	sale.column.add_child(_reroll)
-	_reroll_note = UiParts.text("", Fonts.BODY, UiSkin.DIM, STOCK_COLUMNS * (STOCK_SLOT + 8))
+	_reroll_note = UiParts.text("", Fonts.BODY, UiSkin.DIM, STOCK_COLUMNS * (STOCK_SLOT + GAP))
 	sale.column.add_child(_reroll_note)
 
 	# Middle: what the hero carries, to sell.
@@ -367,20 +370,20 @@ func _build() -> void:
 	columns.add_child(mine.box)
 	var bag_scroll := UiParts.scroll()
 	bag_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	bag_scroll.custom_minimum_size.x = BAG_COLUMNS * (BAG_SLOT + 6)
+	bag_scroll.custom_minimum_size.x = BAG_COLUMNS * (BAG_SLOT + GAP)
 	mine.column.add_child(bag_scroll)
 	var bag_column := VBoxContainer.new()
 	bag_scroll.add_child(bag_column)
 	_bag = GridContainer.new()
 	_bag.columns = BAG_COLUMNS
 	_bag.name = "Bag"
-	_bag.add_theme_constant_override("h_separation", 6)
+	_bag.add_theme_constant_override("h_separation", GAP)
 	_bag.add_theme_constant_override("v_separation", 6)
 	_named.add(_bag)
 	bag_column.add_child(_bag)
-	_bag_note = UiParts.text(tr("Your bag and belt are empty."), Fonts.BODY, UiSkin.DIM, BAG_COLUMNS * (BAG_SLOT + 6))
+	_bag_note = UiParts.text(tr("Your bag and belt are empty."), Fonts.BODY, UiSkin.DIM, BAG_COLUMNS * (BAG_SLOT + GAP))
 	bag_column.add_child(_bag_note)
-	mine.column.add_child(UiParts.text(tr("Choose one to see what the merchant pays."), Fonts.BODY, UiSkin.DIM, BAG_COLUMNS * (BAG_SLOT + 6)))
+	mine.column.add_child(UiParts.text(tr("Choose one to see what the merchant pays."), Fonts.BODY, UiSkin.DIM, BAG_COLUMNS * (BAG_SLOT + GAP)))
 
 	# Right: the picked item.
 	var card: Dictionary = RpgWindow.section(tr("Item"))
@@ -396,7 +399,7 @@ func _build() -> void:
 	_lock_note = UiSkin.label("", Fonts.BODY, UiSkin.DIM, true)
 	card.column.add_child(_lock_note)
 	var actions := HBoxContainer.new()
-	actions.add_theme_constant_override("separation", 8)
+	actions.add_theme_constant_override("separation", GAP)
 	card.column.add_child(actions)
 	_buy = UiParts.button(tr("Buy"), func() -> void: buy_selected(), Vector2(0, 52), Fonts.BODY)
 	_buy.name = "BuyButton"

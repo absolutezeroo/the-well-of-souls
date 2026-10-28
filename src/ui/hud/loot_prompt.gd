@@ -1,16 +1,25 @@
 class_name LootPrompt
 extends PanelContainer
 ## Standing on an item that auto loot leaves on the ground (Settings.auto_loot), or that the bag
-## has no room for: a small board low on the screen, above the buttons, shows it (its slot, name
-## in its rarity, how it compares with what is worn) with a Take button. With no room, the button
-## opens the bag instead (dismantle or drop something, then take it). Gone when the hero walks off.
+## has no room for: a small board low on the screen, above the buttons, shows it (its slot, and in
+## a dark inset its name in its rarity, how it compares with what is worn) with a Take button.
+## With no room, the button opens the bag instead (dismantle or drop something, then take it).
+## Gone when the hero walks off. On touch it sits above the belt and the roll, left of the skills
+## (place()); where Take would fall in the joystick's zone (Large buttons on a narrow screen), at
+## the top middle instead.
 ## Also says, in a toast, when the bag is full (Events.bag_full), at most every few seconds.
 ## Built by the HUD; listens to Events.
 
 const WIDTH := 600.0
+## Under the screen's bottom edge with keys and a gamepad (over the action bar), and the top
+## spot's height (under the boss bar).
+const BOTTOM_KEYS := 140.0
+const TOP := 96.0
 ## Seconds between two "bag full" toasts (walking over loot again and again).
 const FULL_TOAST_GAP := 4.0
 const REFRESH := 0.25
+## The round buttons the board sits above (the bottom row: the belt and the roll).
+const LOW_ROW: Array[String] = ["QuickItemButton", "Belt2Button", "Belt3Button", "Skill1Button"]
 
 ## Toasts, and the bag button's signal.
 var hud: Hud
@@ -31,17 +40,8 @@ var _refresh_in := 0.0
 func _ready() -> void:
 	name = "LootPrompt"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE  # the joystick's thumb may slide under it
-	anchor_left = 0.5
-	anchor_right = 0.5
-	anchor_top = 1.0
-	anchor_bottom = 1.0
-	offset_left = -WIDTH * 0.5
-	offset_right = WIDTH * 0.5
-	# Above the belt and skill buttons (even at the biggest controls size), under the hero.
-	offset_bottom = -140.0
-	offset_top = -246.0
-	grow_horizontal = Control.GROW_DIRECTION_BOTH
-	grow_vertical = Control.GROW_DIRECTION_BEGIN
+	# Placed by place(), from the top left of the HUD's safe area.
+	set_anchors_preset(Control.PRESET_TOP_LEFT)
 	add_theme_stylebox_override("panel", _panel())
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -51,12 +51,17 @@ func _ready() -> void:
 	_slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_slot.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	row.add_child(_slot)
+	# The words in a dark inset (never colors straight on the wood: design/interface.md).
+	var recess := UiSkin.section()
+	recess.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	recess.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(recess)
 	var words := VBoxContainer.new()
 	words.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	words.alignment = BoxContainer.ALIGNMENT_CENTER
 	words.add_theme_constant_override("separation", 0)
-	row.add_child(words)
+	recess.add_child(words)
 	_name = UiSkin.label("", Fonts.BODY, UiSkin.GOLD)
 	_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_name.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -76,7 +81,7 @@ func _ready() -> void:
 	_compare.add_theme_color_override("font_outline_color", Fonts.OUTLINE)
 	_compare.add_theme_color_override("default_color", UiSkin.TEXT)
 	words.add_child(_compare)
-	_take = UiParts.button(tr("Take"), _on_take, Vector2(130, 60))
+	_take = UiParts.button(tr("Take"), _on_take, Vector2(130, 64))
 	_take.name = "TakeButton"
 	_take.focus_mode = Control.FOCUS_NONE  # nothing on the HUD keeps the focus (Space attacks)
 	_take.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -84,6 +89,7 @@ func _ready() -> void:
 	row.add_child(PromptGlyph.make(&"interact"))
 	row.add_child(_take)
 	hide()
+	resized.connect(place)
 	Events.loot_offered.connect(_on_offered)
 	Events.loot_left.connect(_on_left)
 	Events.bag_full.connect(_on_bag_full)
@@ -95,6 +101,38 @@ func _ready() -> void:
 ## The item shown (tests), null when hidden.
 func shown_item() -> ItemDef:
 	return _shown.item if visible and is_instance_valid(_shown) else null
+
+
+## Puts the board where nothing to tap is under its Take button: with keys, low in the middle
+## over the action bar; on touch above the belt row and the roll, left of every other round
+## button beside it (16 units clear), or at the top middle when that would put Take in the
+## joystick's zone.
+func place() -> void:
+	var parent := get_parent() as Control
+	if hud == null or parent == null or not is_inside_tree():
+		return
+	var area := parent.size
+	var height := get_combined_minimum_size().y
+	var rect := Rect2(roundf((area.x - WIDTH) * 0.5), area.y - BOTTOM_KEYS - height, WIDTH, height)
+	if hud.touch_controls_shown():
+		var buttons := hud.touch_rects()
+		var bottom := area.y
+		for low in LOW_ROW:
+			if buttons.has(low):
+				bottom = minf(bottom, (buttons[low] as Rect2).position.y - Hud.TOUCH_GAP)
+		var right := roundf((area.x + WIDTH) * 0.5)
+		for button_name: String in buttons:
+			var button: Rect2 = buttons[button_name]
+			if not button_name in LOW_ROW and button.position.y < bottom + Hud.TOUCH_GAP and button.end.y > bottom - height - Hud.TOUCH_GAP:
+				right = minf(right, button.position.x - Hud.TOUCH_GAP)
+		rect = Rect2(right - WIDTH, bottom - height, WIDTH, height)
+		var take_left := rect.end.x - _panel().content_margin_right - _take.get_combined_minimum_size().x
+		if take_left < hud.stick_zone().end.x + Hud.TOUCH_GAP:
+			rect = Rect2(roundf((area.x - WIDTH) * 0.5), TOP, WIDTH, height)
+	rect.position = (rect.position / 2.0).round() * 2.0  # (even units: whole screen pixels at x1.5)
+	if not position.is_equal_approx(rect.position) or not size.is_equal_approx(rect.size):
+		position = rect.position
+		size = rect.size
 
 
 ## The Take button (or "Open the bag" when there is no room), as if tapped (tests).
@@ -163,6 +201,7 @@ func _show_last() -> void:
 	var room := player.pack.can_store(item) or _fits_by_equipping(item)
 	_take.text = tr("Take") if room else tr("Open the bag")
 	_compare.text = _compare_line(item) if room else "[color=#%s]%s[/color]" % [UiSkin.BAD.to_html(false), player.inventory.full_text(item)]
+	place.call_deferred()
 
 
 ## "+3 damage, -1 armor": the first changes against what is worn, green or red.
@@ -186,3 +225,8 @@ static func _panel() -> StyleBoxTexture:
 	box.content_margin_top = 10
 	box.content_margin_bottom = 10
 	return box
+
+
+## The Take button (tests: where it lies, what it says).
+func take_button() -> Button:
+	return _take

@@ -58,6 +58,11 @@ func set_title(text: String, color: Color = UiSkin.TEXT) -> void:
 	_place_ribbon.call_deferred()
 
 
+## The board's least width (0: as wide as its contents).
+func set_board_width(width: float) -> void:
+	_board.custom_minimum_size.x = width
+
+
 ## The board's size on screen (tests, layout checks).
 func board_rect() -> Rect2:
 	return _board.get_global_rect()

@@ -101,9 +101,8 @@ func _add_spot(at: Vector2, action: StringName, label_text: String, resident: Vi
 func _build_ui() -> void:
 	var layer := CanvasLayer.new()
 	add_child(layer)
-	_hud = Control.new()
-	_hud.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# The village's HUD in the screen's safe area (a phone's camera hole hides none of it).
+	_hud = SafeArea.new()
 	layer.add_child(_hud)
 	var header := VBoxContainer.new()
 	header.position = Vector2(24, 20)
@@ -359,7 +358,7 @@ func open_well() -> void:
 	if not RunSave.read().is_empty():
 		panel.choice(tr("Resume the descent"), &"resume")
 	panel.choice(tr("Descend"), &"normal")
-	panel.choice(tr("Daily Descent"), &"daily")
+	panel.choice(tr("Daily descent"), &"daily")
 
 
 func _choose(action: StringName, payload: Resource) -> void:

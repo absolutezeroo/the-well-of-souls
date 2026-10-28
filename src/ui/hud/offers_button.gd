@@ -19,6 +19,8 @@ var count := 0:
 
 var _time := 0.0
 var _tween: Tween
+## A new choice's ring (1 when it comes, fading to 0).
+var _burst := 0.0
 
 
 func _init() -> void:
@@ -38,13 +40,14 @@ func _process(delta: float) -> void:
 		queue_redraw()
 
 
-## A new choice: the button swells and settles.
+## A new choice: a ring of gold bursts out of the button (the button and its words stay still:
+## nothing to read swells).
 func _pop() -> void:
 	if _tween:
 		_tween.kill()
-	scale = Vector2.ONE * 1.35
+	_burst = 1.0
 	_tween = create_tween()
-	_tween.tween_property(self, "scale", Vector2.ONE, 0.45).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	_tween.tween_property(self, "_burst", 0.0, 0.45).set_ease(Tween.EASE_OUT)
 
 
 func _draw() -> void:
@@ -57,6 +60,8 @@ func _draw() -> void:
 	var base := Vector2(radius, radius) * 2.0
 	draw_texture_rect(ActionButton.BASE_PRESSED if is_pressed() else ActionButton.BASE, Rect2(center - base * 0.5, base), false, Color(1.0, 0.86, 0.55, 0.95))
 	draw_arc(center, radius, 0.0, TAU, 40, Color(GOLD, 0.6 + 0.4 * pulse), 2.5, true)
+	if _burst > 0.0:
+		draw_arc(center, radius + roundf((1.0 - _burst) * 12.0) * 2.0, 0.0, TAU, 48, Color(GOLD, _burst), 4.0, true)
 	_draw_star(center + (Vector2(0, 2) if is_pressed() else Vector2.ZERO), radius * 0.62, pulse)
 	# How many wait.
 	var badge := center + Vector2(radius * 0.72, -radius * 0.72)

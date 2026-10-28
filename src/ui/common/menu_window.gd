@@ -9,6 +9,11 @@ extends RpgWindow
 const SOULS := Color(0.65, 0.95, 1.0)
 
 const SWITCH_SIZE := Vector2i(60, 30)
+## The least height of anything tapped (UI units: about 6 mm on a phone), and the room between
+## two things to tap (design/interface.md "One skin": 64 and 16). The button factory holds every
+## button to it.
+const TOUCH_MIN := 64.0
+const TOUCH_GAP := 16
 
 static var _switches := {}
 
@@ -29,11 +34,12 @@ static func expose(node: Node, node_name: String, scene_owner: Node) -> void:
 	node.unique_name_in_owner = true
 
 
-## A plain button in the game's theme (keys and gamepads reach it: MenuNav).
-static func button(text: String, font_size: int = Fonts.BODY, height: float = 52.0) -> Button:
+## A plain button in the game's theme (keys and gamepads reach it: MenuNav), never less than
+## TOUCH_MIN tall (a smaller `height` is raised to it: a finger must find it).
+static func button(text: String, font_size: int = Fonts.BODY, height: float = TOUCH_MIN) -> Button:
 	var result := Button.new()
 	result.text = text
-	result.custom_minimum_size = Vector2(0, height)
+	result.custom_minimum_size = Vector2(0, maxf(height, TOUCH_MIN))
 	result.add_theme_font_size_override("font_size", font_size)
 	return result
 

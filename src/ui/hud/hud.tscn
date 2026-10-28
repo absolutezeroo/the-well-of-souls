@@ -164,9 +164,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -236.0
-offset_top = 92.0
+offset_top = 96.0
 offset_right = -16.0
-offset_bottom = 242.0
+offset_bottom = 246.0
 grow_horizontal = 0
 script = ExtResource("9_map")
 
@@ -176,9 +176,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -236.0
-offset_top = 246.0
+offset_top = 250.0
 offset_right = -16.0
-offset_bottom = 272.0
+offset_bottom = 276.0
 grow_horizontal = 0
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.705882, 0.54902, 1, 1)
@@ -194,9 +194,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -236.0
-offset_top = 272.0
+offset_top = 276.0
 offset_right = -16.0
-offset_bottom = 296.0
+offset_bottom = 300.0
 grow_horizontal = 0
 mouse_filter = 2
 theme_override_colors/font_color = Color(1, 1, 1, 0.85)
@@ -213,9 +213,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -336.0
-offset_top = 296.0
+offset_top = 300.0
 offset_right = -16.0
-offset_bottom = 320.0
+offset_bottom = 324.0
 grow_horizontal = 0
 mouse_filter = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -338,57 +338,57 @@ mouse_filter = 2
 
 [node name="AttackButton" type="TouchScreenButton" parent="Controls"]
 unique_name_in_owner = true
-position = Vector2(-130, -130)
+position = Vector2(-104, -104)
 action = "attack"
 script = ExtResource("5_button")
-radius = 74.0
+radius = 72.0
 color = Color(1, 0.42, 0.42, 1)
 
 [node name="Skill1Button" type="TouchScreenButton" parent="Controls"]
 unique_name_in_owner = true
-position = Vector2(-300, -84)
+position = Vector2(-248, -80)
 action = "skill_1"
 script = ExtResource("5_button")
-radius = 46.0
+radius = 48.0
 
 [node name="Skill2Button" type="TouchScreenButton" parent="Controls"]
 unique_name_in_owner = true
-position = Vector2(-272, -238)
+position = Vector2(-256, -224)
 action = "skill_2"
 script = ExtResource("5_button")
-radius = 46.0
+radius = 48.0
 
 [node name="Skill3Button" type="TouchScreenButton" parent="Controls"]
 unique_name_in_owner = true
-position = Vector2(-130, -306)
+position = Vector2(-96, -240)
 action = "skill_3"
 script = ExtResource("5_button")
-radius = 46.0
+radius = 48.0
 
 [node name="Skill4Button" type="TouchScreenButton" parent="Controls"]
 unique_name_in_owner = true
-position = Vector2(-412, -214)
+position = Vector2(-400, -200)
 action = "skill_4"
 script = ExtResource("5_button")
-radius = 46.0
+radius = 48.0
 
 [node name="QuickItemButton" type="TouchScreenButton" parent="Controls"]
 unique_name_in_owner = true
-position = Vector2(-430, -70)
+position = Vector2(-344, -72)
 action = "quick_item"
 script = ExtResource("5_button")
-radius = 34.0
+radius = 32.0
 
 [node name="Belt2Button" type="TouchScreenButton" parent="Controls"]
 unique_name_in_owner = true
-position = Vector2(-512, -70)
+position = Vector2(-424, -72)
 action = "belt_2"
 script = ExtResource("5_button")
-radius = 34.0
+radius = 32.0
 
 [node name="Belt3Button" type="TouchScreenButton" parent="Controls"]
 unique_name_in_owner = true
-position = Vector2(-594, -70)
+position = Vector2(-504, -72)
 action = "belt_3"
 script = ExtResource("5_button")
-radius = 34.0
+radius = 32.0

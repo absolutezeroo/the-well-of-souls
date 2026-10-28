@@ -189,7 +189,7 @@ static func run_row(entry: Dictionary, content: ContentDB) -> Control:
 	ending.alignment = BoxContainer.ALIGNMENT_CENTER
 	ending.add_theme_constant_override("separation", 0)
 	row.add_child(ending)
-	var headline := TranslationServer.tr("Victory Achieved") if won else TranslationServer.tr("Died on floor %d") % depth
+	var headline := TranslationServer.tr("Victory achieved") if won else TranslationServer.tr("Died on floor %d") % depth
 	ending.add_child(UiSkin.label(headline, Fonts.BODY, DONE if won else Palette.DANGER))
 	var how := TranslationServer.tr("Reached the bottom of the Well")
 	if won and not cause.is_empty():

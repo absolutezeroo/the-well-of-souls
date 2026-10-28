@@ -4,6 +4,11 @@ extends CanvasLayer
 ## buttons; on a keyboard or a gamepad (InputDevice), those are put away for the ActionBar (the
 ## same actions as compact slots with their keys) and the bag, pause, map and perk buttons show
 ## their key in a corner (PromptGlyph). The mouse fights with MouseControls.
+## Everything but the full-screen tints sits in the screen's safe area (`safe_area`, SafeArea: a
+## phone's camera hole hides nothing). The round buttons are laid out in the scene for the
+## buttons size 1 and grown by Settings.controls_scale (positions and radii, never the Control's
+## scale): combat buttons at least 96 units, the rest at least 64, 16 between any two, none in the
+## joystick's zone (design/interface.md "One skin", PcTests U4).
 
 signal inventory_requested
 signal pause_requested
@@ -22,8 +27,6 @@ const BANNER_WIDTH := 1000.0
 var _player: Player
 var _world: World
 var _banner_tween: Tween
-var _souls_tween: Tween
-var _seal_tween: Tween
 var _toasts: Array[String] = []
 var _split_tween: Tween
 ## The run time's text on screen (rebuilt only when it changes).
@@ -34,7 +37,7 @@ var _belt_shown: Array[ItemDef] = [null, null, null]
 var _belt_counts := PackedInt32Array([0, 0, 0])
 var _belt_shown_for: Player
 var _weapon_shown: WeaponDef
-## The temperature last shown (_refresh_temperature()): its value, the extreme's blink, the
+## The temperature last shown (_refresh_temperature()): its value, whether it is extreme, the
 ## overlay's size; NAN: show it again.
 var _temp_shown := Vector4(NAN, NAN, NAN, NAN)
 ## The note on screen (its fade in, wait and fade out), stopped when a banner comes up.
@@ -47,6 +50,17 @@ var _abyss_hud: AbyssHud
 ## Who put the floor's widgets away (&"threshold", &"abyss": they nest) -> the widgets it hid,
 ## to show again when it is over (the boss bar, the map...).
 var _put_away := {}
+## Room kept between two things to tap, and from the joystick's zone (UI units).
+const TOUCH_GAP := 16.0
+## Interact's place and radius at the buttons size 1: above the spell, out of the lines under the
+## map (the pact's or the trial's) whatever the buttons size.
+const INTERACT_PLACE := Vector2(-472, -344)
+const INTERACT_RADIUS := 44.0
+
+## Every widget of the HUD but the full-screen tints, inside the screen's safe area.
+var safe_area := SafeArea.new()
+## Each round button -> [its place, its radius] at the buttons size 1 (the scene's layout).
+var _layout := {}
 ## A word, a space, a number: the space becomes unbreakable on the info line.
 static var _word_and_number := RegEx.create_from_string("(\\S) (\\d)")
 
@@ -94,6 +108,8 @@ var bag_full_mark := BagFullMark.new()
 
 
 func _ready() -> void:
+	_move_into_safe_area()
+	(%Toast as PanelContainer).add_theme_stylebox_override("panel", MenuWindow.strip_style())
 	%BagButton.pressed.connect(func() -> void: inventory_requested.emit())
 	%BagButton.icon = BAG_ICON
 	%BagButton.add_child(bag_full_mark)
@@ -119,15 +135,17 @@ func _ready() -> void:
 	# A cinematic (a warden's story) takes the screen: the HUD steps aside until it is over.
 	Events.cinematic_started.connect(func() -> void: visible = false)
 	Events.cinematic_finished.connect(func() -> void: visible = true)
-	_apply_settings()
 	pact_line.hud = self
-	add_child(pact_line)
+	safe_area.add_child(pact_line)
 	trial_line.hud = self
-	add_child(trial_line)
+	safe_area.add_child(trial_line)
 	loot_prompt.hud = self
-	add_child(loot_prompt)
+	safe_area.add_child(loot_prompt)
 	_add_offers_button()
 	_add_interact_button()
+	_record_layout()
+	_apply_settings()
+	safe_area.resized.connect(loot_prompt.place)
 	_add_action_bar()
 	_add_key_badges()
 	mouse_controls.name = "MouseControls"
@@ -136,6 +154,25 @@ func _ready() -> void:
 	_apply_device()
 	Events.depth_changed.connect(_on_depth_changed)
 	_depth_banner.modulate.a = 0.0
+
+
+## The scene's widgets (from the joystick on: not the full-screen tints under it) go into the safe
+## area, in their order; what the HUD builds later goes there too.
+func _move_into_safe_area() -> void:
+	var first := (%Joystick as Control).get_index()
+	var widgets := get_children().slice(first)
+	add_child(safe_area)
+	move_child(safe_area, first)
+	for widget in widgets:
+		widget.reparent(safe_area, false)
+
+
+## The round buttons' places and radii as laid out for the buttons size 1.
+func _record_layout() -> void:
+	for child in (%Controls as Control).get_children():
+		var button := child as ActionButton
+		if button:
+			_layout[button] = [button.position, button.radius]
 
 
 ## Dev builds: a DBG button left of the pause button, wherever the pause button really is (the
@@ -154,14 +191,16 @@ func _add_debug_button() -> void:
 	button.offset_top = pause.offset_top
 	button.offset_bottom = pause.offset_bottom
 	var place := func() -> void:
-		var right := pause.position.x - pause.get_parent_area_size().x - 8.0
+		var right := pause.position.x - pause.get_parent_area_size().x - TOUCH_GAP
 		button.offset_right = right
 		button.offset_left = right - 72.0
 	pause.item_rect_changed.connect(place)
 	place.call()
 	button.modulate = Color(1, 1, 1, 0.75)
 	button.pressed.connect(func() -> void: debug_requested.emit())
-	add_child(button)
+	safe_area.add_child(button)
+	button.owner = self
+	button.unique_name_in_owner = true
 
 
 ## The perk button, left of the minimap, under the pause button: in thumb's reach on the right,
@@ -170,13 +209,14 @@ func _add_offers_button() -> void:
 	offers_button.name = "OffersButton"
 	offers_button.anchor_left = 1.0
 	offers_button.anchor_right = 1.0
-	offers_button.offset_left = -326.0
-	offers_button.offset_right = -326.0 + OffersButton.SIZE
-	offers_button.offset_top = 92.0
-	offers_button.offset_bottom = 92.0 + OffersButton.SIZE
+	# 16 units clear of the pause button and the map.
+	offers_button.offset_left = -332.0
+	offers_button.offset_right = -332.0 + OffersButton.SIZE
+	offers_button.offset_top = 96.0
+	offers_button.offset_bottom = 96.0 + OffersButton.SIZE
 	offers_button.pressed.connect(func() -> void: offers_requested.emit())
-	add_child(offers_button)
-	move_child(offers_button, _minimap.get_index())  # under the full map
+	safe_area.add_child(offers_button)
+	safe_area.move_child(offers_button, _minimap.get_index())  # under the full map
 	offers_button.owner = self  # the tutorial points at it (hint_target())
 	offers_button.unique_name_in_owner = true
 
@@ -185,7 +225,8 @@ func _add_offers_button() -> void:
 ## reaches it, and it never covers a skill.
 func _add_interact_button() -> void:
 	interact_button.name = "InteractButton"
-	interact_button.position = Vector2(-262, -372)
+	interact_button.position = INTERACT_PLACE
+	interact_button.radius = INTERACT_RADIUS
 	%Controls.add_child(interact_button)
 	interact_button.owner = self
 	interact_button.unique_name_in_owner = true
@@ -197,8 +238,8 @@ func _add_action_bar() -> void:
 	buttons.append_array(_skill_buttons)
 	buttons.append_array(_belt_buttons)
 	action_bar.setup(buttons, 1 + _skill_buttons.size(), interact_button)
-	add_child(action_bar)
-	move_child(action_bar, (%Controls as Control).get_index())
+	safe_area.add_child(action_bar)
+	safe_area.move_child(action_bar, (%Controls as Control).get_index())
 	action_bar.owner = self
 	action_bar.unique_name_in_owner = true
 
@@ -218,6 +259,7 @@ func _apply_device() -> void:
 	(%Controls as Control).visible = touch
 	(%Joystick as Control).visible = touch
 	action_bar.visible = not touch
+	loot_prompt.place()
 
 
 ## Whether the touch controls are on screen (false with keys or a gamepad).
@@ -255,11 +297,33 @@ func bind_interactor(interactor: Interactor) -> void:
 		interact_button.show_for(null if _in_trial else target))
 
 
-## Size of the touch controls (Options). They grow from their corner of the screen.
+## Size of the touch controls (Options): every round button's place and radius at size 1 times
+## the step chosen (Settings.CONTROLS_SIZES), on whole units; they grow from their corner.
 func _apply_settings() -> void:
-	(%Controls as Control).scale = Vector2.ONE * Settings.controls_scale
-	(%Joystick as TouchJoystick).max_distance = TouchJoystick.BASE_DISTANCE * Settings.controls_scale
+	var size_step := Settings.controls_scale
+	for button: ActionButton in _layout:
+		button.position = ((_layout[button][0] as Vector2) * size_step).round()
+		button.radius = roundf(float(_layout[button][1]) * size_step)
+	(%Joystick as TouchJoystick).max_distance = TouchJoystick.BASE_DISTANCE * size_step
 	(%Joystick as TouchJoystick).fixed = Settings.fixed_joystick
+	loot_prompt.place()
+
+
+## Where each round button can be touched (name -> its square, in the safe area's units),
+## hidden ones too: what the loot prompt keeps clear of, what the touch tests measure.
+func touch_rects() -> Dictionary:
+	var result := {}
+	var to_safe := safe_area.get_global_transform_with_canvas().affine_inverse()
+	for button: ActionButton in _layout:
+		var center := to_safe * button.get_global_transform_with_canvas().origin
+		result[String(button.name)] = Rect2(center - Vector2.ONE * button.radius, Vector2.ONE * button.radius * 2.0)
+	return result
+
+
+## Where a touch starts the joystick (the safe area's units): its left part under the top.
+func stick_zone() -> Rect2:
+	var stick := %Joystick as TouchJoystick
+	return stick.zone()
 
 
 ## The floor shown on the minimap.
@@ -280,8 +344,9 @@ func bind_threshold(threshold: Threshold) -> void:
 	_threshold_hud = ThresholdHud.new()
 	_threshold_hud.name = "ThresholdHud"
 	_threshold_hud.threshold = threshold
+	# Over the whole screen (its cards across the top), under every widget, toasts and banners.
 	add_child(_threshold_hud)
-	move_child(_threshold_hud, (%Toast as Control).get_index())  # under the toasts and banners
+	move_child(_threshold_hud, safe_area.get_index())
 	# The tutorial points at the counters by name (hint_target()).
 	_threshold_hud.counters().owner = self
 	_threshold_hud.counters().unique_name_in_owner = true
@@ -307,8 +372,9 @@ func bind_abyss(abyss: Abyss) -> void:
 	_abyss_hud = AbyssHud.new()
 	_abyss_hud.name = "AbyssHud"
 	_abyss_hud.abyss = abyss
+	# Over the whole screen (its arrow points from the hero), under every widget, toasts and banners.
 	add_child(_abyss_hud)
-	move_child(_abyss_hud, (%Toast as Control).get_index())  # under the toasts and banners
+	move_child(_abyss_hud, safe_area.get_index())
 	# The tutorial points at the way out's name by name (hint_target()).
 	_abyss_hud.banner().owner = self
 	_abyss_hud.banner().unique_name_in_owner = true
@@ -362,14 +428,10 @@ func _refresh_seal() -> void:
 		_seal_label.add_theme_color_override("font_color", Palette.GOLD)
 
 
+## The seal broken: a banner, and brackets flash round "Stairs open" (its words stay still).
 func _on_seal_broken() -> void:
 	show_banner(tr("The stairs are open"), Palette.GOLD)
-	if _seal_tween:
-		_seal_tween.kill()
-	_seal_label.pivot_offset = _seal_label.size * Vector2(1.0, 0.5)
-	_seal_label.scale = Vector2.ONE * 1.4
-	_seal_tween = create_tween()
-	_seal_tween.tween_property(_seal_label, "scale", Vector2.ONE, 0.35).set_trans(Tween.TRANS_BACK)
+	TextCue.ping(_seal_label, Palette.GOLD, 0.6)
 
 
 func bind_player(player: Player) -> void:
@@ -466,8 +528,8 @@ func _refresh_skill_buttons() -> void:
 
 func _refresh_temperature() -> void:
 	var temperature := _player.temperature
-	var blink := 1.0 if temperature.is_extreme() and int(Time.get_ticks_msec() / 250.0) % 2 == 0 else 0.0
-	var key := Vector4(temperature.value, blink, _temp_overlay.size.x, _temp_overlay.size.y)
+	var extreme := 1.0 if temperature.is_extreme() else 0.0
+	var key := Vector4(temperature.value, extreme, _temp_overlay.size.x, _temp_overlay.size.y)
 	if key == _temp_shown:
 		return  # (as it was: no text, no uniform set again)
 	_temp_shown = key
@@ -486,7 +548,9 @@ func _refresh_temperature() -> void:
 	var is_cold := temperature.value < 0.0
 	var label := (tr("Freezing!") if is_cold else tr("Burning up!")) if temperature.is_extreme() else (tr("Cold") if is_cold else tr("Hot"))
 	_temp_bar.fill_color = BodyTemperature.COLD_COLOR if is_cold else BodyTemperature.HOT_COLOR
-	if blink > 0.0:
+	# At the extreme the bar is lighter and says so in words ("Freezing!"); it never blinks (its
+	# words are on it: nothing to read blinks).
+	if extreme > 0.0:
 		_temp_bar.fill_color = _temp_bar.fill_color.lightened(0.4)
 	_temp_bar.set_values(absf(temperature.value), BodyTemperature.LIMIT, label)
 
@@ -568,17 +632,12 @@ func _yield_toast() -> void:
 	get_tree().create_timer(0.3, false).timeout.connect(_next_toast)
 
 
-## Souls gathered this run (what the shrine will get). `pulse` when a new one arrives.
+## Souls gathered this run (what the shrine will get). `pulse` when a new one arrives: brackets
+## flash round the count (the words never swell: nothing to read moves).
 func set_souls(count: int, pulse: bool = false) -> void:
 	_souls_label.text = tr("Souls %d") % count
-	if not pulse:
-		return
-	if _souls_tween:
-		_souls_tween.kill()
-	_souls_label.pivot_offset = _souls_label.size * Vector2(0.0, 0.5)
-	_souls_label.scale = Vector2.ONE * 1.25
-	_souls_tween = create_tween()
-	_souls_tween.tween_property(_souls_label, "scale", Vector2.ONE, 0.2)
+	if pulse:
+		TextCue.ping(_souls_label, MenuWindow.SOULS, 0.3)
 
 
 ## Big centered text that fades out (floor names, boss names, a warden's last words...). A text

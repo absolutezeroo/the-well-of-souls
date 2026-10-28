@@ -39,7 +39,7 @@ capacity = 16
 [sub_resource type="Resource" id="Category_scrolls"]
 script = ExtResource("2_def")
 id = &"scrolls"
-display_name = "Tomes & Scrolls"
+display_name = "Tomes & scrolls"
 full_text = "No room left for tomes and scrolls"
 icon = ExtResource("5_tomes")
 kinds = Array[StringName]([&"SkillTomeDef"])

@@ -15,8 +15,8 @@ the menu on top (the title's, under the Options) takes no drag.
 |---|---|---|---|
 | Move | Drag on the left side | WASD / arrows | Left stick |
 | Attack (auto-aim): tap; hold to charge, let go to unleash | Big red button | Space / J, left click | X |
-| Roll (skill 1), weapon skills 2-3, spell 4 | Small round buttons | 1 2 3 4 or K L O P; roll: right click too | A B Y RB |
-| Belt (potions, bombs, scrolls) | The 3 small buttons left of the skills | Q / H, 5, 6 | LB, D-pad left, D-pad right |
+| Roll (skill 1), weapon skills 2-3, spell 4 | Round buttons around it (96 units across) | 1 2 3 4 or K L O P; roll: right click too | A B Y RB |
+| Belt (potions, bombs, scrolls) | The 3 smaller buttons in the bottom row, left of the roll | Q / H, 5, 6 | LB, D-pad left, D-pad right |
 | Use what you stand by (trade, forge, drink...), or take loot left on the ground | The Interact button (shows only then) | E / F | RT |
 | Open the waiting perk choices | The perk button (shows only then) | C | LT |
 | Whole floor's map | Tap the minimap | M | D-pad up |
@@ -182,6 +182,13 @@ shows to the device in hand.
 - **Interface size** (Options > Graphics): Big (the largest step that fits), Medium, Small: one or two
   steps smaller, never under x1, for more room on a big monitor; the floor's framing stays
   (`Settings.ui_size`, saved).
+- **The safe area** (`SafeArea`, `src/ui/common/safe_area.gd`): a phone's camera hole, notch or
+  rounded corners hide nothing. `DisplayServer.get_display_safe_area()`, in the canvas's units
+  (screen pixels / `PixelGrid.ui_scale()`, rounded up to even units), moves in the edges of the
+  HUD (everything but its full-screen tints and the Threshold's and the Deeps' overlays), the
+  village's HUD, every `RpgWindow`'s board and title (the dim behind still covers the screen) and
+  the touch joystick's zone. On a computer the window is the safe area. Tests simulate a cutout
+  (`SafeArea.simulate()`, `PcTests._test_safe_area()`).
 - The layouts are checked at 1280x720, 1366x768, 1920x1080, 2560x1440, 1280x800, 3440x1440,
   1024x768 and the phones' 2340x1080 and 1540x720: nothing out of the screen, no HUD control over
   another, on touch and on keys (`PcTests`). French runs 20-30% longer: in French, at 1280x720,
@@ -273,8 +280,9 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   policy**, **Cancel**, **Send**. Sent, the form closes and a note at the top thanks the player in
   the Well's voice ("Thank you. Your words rise out of the Well to those who watch over it."),
   over everything for about 4 s, taking no taps. Keys and gamepads start on the first kind; Back
-  closes it, the focus goes back to its button. It fits 1280x720 in French (the pause menu's
-  buttons are 320x54 and its notes 460 wide so that six rows and the gold and souls box fit too).
+  closes it, the focus goes back to its button. It fits 1280x720 in French: the form in a dark
+  inset, two columns (what is written | the switches and what goes with it), its controls a
+  finger's size.
 - Back closes the page or dialog on top first (the title's and the Options' `back()`/`close()`).
 
 ## On a phone
@@ -287,6 +295,8 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   the killing blow.
 - **Pause menu** (the II button, Escape, a gamepad's Start, or the phone's back button): resume, options, bestiary,
   **Send feedback**, save and quit, give up the run (two taps). Coming back to the app, the game waits paused.
+  Three columns in a dark inset, each button (340x64) with what it does under it, 16 units and
+  more between them: room for a row more on a 720-line screen in French.
 - **Options** (`Settings` autoload, `user://settings.cfg`), on the title screen and in the pause menu:
   five volumes (**General**, **Music**, **Interface**, **Combat**, **Ambience**: which sounds
   each one sets is in presentation.md, SFX; a slider follows the finger or the mouse smoothly (a
@@ -294,7 +304,10 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   it is let go), jumps where its track is tapped, and moves by 5% (shake 10%) a key or a gamepad
   press (`MenuNav.KEY_STEP`); it is 48 units tall, for a finger; letting go plays a sound of what
   it sets: a click, a hit, coins; settings files from before, with one sound volume, give it to Interface,
-  Combat and Ambience), screen shake, size of the touch controls, **vibrations** (big shakes,
+  Combat and Ambience), screen shake, **buttons size** of the touch controls (Normal or Large: whole
+  steps of 1 and 1.25, `Settings.CONTROLS_SIZES`, that keep every button at its minimum and out of
+  the joystick's zone on a 1280x720 canvas; a settings file from before, 0.7 to 1.3, takes the
+  nearest), **large text** and the **text speed** (Reading, below), **vibrations** (big shakes,
   hits you land, crits; `Settings.vibrate()`; exported Android builds need the Vibrate permission),
   **fixed joystick** (it stays in its corner and starts only when touched there, instead of
   appearing under the thumb), **battery saver** (30 FPS cap, `Engine.max_fps`), **fewer effects**
@@ -312,9 +325,11 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   size) is a row of buttons under its name, the one in use pressed:
   - **Gameplay** (opens first): Language (first, for a player who can't read the one in use),
     Loot (auto loot), Story (boss stories); In a run (run timer, screen shake, vibrations),
-    Tutorial (hints, Replay tutorial).
+    Reading (large text, text speed: Slow / Normal / Fast / At once), Tutorial (hints, Replay
+    tutorial).
   - **Graphics**: Screen (fullscreen on a computer, interface size), Touch controls (buttons
-    size, fixed joystick); Effects and battery (fewer effects, screen flashes, battery saver).
+    size: Normal / Large, fixed joystick); Effects and battery (fewer effects, screen flashes,
+    battery saver).
   - **Audio**: the five volumes, long sliders in one column.
   - **Controls**: the keys and buttons of the device in use (the Controls page, above).
   - **Privacy**: leaderboards, the player's data, the policy and the credits (Privacy and
@@ -323,14 +338,19 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   The tabs are a row under the header (a tap, a click, Q / E, LB / RB: `MenuNav`, group
   `menu_tabs`, wrapping around); their list is `OptionsPanel.Tab` / `TAB_NAMES`, each page built by
   its own `_build_<tab>()`. Each page has one or two columns that scroll on their own: at 720
-  lines in French, Gameplay's and Graphics' left columns scroll a little. Saved keys
+  lines in French, Gameplay's and Graphics' columns scroll a little. Every control is a finger's
+  (switches, choice buttons and sliders 64 units tall) with 16 units between rows
+  (`OptionRows.ROW_GAP`); a choice's name sits 4 units over its buttons. Saved keys
   are unchanged (`Settings`, the Leaderboards and Privacy files).
 - **Loot left on the ground** (auto loot, or no room in the bag): while the hero stands on it, a
-  small board low in the middle of the screen, above the belt and skill buttons (`LootPrompt`,
-  built by the HUD from `Events.loot_offered` / `loot_left`), shows its slot, its name in its
-  rarity, its type and the first changes against what is worn (green / red), with **Take**; with
-  no room, the button reads "Open the bag". Only the button catches touches (the joystick's thumb
-  may slide under the board). A full bag also says so in a toast.
+  small board (`LootPrompt`, built by the HUD from `Events.loot_offered` / `loot_left`) shows its
+  slot and, in a dark inset, its name in its rarity, its type and the first changes against what
+  is worn (green / red), with **Take** (64 units tall); with no room, the button reads "Open the
+  bag". On touch it sits above the belt row and the roll, 16 units left of the other round
+  buttons (`LootPrompt.place()`, from `Hud.touch_rects()`); where Take would then fall within 16
+  units of the joystick's zone (Large buttons on a 1280-wide canvas) it goes to the top middle,
+  under the boss bar. With keys, low in the middle over the action bar. Only the button catches
+  touches (the joystick's thumb may slide under the board). A full bag also says so in a toast.
 - **The trial of the Threshold** (`ThresholdHud`, built by the HUD from the `Threshold`'s signals):
   its name and rule across the screen for three seconds ("The Threshold" / "Slay 8 spectres before
   the knell"), then a panel at the top center with the spectres slain ("Slain 3 / 8") and a big
@@ -422,6 +442,29 @@ most phones (1080 lines), x2 on 1440.
   off those edges.
 - A wrapped line never splits a stat from its number (the HUD's info line uses unbreakable
   spaces).
+- **Large text** (Options > Gameplay > Reading, `Settings.large_text`; **on by default on a
+  phone**, off on a computer): reading text one whole font step bigger, `Fonts.TITLE` instead of
+  `BODY` (`UiSkin.reading_size()`, `reading_label()`): what someone says (`DialogueBox`, the
+  village's words), tutorial hints (their board 880 wide), a monster's description and a
+  warden's chronicle in the codex, a fragment's lines, an item's details. On the S23 BODY is
+  about a third of the size the Xbox guidelines ask of mobile text; 24 would not be whole at
+  x1.5, so the next step is 32. Panels holding it scroll (the codex, the item card, the village's
+  words, a fragment longer than the screen: a finger on its words then scrolls instead of
+  closing it) or page (`DialogueBox`), never shrink it; every one fits 2340x1080, 1540x720 and
+  1280x720 in French (`PcTests._test_large_text()`), which is why it is the phone's default.
+- **Typing** (`DialogueBox`, the village's words, a cinematic's lines): the words are laid out
+  before they are typed (`UiSkin.typed()`: `VC_CHARS_AFTER_SHAPING`), so a word never starts on
+  one line and jumps to the next. The pace is the speaker's times the **text speed** (Slow 0.6,
+  Normal 1, Fast 1.8, At once: each page written out; `Settings.text_speed`); a tap writes a
+  page out at any speed.
+- **Dialogue lines**: the shrine's box (`DialogueScreen`, 932 wide: a wooden board around the
+  `DialogueBox`'s dark inset) holds at most 60 characters a line in French at BODY (about 58 the
+  longest) and 3 lines a page: a longer page goes on to another, cut at a line's end
+  (`DialogueBox.split_page()`, `MAX_LINES`); the board follows each page's height.
+- **Sentence case** for the interface's words in both languages ("Level up", "Victory achieved",
+  "Daily descent", "Tomes & scrolls"); names keep their capitals (docs/lexicon.md: places,
+  beings, items, perks, achievements), and the bosses' shouted cries stay in capitals: they are
+  flavour, a voice, not interface.
 
 ## One skin (binding)
 
@@ -438,14 +481,33 @@ Numbers to hold (sources in [the art bible](../art-bible.md)'s research report):
 
 - **Touch**: combat buttons (attack, dodge, skills) have a touch area of at least **96 x 96**
   units (about 9 mm on the S23; Android asks 48 dp, about 9 mm); anything else tappable at least
-  **64 x 64**; at least **16** units between targets; nothing tappable in the stick's area;
-  everything anchored inside the safe area (never an absolute x).
+  **64 x 64** (`MenuWindow.TOUCH_MIN`: the button factory, `TabRow`, Close, the options' rows,
+  slots and tabs hold it); at least **16** units between targets (`MenuWindow.TOUCH_GAP`);
+  nothing tappable within 16 units of the stick's zone; everything anchored inside the safe area
+  (`SafeArea`, never an absolute x). The HUD's round buttons are laid out in `hud.tscn` for the
+  buttons size 1 (attack 144 across, skills 96, belt 64, Interact 88, centres on multiples of 8
+  and radii of 4 units) and grown by the size step chosen, never by the Control's scale; checked
+  at 2340x1080, 1920x1080 and 1280x720 at every step (`PcTests._test_touch_targets()`, U4) and in
+  the pause menu, the options, the bag, the merchant, the forge and a village conversation
+  (`_test_menu_targets()`).
 - **Text**: never below `Fonts.SMALL`; French is 20-30 % longer and never cut; at most about 60
   characters per line and 3 visible lines in a dialogue; sentence case; text contrast 4.5:1
-  (large or disabled 3:1).
-- **Colour is never the only cue** (rarity, danger, affordability get a shape or an icon too).
-- **Feedback**: a pressed state on press, the shared UI sounds, open/close in at most 0.15 s on
-  whole art pixels; nothing to read shakes or blinks.
+  (large or disabled 3:1). Measured on the skin's own textures (`PcTests._test_contrast()`):
+  TEXT, GOLD, DIM, GOOD and BAD on an inset 4.8 to 12.6:1; a button's words 5.1:1, pressed 5.8,
+  disabled 3.6 (UiSkin.DIM, no longer half-transparent dark words); the dark outline every label
+  wears 4.3:1 on the wood, the words 16.5:1 on it. **Reading text sits in dark insets, never on
+  the bare wood; DIM and BAD never go on the wood** (1.5 to 2.6:1 there; checked on every in-run
+  panel in French, `PcTests._dim_on_wood()`); a lone note on the wood is TEXT.
+- **Colour is never the only cue** (rarity, danger, affordability get a shape or an icon too):
+  in a slot, gear's rarity has its pips (Magic one, Rare two, Epic three, bottom right) and a
+  rune its family's sign (a flame, a snowflake, a drop, a bolt, a star; `ItemSlot`); a boss in
+  the codex has the word "Boss" with its red name.
+- **Feedback**: a pressed state on press (an item slot sinks, the minimap flashes a gold frame),
+  the shared UI sounds (the village's conversations too: opening, a choice, Close), open/close
+  in at most 0.15 s on whole art pixels (the perk choice rises 12 units on even steps); nothing
+  to read shakes or blinks: a number that changes (souls, the seal broken, the Threshold's last
+  seconds, gold in the bag) flashes pixel brackets round its still words (`TextCue`), the perk
+  button a ring, the temperature bar stays lighter at the extreme instead of blinking.
 - **Pixels**: offsets, sizes and margins in steps of 2 units; Control scale 1 or 2; Nearest.
 
 Before calling a screen done: captures at 2340x1080, 1920x1080 and 1280x720
@@ -460,10 +522,11 @@ Every window is built from the same pieces in `src/ui/common/`, so they look and
   (full screen) and `RpgDialog` (centred). `RpgWindow`'s header is `header_left`, a spacer,
   `header_right`, Back's key and `close_button`: windows add to its parts, never reach into the
   row by index (`MenuWindow` gives `header_left` the room for a line of text).
-- **Tabs**: `TabRow`, for the options, the codex, the bag (its `BagTab`s), the debug panel and
-  the leaderboards (the boards and the Toll; the periods are a second row, not menu tabs): toggle
-  buttons of one size (136x44 at least), the one shown pressed, a click when another is picked,
-  the tab keys' cap before them, the group `menu_tabs` (Q / E, LB / RB).
+- **Tabs**: `TabRow`, for the options, the codex, the bag (its `BagTab`s, 64x64 in two rows of
+  three), the debug panel and the leaderboards (the boards and the Toll; the periods are a second
+  row, not menu tabs): toggle buttons of one size (112x64 at least), 16 units apart, the one shown
+  pressed, a click when another is picked, the tab keys' cap before them, the group `menu_tabs`
+  (Q / E, LB / RB).
 - **The item card**: `ItemCard`, the bag's and the merchant's: slot, name in its rarity, type,
   details, the comparison with what is worn in green and red lines.
 - **Small helpers**: `UiParts.button()` (built on `MenuWindow.button()`, the one button
@@ -501,9 +564,9 @@ stones lit in their runes' colors. The selected slot pulses gold.
   - **Compartments and their tabs** (`Inventory`, `BagCategorySet`,
     `data/items/bag_categories.tres`; `BagTab`): the bag is six compartments, each with its own
     places (loot.md, "Room in the bag"): **Weapons** (Armes), **Armors** (Armures), **Runes**,
-    **Tomes & Scrolls** (Grimoires & Parchemins: the tomes and the Scroll of Fire),
+    **Tomes & scrolls** (Grimoires & parchemins: the tomes and the Scroll of Fire),
     **Consumables** (Consommables) and **Other** (Divers: keys, and whatever no compartment
-    claims; its tab hidden while empty). A row of wooden tabs over the grid, each with its
+    claims; its tab hidden while empty). Two rows of wooden tabs over the grid (64x64, 16 apart), each with its
     pictogram in the middle (`assets/ui/placeholders/`, drawn by `tools/ui/make_placeholders.py`:
     a plain sign, never an item of the game; the empty equipment slots show the same signs, faint),
     how many items it holds when any (a stack counts all of its own; red when the compartment is full) and
@@ -516,7 +579,7 @@ stones lit in their runes' colors. The selected slot pulses gold.
     make room before anything new goes in."). Tap a tab, or Q / E, LB / RB (`MenuNav`,
     "menu_tabs"). The tab picked stays picked until the run ends (the bag opens on it); a new
     run, Restart included, opens it on the first tab with nothing seen yet.
-  - **In a tab**: a 4-column grid, one slot per stack with its count ("x3"), the rarest first,
+  - **In a tab**: a 3-column grid of slots 16 units apart (scrolling), one slot per stack with its count ("x3"), the rarest first,
     then weapons, helms, body armors (a rune's family, a consumable's kind), the higher item
     level, then by name; after them the compartment's free places (empty slots). A slot new since the bag
     was last closed (or the item last picked) has the gold gem in its corner; what is worn or on
@@ -554,7 +617,8 @@ stones lit in their runes' colors. The selected slot pulses gold.
   `EncounterOutcome.summary()`), risks in red; Leave ("nothing happens, you can come back").
 - **Perk choice**, **pause menu** and **end of a run** use `RpgDialog` (a centred board, no Close):
   the cards on dark wood with Reroll / Banish explained and **Later** (the choice waits behind the
-  perk button; Back does the same), coming in softly (the world dims, the board rises, 0.2 s)
+  perk button; Back does the same), coming in softly (the world dims, the board rises 12 units on
+  even steps, 0.15 s)
   instead of cutting over the fight; each pause button says what it does, with
   what gold and souls are for; the end screen shows the run's numbers (`RunState.summary_rows()`),
   the souls earned and what they buy. After a death, the Vigil-Keeper's tale and advice sit under
@@ -585,7 +649,8 @@ hero is still valid before disconnecting signals.
 inhabitant, shrine or statue and press the normal Interact action; touch uses the existing stick
 and ActionButton. Conversations, restoration purchases and memorials use the scrollable Ninja Adventure
 VillagePanel and stop walking. The conversation sits low on screen with its portrait, readable
-words and separate choices; the world remains visible. Longer replies and services scroll. New descents explicitly ask before replacing a saved run. Pause and end-of-run
+words (typed like the DialogueBox's, a tap writes them out; reading size) and separate choices
+64 units tall, 16 apart; the world remains visible. Longer replies and services scroll. New descents explicitly ask before replacing a saved run. Pause and end-of-run
 Return to village buttons lead back to the square; the pause path keeps the active save.
 
 The village HUD shows day/time and a **Quests** button. The wooden noticeboard opens the same

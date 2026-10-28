@@ -12,6 +12,10 @@ extends PanelContainer
 ##   the other without waiting (an accent line, the advice, in its own color); a tap or accept
 ##   writes everything out. It never holds the screen: once written, accept is the buttons'.
 ## Taps in its first quarter of a second are not for it (a thumb still on the screen).
+## The words are reading text (UiSkin.reading_size(): bigger with Large text), typed at the
+## speaker's pace times the player's text speed (Settings.text_speed, "at once" writes each page
+## out), laid out before they are typed so no word jumps a line (UiSkin.typed()). PAGED, a page
+## longer than MAX_LINES at the box's width is split into pages of MAX_LINES.
 
 signal finished
 ## A new page or line began (its speaker's voice).
@@ -25,6 +29,11 @@ const PORTRAIT := 76.0
 const LINE_PAUSE := 0.35
 const OPEN_GRACE := 0.25
 const ACCENT := Palette.GOLD
+## The most lines a page shows (PAGED): longer ones go on to another page.
+const MAX_LINES := 3
+## What the box keeps around its words: the inset's margins, the face's frame and the room beside
+## it (the words' width is the box's less this, before it is laid out).
+const SIDE_ROOM := 32.0 + PORTRAIT + 32.0 + 14.0
 
 var mode: Mode = Mode.PAGED
 ## Typing speed when the speaker gives none.
@@ -53,6 +62,8 @@ var _more: Control
 var _more_key: Control
 var _more_shown := false
 var _current: Label
+## The page on screen is written out and what follows it was done (the more sign, the next line).
+var _page_written := false
 
 
 func _init(box_mode: Mode = Mode.PAGED, width: float = 760.0) -> void:
@@ -128,8 +139,39 @@ func say(spoken: Array[Dialogues.Spoken]) -> void:
 			pages.append({"text": "\n".join(entry.pages), "accent": entry.accent})
 		else:
 			for page in entry.pages:
-				pages.append({"text": page, "accent": entry.accent})
+				for part in split_page(page, words_width(), UiSkin.reading_size()):
+					pages.append({"text": part, "accent": entry.accent})
 	say_pages(speaker, pages)
+
+
+## How wide the words are: the box's width less its face and margins.
+func words_width() -> float:
+	var whole := size.x if size.x > 0.0 else custom_minimum_size.x
+	return maxf(whole - SIDE_ROOM, 120.0)
+
+
+## `text` wrapped at `width` (UI units) and `font_size` as a Label wraps it, cut into pieces of at
+## most MAX_LINES lines (at line ends: whole words).
+static func split_page(text: String, width: float, font_size: int) -> PackedStringArray:
+	var paragraph := TextParagraph.new()
+	paragraph.add_string(text, Fonts.MAIN, font_size)
+	paragraph.width = width
+	paragraph.break_flags = TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND | TextServer.BREAK_ADAPTIVE
+	var count := paragraph.get_line_count()
+	var parts := PackedStringArray()
+	if count <= MAX_LINES:
+		parts.append(text)
+		return parts
+	var start := 0
+	for line in range(MAX_LINES - 1, count, MAX_LINES):
+		var end := paragraph.get_line_range(line).y if line < count - 1 else text.length()
+		parts.append(text.substr(start, end - start).strip_edges())
+		start = end
+	if start < text.length():
+		var rest := text.substr(start).strip_edges()
+		if not rest.is_empty():
+			parts.append(rest)
+	return parts
 
 
 ## Says `pages` ([{text, accent}], already translated) as `speaker`.
@@ -201,6 +243,7 @@ func advance() -> bool:
 		return true
 	if is_typing():
 		_current.visible_characters = -1
+		_page_written = true
 		_set_more(true)
 		return true
 	if _page < _pages.size() - 1:
@@ -216,13 +259,16 @@ func _start_page(index: int, voice := true) -> void:
 	if mode == Mode.PAGED:
 		UiParts.clear(_lines)
 	var page: Dictionary = _pages[index]
-	_current = UiSkin.label(str(page.text), Fonts.BODY, ACCENT if page.accent else UiSkin.TEXT, true)
+	_current = UiSkin.typed(UiSkin.label(str(page.text), UiSkin.reading_size(), ACCENT if page.accent else UiSkin.TEXT, true))
 	_current.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_current.visible_characters = 0
 	_lines.add_child(_current)
 	_letters = 0.0
 	_pause = 0.0
+	_page_written = false
 	_set_more(false)
+	if is_inf(Settings.text_speed_factor()):
+		_current.visible_characters = -1  # (the text speed "at once": written out, the voice still heard)
 	if voice and _speaker and _speaker.voice:
 		Sfx.play_ui(_speaker.voice, _speaker.voice_db)
 	page_started.emit(index)
@@ -237,12 +283,14 @@ func _process(delta: float) -> void:
 		if _pause <= 0.0:
 			_start_page(_page + 1)
 		return
-	if not is_typing():
-		return
-	_letters += delta * (_speaker.letters_per_second if _speaker else letters_per_second)
-	_current.visible_characters = mini(int(_letters), _current.get_total_character_count())
 	if is_typing():
+		_letters += delta * (_speaker.letters_per_second if _speaker else letters_per_second) * Settings.text_speed_factor()
+		_current.visible_characters = mini(int(_letters), _current.get_total_character_count())
+		if is_typing():
+			return
+	if _page_written:
 		return
+	_page_written = true
 	_current.visible_characters = -1
 	if mode == Mode.STACKED:
 		if _page < _pages.size() - 1:

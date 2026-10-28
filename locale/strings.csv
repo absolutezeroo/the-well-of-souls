@@ -156,7 +156,6 @@ Fast broken,Fast broken,Jeûne rompu
 Slay every foe within %d seconds of the door sealing.,Slay every foe within %d seconds of the door sealing.,"Abats tous les ennemis en %d secondes, dès que la porte se scelle."
 The knell has tolled,The knell has tolled,Le glas a sonné
 %d s left,%d s left,%d s restantes
-ECHO,ECHO,ÉCHO
 Starts with the %s,Starts with the %s,Commence avec : %s
 %+d%% max Health,%+d%% max Health,%+d %% de Vie max
 %+d%% move speed,%+d%% move speed,%+d %% de Vitesse
@@ -199,7 +198,7 @@ Trade,Trade,Marchander
 Fell!,Fell!,Tombé !
 Learned %s!,Learned %s!,Appris : %s !
 Level up! You are now level %d,Level up! You are now level %d,Niveau supérieur ! Tu es maintenant niveau %d
-LEVEL UP,LEVEL UP,NIVEAU SUPÉRIEUR
+Level up,Level up,Niveau supérieur
 You fell into a hole!,You fell into a hole!,Tu es tombé dans un trou !
 giving up,giving up,l'abandon
 Your soul slips into the Well.,Your soul slips into the Well.,Ton âme glisse dans le Puits.
@@ -241,7 +240,7 @@ Depth %d. The stairs are sealed: slay %d monsters to open them.,Depth %d. The st
 Depth %d. Find the stairs!,Depth %d. Find the stairs!,Étage %d. Trouve les escaliers !
 "{name}, {title}","{name}, {title}","{name}, {title}"
 +%d reroll for the perk choices.,+%d reroll for the perk choices.,+%d relance pour les choix d'atouts.
-Victory Achieved,Victory Achieved,Victoire Acquise
+Victory achieved,Victory achieved,Victoire acquise
 %s falls. The way down lies open.,%s falls. The way down lies open.,%s s'effondre. La voie des profondeurs s'ouvre.
 A Celestial %s! It joins the bestiary's collection.,A Celestial %s! It joins the bestiary's collection.,Nouvelle prise pour le bestiaire : %s Céleste !
 Difficulty,Difficulty,Difficulté
@@ -697,6 +696,7 @@ Screen shake,Screen shake,Tremblement de l'écran
 On big hits.,On big hits.,Lors des gros coups.
 Vibrations,Vibrations,Vibrations
 The phone buzzes on big hits and critical hits.,The phone buzzes on big hits and critical hits.,Le téléphone vibre lors des gros coups et des coups critiques.
+Reading,Reading,Lecture
 Tutorial,Tutorial,Tutoriel
 Tutorial hints,Tutorial hints,Conseils du tutoriel
 Short tips during your first runs.,Short tips during your first runs.,De courts conseils pendant tes premières parties.
@@ -705,6 +705,8 @@ Screen,Screen,Écran
 Fullscreen,Fullscreen,Plein écran
 "The whole screen, or a window you can resize (F11, Alt+Enter).","The whole screen, or a window you can resize (F11, Alt+Enter).","Tout l'écran, ou une fenêtre redimensionnable (F11, Alt+Entrée)."
 Touch controls,Touch controls,Commandes tactiles
+Normal,Normal,Normale
+Large,Large,Grande
 Buttons size,Buttons size,Taille des boutons
 Joystick and buttons.,Joystick and buttons.,Joystick et boutons.
 Fixed joystick,Fixed joystick,Joystick fixe
@@ -736,6 +738,13 @@ Boss stories,Boss stories,Histoires des gardiens
 Full,Full,Complètes
 Short,Short,Courtes
 Off,Off,Aucune
+Large text,Large text,Grand texte
+"Dialogue, hints and descriptions one size bigger.","Dialogue, hints and descriptions one size bigger.","Dialogues, conseils et descriptions une taille au-dessus."
+Text speed,Text speed,Vitesse du texte
+How fast the words of someone speaking are written.,How fast the words of someone speaking are written.,La vitesse à laquelle s'écrivent les paroles.
+Slow,Slow,Lente
+Fast,Fast,Rapide
+At once,At once,Immédiate
 Interface size,Interface size,Taille de l'interface
 Smaller leaves more room on a big screen.,Smaller leaves more room on a big screen.,"Plus petite, elle laisse plus de place sur un grand écran."
 Big,Big,Grande
@@ -792,7 +801,6 @@ Really? Press again,Really? Press again,Vraiment ? Appuie encore
 Ends this run now. You keep the souls earned so far.,Ends this run now. You keep the souls earned so far.,Met fin à la partie maintenant. Tu gardes les âmes gagnées jusqu'ici.
 Tap again to end the run. Anything else to cancel.,Tap again to end the run. Anything else to cancel.,Touche encore pour abandonner. N'importe quoi d'autre pour annuler.
 Press again to end the run. Anything else to cancel.,Press again to end the run. Anything else to cancel.,Appuie encore pour abandonner. N'importe quoi d'autre pour annuler.
-RELIC,RELIC,RELIQUE
 New perk,New perk,Nouvel atout
 New perk  (up to level %d),New perk  (up to level %d),Nouvel atout  (jusqu'au niveau %d)
 Level %d > %d  (max %d),Level %d > %d  (max %d),Niveau %d > %d  (max %d)
@@ -1027,7 +1035,7 @@ A voice caught in the lantern's light.,A voice caught in the lantern's light.,Un
 %s — complete %s first,%s — complete %s first,%s — termine d’abord %s
 Choose a descent here. Your village and its memories remain when a run ends.,Choose a descent here. Your village and its memories remain when a run ends.,Choisis ta descente ici. Ton village et ses souvenirs restent lorsque la tentative s’achève.
 Descend,Descend,Descendre
-Daily Descent,Daily Descent,Descente quotidienne
+Daily descent,Daily descent,Descente quotidienne
 A descent is already saved,A descent is already saved,Une descente est déjà sauvegardée
 Starting another descent replaces the saved run. You can resume it instead.,Starting another descent replaces the saved run. You can resume it instead.,Commencer une autre descente remplace la partie sauvegardée. Tu peux aussi la reprendre.
 Replace the saved descent,Replace the saved descent,Remplacer la descente sauvegardée
@@ -1339,7 +1347,7 @@ No room left for weapons,No room left for weapons,Plus de place pour les armes
 Armors,Armors,Armures
 No room left for armor,No room left for armor,Plus de place pour les armures
 No room left for runes,No room left for runes,Plus de place pour les runes
-Tomes & Scrolls,Tomes & Scrolls,Grimoires & Parchemins
+Tomes & scrolls,Tomes & scrolls,Grimoires & parchemins
 No room left for tomes and scrolls,No room left for tomes and scrolls,Plus de place pour les grimoires et parchemins
 Consumables,Consumables,Consommables
 No room left for consumables,No room left for consumables,Plus de place pour les consommables

@@ -5,7 +5,8 @@ extends Button
 ## is written under the row (InventoryPanel). Tapped or clicked; Q / E and LB / RB switch tabs
 ## (MenuNav, group "menu_tabs"), so it never takes the focus itself.
 
-const SIZE := Vector2(48, 52)
+## A finger's size (MenuWindow.TOUCH_MIN).
+const SIZE := Vector2(64, 64)
 
 var category: BagCategoryDef
 var count := 0:

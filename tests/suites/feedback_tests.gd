@@ -290,10 +290,15 @@ func _test_pause_gamepad() -> void:
 	await _frames(2)
 	if get_viewport().gui_get_focus_owner() == null:
 		MenuNav.focus_first(MenuNav.top_menu())
-	for i in 8:
-		if get_viewport().gui_get_focus_owner() == button:
+	# The pause menu is a grid of columns: down a column, and right to the next one once it wrapped.
+	var seen := {}
+	for i in 16:
+		var now := get_viewport().gui_get_focus_owner()
+		if now == button:
 			break
-		await _tap_pad(JOY_BUTTON_DPAD_DOWN)
+		var step := JOY_BUTTON_DPAD_RIGHT if seen.has(now) else JOY_BUTTON_DPAD_DOWN
+		seen[now] = true
+		await _tap_pad(step)
 	check(get_viewport().gui_get_focus_owner() == button, "feedback: the D-pad reaches the pause menu's button")
 	await _tap_pad(JOY_BUTTON_A)
 	await _frames(2)

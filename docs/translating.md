@@ -66,7 +66,7 @@ says so).
 | Slay | Abattre (bosses: terrasser) | Warden | Gardien |
 | Descend (Play); Begin the descent | Descendre ; Entamer la descente | Unsworn / Sworn (oaths) | Sans serment / Juré |
 | Tree branches Flesh / Blade / Arcana / Greed | Chair / Lame / Arcanes / Avarice | At the Well's Edge (before a run) | Au Bord du Puits |
-| The Well claims you (death) | Le Puits te réclame | Victory Achieved | Victoire Acquise |
+| The Well claims you (death) | Le Puits te réclame | Victory achieved | Victoire acquise |
 | Souls to offer (shrine badge) | Âmes à offrir | Choose your ordeal (difficulty) | Choisis ton épreuve |
 | The Threshold (a second life's trial) | Le Seuil | spectre (its monsters); the knell | spectre ; le glas |
 | The Deeps; the Damned (its monsters) | Les Tréfonds ; les Damnés | the hunger below (the Maw, unnamed) | la faim du fond |

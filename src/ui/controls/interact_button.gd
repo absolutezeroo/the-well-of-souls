@@ -20,7 +20,8 @@ func _init() -> void:
 	visible = false
 
 
-## Shows it for `target` (null: hides it). It pops in, so the eye catches it.
+## Shows it for `target` (null: hides it). It fades in fast (0.12 s), so the eye catches it
+## without its words swelling.
 func show_for(target: Interactable) -> void:
 	if target == null:
 		if _tween:
@@ -37,11 +38,9 @@ func show_for(target: Interactable) -> void:
 	show()
 	if _tween:
 		_tween.kill()
-	scale = Vector2.ONE * 0.6
 	modulate.a = 0.0
-	_tween = create_tween().set_parallel()
-	_tween.tween_property(self, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	_tween.tween_property(self, "modulate:a", 1.0, 0.15)
+	_tween = create_tween()
+	_tween.tween_property(self, "modulate:a", 1.0, 0.12)
 
 
 func _draw() -> void:

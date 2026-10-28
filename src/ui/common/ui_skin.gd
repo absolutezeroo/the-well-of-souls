@@ -91,6 +91,30 @@ static func set_text_style(control: Control, font_size: int) -> void:
 	control.add_theme_color_override("font_outline_color", Fonts.OUTLINE)
 
 
+## The size of reading text (dialogue, the village's words, hints, the codex's and items'
+## descriptions): BODY, or a whole font step bigger (TITLE) with Settings.large_text. Panels
+## showing it scroll or page rather than shrink it (design/interface.md, Text).
+static func reading_size() -> int:
+	return Fonts.TITLE if Settings.large_text else Fonts.BODY
+
+
+## A label of reading text (reading_size()), wrapping, in `color`.
+static func reading_label(text: String, color: Color = TEXT) -> Label:
+	return label(text, reading_size(), color, true)
+
+
+## Gives `words` the reading size in use (a label built before the option changed).
+static func set_reading_style(words: Control) -> void:
+	set_text_style(words, reading_size())
+
+
+## Words typed letter by letter keep the places they will have once whole: a word never starts
+## on one line and jumps to the next as it is typed (Label.VC_CHARS_AFTER_SHAPING).
+static func typed(words: Label) -> Label:
+	words.visible_characters_behavior = TextServer.VC_CHARS_AFTER_SHAPING
+	return words
+
+
 ## A title on the red ribbon.
 static func title(text: String) -> PanelContainer:
 	var box := PanelContainer.new()

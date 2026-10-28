@@ -5,9 +5,14 @@ class_name OptionRows
 ## switch whose name flips it too. Each control is made reachable as %Name from `scene_owner`
 ## (the window: tests and other scripts find it there).
 
-## A slider's length beside its words, and its height: the strip a finger grabs (UI units).
+## A slider's length beside its words, and its height: the strip a finger grabs (UI units, at
+## least MenuWindow.TOUCH_MIN).
 const SLIDER_WIDTH := 180.0
-const SLIDER_HEIGHT := 48.0
+const SLIDER_HEIGHT := 64.0
+## Room between two rows of a section (two things to tap: MenuWindow.TOUCH_GAP), and between a
+## choice's words and its buttons.
+const ROW_GAP := MenuWindow.TOUCH_GAP
+const WORDS_GAP := 4
 ## The smallest move of a slider under a finger or the mouse (smooth; every range and key step
 ## is a multiple of it, so a value set in code stays exact).
 const FINE_STEP := 0.01
@@ -41,7 +46,7 @@ static func column(parent: Control) -> VBoxContainer:
 static func section(parent: VBoxContainer, heading: String) -> VBoxContainer:
 	var box: Dictionary = RpgWindow.section(heading)
 	parent.add_child(box.box)
-	(box.column as VBoxContainer).add_theme_constant_override("separation", 4)
+	(box.column as VBoxContainer).add_theme_constant_override("separation", ROW_GAP)
 	return box.column
 
 
@@ -69,19 +74,23 @@ static func note_of(name_and_note: VBoxContainer) -> Label:
 ## Returns value -> button (the caller keeps the one in use pressed). `note_name`: the helper
 ## line reachable by that name (for words that change later).
 static func choice(scene_owner: Node, parent: VBoxContainer, title: String, helper: String, entries: Array, note_name := "") -> Dictionary:
+	# Its words and its buttons together (the section keeps ROW_GAP between rows).
+	var group := VBoxContainer.new()
+	group.add_theme_constant_override("separation", WORDS_GAP)
+	parent.add_child(group)
 	if title.is_empty():
-		parent.add_child(UiSkin.label(helper, Fonts.BODY, UiSkin.DIM, true))
+		group.add_child(UiSkin.label(helper, Fonts.BODY, UiSkin.DIM, true))
 	else:
 		var name_and_note := words(title, helper)
-		parent.add_child(name_and_note)
+		group.add_child(name_and_note)
 		if not note_name.is_empty():
 			MenuWindow.expose(note_of(name_and_note), note_name, scene_owner)
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	parent.add_child(row)
+	row.add_theme_constant_override("separation", MenuWindow.TOUCH_GAP)
+	group.add_child(row)
 	var buttons := {}
 	for entry: Array in entries:
-		var button := MenuWindow.button(entry[1], Fonts.BODY, 44)
+		var button := MenuWindow.button(entry[1], Fonts.BODY, MenuWindow.TOUCH_MIN)
 		button.toggle_mode = true
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(button)
@@ -131,7 +140,8 @@ static func check(scene_owner: Node, parent: VBoxContainer, title: String, helpe
 	name_and_note.mouse_filter = Control.MOUSE_FILTER_STOP
 	row.add_child(name_and_note)
 	var result := CheckButton.new()
-	result.custom_minimum_size = Vector2(MenuWindow.SWITCH_SIZE.x + 8, 40)
+	# The switch's drawing is smaller; its touch area a finger's.
+	result.custom_minimum_size = Vector2(maxf(MenuWindow.SWITCH_SIZE.x + 8, MenuWindow.TOUCH_MIN), MenuWindow.TOUCH_MIN)
 	result.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	MenuWindow.style_switch(result)
 	row.add_child(result)

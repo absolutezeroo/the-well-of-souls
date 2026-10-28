@@ -30,7 +30,7 @@ func _init() -> void:
 	add_theme_constant_override("separation", 8)
 	_heading = UiSkin.label("", Fonts.BODY, UiSkin.GOLD)
 	add_child(_heading)
-	_note = UiSkin.label("", Fonts.BODY, UiSkin.DIM, true)
+	_note = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)  # (on the wood: never dim)
 	add_child(_note)
 	var box := UiSkin.section()
 	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -184,7 +184,7 @@ func _show_note() -> void:
 				(child as CanvasItem).visible = false
 		return
 	_note.remove_theme_color_override("font_color")
-	_note.add_theme_color_override("font_color", UiSkin.DIM)
+	_note.add_theme_color_override("font_color", UiSkin.TEXT)
 	if InputDevice.uses_touch():
 		_note.text = tr("The controls of the device in hand. Pick up another (a key, a gamepad, a touch) and this page follows.")
 	else:

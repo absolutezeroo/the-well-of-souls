@@ -580,8 +580,8 @@ func _test_difficulty_words() -> void:
 ## setting in exactly one tab, where a player would look for it; nothing outside the tabs.
 func _test_options_tabs(options: OptionsPanel) -> void:
 	var where := {
-		OptionsPanel.Tab.GAMEPLAY: ["EnglishButton", "FrenchButton", "AutoLootAll", "AutoLootBetter", "AutoLootOff", "StoriesFull", "StoriesShort", "StoriesOff", "RunTimerCheck", "ShakeSlider", "VibrationsCheck", "TutorialCheck", "ReplayTutorialButton"],
-		OptionsPanel.Tab.GRAPHICS: ["UiSizeBig", "UiSizeMedium", "UiSizeSmall", "ControlsSlider", "FixedStickCheck", "FewerEffectsCheck", "FlashesCheck", "BatteryCheck"],
+		OptionsPanel.Tab.GAMEPLAY: ["EnglishButton", "FrenchButton", "AutoLootAll", "AutoLootBetter", "AutoLootOff", "StoriesFull", "StoriesShort", "StoriesOff", "RunTimerCheck", "ShakeSlider", "VibrationsCheck", "LargeTextCheck", "TextSlow", "TextNormal", "TextFast", "TextInstant", "TutorialCheck", "ReplayTutorialButton"],
+		OptionsPanel.Tab.GRAPHICS: ["UiSizeBig", "UiSizeMedium", "UiSizeSmall", "ControlsNormal", "ControlsLarge", "FixedStickCheck", "FewerEffectsCheck", "FlashesCheck", "BatteryCheck"],
 		OptionsPanel.Tab.AUDIO: ["MasterSlider", "MusicSlider", "InterfaceSlider", "CombatSlider", "AmbienceSlider"],
 		OptionsPanel.Tab.CONTROLS: [],
 		OptionsPanel.Tab.PRIVACY: ["PolicyButton", "CreditsButton"],
@@ -674,7 +674,7 @@ func _test_options_screen(title: TitleScreen) -> void:
 	(title.get_node("%OptionsButton") as Button).pressed.emit()
 	await _frames(2)
 	check(options.visible, "the options open from the title")
-	for node_name in ["MasterSlider", "MusicSlider", "InterfaceSlider", "CombatSlider", "AmbienceSlider", "ShakeSlider", "ControlsSlider", "VibrationsCheck", "FixedStickCheck", "BatteryCheck", "FewerEffectsCheck", "FlashesCheck", "RunTimerCheck", "TutorialCheck", "ReplayTutorialButton", "CloseButton"]:
+	for node_name in ["MasterSlider", "MusicSlider", "InterfaceSlider", "CombatSlider", "AmbienceSlider", "ShakeSlider", "ControlsNormal", "ControlsLarge", "LargeTextCheck", "TextNormal", "VibrationsCheck", "FixedStickCheck", "BatteryCheck", "FewerEffectsCheck", "FlashesCheck", "RunTimerCheck", "TutorialCheck", "ReplayTutorialButton", "CloseButton"]:
 		check(options.get_node_or_null("%" + node_name) != null, "options: %s" % node_name)
 	_test_options_tabs(options)
 	await _test_options_slider(options)

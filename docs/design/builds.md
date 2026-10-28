@@ -134,7 +134,7 @@ path), heal, buff, summon. Statuses (`OnHitStatus`): burn and slow.
 Every level up offers **1 perk out of 3** (`PlayerDef.perk_choices`, before shrine bonuses),
 but **only when the player asks**: a level up opens
 nothing and never pauses. It is a short moment in the world instead (rings of golden light widening
-around the hero and a column of light behind him, `LevelUpVfx`; "LEVEL UP" floating up; a chime),
+around the hero and a column of light behind him, `LevelUpVfx`; "Level up" floating up; a chime),
 and the choice waits behind the HUD's **perk button** (left of the minimap: a glowing star with how
 many choices wait on a badge, `OffersButton`). Tapping it (or C, the left trigger) opens the choice
 and pauses the game; several waiting choices follow one another, with Reroll and Banish as below.

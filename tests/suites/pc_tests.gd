@@ -9,6 +9,7 @@ extends TestSuite
 ## and a gamepad, and the HUD's layout at every screen size.
 
 const PixelGridScript := preload("res://src/autoload/pixel_grid.gd")  # its static helpers are called on the script, not the autoload
+const SettingsScript := preload("res://src/autoload/settings.gd")
 
 ## Screens the layouts must hold at: computers (16:9, 16:10, 21:9, 4:3) and phones.
 const SIZES: Array[Vector2i] = [
@@ -186,6 +187,8 @@ func run_unit() -> void:
 	await _test_settings()
 	await _test_canvas_scale()
 	await _test_menu_nav_unit()
+	_test_contrast()
+	_test_colour_cues()
 	InputDevice.use(before)
 
 
@@ -1105,6 +1108,7 @@ func _test_french_panels() -> void:
 		get_tree().paused = false
 		await _frames(2)
 	@warning_ignore_restore("redundant_await")
+	await _test_large_text(game, fragment, fragment_boss, named)
 	game.queue_free()
 	await _frames(2)
 	Profile.kills_by_monster = kills
@@ -1119,6 +1123,40 @@ func _test_french_panels() -> void:
 func _panel_fits(where: String, what: String, panel: Control, found: Array[String] = []) -> void:
 	var outside := found if not found.is_empty() else _panel_outside(panel)
 	check(panel.is_visible_in_tree() and outside.is_empty(), "%s: %s fits the screen (%s)" % [where, what, ", ".join(outside.slice(0, 3)) if panel.is_visible_in_tree() else "not open"])
+	if where.contains("2340"):
+		var bare := _dim_on_wood(panel)
+		check(bare.is_empty(), "%s: %s puts no dim or red words on the bare wood, nor a frame off the skin (%s)" % [where, what, ", ".join(bare.slice(0, 4))])
+
+
+## The words of `panel` in UiSkin.DIM or BAD drawn straight on the wood (their nearest frame is
+## UiSkin.panel(): 1.5 to 2.2:1 there; an inset gives them 4.5:1 and more), and the frames that
+## are not the skin's (the theme's own PanelContainer box).
+func _dim_on_wood(panel: Control) -> Array[String]:
+	var found: Array[String] = []
+	for node in panel.find_children("*", "Control", true, false):
+		var control := node as Control
+		if not control.is_visible_in_tree():
+			continue
+		if control is PanelContainer:
+			var box := control.get_theme_stylebox(&"panel") as StyleBoxTexture
+			if box and box.texture and not box.texture.resource_path.begins_with(UiSkin.DIR):
+				found.append("%s framed by %s" % [control.name, box.texture.resource_path.get_file()])
+			continue
+		var label := control as Label
+		if label == null or label.text.strip_edges().is_empty():
+			continue
+		var color := label.get_theme_color(&"font_color")
+		if not (color.is_equal_approx(UiSkin.DIM) or color.is_equal_approx(UiSkin.BAD)):
+			continue
+		var parent := label.get_parent()
+		while parent and not parent is PanelContainer:
+			parent = parent.get_parent()
+		if parent == null:
+			continue
+		var frame := (parent as PanelContainer).get_theme_stylebox(&"panel") as StyleBoxTexture
+		if frame and frame.texture == UiSkin.PANEL:
+			found.append("'%s'" % label.text.left(30))
+	return found
 
 
 ## After each panel checked in French: nothing here (a probe may take a screenshot).
@@ -1179,6 +1217,10 @@ func run_game(game: Game) -> void:
 	await _test_pause_keys(game)
 	await _test_panels_keys(game)
 	await _test_hud_layouts(game)
+	await _test_touch_targets(game)
+	await _test_safe_area(game)
+	await _test_menu_targets(game)
+	await _test_perk_choice_opens(game)
 	InputDevice.use(InputDevice.Kind.TOUCH)
 	await _frames(2)
 
@@ -1462,9 +1504,9 @@ func _test_hud_layouts(game: Game) -> void:
 			InputDevice.use(kind)
 			await _frames(3)
 			var widgets := {
-				"stats": hud.get_node("TopLeft/HpBar"), "info": hud.get_node("%InfoLabel"),
+				"stats": hud.get_node("%HpBar"), "info": hud.get_node("%InfoLabel"),
 				"bag": hud.get_node("%BagButton"), "pause": hud.get_node("%PauseButton"),
-				"debug": hud.get_node_or_null("DebugButton"), "map": hud.get_node("%Minimap"),
+				"debug": hud.get_node_or_null("%DebugButton"), "map": hud.get_node("%Minimap"),
 				"seal": hud.get_node("%SealLabel"), "timer": hud.get_node("%TimerLabel"),
 				"perks": hud.offers_button,
 			}
@@ -1493,3 +1535,511 @@ func _test_hud_layouts(game: Game) -> void:
 	hud.offers_button.count = 0
 	InputDevice.use(InputDevice.Kind.TOUCH)
 	await _restore_window(before)
+
+
+# --- U4: touch targets (docs/design/interface.md "One skin") -------------------------------
+
+## Screens the touch rules are measured at: the S23 (canvas 1560x720 at x1.5), a 1080p screen
+## (1280x720 at x1.5) and a 720p one.
+const TOUCH_SIZES: Array[Vector2i] = [Vector2i(2340, 1080), Vector2i(1920, 1080), Vector2i(1280, 720)]
+## The fight's buttons (at least 96 units) among the HUD's round buttons.
+const COMBAT_BUTTONS: Array[String] = ["AttackButton", "Skill1Button", "Skill2Button", "Skill3Button", "Skill4Button"]
+const COMBAT_MIN := 96.0
+
+
+## A touch target in canvas units: a disc {c, r} or a box {rect}.
+func _disc_of(button: ActionButton) -> Dictionary:
+	var xf := button.get_global_transform_with_canvas()
+	return { "c": xf.origin, "r": button.radius * xf.get_scale().x }
+
+
+func _box_of(control: Control) -> Dictionary:
+	return { "rect": control.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, control.size) }
+
+
+func _target_rect(target: Dictionary) -> Rect2:
+	if target.has("rect"):
+		return target.rect
+	return Rect2(target.c - Vector2.ONE * target.r, Vector2.ONE * target.r * 2.0)
+
+
+## How far apart two touch targets are (negative: they overlap).
+func _target_gap(a: Dictionary, b: Dictionary) -> float:
+	if a.has("c") and b.has("c"):
+		return (a.c as Vector2).distance_to(b.c) - a.r - b.r
+	if a.has("c") or b.has("c"):
+		var disc: Dictionary = a if a.has("c") else b
+		var box: Rect2 = (b if a.has("c") else a).rect
+		var nearest: Vector2 = (disc.c as Vector2).clamp(box.position, box.end)
+		return nearest.distance_to(disc.c) - disc.r
+	var ra: Rect2 = a.rect
+	var rb: Rect2 = b.rect
+	var dx := maxf(0.0, maxf(ra.position.x - rb.end.x, rb.position.x - ra.end.x))
+	var dy := maxf(0.0, maxf(ra.position.y - rb.end.y, rb.position.y - ra.end.y))
+	if dx == 0.0 and dy == 0.0:
+		var overlap := ra.intersection(rb)
+		return -minf(overlap.size.x, overlap.size.y)
+	return sqrt(dx * dx + dy * dy)
+
+
+## The HUD's touch targets on touch, with every round button shown (a full kit, Interact by the
+## merchant, perk choices waiting, loot on the ground).
+func _hud_targets(hud: Hud) -> Dictionary:
+	var targets := {}
+	for button_name: String in hud.touch_rects():
+		targets[button_name] = _disc_of(hud.get_node("%" + button_name) as ActionButton)
+	for control_name in ["BagButton", "PauseButton", "Minimap"]:
+		targets[control_name] = _box_of(hud.get_node("%" + control_name) as Control)
+	targets["OffersButton"] = _box_of(hud.offers_button)
+	if hud.loot_prompt.visible:
+		targets["Take"] = _box_of(hud.loot_prompt.take_button())
+	return targets
+
+
+## U4: every touch button at least 64 units (the fight's 96), 16 between any two, none in the
+## joystick's zone nor over the HUD's lines, all on the screen, at every buttons size and screen.
+func _test_touch_targets(game: Game) -> void:
+	var hud := game.hud
+	var before := get_tree().root.size
+	var size_before := Settings.controls_scale
+	InputDevice.use(InputDevice.Kind.TOUCH)
+	hud.offers_button.count = 2
+	hud.interact_button.caption = "Trade"
+	hud.interact_button.show()
+	for button_name in COMBAT_BUTTONS + ["QuickItemButton", "Belt2Button", "Belt3Button"]:
+		(hud.get_node("%" + button_name) as ActionButton).visible = true
+	hud.loot_prompt._refresh_in = 1000.0  # (no pickup under the hero: shown by hand, kept up)
+	hud.loot_prompt.show()
+	for size in TOUCH_SIZES:
+		await _window(size)
+		for step: float in Settings.CONTROLS_SIZES:
+			Settings.set_option(&"controls_scale", step)
+			await _frames(3)
+			hud.loot_prompt.place()
+			await _frames(1)
+			var where := "%s at buttons size %s" % [size, step]
+			var targets := _hud_targets(hud)
+			var screen := Rect2(Vector2.ZERO, get_viewport().get_visible_rect().size)
+			var zone := hud.safe_area.get_global_transform_with_canvas() * hud.stick_zone()
+			var small: Array[String] = []
+			var outside: Array[String] = []
+			var in_zone: Array[String] = []
+			for target_name: String in targets:
+				var box := _target_rect(targets[target_name])
+				var least := COMBAT_MIN if target_name in COMBAT_BUTTONS else MenuWindow.TOUCH_MIN
+				if minf(box.size.x, box.size.y) < least - 0.01:
+					small.append("%s %s" % [target_name, box.size])
+				if not screen.grow(0.5).encloses(box):
+					outside.append(target_name)
+				if _target_gap(targets[target_name], { "rect": zone }) < MenuWindow.TOUCH_GAP - 0.01:
+					in_zone.append(target_name)
+			check(small.is_empty(), "%s: the fight's buttons are at least 96 units, everything else to tap 64 (%s)" % [where, ", ".join(small)])
+			check(outside.is_empty(), "%s: every button on the screen (%s)" % [where, ", ".join(outside)])
+			check(in_zone.is_empty(), "%s: nothing to tap within 16 units of the joystick's zone (%s)" % [where, ", ".join(in_zone)])
+			var close: Array[String] = []
+			var names := targets.keys()
+			for i in names.size():
+				for j in range(i + 1, names.size()):
+					var gap := _target_gap(targets[names[i]], targets[names[j]])
+					if gap < MenuWindow.TOUCH_GAP - 0.01:
+						close.append("%s-%s %.1f" % [names[i], names[j], gap])
+			check(close.is_empty(), "%s: 16 units between any two things to tap (%s)" % [where, ", ".join(close.slice(0, 6))])
+			# The lines under the map, and the loot board, never lie over a round button.
+			var covered: Array[String] = []
+			var lines := {
+				"seal": hud.get_node("%SealLabel"), "timer": hud.get_node("%TimerLabel"),
+				"split": hud.get_node("%SplitLabel"), "pact": hud.pact_line, "trial": hud.trial_line,
+				"loot board": hud.loot_prompt,
+			}
+			for line_name: String in lines:
+				var line := lines[line_name] as Control
+				var line_rect := line.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, line.size)
+				for button_name: String in hud.touch_rects():
+					if _target_gap({ "rect": line_rect }, targets[button_name]) < 0.0:
+						covered.append("%s over %s" % [line_name, button_name])
+			check(covered.is_empty(), "%s: no line of the HUD over a round button (%s)" % [where, ", ".join(covered.slice(0, 6))])
+			# Sizes and places on even units (whole screen pixels at x1.5).
+			var odd: Array[String] = []
+			for button_name: String in hud.touch_rects():
+				var button := hud.get_node("%" + button_name) as ActionButton
+				if fposmod(button.radius * 2.0, 2.0) > 0.01 or fposmod(button.position.x, 2.0) > 0.01 or fposmod(button.position.y, 2.0) > 0.01:
+					odd.append(button_name)
+			check(odd.is_empty(), "%s: round buttons' sizes and places on even units (%s)" % [where, ", ".join(odd)])
+	check(is_equal_approx(SettingsScript.snap_controls_scale(0.7), 1.0) and is_equal_approx(SettingsScript.snap_controls_scale(1.3), 1.25), "a buttons size saved before (0.7 to 1.3) takes the nearest whole step, never under the minimums")
+	hud.loot_prompt._refresh_in = 0.0
+	hud.loot_prompt.hide()
+	hud.interact_button.hide()
+	hud.offers_button.count = 0
+	Settings.set_option(&"controls_scale", size_before)
+	await _restore_window(before)
+
+
+## The HUD, the joystick and a window keep out of a phone's camera hole: a simulated cutout on
+## both sides and at the bottom moves them in.
+func _test_safe_area(game: Game) -> void:
+	var hud := game.hud
+	var before := get_tree().root.size
+	InputDevice.use(InputDevice.Kind.TOUCH)
+	await _window(Vector2i(2340, 1080))
+	SafeArea.simulate(get_tree(), Vector4(120, 0, 90, 30))
+	await _frames(3)
+	var safe := SafeArea.rect(get_viewport())
+	check(safe.position.x == 80.0 and safe.end.x == 1560.0 - 60.0 and safe.end.y == 720.0 - 20.0, "a cutout of 120 / 90 / 30 screen pixels is 80 / 60 / 20 units at x1.5 (%s)" % safe)
+	var outside: Array[String] = []
+	for target_name: String in _hud_targets(hud):
+		if not safe.grow(0.5).encloses(_target_rect(_hud_targets(hud)[target_name])):
+			outside.append(target_name)
+	for control_name in ["HpBar", "BagButton", "PauseButton", "Minimap"]:
+		var control := hud.get_node("%" + control_name) as Control
+		if not safe.grow(0.5).encloses(control.get_global_rect()):
+			outside.append(control_name)
+	check(outside.is_empty(), "a cutout: the HUD stays in the safe area (%s)" % ", ".join(outside))
+	var zone := hud.safe_area.get_global_transform_with_canvas() * hud.stick_zone()
+	check(zone.position.x >= safe.position.x - 0.5 and zone.end.y <= safe.end.y + 0.5, "a cutout: the joystick starts only in the safe area (%s)" % zone)
+	game.open_pause_menu()
+	await _frames(2)
+	var options := game.pause_menu.get_node("%OptionsPanel") as OptionsPanel
+	options.open()
+	await _frames(3)
+	var board := options.get_node("%CloseButton") as Control
+	check(safe.grow(0.5).encloses(board.get_global_rect()), "a cutout: a window's Close stays in the safe area")
+	options.close()
+	game.pause_menu.hide()
+	get_tree().paused = false
+	SafeArea.stop_simulating(get_tree())
+	await _frames(2)
+	check(SafeArea.margins(get_viewport()) == Vector4.ZERO, "no cutout on a computer: the safe area is the window")
+	await _restore_window(before)
+
+
+## What can be tapped in `panel` (shown, taking touches).
+func _tappables(panel: Node) -> Array[Control]:
+	var found: Array[Control] = []
+	for node in panel.find_children("*", "Control", true, false):
+		var control := node as Control
+		if not control.is_visible_in_tree() or control.mouse_filter == Control.MOUSE_FILTER_IGNORE:
+			continue
+		if control is BaseButton or control is LineEdit or (control is Range and not control is ScrollBar and not control is ProgressBar):
+			# A list's rows scrolled out of its box can't be touched.
+			var scroll := _scroll_of(control)
+			if scroll and not scroll.get_global_rect().intersects(control.get_global_rect()):
+				continue
+			found.append(control)
+	return found
+
+
+## Where `control` can be touched: its box, cut by the list it scrolls in.
+func _touch_box(control: Control) -> Rect2:
+	var rect := control.get_global_rect()
+	var scroll := _scroll_of(control)
+	return rect.intersection(scroll.get_global_rect()) if scroll else rect
+
+
+func _scroll_of(control: Control) -> ScrollContainer:
+	var node := control.get_parent()
+	while node:
+		if node is ScrollContainer:
+			return node as ScrollContainer
+		node = node.get_parent()
+	return null
+
+
+## Every tappable of `panel` at least 64 units a side and 16 from the next.
+func _check_menu_targets(panel: Node, what: String) -> void:
+	var items := _tappables(panel)
+	var small: Array[String] = []
+	var close: Array[String] = []
+	for item in items:
+		var rect := item.get_global_rect()  # (its whole size: a row half scrolled out is still big enough)
+		if rect.size.x < MenuWindow.TOUCH_MIN - 0.01 or rect.size.y < MenuWindow.TOUCH_MIN - 0.01:
+			small.append("%s %s" % [item.name, rect.size])
+	for i in items.size():
+		for j in range(i + 1, items.size()):
+			if items[i].is_ancestor_of(items[j]) or items[j].is_ancestor_of(items[i]):
+				continue
+			var gap := _target_gap({ "rect": _touch_box(items[i]) }, { "rect": _touch_box(items[j]) })
+			if gap < MenuWindow.TOUCH_GAP - 0.01:
+				close.append("%s-%s %.0f" % [items[i].name, items[j].name, gap])
+	check(not items.is_empty() and small.is_empty(), "%s: everything to tap is at least 64x64 (%s)" % [what, ", ".join(small.slice(0, 6))])
+	check(close.is_empty(), "%s: 16 units between things to tap (%s)" % [what, ", ".join(close.slice(0, 6))])
+
+
+## U4 in the menus of a run: the pause menu, every options page, the bag, a village conversation.
+func _test_menu_targets(game: Game) -> void:
+	var before := get_tree().root.size
+	InputDevice.use(InputDevice.Kind.TOUCH)
+	for size in [Vector2i(2340, 1080), Vector2i(1280, 720)]:
+		await _window(size)
+		game.open_pause_menu()
+		await _frames(2)
+		_check_menu_targets(game.pause_menu, "%s the pause menu" % size)
+		var options := game.pause_menu.get_node("%OptionsPanel") as OptionsPanel
+		options.open()
+		for tab in [OptionsPanel.Tab.GAMEPLAY, OptionsPanel.Tab.GRAPHICS, OptionsPanel.Tab.AUDIO]:
+			options.show_tab(tab)
+			await _frames(3)
+			_check_menu_targets(options, "%s options page %s" % [size, OptionsPanel.TAB_NAMES[tab]])
+		options.close()
+		game.pause_menu.hide()
+		get_tree().paused = false
+		await _frames(1)
+		game.open_inventory()
+		await _frames(3)
+		_check_menu_targets(game.inventory_panel, "%s the bag" % size)
+		game.inventory_panel.close()
+		get_tree().paused = false
+		# The merchant and the smith.
+		var merchant := game.world.spawn_merchant(CONTENT.dungeon.merchant, game.world.map.world_to_cell(game.world.find_open_point_near(game.player.global_position + Vector2(-60, 0), 40.0)))
+		var forge := game.world.spawn_forge(CONTENT.dungeon.forge, game.world.map.world_to_cell(game.world.find_open_point_near(game.player.global_position + Vector2(60, 0), 40.0)))
+		await _frames(1)
+		game.open_shop(merchant)
+		await _frames(3)
+		_check_menu_targets(game.shop_panel, "%s the merchant" % size)
+		game.shop_panel.close()
+		game.open_forge(forge)
+		await _frames(3)
+		_check_menu_targets(game.menus.forge, "%s the forge" % size)
+		game.menus.forge.close()
+		get_tree().paused = false
+		merchant.queue_free()
+		forge.queue_free()
+		var talk := VillagePanel.new()
+		add_child(talk)
+		talk.open("Sayo", "Words.")
+		for i in 3:
+			talk.choice("A choice %d" % i, &"none")
+		await _frames(3)
+		_check_menu_targets(talk, "%s a village conversation" % size)
+		talk.queue_free()
+		await _frames(1)
+	await _restore_window(before)
+
+
+
+## Large text (Settings.large_text, on by default on a phone): the reading text one font step
+## bigger (TITLE) everywhere it shows, and every panel holding it still fits the phones' screens
+## and the smallest one in French (it scrolls or pages, never shrinks): the shrine's
+## conversation (pages of at most three lines), a tutorial hint, the bag's item card, a
+## monster's page and a warden's chronicle, the longest fragment, a village conversation.
+func _test_large_text(game: Game, fragment: FragmentDef, boss: BossDef, monster: MonsterDef) -> void:
+	var large_before := Settings.large_text
+	await _test_dialogue_lines()
+	Settings.large_text = true
+	check(UiSkin.reading_size() == Fonts.TITLE, "Large text: reading text at TITLE, the next whole font step")
+	var hints: Array[HintDef] = []
+	hints.assign(CONTENT.tutorial.hints)
+	var longest_hint: HintDef = _longest(hints, func(hint: HintDef) -> String: return hint.shown_text())
+	var pages: Array[String] = []
+	for file in DirAccess.get_files_at("res://data/story/dialogue"):
+		if file.ends_with(".tres"):
+			var def := load("res://data/story/dialogue/" + file) as Resource
+			for line: Resource in def.get("lines"):
+				for page: String in line.get("lines"):
+					pages.append(tr(page))
+	pages.sort_custom(func(a: String, b: String) -> bool: return a.length() > b.length())
+	var keeper := load("res://data/story/dialogue/speakers/vigil_keeper.tres") as SpeakerDef
+	for size: Vector2i in [Vector2i(2340, 1080), Vector2i(1540, 720), Vector2i(1280, 720)]:
+		await _window(size)
+		var where := "%s in French, Large text" % size
+		# The shrine's conversation: its longest pages, paged at three lines, the box on screen.
+		var layer := CanvasLayer.new()
+		get_tree().root.add_child(layer)
+		var talk := DialogueScreen.new()
+		layer.add_child(talk)
+		await _frames(1)
+		var too_long: Array[String] = []
+		for text in pages.slice(0, 6):
+			var spoken: Array[Dictionary] = []
+			for part in DialogueBox.split_page(text, talk.box.words_width(), Fonts.TITLE):
+				spoken.append({ "text": part, "accent": false })
+			talk.show()
+			talk.box.say_pages(keeper, spoken)
+			await _frames(2)
+			var label := talk.box.get("_current") as Label
+			if label.get_theme_font_size(&"font_size") != Fonts.TITLE or label.get_line_count() > DialogueBox.MAX_LINES:
+				too_long.append("%s... (%d lines at %d)" % [text.left(20), label.get_line_count(), label.get_theme_font_size(&"font_size")])
+		check(too_long.is_empty(), "%s: the shrine's words at TITLE, at most %d lines a page (%s)" % [where, DialogueBox.MAX_LINES, ", ".join(too_long)])
+		_panel_fits(where, "the shrine's conversation", talk)
+		layer.queue_free()
+		# A tutorial hint, the longest.
+		game.hint_box.show_hint(longest_hint, Rect2())
+		await _frames(2)
+		_panel_fits(where, "the longest hint", game.hint_box)
+		game.hint_box.hide_hint()
+		# The bag's item card.
+		game.open_inventory()
+		await _frames(3)
+		var details := game.inventory_panel.find_child("ItemDetails", true, false) as Label
+		check(details != null and details.get_theme_font_size(&"font_size") == Fonts.TITLE, "%s: an item's details at TITLE" % where)
+		_panel_fits(where, "the bag", game.inventory_panel)
+		game.inventory_panel.close()
+		# A monster's page and a warden's chronicle.
+		game.open_pause_menu()
+		await _frames(2)
+		var codex := game.pause_menu.get_node("%CodexPanel") as CodexPanel
+		codex.open(CONTENT, CodexPanel.Tab.BESTIARY)
+		codex.open_monster(monster)
+		await _frames(2)
+		_panel_fits(where, "a monster's page", codex)
+		codex.back()
+		codex.open_monster(boss)
+		await _frames(2)
+		var chronicle := _find_named(codex, "ChronicleTab") as Button
+		if chronicle:
+			chronicle.pressed.emit()
+			await _frames(2)
+		_panel_fits(where, "a warden's chronicle", codex)
+		codex.back()
+		codex.back()
+		game.pause_menu.hide()
+		get_tree().paused = false
+		# The longest fragment: it scrolls when it is longer than the screen.
+		game.menus.fragment.open(fragment, boss, true)
+		await _frames(3)
+		_panel_fits(where, "the longest fragment", game.menus.fragment)
+		game.menus.fragment.hide()
+		# A village conversation with a long reply.
+		var village := VillagePanel.new()
+		game.hud.add_child(village)
+		village.open("Sayo", pages[0])
+		await _frames(2)
+		check(village.words.get_theme_font_size(&"font_size") == Fonts.TITLE, "%s: the village's words at TITLE" % where)
+		_panel_fits(where, "a village conversation", village)
+		village.queue_free()
+		await _frames(1)
+	Settings.large_text = large_before
+
+
+
+## The shrine's conversation at BODY in French: at most 60 characters a line (about 58 the
+## longest lines) and 3 lines a page, every page of every speaker (design/interface.md, Text).
+func _test_dialogue_lines() -> void:
+	Settings.large_text = false
+	await _window(Vector2i(2340, 1080))
+	var talk := DialogueScreen.new()
+	var layer := CanvasLayer.new()
+	get_tree().root.add_child(layer)
+	layer.add_child(talk)
+	await _frames(1)
+	var width := talk.box.words_width()
+	var longest := 0
+	var most_lines := 0
+	for file in DirAccess.get_files_at("res://data/story/dialogue"):
+		if not file.ends_with(".tres"):
+			continue
+		for line: Resource in (load("res://data/story/dialogue/" + file) as Resource).get("lines"):
+			for page: String in line.get("lines"):
+				for part in DialogueBox.split_page(tr(page), width, Fonts.BODY):
+					var paragraph := TextParagraph.new()
+					paragraph.add_string(part, Fonts.MAIN, Fonts.BODY)
+					paragraph.width = width
+					paragraph.break_flags = TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND | TextServer.BREAK_ADAPTIVE
+					most_lines = maxi(most_lines, paragraph.get_line_count())
+					for i in paragraph.get_line_count():
+						var range_i := paragraph.get_line_range(i)
+						longest = maxi(longest, part.substr(range_i.x, range_i.y - range_i.x).strip_edges().length())
+	check(longest <= 60 and longest >= 50, "the shrine's words: at most 60 characters a line in French (%d)" % longest)
+	check(most_lines <= DialogueBox.MAX_LINES, "the shrine's words: at most %d lines a page (%d)" % [DialogueBox.MAX_LINES, most_lines])
+	layer.queue_free()
+	await _frames(1)
+
+
+
+# --- Contrast and colour (docs/design/interface.md "One skin") ------------------------------
+
+## WCAG relative luminance of `color` (its alpha ignored).
+static func _luminance(color: Color) -> float:
+	var channels := [color.r, color.g, color.b]
+	var linear: Array[float] = []
+	for c: float in channels:
+		linear.append(c / 12.92 if c <= 0.03928 else pow((c + 0.055) / 1.055, 2.4))
+	return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+
+
+## The contrast of `front` (blended by its alpha) on `back`.
+static func _contrast(front: Color, back: Color) -> float:
+	var seen := back.lerp(Color(front, 1.0), front.a)
+	var a := _luminance(seen)
+	var b := _luminance(back)
+	return (maxf(a, b) + 0.05) / (minf(a, b) + 0.05)
+
+
+## The colour in the middle of a skin texture (its fill, where words sit).
+static func _fill_of(texture: Texture2D) -> Color:
+	var image := texture.get_image()
+	if image.is_compressed():
+		image.decompress()
+	return image.get_pixel(floori(image.get_width() * 0.5), floori(image.get_height() * 0.5))
+
+
+## The skin's colours on its own backgrounds, sampled from the textures: text in the dark insets
+## at 4.5:1 or more (UiSkin.TEXT, GOLD, DIM, GOOD, BAD), the buttons' words (4.5:1; disabled
+## 3:1), the outline of every label (Fonts.OUTLINE) standing out from the wood and the words from
+## it. DIM and BAD fall under 3:1 on the bare wood: they never go there (PcTests' French panels).
+func _test_contrast() -> void:
+	var inset := _fill_of(UiSkin.INSET)
+	var wood := _fill_of(UiSkin.PANEL)
+	for pair: Array in [["TEXT", UiSkin.TEXT], ["GOLD", UiSkin.GOLD], ["DIM", UiSkin.DIM], ["GOOD", UiSkin.GOOD], ["BAD", UiSkin.BAD]]:
+		var ratio := _contrast(pair[1], inset)
+		check(ratio >= 4.5, "contrast: %s on an inset %.2f:1 (4.5 at least)" % [pair[0], ratio])
+	var theme := load("res://assets/theme/main_theme.tres") as Theme
+	var normal := _fill_of((theme.get_stylebox(&"normal", &"Button") as StyleBoxTexture).texture)
+	var hover := _fill_of((theme.get_stylebox(&"hover", &"Button") as StyleBoxTexture).texture)
+	var pressed := _fill_of((theme.get_stylebox(&"pressed", &"Button") as StyleBoxTexture).texture)
+	var disabled := _fill_of((theme.get_stylebox(&"disabled", &"Button") as StyleBoxTexture).texture)
+	var words := theme.get_color(&"font_color", &"Button")
+	check(_contrast(words, normal) >= 4.5 and _contrast(theme.get_color(&"font_hover_color", &"Button"), hover) >= 4.5, "contrast: a button's words 4.5:1 (%.2f, hovered %.2f)" % [_contrast(words, normal), _contrast(theme.get_color(&"font_hover_color", &"Button"), hover)])
+	check(_contrast(theme.get_color(&"font_pressed_color", &"Button"), pressed) >= 4.5, "contrast: a pressed button's words 4.5:1 (%.2f)" % _contrast(theme.get_color(&"font_pressed_color", &"Button"), pressed))
+	check(_contrast(theme.get_color(&"font_disabled_color", &"Button"), disabled) >= 3.0, "contrast: a disabled button's words 3:1 (%.2f)" % _contrast(theme.get_color(&"font_disabled_color", &"Button"), disabled))
+	check(_contrast(PauseMenu.GIVE_UP_COLOR, normal) >= 4.5, "contrast: Give up's red words on its button 4.5:1 (%.2f)" % _contrast(PauseMenu.GIVE_UP_COLOR, normal))
+	check(_contrast(Fonts.OUTLINE, wood) >= 3.0 and _contrast(UiSkin.TEXT, Fonts.OUTLINE) >= 4.5 and _contrast(UiSkin.GOLD, Fonts.OUTLINE) >= 4.5, "contrast: on the wood, the words' dark outline stands out (%.2f) and the words from it (%.2f, gold %.2f)" % [_contrast(Fonts.OUTLINE, wood), _contrast(UiSkin.TEXT, Fonts.OUTLINE), _contrast(UiSkin.GOLD, Fonts.OUTLINE)])
+	check(_contrast(UiSkin.DIM, wood) < 3.0 and _contrast(UiSkin.BAD, wood) < 3.0, "contrast: DIM and BAD are under 3:1 on the bare wood (why they stay off it)")
+
+
+## Colour is never the only cue: gear's rarity has its pips (Magic 1, Rare 2, Epic 3), every rune
+## family its own sign.
+func _test_colour_cues() -> void:
+	var none: Array[ItemAffixDef] = []
+	var mail := load("res://data/items/armors/chain_mail.tres") as EquipmentDef
+	var pips: Array[int] = []
+	for rarity in [ItemRarity.COMMON, ItemRarity.MAGIC, ItemRarity.RARE, ItemRarity.EPIC]:
+		pips.append(ItemSlot.pip_count(LootRoller.make(mail, rarity, none, [], 3)))
+	check(pips == [0, 1, 2, 3], "rarity: pips as well as colour (Common, Magic, Rare, Epic: %s)" % [pips])
+	var signs := {}
+	var missing: Array[String] = []
+	for rune: RuneDef in CONTENT.runes:
+		if rune.family == null:
+			continue
+		if not ItemSlot.FAMILY_SIGNS.has(rune.family.id):
+			missing.append(String(rune.family.id))
+		else:
+			signs[rune.family.id] = str(ItemSlot.FAMILY_SIGNS[rune.family.id])
+	var shapes := {}
+	for shape: String in signs.values():
+		shapes[shape] = true
+	check(missing.is_empty() and shapes.size() == signs.size() and signs.size() >= 2, "runes: each family its own sign as well as its colour (%d families, missing %s)" % [signs.size(), missing])
+
+
+
+## The perk choice comes in within 0.15 s, its board rising on whole UI pixels (even units), its
+## cards shown by then (design/interface.md "One skin").
+func _test_perk_choice_opens(game: Game) -> void:
+	var perks: Array[PerkDef] = []
+	perks.assign(CONTENT.perks.slice(0, 3))
+	var panel := game.perk_panel
+	panel.open(tr("Level %d!") % 2, tr("Choose an upgrade"), perks, game.player.perks)
+	var board := panel.get("_dialog") as Control
+	var odd: Array[float] = []
+	var start := Time.get_ticks_msec()
+	while Time.get_ticks_msec() - start < 140:
+		if fposmod(board.position.y, 2.0) > 0.01:
+			odd.append(board.position.y)
+		await get_tree().process_frame
+	await get_tree().create_timer(0.03, true).timeout
+	var cards_in := true
+	for card: Control in panel.get_node("%Cards").get_children():
+		cards_in = cards_in and card.modulate.a >= 0.99
+	check(odd.is_empty() and is_equal_approx(board.position.y, 0.0) and panel.modulate.a >= 0.99 and cards_in, "the perk choice is in place within 0.15 s, rising on even units (odd: %s)" % [odd])
+	panel.hide()
+	get_tree().paused = false
+	await _frames(2)

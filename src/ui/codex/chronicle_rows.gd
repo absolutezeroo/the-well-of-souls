@@ -49,7 +49,7 @@ static func _chapter(chapter: ChronicleChapter, boss: BossDef) -> Control:
 	if chapter.is_open(boss):
 		box.add_child(UiSkin.label(TranslationServer.tr(chapter.title), Fonts.BODY, UiSkin.GOLD, true))
 		for line in chapter.lines:
-			box.add_child(UiSkin.label(TranslationServer.tr(line), Fonts.BODY, UiSkin.TEXT, true))
+			box.add_child(UiSkin.reading_label(TranslationServer.tr(line)))
 	else:
 		box.add_child(UiSkin.label("???", Fonts.BODY, LOCKED))
 		for need in chapter.requirements(boss):
@@ -64,7 +64,7 @@ static func _speech(line: WakingLine, boss: BossDef) -> Control:
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 2)
 	if line.is_open(boss):
-		box.add_child(UiSkin.label(TranslationServer.tr("\"%s\"") % TranslationServer.tr(line.line), Fonts.BODY, SPEECH, true))
+		box.add_child(UiSkin.reading_label(TranslationServer.tr("\"%s\"") % TranslationServer.tr(line.line), SPEECH))
 	else:
 		box.add_child(UiSkin.label(TranslationServer.tr("\"%s\"") % "???", Fonts.BODY, LOCKED))
 		for need in ProgressCondition.describe_unmet(line.conditions, boss):

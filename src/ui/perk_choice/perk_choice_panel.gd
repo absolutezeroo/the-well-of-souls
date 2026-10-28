@@ -2,7 +2,8 @@ class_name PerkChoicePanel
 extends Control
 ## "Choose 1 of 3": a level up's perks (when the player taps the HUD's perk button) and a boss'
 ## or a pact's relics, in the game's skin (RpgDialog, cards on dark wood). Built in code. The game
-## pauses while it is open; it comes in softly (the world dims, the board rises, ~0.2 s).
+## pauses while it is open; it comes in softly (the world dims, the board rises a few UI pixels a
+## whole pixel at a time, 0.15 s: design/interface.md "One skin").
 ## Tap a card, or use the arrows and confirm on a keyboard or gamepad.
 ## Under the cards: Reroll (three new cards) and Banish (tap Banish, then a card: that perk is
 ## gone for the run and another takes its place), while the run has charges left (RunState).
@@ -23,7 +24,9 @@ const CARD_SCENE: PackedScene = preload("res://src/ui/perk_choice/perk_card.tscn
 const INPUT_DELAY := 0.45
 const BANISH_TINT := Color(1.0, 0.55, 0.55)
 ## Seconds the panel takes to come in.
-const ENTER_TIME := 0.2
+const ENTER_TIME := 0.15
+## How far below its place the board starts rising (UI units, even: whole screen pixels at x1.5).
+const ENTER_RISE := 12.0
 
 var _perks: Array[PerkDef] = []
 var _owned: PerkSet
@@ -92,10 +95,15 @@ func _enter() -> void:
 	if _enter_tween:
 		_enter_tween.kill()
 	modulate.a = 0.0
-	_dialog.position.y = 28.0
+	_rise(ENTER_RISE)
 	_enter_tween = create_tween().set_parallel()
 	_enter_tween.tween_property(self, "modulate:a", 1.0, ENTER_TIME).set_ease(Tween.EASE_OUT)
-	_enter_tween.tween_property(_dialog, "position:y", 0.0, ENTER_TIME).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_enter_tween.tween_method(_rise, ENTER_RISE, 0.0, ENTER_TIME).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+
+## The board `height` units under its place, on even units (never between two screen pixels).
+func _rise(height: float) -> void:
+	_dialog.position.y = roundf(height * 0.5) * 2.0
 
 
 ## Puts the choice off (Later, or Back): it waits behind the HUD's perk button.
@@ -124,8 +132,8 @@ func show_cards(perks: Array[PerkDef], waiting: bool = false) -> void:
 		card.pressed.connect(_on_card_pressed.bind(i))
 		card.modulate.a = 0.0
 		var tween := card.create_tween()
-		tween.tween_interval(0.08 * i)
-		tween.tween_property(card, "modulate:a", 1.0, 0.2)
+		tween.tween_interval(0.025 * i)
+		tween.tween_property(card, "modulate:a", 1.0, 0.1)  # (all three in 0.15 s)
 	_rule.visible = perks.any(func(perk: PerkDef) -> bool: return not perk.synergies.is_empty())
 	_set_banishing(false)
 
@@ -198,7 +206,7 @@ func _build() -> void:
 	_subtitle.name = "Subtitle"
 	_subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_dialog.body.add_child(_subtitle)
-	_rule = UiParts.text(tr("Every perk belongs to a family. Hold 3 different perks of one family to awaken its bonus."), Fonts.SMALL, UiSkin.DIM, 1100)
+	_rule = UiParts.text(tr("Every perk belongs to a family. Hold 3 different perks of one family to awaken its bonus."), Fonts.SMALL, UiSkin.TEXT, 1100)  # (on the wood: never dim)
 	_rule.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_dialog.body.add_child(_rule)
 	_cards = HBoxContainer.new()
@@ -211,21 +219,23 @@ func _build() -> void:
 	_tools.alignment = BoxContainer.ALIGNMENT_CENTER
 	_tools.add_theme_constant_override("separation", 24)
 	_dialog.body.add_child(_tools)
-	_reroll = UiParts.button(tr("Reroll (%d)") % 1, Callable(), Vector2(220, 48), Fonts.BODY)
+	_reroll = UiParts.button(tr("Reroll (%d)") % 1, Callable(), Vector2(220, MenuWindow.TOUCH_MIN), Fonts.BODY)
 	_reroll.name = "RerollButton"
 	_reroll.icon = load("res://assets/ui/icons/reroll.png")
 	_tools.add_child(_reroll)
-	_banish = UiParts.button(tr("Banish (%d)") % 1, Callable(), Vector2(220, 48), Fonts.BODY)
+	_banish = UiParts.button(tr("Banish (%d)") % 1, Callable(), Vector2(220, MenuWindow.TOUCH_MIN), Fonts.BODY)
 	_banish.name = "BanishButton"
 	_banish.icon = load("res://assets/ui/icons/banish.png")
 	_tools.add_child(_banish)
-	_later = UiParts.button(tr("Later"), Callable(), Vector2(180, 48), Fonts.BODY)
+	_later = UiParts.button(tr("Later"), Callable(), Vector2(180, MenuWindow.TOUCH_MIN), Fonts.BODY)
 	PromptGlyph.badge(_later, &"ui_cancel", PromptGlyph.Place.INSIDE)  # Back puts the choice off too
 	_later.name = "LaterButton"
 	_tools.add_child(_later)
-	_tools_note = UiParts.text(tr("Reroll: 3 new perks to choose from.   Banish: removes a perk from this run's offers (Banish, then the card)."), Fonts.SMALL, UiSkin.DIM, 1100)
-	_tools_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_dialog.body.add_child(_tools_note)
+	# Beside the buttons (as tall as them), not under: the row of finger-sized buttons and the
+	# three cards fit a 720-line screen in French.
+	_tools_note = UiParts.text(tr("Reroll: 3 new perks to choose from.   Banish: removes a perk from this run's offers (Banish, then the card)."), Fonts.SMALL, UiSkin.TEXT, 400)
+	_tools_note.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_tools.add_child(_tools_note)
 	for node: Node in [_title, _subtitle, _cards, _tools, _reroll, _banish, _later]:
 		node.owner = self
 		node.unique_name_in_owner = true

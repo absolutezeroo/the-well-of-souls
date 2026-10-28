@@ -3,7 +3,15 @@ extends TouchScreenButton
 ## Round on-screen button bound to an input action (set `action` in the inspector).
 ## TouchScreenButton supports multi-touch, so you can move and attack at the same time.
 
-@export var radius := 56.0
+## The touch area's radius, and the art's (UI units). The HUD sets it from its layout times
+## the buttons size (Settings.controls_scale): the touch circle follows.
+@export var radius := 56.0:
+	set(value):
+		if value != radius:
+			radius = value
+			if shape is CircleShape2D:
+				(shape as CircleShape2D).radius = value
+			queue_redraw()
 ## Shown in the middle when there is no icon.
 @export var label := "":
 	set(value):
@@ -75,7 +83,7 @@ func _draw() -> void:
 		var offset := Vector2(0, 2) if is_pressed() else Vector2.ZERO
 		draw_texture_rect(icon, Rect2(-icon_size * 0.5 + offset, icon_size), false, icon_tint)
 	elif not label.is_empty():
-		var font_size := Fonts.BODY if radius < 60.0 else Fonts.TITLE
+		var font_size := Fonts.BODY if radius < 70.0 else Fonts.TITLE
 		Fonts.draw(self, Vector2(0, Fonts.half_cap(font_size)), label, font_size, Color.WHITE, 0.5, Color("2b1d24"))
 
 	if cooldown_ratio > 0.01:

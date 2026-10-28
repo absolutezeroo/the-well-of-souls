@@ -6143,8 +6143,8 @@
     {
       "id": "task_407",
       "title": "Tailles tactiles et texte sur téléphone selon la bible",
-      "description": "interface.md « One skin » fixe : boutons de combat avec une zone de toucher d'au moins 96x96 unités (~9 mm sur S23), tout élément tactile 64x64, 16 unités d'écart. Les recommandations Xbox donnent sur mobile un texte bien plus grand que la police BODY actuelle. Mesurer les boutons et le texte réels sur le S23, puis décider (taille d'interface par défaut sur téléphone ?).\n\nAudit du 28/10 (mesuré dans le moteur à 2340x1080) : compétences et esquive Ø 92 unités (8,3 mm) au lieu de 96 ; les 50 contrôles des options sous 64 unités ; écarts de 4 à 14 unités ; le curseur « Taille des boutons » à 0,7 passe sous tous les seuils et à 1,3 fait chevaucher « Prendre » et la compétence 4 ; zone sûre jamais lue (get_display_safe_area) ; texte courant à 32 % de la cible Xbox mobile, sans option pour l'agrandir ; bouton désactivé à 1,64:1 de contraste.",
-      "status": "todo",
+      "description": "interface.md « One skin » fixe : boutons de combat avec une zone de toucher d'au moins 96x96 unités (~9 mm sur S23), tout élément tactile 64x64, 16 unités d'écart. Les recommandations Xbox donnent sur mobile un texte bien plus grand que la police BODY actuelle. Mesurer les boutons et le texte réels sur le S23, puis décider (taille d'interface par défaut sur téléphone ?).\n\nAudit du 28/10 (mesuré dans le moteur à 2340x1080) : compétences et esquive Ø 92 unités (8,3 mm) au lieu de 96 ; les 50 contrôles des options sous 64 unités ; écarts de 4 à 14 unités ; le curseur « Taille des boutons » à 0,7 passe sous tous les seuils et à 1,3 fait chevaucher « Prendre » et la compétence 4 ; zone sûre jamais lue (get_display_safe_area) ; texte courant à 32 % de la cible Xbox mobile, sans option pour l'agrandir ; bouton désactivé à 1,64:1 de contraste.\n\nFait le 28/10 (branche fix/ui) : boutons de combat Ø 96 (attaque 144), ceinture 64, Interact 88, 16 unités d'écart, rien à moins de 16 unités de la zone du stick ; « Taille des boutons » devient Normale / Grande (paliers entiers 1 et 1,25, jamais sous les seuils, vérifiés à 2340x1080, 1920x1080 et 1280x720 : test U4 PcTests._test_touch_targets) ; « Prendre » se place à gauche des compétences ou en haut au milieu ; tout ce qui se touche dans la pause, les options, le sac, le marchand, la forge et les conversations du village fait 64x64 au moins, à 16 d'écart (pause sur 3 colonnes, sac et marchand en 3 colonnes, onglets du sac sur 2 rangées) ; zone sûre (SafeArea) lue sur le HUD, le HUD du village, les fenêtres et la zone du stick ; option « Grand texte » (texte de lecture en TITLE, activée par défaut sur téléphone : tous les panneaux tiennent, mesuré en français) ; bouton désactivé à 3,6:1.\nÀ vérifier sur le S23 : la taille des boutons en Normale et Grande (atteinte du pouce, Interact plus à gauche qu'avant), l'encoche réelle (rien de caché, en paysage des deux côtés), le Grand texte par défaut (lisible sans être trop gros ?), les captures dans scratchpad/fix_ui.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_4",
       "due_date": null,
@@ -6153,7 +6153,7 @@
         "android"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793161745
+      "updated_at": 1793166239
     },
     {
       "id": "task_408",
@@ -6232,7 +6232,7 @@
     {
       "id": "task_413",
       "title": "Accessibilité de base : maintien, difficulté en partie, mode assisté, texte qui saute",
-      "description": "Audit du 28/10, niveau Basic des Game Accessibility Guidelines exigé par pillars.md : l'attaque chargée se fait seulement en maintenant (pas d'option bascule) ; difficulté non modifiable en partie (game.gd:274) ; pas de mode assisté façon Hades/Celeste ; les mots sautent de ligne pendant la frappe du dialogue (VC_CHARS_BEFORE_SHAPING, dialogue_box.gd:219, cinematic_view.gd:280) ; pas de réglage de vitesse du texte ; pas de bouton « Redescendre » sur l'écran de mort (Kagari obligatoire) ; indices de 3 lignes au lieu d'une et non relisibles (pas d'onglet Conseils au codex). Décisions du propriétaire : mode assisté, et si changer de difficulté en partie sort la partie des records.",
+      "description": "Audit du 28/10, niveau Basic des Game Accessibility Guidelines exigé par pillars.md : l'attaque chargée se fait seulement en maintenant (pas d'option bascule) ; difficulté non modifiable en partie (game.gd:274) ; pas de mode assisté façon Hades/Celeste ; les mots sautent de ligne pendant la frappe du dialogue (VC_CHARS_BEFORE_SHAPING, dialogue_box.gd:219, cinematic_view.gd:280) ; pas de réglage de vitesse du texte ; pas de bouton « Redescendre » sur l'écran de mort (Kagari obligatoire) ; indices de 3 lignes au lieu d'une et non relisibles (pas d'onglet Conseils au codex). Décisions du propriétaire : mode assisté, et si changer de difficulté en partie sort la partie des records.\n\nPartie interface faite le 28/10 (branche fix/ui, à vérifier) : les mots ne sautent plus de ligne pendant la frappe (VC_CHARS_AFTER_SHAPING sur DialogueBox, village et cinématiques), réglage « Vitesse du texte » (Lente / Normale / Rapide / Immédiate), dialogue du sanctuaire à 60 caractères par ligne au plus et 3 lignes par page (les pages trop longues se coupent). Le reste (charge sans maintien, difficulté en partie, mode assisté, Redescendre) relève des autres chantiers.",
       "status": "todo",
       "priority": "medium",
       "epic_id": "epic_4",
@@ -6243,7 +6243,7 @@
         "android"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793166239
     },
     {
       "id": "task_414",

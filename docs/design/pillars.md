@@ -58,6 +58,15 @@ no flicker, saved settings, a wide choice of difficulty. Also: an alternative to
 required simultaneous presses, autosave, difficulty changeable in a run. Screen shake (0-100 %),
 Screen flashes and Vibrations are options every effect respects.
 
+How the interface holds it (numbers and checks: [interface.md "One skin"](interface.md#one-skin-binding)):
+touch targets of 96 units for the fight's buttons and 64 for everything else, 16 apart, out of
+the joystick's zone, at both buttons sizes (Normal, Large); everything in the screen's safe
+area; **Large text** (reading text a whole font step bigger, on by default on a phone, where the
+panels were measured to hold it) and a **text speed** (slow to at once); words laid out before
+they are typed; text in dark insets at 4.5:1 or more, disabled buttons at 3:1; rarity and rune
+families with a shape as well as a colour; a pressed state on press; nothing to read swells,
+shakes or blinks.
+
 ## Performance on the phone
 
 - 60 fps on the S23, judged on the worst frames (P99), not the average: Android counts a session

@@ -52,7 +52,7 @@ func _ready() -> void:
 ## `spoken`: what the Vigil-Keeper says of it (Dialogues.Spoken: the tale, then the advice).
 func show_end(victory: bool, story: String, rows: Array, souls_earned: int, souls_total: int, title: String = "", spoken: Array[Dialogues.Spoken] = []) -> void:
 	if title.is_empty():
-		title = tr("Victory Achieved") if victory else tr("The Well claims you")
+		title = tr("Victory achieved") if victory else tr("The Well claims you")
 	_show(title, VICTORY_COLOR if victory else DEATH_COLOR, story, victory)
 	_voice.visible = not spoken.is_empty()
 	_souls_note.visible = spoken.is_empty()

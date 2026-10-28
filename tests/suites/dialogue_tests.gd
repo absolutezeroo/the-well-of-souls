@@ -188,6 +188,7 @@ func run_unit() -> void:
 	_test_save()
 	await _test_codex_voices()
 	await _test_box()
+	await _test_reading()
 	_restore(saved)
 	InputDevice.use(InputDevice.Kind.TOUCH)
 
@@ -796,3 +797,64 @@ func _test_keeper_panels(game: Game) -> void:
 	gambler.queue_free()
 	await _frames(2)
 	_fresh()
+
+
+
+## Reading (design/interface.md, Text): a typed word never jumps to the next line (laid out
+## before it is typed), the text speed (slow, normal, fast, at once) sets the pace, a page longer
+## than three lines goes on to another page, and the village's words are typed the same way and
+## written out by a tap.
+func _test_reading() -> void:
+	var speed_before := Settings.text_speed
+	var layer := CanvasLayer.new()
+	get_tree().root.add_child(layer)
+	var box := DialogueBox.new(DialogueBox.Mode.PAGED, 520.0)
+	layer.add_child(box)
+	var speaker := load("res://data/story/dialogue/speakers/vigil_keeper.tres") as SpeakerDef
+	var text := "The Well woke on a moonless night. A cold breath went through every house of Kagari."
+	var one: Array[Dictionary] = [{ "text": text, "accent": false }]
+	Settings.text_speed = Settings.TEXT_NORMAL
+	box.say_pages(speaker, one)
+	await _frames(2)
+	var label := box.get("_current") as Label
+	check(label.visible_characters_behavior == TextServer.VC_CHARS_AFTER_SHAPING, "typing: the words are laid out before they are typed")
+	var whole := label.get_line_count()
+	var jumped := 0
+	for n in range(1, text.length(), 3):
+		label.visible_characters = n
+		if label.get_line_count() != whole:
+			jumped += 1
+	check(whole > 1 and jumped == 0, "typing: every letter typed sits where it will stay (%d lines, %d moves)" % [whole, jumped])
+	# The pace: slow types fewer letters than normal in the same time, fast more, at once all.
+	var typed := {}
+	for speed: int in [Settings.TEXT_SLOW, Settings.TEXT_NORMAL, Settings.TEXT_FAST, Settings.TEXT_INSTANT]:
+		Settings.text_speed = speed
+		box.say_pages(speaker, one)
+		box._age = 1.0  # (past its opening grace)
+		await _frames(30)
+		var current := box.get("_current") as Label
+		typed[speed] = current.get_total_character_count() if current.visible_characters < 0 else current.visible_characters
+	check(typed[Settings.TEXT_SLOW] < typed[Settings.TEXT_NORMAL] and typed[Settings.TEXT_NORMAL] < typed[Settings.TEXT_FAST] and typed[Settings.TEXT_INSTANT] == text.length(), "the text speed sets the pace: slow, normal, fast, at once (%s)" % typed)
+	check(not box.is_typing(), "at once: the page is written out, the more sign up")
+	# Pages: a long one goes on in pieces of at most three lines, whole words.
+	var long_text := " ".join(PackedStringArray([text, text, text]))
+	var parts := DialogueBox.split_page(long_text, 300.0, Fonts.BODY)
+	check(parts.size() > 1 and " ".join(parts) == long_text, "a page too long for three lines is cut at line ends into several (%d)" % parts.size())
+	layer.queue_free()
+	# The village's words: typed, a tap writes them out.
+	Settings.text_speed = Settings.TEXT_NORMAL
+	var village := VillagePanel.new()
+	var village_layer := CanvasLayer.new()
+	get_tree().root.add_child(village_layer)
+	village_layer.add_child(village)
+	village.open("Sayo", text)
+	await _frames(3)
+	check(village.is_typing() and village.words.visible_characters_behavior == TextServer.VC_CHARS_AFTER_SHAPING, "the village's words are typed, laid out first")
+	var tap := InputEventMouseButton.new()
+	tap.button_index = MOUSE_BUTTON_LEFT
+	tap.pressed = true
+	village._on_words_input(tap)
+	check(not village.is_typing() and village.words.visible_characters < 0, "a tap on them writes them out")
+	village_layer.queue_free()
+	Settings.text_speed = speed_before
+	await _frames(1)

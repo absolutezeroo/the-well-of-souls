@@ -9,9 +9,10 @@ extends Control
 signal closed
 
 const WEAPON_SLOT := 66.0
-const SOCKET_SLOT := 92.0
+const SOCKET_SLOT := 76.0
 const RUNE_SLOT := 66.0
-const RUNE_COLUMNS := 5
+## Four columns of finger-sized rune slots 16 units apart (five would widen the forge).
+const RUNE_COLUMNS := 4
 
 var _forge: Forge
 var _player: Player
@@ -262,7 +263,7 @@ func _build() -> void:
 	weapon_scroll.custom_minimum_size.y = WEAPON_SLOT + 8
 	left.column.add_child(weapon_scroll)
 	_weapons = HBoxContainer.new()
-	_weapons.add_theme_constant_override("separation", 6)
+	_weapons.add_theme_constant_override("separation", MenuWindow.TOUCH_GAP)
 	weapon_scroll.add_child(_weapons)
 	var top := HBoxContainer.new()
 	top.add_theme_constant_override("separation", 12)
@@ -280,7 +281,7 @@ func _build() -> void:
 	naming.add_child(_weapon_details)
 	left.column.add_child(UiSkin.label(tr("Sockets"), Fonts.BODY, UiSkin.GOLD))
 	_sockets = HBoxContainer.new()
-	_sockets.add_theme_constant_override("separation", 12)
+	_sockets.add_theme_constant_override("separation", MenuWindow.TOUCH_GAP)
 	left.column.add_child(_sockets)
 	var spacer := Control.new()
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -298,17 +299,17 @@ func _build() -> void:
 	var rune_scroll := ScrollContainer.new()
 	rune_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	rune_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	rune_scroll.custom_minimum_size = Vector2(RUNE_COLUMNS * (RUNE_SLOT + 6) + 4, RUNE_SLOT * 2 + 12)
+	rune_scroll.custom_minimum_size = Vector2(RUNE_COLUMNS * (RUNE_SLOT + MenuWindow.TOUCH_GAP) + 4, RUNE_SLOT * 2 + MenuWindow.TOUCH_GAP + 6)
 	right.column.add_child(rune_scroll)
 	_runes = GridContainer.new()
 	_runes.columns = RUNE_COLUMNS
-	_runes.add_theme_constant_override("h_separation", 6)
-	_runes.add_theme_constant_override("v_separation", 6)
+	_runes.add_theme_constant_override("h_separation", MenuWindow.TOUCH_GAP)
+	_runes.add_theme_constant_override("v_separation", MenuWindow.TOUCH_GAP)
 	rune_scroll.add_child(_runes)
 	_rune_name = UiSkin.label("", Fonts.BODY, UiSkin.GOLD)
 	right.column.add_child(_rune_name)
 	_rune_text = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
-	_rune_text.custom_minimum_size.x = RUNE_COLUMNS * (RUNE_SLOT + 6)
+	_rune_text.custom_minimum_size.x = RUNE_COLUMNS * (RUNE_SLOT + MenuWindow.TOUCH_GAP)
 	right.column.add_child(_rune_text)
 	_set_button = _button(tr("Set"), func() -> void:
 		if _rune:
@@ -325,7 +326,7 @@ func _clear(container: Container) -> void:
 func _button(text: String, action: Callable) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.custom_minimum_size = Vector2(0, 52)
+	button.custom_minimum_size = Vector2(0, MenuWindow.TOUCH_MIN)
 	button.add_theme_font_size_override("font_size", Fonts.BODY)
 	button.pressed.connect(action)
 	return button

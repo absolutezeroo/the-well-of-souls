@@ -1,6 +1,7 @@
 extends Node
 ## Player options (autoload "Settings"): volumes, screen shake, vibrations, size of the touch
-## controls, fixed or floating joystick, battery saver (30 FPS), fewer effects, screen flashes, tutorial hints, run timer,
+## controls (whole steps: CONTROLS_SIZES), large text and the text speed (reading), fixed or
+## floating joystick, battery saver (30 FPS), fewer effects, screen flashes, tutorial hints, run timer,
 ## boss stories (full, short, off), on a computer fullscreen or a window (F11, Alt+Enter), the
 ## interface's size (PixelGrid),
 ## language (English or French: TranslationServer's locale, see locale/strings.csv), and the
@@ -23,7 +24,7 @@ const VOLUME_BUSES := {
 const OLD_SOUND_KEY := "sound_volume"
 const SPLIT_SOUND_KEYS: Array[String] = ["ui_volume", "combat_volume", "ambience_volume"]
 const MIN_VIBRATION_GAP_MS := 50
-const KEYS: Array[String] = ["master_volume", "music_volume", "ui_volume", "combat_volume", "ambience_volume", "screen_shake", "vibrations", "controls_scale", "fixed_joystick", "battery_saver", "fewer_effects", "screen_flashes", "tutorial_hints", "run_timer", "language", "auto_loot", "boss_stories", "fullscreen", "ui_size"]
+const KEYS: Array[String] = ["master_volume", "music_volume", "ui_volume", "combat_volume", "ambience_volume", "screen_shake", "vibrations", "controls_scale", "large_text", "text_speed", "fixed_joystick", "battery_saver", "fewer_effects", "screen_flashes", "tutorial_hints", "run_timer", "language", "auto_loot", "boss_stories", "fullscreen", "ui_size"]
 ## Frames per second: normal (0 = no cap), and with the battery saver.
 const FPS := 0
 const SAVER_FPS := 30
@@ -40,6 +41,19 @@ const LOOT_OFF := 2
 const STORIES_FULL := 0
 const STORIES_SHORT := 1
 const STORIES_OFF := 2
+## The touch controls' sizes (Options > Graphics): every step keeps the combat buttons at 96 UI
+## units or more and everything else at 64 (Hud's layout is drawn for 1.0 and must fit at each
+## step on a 1280x720 canvas: PcTests U4). Steps of a quarter keep the layout's positions (on 8s)
+## and radii (on 4s) on even units.
+const CONTROLS_SIZES: Array[float] = [1.0, 1.25]
+## The dialogue's typing (DialogueBox, the village's words, a cinematic's lines): slow, normal,
+## fast, or each page written at once. A tap writes a page out at any speed.
+const TEXT_SLOW := 0
+const TEXT_NORMAL := 1
+const TEXT_FAST := 2
+const TEXT_INSTANT := 3
+## How many times faster than the speaker's own pace each speed types (INSTANT: at once).
+const TEXT_SPEED_FACTORS: Array[float] = [0.6, 1.0, 1.8, INF]
 ## The interface's size (PixelGrid): as big as the screen allows, a step smaller, two steps.
 const UI_BIG := 0
 const UI_MEDIUM := 1
@@ -56,8 +70,15 @@ var ambience_volume := 1.0
 ## Multiplies every camera shake (0 = none).
 var screen_shake := 1.0
 var vibrations := true
-## Size of the on-screen joystick and buttons.
+## Size of the on-screen joystick and buttons: one of CONTROLS_SIZES.
 var controls_scale := 1.0
+## Reading text (dialogue, the village's words, hints, the codex's and items' descriptions) one
+## font step bigger: Fonts.TITLE instead of Fonts.BODY (UiSkin.reading_size()). On by default on a
+## phone, where BODY is about a third of the size the Xbox guidelines ask for (design/interface.md,
+## Text).
+var large_text := default_large_text()
+## TEXT_SLOW .. TEXT_INSTANT.
+var text_speed := TEXT_NORMAL
 ## The joystick stays in its corner (touch it there) instead of appearing under the thumb.
 var fixed_joystick := false
 ## 30 frames per second instead of 60: the phone lasts longer and stays cooler.
@@ -186,6 +207,27 @@ func window_keys() -> Node:
 	return _window_keys
 
 
+## The step of CONTROLS_SIZES nearest `value` (a settings file from before had any size from
+## 0.7 to 1.3: smaller than the first step is the first step, never under the touch minimums).
+static func snap_controls_scale(value: float) -> float:
+	var best := CONTROLS_SIZES[0]
+	for step in CONTROLS_SIZES:
+		if absf(step - value) < absf(best - value):
+			best = step
+	return best
+
+
+## Large text by default on a phone (a computer's screen is read from further, but bigger and
+## sharper: BODY already passes there).
+static func default_large_text() -> bool:
+	return OS.has_feature("mobile")
+
+
+## How many times the speaker's own typing speed the text speed types (INF: at once).
+func text_speed_factor() -> float:
+	return TEXT_SPEED_FACTORS[clampi(text_speed, TEXT_SLOW, TEXT_INSTANT)]
+
+
 ## The device's language if the game speaks it, else English.
 static func device_language() -> String:
 	return "fr" if OS.get_locale_language() == "fr" else "en"
@@ -234,7 +276,9 @@ func load_settings() -> void:
 			set(key, old)
 	screen_shake = float(file.get_value("options", "screen_shake", screen_shake))
 	vibrations = bool(file.get_value("options", "vibrations", vibrations))
-	controls_scale = clampf(float(file.get_value("options", "controls_scale", controls_scale)), 0.7, 1.3)  # bigger would cover the minimap
+	controls_scale = snap_controls_scale(float(file.get_value("options", "controls_scale", controls_scale)))
+	large_text = bool(file.get_value("options", "large_text", large_text))
+	text_speed = clampi(int(file.get_value("options", "text_speed", text_speed)), TEXT_SLOW, TEXT_INSTANT)
 	fixed_joystick = bool(file.get_value("options", "fixed_joystick", fixed_joystick))
 	battery_saver = bool(file.get_value("options", "battery_saver", battery_saver))
 	fewer_effects = bool(file.get_value("options", "fewer_effects", fewer_effects))
