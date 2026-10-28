@@ -48,6 +48,8 @@ var seed_value := 1
 ## Acts measured (all by default; --quick: act II only, a few variants).
 var acts: Array[int] = []
 var quick := false
+## Only these picks (ids; --picks): a targeted measure of new content next to a few known ones.
+var picks := PackedStringArray()
 var verbose := true
 
 ## Per act: { base, hp_scale, room, raw_hits, session, boss, boss_rules }.
@@ -81,6 +83,8 @@ func run() -> BalanceReport:
 		var variants := variants_for(expected)
 		if quick:
 			variants = variants.filter(func(v: Dictionary) -> bool: return ["vampirism", "strength", "leech_rune", "sharp", "might", "blood"].has(v.id))
+		if not picks.is_empty():
+			variants = variants.filter(func(v: Dictionary) -> bool: return picks.has(String(v.id)))
 		var bases := { "": base }
 		var count := 0
 		for v: Dictionary in variants:

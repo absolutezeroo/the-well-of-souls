@@ -3,6 +3,25 @@
 Dated entries, newest first: what was measured, what changed and why, before/after numbers, open
 questions. How to measure: [balance.md](balance.md).
 
+## 2026-10-28 - Five behaviour perks (Cinder Wake, Riven Glyph, Leaping Bolt, Burst Veins, Rime Halo)
+
+What changed: five new common build-arounds, one per family, weight 6 like their neighbours
+(docs/design/builds.md "Behaviour perks"). Measured with the marginal lab (a new option,
+`--picks=<ids>`, restricts it to a few picks: `--mode=marginal --acts=2 --picks=...`), act II's
+expected build, Normal, seed 1, value at max level next to their neighbours measured in the same
+run (the last full pass put the act II perk median near +10%):
+
+| Pick | Value | DPS / pack clear | Reads as |
+|---|---|---|---|
+| Rime Halo x3 | +28% (x1 +24%, x2 +33%) | +57% / +9% | its slow wakes the Frost family the build half holds (Frost Armor, Guardian Ring): Frostbite does the same, +24% at every level; the shards' own share is +4-9% |
+| Leaping Bolt x2 | +4% | +3% / +5% | in line with Thunderclap x3 (+3%); grows with crit chance (the crit builds) |
+| Burst Veins x3 | -6% at knockback 140, +2% at 30 | +0% / -12% -> +5% | its burst threw the pack apart (a blade swinging at air): knockback 140 -> 30, minimum 35% -> 50% of Damage a level; now with Ice Shards (-3%) and Thunderclap (+3%), within the pack measure's noise (other seed -6%) |
+| Cinder Wake x2 | +1% | the lab's blind spot | the dummy test never rolls: Blazing Roll reads +1% too. On paper a burn of 15% of Damage every 0.5 s in a 3 s trail plus the burn status, about Blazing Roll's 70% blast for a pack that stays in it |
+| Riven Glyph x2 | +0% | the lab's blind spot | the expected build is a Katana: no shots. On paper 3 bolts of 30% of a shot's hit going on into the crowd (Hydra's Quiver, a relic, adds 65% a shot) |
+
+Open: the lab measures rolls and shots on no build (a ranged expected build or a rolling bot in
+the marginal mode would show Cinder Wake, Riven Glyph, Blazing Roll and Hydra's Quiver).
+
 ## 2026-10-28 - The fairness contract: wind-up floors, one twist per ascension (decision 0008)
 
 What changed: no wind-up of an attack that hurts goes under **0.4 s** (a boss's **0.5 s**; a

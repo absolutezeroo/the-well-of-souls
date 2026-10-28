@@ -107,6 +107,7 @@ func test_cases() -> Array:
 		["assist", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_assist(game))],
 		["lower_difficulty", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_lower_difficulty(game))],
 		["hints", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_hints(game))],
+		["behaviour_perks", _on_game(func(game: Game) -> void: await (_borrow(VarietyTests.new()) as VarietyTests).run_behaviour_perks(game))],
 	]
 
 

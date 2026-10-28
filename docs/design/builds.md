@@ -195,6 +195,15 @@ A `PerkDef` (in `data/perks/`) is stat bonuses + a list of `Passive`s, both mult
 | `ExecutePassive` | before a hit | Executioner |
 | `ExtraProjectilesPassive` | every volley | Hydra's Quiver |
 | `CheatDeathPassive` | before dying (opens the Threshold, see below) | Phoenix Feather (and Death Denied's) |
+| `EmberTrailPassive` | on dash (an `EmberTrail` on the floor) | Cinder Wake |
+| `SplitShotPassive` | on hit, a direct shot (`HitInfo.shot`) | Riven Glyph |
+| `CritLeapPassive` | on hit (crits) | Leaping Bolt |
+| `OverkillBurstPassive` | before a hit (Health left), on hit (the killing blow) | Burst Veins |
+| `FrostOrbitPassive` | every frame (`Passive.tick`, shards drawn by `FrostOrbitVfx`) | Rime Halo |
+
+**Acting over time** (`Passive.ticks()` / `tick()`): a passive that does something by itself
+(shards circling the hero) says so, and only those are called each physics frame
+(`PerkSet.tick()`, from `Actor._tick_timers()`); the others cost nothing there.
 
 Damage caused by a passive (burn, thorns, shockwaves, chains, Ice Shards' shards, the Arcane
 ring of bolts: `ProjectileSpec.secondary`) is a *secondary* hit: it never triggers other on-hit
@@ -267,11 +276,11 @@ perks** of a family wakes its bonus for the rest of the run: a change in how you
 
 | Family | Perks and relics | Awake |
 |---|---|---|
-| **Inferno** | Ignite, Kindling, Blazing Roll, Burning Thorns, Phoenix Feather | enemies that die burning explode and set everything around on fire |
-| **Frost** | Frostbite, Cold Snap, Ice Shards, Frost Armor, Guardian Ring | slowed enemies take +50%, crits freeze them |
-| **Blood** | Vampirism, Vitality, Bloodrage, Devotion, Executioner | below half Health +40% damage, every kill heals 4% max Health |
-| **Storm** | Frenzy, Thunderclap, Shock Roll, Swiftness | attacks 15% faster; every 3rd hit, lightning jumps to 3 enemies |
-| **Arcane** | Arcane Focus, Arcane Power, Devotion, Echo, Sage's Codex, Hydra's Quiver | every skill also fires a ring of 8 bolts |
+| **Inferno** | Ignite, Kindling, Blazing Roll, Burning Thorns, Cinder Wake, Phoenix Feather | enemies that die burning explode and set everything around on fire |
+| **Frost** | Frostbite, Cold Snap, Ice Shards, Frost Armor, Rime Halo, Guardian Ring | slowed enemies take +50%, crits freeze them |
+| **Blood** | Vampirism, Vitality, Bloodrage, Devotion, Burst Veins, Executioner | below half Health +40% damage, every kill heals 4% max Health |
+| **Storm** | Frenzy, Thunderclap, Shock Roll, Swiftness, Leaping Bolt | attacks 15% faster; every 3rd hit, lightning jumps to 3 enemies |
+| **Arcane** | Arcane Focus, Arcane Power, Devotion, Echo, Riven Glyph, Sage's Codex, Hydra's Quiver | every skill also fires a ring of 8 bolts |
 
 A perk sits in a family only if its effect plainly belongs to it (Inferno: fire and burning;
 Frost: cold, slows, freezing; Blood: health, life drain, low-health power; Storm: lightning,
@@ -290,10 +299,38 @@ perk, relic or affix without a role, or a build-around without a family.
 |---|---|---|
 | Staple, no family | Strength, Precision, Fortune, War Banner | Brutal, Ironbound, Light, Unerring, Sharp, Stalwart, Swift, Venomous, of Fury, of Haste, of Sorcery, of the Bear, of the Fox, of the Titan, of Thorns |
 | Staple, in a family | Arcane Focus, Arcane Power, Sage's Codex (Arcane); Frenzy, Swiftness (Storm); Vitality (Blood); Guardian Ring (Frost) | |
-| Build-around | Ignite, Kindling, Blazing Roll, Burning Thorns, Phoenix Feather (Inferno); Frostbite, Cold Snap, Ice Shards, Frost Armor (Frost); Vampirism, Bloodrage, Devotion, Executioner (Blood); Thunderclap, Shock Roll (Storm); Echo, Devotion, Hydra's Quiver (Arcane) | Burning, of Embers (Inferno); Frozen, Shattering (Frost); Thundering (Storm); Vampiric (Blood); of Echoes (Arcane) |
+| Build-around | Ignite, Kindling, Blazing Roll, Burning Thorns, Cinder Wake, Phoenix Feather (Inferno); Frostbite, Cold Snap, Ice Shards, Frost Armor, Rime Halo (Frost); Vampirism, Bloodrage, Devotion, Burst Veins, Executioner (Blood); Thunderclap, Shock Roll, Leaping Bolt (Storm); Echo, Devotion, Riven Glyph, Hydra's Quiver (Arcane) | Burning, of Embers (Inferno); Frozen, Shattering (Frost); Thundering (Storm); Vampiric (Blood); of Echoes (Arcane) |
 
 A new perk, relic or affix declares its role with its numbers: a staple is plain numbers or a
 modest effect worth taking anywhere; a build-around's effect plainly belongs to its family.
+
+### Behaviour perks (the audit of 2026-10-28)
+
+Players' first complaint about roguelikes that feel the same run after run is perks that "just
+add stats" (research, "Ce qui manque au roguelike"). Past the four staples, a perk should make
+something happen in the world that changes how you play: where you roll, what you shoot first,
+whether you dive into the pack. The audit sorted the 24 perks and relics past the staples:
+
+| Kind | Perks | |
+|---|---|---|
+| Numbers only | Arcane Focus, Arcane Power, Frenzy, Vitality, Sage's Codex | staples of their family: kept as they are |
+| A number under a condition | Kindling, Bloodrage, Executioner, Swiftness | the families' payoffs (burning, low Health, wounded foes, after a roll): kept |
+| A status or a heal on a hook | Ignite, Frostbite, Vampirism, Devotion, Burning Thorns | |
+| Something happens in the world | Blazing Roll, Cold Snap, Shock Roll (a wave on the roll), Thunderclap (a wave on a crit), Ice Shards (shards from a kill), Frost Armor (a wave when hurt), Hydra's Quiver, Echo, Phoenix Feather, Guardian Ring | three of them the same wave on the roll |
+
+So five perks were added, one per family, each a new kind of behaviour (a new `Passive`, no
+branch in `Actor`): **Cinder Wake** (Inferno: the roll leaves a trail of embers for 3 s that
+burns what stands in it, so you roll around a pack and fight at the trail's edge), **Riven
+Glyph** (Arcane: a shot that strikes splits into 3 bolts flying on, +2 a level, 30% of the hit
+each: the archer aims at the front of a crowd), **Leaping Bolt** (Storm: a crit leaps to the
+nearest other enemy for 70% of it, one more leap a level: the enemy standing apart), **Burst
+Veins** (Blood: a killing blow's damage past the Health left bursts onto the enemies around,
+50% of your Damage a level at least, twice your Damage at most: heavy blows on weak foes clear
+packs) and **Rime Halo** (Frost: 2 shards of ice circle you, +1 a level, cutting and chilling
+what they pass through, each enemy once every 0.6 s: you stay close and circle). All are
+build-arounds of weight 6, like the others; their hits are secondary (no on-hit perks, nothing
+loops). Now 15 of the 29 perks and relics past the staples act in the world (`unit.variety`
+keeps it at a third at least), and the rule-bending relics below add more.
 
 ### Choosing: reroll, banish, families first
 

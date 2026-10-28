@@ -47,6 +47,19 @@ func on_floor_started(_owner: Actor, _perk: PerkSet.Entry) -> void:
 	pass
 
 
+## Whether it acts by itself over time (tick()): something circling the owner, a trail left
+## burning, a storm that strikes while he moves. Only the passives that say so are called each
+## frame (PerkSet.tick()); the others cost nothing there.
+func ticks() -> bool:
+	return false
+
+
+## Every physics frame while the owner is alive and on its feet (ticks() true only).
+## Runs every frame: no allocation here (docs/performance.md, "No allocation in a hot path").
+func tick(_owner: Actor, _delta: float, _perk: PerkSet.Entry) -> void:
+	pass
+
+
 ## The owner died (monsters with the "explosive" elite affix blow up...).
 func on_died(_owner: Actor, _perk: PerkSet.Entry) -> void:
 	pass

@@ -92,6 +92,7 @@ func test_cases() -> Array:
 		["core", func() -> void: await _part(CoreTests.new(), func(suite: CoreTests) -> void: suite.run_unit())],
 		["fairness", func() -> void: await _part(FairnessTests.new(), func(suite: FairnessTests) -> void: await suite.run_unit())],
 		["feel_limits", func() -> void: await _part(FeelTests.new(), func(suite: FeelTests) -> void: await suite.run_unit())],
+		["variety", func() -> void: await _part(VarietyTests.new(), func(suite: VarietyTests) -> void: suite.run_unit())],
 	]
 
 
@@ -1984,12 +1985,14 @@ func _test_synergies() -> void:
 	owned.add(_perk("ignite"))
 	owned.add(_perk("frenzy"))
 	var inferno_count := [0, 0]
+	# (2000 draws: the families grew, the ratio expected from the weights is near 1.5; 400 draws
+	# of these fixed dice left it within their noise of 1.4.)
 	for bias_index in 2:
-		for i in 400:
+		for i in 2000:
 			var picked: PerkDef = CONTENT.pick_perks(owned, 1, PerkDef.Rarity.COMMON, rng, [], [0.0, 1.0][bias_index])[0]
 			if picked.synergies.has(inferno):
 				inferno_count[bias_index] += 1
-	check(inferno_count[1] > inferno_count[0] * 1.4, "offers lean toward a started family (%d vs %d of 400)" % [inferno_count[1], inferno_count[0]])
+	check(inferno_count[1] > inferno_count[0] * 1.4, "offers lean toward a started family (%d vs %d of 2000)" % [inferno_count[1], inferno_count[0]])
 	var shop: ShopDef = CONTENT.dungeon.merchant
 	check(shop.reroll_price(1, 1) > shop.reroll_price(0, 1) and shop.reroll_price(0, 8) > shop.reroll_price(0, 1), "shop rerolls cost more each time and deeper")
 	# The daily run: the same day gives the same start; scores; the streak.

@@ -53,6 +53,8 @@ var _awake: Array[Entry] = []
 var _gear: Array[Entry] = []
 ## Collected perks, awakened families and gear together (what the events go through).
 var _all: Array[Entry] = []
+## The entries of _all with a passive that acts over time (Passive.ticks()): tick() walks only them.
+var _ticking: Array[Entry] = []
 
 
 func add(perk: PerkDef) -> void:
@@ -152,6 +154,10 @@ func _rebuild_all() -> void:
 	_all = entries.duplicate()
 	_all.append_array(_awake)
 	_all.append_array(_gear)
+	_ticking.clear()
+	for entry in _all:
+		if entry.passives().any(func(passive: Passive) -> bool: return passive.ticks()):
+			_ticking.append(entry)
 
 
 ## The affixes and runes of what the actor wears: those with passives join the events (two
@@ -291,6 +297,23 @@ func on_floor_started(owner: Actor) -> void:
 	for entry in _all:
 		for passive in entry.passives():
 			passive.on_floor_started(owner, entry)
+
+
+## Whether some passive acts over time (the actor's frame skips tick() otherwise).
+func has_ticking() -> bool:
+	return not _ticking.is_empty()
+
+
+## Every physics frame (Actor._tick_timers()): the passives that act over time, credited to their
+## entry like the hooks that hit or heal.
+func tick(owner: Actor, delta: float) -> void:
+	var outer := Actor.heal_source
+	for entry in _ticking:
+		Actor.heal_source = entry.source_tag()
+		for passive in entry.passives():
+			if passive.ticks():
+				passive.tick(owner, delta, entry)
+	Actor.heal_source = outer
 
 
 func on_died(owner: Actor) -> void:

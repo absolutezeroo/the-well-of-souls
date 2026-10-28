@@ -25,6 +25,8 @@ extends Node
 ##                                 easy..nightmare+10; --quick: normal)
 ##   --bot=face_tank,kite          arena/pack bots (default both)
 ##   --acts=2,4                    marginal: acts measured (default all)
+##   --picks=ignite,cinder_wake    marginal: only these picks (perk, relic, family, rune, affix ids;
+##                                 the "vs median" column then compares them among themselves)
 ##   --out=<dir>                   where reports go (default user://balance/)
 ##   --seed=N                      every measure starts from this seed (default 1): same run, same numbers
 ##   --all-pairs                   arena: every build against every boss
@@ -278,6 +280,7 @@ func _run_mode(m: String, content: ContentDB, targets: BalanceTargets, every_bui
 			marginal.all_builds = every_build
 			marginal.seed_value = args.seed
 			marginal.quick = args.quick
+			marginal.picks = args.picks
 			marginal.verbose = _jobs.measuring
 			for a: String in args.acts:
 				marginal.acts.append(int(a))
@@ -456,7 +459,7 @@ static func parse_args(user_args: PackedStringArray) -> Dictionary:
 		"bots": PackedStringArray(["face_tank", "kite"]), "acts": PackedStringArray(), "weapons": PackedStringArray(),
 		"only": PackedStringArray(), "out": DEFAULT_OUT, "seed": 1,
 		"all_pairs": false, "timeout": 240.0, "quick": false, "jobs": 2, "worker": "", "cache": DEFAULT_CACHE, "no_cache": false,
-		"inputs": PackedStringArray(), "keeper": PackedStringArray(), "plain": false, "no_weapons": false, "classic": false, "no_renew": false, "hits": false, "bots_given": false, "gauntlet": "all", "claims": "",
+		"inputs": PackedStringArray(), "keeper": PackedStringArray(), "plain": false, "no_weapons": false, "classic": false, "no_renew": false, "hits": false, "bots_given": false, "gauntlet": "all", "claims": "", "picks": PackedStringArray(),
 	}
 	for arg in user_args:
 		var key := arg.get_slice("=", 0)
@@ -470,6 +473,7 @@ static func parse_args(user_args: PackedStringArray) -> Dictionary:
 				args.bots = value.split(",", false)
 				args.bots_given = true
 			"--acts", "--act": args.acts = value.split(",", false)
+			"--picks", "--pick": args.picks = value.split(",", false)
 			"--only": args.only = value.split(",", false)
 			"--out": args.out = value
 			"--seed": args.seed = int(value)
@@ -496,8 +500,8 @@ static func _command(args: Dictionary) -> String:
 	var parts := PackedStringArray(["--mode=%s" % args.mode])
 	if args.quick:
 		parts.append("--quick")
-	for key: String in ["only", "bosses", "builds", "difficulties", "bots", "acts", "keeper"]:
-		if not (args[key] as PackedStringArray).is_empty():
+	for key: String in ["only", "bosses", "builds", "difficulties", "bots", "acts", "keeper", "picks"]:
+		if not (args.get(key, PackedStringArray()) as PackedStringArray).is_empty():
 			parts.append("--%s=%s" % [key, ",".join(args[key])])
 	parts.append("--seed=%d" % args.seed)
 	if args.all_pairs:

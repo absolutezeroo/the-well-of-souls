@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 434,
+  "next_id": 436,
   "tags": [
     "pc",
     "test",
@@ -6544,6 +6544,37 @@
       ],
       "created_at": 1793170158,
       "updated_at": 1793170158
+    },
+    {
+      "id": "task_434",
+      "title": "Atouts qui changent la façon de jouer (un par famille)",
+      "description": "Audit des atouts « qui ajoutent juste des stats » (docs/design/builds.md « Behaviour perks ») et cinq atouts de comportement, un par famille, chacun un nouveau Passive : Sillage de Braises (Brasier : la roulade laisse une traînée de braises 3 s qui enflamme), Glyphe Fendu (Arcane : un tir qui touche se fend en 3 traits qui continuent), Foudre Bondissante (Orage : un critique bondit sur l'ennemi le plus proche à 70 %), Veines Éclatées (Sang : l'excédent d'un coup fatal éclabousse les ennemis autour), Nimbe de Givre (Givre : 2 éclats de glace tournent autour du héros, blessent et ralentissent). Nouveau crochet Passive.tick (seuls les passifs qui agissent dans le temps sont appelés chaque image). Mesuré au labo (balance-log 28/10), captures dans le scratchpad fix_variety/perks.\nÀ vérifier sur le S23 : la traînée de braises reste lisible sur un sol clair et sombre ; les éclats du Nimbe ne masquent pas le héros ; pas de saccade avec Glyphe Fendu sur Tempête de Shurikens (16 étoiles) ; le rythme des Veines Éclatées avec un marteau.",
+      "status": "review",
+      "priority": "high",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "contenu",
+        "équilibrage",
+        "vfx"
+      ],
+      "created_at": 1793186390,
+      "updated_at": 1793186390
+    },
+    {
+      "id": "task_435",
+      "title": "Labo d'équilibrage : mesurer les roulades et les tirs (marginal)",
+      "description": "Le mode marginal ne roule jamais et le build attendu est un Katana : Sillage de Braises, Roulade Embrasée, Glyphe Fendu et le Carquois de l'Hydre y valent +0 %. Ajouter un build attendu à distance (arc, baguette) et un bot qui roule dans le labo marginal (balance-log 28/10).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_5",
+      "due_date": null,
+      "tags": [
+        "équilibrage",
+        "tests"
+      ],
+      "created_at": 1793186390,
+      "updated_at": 1793186390
     }
   ]
 }

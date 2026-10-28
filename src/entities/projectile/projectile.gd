@@ -200,7 +200,9 @@ func _on_body_entered(body: Node2D) -> void:
 	if _spec.explosion_radius > 0.0:
 		_finish()
 		return
-	target.take_hit(_make_hit(_shooter if is_instance_valid(_shooter) else null, _direction * _spec.knockback))
+	var struck := _make_hit(_shooter if is_instance_valid(_shooter) else null, _direction * _spec.knockback)
+	struck.shot = _direction  # (its blast's hits, below, are a blast's, not the shot's)
+	target.take_hit(struck)
 	if _pierce_left > 0:
 		_pierce_left -= 1
 	else:

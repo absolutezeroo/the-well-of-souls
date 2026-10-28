@@ -1745,6 +1745,10 @@ Blazing Roll,Blazing Roll,Roulade Embrasée
 Rolling bursts into flames that hurt and set enemies around on fire.,Rolling bursts into flames that hurt and set enemies around on fire.,Ta roulade s'embrase : les flammes blessent et enflamment les ennemis alentour.
 Bloodrage,Bloodrage,Rage Sanguinaire
 "Below half Health, you deal 20% more damage per level.","Below half Health, you deal 20% more damage per level.","Sous la moitié de ta Vie, tu infliges 20 % de Dégâts en plus par niveau."
+Burst Veins,Burst Veins,Veines Éclatées
+"A killing blow bursts out of the body: what it dealt beyond the Health left hurts the enemies around (at least 50% of your Damage per level, twice your Damage at most).","A killing blow bursts out of the body: what it dealt beyond the Health left hurts the enemies around (at least 50% of your Damage per level, twice your Damage at most).","Un coup fatal jaillit du corps : ce qu'il inflige au-delà de la Vie restante blesse les ennemis alentour (au moins 50 % de tes Dégâts par niveau, deux fois tes Dégâts au plus)."
+Cinder Wake,Cinder Wake,Sillage de Braises
+Rolling leaves a trail of embers for 3 s: enemies in it catch fire and take a little damage every half second.,Rolling leaves a trail of embers for 3 s: enemies in it catch fire and take a little damage every half second.,Ta roulade laisse une traînée de braises pendant 3 s : les ennemis qui s'y tiennent s'enflamment et subissent quelques dégâts chaque demi-seconde.
 Cold Snap,Cold Snap,Coup de Froid
 Rolling releases a wave of cold that hurts and slows enemies around by 50%.,Rolling releases a wave of cold that hurts and slows enemies around by 50%.,Ta roulade libère une vague de froid qui blesse et ralentit de 50 % les ennemis alentour.
 Devotion,Devotion,Dévotion
@@ -1763,8 +1767,14 @@ Frost Armor,Frost Armor,Armure de Givre
 Getting hit releases a wave of cold: enemies around you are thrown back and slowed by 40% (once every 3 s).,Getting hit releases a wave of cold: enemies around you are thrown back and slowed by 40% (once every 3 s).,Être touché libère une vague de froid : les ennemis autour de toi sont repoussés et ralentis de 40 % (une fois toutes les 3 s).
 Kindling,Kindling,Amadou
 Burning enemies take 20% more damage per level.,Burning enemies take 20% more damage per level.,Les ennemis en feu subissent 20 % de Dégâts en plus par niveau.
+Leaping Bolt,Leaping Bolt,Foudre Bondissante
+"A critical hit leaps as lightning to the nearest other enemy (one more leap per level), striking it for 70% of the critical hit.","A critical hit leaps as lightning to the nearest other enemy (one more leap per level), striking it for 70% of the critical hit.",Un coup critique bondit en éclair jusqu'à l'ennemi le plus proche (un bond de plus par niveau) et le frappe pour 70 % du coup critique.
 Precision,Precision,Précision
 Your first blow on an unhurt enemy is always a critical hit.,Your first blow on an unhurt enemy is always a critical hit.,Ton premier coup sur un ennemi indemne est toujours un coup critique.
+Rime Halo,Rime Halo,Nimbe de Givre
+"2 shards of ice circle you (+1 per level), hurting the enemies they pass through and slowing them by 30%.","2 shards of ice circle you (+1 per level), hurting the enemies they pass through and slowing them by 30%.",2 éclats de glace tournent autour de toi (+1 par niveau) : ils blessent les ennemis qu'ils traversent et les ralentissent de 30 %.
+Riven Glyph,Riven Glyph,Glyphe Fendu
+"A shot that strikes an enemy splits into 3 arcane bolts (+2 per level) that fly on, each dealing 30% of the hit.","A shot that strikes an enemy splits into 3 arcane bolts (+2 per level) that fly on, each dealing 30% of the hit.","Un tir qui frappe un ennemi se fend en 3 traits arcaniques (+2 par niveau) qui poursuivent leur course, chacun infligeant 30 % du coup."
 Shock Roll,Shock Roll,Roulade de Choc
 Rolling releases a shockwave that hurts and pushes enemies away.,Rolling releases a shockwave that hurts and pushes enemies away.,Ta roulade libère une onde de choc qui blesse et repousse les ennemis.
 Strength,Strength,Force

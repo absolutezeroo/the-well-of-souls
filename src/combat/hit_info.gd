@@ -20,6 +20,9 @@ var is_secondary: bool = false
 var is_tick: bool = false
 ## The color of its damage number (a burn's orange, a poison's green); transparent: the usual.
 var text_color := Color.TRANSPARENT
+## The way the shot that dealt it was flying (Projectile); zero for a blow, a blast, a tick.
+## Passives that care about shots read it (a shot splitting on impact: SplitShotPassive).
+var shot := Vector2.ZERO
 ## Lands even on an invulnerable actor (a price paid at an altar, giving up...).
 var unavoidable: bool = false
 ## Statuses left on the target (burn, slow...). Optional.
