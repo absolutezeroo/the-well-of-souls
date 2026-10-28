@@ -2406,7 +2406,7 @@ func _test_languages() -> void:
 	var vampirism := _perk("vampirism")
 	check(vampirism != null and vampirism.describe().begins_with("Abattre un ennemi rend 3 de Vie"), "languages: a perk's description (%s)" % (vampirism.describe() if vampirism else "?"))
 	var hint := CONTENT.tutorial.hint(&"move")
-	check(hint != null and tr(hint.text).begins_with("Fais glisser ton pouce"), "languages: a tutorial hint")
+	check(hint != null and tr(hint.text).begins_with("Glisse ton pouce"), "languages: a tutorial hint")
 	check(LootRoller.rolled_name("Battle Axe", "Sharp", "of the Bear") == "Hache de Guerre Affûtée de l'Ours", "languages: a rolled name agrees in French (%s)" % LootRoller.rolled_name("Battle Axe", "Sharp", "of the Bear"))
 	check(LootRoller.rolled_name("Katana", "Sharp", "") == "Katana Affûté", "languages: ...and with a masculine item")
 	var stats := StatBlock.from_dict({ "attack": 3, "cooldown_reduction": 0.05 })

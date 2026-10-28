@@ -5,7 +5,7 @@ extends TestSuite
 ## (kills, level ups, stairs, the bag, death and restart), the daily run, saving and resuming, a
 ## mortal run deeper, then the other game suites' parts (CombatTests, FloorTests, LevelTests,
 ## SecretTests, BossTests, FinaleTests, CoreTests, DebugTests, SaveTests, PcTests, BagTests,
-## StoryTests, DialogueTests). Every Game is set up the same way (_new_game()): no merchant,
+## StoryTests, DialogueTests, FirstRunTests). Every Game is set up the same way (_new_game()): no merchant,
 ## encounter, ambush, curse or special floor popping up (they have their own tests), no act
 ## cards, the gameplay statistics accepted on a fake server.
 
@@ -100,6 +100,7 @@ func test_cases() -> Array:
 		["bag", _on_game(func(game: Game) -> void: await (_borrow(BagTests.new()) as BagTests).run_bag_game(game), true)],
 		["story", _on_game(func(game: Game) -> void: await (_borrow(StoryTests.new()) as StoryTests).run_game(game), true)],
 		["dialogue", _on_game(func(game: Game) -> void: await (_borrow(DialogueTests.new()) as DialogueTests).run_game(game), true)],
+		["hints", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_hints(game))],
 	]
 
 

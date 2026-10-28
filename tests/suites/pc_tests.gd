@@ -1232,7 +1232,7 @@ func _test_hud_devices(game: Game) -> void:
 	check(game.hint_box.shown_text() == tr(hint.text), "a hint on touch: its tap words")
 	_keys_mode()
 	await _frames(1)
-	check(game.hint_box.shown_text() == "Press [Space] to strike. It aims at the closest enemy by itself.", "the keyboard taken up mid-hint: its key (%s)" % game.hint_box.shown_text())
+	check(game.hint_box.shown_text() == "Press [Space] to strike the closest enemy.", "the keyboard taken up mid-hint: its key (%s)" % game.hint_box.shown_text())
 	game.hint_box.hide_hint()
 
 

@@ -1,8 +1,11 @@
 class_name Tutorial
 extends Node
 ## Shows the tutorial's hints (TutorialDef) in a HintBox: the first steps of the first run, then
-## a note the first time something new comes up. Each hint shows once ever (Profile), never over
-## a menu, one at a time with a short gap. Settings.tutorial_hints turns them all off.
+## a note the first time something new comes up. Each hint shows once ever (Profile) once read: a
+## tap on it, or what it asks done. One whose time runs out unread comes back on a later floor
+## (TutorialDef.unread_returns times: _ran_out), and the hints after it in its chain get in line
+## again then. Never over a menu, one at a time with a short gap. Settings.tutorial_hints turns
+## them all off.
 ##
 ## Cues bring hints up: the Game calls cue() (a run or a floor starts, a perk is picked), signals
 ## of the hero and the world call it (a monster noticed the hero, a boss, an ambush, the seal
@@ -57,6 +60,9 @@ var _gap := 0.0
 var _poll := 0.0
 var _walked := 0.0
 var _last_position := Vector2.INF
+## Hints whose time ran out unread, this session: id -> [how many times, the World.floor_id it
+## last did on]. Not again on that floor; seen once it has run out more than unread_returns times.
+var _ran_out := {}
 
 
 func _ready() -> void:
@@ -107,10 +113,15 @@ func bind(new_player: Player, new_world: World, new_hud: Hud) -> void:
 	_last_position = Vector2.INF
 
 
-## Something happened: the hints it brings up get in line (once ever each).
+## Something happened: the hints it brings up get in line (once ever each). A new floor also
+## brings back the chained hints (no cue of their own) that ran out unread.
 func cue(cue_name: StringName) -> void:
 	if not is_enabled():
 		return
+	if cue_name == &"floor_start":
+		for hint in def.hints:
+			if hint.cue == &"" and hint.after != &"" and _ran_out.has(hint.id) and Profile.has_seen_hint(hint.after) and _wants(hint):
+				_add(hint)
 	for hint in def.hints:
 		if hint.cue == cue_name and _wants(hint):
 			if hint.after == &"" or Profile.has_seen_hint(hint.after):
@@ -143,7 +154,7 @@ func _process(delta: float) -> void:
 		if current.duration > 0.0:
 			_time_left -= delta
 			if _time_left <= 0.0:
-				_close(true)
+				_run_out()
 		return
 	_gap -= delta
 	if _gap <= 0.0 and not _queue.is_empty() and not is_blocked.call():
@@ -214,7 +225,21 @@ func _near(group: StringName) -> bool:
 
 
 func _wants(hint: HintDef) -> bool:
-	return not Profile.has_seen_hint(hint.id) and hint != current and not _queue.has(hint)
+	return not Profile.has_seen_hint(hint.id) and hint != current and not _queue.has(hint) and not _ran_out_here(hint)
+
+
+## Its time ran out unread on this floor: it waits for another.
+func _ran_out_here(hint: HintDef) -> bool:
+	return _ran_out.has(hint.id) and world != null and int(_ran_out[hint.id][1]) == world.floor_id
+
+
+## The hint on screen stayed its whole time without a tap or its action: unread, it comes back
+## on a later floor, unless it already did unread_returns times (then it counts as seen).
+func _run_out() -> void:
+	var hint := current
+	var times := int(_ran_out.get(hint.id, [0, 0])[0]) + 1
+	_ran_out[hint.id] = [times, world.floor_id if world else 0]
+	_close(times > def.unread_returns)
 
 
 func _add(hint: HintDef) -> void:

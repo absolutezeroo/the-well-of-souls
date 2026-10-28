@@ -346,10 +346,17 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
 ## Tutorial
 
 No separate tutorial level: the first run teaches as it goes. A small wooden board comes up at the
-top of the screen (`HintBox`), says what to do, and, when it is about a control, a gold ring pulses
-around it with an arrow. Each hint shows **once ever** (`Profile.hints_seen`), one at a time, never
-over a menu or a big banner. A tap or a click (or OK) closes it. A hint about a control says it
-in the device's words ("Tap the big button" / "Press [Space]", `HintDef.button_text`).
+top of the screen (`HintBox`), its title in gold over **one line** saying what to do, and, when it
+is about a control, a gold ring pulses around it with an arrow. The board is as wide as its line,
+up to 640 units of text (`HintBox.MAX_TEXT`: every hint fits that in English and French, by touch,
+keys and gamepad, `FirstRunTests.run_hints()`; a longer key name wraps); it keeps clear of the
+HUD's top corners where the screen allows (between them on a phone, against the right one at
+1280 wide, the Health numbers in sight). A hint shows **once ever** once read (`Profile.hints_seen`):
+a tap or a click (or OK) on it, or what it asks done. One whose time runs out unread comes back on
+a later floor, once (`TutorialDef.unread_returns`), the next steps of its chain with it; then it
+counts as seen. One at a time, never over a menu or a big banner. A hint about a control says it
+in the device's words ("Tap the big button" / "Press [Space]", `HintDef.button_text`). The
+codex's **Tips** tab lists the hints seen, to read again, in the device's words.
 
 - **First steps**: move (it stays until you have walked a few tiles), then the sealed stairs; when
   a monster first sees you, attack (tap; until you swing), then roll, then the weapon's two
@@ -564,7 +571,8 @@ stones lit in their runes' colors. The selected slot pulses gold.
   shows in place of its encounter's description, in its color (the panel keeps its height on a
   720-line screen), and the outcome takes its place when a choice is made.
 - **Codex, Voices** (*Paroles*): what each speaker said and is kept, by speaker, and how many
-  lines are still to hear.
+  lines are still to hear. **Tips** (*Conseils*): the tutorial's hints seen, title and line. With
+  six tabs the header holds the tabs and Close; the souls sit at the end of the tab's summary line.
 
 
 ## Active product and input ownership

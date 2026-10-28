@@ -11,8 +11,9 @@ decision ([decisions/](../decisions/README.md)).
 
 - A new mechanic is **introduced** where the player can't really fail, **developed**, then
   **twisted** deeper down (Nintendo's kishōtenketsu): three placements by depth.
-- Hints are one line, once per profile, never in a combat pause, with the active device's glyph
-  (`Prompts.pick()`), and can be read again in the codex.
+- Hints are one line, once per profile once read (one that runs out unread comes back once, on a
+  later floor), never in a combat pause, with the active device's glyph (`Prompts.pick()`), and
+  can be read again in the codex's Tips (interface.md "Tutorial").
 - First run *(start)*: a fight within 30 s of launching, a perk choice within 3 min, a moment of
   story at the first death (the Vigil-Keeper). The first room has no damage until the hero has
   moved and attacked; the first monster is slow, clearly telegraphed, dead in 2-3 hits.
