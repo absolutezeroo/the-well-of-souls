@@ -338,6 +338,11 @@ be confused with the soul-loss that the rescue quests resolve.
 
 The Temple of the Last Flame stands north of the square. Its inhabited shrine remains a
 place of care: the Veilleuse tends it morning and evening; Sayo comes to pray once restored.
-It is not another dungeon or a temple of Solhar. The current facade, stonework and furnishings
-use the least ruined pieces of the supplied temple pack. The living village's residential
-houses still await their own art. No new survivor or revelation is added by entering the temple.
+It is not another dungeon or a temple of Solhar. No new survivor or revelation is added by
+entering the temple.
+
+A sleeping house looks as its sleeper does: moss and the Well's roots over it, its door shut to
+the living. When its sleeper wakes the moss is gone with the roots and the door opens. Sayo's
+house is a room of songs: her shelves, the low table where she writes, the paper lantern Ren made
+her. Ren's workshop smells of oil; lanterns wait on his bench for their wicks. Entering a home
+reveals nothing of the moonless night; it shows what the Well took and gave back: ordinary life.

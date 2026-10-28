@@ -37,9 +37,9 @@ concernés avec Git. L’outil n’est pas un éditeur de sauvegardes de joueurs
 | `Home_nom` | Position d’origine/écho d’un habitant. |
 | `Animal_nom` | Place d’un animal (poules, chat, chien) : il y dort et se promène dans le cadre bleu autour. Garde-la à moins de 3 tuiles de son propriétaire (potager, étal, cabane). |
 | `nom_08h_…` | Destination d’une activité à cette heure. Chaque horaire reste indépendant. |
-| `temple_door`, `temple_return_position` | Entrée extérieure et endroit où ressort le héros. |
-| `temple_spawn`, `temple_exit`, `temple_shrine` | Arrivée, sortie et sanctuaire dans la salle. |
-| `temple_camera_center` | Centre du cadrage intérieur. |
+| `kagari_temple_door`, `…_return_position` (et `sayo_home_…`, `ren_home_…`) | Entrée extérieure et endroit où ressort le héros. |
+| `…_spawn`, `…_exit`, `…_shrine` | Arrivée, sortie et sanctuaire dans la salle. |
+| `…_camera_center` | Centre du cadrage intérieur. |
 
 Si tu déplaces le **temple**, déplace aussi sa porte et son point de retour. Si tu déplaces une
 maison, pense au point `Home_…` et aux destinations des horaires qui s’y rendent. L’intérieur
@@ -67,9 +67,14 @@ Ouvre les `.tres` dans l’inspecteur, enregistre-les, puis recharge l’aperçu
   `Idle Frames`/`Walk Frames`, vitesse, pauses et heures de veille (`Wakes At`, `Sleeps At`).
 - **Sols/chemins :** `Ground`, `Ground Region`, `Paths`, `Path Texture` et `Path Region`.
   L’aperçu déplace les chemins ; leurs dimensions se règlent dans `Paths`.
-- **Temple :** `data/village/temple.tres`, avec `Tiles`, `Props`, `Walls`, `Walk Bounds`,
-  les portes et le cadrage. Pour une autre maison jouable, crée un autre
-  `VillageInteriorDef` et ajoute-le à `Interiors` sur le village.
+- **Temple et maisons :** `data/village/temple.tres`, `sayo_home.tres`, `ren_home.tres`, avec
+  `Tiles`, `Props`, `Walls`, `Walk Bounds`, les portes et le cadrage. `Opens After` garde une
+  maison fermée tant que son habitant dort. Pour une autre maison jouable, crée un autre
+  `VillageInteriorDef` et ajoute-le à `Interiors` sur le village ; place sa porte sous la
+  collision de la façade (les tests vérifient qu'on peut y marcher).
+- **Façades endormies et réveillées :** une maison endormie est l'accessoire envahi de mousse
+  avec `Cleared By` = la quête de son habitant ; la même maison réveillée est un second
+  accessoire avec `Shown After` = cette quête. L'aperçu montre les deux superposées.
 - **PNJ :** `keeper.tres`, `ren.tres`, `sayo.tres`, `wanderer.tres`. `Schedule` contient les
   horaires ; `Destination` donne le lieu et `Room` l’intérieur éventuel. Les horaires commencent
   à minuit et restent triés. `Idle Frames` et `Walk Frames` décrivent l’animation du spritesheet.
@@ -79,7 +84,6 @@ Ouvre les `.tres` dans l’inspecteur, enregistre-les, puis recharge l’aperçu
 - **Âmes, lampes et descente :** `data/village/atmosphere.tres` (quantité, vitesse, rayon,
   palette et durées). Les durées des quatre phases doivent rester strictement positives.
 
-Le pack du temple ne fournit pas de maisons résidentielles : les façades provisoires restent
-à remplacer avec les assets adaptés. Le guide [ajouter du contenu](adding-content.md) détaille
+Le guide [ajouter du contenu](adding-content.md) détaille
 les ressources. Après une modification de disposition, exécute au minimum les tests
 `unit.village` et `title.village` décrits dans [testing.md](testing.md).

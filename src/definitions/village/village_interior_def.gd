@@ -16,6 +16,9 @@ extends Resource
 @export var exit: Vector2
 @export var shrine: Vector2
 @export var has_shrine: bool = false
+## A home opens once its resident wakes (this quest returned); null: always open (the temple).
+## Until then its door is not an interaction and nobody walks in.
+@export var opens_after: VillageQuestDef
 @export var light: Color = Color.WHITE
 @export var backdrop: Color = Color("191c22")
 @export var tiles: Array[VillageTilePatchDef] = []

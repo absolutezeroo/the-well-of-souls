@@ -7,20 +7,23 @@
 [ext_resource type="Resource" path="res://data/village/topics/ren_sayo_home.tres" id="topic_2"]
 [ext_resource type="Resource" path="res://data/village/topics/ren_two_homes.tres" id="reaction"]
 [ext_resource type="Script" path="res://src/definitions/village/village_activity_def.gd" id="activity_script"]
+[ext_resource type="Resource" path="res://data/village/ren_home.tres" id="home"]
 
 [sub_resource type="Resource" id="activity_0"]
 script = ExtResource("activity_script")
 start_hour = 0.0
 display_name = "Resting at home"
-destination = Vector2(1136, 352)
-indoors = true
+destination = Vector2(648, 312)
+indoors = false
+room = ExtResource("home")
 
 [sub_resource type="Resource" id="activity_1"]
 script = ExtResource("activity_script")
 start_hour = 6.0
 display_name = "Mending lanterns at home"
-destination = Vector2(1136, 352)
+destination = Vector2(448, 376)
 indoors = false
+room = ExtResource("home")
 
 [sub_resource type="Resource" id="activity_2"]
 script = ExtResource("activity_script")
@@ -33,8 +36,9 @@ indoors = false
 script = ExtResource("activity_script")
 start_hour = 12.0
 display_name = "Mending lanterns at home"
-destination = Vector2(1136, 352)
+destination = Vector2(448, 376)
 indoors = false
+room = ExtResource("home")
 
 [sub_resource type="Resource" id="activity_4"]
 script = ExtResource("activity_script")
@@ -47,8 +51,9 @@ indoors = false
 script = ExtResource("activity_script")
 start_hour = 20.0
 display_name = "Resting at home"
-destination = Vector2(1136, 352)
-indoors = true
+destination = Vector2(648, 312)
+indoors = false
+room = ExtResource("home")
 
 [resource]
 script = ExtResource("script")

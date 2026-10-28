@@ -23,7 +23,7 @@ func rebuild(def: VillageDef) -> void:
 				inside._block(Rect2(room.offset + prop.position + prop.collision.position, prop.collision.size))
 		rooms[room] = inside
 	for prop in def.props:
-		if prop.collision.has_area() and (prop.cleared_by == null or VillageProgress.stage(prop.cleared_by) != VillageProgress.Step.RETURNED):
+		if prop.collision.has_area() and VillageProgress.prop_present(prop):
 			_block(Rect2(prop.position + prop.collision.position, prop.collision.size))
 	_block(Rect2(def.well + Vector2(-34, -22), Vector2(68, 44)))
 	_block(Rect2(def.noticeboard + Vector2(-24, -12), Vector2(48, 12)))

@@ -46,8 +46,8 @@ approach and interact; walking by never launches a run or opens a conversation a
    the recoverable object. It uses the normal contextual Interact action and a warm light.
 3. Recover it: the lantern keeps the evidence permanently, even through death or a restart.
 4. Return to the Veilleuse, via the pause menu or after the descent ends, and hand it over.
-5. Ren wakes, his eastern root barricade disappears (including collision), a window lights,
-   and 15 souls are awarded once. His words and the other inhabitants' reactions change.
+5. Ren wakes, his eastern root barricade disappears (including collision), his house wakes
+   from its moss and its workshop opens ("The homes"), and 15 souls are awarded once. His words and the other inhabitants' reactions change.
 
 This is an explicit accepted → evidence found → returned sequence, not an automatically paid
 kill counter. The existing daily/weekly QuestBoard remains separate. The first infestation
@@ -59,8 +59,8 @@ no offline deterioration and no penalty for failed runs.
 1. Speak to Sayo and accept her request. Finding Ren's evidence alone does not unlock it.
 2. Recover her written verse on floor 4 of an ordinary descent; the lantern keeps it through
    death/restart under the same rules as the ember-box.
-3. Return it to Sayo. She wakes, the western roots and their collisions disappear, her window
-   lights, and 20 souls are paid once. Ren's rescue and the memorials remain intact.
+3. Return it to Sayo. She wakes, the western roots and their collisions disappear, her house
+   wakes and opens, and 20 souls are paid once. Ren's rescue and the memorials remain intact.
 
 The two fronts are independent: Ren's return removes only the eastern roots. Sayo stays an echo
 until her own quest is returned. The HUD points to the next available quest when none is active,
@@ -171,10 +171,10 @@ schedule, followed by daily/weekly bounties. Found requests come first and compl
 Reading a board never accepts or pays a request: return to the resident for those actions.
 Bounties continue to use real-world dates, independently of the village clock.
 
-Ordinary night rest still hides Ren, Sayo or the Wanderer behind home/stall doors; interacting
-there knocks and opens the normal conversation, so a quest or service is not time-locked.
-Their actual home interiors await a residential asset pack. Kagari is an inhabited village
-whose souls were taken; its houses are not a settlement of ruins to rebuild.
+A woken Sayo and Ren rest inside their own homes ("The homes" below), where the hero can find
+them at night. The Wanderer still rests behind his stall's door; interacting there knocks and
+opens the normal conversation, so a quest or service is not time-locked. Kagari is an inhabited
+village whose souls were taken; its houses are not a settlement of ruins to rebuild.
 
 ## The layout of Kagari
 
@@ -192,8 +192,10 @@ at the Well's square. Every place stands where its use puts it:
   corners, the two memorial lamps.
 - **North-west and north-east, the sleeping homes:** Sayo's and Ren's houses, each at the end of
   its own lane from the street. The Well's roots smother each house on both sides (never across
-  its lane, so the echo at the door can still be reached); returning the quest clears them.
-  Sayo's washing line and Ren's hay sit beside their homes.
+  its lane, so the echo at the door can still be reached), and the house itself stands overgrown:
+  the pack's own moss-covered twin from TilesetVillageAbandoned. Returning the quest clears the
+  roots and wakes the house: the same house from TilesetHouse takes its place (`shown_after`),
+  its door at the lane's end, and it opens. Sayo's washing line and Ren's hay sit beside them.
 - **South, the lane of cottages:** a cottage with its vegetable rows and the woodcutter's hut
   with its woodpile, joined by a lane across the avenue.
 - **The forest ring** closes the clearing on every side but the south.
@@ -303,12 +305,43 @@ spawn/exit, shrine interaction, light, tiles, wall collisions and props. `Villag
 records repeated atlas patches; `VillageInteriorFloor` draws them only on change. The shared
 `VillagePropView` renders props inside and outside. `VillageNavigation` caches one grid per
 registered room, and `VillageActivityDef.room` makes an appointment's destination room-local.
-Register more interiors in `VillageDef.interiors`; future houses can reuse this mechanism.
+Register more interiors in `VillageDef.interiors`; the homes below reuse this mechanism.
 
 All of Kagari is Ninja Adventure art (CC0, assets/LICENSE_NinjaAdventure.txt): TilesetHouse
 (assets/tiles/house.png) for the temple, the houses and the shop, TilesetInteriorFloor and
-TilesetWallSimple for the temple's room. The Craftpix temple used before clashed with that
-style and was removed. Enterable residential houses remain a separate next step.
+TilesetWallSimple for the rooms, the pack's furniture, beds (tileset_bed) and camp pieces
+(tileset_camp) inside the homes. The Craftpix temple used before clashed with that style and was
+removed.
+
+## The homes
+
+Sayo's house and Ren's workshop (`data/village/sayo_home.tres`, `ren_home.tres`) open when their
+resident wakes (`VillageInteriorDef.opens_after`: until that quest is returned the overgrown
+facade stands, its door is no interaction and `VillageHub.enter_room()` refuses it). Each is a
+small room at its own world offset, entered and left like the temple: the same hero, clock and
+profile, a steady warm light, a fixed camera at the surface's zoom (2, made whole by
+`PixelGrid.camera_zoom()`), the room filling a 1280x720 view.
+
+- **The shell** is the pack's room frame (TilesetWallSimple's 9-slice: corners, edges, the
+  capped pieces either side of the doorway), a wooden back wall from TilesetHouse, a floor of
+  TilesetInteriorFloor: light boards for Sayo, the dark stone of a lantern-mender's workshop for
+  Ren, in a stone frame like the temple's. Furniture stands against the walls and leaves the
+  middle free; the threshold is a floor tile in the frame's gap.
+- **Sayo's house**: her bed (blue, her colour), a paper lantern Ren made her, drawers, the
+  shelves of her songs, the low table where she writes on a straw mat, two stools, a plant.
+- **Ren's workshop**: a tool chest, shelves, two hanging lanterns, the workbench with paper
+  lanterns waiting for wicks, oil barrels and crates by the door, his bed in the far corner.
+- **Who is inside, when**: Sayo rests at home at night and welcomes neighbours inside from 16:00;
+  Ren mends lanterns at his workbench in the early morning and at noon, and rests at home at
+  night. Their appointments carry `room`, so they walk to their door, cross it and walk to their
+  place inside, as in the temple. At night the hero finds them inside, awake enough to talk.
+
+Doors stand below each facade's clearance (`unit.village`: every door walkable from the spawn,
+with a path at its step, nothing solid crowding it). `title.village` checks a sleeping home
+cannot be entered, then, once woken, the facades swap with their collisions, the door is a real
+interaction, the room has its own bounds and light, and the threshold returns the hero to the
+house's own door. `tools/design/capture.py` shoots each home (`homes`) and the woken square
+(`village_woken`).
 
 Sayo's figure and portrait share a teal palette material, distinguishing her from the Veilleuse
 without duplicating or regenerating sprite textures. Static props remain separate from these

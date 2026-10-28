@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://src/definitions/village/village_prop_def.gd" id="prop_script"]
 [ext_resource type="Texture2D" path="res://assets/tiles/house.png" id="house"]
 [ext_resource type="Resource" path="res://data/village/temple.tres" id="temple"]
+[ext_resource type="Resource" path="res://data/village/sayo_home.tres" id="sayo_home"]
+[ext_resource type="Resource" path="res://data/village/ren_home.tres" id="ren_home"]
 [ext_resource type="Texture2D" path="res://assets/tiles/floor.png" id="ground"]
 [ext_resource type="Resource" path="res://data/village/ember_box.tres" id="quest"]
 [ext_resource type="Resource" path="res://data/village/last_verse.tres" id="sayo_quest"]
@@ -39,18 +41,38 @@ region = Rect2(32, 48, 16, 16)
 [sub_resource type="Resource" id="prop_0"]
 script = ExtResource("prop_script")
 texture = ExtResource("ruins")
-position = Vector2(304, 340)
+position = Vector2(312, 340)
 art_scale = 2.0
-region = Rect2(184, 96, 72, 80)
-collision = Rect2(-60, -55, 120, 55)
+region = Rect2(192, 96, 64, 80)
+collision = Rect2(-68, -55, 120, 55)
+cleared_by = ExtResource("sayo_quest")
+
+[sub_resource type="Resource" id="sayo_house_awake"]
+script = ExtResource("prop_script")
+texture = ExtResource("house")
+position = Vector2(320, 340)
+art_scale = 2.0
+region = Rect2(400, 224, 64, 80)
+collision = Rect2(-58, -50, 116, 40)
+shown_after = ExtResource("sayo_quest")
 
 [sub_resource type="Resource" id="prop_1"]
 script = ExtResource("prop_script")
 texture = ExtResource("ruins")
-position = Vector2(1136, 340)
+position = Vector2(1136, 308)
 art_scale = 2.0
-region = Rect2(256, 96, 64, 80)
-collision = Rect2(-50, -55, 100, 55)
+region = Rect2(256, 96, 64, 64)
+collision = Rect2(-50, -34, 100, 30)
+cleared_by = ExtResource("quest")
+
+[sub_resource type="Resource" id="ren_house_awake"]
+script = ExtResource("prop_script")
+texture = ExtResource("house")
+position = Vector2(1152, 340)
+art_scale = 2.0
+region = Rect2(400, 112, 64, 112)
+collision = Rect2(-58, -60, 116, 50)
+shown_after = ExtResource("quest")
 
 [sub_resource type="Resource" id="prop_2"]
 script = ExtResource("prop_script")
@@ -635,7 +657,7 @@ restored_text = "Two windows burn. Beyond the square, Kagari still sleeps."
 bounds = Rect2(0, 0, 1440, 960)
 spawn = Vector2(720, 680)
 well = Vector2(720, 560)
-interiors = [ExtResource("temple")]
+interiors = [ExtResource("temple"), ExtResource("sayo_home"), ExtResource("ren_home")]
 memorial = Vector2(1120, 690)
 noticeboard = Vector2(600, 492)
 clock = ExtResource("clock")
@@ -656,5 +678,5 @@ decor_chance = 0.18
 quests = [ExtResource("quest"), ExtResource("sayo_quest")]
 services = [ExtResource("market"), ExtResource("memorial")]
 residents = [ExtResource("keeper"), ExtResource("sayo"), ExtResource("ren"), ExtResource("wanderer")]
-props = [SubResource("prop_0"), SubResource("prop_1"), SubResource("prop_2"), SubResource("prop_3"), SubResource("prop_4"), SubResource("prop_5"), SubResource("prop_6"), SubResource("prop_7"), SubResource("prop_8"), SubResource("prop_9"), SubResource("prop_10"), SubResource("prop_11"), SubResource("prop_12"), SubResource("prop_13"), SubResource("prop_14"), SubResource("prop_15"), SubResource("prop_16"), SubResource("prop_17"), SubResource("prop_18"), SubResource("prop_19"), SubResource("west_roots_0"), SubResource("west_roots_1"), SubResource("west_roots_2"), SubResource("west_roots_3"), SubResource("deco_0"), SubResource("deco_1"), SubResource("deco_2"), SubResource("deco_3"), SubResource("deco_4"), SubResource("deco_5"), SubResource("deco_6"), SubResource("deco_7"), SubResource("deco_8"), SubResource("deco_9"), SubResource("deco_10"), SubResource("deco_11"), SubResource("deco_12"), SubResource("deco_13"), SubResource("deco_14"), SubResource("deco_15"), SubResource("deco_16"), SubResource("deco_17"), SubResource("deco_18"), SubResource("deco_19"), SubResource("deco_20"), SubResource("deco_21"), SubResource("deco_22"), SubResource("deco_23"), SubResource("deco_24"), SubResource("deco_25"), SubResource("deco_26"), SubResource("deco_27"), SubResource("deco_28"), SubResource("deco_29"), SubResource("deco_30"), SubResource("deco_31"), SubResource("deco_32"), SubResource("deco_33"), SubResource("deco_34"), SubResource("deco_35"), SubResource("deco_36"), SubResource("deco_37"), SubResource("deco_38"), SubResource("temple_flag_left"), SubResource("temple_flag_right"), SubResource("market_flag")]
+props = [SubResource("prop_0"), SubResource("sayo_house_awake"), SubResource("prop_1"), SubResource("ren_house_awake"), SubResource("prop_2"), SubResource("prop_3"), SubResource("prop_4"), SubResource("prop_5"), SubResource("prop_6"), SubResource("prop_7"), SubResource("prop_8"), SubResource("prop_9"), SubResource("prop_10"), SubResource("prop_11"), SubResource("prop_12"), SubResource("prop_13"), SubResource("prop_14"), SubResource("prop_15"), SubResource("prop_16"), SubResource("prop_17"), SubResource("prop_18"), SubResource("prop_19"), SubResource("west_roots_0"), SubResource("west_roots_1"), SubResource("west_roots_2"), SubResource("west_roots_3"), SubResource("deco_0"), SubResource("deco_1"), SubResource("deco_2"), SubResource("deco_3"), SubResource("deco_4"), SubResource("deco_5"), SubResource("deco_6"), SubResource("deco_7"), SubResource("deco_8"), SubResource("deco_9"), SubResource("deco_10"), SubResource("deco_11"), SubResource("deco_12"), SubResource("deco_13"), SubResource("deco_14"), SubResource("deco_15"), SubResource("deco_16"), SubResource("deco_17"), SubResource("deco_18"), SubResource("deco_19"), SubResource("deco_20"), SubResource("deco_21"), SubResource("deco_22"), SubResource("deco_23"), SubResource("deco_24"), SubResource("deco_25"), SubResource("deco_26"), SubResource("deco_27"), SubResource("deco_28"), SubResource("deco_29"), SubResource("deco_30"), SubResource("deco_31"), SubResource("deco_32"), SubResource("deco_33"), SubResource("deco_34"), SubResource("deco_35"), SubResource("deco_36"), SubResource("deco_37"), SubResource("deco_38"), SubResource("temple_flag_left"), SubResource("temple_flag_right"), SubResource("market_flag")]
 animals = Array[ExtResource("animal_script")]([SubResource("hen_white"), SubResource("hen_brown"), SubResource("market_cat"), SubResource("woodcutter_dog")])

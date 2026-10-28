@@ -40,7 +40,7 @@ func refresh() -> void:
 			dressing.remove_child(child)
 			child.queue_free()
 	for prop in def.props:
-		if prop.cleared_by and VillageProgress.stage(prop.cleared_by) == VillageProgress.Step.RETURNED:
+		if not VillageProgress.prop_present(prop):
 			continue
 		var body := VillagePropView.new()
 		body.def = prop

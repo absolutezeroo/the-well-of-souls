@@ -56,6 +56,17 @@ static func _advance(quest: VillageQuestDef, expected: Step, next: Step) -> bool
 	return Profile.from_data(data)
 
 
+## Whether a prop stands now: a sleeping home's roots and overgrown facade go when its quest is
+## returned, the woken facade comes with it.
+static func prop_present(prop: VillagePropDef) -> bool:
+	return (prop.cleared_by == null or stage(prop.cleared_by) != Step.RETURNED) \
+		and (prop.shown_after == null or stage(prop.shown_after) == Step.RETURNED)
+
+
+static func room_open(room: VillageInteriorDef) -> bool:
+	return room.opens_after == null or stage(room.opens_after) == Step.RETURNED
+
+
 static func restored(service: VillageServiceDef) -> bool:
 	return Profile.village_services.has(String(service.id))
 

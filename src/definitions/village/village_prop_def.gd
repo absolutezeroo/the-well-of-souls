@@ -10,6 +10,9 @@ extends Resource
 @export var tint: Color = Color.WHITE
 @export var collision: Rect2
 @export var cleared_by: VillageQuestDef
+## Appears (with its collision) only once this quest is returned: a woken home's own facade,
+## where the sleeping one (`cleared_by` the same quest) stood overgrown.
+@export var shown_after: VillageQuestDef
 @export var lit_by: VillageServiceDef
 ## What a lamp shows until `lit_by` is restored: the pack's own unlit piece (never the lit one
 ## darkened by a multiply: decision 0009).

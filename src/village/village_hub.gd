@@ -20,6 +20,8 @@ class Spot extends RefCounted:
 	var resident: VillageResidentDef
 	var room: VillageInteriorDef
 	var target_room: VillageInteriorDef
+	## A sleeping home's door is no interaction until its resident wakes (set on profile change).
+	var enabled := true
 
 var walker: VillageWalker
 var view: VillageView
@@ -200,7 +202,7 @@ func _physics_process(delta: float) -> void:
 				var actor := view.actor_for(spot.resident)
 				spot.at = actor.position
 				spot.room = actor.room
-			if spot.room != walker.room: continue
+			if spot.room != walker.room or not spot.enabled: continue
 			var candidate := walker.position.distance_squared_to(spot.at)
 			if candidate <= distance:
 				nearest = spot
@@ -235,7 +237,7 @@ func interact() -> bool:
 
 
 func enter_room(room: VillageInteriorDef) -> bool:
-	if room == null or not def.interiors.has(room) or walker.room != null or not _can_cross():
+	if room == null or not def.interiors.has(room) or walker.room != null or not _can_cross() or not VillageProgress.room_open(room):
 		return false
 	_set_place(room, room.offset + room.spawn)
 	return true
@@ -277,6 +279,12 @@ func _show_prompt() -> void:
 
 
 func _refresh() -> void:
+	for spot in spots:
+		if spot.action == &"enter":
+			spot.enabled = VillageProgress.room_open(spot.target_room)
+	if focus and not focus.enabled:
+		focus = null
+		_show_prompt()
 	_clock_minute = -1
 	refresh_time()
 	var lines := PackedStringArray()

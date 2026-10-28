@@ -58,3 +58,9 @@ path = ["assets/props/flag_red.png", "assets/props/flag_blue.png", "assets/props
 SPDX-FileCopyrightText = "Pixel-boy and AAA (Ninja Adventure asset pack, https://pixel-boy.itch.io/ninja-adventure-asset-pack)"
 SPDX-License-Identifier = "CC0-1.0"
 SPDX-FileComment = "Kagari's ambient life, pack sheets copied unchanged: Backgrounds/Animated/Flag/FlagRed16x16.png and FlagBlue16x16.png (flags), Backgrounds/Animated/Plant/SpriteSheet16x16.png (swaying_flower), Actor/Animal/Chicken/SpriteSheetWhite.png and SpriteSheetBrown.png (hen_white, hen_brown), Actor/Animal/Cat/SpriteSheet.png (cat), Actor/Animal/Dog/SpriteSheet.png (dog)."
+
+[[annotations]]
+path = ["assets/tiles/bed.png", "assets/tiles/camp.png"]
+SPDX-FileCopyrightText = "Pixel-boy and AAA (Ninja Adventure asset pack, https://pixel-boy.itch.io/ninja-adventure-asset-pack)"
+SPDX-License-Identifier = "CC0-1.0"
+SPDX-FileComment = "Kagari's homes, pack sheets copied unchanged: Backgrounds/Tilesets/tileset_bed.png (bed), Backgrounds/Tilesets/tileset_camp.png (camp)."

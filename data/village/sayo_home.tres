@@ -1,0 +1,219 @@
+[gd_resource type="Resource" script_class="VillageInteriorDef" format=3]
+[ext_resource type="Script" path="res://src/definitions/village/village_interior_def.gd" id="script"]
+[ext_resource type="Script" path="res://src/definitions/village/village_tile_patch_def.gd" id="tile"]
+[ext_resource type="Script" path="res://src/definitions/village/village_prop_def.gd" id="prop"]
+[ext_resource type="Texture2D" path="res://assets/tiles/interior_floor.png" id="floor_art"]
+[ext_resource type="Texture2D" path="res://assets/tiles/house.png" id="house"]
+[ext_resource type="Texture2D" path="res://assets/tiles/furniture.png" id="furniture"]
+[ext_resource type="Texture2D" path="res://assets/tiles/interior_wall.png" id="walls"]
+[ext_resource type="Texture2D" path="res://assets/tiles/bed.png" id="bed"]
+[ext_resource type="Resource" path="res://data/village/last_verse.tres" id="sayo_quest"]
+
+[sub_resource type="Resource" id="tile_0"]
+script = ExtResource("tile")
+texture = ExtResource("floor_art")
+region = Rect2(192, 32, 16, 16)
+area = Rect2(256, 224, 448, 224)
+
+[sub_resource type="Resource" id="tile_1"]
+script = ExtResource("tile")
+texture = ExtResource("floor_art")
+region = Rect2(176, 80, 16, 16)
+area = Rect2(448, 448, 64, 32)
+
+[sub_resource type="Resource" id="tile_2"]
+script = ExtResource("tile")
+texture = ExtResource("house")
+region = Rect2(352, 192, 16, 16)
+area = Rect2(256, 160, 448, 32)
+
+[sub_resource type="Resource" id="tile_3"]
+script = ExtResource("tile")
+texture = ExtResource("house")
+region = Rect2(368, 208, 16, 16)
+area = Rect2(256, 192, 448, 32)
+
+[sub_resource type="Resource" id="tile_4"]
+script = ExtResource("tile")
+texture = ExtResource("furniture")
+region = Rect2(208, 64, 48, 48)
+area = Rect2(416, 272, 96, 96)
+
+[sub_resource type="Resource" id="tile_5"]
+script = ExtResource("tile")
+texture = ExtResource("walls")
+region = Rect2(0, 0, 16, 16)
+area = Rect2(224, 128, 32, 32)
+
+[sub_resource type="Resource" id="tile_6"]
+script = ExtResource("tile")
+texture = ExtResource("walls")
+region = Rect2(48, 0, 16, 16)
+area = Rect2(256, 128, 448, 32)
+
+[sub_resource type="Resource" id="tile_7"]
+script = ExtResource("tile")
+texture = ExtResource("walls")
+region = Rect2(64, 0, 16, 16)
+area = Rect2(704, 128, 32, 32)
+
+[sub_resource type="Resource" id="tile_8"]
+script = ExtResource("tile")
+texture = ExtResource("walls")
+region = Rect2(0, 16, 16, 16)
+area = Rect2(224, 160, 32, 288)
+
+[sub_resource type="Resource" id="tile_9"]
+script = ExtResource("tile")
+texture = ExtResource("walls")
+region = Rect2(64, 16, 16, 16)
+area = Rect2(704, 160, 32, 288)
+
+[sub_resource type="Resource" id="tile_10"]
+script = ExtResource("tile")
+texture = ExtResource("walls")
+region = Rect2(0, 64, 16, 16)
+area = Rect2(224, 448, 32, 32)
+
+[sub_resource type="Resource" id="tile_11"]
+script = ExtResource("tile")
+texture = ExtResource("walls")
+region = Rect2(64, 64, 16, 16)
+area = Rect2(704, 448, 32, 32)
+
+[sub_resource type="Resource" id="tile_12"]
+script = ExtResource("tile")
+texture = ExtResource("walls")
+region = Rect2(48, 64, 16, 16)
+area = Rect2(256, 448, 160, 32)
+
+[sub_resource type="Resource" id="tile_13"]
+script = ExtResource("tile")
+texture = ExtResource("walls")
+region = Rect2(16, 64, 16, 16)
+area = Rect2(416, 448, 32, 32)
+
+[sub_resource type="Resource" id="tile_14"]
+script = ExtResource("tile")
+texture = ExtResource("walls")
+region = Rect2(32, 64, 16, 16)
+area = Rect2(512, 448, 32, 32)
+
+[sub_resource type="Resource" id="tile_15"]
+script = ExtResource("tile")
+texture = ExtResource("walls")
+region = Rect2(48, 64, 16, 16)
+area = Rect2(544, 448, 160, 32)
+
+[sub_resource type="Resource" id="prop_0"]
+script = ExtResource("prop")
+texture = ExtResource("bed")
+position = Vector2(280, 290)
+region = Rect2(192, 48, 16, 32)
+collision = Rect2(-14, -56, 28, 52)
+
+[sub_resource type="Resource" id="prop_1"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(320, 250)
+region = Rect2(0, 80, 16, 32)
+collision = Rect2(-8, -8, 16, 8)
+
+[sub_resource type="Resource" id="prop_2"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(352, 248)
+region = Rect2(32, 112, 16, 32)
+collision = Rect2(-14, -16, 28, 14)
+
+[sub_resource type="Resource" id="prop_3"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(384, 248)
+region = Rect2(16, 112, 16, 32)
+collision = Rect2(-14, -16, 28, 14)
+
+[sub_resource type="Resource" id="prop_4"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(440, 214)
+region = Rect2(64, 144, 16, 16)
+
+[sub_resource type="Resource" id="prop_5"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(512, 206)
+region = Rect2(96, 160, 16, 16)
+
+[sub_resource type="Resource" id="prop_6"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(576, 248)
+region = Rect2(128, 112, 32, 32)
+collision = Rect2(-30, -16, 60, 14)
+
+[sub_resource type="Resource" id="prop_7"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(624, 248)
+region = Rect2(48, 112, 16, 32)
+collision = Rect2(-14, -16, 28, 14)
+
+[sub_resource type="Resource" id="prop_8"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(672, 250)
+region = Rect2(0, 120, 16, 24)
+collision = Rect2(-12, -10, 24, 10)
+
+[sub_resource type="Resource" id="prop_9"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(464, 324)
+region = Rect2(32, 160, 48, 16)
+collision = Rect2(-44, -18, 88, 16)
+
+[sub_resource type="Resource" id="prop_10"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(432, 356)
+region = Rect2(80, 112, 16, 16)
+
+[sub_resource type="Resource" id="prop_11"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(496, 356)
+region = Rect2(80, 112, 16, 16)
+
+[sub_resource type="Resource" id="prop_12"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(288, 440)
+region = Rect2(16, 144, 16, 16)
+collision = Rect2(-12, -10, 24, 10)
+
+[sub_resource type="Resource" id="prop_13"]
+script = ExtResource("prop")
+texture = ExtResource("furniture")
+position = Vector2(672, 440)
+region = Rect2(32, 144, 16, 16)
+collision = Rect2(-12, -10, 24, 10)
+
+[resource]
+script = ExtResource("script")
+id = &"sayo_home"
+display_name = "Sayo's House"
+offset = Vector2(2624, 0)
+bounds = Rect2(0, 0, 960, 640)
+walk_bounds = Rect2(256, 224, 448, 224)
+camera_center = Vector2(480, 304)
+camera_zoom = 2.0
+door = Vector2(304, 360)
+return_position = Vector2(304, 388)
+spawn = Vector2(480, 412)
+exit = Vector2(480, 436)
+opens_after = ExtResource("sayo_quest")
+light = Color(1, 0.94, 0.86, 1)
+tiles = [SubResource("tile_0"), SubResource("tile_1"), SubResource("tile_2"), SubResource("tile_3"), SubResource("tile_4"), SubResource("tile_5"), SubResource("tile_6"), SubResource("tile_7"), SubResource("tile_8"), SubResource("tile_9"), SubResource("tile_10"), SubResource("tile_11"), SubResource("tile_12"), SubResource("tile_13"), SubResource("tile_14"), SubResource("tile_15")]
+walls = [Rect2(224, 128, 512, 96), Rect2(224, 224, 32, 256), Rect2(704, 224, 32, 256), Rect2(256, 448, 192, 32), Rect2(512, 448, 192, 32)]
+props = [SubResource("prop_0"), SubResource("prop_1"), SubResource("prop_2"), SubResource("prop_3"), SubResource("prop_4"), SubResource("prop_5"), SubResource("prop_6"), SubResource("prop_7"), SubResource("prop_8"), SubResource("prop_9"), SubResource("prop_10"), SubResource("prop_11"), SubResource("prop_12"), SubResource("prop_13")]

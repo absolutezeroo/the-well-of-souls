@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 435,
+  "next_id": 436,
   "tags": [
     "pc",
     "test",
@@ -5757,8 +5757,8 @@
     {
       "id": "task_383",
       "title": "Construire les vraies maisons habitées de Kagari avec un pack résidentiel",
-      "description": "Le pack Craftpix du temple a été reçu et intégré : façade, salle jouable, sanctuaire des compétences intérieur et horaires des PNJ (voir task_384). Ce pack ne contient pas de maisons de village. En attente d’assets résidentiels : remplacer les façades provisoires, assembler les vrais intérieurs et relier portes, travail et repos aux horaires. Réutiliser VillageInteriorDef et les transitions/navigation du temple. Kagari est un village dont les âmes sont aspirées par le puits, pas une suite de ruines ; conserver mobile, sauvegardes et boucle roguelike.\n\nNote : les maisons habitées doivent venir du pack Ninja Adventure complet (TilesetHouse), pas d'un autre pack, pour garder un seul style.\n\n27/10 : le pack complet est maintenant disponible (assets/tiles/house.png = TilesetHouse) ; les maisons visibles sont posées, il reste à les rendre habitables (intérieurs).",
-      "status": "in_progress",
+      "description": "Le pack Craftpix du temple a été reçu et intégré : façade, salle jouable, sanctuaire des compétences intérieur et horaires des PNJ (voir task_384). Ce pack ne contient pas de maisons de village. En attente d’assets résidentiels : remplacer les façades provisoires, assembler les vrais intérieurs et relier portes, travail et repos aux horaires. Réutiliser VillageInteriorDef et les transitions/navigation du temple. Kagari est un village dont les âmes sont aspirées par le puits, pas une suite de ruines ; conserver mobile, sauvegardes et boucle roguelike.\n\nNote : les maisons habitées doivent venir du pack Ninja Adventure complet (TilesetHouse), pas d'un autre pack, pour garder un seul style.\n\n27/10 : le pack complet est maintenant disponible (assets/tiles/house.png = TilesetHouse) ; les maisons visibles sont posées, il reste à les rendre habitables (intérieurs).\n\n28/10 (agent Kagari) — fait : la maison de Sayo et l'atelier de Ren sont habitables une fois leur habitant réveillé. Endormie, la maison est la jumelle moussue du pack (TilesetVillageAbandoned, régions corrigées : plus de bouts de sprites voisins sous les façades) ; réveillée, la même maison du TilesetHouse la remplace (nouveau champ VillagePropDef.shown_after) avec sa porte au bout de la ruelle. VillageInteriorDef.opens_after garde la porte fermée (pas d'interaction, enter_room refusé) tant que la quête n'est pas rendue. Intérieurs (data/village/sayo_home.tres, ren_home.tres) : cadre 9-slice du TilesetWallSimple, mur de bois du TilesetHouse, parquet clair pour Sayo, pierre sombre et cadre de pierre pour l'atelier de Ren ; meubles du pack (lit bleu, lanterne de papier faite par Ren, étagères de chants, table basse sur natte ; établi, lanternes à mèche, tonneaux d'huile, lit rouge). Nouvelles feuilles copiées telles quelles : tileset_bed.png et tileset_camp.png (REUSE.toml, table de la bible). Horaires : Sayo dort chez elle et y accueille les voisins à 16 h ; Ren répare ses lanternes à l'établi à 6 h et midi et dort chez lui ; ils passent par leur porte. Le Vieil Errant dort toujours derrière son étal. Caméra au zoom de la place (2, entier). Tests : maisons fermées avant le réveil, façades échangées avec leurs collisions, porte réelle, salle avec ses limites et sa lumière, retour à la bonne porte ; journée complète des habitants à travers les pièces. Les tests qui épinglaient le nombre de points d'interaction, d'objets du décor et « Ren derrière sa porte la nuit » ont été mis à jour (Ren dort maintenant dans son atelier ; le contrôle « derrière la porte » porte sur le Vieil Errant). Captures : /tmp/claude-0/-home-claude/d124b88d-9642-5f48-896d-092820964a06/scratchpad/fix_kagari/homes/ (home_sayo_home, home_ren_home, village_woken, temple ×3 résolutions, zoom, gris).\n\nÀ vérifier sur le S23 : entrer/sortir des deux maisons au tactile, place des meubles (rien ne gêne le passage), lisibilité du texte d'objectif au-dessus du mur, Sayo et Ren qui rentrent chez eux le soir. Reste : l'intérieur de la boutique du Vieil Errant (carte ajoutée).",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_1",
       "tags": [
@@ -5770,7 +5770,7 @@
         "tests"
       ],
       "created_at": 1793039913,
-      "updated_at": 1793186003,
+      "updated_at": 1793187036,
       "due_date": null
     },
     {
@@ -6561,6 +6561,22 @@
       ],
       "created_at": 1793186003,
       "updated_at": 1793186003
+    },
+    {
+      "id": "task_435",
+      "title": "Intérieur de la boutique du Vieil Errant",
+      "description": "Suite de task_383 : rendre la boutique verte du marché habitable (comptoir, étagères, marchandises du pack), le Vieil Errant y dormant et y commerçant le soir au lieu de « derrière son étal ». Même mécanisme que les maisons (VillageInteriorDef, porte sous la collision de la façade, horaires avec room).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "pnj",
+        "visuel"
+      ],
+      "created_at": 1793187036,
+      "updated_at": 1793187036
     }
   ]
 }

@@ -7,6 +7,7 @@
 [ext_resource type="Resource" path="res://data/village/topics/sayo_awake.tres" id="topic_2"]
 [ext_resource type="Material" path="res://data/village/sayo_palette.tres" id="appearance"]
 [ext_resource type="Script" path="res://src/definitions/village/village_activity_def.gd" id="activity_script"]
+[ext_resource type="Resource" path="res://data/village/sayo_home.tres" id="home"]
 
 [ext_resource type="Resource" path="res://data/village/temple.tres" id="temple"]
 
@@ -14,14 +15,15 @@
 script = ExtResource("activity_script")
 start_hour = 0.0
 display_name = "Resting at home"
-destination = Vector2(304, 352)
-indoors = true
+destination = Vector2(336, 312)
+indoors = false
+room = ExtResource("home")
 
 [sub_resource type="Resource" id="activity_1"]
 script = ExtResource("activity_script")
 start_hour = 6.0
 display_name = "Opening her house"
-destination = Vector2(304, 352)
+destination = Vector2(336, 376)
 indoors = false
 
 [sub_resource type="Resource" id="activity_2"]
@@ -43,15 +45,17 @@ room = ExtResource("temple")
 script = ExtResource("activity_script")
 start_hour = 16.0
 display_name = "Welcoming neighbours at home"
-destination = Vector2(304, 352)
+destination = Vector2(560, 340)
 indoors = false
+room = ExtResource("home")
 
 [sub_resource type="Resource" id="activity_5"]
 script = ExtResource("activity_script")
 start_hour = 20.0
 display_name = "Resting at home"
-destination = Vector2(304, 352)
-indoors = true
+destination = Vector2(336, 312)
+indoors = false
+room = ExtResource("home")
 
 [resource]
 script = ExtResource("script")

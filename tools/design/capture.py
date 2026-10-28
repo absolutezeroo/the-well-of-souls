@@ -20,7 +20,7 @@ RESOLUTIONS = ["2340x1080", "1920x1080", "1280x720"]
 def main():
 	parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
 	parser.add_argument("out", nargs="?", default=os.path.join(ROOT, ".captures"))
-	parser.add_argument("--shots", default="", help="village, village_map, temple, talk (default: all)")
+	parser.add_argument("--shots", default="", help="village, village_map, temple, talk, village_woken, homes (default: all)")
 	parser.add_argument("--godot", help="the Godot 4.7 binary")
 	args = parser.parse_args()
 	import run_tests

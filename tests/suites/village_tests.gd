@@ -393,7 +393,10 @@ func run_title() -> void:
 	var hub := HUB.instantiate() as VillageHub
 	add_child(hub)
 	await _frames(3)
-	check(hub.spots.size() == 10 and hub.walker != null and not hub.walker.blocked, "Kagari opens with a controllable hero, surface/temple places and four residents")
+	var shrines := VILLAGE.interiors.filter(func(room: VillageInteriorDef) -> bool: return room.has_shrine).size()
+	# The Well, the court, the board, a door in and out of every room, its shrine, each resident.
+	check(hub.spots.size() == 3 + 2 * VILLAGE.interiors.size() + shrines + VILLAGE.residents.size() and hub.walker != null and not hub.walker.blocked, "Kagari opens with a controllable hero, its places, rooms and residents")
+	await _test_closed_homes(hub)
 	await _test_temple(hub)
 	await _test_framing(hub)
 	_test_untinted_well(hub)
@@ -441,7 +444,9 @@ func run_title() -> void:
 	var roots := 0
 	for prop in VILLAGE.props:
 		if prop.cleared_by == VILLAGE.quests[0]: roots += 1
-	check(roots > 0 and hub.view.dressing.get_child_count() == VILLAGE.props.size() - roots + VILLAGE.residents.size() + VILLAGE.animals.size() + 5, "returning the quest removes its root props and their collisions")
+	# The walker, the memorial, the Well, the board, every room's view, the present props, people.
+	var dressing := func() -> int: return 4 + VILLAGE.interiors.size() + VILLAGE.props.filter(func(prop: VillagePropDef) -> bool: return VillageProgress.prop_present(prop)).size() + VILLAGE.residents.size() + VILLAGE.animals.size()
+	check(roots > 0 and hub.view.dressing.get_child_count() == dressing.call(), "returning the quest removes its root props and their collisions")
 	var first_count := hub.view.dressing.get_child_count()
 	hub.panel.hide()
 	check(hub.leave_room(), "the temple returns the existing hero to its exterior doorway")
@@ -458,7 +463,10 @@ func run_title() -> void:
 	var west_roots := 0
 	for prop in VILLAGE.props:
 		if prop.cleared_by == VILLAGE.quests[1]: west_roots += 1
-	check(west_roots > 0 and hub.view.dressing.get_child_count() == first_count - west_roots, "the second hand-in removes only the remaining western roots and collisions")
+	var woken := 0
+	for prop in VILLAGE.props:
+		if prop.shown_after == VILLAGE.quests[1]: woken += 1
+	check(west_roots > 0 and hub.view.dressing.get_child_count() == first_count - west_roots + woken, "the second hand-in removes only the remaining western roots and collisions (and wakes Sayo's facade)")
 	check(VILLAGE.residents[1].wakes_after == VILLAGE.quests[1] and hub.panel.words.text == tr(VILLAGE.residents[1].used_text), "Sayo's waking condition and conversation follow her own completed quest")
 	var subject := VILLAGE.residents[1].topics.back() as VillageTopicDef
 	var question := _choice(hub, subject.prompt)
@@ -486,11 +494,12 @@ func run_title() -> void:
 	await _frames(3)
 	check(hub.journal.visible and hub.walker.blocked and Profile.to_data() == journal_profile, "the journal is directly accessible and reading it neither accepts nor rewards quests")
 	hub.journal.hide()
+	await _test_open_homes(hub)
 	# The clock changes the appointment, not the resident's position. Travel remains physical.
 	start = ren.position
 	Profile.village_seconds = VILLAGE.clock.day_seconds * (20.0 - VILLAGE.clock.start_hour) / 24.0
 	hub.refresh_time()
-	check(ren.activity.indoors and ren.position == start, "evening assigns home rest without teleporting a travelling resident")
+	check((ren.activity.indoors or ren.activity.room != null) and ren.position == start, "evening assigns home rest without teleporting a travelling resident")
 	check(hub.view.daylight.color != Color.WHITE, "the village's world tint follows the time of day")
 
 	hub.panel.hide()
@@ -510,7 +519,10 @@ func run_title() -> void:
 	var night := HUB.instantiate() as VillageHub
 	add_child(night)
 	await _frames(2)
-	check(night.view.actor_for(VILLAGE.residents[2]).indoors and not night.view.actor_for(VILLAGE.residents[2]).visible, "a loaded nighttime village places Ren behind his home doorway")
+	# Ren rests inside his own workshop now (task_383); the Wanderer still rests behind his stall.
+	var ren_home := VILLAGE.residents[2].activity_at(22.0).room
+	check(ren_home != null and night.view.actor_for(VILLAGE.residents[2]).room == ren_home and night.view.actor_for(VILLAGE.residents[2]).visible, "a loaded nighttime village places Ren inside his home")
+	check(night.view.actor_for(VILLAGE.residents[3]).indoors and not night.view.actor_for(VILLAGE.residents[3]).visible, "a loaded nighttime village places the Wanderer behind his stall's doorway")
 	# Exercise real physics along a whole restored day, including the long market/home trips.
 	# Hold the clock only, so the authored appointments cannot change during each journey.
 	night.set_physics_process(false)
@@ -598,6 +610,47 @@ func _test_framing(hub: VillageHub) -> void:
 	get_tree().root.size = window
 	await _frames(3)
 	check(hub.walker.camera.zoom.is_equal_approx(Vector2.ONE * PixelGrid.camera_zoom(VillageWalker.SURFACE_ZOOM)), "the framing follows the window back")
+	hub.walker.position = VILLAGE.spawn
+
+
+## A sleeping home is sealed (task_383): its overgrown facade stands, its door is no interaction
+## and cannot be crossed, even by calling the hub directly.
+func _test_closed_homes(hub: VillageHub) -> void:
+	for room in VILLAGE.interiors:
+		if room.opens_after == null:
+			continue
+		hub.walker.position = room.door + Vector2(0, 16)
+		await _frames(3)
+		check(hub.focus == null or hub.focus.target_room != room, "%s's door offers no entry while its resident sleeps" % room.id)
+		check(not hub.enter_room(room) and hub.walker.room == null, "%s cannot be entered before its resident wakes" % room.id)
+	hub.walker.position = VILLAGE.spawn
+
+
+## A woken home (task_383): its own facade replaces the overgrown one, collisions included, and its
+## door leads into a lived-in room with the same hero, camera rules and clock, then back out.
+func _test_open_homes(hub: VillageHub) -> void:
+	for room in VILLAGE.interiors:
+		if room.opens_after == null or VillageProgress.stage(room.opens_after) != VillageProgress.Step.RETURNED:
+			continue
+		var facades := VILLAGE.props.filter(func(prop: VillagePropDef) -> bool: return prop.shown_after == room.opens_after)
+		var overgrown := VILLAGE.props.filter(func(prop: VillagePropDef) -> bool: return prop.cleared_by == room.opens_after and prop.region.size.x >= 64)
+		check(facades.size() == 1 and overgrown.size() == 1, "%s has one woken facade and one overgrown facade" % room.id)
+		if facades.size() == 1:
+			var facade := facades[0] as VillagePropDef
+			var shown := hub.view.dressing.get_children().filter(func(node: Node) -> bool: return node is VillagePropView and ((node as VillagePropView).def == facade or overgrown.has((node as VillagePropView).def)))
+			check(shown.size() == 1 and (shown[0] as VillagePropView).def == facade, "%s: the woken facade stands, the overgrown one is gone" % room.id)
+			var navigation := VillageNavigation.new()
+			navigation.rebuild(VILLAGE)
+			var middle := facade.position + facade.collision.get_center()
+			check(navigation.path(VILLAGE.spawn, middle).is_empty(), "%s: the woken facade's collision is in the village's navigation" % room.id)
+		hub.walker.position = room.door + Vector2(0, 16)
+		await _frames(3)
+		check(hub.focus != null and hub.focus.action == &"enter" and hub.focus.target_room == room and hub.interact(), "%s's door is a real interaction once its resident wakes" % room.id)
+		check(hub.walker.room == room and room.world_walk_bounds().has_point(hub.walker.position) and hub.view.daylight.color == room.light, "%s: inside, in its own bounds and steady light" % room.id)
+		hub.walker.position = room.offset + room.exit
+		await _frames(3)
+		check(hub.focus != null and hub.focus.action == &"exit" and hub.interact(), "%s's threshold leads back out" % room.id)
+		check(hub.walker.room == null and hub.walker.position == room.return_position, "%s: the hero comes out at the house's own door" % room.id)
 	hub.walker.position = VILLAGE.spawn
 
 
