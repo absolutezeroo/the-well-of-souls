@@ -19,6 +19,9 @@ const RING_COLOR := Color(1.0, 0.85, 0.35)
 
 ## The control pointed at (screen rect); empty: none.
 var target := Rect2()
+## The room at the top between the HUD's stats and its map's column (Hud.top_room(), set by the
+## game): a hint with Large text, wider, stays in it when it can.
+var top_room := Callable()
 ## Pushed down under the boss bar (the Hud says when).
 var lowered := false:
 	set(value):
@@ -91,6 +94,7 @@ func show_hint(hint: HintDef, at: Rect2) -> void:
 	_title.text = tr(hint.title)
 	UiSkin.set_reading_style(_text)
 	_text.custom_minimum_size.x = _width() - SIDE_ROOM
+	_board.size = Vector2.ZERO  # (shrinks to the new words before _place)
 	_text.text = hint.shown_text()
 	target = at
 	_time = 0.0
@@ -123,15 +127,30 @@ func shown_text() -> String:
 	return _text.text
 
 
-## The board's width: wider with Large text.
+## The board's width: wider with Large text, as wide as the room between the HUD's stats and its
+## map's column allows (never narrower than at BODY).
 func _width() -> float:
-	return LARGE_WIDTH if UiSkin.reading_size() > Fonts.BODY else WIDTH
+	if UiSkin.reading_size() <= Fonts.BODY:
+		return WIDTH
+	var room := _room()
+	return clampf(room.y - room.x, WIDTH, LARGE_WIDTH) if room.y > room.x else LARGE_WIDTH
+
+
+## The top's room (from x, to x) in this box's units; empty without the HUD.
+func _room() -> Vector2:
+	if not top_room.is_valid():
+		return Vector2.ZERO
+	return (top_room.call() as Vector2) - Vector2.ONE * get_global_rect().position.x
 
 
 func _place() -> void:
 	var width := _width()
 	_board.size = Vector2(width, _board.get_combined_minimum_size().y)
-	_board.position = Vector2(roundf((size.x - width) * 0.5), TOP_UNDER_BOSS_BAR if lowered else TOP)
+	var x := (size.x - width) * 0.5
+	var room := _room()
+	if UiSkin.reading_size() > Fonts.BODY and room.y - room.x >= width:
+		x = room.x + (room.y - room.x - width) * 0.5
+	_board.position = Vector2(roundf(x * 0.5) * 2.0, TOP_UNDER_BOSS_BAR if lowered else TOP)
 
 
 func _process(delta: float) -> void:

@@ -128,7 +128,10 @@ func place() -> void:
 		rect = Rect2(right - WIDTH, bottom - height, WIDTH, height)
 		var take_left := rect.end.x - _panel().content_margin_right - _take.get_combined_minimum_size().x
 		if take_left < hud.stick_zone().end.x + Hud.TOUCH_GAP:
-			rect = Rect2(roundf((area.x - WIDTH) * 0.5), TOP, WIDTH, height)
+			# At the top, between the stats and the map's column (narrower if it must).
+			var room := hud.top_room() - Vector2.ONE * parent.get_global_rect().position.x
+			var width := minf(WIDTH, room.y - room.x)
+			rect = Rect2(roundf(room.x + (room.y - room.x - width) * 0.5), TOP, width, height)
 	rect.position = (rect.position / 2.0).round() * 2.0  # (even units: whole screen pixels at x1.5)
 	if not position.is_equal_approx(rect.position) or not size.is_equal_approx(rect.size):
 		position = rect.position

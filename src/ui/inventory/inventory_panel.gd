@@ -688,6 +688,7 @@ func _build_hero(columns: HBoxContainer) -> void:
 ## Middle: the tabs, the tab's name between its keys, the bag's slots, Dismantle the worse.
 func _build_bag(columns: HBoxContainer) -> void:
 	var bag: Dictionary = RpgWindow.section(tr("Bag"))
+	(bag.column as VBoxContainer).add_theme_constant_override("separation", GAP)  # (the grid's last row and the button under it)
 	columns.add_child(bag.box)
 	# The compartments: a TabRow of BagTabs (their keys' caps stand around the name below).
 	_tab_row = TabRow.new(false)

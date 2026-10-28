@@ -68,7 +68,7 @@ func _init() -> void:
 	_face_frame.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	_face_frame.add_child(portrait)
 	speaker_row.add_child(_face_frame)
-	_subtitle = UiSkin.label("", Fonts.BODY, UiSkin.DIM, true)
+	_subtitle = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)  # (on the wood: never dim)
 	_subtitle.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_subtitle.custom_minimum_size.x = 200.0
 	speaker_row.add_child(_subtitle)
@@ -84,8 +84,12 @@ func _init() -> void:
 	words = UiSkin.typed(UiSkin.reading_label(""))
 	words.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	speech_scroll.add_child(words)
+	# The choices and what they offer in a dark inset too (their words are read).
+	var choices_recess := UiSkin.section()
+	choices_recess.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_row.add_child(choices_recess)
 	_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_row.add_child(_scroll)
+	choices_recess.add_child(_scroll)
 	list = VBoxContainer.new()
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list.add_theme_constant_override("separation", MenuWindow.TOUCH_GAP)

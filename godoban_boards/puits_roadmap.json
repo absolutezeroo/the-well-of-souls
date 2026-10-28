@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 416,
+  "next_id": 420,
   "tags": [
     "pc",
     "test",
@@ -1424,7 +1424,7 @@
     {
       "id": "task_90",
       "title": "Accessibilité",
-      "description": "Désactiver les secousses d'écran, mode daltonien, taille du texte, réaffectation des touches (déjà en carte).",
+      "description": "Désactiver les secousses d'écran, mode daltonien, taille du texte, réaffectation des touches (déjà en carte).\n\n28/10 : taille du texte faite (option « Grand texte », branche fix/ui). Reste : mode daltonien (palette Okabe-Ito, décision du propriétaire pour de nouvelles couleurs).",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_80",
@@ -1434,7 +1434,7 @@
         "ui"
       ],
       "created_at": 1792720000,
-      "updated_at": 1792720000
+      "updated_at": 1793168012
     },
     {
       "id": "task_91",
@@ -6143,7 +6143,7 @@
     {
       "id": "task_407",
       "title": "Tailles tactiles et texte sur téléphone selon la bible",
-      "description": "interface.md « One skin » fixe : boutons de combat avec une zone de toucher d'au moins 96x96 unités (~9 mm sur S23), tout élément tactile 64x64, 16 unités d'écart. Les recommandations Xbox donnent sur mobile un texte bien plus grand que la police BODY actuelle. Mesurer les boutons et le texte réels sur le S23, puis décider (taille d'interface par défaut sur téléphone ?).\n\nAudit du 28/10 (mesuré dans le moteur à 2340x1080) : compétences et esquive Ø 92 unités (8,3 mm) au lieu de 96 ; les 50 contrôles des options sous 64 unités ; écarts de 4 à 14 unités ; le curseur « Taille des boutons » à 0,7 passe sous tous les seuils et à 1,3 fait chevaucher « Prendre » et la compétence 4 ; zone sûre jamais lue (get_display_safe_area) ; texte courant à 32 % de la cible Xbox mobile, sans option pour l'agrandir ; bouton désactivé à 1,64:1 de contraste.\n\nFait le 28/10 (branche fix/ui) : boutons de combat Ø 96 (attaque 144), ceinture 64, Interact 88, 16 unités d'écart, rien à moins de 16 unités de la zone du stick ; « Taille des boutons » devient Normale / Grande (paliers entiers 1 et 1,25, jamais sous les seuils, vérifiés à 2340x1080, 1920x1080 et 1280x720 : test U4 PcTests._test_touch_targets) ; « Prendre » se place à gauche des compétences ou en haut au milieu ; tout ce qui se touche dans la pause, les options, le sac, le marchand, la forge et les conversations du village fait 64x64 au moins, à 16 d'écart (pause sur 3 colonnes, sac et marchand en 3 colonnes, onglets du sac sur 2 rangées) ; zone sûre (SafeArea) lue sur le HUD, le HUD du village, les fenêtres et la zone du stick ; option « Grand texte » (texte de lecture en TITLE, activée par défaut sur téléphone : tous les panneaux tiennent, mesuré en français) ; bouton désactivé à 3,6:1.\nÀ vérifier sur le S23 : la taille des boutons en Normale et Grande (atteinte du pouce, Interact plus à gauche qu'avant), l'encoche réelle (rien de caché, en paysage des deux côtés), le Grand texte par défaut (lisible sans être trop gros ?), les captures dans scratchpad/fix_ui.",
+      "description": "interface.md « One skin » fixe : boutons de combat avec une zone de toucher d'au moins 96x96 unités (~9 mm sur S23), tout élément tactile 64x64, 16 unités d'écart. Les recommandations Xbox donnent sur mobile un texte bien plus grand que la police BODY actuelle. Mesurer les boutons et le texte réels sur le S23, puis décider (taille d'interface par défaut sur téléphone ?).\n\nAudit du 28/10 (mesuré dans le moteur à 2340x1080) : compétences et esquive Ø 92 unités (8,3 mm) au lieu de 96 ; les 50 contrôles des options sous 64 unités ; écarts de 4 à 14 unités ; le curseur « Taille des boutons » à 0,7 passe sous tous les seuils et à 1,3 fait chevaucher « Prendre » et la compétence 4 ; zone sûre jamais lue (get_display_safe_area) ; texte courant à 32 % de la cible Xbox mobile, sans option pour l'agrandir ; bouton désactivé à 1,64:1 de contraste.\n\nFait le 28/10 (branche fix/ui) : boutons de combat Ø 96 (attaque 144), ceinture 64, Interact 88, 16 unités d'écart, rien à moins de 16 unités de la zone du stick ; « Taille des boutons » devient Normale / Grande (paliers entiers 1 et 1,25, jamais sous les seuils, vérifiés à 2340x1080, 1920x1080 et 1280x720 : test U4 PcTests._test_touch_targets) ; « Prendre » se place à gauche des compétences ou en haut au milieu ; tout ce qui se touche dans la pause, les options, le sac, le marchand, la forge et les conversations du village fait 64x64 au moins, à 16 d'écart (pause sur 3 colonnes, sac et marchand en 3 colonnes, onglets du sac sur 2 rangées) ; zone sûre (SafeArea) lue sur le HUD, le HUD du village, les fenêtres et la zone du stick ; option « Grand texte » (texte de lecture en TITLE, activée par défaut sur téléphone : tous les panneaux tiennent, mesuré en français) ; bouton désactivé à 3,6:1.\nÀ vérifier sur le S23 : la taille des boutons en Normale et Grande (atteinte du pouce, Interact plus à gauche qu'avant), l'encoche réelle (rien de caché, en paysage des deux côtés), le Grand texte par défaut (lisible sans être trop gros ?), les captures dans scratchpad/fix_ui.\nCaptures : /tmp/claude-0/-home-claude/d124b88d-9642-5f48-896d-092820964a06/scratchpad/fix_ui/shots (HUD Normale/Grande, pause, options, sac, sanctuaire et conseil en Grand texte, fragment, encoche simulée, conversation du village) à 2340x1080, 1920x1080 et 1280x720. Retouches après captures : le panneau « Prendre » et un conseil en Grand texte se placent entre les stats et la colonne de la carte (sans les cacher) ; les choix du village sont dans un encart sombre.",
       "status": "review",
       "priority": "medium",
       "epic_id": "epic_4",
@@ -6153,7 +6153,7 @@
         "android"
       ],
       "created_at": 1793159546,
-      "updated_at": 1793166239
+      "updated_at": 1793168012
     },
     {
       "id": "task_408",
@@ -6273,6 +6273,66 @@
       ],
       "created_at": 1793161745,
       "updated_at": 1793161745
+    },
+    {
+      "id": "task_416",
+      "title": "Skin Kenney à 3 unités par pixel d'art : 4,5 pixels d'écran sur le S23",
+      "description": "Les pièces de l'interface (assets/ui/rpg/, Kenney) sont du pixel art 16 px stocké en x3 : 3 unités par pixel d'art, donc 4,5 pixels d'écran à l'échelle x1,5 du téléphone (pixels inégaux, comme le donjon avant la décision 0007). Leurs marges (9, 15, 39, 42) et OrnateBoard.INSET (9) restent des multiples de 3 exprès (exception écrite dans interface.md « One skin », Pixels). Pour des pixels entiers partout : redessiner le skin à 2 ou 4 unités par pixel (x2 ou x4). Décision du propriétaire (art, cadre de l'interface).",
+      "status": "backlog",
+      "priority": "medium",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "visuel"
+      ],
+      "created_at": 1793168012,
+      "updated_at": 1793168012
+    },
+    {
+      "id": "task_417",
+      "title": "Boutons ronds du HUD : la sphère de 32 px dessinée à une échelle non entière",
+      "description": "ActionButton dessine backgroundwood.png (32x32) à la taille de sa zone de toucher : 144 unités pour l'attaque (4,5 unités par pixel), 120 en taille Grande… Garder la zone de toucher et dessiner l'art au multiple entier inférieur (128, 96…) ou des sphères redessinées aux bonnes tailles. À regarder sur le S23 (rond flou ou pixels inégaux ?).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "visuel"
+      ],
+      "created_at": 1793168012,
+      "updated_at": 1793168012
+    },
+    {
+      "id": "task_418",
+      "title": "Contrôle tactile U4 sur tous les écrans",
+      "description": "PcTests._test_touch_targets / _test_menu_targets vérifient 64x64 et 16 unités d'écart sur le HUD, la pause, les options, le sac, le marchand, la forge et une conversation du village. Le bouton de fabrique (MenuWindow.button, UiParts.button) impose déjà 64 de haut partout, mais les écarts ne sont pas vérifiés sur l'écran titre, le sanctuaire, le codex, les classements, le compte, le consentement, la difficulté, les serments et le panneau de debug : étendre le test et corriger ce qu'il trouve.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "tests"
+      ],
+      "created_at": 1793168012,
+      "updated_at": 1793168012
+    },
+    {
+      "id": "task_419",
+      "title": "Conseils du tutoriel trop longs en Grand texte",
+      "description": "Avec le Grand texte (par défaut sur téléphone), un conseil de 3 lignes en BODY devient 5 lignes en TITLE dans un panneau de 760 unités en haut de l'écran : il tient (vérifié) mais couvre le haut du combat. pillars.md veut des conseils d'une ligne : les raccourcir (chantier des premières minutes) ou les paginer ; à juger sur le S23.",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "android"
+      ],
+      "created_at": 1793168012,
+      "updated_at": 1793168012
     }
   ]
 }

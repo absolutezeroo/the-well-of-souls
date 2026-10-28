@@ -366,6 +366,7 @@ func _setup_tutorial() -> void:
 	layer.layer = 6  # above the HUD (5), under the menus (10)
 	add_child(layer)
 	hint_box.name = "HintBox"
+	hint_box.top_room = hud.top_room
 	hint_box.dismissed.connect(tutorial.dismiss)
 	layer.add_child(hint_box)
 

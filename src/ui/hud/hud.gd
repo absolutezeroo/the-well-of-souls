@@ -320,6 +320,14 @@ func touch_rects() -> Dictionary:
 	return result
 
 
+## The room at the top of the screen between the stats (top left) and the map's column (canvas
+## units: from x, to x): where a board over the fight goes without hiding them (the loot prompt's
+## top spot, a hint with Large text).
+func top_room() -> Vector2:
+	var stats := (%HpBar as Control).get_parent() as Control
+	return Vector2(stats.get_global_rect().end.x + TOUCH_GAP, offers_button.get_global_rect().position.x - TOUCH_GAP)
+
+
 ## Where a touch starts the joystick (the safe area's units): its left part under the top.
 func stick_zone() -> Rect2:
 	var stick := %Joystick as TouchJoystick

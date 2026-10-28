@@ -1658,6 +1658,9 @@ func _test_touch_targets(game: Game) -> void:
 					if _target_gap({ "rect": line_rect }, targets[button_name]) < 0.0:
 						covered.append("%s over %s" % [line_name, button_name])
 			check(covered.is_empty(), "%s: no line of the HUD over a round button (%s)" % [where, ", ".join(covered.slice(0, 6))])
+			var stats := (hud.get_node("%HpBar") as Control).get_parent() as Control
+			var board := hud.loot_prompt.get_global_rect()
+			check(not board.intersects(stats.get_global_rect()) and not board.intersects(hud.offers_button.get_global_rect()), "%s: the loot board hides neither the stats nor the perk button (%s)" % [where, board])
 			# Sizes and places on even units (whole screen pixels at x1.5).
 			var odd: Array[String] = []
 			for button_name: String in hud.touch_rects():
@@ -1810,6 +1813,10 @@ func _test_menu_targets(game: Game) -> void:
 			talk.choice("A choice %d" % i, &"none")
 		await _frames(3)
 		_check_menu_targets(talk, "%s a village conversation" % size)
+		talk.speak((load("res://data/village/kagari.tres") as Resource).get("residents")[0], "Words.", "Here.")
+		await _frames(2)
+		var bare := _dim_on_wood(talk)
+		check(bare.is_empty(), "%s: a village conversation puts no dim or red words on the bare wood (%s)" % [size, ", ".join(bare)])
 		talk.queue_free()
 		await _frames(1)
 	await _restore_window(before)
@@ -1861,10 +1868,15 @@ func _test_large_text(game: Game, fragment: FragmentDef, boss: BossDef, monster:
 		check(too_long.is_empty(), "%s: the shrine's words at TITLE, at most %d lines a page (%s)" % [where, DialogueBox.MAX_LINES, ", ".join(too_long)])
 		_panel_fits(where, "the shrine's conversation", talk)
 		layer.queue_free()
-		# A tutorial hint, the longest.
+		# A tutorial hint, the longest: between the HUD's stats and its map's column when there is
+		# room for it (the phones).
 		game.hint_box.show_hint(longest_hint, Rect2())
-		await _frames(2)
+		await _frames(3)
 		_panel_fits(where, "the longest hint", game.hint_box)
+		if size.x * 720 >= size.y * 1540:
+			var hint_board := (game.hint_box.get("_board") as Control).get_global_rect()
+			var stats := (game.hud.get_node("%HpBar") as Control).get_parent() as Control
+			check(not hint_board.intersects(stats.get_global_rect()) and not hint_board.intersects(game.hud.get_node("%Minimap").get_global_rect()), "%s: the hint hides neither the stats nor the map (%s)" % [where, hint_board])
 		game.hint_box.hide_hint()
 		# The bag's item card.
 		game.open_inventory()

@@ -204,8 +204,8 @@ Walking up to someone or something never opens a window, and a level up never do
 player decides when the fight stops.
 
 - **Interact** (input action `interact`): standing by the merchant, the forge, an encounter or a
-  pact door's stele, a round button pops in above the skills (left of the third one, where the
-  thumb on the attack button reaches it; `InteractButton`), with the thing's picture and what
+  pact door's stele, a round button fades in (0.12 s) above the spell, left of the skills' arc
+  (`InteractButton`, 88 units across: left enough that the lines under the map never cover it), with the thing's picture and what
   tapping does on a plaque under it: **Trade** (the merchant), **Forge** (the smith), the
   encounter's own word (`EncounterDef.verb`: **Drink** at the spring, **Offer** at the blood
   altar, **Talk** to the grinning spirit, **Kneel** before the statue), **Read the pact** (a pact
@@ -222,7 +222,8 @@ player decides when the fight stops.
   on them: they open no window.
 - **The perk button** (input action `offers`): see [builds.md](builds.md#perks-and-relics). Left
   of the minimap, under the pause button: a glowing golden star, "Perks" under it and how many
-  choices wait on a red badge; it swells when one more comes. Hidden while none waits.
+  choices wait on a red badge; a ring of gold bursts out of it when one more comes (its words
+  stay still). Hidden while none waits.
 - Both are put away during the trial of the Threshold.
 
 ## Privacy and credits
@@ -354,7 +355,8 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
 - **The trial of the Threshold** (`ThresholdHud`, built by the HUD from the `Threshold`'s signals):
   its name and rule across the screen for three seconds ("The Threshold" / "Slay 8 spectres before
   the knell"), then a panel at the top center with the spectres slain ("Slain 3 / 8") and a big
-  countdown in seconds, red and beating in the last ten. The minimap, the seal, the boss bar and
+  countdown in seconds, red in the last ten, pixel brackets flashing round it each second (its
+  digits stay still). The minimap, the seal, the boss bar and
   the bag button are put away until the hero is back; a toast says he came back ("You come back
   from the Threshold."), a red banner that the knell has tolled.
 - **Minimap** (`Minimap`): rooms are revealed when you walk in, corridors around you; it shows holes,
