@@ -101,6 +101,8 @@ var config: DungeonConfig
 var reset_min_depth := 1
 ## Picked up from a save (create() was given one), not begun now. Not saved.
 var resumed := false
+## What the run has drawn (no repeats) and its drought of Rare finds (RunLuck). Saved.
+var luck := RunLuck.new()
 
 
 ## A new run, or the saved one (`saved` from RunSave; empty for a new run).
@@ -177,6 +179,7 @@ static func create(content: ContentDB, saved: Dictionary, rng: RandomNumberGener
 	if saved_world_stats is Dictionary:
 		run.world_stats = saved_world_stats
 	run.finish_time = float(saved.get("finish_time", -1.0))
+	run.luck = RunLuck.from_data(saved.get("luck", {}))
 	if saved.has("oath"):
 		run.oath = RunSave.load_ref(saved["oath"]) as OathDef
 	var taken: Variant = saved.get("routes", {})
@@ -281,6 +284,7 @@ func to_data() -> Dictionary:
 		"world_stats": world_stats,
 		"marks": marks,
 		"met_floors": met_floors,
+		"luck": luck.to_data(),
 		"difficulty": String(difficulty.id),
 		"ascension": difficulty.ascension,
 		"remote": tuning.to_data(),

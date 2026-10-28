@@ -70,6 +70,9 @@ var boons := RunBoons.new():
 		if rules:
 			rules.boons = value  # the floor's drops and gold ask its rules (FloorRules.boons)
 
+## The run's engineered luck (RunLuck: no repeats, bad-luck protection on drops), set by the Game;
+## a floor's draws record into it as it is laid.
+var luck := RunLuck.new()
 ## The floor's light color and brightness (its difficulty, curse and event): relight().
 var _light_tint := Color.WHITE
 ## The boss of each act for this run (an act may have several; the game draws one per run).
@@ -178,9 +181,12 @@ func build_floor(new_depth: int, content: ContentDB, taken: FloorRoute = null) -
 	_content = content
 	DeathPiecesVfx.warm_content(content)
 	var kind := FloorKind.choose(self, content, taken)
+	luck.forget(new_depth)  # (laid again from its seed: its draws come out the same)
 	var twist := kind.twist(self, content)
 	curse = twist.curse if twist else null
 	floor_event = twist.floor_event if twist else null
+	luck.record(RunLuck.CURSE, curse, depth)
+	luck.record(RunLuck.EVENT, floor_event, depth)
 	# The world first: its rooms take its shapes (BiomeDef.room_shapes).
 	biome = kind.pick_biome(self, content)
 	arena_plan = kind.pick_arena(self, content)
@@ -555,7 +561,7 @@ func drop_trophy(at: Vector2) -> void:
 	for i in 20:
 		var item := pick_random_item() as EquipmentDef
 		if item:
-			spawn_item(LootRoller.roll(item, depth, rules.drop_quality(), config(), _content.item_affixes, rng, ItemRarity.MAGIC), at)
+			spawn_item(LootRoller.roll(item, depth, rules.drop_quality(), config(), _content.item_affixes, rng, ItemRarity.MAGIC, luck), at)
 			return
 
 

@@ -69,6 +69,8 @@ func test_cases() -> Array:
 		["sound", func() -> void: await _part(SoundTests.new(), func(suite: SoundTests) -> void: suite.run())],
 		["vfx", func() -> void: await _part(VfxTests.new(), func(suite: VfxTests) -> void: suite.run())],
 		["level", func() -> void: await _part(LevelTests.new(), func(suite: LevelTests) -> void: suite.run_unit())],
+		["pacing", func() -> void: await _part(PacingTests.new(), func(suite: PacingTests) -> void: suite.run_unit())],
+		["luck", func() -> void: await _part(LuckTests.new(), func(suite: LuckTests) -> void: suite.run_unit())],
 		["floor_determinism", func() -> void: await _part(FloorDeterminismTests.new(), func(suite: FloorDeterminismTests) -> void: await suite.run_unit())],
 		["debug", func() -> void: await _part(DebugTests.new(), func(suite: DebugTests) -> void: suite.run_unit())],
 		["leaderboard", func() -> void: await _part(LeaderboardTests.new(), func(suite: LeaderboardTests) -> void: await suite.run_unit())],

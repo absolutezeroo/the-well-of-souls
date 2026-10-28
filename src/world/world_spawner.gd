@@ -70,11 +70,14 @@ func spawn_loot(item: ItemDef, at: Vector2, quality: float = 1.0) -> ItemPickup:
 	if item is ConsumableDef and _world.player and not _world.ledger.numbering and _world.player.pack.carried_count(item) >= _world.config().consumable_carry_cap:
 		spawn_gold(at, maxi(_world.config().consumable_gold_min, roundi(item.value * _world.config().consumable_gold_share)))
 		return null
-	return spawn_item(roll_item(item, _world.rules.drop_quality(quality)), at)
+	# Found while the floor is played (not laid by its seed): the run's bad-luck protection counts it.
+	return spawn_item(roll_item(item, _world.rules.drop_quality(quality), null if _world.ledger.numbering else _world.luck), at)
 
 
-func roll_item(item: ItemDef, quality: float = 1.0) -> ItemDef:
-	return LootRoller.roll(item, _world.depth, quality, _world.config(), _world.content_db().item_affixes, _world.rng)
+## `luck`: a find the run's bad-luck protection counts (RunLuck.rare_drought); null for the
+## merchant's stock and what the floor's seed lays.
+func roll_item(item: ItemDef, quality: float = 1.0, luck: RunLuck = null) -> ItemDef:
+	return LootRoller.roll(item, _world.depth, quality, _world.config(), _world.content_db().item_affixes, _world.rng, ItemRarity.COMMON, luck)
 
 
 func spawn_gold(at: Vector2, amount: int) -> void:

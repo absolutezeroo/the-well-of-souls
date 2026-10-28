@@ -67,25 +67,27 @@ static func floor_rng(rng: RandomNumberGenerator) -> RandomNumberGenerator:
 
 ## The pact of this floor, if it gets one: { "room": index in map.rooms, "pact": PactDef },
 ## or empty. Never on the first floor nor a boss floor; `excluded`: rooms already given away.
-static func plan(world: World, config: DungeonConfig, depth: int, excluded: Array[int]) -> Dictionary:
+static func plan(world: World, config: DungeonConfig, depth: int, excluded: Array[int], preferred: Array[int] = []) -> Dictionary:
 	if depth <= 1 or config.boss_for_depth(depth) != null or config.pacts.is_empty():
 		return {}
 	var rng := floor_rng(world.rng)
 	if rng.randf() >= config.pact_chance:
 		return {}
-	var pact := ContentDB.pick_from(config.pacts, depth, rng) as PactDef
+	var pact := world.luck.draw(RunLuck.PACT, config.pacts, depth, depth + 1, rng) as PactDef  # (no repeats)
 	if pact == null or pact.rule == null:
 		return {}
-	var index := find_room(world.map, rng, excluded, config.corridor_width + 3)
+	var index := find_room(world.map, rng, excluded, config.corridor_width + 3, preferred)
 	return { "room": index, "pact": pact } if index >= 0 else {}
 
 
 ## A room that can be sealed without cutting anything off: not the first, no stairs in or by
 ## it, one opening on one side (at most `widest` cells) and the rest of the floor still joined
-## without it. -1 if none.
-static func find_room(map: DungeonMap, rng: RandomNumberGenerator, excluded: Array[int], widest: int) -> int:
+## without it. -1 if none. One of `preferred` first (the floor's peak: FloorPacing).
+static func find_room(map: DungeonMap, rng: RandomNumberGenerator, excluded: Array[int], widest: int, preferred: Array[int] = []) -> int:
 	var order: Array = range(1, map.rooms.size())
 	RandomUtils.shuffle(order, rng)
+	if not preferred.is_empty():
+		order = order.filter(func(i: int) -> bool: return preferred.has(i)) + order.filter(func(i: int) -> bool: return not preferred.has(i))
 	var reachable := -1
 	for i: int in order:
 		var room_rect := map.rooms[i]

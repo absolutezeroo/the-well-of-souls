@@ -24,8 +24,9 @@ const VERSION := 3
 const OLDEST_VERSION := 1
 ## Bump it when a change makes a floor come out otherwise from the same seed (the generator, the
 ## order things are laid in, the pools they are drawn from) without a new game version: saved
-## floors are then laid fresh (floor_of()).
-const FLOOR_FORMAT := 3
+## floors are then laid fresh (floor_of()). 4: rooms kept apart, monsters by the rooms' size, calm
+## rooms, draws without repeats (decision 0012).
+const FLOOR_FORMAT := 4
 
 ## What a field may hold: "number" (int or float, as JSON reads it), "bool" (or a number),
 ## "string", "dict", "array", "any"; a Dictionary: a dictionary whose listed keys are checked
@@ -62,6 +63,7 @@ const SHAPE := {
 	"world_stats": "dict",
 	"marks": "dict",
 	"met_floors": "array",
+	"luck": "dict",
 	"difficulty": "string",
 	"ascension": "number",
 	"remote": "dict",

@@ -3,6 +3,12 @@ class_name FloorPopulator
 ## a fragment of the past now and then (FragmentPlacer, last),
 ## props and hazards first (they claim their cells), then the ambush room, chests, monsters and
 ## items on the free cells. The first room is where the player starts: no monsters or hazards.
+## The floor's rhythm (FloorPacing, decision 0012): monsters by each room's size, a calm room on
+## the way after a few fights, the ambush or the pact door at the peak, the merchant and the forge
+## after it, a chest on every floor.
+
+## Free cells kept between a room's pillar and a crate or lamp along its walls (near_pillar()).
+const PILLAR_CLEARANCE := 2
 
 
 static func populate(world: World, content: ContentDB, depth: int) -> void:
@@ -19,6 +25,17 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 		_reserve_around(taken, cell, 1)
 	for cell: Vector2i in map.pillars:
 		taken[cell] = true
+	# Two free cells between a pillar and the furniture and lamps the dressing stands along the walls:
+	# no one-cell squeeze (crates and chests keep clear by near_pillar()). Given back once they
+	# stand: a trial's souls, an encounter, the monsters only need their own room.
+	var pillar_clearance := {}
+	for cell: Vector2i in map.pillars:
+		for dy in range(-PILLAR_CLEARANCE, PILLAR_CLEARANCE + 1):
+			for dx in range(-PILLAR_CLEARANCE, PILLAR_CLEARANCE + 1):
+				var near := cell + Vector2i(dx, dy)
+				if not taken.has(near):
+					taken[near] = true
+					pillar_clearance[near] = true
 	for cell in map.exit_cells():
 		_reserve_around(taken, cell, 1)
 	# Nothing in front of a cracked wall (SecretRoomPlan): the way to it stays clear.
@@ -29,12 +46,14 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 		for room in map.rooms:
 			place_lights(world, config, room, taken)
 		return
+	var pacing := FloorPacing.new(map)
+	var after_peak := pacing.rooms_from(config.peak_to)  # the release: the merchant, the forge
 
 	# The merchant waits in a quiet room (no monsters, no hazards, no props around).
 	var event := world.floor_event
 	var merchant_index := -1
 	if config.merchant and (rng.randf() < config.merchant_chance or (event and event.merchant)):
-		merchant_index = _pick_quiet_room(map, rng, -1)
+		merchant_index = _pick_quiet_room(map, rng, -1, after_peak)
 		if merchant_index >= 0:
 			var cell := map.heart(merchant_index)
 			world.spawn_merchant(config.merchant, cell)
@@ -47,7 +66,7 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 	# The smith's forge: in another quiet room, more likely the longer it has been away.
 	var forge_index := -1
 	if config.forge and rng.randf() < config.forge_chance + config.forge_chance_growth * world.floors_without_forge:
-		forge_index = _pick_quiet_room(map, rng, merchant_index)
+		forge_index = _pick_quiet_room(map, rng, merchant_index, after_peak)
 		if forge_index >= 0:
 			var cell := map.heart(forge_index)
 			world.spawn_forge(config.forge, cell)
@@ -62,8 +81,11 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 		not_pact.append(secret.host)
 	# A room trial (RoomTrial), on a floor with no other event; a floor with one has no pact.
 	var trial_plan := RoomTrial.plan(world, config, depth, not_pact)
-	var pact_plan := PactRoom.plan(world, config, depth, not_pact) if trial_plan.is_empty() else {}
+	world.luck.record(RunLuck.TRIAL, trial_plan.get("trial") as TrialDef, depth)
+	var peak := pacing.rooms_between(config.peak_from, config.peak_to)
+	var pact_plan := PactRoom.plan(world, config, depth, not_pact, peak) if trial_plan.is_empty() else {}
 	var pact_index: int = pact_plan.get("room", -1)
+	world.luck.record(RunLuck.PACT, pact_plan.get("pact") as PactDef, depth)
 	# The Unbound Seal shuts a room as a pact door does: nothing else in it.
 	if trial_plan.get("trial") is SealTrialDef:
 		pact_index = int(trial_plan.room)
@@ -72,10 +94,20 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 	var ambush_index := -1
 	if rng.randf() < config.ambush_chance:
 		for attempt in 6:
-			ambush_index = _pick_quiet_room(map, rng, merchant_index)
+			ambush_index = _pick_quiet_room(map, rng, merchant_index, peak)
 			if ambush_index != forge_index and ambush_index != pact_index:
 				break
 			ambush_index = -1  # not by the smith, nor behind a pact door
+	# The calm rooms on the way: never more than max_fights_in_a_row fights in a row.
+	var calm := {0: true}
+	var forced := {}
+	for i in [merchant_index, forge_index]:
+		if i >= 0:
+			calm[i] = true
+	for i in [ambush_index, pact_index]:
+		if i >= 0:
+			forced[i] = true
+	pacing.plan_breathers(config.max_fights_in_a_row, calm, forced)
 	# The biome's grounds, scenes and decor, before anything else claims the rooms.
 	FloorDresser.dress(world, taken)
 	for i in map.rooms.size():
@@ -84,6 +116,9 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 	if not pact_plan.is_empty():
 		world.spawn_pact(pact_plan.pact, map.rooms[pact_index], taken)
 		_reserve_rect(taken, map.rooms[pact_index])  # its own fight only: nothing else in it
+	for cell: Vector2i in pillar_clearance:
+		if not (pact_index >= 0 and map.rooms[pact_index].has_point(cell)):
+			taken.erase(cell)
 	if not trial_plan.is_empty():
 		world.spawn_trial(trial_plan, taken)
 
@@ -92,12 +127,26 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 	if event and config.encounters_max > 0:
 		encounter_count += event.extra_encounters
 	var encounter_rooms: Array[int] = []  # one encounter per room: never two side by side
+	var calm_first := pacing.by_window(pacing.breather_rooms(), 1.0, INF)  # the latest first
 	for n in encounter_count:
-		var encounter := ContentDB.pick_from(content.encounters, depth, rng) as EncounterDef
+		var encounter := world.luck.draw(RunLuck.ENCOUNTER, content.encounters, depth, depth + 1, rng) as EncounterDef
 		if encounter == null:
 			continue
-		# A few tries: a room's middle may hold a scene (a statue, a pond...); then near it.
-		for attempt in 8:
+		# The calm rooms on the way first (a spring, an altar to break the fights), then a few tries
+		# anywhere: a room's middle may hold a scene (a statue, a pond...); then near it.
+		var placed := false
+		for index in calm_first:
+			if index in encounter_rooms:
+				continue
+			var cell := _free_near_middle(world, index, taken)
+			if cell != Vector2i(-1, -1):
+				world.spawn_encounter(encounter, cell)
+				world.luck.record(RunLuck.ENCOUNTER, encounter, depth)
+				_reserve_around(taken, cell, config.encounter_clearance)
+				encounter_rooms.append(index)
+				placed = true
+				break
+		for attempt in 0 if placed else 8:
 			var index := rng.randi_range(1, map.rooms.size() - 1)
 			if index in encounter_rooms or index == merchant_index or index == forge_index \
 					or index == ambush_index or index == pact_index:
@@ -105,6 +154,7 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 			var cell := _free_near_middle(world, index, taken)
 			if cell != Vector2i(-1, -1):
 				world.spawn_encounter(encounter, cell)
+				world.luck.record(RunLuck.ENCOUNTER, encounter, depth)
 				_reserve_around(taken, cell, config.encounter_clearance)
 				encounter_rooms.append(index)
 				break
@@ -119,10 +169,14 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 		var hazard_groups := roundi(rng.randi_range(config.hazard_groups_min, config.hazard_groups_max) * spread)
 		if event:
 			hazard_groups += event.extra_hazards
-		for n in hazard_groups:
+		var hazard_rooms: Array[int] = []  # (the calm rooms stay calm)
+		for i in range(1, map.rooms.size()):
+			if not pacing.breathers.has(i):
+				hazard_rooms.append(i)
+		for n in hazard_groups if not hazard_rooms.is_empty() else 0:
 			var hazard := world.biome.pick_hazard(act, depth, rng) if world.biome else act.pick_hazard(depth, rng)
 			if hazard:
-				hazard.place(world, map.rooms[rng.randi_range(1, map.rooms.size() - 1)], taken)
+				hazard.place(world, map.rooms[hazard_rooms[rng.randi_range(0, hazard_rooms.size() - 1)]], taken)
 
 	if ambush_index >= 0:
 		world.spawn_ambush(map.rooms[ambush_index])
@@ -132,6 +186,10 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 		if event:
 			chest_count += event.extra_chests
 		for n in chest_count:
+			# The first in a dead end (the reward for the detour), else a calm room on the way, else
+			# any room with a free spot (a floor never goes without its treasure).
+			if n == 0 and _place_treasure(world, config, pacing, [ambush_index, pact_index], taken):
+				continue
 			# A few tries: some rooms have no free spot along their walls.
 			for attempt in 12:
 				var index := rng.randi_range(1, map.rooms.size() - 1)
@@ -146,16 +204,22 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 
 	if world.unpeopled:
 		return  # the monsters and the items lying around come last: the rest is as it would be
-	var extra := world.rules.extra_monsters()
-	var max_per_room := world.rules.max_monsters_per_room()
-	var counts := {}  # room index -> monsters
+	var counts := {}  # room index -> its share of monsters (by its size; a tough one counts more)
 	var total := 0
 	for i in range(1, map.rooms.size()):
-		if i == ambush_index or i == merchant_index or i == forge_index or i == pact_index:
+		if i == ambush_index or i == merchant_index or i == forge_index or i == pact_index or pacing.breathers.has(i):
 			continue
-		var count := mini(rng.randi_range(config.monsters_per_room_min, config.monsters_per_room_max) + extra, max_per_room)
-		counts[i] = roundi(count * world.rules.monster_count_scale())
+		counts[i] = world.rules.room_monsters(ground_cells(map, map.rooms[i]), rng.randf())
 		total += counts[i]
+	# The peak: the ambush or the pact door, else an elite in the fight room there.
+	var peak_room := -1
+	if depth >= config.peak_elite_min_depth and not peak.has(ambush_index) and not peak.has(pact_index):
+		var fights: Array[int] = []
+		for i: int in counts:
+			if pacing.on_route(i) and counts[i] > 0:
+				fights.append(i)
+		var by_peak := pacing.by_window(fights, config.peak_from, config.peak_to)
+		peak_room = by_peak[0] if not by_peak.is_empty() else -1
 	# Too many for one floor: every room gets fewer (at least one).
 	if config.max_monsters_per_floor > 0 and total > config.max_monsters_per_floor:
 		var keep := float(config.max_monsters_per_floor) / total
@@ -168,11 +232,17 @@ static func populate(world: World, content: ContentDB, depth: int) -> void:
 		# are shoved apart by the physics on the first frame, hard enough to end in a wall or a
 		# crate (level_tests "as built").
 		var placed: Array[Actor] = []
-		for n in counts[i]:
+		var share: int = counts[i]
+		while share > 0:
 			var def := content.pick_monster(depth, rng)
+			share -= 1 if def else share  # (no monster for this depth: the room stays as it is)
 			if def:
 				var monster := world.spawn_monster(def, _free_point_in(world, room, rng, taken, WorldSpace.room_for(def), placed))
 				world.roll_elite(monster)
+				if i == peak_room and placed.is_empty() and not monster.is_elite():
+					world.make_elite(monster)  # the floor's peak
+				if monster.is_elite() or def.radius >= config.tough_radius:
+					share -= config.tough_cost - 1  # a tough one takes more of the room's share
 				# An elite grew: its bigger body must fit where it stands too.
 				if monster.radius > WorldSpace.room_for(def) and (not _fits(world, monster.global_position, monster.radius) \
 						or WorldSpace.is_under_body(monster.global_position, placed, monster.radius)):
@@ -242,14 +312,55 @@ static func _free_near_middle(world: World, index: int, taken: Dictionary) -> Ve
 
 
 ## A big enough room, not the first one, without the stairs and not `except` (-1 if none); not
-## a chasm room nor a biome's signature room (RoomPlan.is_quiet()).
-static func _pick_quiet_room(map: DungeonMap, rng: RandomNumberGenerator, except: int) -> int:
+## a chasm room nor a biome's signature room (RoomPlan.is_quiet()). One of `preferred` if any of
+## them will do (the floor's peak, its release: FloorPacing).
+static func _pick_quiet_room(map: DungeonMap, rng: RandomNumberGenerator, except: int, preferred: Array[int] = []) -> int:
 	var candidates: Array[int] = []
 	for i in range(1, map.rooms.size()):
 		var room := map.rooms[i]
 		if i != except and map.plan(i).is_quiet() and room.size.x >= 7 and room.size.y >= 7 and not map.exit_cells().any(func(c: Vector2i) -> bool: return room.grow(1).has_point(c)):
 			candidates.append(i)
+	var wanted := candidates.filter(func(i: int) -> bool: return preferred.has(i))
+	if not wanted.is_empty():
+		candidates.assign(wanted)
 	return candidates[rng.randi_range(0, candidates.size() - 1)] if not candidates.is_empty() else -1
+
+
+## The floor's first chest (decision 0012: a treasure on every floor): in a dead end if one has a
+## free spot by its walls (the reward for the detour), else a calm room on the way, else any room
+## but `not_in` (the ambush's, the pact's). False if no room had room for it.
+static func _place_treasure(world: World, config: DungeonConfig, pacing: FloorPacing, not_in: Array, taken: Dictionary) -> bool:
+	var map := world.map
+	var dead_ends: Array[int] = []
+	var others: Array[int] = []
+	for i in range(1, map.rooms.size()):
+		if not_in.has(i):
+			continue
+		if pacing.is_dead_end(i):
+			dead_ends.append(i)
+		elif not pacing.breathers.has(i):
+			others.append(i)
+	RandomUtils.shuffle(dead_ends, world.rng)
+	var order: Array[int] = dead_ends
+	order.append_array(pacing.breather_rooms())
+	order.append_array(others)
+	for index in order:
+		var cells := _shuffled(edge_cells(map, map.rooms[index], taken), world.rng)
+		if not cells.is_empty():
+			world.spawn_chest(config.chest, cells[0], world.rng.randf() < config.chest.trapped_chance)
+			_reserve_around(taken, cells[0], 1)
+			return true
+	return false
+
+
+## Open ground cells in `room` (no rock, chasm, pool or pillar): what its monsters are counted by.
+static func ground_cells(map: DungeonMap, room: Rect2i) -> int:
+	var count := 0
+	for y in range(room.position.y, room.end.y):
+		for x in range(room.position.x, room.end.x):
+			if map.is_ground(Vector2i(x, y)):
+				count += 1
+	return count
 
 
 ## Lanterns along the walls of a room (also used for boss arenas).
@@ -315,7 +426,20 @@ static func _is_edge(map: DungeonMap, room: Rect2i, cell: Vector2i) -> bool:
 		touches_wall = touches_wall or not map.is_floor(cell + dir)
 	if not touches_wall:
 		return false
-	return not near_doorway(map, room, cell)
+	return not near_doorway(map, room, cell) and not near_pillar(map, cell)
+
+
+## A room's pillar stands within PILLAR_CLEARANCE cells: a crate or a lamp there would leave a
+## one-cell squeeze between it and the pillar (docs/design/dungeon.md "Pacing": two free cells
+## at least between obstacles).
+static func near_pillar(map: DungeonMap, cell: Vector2i) -> bool:
+	if map.pillars.is_empty():
+		return false
+	for dy in range(-PILLAR_CLEARANCE, PILLAR_CLEARANCE + 1):
+		for dx in range(-PILLAR_CLEARANCE, PILLAR_CLEARANCE + 1):
+			if map.pillars.has(cell + Vector2i(dx, dy)):
+				return true
+	return false
 
 
 ## Next to a corridor mouth (floor outside the room): something there would block the way.

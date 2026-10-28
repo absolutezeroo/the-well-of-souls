@@ -37,7 +37,7 @@ static func plan(world: World, config: DungeonConfig, depth: int, excluded: Arra
 	# its place to another.
 	var pool := config.trials.duplicate()
 	while not pool.is_empty():
-		var picked := ContentDB.pick_from(pool, depth, rng) as TrialDef
+		var picked := world.luck.draw(RunLuck.TRIAL, pool, depth, depth + 1, rng) as TrialDef  # (no repeats)
 		if picked == null:
 			return {}
 		var planned := picked.plan(world, rng, excluded)

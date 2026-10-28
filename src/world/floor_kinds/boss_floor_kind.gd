@@ -5,6 +5,9 @@ extends FloorKind
 ## clear: lamps, grounds and decor only.
 
 const ARENA_SCENE := preload("res://src/world/boss_arena.tscn")
+## Where the spring before the warden may stand, from where the hero arrives (the first that is
+## free): two cells off, never on his spot.
+const SPRING_SPOTS: Array[Vector2i] = [Vector2i(0, -2), Vector2i(2, 0), Vector2i(-2, 0), Vector2i(0, 2), Vector2i(2, -2), Vector2i(-2, -2)]
 
 var _boss: BossDef
 
@@ -48,8 +51,23 @@ func lay(world: World, content: ContentDB) -> void:
 	for room in world.map.rooms:
 		FloorPopulator.place_lights(world, content.dungeon, room, {}, _lamps(world, room))
 	FloorDresser.dress(world, {}, false)  # the arena keeps clear: grounds and decor only
+	place_spring(world, content)
 	_lay_more(world)
 	world.seal.clear()
+
+
+## A heal before every boss (decision 0012): the dungeon's spring (DungeonConfig.boss_spring) in
+## the first room, by where the hero arrives. Null if it found no free spot.
+static func place_spring(world: World, content: ContentDB) -> Encounter:
+	var spring := content.dungeon.boss_spring
+	if spring == null or world.map.rooms.is_empty():
+		return null
+	var room := world.map.rooms[0].grow(-1)
+	for offset in SPRING_SPOTS:
+		var cell := world.map.start_cell + offset
+		if room.has_point(cell) and world.map.is_ground(cell) and world.is_free_cell(cell):
+			return world.spawn_encounter(spring, cell)
+	return null
 
 
 ## Lamps for `room` (-1: as many as the dungeon puts in a room that size).

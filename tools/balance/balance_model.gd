@@ -1344,5 +1344,4 @@ func _check_floor_curve(by_act: Dictionary) -> void:
 func _room_size(depth: int, difficulty: DifficultyDef) -> int:
 	var config := content.dungeon
 	var rules := FloorRules.make(config, difficulty, null, depth)
-	var base := roundi((config.monsters_per_room_min + config.monsters_per_room_max) * 0.5)
-	return mini(base + rules.extra_monsters(), config.max_monsters_per_room + difficulty.extra_monsters)
+	return rules.room_monsters(config.room_cells, 0.5)

@@ -10,7 +10,10 @@
   top and foot) would make taller cliffs; a wall one cell thick shows the plateau's short edge
   (`wall_bottom*`). The mist leaves both cells of the face clear. The generator smooths every floor so only shapes the tiles can draw remain
   (no wall thinner than 3 cells between two floors, `DungeonGenerator.MIN_WALL_THICKNESS`: they
-  looked like flimsy fences; no walls touching by a corner).
+  looked like flimsy fences; no walls touching by a corner). So rooms keep 3 cells of rock between
+  them (`DungeonConfig.room_gap`): at 2, smoothing opened the wall and two rooms merged into one
+  sprawling space (30% of the open spaces held two rooms or more). Each new room is joined to the
+  last one by an L-shaped corridor bent the way that cuts through fewer other rooms.
 - **Props** (`data/props/`): crates, vases and barrels break under any attack and may drop loot;
   **powder kegs** blink then explode, hurting everyone (you too) and setting off other kegs.
   Explosions you trigger give you the XP of what they kill. Props block movement, sight and shots.
@@ -51,9 +54,11 @@
   those numbers out (a number that comes out as another kind of monster stays, rather than the
   wrong one going); a hurt one comes back with its share of Health, and the monsters that came
   later and still stand come back where they stood. The rest of
-  what the seed lays is kept the same way (see progression.md, "Saving and resuming"). No more running past everything: a floor takes a couple of
-  minutes, a run about half an hour. Floors are 72x72 cells with up to 15 rooms on Pilgrim, and
-  bigger the harder the run (see Difficulty); boss floors keep that size.
+  what the seed lays is kept the same way (see progression.md, "Saving and resuming"). No more running past everything: a floor is one
+  phone session, 3 to 6 minutes (pillars.md "Pacing"; the target, to measure on the phone), so a
+  run of twelve floors 40 to 70 minutes. Floors are 72x72
+  cells with up to 15 rooms on Pilgrim, and bigger the harder the run (see Difficulty); boss
+  floors keep that size. How a floor's fights, calm rooms and rewards are spread: "Pacing" below.
 - **Biomes** (`data/biomes/`, `BiomeDef`): every floor is one world from end to end, picked among
   its act's (`ActDef.biomes`; the boss arena has `boss_biome`): Act I **Weeping Grotto**,
   **Pale Garden**, **Drowned Caverns**; Act II **Catacombs**, **Hushed Archive**; Act III
@@ -83,7 +88,9 @@
   This is how Dead Cells, Enter the Gungeon or Brogue keep generated levels coherent: hand-made
   pieces per biome, laid out by the generator (`FloorDresser`).
 - **Chests** (`data/chests/`): walk up to one to open it. Some are trapped: they blow up or let
-  monsters out (and keep only one item). A trapped chest rattles now and then...
+  monsters out (and keep only one item). A trapped chest rattles now and then... Every floor has
+  one at least (`chests_min` 1, times the floor's size: two on the biggest floors), the first in
+  a dead end (see "Pacing").
 - **Two ways down** (`FloorRoute`, `dungeon_config.tres` > Routes): a normal floor ends on two
   stairs, and a boss arena opens two once the boss falls. Each leads to a different world of
   the act (`ActDef.biomes`), and may be cursed or hold a floor event: a wooden **sign** over each
@@ -116,13 +123,63 @@
   (`temperature_overlay.gdshader`). Cold slows you down; frozen or burning up, you take damage
   every second. Campfires and springs (`HeatSourceDef` with `comfort`) bring it back to normal,
   and away from cold and heat it goes back to normal by itself.
-- **Ambushes**: a floor may have a quiet, empty room. Walk in and spikes close the exits,
-  monsters pour in, wave after wave, the last one led by an elite. Clear it for a big chest.
+- **Ambushes**: a floor may have a quiet, empty room, at the floor's peak (see "Pacing"). Walk in
+  and spikes close the exits, monsters pour in, wave after wave, the last one led by an elite.
+  Clear it for a big chest.
 - **Elites** (`data/elites/`): any monster can be one, more often deeper and on harder
   difficulties. They glow in their color, show their name, are bigger and tougher, give 3x XP
   and always drop an item. Their affix is a perk, like the hero's: **Swift**, **Vampiric**
   (heals when hitting), **Bursting** (blows up when it dies), **Ironclad**, **Venomous**
   (poisons), **Thorned** (hurts who hits it).
+
+## Pacing
+
+A floor is laid like a level, not filled at random (decision 0012, pillars.md "Pacing";
+`FloorPacing`, `DungeonConfig` > Population, Pacing). Its numbers are starting values to tune by
+playing on the S23.
+
+- **Monsters follow the room's size**: a fight room gets its share by its open ground (no rock,
+  chasm, pool or pillar), `monsters_per_room` (2) for every `room_cells` (70) cells on the first
+  floor, plus the floor's extra ones (`extra_monsters_per_depth`, the difficulty's) for every 70
+  cells too, the fraction rounded up as often as it is big; one at least, `max_monsters_per_room`
+  (9, the difficulty's extra ones on top) at most (`FloorRules.room_monsters()`). A tough
+  monster takes more of the share: an elite (any rank) or a big body (radius 14 or more) counts
+  `tough_cost` (2). The floor's cap (`max_monsters_per_floor`, 130) counts the same way. A small
+  side room holds two or three, a great hall eight or nine; a floor as a whole holds about what it
+  did before (Pilgrim 47, Keeper 65, Martyr 86, Nightmare 97 on average).
+- **A breather after a few fights**: walking the shortest way from the start to each stairs, the
+  hero never crosses more than `max_fights_in_a_row` (3) fight rooms in a row (an ambush and a
+  pact door count as fights). The room that would make one too many is kept calm (no monsters, no
+  hazards): a spring or an altar goes there first, the floor's chest may, or only its crates and
+  its scenes.
+- **Build-up, peak, release**: the ambush and the pact door go in a room `peak_from`-`peak_to`
+  (60-80%) of the way to the stairs when one fits (the walk's length to the room's heart against
+  the walk to the stairs); a floor with neither there gets an elite in the fight room nearest that
+  stretch (from floor `peak_elite_min_depth`, 2). The merchant and the forge come after the peak
+  (80% of the way or more, by the stairs or beyond): what is earned on the way is spent there.
+- **A treasure on every floor**: the first chest goes to a dead end (a room with one way in) when
+  one has a free spot by its walls, else to a calm room on the way.
+- **Room to move around pillars**: nothing standing (a scene's furniture, a lamp, a crate, a
+  chest) within 2 cells of a shaped room's pillar (`FloorPopulator.PILLAR_CLEARANCE`), so no
+  one-cell squeeze between them; the monsters may stand there.
+
+Measured on 960 generated floors (`tools/levels/floor_probe.tscn` and `floor_report.py`: the four
+difficulties, every floor of the run, 20 seeds; the 640 normal floors counted), before and after
+(2026-10-28):
+
+| | before | after |
+|---|---|---|
+| Fight rooms in a row on the way to the stairs | median 4, max 9; 64% of floors over 3 | 3 at most |
+| Calm rooms (no monsters) | 6% of the rooms | 9% |
+| Floors without a chest; chests in a dead end | 35%; 6% | 0%; 20% (1.6 a floor both times) |
+| Monsters against the room's open cells | r = 0.02 | r = 0.64 |
+| Ambush along the way; merchant and forge | 56%; 55% (median) | 68%; 85% |
+| Open spaces holding two rooms or more; p90 size | 30%; 64 cells | 22%; 51 cells |
+| Pillared rooms with a crate or lamp within 2 cells of a pillar | 930 of 1027 | 1 of 977 |
+| Monsters a floor, Pilgrim / Keeper / Martyr / Nightmare | 47 / 65 / 86 / 97 | 49 / 68 / 91 / 97 |
+
+`tests/suites/pacing_tests.gd` holds these on fixed seeds: fights in a row, a chest on every floor,
+monsters by size (r >= 0.5), the peak and the release, merged spaces, pillars' room, the seal.
 
 ## Room shapes
 
@@ -393,7 +450,11 @@ bottom of the Well"; the canon in docs/lore.md, section 7, step 7).
 ## Boss arenas
 
 A boss floor is a start room and an arena picked among `DungeonConfig.arenas` (or the boss' own,
-`BossDef.arenas`: the Wyrms want room). An `ArenaDef` (`data/arenas/`) has a size, a shape (rect,
+`BossDef.arenas`: the Wyrms want room). **A heal before every boss** (decision 0012): the start
+room holds the **Spring of the Last Vigil** (`DungeonConfig.boss_spring`,
+`data/encounters/vigil_spring.tres`), two cells from where the hero arrives, on every difficulty
+(the hidden floor's and the bottom of the Well's first room too): Drink, healed whole, no cost
+and no risk, once (`BossFloorKind.place_spring()`). An `ArenaDef` (`data/arenas/`) has a size, a shape (rect,
 **oval**, **cross**), pillars (props: cover from shots) and **changes** (`ArenaShiftDef`), one at
 each of the boss' next phases (`Monster.phase_entered`): the cells blink red (`CellWarning`), then
 become cracked floor, pits or spikes, in a pattern (the **edge** crumbling in, a **cross** of
@@ -453,6 +514,13 @@ its own and nothing (chest, prop, hazard, another encounter) within
 | Blood Altar | Offer your blood (-15% max health) | a choice of relics |
 | Grinning Spirit | Wager 30 / 80 gold (more each floor) | an item, sometimes a great one... or it laughs and runs |
 | Keeper's Statue | Kneel | a choice of perks (50%), or two elites (50%) |
+| Spring of the Last Vigil (a boss floor's first room only, see "Boss arenas") | Drink | healed whole (100%) |
+
+**No repeats** (decision 0012, `RunLuck`): a floor's encounters are drawn among those the run has
+drawn least, so each comes once before any comes twice; floor events, curses (the ways down's
+twists included: the two ways never share one), pacts and trials are drawn the same way. A floor
+laid again from its seed (a run picked up) sees only what the floors above it drew, so it draws
+the same; what the run drew is saved with it (`"luck"`).
 
 The Keeper's Statue stands beside **an empty niche** (`EncounterDef.niche`, `EncounterNiche`):
 drawn next to it on the floor, its inscription told under the statue's text in the panel. Before
@@ -542,37 +610,6 @@ washed pale and see-through in spirit's ramp, a soft halo behind them (`CaptiveS
 star and the lanterns' flames are drawn on the art's grid at 8 and 12 fps (`SealTrial`,
 `SealLantern`). The trials' lore: the souls Tôma gave to the Well on the moonless night; the seal
 whose knots he undid, tied back here one flame at a time (docs/lore.md).
-
-## Room trials
-
-A floor may hold a trial (« épreuve », `RoomTrial`, `data/trials/`, `TrialDef`): something to do
-besides reaching the stairs, optional, in the Well's voice. **One thing of its own a floor**: only
-a normal floor past the first with no curse and no floor event (cold, night, heat...), never a
-boss floor, and a floor with a trial has no pact door (`DungeonConfig` > Room trials:
-`trial_chance` 0.45 of those floors). It comes from the floor's seed (its own generator,
-`RoomTrial.floor_rng()`: the rest of the floor is laid the same), so a daily run has the same.
-As the floor begins a banner names it and the log says its call; under the minimap a line says
-its objective ("Souls freed: 2 / 4", `TrialLine`); the minimap marks what is left to do once
-seen; each step is a toast, the end a banner ("Trial done") and the log's last line. Each step
-brings foes (`foes_per_step`, +1 every `depths_per_extra_foe` floors). Done, it pays
-(`bonus_souls` to the run, paid at its end like the hidden floor's; `relic_choices` relics if
-any: the Game, on `Events.trial_completed`). A floor's save keeps its steps done (`"trial"`): a
-resumed floor finds them done again, quietly (no foes, no reward again). A partly freed soul
-also keeps its progress and whether its foes were already called, so resuming beside it never
-calls a second wave. Older saves without that state start untouched souls normally. Debug panel:
-"Room trial" lays one on the current floor.
-
-| Trial (FR / EN) | What to do | Each step | Reward |
-|---|---|---|---|
-| Les Âmes de Kagari / The Souls of Kagari | free 3-4 souls held by chains of tar in the floor's biggest quiet room: stand by each for 3 s (stepping away stops the count, it is not lost) | the first moment by a soul, the Well sends foes to take it back; freed, it rises (spirit nova, light) and gives back 6% of max Health | 25 souls |
-| Le Sceau Défait / The Unbound Seal | light the 5 lanterns standing cold in other rooms (Interact: "Kindle"); a dead-end room is shut behind violet spikes, a star drawn before its door, a point for each lantern | the dark answers each lantern with foes around it; its point of the star lights | the door opens on its hoard (a big chest, seen through the bars all along), 15 souls |
-
-The souls are villagers' figures (the merchant's, the smith's, the Vigil-Keeper's frames),
-washed pale and see-through in spirit's ramp, a soft halo behind them (`CaptiveSoul`); the seal's
-star and the lanterns' flames are drawn on the art's grid at 8 and 12 fps (`SealTrial`,
-`SealLantern`). The trials' lore: the souls Tôma gave to the Well on the moonless night; the seal
-whose knots he undid, tied back here one flame at a time (docs/lore.md).
-
 
 ## Creation ownership
 

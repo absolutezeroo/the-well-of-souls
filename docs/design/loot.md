@@ -23,6 +23,14 @@
   (`ItemAffixDef.family`, as a rune does): Burning and of Embers Inferno, Frozen and Shattering
   Frost, Thundering (`shocking`) Storm, Vampiric Blood, of Echoes Arcane. A tag: an affix wakes no
   family.
+- **Bad-luck protection** (decision 0012): after `pity_after` (20) pieces of equipment found in a
+  row without a Rare or better, each further one weighs Rare and Epic `pity_growth` (x1) more
+  (21st x2, 22nd x3...) until one comes, which ends the streak (`RunLuck.rare_drought`, saved with
+  the run; `LootRoller.pity_scale()`). Counted: what monsters, chests, crates and encounters drop
+  while the floor is played; not the merchant's stock nor the items a floor's seed lays. On the
+  first floor the longest streak goes from about 230 finds to under 40; the share of Rare finds
+  over a run barely moves deeper down (+8% of them around floor 5, +3% around floor 9). Odds told
+  elsewhere (an encounter's) are the plain ones.
 - **Rarity you can see** (`RarityLookDef`, `data/items/rarity_looks.tres`; docs/vfx.md section
   10): each rarity keeps the signs of the one below and adds one. On the floor, Common lies
   plain; Magic has a blue rim and a glint running over it; Rare a gold rim, a gold ring under it

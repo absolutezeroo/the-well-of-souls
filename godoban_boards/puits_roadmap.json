@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 416,
+  "next_id": 420,
   "tags": [
     "pc",
     "test",
@@ -4219,7 +4219,7 @@
     {
       "id": "task_277",
       "title": "Idée SPD : mémoire de partie pour limiter les répétitions de salles et récompenses",
-      "description": "Favoriser la variété entre étages avec historique borné ou paquets pondérés, état de partie sauvegardé par ids stables. Shattered remet ses salles utilisées en fin de file et décrémente certains poids de butin. Dans le Puits, limites actuelles par étage, flux propre à SecretRoom et rattrapage de forge existent déjà ; les préserver. Filtrer biome/profondeur, assainir contenus retirés, garder flux RNG isolé et déterminisme du quotidien. Aucun dessin ; effort moyen. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.\nRoadmap RPG du 26/10/2026 : R3.6 (task_312), docs/rpg-roadmap.md. La mémoire de tirage concerne surtout les donjons renouvelables ; conserver la géographie permanente. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
+      "description": "Favoriser la variété entre étages avec historique borné ou paquets pondérés, état de partie sauvegardé par ids stables. Shattered remet ses salles utilisées en fin de file et décrémente certains poids de butin. Dans le Puits, limites actuelles par étage, flux propre à SecretRoom et rattrapage de forge existent déjà ; les préserver. Filtrer biome/profondeur, assainir contenus retirés, garder flux RNG isolé et déterminisme du quotidien. Aucun dessin ; effort moyen. Étude et sources épinglées : docs/shattered-pixel-dungeon-study.md. Proposition à sélectionner ; aucune implémentation autorisée par cette carte seule.\nRoadmap RPG du 26/10/2026 : R3.6 (task_312), docs/rpg-roadmap.md. La mémoire de tirage concerne surtout les donjons renouvelables ; conserver la géographie permanente. Statut historique conservé ; voir le nouveau cadrage avant reprise.\n\nLe 28/10 (décision 0012) : la partie « tirages sans remise » est faite pour événements, malédictions, rencontres, pactes et épreuves (RunLuck, sauvegardé avec la partie, rejouable à l'identique à la reprise). Reste de cette idée : mémoire des formes de salles et poids de butin.",
       "status": "backlog",
       "priority": "medium",
       "epic_id": "epic_7",
@@ -4228,7 +4228,7 @@
         "contenu"
       ],
       "created_at": 1792965288,
-      "updated_at": 1792973386,
+      "updated_at": 1793166309,
       "due_date": null
     },
     {
@@ -6187,8 +6187,8 @@
     {
       "id": "task_410",
       "title": "Rythme des étages : répits, monstres selon la surface, trésor garanti",
-      "description": "Audit du 28/10 (960 étages générés) : sur le trajet vers l'escalier, médiane de 4 salles de combat d'affilée (max 9, 55 % des étages au-delà de 3) ; 9 % seulement de salles sans monstre ; nombre de monstres sans lien avec la taille de la salle (corrélation 0,02, floor_populator.gd:156) ; 35 % des étages sans coffre, coffres en cul-de-sac 6 % ; 37 % des espaces ouverts fusionnés au-delà d'un écran (salles à 2 cases d'écart fusionnées par smooth()). Proposé : effectif selon la surface (1 monstre pour 25-35 cases, plafonné), une salle calme toutes les 2-3 sur le chemin, pic vers 60-80 % puis relâche, au moins un trésor, écart de 3 cases entre salles ; tests sur graines fixes. Durée réelle d'un étage à mesurer (télémétrie floor_times ; cible 3-6 min).",
-      "status": "todo",
+      "description": "Audit du 28/10 (960 étages générés) : sur le trajet vers l'escalier, médiane de 4 salles de combat d'affilée (max 9, 55 % des étages au-delà de 3) ; 9 % seulement de salles sans monstre ; nombre de monstres sans lien avec la taille de la salle (corrélation 0,02, floor_populator.gd:156) ; 35 % des étages sans coffre, coffres en cul-de-sac 6 % ; 37 % des espaces ouverts fusionnés au-delà d'un écran (salles à 2 cases d'écart fusionnées par smooth()). Proposé : effectif selon la surface (1 monstre pour 25-35 cases, plafonné), une salle calme toutes les 2-3 sur le chemin, pic vers 60-80 % puis relâche, au moins un trésor, écart de 3 cases entre salles ; tests sur graines fixes. Durée réelle d'un étage à mesurer (télémétrie floor_times ; cible 3-6 min).\n\nFait le 28/10 (décision 0012, branche fix/pacing) : salles à 3 cases d'écart (smooth() ne les fusionne plus), couloirs coudés du côté qui traverse le moins de salles ; monstres selon la surface ouverte (70 cases pour 2 au premier étage, plus les supplémentaires de la profondeur et de la difficulté ; élite ou gros corps compte double) ; au plus 3 salles de combat d'affilée sur le chemin de chaque escalier (une salle calme ensuite : source, autel, coffre ou rien) ; embuscade et pacte vers 60-80 % du chemin, sinon une élite (dès l'étage 2) ; marchand et forge après (80 % et plus) ; un coffre par étage au moins, d'abord en cul-de-sac ; 2 cases libres autour des piliers. Mesuré sur 960 étages (tools/levels/floor_report.py) : combats d'affilée médiane 4 / max 9 → 3 au plus ; étages sans coffre 35 % → 0 % ; corrélation surface/monstres 0,02 → 0,64 ; espaces ouverts à 2 salles 30 % → 22 % ; monstres par étage inchangés à ±5 %. Tests : unit.pacing. À vérifier sur le S23 : le rythme ressenti (salles calmes, pic, relâche), la densité des grandes salles (jusqu'à 9), la durée d'un étage (cible 3-6 min).",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6197,7 +6197,7 @@
         "équilibrage"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793166309
     },
     {
       "id": "task_411",
@@ -6217,8 +6217,8 @@
     {
       "id": "task_412",
       "title": "Chance et choix : pitié, soin avant boss, pas de répétition, rôles déclarés",
-      "description": "Audit du 28/10 : aucune protection contre la malchance sur la rareté (loot_roller.gd) ; pas de soin garanti avant un boss sauf en Pèlerin ; tirages avec remise pour événements, malédictions, rencontres, pactes et épreuves (voir task_277) ; aucun rôle (pilier ou « à construire ») déclaré sur les atouts et affixes, 0 affixe sur 22 relié à une famille (Brûlant et des Braises → Brasier, Gelé et Fracassant → Givre, Électrique → Orage, Vampirique → Sang, des Échos → Arcane). Décision du propriétaire : le sort des 4 atouts sans famille (Force, Précision, Fortune, Bannière de guerre).\n\nEn cours le 28/10 (décision 0012, branche fix/pacing) : rôle déclaré (pilier ou « à construire ») sur les 28 atouts et reliques et les 22 affixes ; Force, Précision, Fortune et Bannière de guerre piliers hors famille ; affixes à thème reliés à la famille de leur élément (ItemAffixDef.family). Reste : pitié, soin avant boss, tirages sans remise.",
-      "status": "in_progress",
+      "description": "Audit du 28/10 : aucune protection contre la malchance sur la rareté (loot_roller.gd) ; pas de soin garanti avant un boss sauf en Pèlerin ; tirages avec remise pour événements, malédictions, rencontres, pactes et épreuves (voir task_277) ; aucun rôle (pilier ou « à construire ») déclaré sur les atouts et affixes, 0 affixe sur 22 relié à une famille (Brûlant et des Braises → Brasier, Gelé et Fracassant → Givre, Électrique → Orage, Vampirique → Sang, des Échos → Arcane). Décision du propriétaire : le sort des 4 atouts sans famille (Force, Précision, Fortune, Bannière de guerre).\n\nFait le 28/10 (décision 0012, branche fix/pacing) : protection contre la malchance (après 20 objets d'équipement sans Rare ou mieux, Rare et Épique pèsent +100 % par objet de plus ; compteur sauvegardé avec la partie, RunLuck) ; Source de la Dernière Veille (soin complet, sans coût ni risque) dans la salle de départ de chaque étage de boss, à toutes les difficultés ; tirages sans remise dans une partie pour événements, malédictions (y compris les deux chemins, qui n'en partagent plus), rencontres, pactes et épreuves, identiques à la reprise ; rôle déclaré (pilier ou « à construire ») sur les 28 atouts et reliques et les 22 affixes ; Force, Précision, Fortune et Bannière de guerre piliers hors famille ; Brûlant et des Braises → Brasier, Gelé et Fracassant → Givre, Électrique → Orage, Vampirique → Sang, des Échos → Arcane (étiquette ItemAffixDef.family). Tests : unit.luck. À vérifier sur le S23 : la source avant chaque boss (visible, lisible), et qu'aucun événement ne revient trop tôt.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6273,6 +6273,51 @@
       ],
       "created_at": 1793161745,
       "updated_at": 1793161745
+    },
+    {
+      "id": "task_416",
+      "title": "Rythme des étages : régler les chiffres en jouant sur le S23",
+      "description": "Suite de task_410. Les chiffres du rythme sont des valeurs de départ (dungeon_config.tres > Population, Pacing) : 70 cases pour 2 monstres au premier étage, 9 au plus par salle, 3 combats d'affilée au plus, pic à 60-80 % du chemin, élite au pic dès l'étage 2. À jouer en Pèlerin et en Martyr, puis ajuster ; mesurer la durée réelle d'un étage (télémétrie floor_times, cible 3-6 min).",
+      "status": "todo",
+      "priority": "medium",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "niveaux",
+        "playtest",
+        "équilibrage"
+      ],
+      "created_at": 1793166309,
+      "updated_at": 1793166309
+    },
+    {
+      "id": "task_417",
+      "title": "Couloirs qui fusionnent encore les salles (22 % des espaces ouverts)",
+      "description": "Après l'écart de 3 cases (task_410), 22 % des espaces ouverts tiennent encore 2 salles ou plus (30 % avant), surtout par des couloirs parallèles à 1-2 cases que smooth() ouvre en bandes larges. Piste : relier chaque salle à la plus proche, ou refuser un couloir à moins de 3 cases d'un autre. Change la topologie des étages : à décider en jouant.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_2",
+      "due_date": null,
+      "tags": [
+        "niveaux"
+      ],
+      "created_at": 1793166309,
+      "updated_at": 1793166309
+    },
+    {
+      "id": "task_419",
+      "title": "Montrer la famille d'un affixe sur la fiche d'objet",
+      "description": "Les affixes à thème déclarent leur famille (ItemAffixDef.family, décision 0012) mais la fiche d'objet ne la montre pas encore (comme « Rune de Brasier »). Idée d'interface, à valider.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "ui"
+      ],
+      "created_at": 1793166309,
+      "updated_at": 1793166309
     }
   ]
 }
