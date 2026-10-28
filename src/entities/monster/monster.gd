@@ -325,11 +325,11 @@ func wake_up(new_target: Actor, intro := true) -> void:
 func notice_target() -> bool:
 	if dormant:
 		return false
-	if target != null and is_instance_valid(target) and not target.is_dead and DebugCheats.can_be_noticed(target):
+	if target != null and is_instance_valid(target) and not target.is_dead and DebugCheats.can_be_noticed(target) and not world.shelters(target):
 		return true
 	target = null
 	var player := world.player
-	if player and not player.is_dead and DebugCheats.can_be_noticed(player) and can_see(player, detect_radius()):
+	if player and not player.is_dead and DebugCheats.can_be_noticed(player) and not world.shelters(player) and can_see(player, detect_radius()):
 		target = player
 		_noticed(player)
 		return true
@@ -342,6 +342,23 @@ func _noticed(other: Actor) -> void:
 		noticed_frame = Engine.get_physics_frames()
 		Profile.mark_seen(def.id)
 		Events.monster_noticed.emit(self)
+
+
+## The run's difficulty changed in the middle of the floor (lowered from the pause menu: World):
+## its Health, blows, speed, wind-ups and sight follow `after` as a share of `before` (an elite's
+## rank or a boss phase keep their own), its Health keeping its share.
+func follow_rules(before: FloorRules, after: FloorRules) -> void:
+	var boss := def is BossDef
+	var share := float(hp) / maxf(float(get_max_hp()), 1.0)
+	base_stats = base_stats.duplicate()
+	base_stats.max_hp = maxi(1, roundi(base_stats.max_hp * after.monster_hp(boss) / maxf(before.monster_hp(boss), 0.01)))
+	base_stats.move_speed *= after.monster_speed() / maxf(before.monster_speed(), 0.01)
+	_damage_multiplier *= after.monster_damage(boss) / maxf(before.monster_damage(boss), 0.01)
+	_windup_multiplier *= after.telegraph_time() / maxf(before.telegraph_time(), 0.01)
+	_detect_multiplier *= after.detect_range() / maxf(before.detect_range(), 0.01)
+	invalidate_stats()
+	hp = clampi(roundi(get_max_hp() * share), 1, get_max_hp())
+	health_changed.emit(hp, get_max_hp())
 
 
 ## How far it spots the hero: its kind's reach, times the difficulty's.

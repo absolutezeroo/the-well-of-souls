@@ -1,12 +1,23 @@
 class_name HintBox
 extends Control
 ## A tutorial hint on screen (see Tutorial): a small wooden board at the top, its title in gold,
-## what to do, an OK button; when the hint is about a control of the HUD, a ring pulses around
-## that control and an arrow points at it.
+## what to do in one line, an OK button; when the hint is about a control of the HUD, a ring
+## pulses around that control and an arrow points at it. The board is as wide as its line (a
+## short hint, a small board), up to MAX_TEXT: every hint's line fits that in English and French
+## on every device (tutorial tests), a longer one (a long key name) wraps.
 
 signal dismissed
 
-const WIDTH := 560.0
+## The line's width (UI units) the board grows to before it wraps: one line at 1280x720 and on a
+## phone, the board clear of the minimap; and the least it takes (a short hint stays a board).
+const MAX_TEXT := 640.0
+const MIN_TEXT := 280.0
+## The HUD's top corners the board keeps clear of when there is room (hud.tscn: the bars and the
+## run's line on the left, to 436; the bag, pause and minimap in the last 236 on the right): on a
+## phone's wide screen it sits between them, on a 1280-wide one it hugs the right column (the
+## Health numbers stay in sight).
+const CLEAR_LEFT := 452.0
+const CLEAR_RIGHT := 244.0
 const TOP := 12.0
 ## Lower, when the boss bar takes the top of the screen.
 const TOP_UNDER_BOSS_BAR := 84.0
@@ -55,7 +66,7 @@ func _init() -> void:
 	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(_title)
 	_text = UiSkin.label("", Fonts.BODY, UiSkin.TEXT, true)
-	_text.custom_minimum_size.x = WIDTH - 140.0  # wraps at the board's width from the start
+	_text.custom_minimum_size.x = MIN_TEXT  # (fitted to each hint's line: _fit())
 	_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(_text)
 	var ok := Button.new()
@@ -73,7 +84,9 @@ func _ready() -> void:
 	# Picking up a gamepad mid-hint: its words follow ("Tap" / "Press [A]").
 	InputDevice.changed.connect(func() -> void:
 		if visible and _hint:
-			_text.text = _hint.shown_text())
+			_text.text = _hint.shown_text()
+			_fit()
+			_place.call_deferred())
 
 
 ## `at`: the control it is about (screen rect), or an empty rect.
@@ -81,6 +94,7 @@ func show_hint(hint: HintDef, at: Rect2) -> void:
 	_hint = hint
 	_title.text = tr(hint.title)
 	_text.text = hint.shown_text()
+	_fit()
 	target = at
 	_time = 0.0
 	show()
@@ -112,9 +126,29 @@ func shown_text() -> String:
 	return _text.text
 
 
+## The board on screen (tests: its line fits on one).
+func board_rect() -> Rect2:
+	return _board.get_global_rect()
+
+
+## Lines the hint's text takes (tests).
+func text_lines() -> int:
+	return _text.get_line_count()
+
+
+## The text as wide as its line (or its title), within MIN_TEXT and MAX_TEXT.
+func _fit() -> void:
+	var line := Fonts.MAIN.get_string_size(_text.text, HORIZONTAL_ALIGNMENT_LEFT, -1, Fonts.BODY).x
+	var heading := Fonts.MAIN.get_string_size(_title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, Fonts.BODY).x
+	_text.custom_minimum_size.x = clampf(ceilf(maxf(line, heading)) + 2.0, MIN_TEXT, MAX_TEXT)
+
+
 func _place() -> void:
-	_board.size = Vector2(WIDTH, _board.get_combined_minimum_size().y)
-	_board.position = Vector2(roundf((size.x - WIDTH) * 0.5), TOP_UNDER_BOSS_BAR if lowered else TOP)
+	_board.size = _board.get_combined_minimum_size()
+	var x := (size.x - _board.size.x) * 0.5
+	if x < CLEAR_LEFT:
+		x = maxf(x, minf(CLEAR_LEFT, size.x - CLEAR_RIGHT - _board.size.x))
+	_board.position = Vector2(roundf(x), TOP_UNDER_BOSS_BAR if lowered else TOP)
 
 
 func _process(delta: float) -> void:

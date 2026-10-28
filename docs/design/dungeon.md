@@ -123,6 +123,20 @@
   and always drop an item. Their affix is a perk, like the hero's: **Swift**, **Vampiric**
   (heals when hitting), **Bursting** (blows up when it dies), **Ironclad**, **Venomous**
   (poisons), **Thorned** (hurts who hits it).
+- **First steps** (decision 0010, `FirstStepsDef`, `data/tutorial/first_steps.tres`, `FirstSteps`):
+  on floor 1 of a profile's first three runs (`Profile.runs`, counted as a run begins; never a
+  Dawn Knell, the same floors for everyone), the room the hero starts in **shelters** him: no
+  monster notices him there (`World.shelters()`, asked by `Monster.notice_target()`) until he has
+  both walked 110 px and swung once; outside it, or once he has, the floor is as ever. And the
+  **nearest room holding monsters** (the rooms are chained from the start: the lowest-numbered one
+  with monsters, merchant, forge, ambush and pact rooms having none) keeps a single **first
+  monster**: a Slime of its kind (bestiary, kills, sounds) made gentle by the def's numbers, slow
+  (40 px/s, the hero 170), plainly telegraphed (wind-up 0.8 s, recovery 0.6 s), 10 Health and no
+  Armor: 2 or 3 ordinary blows of the starting katana (a critical one may end it sooner). It stands
+  where that room's monster nearest the start stood and takes its number in the seed's order
+  (`Monster.floor_index`), the room's others gone, so a run picked up on that floor finds it
+  again. Laid by the floor kind after `FloorPopulator` (`NormalFloorKind.lay()`), apart from it.
+  The tests turn it off but in their own (`FirstSteps.enabled`, `FirstRunTests`).
 
 ## Room shapes
 

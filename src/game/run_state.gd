@@ -101,6 +101,10 @@ var config: DungeonConfig
 var reset_min_depth := 1
 ## Picked up from a save (create() was given one), not begun now. Not saved.
 var resumed := false
+## An aided run (decision 0011): the Souls' Aid was on at some point of it, or its difficulty was
+## lowered in the middle (lower_difficulty()). It stays off the online leaderboards and sets no
+## record (ranked()); souls, the story and the achievements count. Saved.
+var assisted := false
 
 
 ## A new run, or the saved one (`saved` from RunSave; empty for a new run).
@@ -170,6 +174,7 @@ static func create(content: ContentDB, saved: Dictionary, rng: RandomNumberGener
 	run.run_gold = int(saved.get("run_gold", 0))
 	run.history_recorded = bool(saved.get("history_recorded", false))
 	run.time = float(saved.get("time", 0.0))
+	run.assisted = bool(saved.get("assisted", false))
 	var saved_telemetry: Variant = saved.get("telemetry", {})
 	if saved_telemetry is Dictionary:
 		run.telemetry = saved_telemetry
@@ -284,8 +289,40 @@ func to_data() -> Dictionary:
 		"difficulty": String(difficulty.id),
 		"ascension": difficulty.ascension,
 		"remote": tuning.to_data(),
+		"assisted": assisted,
 		"last_boss": KEEPER_BOSS if last_boss and last_boss == keeper_boss else RunSave.ref(last_boss),
 	}
+
+
+## Its times and the Dawn Knell's score count as records, and it may go on the online
+## leaderboards: not an aided run (assisted).
+func ranked() -> bool:
+	return not assisted
+
+
+## The difficulties this run may be lowered to (from the pause menu): the ones before its own
+## in `content.difficulties`, gentlest first, and its own without its ascension levels when it
+## has some. Each as it is (its ascension 0).
+func lower_difficulties(content: ContentDB) -> Array[DifficultyDef]:
+	var result: Array[DifficultyDef] = []
+	for each in content.difficulties:
+		if each.id == difficulty.id:
+			if difficulty.ascension > 0:
+				result.append(each)
+			break
+		result.append(each)
+	return result
+
+
+## Lowers the run's difficulty to `lower` (one of lower_difficulties()), for the rest of the run:
+## the remote settings it began with apply to it too, and the run becomes aided. False (nothing
+## changed) if `lower` isn't lower.
+func lower_difficulty(content: ContentDB, lower: DifficultyDef) -> bool:
+	if lower == null or not lower_difficulties(content).has(lower):
+		return false
+	difficulty = tuning.apply_to(lower)
+	assisted = true
+	return true
 
 
 ## The way down from this floor leads to the bottom of the Well (FinaleDef): the last act's
@@ -438,6 +475,8 @@ func summary_rows(content: ContentDB, level: int, time_note: String = "") -> Arr
 		[tr("Bosses slain"), str(bosses_slain)],
 		[tr("Time"), time_text],
 	]
+	if assisted:
+		rows.append([tr("Records"), tr("None: an aided descent")])
 	if secrets_found > 0:
 		rows.insert(rows.size() - 1, [tr("Secret rooms found"), str(secrets_found)])
 	if is_daily():

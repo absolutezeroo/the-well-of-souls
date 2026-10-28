@@ -290,8 +290,12 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   perk choices still waiting, the one on screen with its cards). Dying erases it. "Save and quit" in the pause menu does the same on purpose.
   Never during the trial of the Threshold: quit in there, and the run picks up as it was before
   the killing blow.
-- **Pause menu** (the II button, Escape, a gamepad's Start, or the phone's back button): resume, options, bestiary,
-  **Send feedback**, save and quit, give up the run (two taps). Coming back to the app, the game waits paused.
+- **Pause menu** (the II button, Escape, a gamepad's Start, or the phone's back button): resume, options,
+  **Difficulty** (lower it for the rest of this run only, never raise it: `RunDifficultyDialog`, a
+  button per lower difficulty with its description, and Back; the run is then aided, see
+  progression.md "Help without judgement"), bestiary, **Send feedback**, save and quit, give up the
+  run (two taps). Eight rows: at 720 lines the board fills the screen (a taller button would need
+  the help line under them to go). Coming back to the app, the game waits paused.
 - **Options** (`Settings` autoload, `user://settings.cfg`), on the title screen and in the pause menu:
   five volumes (**General**, **Music**, **Interface**, **Combat**, **Ambience**: which sounds
   each one sets is in presentation.md, SFX; a slider follows the finger or the mouse smoothly (a
@@ -309,15 +313,17 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
   By hand, three buttons, the picked one's rule spelled out under them; see design/loot.md),
   **boss stories** (Full / Short / Off, three buttons the same way: the cinematic before a
   warden's fight, presentation.md "Boss stories"),
-  **tutorial hints** (on/off) and **Replay tutorial**, on a computer **fullscreen**, the
+  **tutorial hints** (on/off) and **Replay tutorial**, the **Souls' Aid** (*Aide des âmes*: on/off,
+  its line saying what it takes away now and that its runs set no records; kept in the Profile, not
+  in Settings, like a save file's own setting: progression.md), on a computer **fullscreen**, the
 **interface size** (Big / Medium / Small), and the **language** (English / Français,
   see Languages). The window (`OptionsPanel`, built in code on `MenuWindow`) has five tabs, each
   option with a one-line "what it does"; on/off options are big switches, and tapping an
   option's name flips it too; a choice of a few (language, auto loot, boss stories, interface
   size) is a row of buttons under its name, the one in use pressed:
   - **Gameplay** (opens first): Language (first, for a player who can't read the one in use),
-    Loot (auto loot), Story (boss stories); In a run (run timer, screen shake, vibrations,
-    charge without holding), Tutorial (hints, Replay tutorial).
+    Loot (auto loot), Story (boss stories); Difficulty (the Souls' Aid), In a run (run timer,
+    screen shake, vibrations, charge without holding), Tutorial (hints, Replay tutorial).
   - **Graphics**: Screen (fullscreen on a computer, interface size), Touch controls (buttons
     size, fixed joystick); Effects and battery (fewer effects, screen flashes, battery saver).
   - **Audio**: the five volumes, long sliders in one column.
@@ -351,10 +357,17 @@ The rules and their reasons: [../privacy-ops.md](../privacy-ops.md). On screen:
 ## Tutorial
 
 No separate tutorial level: the first run teaches as it goes. A small wooden board comes up at the
-top of the screen (`HintBox`), says what to do, and, when it is about a control, a gold ring pulses
-around it with an arrow. Each hint shows **once ever** (`Profile.hints_seen`), one at a time, never
-over a menu or a big banner. A tap or a click (or OK) closes it. A hint about a control says it
-in the device's words ("Tap the big button" / "Press [Space]", `HintDef.button_text`).
+top of the screen (`HintBox`), its title in gold over **one line** saying what to do, and, when it
+is about a control, a gold ring pulses around it with an arrow. The board is as wide as its line,
+up to 640 units of text (`HintBox.MAX_TEXT`: every hint fits that in English and French, by touch,
+keys and gamepad, `FirstRunTests.run_hints()`; a longer key name wraps); it keeps clear of the
+HUD's top corners where the screen allows (between them on a phone, against the right one at
+1280 wide, the Health numbers in sight). A hint shows **once ever** once read (`Profile.hints_seen`):
+a tap or a click (or OK) on it, or what it asks done. One whose time runs out unread comes back on
+a later floor, once (`TutorialDef.unread_returns`), the next steps of its chain with it; then it
+counts as seen. One at a time, never over a menu or a big banner. A hint about a control says it
+in the device's words ("Tap the big button" / "Press [Space]", `HintDef.button_text`). The
+codex's **Tips** tab lists the hints seen, to read again, in the device's words.
 
 - **First steps**: move (it stays until you have walked a few tiles), then the sealed stairs; when
   a monster first sees you, attack (tap; until you swing), then roll, then the weapon's two
@@ -561,20 +574,30 @@ stones lit in their runes' colors. The selected slot pulses gold.
   the cards on dark wood with Reroll / Banish explained and **Later** (the choice waits behind the
   perk button; Back does the same), coming in softly (the world dims, the board rises, 0.2 s)
   instead of cutting over the fight; each pause button says what it does, with
-  what gold and souls are for; the end screen shows the run's numbers (`RunState.summary_rows()`),
-  the souls earned and what they buy. After a death, the Vigil-Keeper's tale and advice sit under
-  the title in her `DialogueBox` (presentation.md); with nothing for her to say, the story's line.
+  what gold and souls are for; the end screen shows the run's numbers (`RunState.summary_rows()`;
+  an aided run says it sets no records), the souls earned and what they buy. After a death, the
+  Vigil-Keeper's tale and advice sit under the title in her `DialogueBox` (presentation.md); with
+  nothing for her to say, the story's line. A death's buttons: **Descend again** (straight into the
+  next descent, as the Well would start it: the difficulty, ascension and oath chosen there, a Dawn
+  Knell again as practice; the run that ended recorded and its save erased first; no walk through
+  Kagari, `Game.descend_again()`), Return to village, Title screen. A victory keeps Keep going
+  (endless), Return to village, Title screen.
 - **Keepers' words**: the shop and the forge open on a line of the merchant's or the smith's
   (their dialogue's, else a greeting) in quotes beside their face; the grinning spirit's line
   shows in place of its encounter's description, in its color (the panel keeps its height on a
   720-line screen), and the outcome takes its place when a choice is made.
 - **Codex, Voices** (*Paroles*): what each speaker said and is kept, by speaker, and how many
-  lines are still to hear.
+  lines are still to hear. **Tips** (*Conseils*): the tutorial's hints seen, title and line. With
+  six tabs the header holds the tabs and Close; the souls sit at the end of the tab's summary line.
 
 
 ## Active product and input ownership
 
-The active F5/export path is TitleScreen → story/Kagari → the Well → new or resumed Game. Shrine, daily runs,
+The active F5/export path is TitleScreen → story/Kagari → the Well → new or resumed Game. The
+very first Play (a profile with no run and none saved, `Game.first_descent_due()`) goes title →
+the privacy questions if still due → the story (skippable) → the Game on floor 1 at Keeper, with
+no Kagari, Well or choice before it (decision 0010); the button says **Descend** then, **Enter
+Kagari** afterwards. Shrine, daily runs,
 perk choices, end of run, records and options keep their normal roles. The standalone RPG
 campaign/menu is [archived for a separate project](../rpg-archive.md).
 
@@ -586,7 +609,8 @@ hero is still valid before disconnecting signals.
 
 ## Village interaction
 
-[Kagari](village.md) replaces direct run launch with walking to the central well. Approach an
+[Kagari](village.md) replaces direct run launch with walking to the central well (but for the
+very first descent, which starts from the title: village.md "The first return"). Approach an
 inhabitant, shrine or statue and press the normal Interact action; touch uses the existing stick
 and ActionButton. Conversations, restoration purchases and memorials use the scrollable Ninja Adventure
 VillagePanel and stop walking. The conversation sits low on screen with its portrait, readable

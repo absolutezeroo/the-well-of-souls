@@ -3,13 +3,17 @@ extends Control
 ## End of a run, in the game's skin (RpgDialog): death, or victory over the last boss (then you
 ## may keep going: endless mode). How it ended (the Vigil-Keeper telling it and giving advice, in
 ## a DialogueBox typing beside everything else; else a line of the story), the run's numbers
-## (time, depth, kills...), the souls it earned and what souls are for, then what to do next.
+## (time, depth, kills...), the souls it earned and what souls are for, then what to do next:
+## after a death, Descend again (straight into the next descent, decision 0010), Return to
+## village or the title.
 ## After a Dawn Knell, a Leaderboards button by the run's numbers opens the online page
 ## (LeaderboardsPanel) over it.
 
 signal restart_requested
 signal continue_requested
 signal title_requested
+## Descend again: the next descent at once, without the walk through Kagari (Game.descend_again()).
+signal descend_requested
 
 const DEATH_COLOR := Color(1, 0.88, 0.82)
 const VICTORY_COLOR := Color(1, 0.86, 0.45)
@@ -30,6 +34,7 @@ var _souls_short: Label
 var _continue_note: Label
 var _continue_button: Button
 var _restart_button: Button
+var _descend_button: Button
 var _boards_button: Button
 ## Built nodes reachable as %Name once the panel is built.
 var _named := ExposedNodes.new()
@@ -105,6 +110,7 @@ func _show(title: String, color: Color, summary: String, can_continue: bool) -> 
 	_summary.visible = not summary.is_empty()
 	_continue_button.visible = can_continue
 	_continue_note.visible = can_continue
+	_descend_button.visible = not can_continue  # (a death: going down again is a tap away)
 	_restart_button.text = tr("Return to village")
 	show()
 
@@ -179,6 +185,13 @@ func _build() -> void:
 	_continue_button.name = "ContinueButton"
 	_named.add(_continue_button)
 	buttons.add_child(_continue_button)
+	_descend_button = UiParts.button(tr("Descend again"), func() -> void:
+		Sfx.play_ui(Sfx.bank.ui_click)
+		hide()
+		descend_requested.emit(), Vector2(240, 58), Fonts.BODY)
+	_descend_button.name = "DescendButton"
+	_named.add(_descend_button)
+	buttons.add_child(_descend_button)
 	_restart_button = UiParts.button(tr("Return to village"), func() -> void:
 		Sfx.play_ui(Sfx.bank.ui_click)
 		restart_requested.emit(), Vector2(240, 58), Fonts.BODY)

@@ -2,15 +2,32 @@
 
 Le Puits des Âmes remains an action roguelike. Kagari is a small persistent, walkable hub,
 not the archived RPG campaign. F5 still opens the title (privacy, account, options and records).
-**Enter Kagari** tells the introduction once, then brings the hero to the square. Resume and
+The very first Play (**Descend**: a profile with no run, none saved) tells the introduction, then
+goes straight down the Well (see "The first return" below). Afterwards **Enter Kagari** brings
+the hero to the square (the introduction first, if it was never told). Resume and
 Daily requests also lead here. Walk to the central Well and interact to choose/resume a descent;
 difficulty, ascensions, oaths and the daily explanation retain their normal rules. A new descent
 asks before replacing an existing run. Closing that question or leaving the village loses nothing.
 
 The pause menu's **Return to village** saves the current descent; the Well can resume it at its
 saved floor, with its hero and equipment. After death/victory, **Return to village** closes that
-expedition and leaves no resumable finished run. The optional endless continuation is retained.
+expedition and leaves no resumable finished run. After a death, **Descend again** starts the next
+descent at once, as the Well would (its difficulty, ascension and oath), without the walk back. The optional endless continuation is retained.
 A village visit does not heal, equip or otherwise mutate a suspended dungeon hero.
+
+## The first return
+
+Decision 0010: a new player's first minutes are a fight, not a village. The first descent starts
+from the title, after the privacy questions and the (skippable) story, on floor 1 at Keeper, with
+no Kagari, Well cinematic, difficulty or oath before it. Kagari, the Vigil-Keeper and the choices
+come at the first return: the death screen opens on her first-death line (`vigil_tale`,
+`first_death`: "There you are, child. I never sleep: I was waiting for you."), and **Return to
+village** brings the hero to the square for the first time. Nothing there assumed an earlier
+visit: the HUD's objective is the first quest's offer ("Find the Vigil-Keeper at the Well or in
+the temple."), her greeting ("There you are, child. Ren will not wake...") follows her line on the
+death screen, the ember-box was never laid on floor 2 (no quest accepted yet: VillageExpedition
+lays evidence only for an accepted one), and the Well offers the difficulty and oath choices from
+then on. A first run left from the pause menu, or won, returns the same way.
 
 ## The first chapter
 

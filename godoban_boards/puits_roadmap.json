@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 420,
+  "next_id": 424,
   "tags": [
     "pc",
     "test",
@@ -6172,8 +6172,8 @@
     {
       "id": "task_409",
       "title": "Premières minutes : premier combat en moins de 30 s, premier contact protégé",
-      "description": "Audit du 28/10 : il faut 60 à 120 s avant le premier combat pour un joueur qui lit (titre, consentement, intro de 6 pages, Kagari, chercher la Veilleuse au temple, Puits, difficulté, descente, deux chargements). Immobile dans la salle de départ, le héros est repéré et touché dans 7 départs sur 33 (17-26 s). 42 % des premiers monstres sont rapides (rat, chauve-souris, serpent, préparation 0,2-0,3 s) ; les monstres lents demandent 6 à 10 coups. Proposé (décision du propriétaire sur le parcours) : au tout premier lancement, l'étage 1 directement après une page d'intro, Kagari et la Veilleuse au premier retour ; salle 0 protégée tant que le héros n'a pas bougé et attaqué ; un premier monstre lent posé dans la salle voisine.",
-      "status": "todo",
+      "description": "Audit du 28/10 : il faut 60 à 120 s avant le premier combat pour un joueur qui lit (titre, consentement, intro de 6 pages, Kagari, chercher la Veilleuse au temple, Puits, difficulté, descente, deux chargements). Immobile dans la salle de départ, le héros est repéré et touché dans 7 départs sur 33 (17-26 s). 42 % des premiers monstres sont rapides (rat, chauve-souris, serpent, préparation 0,2-0,3 s) ; les monstres lents demandent 6 à 10 coups. Proposé (décision du propriétaire sur le parcours) : au tout premier lancement, l'étage 1 directement après une page d'intro, Kagari et la Veilleuse au premier retour ; salle 0 protégée tant que le héros n'a pas bougé et attaqué ; un premier monstre lent posé dans la salle voisine.\n\nFait (branche fix/flow, décision 0010) : le tout premier Jouer (profil sans partie ni sauvegarde) dit « Descendre » : questions de confidentialité d'abord si elles sont dues, puis l'histoire (passable), puis l'étage 1 en Gardien, sans Kagari, Puits ni choix ; Kagari et la Veilleuse au premier retour (sa ligne de première mort sur l'écran de mort, la quête de la boîte à braises inchangée, cf. village.md « The first return »). Trois premières parties : salle de départ protégée tant que le héros n'a pas marché 110 px ET frappé ; la salle voisine (la première salle à monstres) ne garde qu'une Gelée lente (40 px/s, préparation 0,8 s, 10 PV, 2-3 coups de katana), data/tutorial/first_steps.tres. Écran de mort : « Redescendre ». Test : lancement → premier monstre qui repère le héros ≈ 15 s de temps de jeu (histoire passée), limite 30 s.\nÀ vérifier sur le S23 : (1) premier lancement réel (désinstaller ou effacer les données) : temps jusqu'au premier combat avec les vrais chargements ; (2) on peut lire le premier indice sans être touché ; (3) la première Gelée se lit bien (lente, préparation visible) et tombe en 2-3 coups ; (4) premier retour à Kagari après la mort : la Veilleuse et l'objectif ont du sens ; (5) Redescendre relance bien une descente avec la même difficulté.",
+      "status": "review",
       "priority": "high",
       "epic_id": "epic_7",
       "due_date": null,
@@ -6182,7 +6182,7 @@
         "combat"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793166835
     },
     {
       "id": "task_410",
@@ -6333,6 +6333,67 @@
       ],
       "created_at": 1793165202,
       "updated_at": 1793165202
+    },
+    {
+      "id": "task_420",
+      "title": "Aide sans jugement : Aide des âmes, difficulté en partie, indices relisibles",
+      "description": "Partie de task_413 faite sur la branche fix/flow (décision 0011 ; le maintien de la charge et le texte qui saute sont à d'autres branches). Options > Jouabilité > Difficulté : « Aide des âmes » (20 % de dégâts en moins, +2 % par mort avec l'aide, 80 % au plus ; data/player/assist.tres ; gardée dans le profil). Menu pause > « Difficulté » : seulement plus bas, pour la partie en cours (les monstres présents suivent). Une partie aidée (aide activée à un moment, ou difficulté baissée) est notée dans la sauvegarde, n'entre dans aucun classement, n'établit aucun record (temps, Fond du Puits, score du Glas de l'aube) ; âmes, histoire, codex, succès comptent. Indices : une ligne chacun (anglais et français, les 33 réécrits), cadre à la largeur de la ligne qui évite les coins du HUD ; un indice qui expire sans être lu revient une fois à un étage suivant ; onglet « Conseils » au codex.\nÀ vérifier sur le S23 : (1) l'option se trouve et se comprend ; (2) avec l'aide, un coup ordinaire fait bien moins mal ; (3) Pause > Difficulté baisse bien et le HUD affiche la nouvelle ; (4) les indices tiennent sur une ligne en français et ne cachent pas la barre de vie ; (5) l'onglet Conseils au codex.",
+      "status": "review",
+      "priority": "medium",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "android",
+        "records"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793166835
+    },
+    {
+      "id": "task_421",
+      "title": "Menu pause plein à 720 lignes (8 boutons)",
+      "description": "Avec « Difficulté », le menu pause a huit lignes de 54 unités et remplit l'écran à 1280x720 (planche de y 30 à 705). Si les boutons passent à 64 unités (task_407), retirer la ligne d'aide du bas (or et âmes) ou regrouper deux boutons.",
+      "status": "todo",
+      "priority": "low",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793166835
+    },
+    {
+      "id": "task_422",
+      "title": "Statistiques de jeu : marquer les parties aidées",
+      "description": "Les statistiques de jeu (Talo) ne savent pas qu'une partie était aidée (Aide des âmes, difficulté baissée) : les mesures d'équilibrage les mélangent. Ajouter le drapeau aux propriétés envoyées demande de mettre à jour docs/privacy-ops.md et la fiche Data safety (ce qui est envoyé). Idée, à décider.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "en ligne",
+        "équilibrage"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793166835
+    },
+    {
+      "id": "task_423",
+      "title": "Cadre des indices : coins du HUD en dur",
+      "description": "HintBox.CLEAR_LEFT (452) et CLEAR_RIGHT (244) recopient la mise en page de hud.tscn (barres à gauche jusqu'à 436, sac/pause/minicarte dans les 236 de droite). Si le HUD bouge (zone sûre, tailles tactiles), mettre ces valeurs à jour ou les demander au HUD.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_4",
+      "due_date": null,
+      "tags": [
+        "ui",
+        "qualité"
+      ],
+      "created_at": 1793166835,
+      "updated_at": 1793166835
     }
   ]
 }
