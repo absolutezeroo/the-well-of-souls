@@ -31,8 +31,8 @@ func _test_numbers_in_data() -> void:
 	check(rules.crit_multiplier == 1.75 and rules.damage_variance == 0.15 and rules.armor_weight == 1.0 and rules.max_cooldown_reduction == 0.5 and rules.delayed_blast_knockback == 260.0,
 		"the combat rules in data are the ones the code had: crit x1.75, variance 15%, armor weight 1, cooldown cap 50%, a delayed blast's push 260")
 	var hero := CONTENT.player
-	check(hero.hit_invulnerability == 0.6 and hero.fall_invulnerability == 1.0 and hero.swap_cooldown == 1.5 and hero.skill_aim_range == 520.0 and hero.melee_aim_assist == 70.0 and hero.attack_buffer == 0.3,
-		"the hero's feel in data is the code's: 0.6 s i-frames, 1 s after a fall, 1.5 s swap cooldown, 520 aim range, 70 melee assist, 0.3 s attack buffer")
+	check(hero.hit_invulnerability == 0.6 and hero.fall_invulnerability == 1.0 and hero.swap_cooldown == 1.5 and hero.skill_aim_range == 520.0 and hero.melee_aim_assist == 70.0 and is_equal_approx(hero.input_buffer, 0.12),
+		"the hero's feel in data is the code's: 0.6 s i-frames, 1 s after a fall, 1.5 s swap cooldown, 520 aim range, 70 melee assist, 0.12 s input buffer (decision 0008's audit: 0.1-0.15 s for the attack, the roll and the skills)")
 	var bosses: Array[BossDef] = []
 	for act in CONTENT.dungeon.acts:
 		for boss in act.all_bosses():

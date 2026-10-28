@@ -23,6 +23,8 @@ extends Resource
 ## Seconds the attack button must be held before the weapon's charge starts filling: a tap is
 ## always a plain attack (Player, AttackCharge).
 @export_range(0.05, 0.6, 0.01) var charge_delay: float = 0.22
+## Tap to charge (Settings.tap_to_charge): two taps within this many seconds start the charge.
+@export_range(0.1, 0.6, 0.01) var double_tap_window: float = 0.3
 ## Played when the charge is full.
 @export var charge_full_sound: AudioStream
 
@@ -38,9 +40,12 @@ extends Resource
 @export var skill_aim_range: float = 520.0
 ## A melee weapon aims at enemies this far beyond its reach (it turns to them, then swings).
 @export var melee_aim_assist: float = 70.0
-## A press of the attack button while the weapon is still swinging waits this long for it (taps
-## in a hurry are not lost; holding never chains attacks: it charges).
-@export_range(0.0, 1.0, 0.05) var attack_buffer: float = 0.3
+## A press of the attack, the roll or a skill that can't go yet (the weapon still swinging, the
+## cooldown about to end) waits this many real seconds for it, a hit stop included: taps in a
+## hurry are not lost, the newest press wins, and a press never fires long after it was made
+## (docs/design/presentation.md "Feel limits": 0.1-0.15 s). Holding never chains attacks: it
+## charges.
+@export_range(0.0, 0.5, 0.01) var input_buffer: float = 0.12
 
 @export_group("Leveling")
 ## Cards in an ordinary upgrade offer (level ups and encounters).

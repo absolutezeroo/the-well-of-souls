@@ -87,6 +87,7 @@ func _enter_phase(phase: BossPhase) -> void:
 	Vfx.magic(world, monster.global_position, Palette.DANGER)
 	Sfx.play_at(Sfx.bank.boss_roar, monster.global_position)
 	Events.screen_shake.emit(0.6)
+	Settings.vibrate(0.5)  # a boss's turn is one of the few things the phone buzzes for
 
 
 ## What `phase` changes in the fight, without its roar: its stats, skills, wind-ups (the

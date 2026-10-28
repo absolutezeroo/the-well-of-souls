@@ -501,8 +501,12 @@ func _on_damaged(hit: HitInfo, _damage: int) -> void:
 	if hit.source and is_hostile_to(hit.source):
 		target = hit.source
 	if hit.source is Player and not hit.is_secondary:
+		# One freeze and one lean per blow, however many it strikes (HitStop takes the longest,
+		# GameCamera the strongest push of a frame); only a crit buzzes the phone, never an
+		# ordinary hit (in a crowd it would drone).
 		HitStop.freeze(0.07 if hit.is_crit else 0.035)
-		Settings.vibrate(0.15 if hit.is_crit else 0.05)
+		if hit.is_crit:
+			Settings.vibrate(0.15)
 		# The blow lands: the camera leans into it.
 		var push := hit.knockback.normalized() if hit.knockback != Vector2.ZERO else hit.source.global_position.direction_to(global_position)
 		Events.camera_kick.emit(push, 6.0 if hit.is_crit else 3.5)
@@ -555,6 +559,8 @@ func _on_died(killer: Actor) -> void:
 			drops.pay_xp(killer)
 		world.spawn_floating_text(global_position, tr("Fell!"), Palette.GOLD)
 		return
+	if is_boss():
+		Settings.vibrate(0.8)  # a warden falls: one of the few things the phone buzzes for
 	if is_boss() and free_on_death:
 		Vfx.boss_death(world, global_position + Vector2(0, -head_height * 0.5), radius * 1.5)
 		HitStop.freeze(0.25)

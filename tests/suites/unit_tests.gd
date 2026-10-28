@@ -88,6 +88,7 @@ func test_cases() -> Array:
 		["dialogue", func() -> void: await _part(DialogueTests.new(), func(suite: DialogueTests) -> void: await suite.run_unit())],
 		["core", func() -> void: await _part(CoreTests.new(), func(suite: CoreTests) -> void: suite.run_unit())],
 		["fairness", func() -> void: await _part(FairnessTests.new(), func(suite: FairnessTests) -> void: await suite.run_unit())],
+		["feel_limits", func() -> void: await _part(FeelTests.new(), func(suite: FeelTests) -> void: await suite.run_unit())],
 	]
 
 

@@ -645,10 +645,14 @@ func splat_count() -> int:
 	return _splats.count() if _splats and is_instance_valid(_splats) and not _splats.is_queued_for_deletion() else 0
 
 
-func spawn_floating_text(at: Vector2, text: String, color: Color) -> void:
+## A rising number or word at `at`; returns it (null when nothing is shown: a simulation), so a
+## blow's number can take the next ones (HitFeedback merges a crowd's numbers).
+func spawn_floating_text(at: Vector2, text: String, color: Color) -> FloatingText:
 	if not Vfx.shown:
-		return
-	spawn_vfx(FloatingText.create(at, text, color))
+		return null
+	var floating := FloatingText.create(at, text, color)
+	spawn_vfx(floating)
+	return floating
 
 
 # --- Holes ------------------------------------------------------------------

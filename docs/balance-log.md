@@ -29,6 +29,10 @@ is 13.3% of his max Health (a beast's charge at depth 7: 28 of 210), the worst b
 (the Giant Frog's fierce leap at depth 3: 23 of 130), at the top of the hits' roll; budget 20% /
 30%. Unchanged by this pass.
 
+Feel numbers (presentation.md "Feel limits"): one input buffer of 0.12 s (was an attack-only
+0.3 s, counted in game time) for the attack, the roll and the skills, in real time
+(`PlayerDef.input_buffer`; core_tests' pin updated with it).
+
 ## 2026-10-27 - Heal share only where the hero was hurt (tools only)
 
 The heal share targets (arena "heal share", model "heal share") now judge only fights where the

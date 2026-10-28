@@ -17,7 +17,10 @@ const MAX_FLASHES_PER_SECOND := 3.0
 
 var _aberration := 0.0
 var _mood_bloom := 0.0
-var _last_flash_ms := -100000
+## When the last flash of the screen was let through (real milliseconds), whoever made it: the
+## lightning here, the hurt vignette in the HUD (DamageVignette). Shared, so together they stay
+## under MAX_FLASHES_PER_SECOND.
+static var _last_flash_ms := -100000
 var _flash_frame := -1
 var _was_transparent := false
 var _positions := PackedVector4Array()
@@ -69,14 +72,23 @@ func kick(strength: float = 1.0) -> void:
 ## The whole picture lit for one frame (a bolt of lightning), at most three times a second, and
 ## never when the player turned flashes off.
 func flash(tint: Color, strength: float = 0.5) -> bool:
+	if not take_flash():
+		return false
+	_flash_frame = Engine.get_process_frames()
+	(material as ShaderMaterial).set_shader_parameter("flash", Color(tint, strength))
+	return true
+
+
+## Whether a flash over a large part of the screen may go now (the Screen flashes option on,
+## and not more than MAX_FLASHES_PER_SECOND, whoever flashes: lightning, the hurt vignette);
+## true takes the turn. Real time: a hit stop doesn't bunch flashes.
+static func take_flash() -> bool:
 	if not Settings.screen_flashes:
 		return false
 	var now := Time.get_ticks_msec()
 	if now - _last_flash_ms < roundi(1000.0 / MAX_FLASHES_PER_SECOND):
 		return false
 	_last_flash_ms = now
-	_flash_frame = Engine.get_process_frames()
-	(material as ShaderMaterial).set_shader_parameter("flash", Color(tint, strength))
 	return true
 
 

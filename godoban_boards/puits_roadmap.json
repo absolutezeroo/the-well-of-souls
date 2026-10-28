@@ -6202,8 +6202,8 @@
     {
       "id": "task_411",
       "title": "Sensations : tampon d'entrée, gel pendant un ralenti, vibrations, menaces hors écran",
-      "description": "Audit du 28/10 : tampon d'attaque 0,3 s (règle : 0,1-0,15 s), aucun tampon pour l'esquive et les compétences, décompte en temps de jeu (figé pendant un gel) ; HitStop.freeze gèle aussi pendant un ralenti ; un gel, un kick et une vibration par cible touchée ; le téléphone vibre à chaque coup ordinaire et aux pas des boss ; la vignette rouge de dégâts ignore l'option Flashs ; nombres de dégâts non fusionnés en foule ; aucune flèche pour une menace hors écran. Proposé : tampon unique de 0,12 s en temps réel, consommé à l'usage (core_tests.gd:34 à mettre à jour avec l'accord du propriétaire) ; garde « pas de gel pendant un ralenti » ; un retour par attaque ; vibration seulement pour blessure, critique et boss ; vignette derrière l'option ; flèche de bord.",
-      "status": "todo",
+      "description": "Audit du 28/10 : tampon d'attaque 0,3 s (règle : 0,1-0,15 s), aucun tampon pour l'esquive et les compétences, décompte en temps de jeu (figé pendant un gel) ; HitStop.freeze gèle aussi pendant un ralenti ; un gel, un kick et une vibration par cible touchée ; le téléphone vibre à chaque coup ordinaire et aux pas des boss ; la vignette rouge de dégâts ignore l'option Flashs ; nombres de dégâts non fusionnés en foule ; aucune flèche pour une menace hors écran. Proposé : tampon unique de 0,12 s en temps réel, consommé à l'usage (core_tests.gd:34 à mettre à jour avec l'accord du propriétaire) ; garde « pas de gel pendant un ralenti » ; un retour par attaque ; vibration seulement pour blessure, critique et boss ; vignette derrière l'option ; flèche de bord.\n\nFait (branche fix/feel, 28/10) : un seul tampon de 0,12 s en temps réel pour l'attaque, la roulade et les compétences, l'appui le plus récent gagne (core_tests mis à jour, décision 0008) ; option « Charger sans maintenir » (Options > Jeu : deux attaques rapprochées chargent, une de plus libère ; décision 0011) ; plus de gel pendant un ralenti ; un gel et un kick par coup, pas par cible ; tremblement en pixels d'art entiers et décroissance en temps réel ; vibration seulement pour une blessure, un critique, une phase ou la mort d'un boss (et la carte de malédiction) ; vignette rouge derrière l'option Flashs, 3 par seconde au plus avec la foudre ; nombres de dégâts fusionnés par cible sur 0,3 s ; flèches de bord (voir task_406). Tests : unit.feel_limits, game.feel_limits.\nÀ VÉRIFIER SUR LE S23 : le tampon (attaques rapides, roulade juste avant la fin de sa recharge), l'option de charge au pouce, les vibrations (rares et nettes), les nombres fusionnés dans une foule, la vignette avec Flashs coupés.",
+      "status": "review",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6212,7 +6212,7 @@
         "android"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793165202
     },
     {
       "id": "task_412",

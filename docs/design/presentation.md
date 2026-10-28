@@ -4,7 +4,8 @@
 
 - **Weight of a blow**: every hit you land pushes the camera a few pixels along the blow, a shot
   recoils it back, a hit taken knocks it away (`GameCamera.kick`, `Events.camera_kick`, springing
-  back in real time, apart from the shake; both follow the Screen shake option). A killing blow
+  back in real time, apart from the shake; both follow the Screen shake option). A blow striking a
+  crowd kicks once (the strongest push of the physics frame, never their sum). A killing blow
   stops the world a moment longer; killing an elite or better slows it down for a beat
   (`HitStop.slow`).
 - **What monsters are made of** (`ImpactMaterialDef`, `data/materials/`: flesh, bone, slime,
@@ -31,7 +32,10 @@
   (`src/vfx/particles/*.tscn`, edit them in the inspector; `pixel_particles.gdshader` keeps them
   whole art pixels on the grid, their fades dithered), dash afterimages (dithered, in the dash's
   element; plain rushes like a beast's Charge also kick up dust), animated projectiles,
-  squash on hit, popping damage numbers, red vignette when hurt or low on HP.
+  squash on hit, popping damage numbers (one per body in a crowd: its hits of one color within
+  0.3 s add up into the number already rising, `HitFeedback.show_damage()`), red vignette when
+  hurt (a screen flash: off with Screen flashes, three a second at most counting the lightning's,
+  `ScreenEffects.take_flash()`) or low on HP.
 - **Atmosphere** (`AmbienceDef` > Atmosphere, one per biome and curse): the whole picture takes
   the biome's colors (`screen.gdshader`: shadows and highlights graded toward two tints,
   saturation, contrast), bright things **bloom** (a flat rim of light one art pixel wide around
@@ -177,7 +181,8 @@
   Spectres rise out of a hollow ring of pale flames (the spirit element): the act's monsters blended 60% toward pale blue
   (`ActorRig.pallor`, under the hit flash) and a little see-through. Won, the bell again and a
   pale veil, and the hero is back with the feather's golden burst; lost, the bell and a dark veil.
-- **Hit stop**: a few frames of freeze on impacts (`HitStop.freeze(seconds)`).
+- **Hit stop**: a few frames of freeze on impacts (`HitStop.freeze(seconds)`), never inside a slow
+  (`HitStop.slow`: Celeste's guard), the longest of a frame's, never their sum.
 - **Light**: in steps, tile by tile (see [Lights](#lights)): the hero's torch, room lanterns, braziers,
   campfires, glowing shots and explosions light up each floor's own darkness.
 - **Shaders**: everything stays on the art's pixel grid. The rig shader flashes actors when hit,
@@ -199,8 +204,16 @@
 Binding caps and invariants for any new attack, monster, skill or effect (sources: Celeste's
 released code, Dead Cells and Sakurai on hitstop, Riot's VFX guide, Xbox and WCAG guidelines;
 the summary is in the owner's research report linked from [the art bible](../art-bible.md)). The
-project's own values already follow them: a hit freezes 0.035 s (a crit 0.07), the hero hurt
-0.08, an elite's death 0.08 then a slow, a boss's death 0.25.
+project's own values follow them: a hit freezes 0.035 s (a crit 0.07), the hero hurt 0.08, an
+elite's death 0.08 then a slow (no freeze inside it), a boss's death 0.25; one press buffer of
+0.12 s for the attack, the roll and the skills, counted in real time, the newest press winning
+(`PlayerDef.input_buffer`, `PlayerControls`); the shake moves the view by whole art pixels and
+fades in real time; the phone buzzes for the hero hurt, a crit, a boss's turn and fall (and a
+curse's card), never for an ordinary hit, a shake or a footstep (`Settings.vibrate()`); wind-ups
+of 0.4 s at least, a boss's 0.5 s ([decision 0008](../decisions/0008-fairness-contract.md)). The
+charged attack can be played without holding (Options > Gameplay > Charge without holding: a
+double tap charges, a tap unleashes; decision 0011). `unit.feel_limits` and `game.feel_limits`
+check these (the wind-ups: `unit.fairness`).
 
 | What | Limit |
 |---|---|

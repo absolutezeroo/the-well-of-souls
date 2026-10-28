@@ -696,7 +696,9 @@ Run timer,Run timer,Chronomètre
 Screen shake,Screen shake,Tremblement de l'écran
 On big hits.,On big hits.,Lors des gros coups.
 Vibrations,Vibrations,Vibrations
-The phone buzzes on big hits and critical hits.,The phone buzzes on big hits and critical hits.,Le téléphone vibre lors des gros coups et des coups critiques.
+"The phone buzzes when you are hurt, on critical hits and when a warden turns or falls.","The phone buzzes when you are hurt, on critical hits and when a warden turns or falls.","Le téléphone vibre quand tu es blessé, sur un coup critique et quand un gardien change de phase ou tombe."
+Charge without holding,Charge without holding,Charger sans maintenir
+"Attack twice quickly to charge, once more to unleash.","Attack twice quickly to charge, once more to unleash.","Attaque deux fois de suite pour charger, une fois de plus pour libérer."
 Tutorial,Tutorial,Tutoriel
 Tutorial hints,Tutorial hints,Conseils du tutoriel
 Short tips during your first runs.,Short tips during your first runs.,De courts conseils pendant tes premières parties.
@@ -713,7 +715,7 @@ Effects and battery,Effects and battery,Effets et batterie
 Fewer effects,Fewer effects,Moins d'effets
 "Half the particles, no heat haze nor glow: smoother on older phones.","Half the particles, no heat haze nor glow: smoother on older phones.","Deux fois moins de particules, ni brume de chaleur ni halo : plus fluide sur les vieux téléphones."
 Screen flashes,Screen flashes,Éclairs à l'écran
-Lightning lights up the whole screen for an instant.,Lightning lights up the whole screen for an instant.,La foudre illumine tout l'écran un instant.
+"Lightning lights up the whole screen, the edges flash red when you are hurt.","Lightning lights up the whole screen, the edges flash red when you are hurt.","La foudre illumine tout l'écran, les bords s'éclairent de rouge quand tu es blessé."
 Battery saver,Battery saver,Économie de batterie
 30 FPS: the phone stays cooler.,30 FPS: the phone stays cooler.,30 FPS : le téléphone chauffe moins.
 Sound,Sound,Son

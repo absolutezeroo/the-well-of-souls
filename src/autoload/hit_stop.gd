@@ -1,7 +1,8 @@
 extends Node
 ## Hit stop (autoload "HitStop"): freezes the game for a few frames on impacts,
 ## which makes hits feel much heavier. Calls overlap: the longest freeze wins.
-## Also slow motion (`slow`): a strong kill slows the world for a moment. A freeze wins over it.
+## Also slow motion (`slow`): a strong kill slows the world for a moment. A freeze asked first
+## wins over it (the killing blow's stop, then its slow); none is asked during it.
 ## Between them the world runs at the debug panel's game speed (DebugCheats.time_scale(), 1 but
 ## in debug builds).
 ##
@@ -31,16 +32,32 @@ func _ready() -> void:
 	get_tree().physics_frame.connect(_on_physics_frame)
 
 
-## Real seconds behind a `delta` of this frame (whatever the hit stop or slow motion).
+## Real seconds behind a `delta` of this frame (whatever the hit stop or slow motion), asked in
+## _process or in _physics_process (there the frame's scale is the one its first physics step
+## saw: _process has not run yet to keep it, and the last frame's would be wrong on the first
+## and the last frames of a freeze).
 func real_delta(delta: float) -> float:
-	return delta / maxf(_applied_scale, 0.001)
+	var scale := _scale_at_first_step if _scale_at_first_step >= 0.0 else _applied_scale
+	return delta / maxf(scale, 0.001)
 
 
+## Freezes for `duration` real seconds: calls overlap (the longest wins, never their sum), and
+## none freezes while a slow runs (Celeste's guard: a stop inside a slow reads as a stutter).
 func freeze(duration: float) -> void:
-	if not enabled or duration <= 0.0:
+	if not enabled or duration <= 0.0 or is_slowed():
 		return
 	_remaining = maxf(_remaining, duration)
 	Engine.time_scale = FROZEN_TIME_SCALE
+
+
+## A slow runs (and no freeze over it).
+func is_slowed() -> bool:
+	return _slow_remaining > 0.0 and _remaining <= 0.0
+
+
+## A freeze holds the world.
+func is_frozen() -> bool:
+	return _remaining > 0.0
 
 
 ## The world runs at `time_scale` for `duration` real seconds.
