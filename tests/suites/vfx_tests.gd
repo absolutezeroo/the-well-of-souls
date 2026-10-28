@@ -38,6 +38,7 @@ func run() -> void:
 	_test_shaders()
 	_test_no_squared_colors()
 	_test_whole_scales()
+	_test_world_tints()
 	_test_simulation()
 
 
@@ -748,6 +749,63 @@ func _test_whole_scales() -> void:
 	for row in 15:
 		monotonic = monotonic and shifts[row] <= shifts[row + 1]
 	check(monotonic, "whole scales: each row of a leaning plant moves less than the one above it")
+
+
+## Decision 0009: a dungeon theme's tint is a neutral dim (every channel 0.75 or more, within
+## 0.12 of each other: a multiply turns the pack's colours to mud), and with any floor's screen
+## grading (AmbienceDef) a mid-tone keeps every channel at 0.6 or more. Only the places the
+## decision lists may go further, flagged in their data (`narrative_exception`): the Threshold,
+## the Deeps, the Well's Bottom, the Blood Moon and the curses.
+func _test_world_tints() -> void:
+	var listed: Array[String] = ["res://data/threshold/limbo_theme.tres", "res://data/abyss/abyss_theme.tres",
+		"res://data/dungeon/themes/well_bottom.tres", "res://data/threshold/limbo_ambience.tres",
+		"res://data/abyss/abyss_ambience.tres", "res://data/dungeon/ambience/blood_moon.tres"]
+	for path in _resources_under("res://data/curses"):
+		var curse := load(path) as CurseDef
+		if curse and curse.ambience:
+			listed.append(curse.ambience.resource_path)
+	var themes: Array[DungeonTheme] = []
+	var moods: Array[AmbienceDef] = []
+	for dir: String in ["res://data/dungeon", "res://data/abyss", "res://data/threshold"]:
+		for path in _resources_under(dir):
+			var resource := load(path)
+			if resource is DungeonTheme:
+				themes.append(resource)
+			elif resource is AmbienceDef:
+				moods.append(resource)
+	check(themes.size() >= 13 and moods.size() >= 15, "tints: every theme and mood checked (%d, %d)" % [themes.size(), moods.size()])
+	for theme in themes:
+		if theme.narrative_exception:
+			check(listed.has(theme.resource_path), "tints: %s is no exception decision 0009 lists" % theme.resource_path)
+			continue
+		var low := minf(theme.tint.r, minf(theme.tint.g, theme.tint.b))
+		var high := maxf(theme.tint.r, maxf(theme.tint.g, theme.tint.b))
+		check(low >= 0.75 and high - low <= 0.12, "tints: %s dims the floor neutrally, its biome shown by its tiles and light (%s)" % [theme.resource_path.get_file(), theme.tint])
+	var dull: Array[String] = []
+	for mood in moods:
+		if mood.narrative_exception:
+			check(listed.has(mood.resource_path), "tints: %s is no exception decision 0009 lists" % mood.resource_path)
+			continue
+		for theme in themes:
+			if theme.narrative_exception:
+				continue
+			for mid: float in [0.25, 0.35, 0.5]:
+				var graded := _graded(Color(mid, mid, mid) * theme.tint, mood)
+				var lowest := minf(graded.r, minf(graded.g, graded.b)) / mid
+				if lowest < 0.6:
+					dull.append("%s x %s at %.2f: %.2f" % [theme.resource_path.get_file(), mood.resource_path.get_file(), mid, lowest])
+	check(dull.is_empty(), "tints: a theme's tint and a floor's grading together keep a mid-tone's every channel at 0.6 or more (%s)" % [dull])
+
+
+## `color` after the screen's grading by `mood` (screen.gdshader: shadows and highlights pulled
+## toward two tints by the grade's strength).
+static func _graded(color: Color, mood: AmbienceDef) -> Color:
+	var gray := color.r * 0.299 + color.g * 0.587 + color.b * 0.114
+	var t := clampf((gray - 0.12) / (0.7 - 0.12), 0.0, 1.0)
+	t = t * t * (3.0 - 2.0 * t)
+	var tint := mood.grade_shadows.lerp(mood.grade_highlights, t)
+	var strength := mood.grade_strength
+	return Color(color.r * lerpf(1.0, tint.r, strength), color.g * lerpf(1.0, tint.g, strength), color.b * lerpf(1.0, tint.b, strength))
 
 
 ## Every .tres under `dir` and its subfolders.

@@ -102,7 +102,9 @@ ground, paths and props collapses, so the scene also reads worse.
 | Dark-fantasy composition with pack pieces: bones, chains, cracked stone, dead trees, candles, banners, the Well's roots | Allowed |
 | Dithered fog or vignette on its own `CanvasLayer` | Allowed |
 | The village clock's `CanvasModulate` (day/night) | Tolerated: a gentle grade, actors and UI readable |
-| `modulate`/`self_modulate`/a tint on ground tiles or per room | **Forbidden** beyond a light, neutral dim: every channel ≥ 0.75 and within 0.12 of each other. **Checked** for the village ground and room floors |
+| A floor's screen grading (`AmbienceDef`, `screen.gdshader`) | Allowed to colour a biome, if with the theme's tint a mid-tone keeps every channel ≥ 0.6 ([decision 0009](decisions/0009-world-tints.md)). **Checked** (`unit.vfx`, "tints") |
+| `modulate`/`self_modulate`/a tint on ground tiles, per room, on a dungeon theme (`DungeonTheme.tint`) or on a village prop | **Forbidden** beyond a light, neutral dim: every channel ≥ 0.75 and within 0.12 of each other; none at all on Kagari's props. **Checked** for the village ground, room floors and props (`unit.village`) and the dungeon themes (`unit.vfx`) |
+| A narrative exception listed by [decision 0009](decisions/0009-world-tints.md): the Threshold, the Deeps, the Well's Bottom, the Blood Moon, curses | May go further, flagged in its data (`narrative_exception` on the theme or the mood); the hero, threats and telegraphs still read in the greyscale capture |
 
 **Readability is value, not colour**: look at the greyscale capture. Ground is the least
 contrasted layer, obstacles in between, interactive things, NPCs and threats the most. A
@@ -151,7 +153,7 @@ A "no" means: stop, and ask the owner (AGENTS.md "Ask the owner first").
 6. Same projection, outline and light as the pack (look at the zoomed capture).
 7. Not more detailed than its neighbours.
 8. Placed beside the hero and a door: plausible proportions.
-9. No new tint on world art (**checked** for the village).
+9. No new tint on world art (**checked** for the village and the dungeon's themes).
 10. Greyscale capture: hero, monsters, telegraphs and interactive things still stand out.
 11. Captures before/after attached to the roadmap card, with what could not be checked.
 

@@ -11,7 +11,7 @@
 
 [resource]
 script = ExtResource("4_krtwc")
-tint = Color(0.68, 0.8, 0.92, 1)
+tint = Color(0.84, 0.88, 0.92, 1)
 lighting = ExtResource("9_lighting")
 music = ExtResource("snd_melancholia")
 ambience = ExtResource("1_178nh")

@@ -6158,7 +6158,7 @@
     {
       "id": "task_408",
       "title": "Teintes sur l'art du monde : donjon et racines de Kagari",
-      "description": "Audit du 28/10 : 10 thèmes de donjon sur 12 multiplient sols, murs et plateau au-delà du seuil de la bible (canaux ≥ 0,75, écart ≤ 0,12) via dungeon_view.gd:89-103 (Seuil 0,50 ; Fond du Puits 0,62 ; Ossuaire 0,68). L'étalonnage d'écran par biome (screen.gdshader) s'y ajoute. À Kagari, les racines du Puits sont des arbres du pack teintés en violet-noir (0,32 ; 0,2 ; 0,38) et le Puits est teinté. Proposé : thèmes en blanc et tilesets recolorés (recolor.py) ; étalonnage borné par un test sur AmbienceDef, avec les exceptions narratives (Lune de sang, Tréfonds, Seuil) consignées dans une décision (le propriétaire tranche la nuance de la règle) ; de vraies racines dessinées sur la palette.",
+      "description": "Audit du 28/10 : 10 thèmes de donjon sur 12 multiplient sols, murs et plateau au-delà du seuil de la bible (canaux ≥ 0,75, écart ≤ 0,12) via dungeon_view.gd:89-103 (Seuil 0,50 ; Fond du Puits 0,62 ; Ossuaire 0,68). L'étalonnage d'écran par biome (screen.gdshader) s'y ajoute. À Kagari, les racines du Puits sont des arbres du pack teintés en violet-noir (0,32 ; 0,2 ; 0,38) et le Puits est teinté. Proposé : thèmes en blanc et tilesets recolorés (recolor.py) ; étalonnage borné par un test sur AmbienceDef, avec les exceptions narratives (Lune de sang, Tréfonds, Seuil) consignées dans une décision (le propriétaire tranche la nuance de la règle) ; de vraies racines dessinées sur la palette.\n\n28/10 (décision 0009, agent art) : donjon fait. Les 7 thèmes hors seuil passent à une atténuation neutre (Ossuaire 0,84/0,88/0,92 ; Catacombes, Cavernes noyées, Archives, Ruines, Temple, Tombeau : écart ≤ 0,08, canal ≥ 0,84) ; l'identité du biome reste dans ses tuiles, sa lumière (LightingDef propre à chaque biome) et son étalonnage. Exceptions narratives écrites dans les données (narrative_exception) : thèmes du Seuil, des Tréfonds et du Fond du Puits ; ambiances du Seuil, des Tréfonds, de la Lune de sang et des malédictions (Souffle de cendre, Givre). Test unit.vfx « tints » : teinte des thèmes et cumul thème x étalonnage ≥ 0,6 sur les tons moyens (0,25 à 0,5), exceptions limitées à la liste de la décision. Captures avant/après des 11 biomes à 1920x1080 par l'agent art : biomes toujours reconnaissables. Kagari : commit suivant.",
       "status": "in_progress",
       "priority": "high",
       "epic_id": "epic_3",
@@ -6167,7 +6167,7 @@
         "visuel"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793163670
+      "updated_at": 1793166484
     },
     {
       "id": "task_409",

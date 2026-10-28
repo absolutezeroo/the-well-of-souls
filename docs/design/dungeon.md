@@ -60,7 +60,10 @@
   **Cinder Ruins**, **Godless Temple**; Act IV **Sandchoked City** (sand streets, an abandoned market,
   oases and palms, a lion fountain) and **Tomb of the Dead Sun** (sarcophagi, burial chambers, gold). Nothing from another biome ever shows up. A biome has:
   - its **look** (`theme`: floor and wall tiles, tint, darkness, music) and its **lights**
-    (candles in the crypt and the library, braziers in the ruins);
+    (candles in the crypt and the library, braziers in the ruins). The theme's tint is a neutral
+    dim at most: the biome's colour comes from its tiles, its light and its screen grading
+    ([decision 0009](../decisions/0009-world-tints.md); only the Threshold, the Deeps and the
+    Well's Bottom are flagged `narrative_exception`);
   - its **grounds** (`GroundLayerDef`: moss, sand, mud, shallow water, cobbles...): patches shaped
     by noise, drifting against the walls or keeping to the middle, drawn by a shader
     (`GroundLayer`) with rounded, ragged edges and a rim, in the art's chunky pixels;

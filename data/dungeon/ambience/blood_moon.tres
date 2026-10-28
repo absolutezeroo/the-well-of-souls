@@ -9,6 +9,7 @@ particles = ExtResource("1_wtlex")
 grade_shadows = Color(0.3, 0.02, 0.06, 1)
 grade_highlights = Color(1, 0.62, 0.56, 1)
 grade_strength = 0.55
+narrative_exception = true
 saturation = 1.06
 contrast = 1.12
 bloom = 0.25
