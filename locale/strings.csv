@@ -125,6 +125,9 @@ Ranged weapon,Ranged weapon,Arme à distance
 ", %d projectiles",", %d projectiles",", %d projectiles"
 ", pierces %d",", pierces %d",", perce %d"
 Skills: %s,Skills: %s,Compétences : %s
+Fill its sockets with {family} runes ({have} of {sockets}) and wake the {family} family.,Fill its sockets with {family} runes ({have} of {sockets}) and wake the {family} family.,Remplis ses emplacements de runes de la famille {family} ({have} sur {sockets}) et éveille la famille {family}.
+Fill its sockets with {family} runes ({have} of {sockets}).,Fill its sockets with {family} runes ({have} of {sockets}).,Remplis ses emplacements de runes de la famille {family} ({have} sur {sockets}).
+Wake the {family} family (3 of its perks).,Wake the {family} family (3 of its perks).,Éveille la famille {family} (3 de ses atouts).
 {prefix} {item} {suffix},{prefix} {item} {suffix},{item} {prefix} {suffix}
 {prefix} {item},{prefix} {item},{item} {prefix}
 {item} {suffix},{item} {suffix},{item} {suffix}
@@ -189,6 +192,7 @@ a fall,a fall,une chute
 the dungeon,the dungeon,le donjon
 %s set into %s,%s set into %s,%s serti dans %s
 %s taken out of %s,%s taken out of %s,%s retiré de %s
+The runes melt into the steel: %s.,The runes melt into the steel: %s.,Les runes fondent dans l'acier : %s.
 Forge,Forge,Forger
 Trap!,Trap!,Piège !
 Bought %s,Bought %s,Acheté : %s
@@ -363,6 +367,7 @@ floors %d to %d,floors %d to %d,étages %d à %d
 %s     %d of %d slain,%s     %d of %d slain,%s     %d sur %d abattus
 under the holes of every floor     %d of %d slain,under the holes of every floor     %d of %d slain,sous les trous de chaque étage     %d sur %d abattus
 Achievements: %d of %d     Souls earned from them: %d,Achievements: %d of %d     Souls earned from them: %d,Succès : %d sur %d     Âmes gagnées grâce à eux : %d
+Weapon evolutions: %d of %d,Weapon evolutions: %d of %d,Évolutions d'armes : %d sur %d
 Runs: %d     Wins: %d     Deepest floor: %d,Runs: %d     Wins: %d     Deepest floor: %d,Parties : %d     Victoires : %d     Étage le plus profond : %d
 No descent finished yet. The Well is waiting.,No descent finished yet. The Well is waiting.,Aucune descente achevée. Le Puits t'attend.
 Fastest wins:   %s,Fastest wins:   %s,Victoires les plus rapides :   %s
@@ -382,7 +387,7 @@ Voices,Voices,Paroles
 Tips,Tips,Conseils
 Track your village requests and bounties here. Return recovered items to the resident who asked for them. Spend your souls at the village Shrine. Daily and weekly bounties follow real-world dates.,Track your village requests and bounties here. Return recovered items to the resident who asked for them. Spend your souls at the village Shrine. Daily and weekly bounties follow real-world dates.,Retrouve ici les demandes du village et les primes. Rapporte les objets à leur propriétaire. Dépense tes âmes au sanctuaire du village. Les primes quotidiennes et hebdomadaires suivent les dates réelles.
 "Every monster you meet goes in here. Slay more of a kind to raise your hunter rank with it: each rank pays souls, and Mastered also gives +%d%% damage against that kind for good. Choose a monster for its attacks and challenges.","Every monster you meet goes in here. Slay more of a kind to raise your hunter rank with it: each rank pays souls, and Mastered also gives +%d%% damage against that kind for good. Choose a monster for its attacks and challenges.","Chaque monstre rencontré est consigné ici. Abats-en d'une même espèce pour monter ton rang de chasseur : chaque rang rapporte des âmes, et Maîtrisé donne aussi +%d %% de Dégâts contre cette espèce, pour toujours. Choisis un monstre pour voir ses attaques et ses défis."
-Big goals across all your runs. Reaching one pays its souls at once.,Big goals across all your runs. Reaching one pays its souls at once.,"De grands objectifs, sur toutes tes parties. En atteindre un rapporte ses âmes aussitôt."
+"Big goals across all your runs. Reaching one pays its souls at once. Below them, the weapons you can evolve at a forge.","Big goals across all your runs. Reaching one pays its souls at once. Below them, the weapons you can evolve at a forge.","De grands objectifs, sur toutes tes parties. En atteindre un rapporte ses âmes aussitôt. En dessous, les armes que tu peux faire évoluer à une forge."
 "Your last runs, newest first. Gold is lost when a run ends; souls are kept.","Your last runs, newest first. Gold is lost when a run ends; souls are kept.","Tes dernières parties, les plus récentes d'abord. L'or est perdu à la fin d'une partie ; les âmes sont conservées."
 "What the Vigil-Keeper and the keepers of the Well told you, kept here. They say more as your descents go deeper.","What the Vigil-Keeper and the keepers of the Well told you, kept here. They say more as your descents go deeper.","Ce que la Veilleuse et les gardiens du Puits t'ont confié, gardé ici. Ils en disent davantage à mesure que tes descentes s'enfoncent."
 "Every tip the tutorial gave you, to read again.","Every tip the tutorial gave you, to read again.","Chaque conseil du tutoriel, à relire."
@@ -391,6 +396,8 @@ Done!,Done!,Accompli !
 Received,Received,Reçu
 Reward,Reward,Récompense
 A secret feat. Some doors only open from the other side.,A secret feat. Some doors only open from the other side.,Un exploit secret. Certaines portes ne s'ouvrent que de l'autre côté.
+"{weapon}, every socket a {family} rune, the {family} family awake, at a forge.","{weapon}, every socket a {family} rune, the {family} family awake, at a forge.","{weapon}, une rune de la famille {family} dans chaque emplacement, la famille {family} éveillée, à une forge."
+"A {weapon} could become something else. The smith says: ""{hint}""","A {weapon} could become something else. The smith says: ""{hint}""",Une arme ({weapon}) pourrait devenir autre chose. Le forgeron dit : « {hint} »
 Died on floor %d,Died on floor %d,Mort à l'étage %d
 Reached the bottom of the Well,Reached the bottom of the Well,A touché le fond du Puits
 "Won, then slain by %s","Won, then slain by %s","Victoire, puis tué par %s"
@@ -513,6 +520,9 @@ No weapon to work on,No weapon to work on,Aucune arme à travailler
 %d rune socket,%d rune socket,%d emplacement de rune
 {damage} damage  -  {sockets},{damage} damage  -  {sockets},{damage} Dégâts  -  {sockets}
 Worn  -  {details},Worn  -  {details},Équipée  -  {details}
+Its runes are ready to melt into it: it can become the %s.,Its runes are ready to melt into it: it can become the %s.,Ses runes sont prêtes à fondre dans l'acier : elle peut devenir %s.
+Temper into %s,Temper into %s,Tremper en %s
+Becomes the {name}: {needs},Becomes the {name}: {needs},Devient {name} : {needs}
 Pick a socket to take its rune out,Pick a socket to take its rune out,Choisis un emplacement pour en retirer la rune
 Take out %s  (%d gold),Take out %s  (%d gold),Retirer %s  (%d or)
 {type}  -  {description},{type}  -  {description},{type}  -  {description}
@@ -1444,6 +1454,21 @@ Templar Sword,Templar Sword,Épée de Templier
 The blessed blade of a templar whose order is long gone. Its skills are holy.,The blessed blade of a templar whose order is long gone. Its skills are holy.,La lame bénie d'un templier dont l'ordre a disparu. Ses compétences sont sacrées.
 Whip,Whip,Fouet
 "Long reach, thin and stinging. Keep them at a distance.","Long reach, thin and stinging. Keep them at a distance.","Longue allonge, fin et cinglant. Garde-les à distance."
+Ashen Codex,Ashen Codex,Codex des Cendres
+Its embers set the floor alight where they strike a foe: whoever stands in the fire burns.,Its embers set the floor alight where they strike a foe: whoever stands in the fire burns.,Ses braises embrasent le sol là où elles frappent un ennemi : quiconque se tient dans le feu brûle.
+"The pages still smoulder. Feed them every ember you find, and something to burn for.","The pages still smoulder. Feed them every ember you find, and something to burn for.","Les pages couvent encore. Nourris-les de chaque braise que tu trouves, et d'une raison de brûler."
+Heartsplitter,Heartsplitter,Fend-Cœur
+What its blow deals past a foe's last Health bursts out of the body onto the foes around.,What its blow deals past a foe's last Health bursts out of the body onto the foes around.,Ce que son coup inflige au-delà de la Vie restante d'un ennemi jaillit du corps sur les ennemis alentour.
+It drinks when it lands. Wet its runes in blood and see.,It drinks when it lands. Wet its runes in blood and see.,"Il boit quand il frappe. Trempe ses runes dans le sang, et tu verras."
+Rimeheart Staff,Rimeheart Staff,Bâton Cœur-de-Givre
+Its shards burst where they strike: a nova of frost hurts and chills the foes around.,Its shards burst where they strike: a nova of frost hurts and chills the foes around.,Ses éclats se brisent là où ils frappent : une nova de givre blesse et ralentit les ennemis alentour.
+"Cold enough to crack stone. Colder still, if you feed it frost.","Cold enough to crack stone. Colder still, if you feed it frost.","Assez froid pour fendre la pierre. Plus froid encore, si tu le nourris de givre."
+Riven Bow,Riven Bow,Arc Fendu
+A bow strung with a riven glyph: each arrow that strikes a foe splits into three arcane bolts that fly on.,A bow strung with a riven glyph: each arrow that strikes a foe splits into three arcane bolts that fly on.,Un arc tendu d'un glyphe fendu : chaque flèche qui frappe un ennemi se fend en trois traits arcaniques qui poursuivent leur course.
+Those glyphs on the limbs want to split. Give it every rune of the arcane.,Those glyphs on the limbs want to split. Give it every rune of the arcane.,Ces glyphes sur les branches veulent se fendre. Donne-lui toutes les runes des Arcanes.
+Stormhowl,Stormhowl,Hurle-Tempête
+"A katana a storm sleeps in: its blows land in lightning, and its held cut calls lightning onto the foes it strikes.","A katana a storm sleeps in: its blows land in lightning, and its held cut calls lightning onto the foes it strikes.","Un katana où dort une tempête : ses coups frappent en éclairs, et sa taille chargée appelle la foudre sur les ennemis qu'elle touche."
+"That blade hums when the sky cracks. It wants storm, all of it.","That blade hums when the sky cracks. It wants storm, all of it.","Cette lame bourdonne quand le ciel se fend. Elle veut la tempête, tout entière."
 Acid Spit,Acid Spit,Crachat Acide
 Bite,Bite,Morsure
 Claws,Claws,Griffes
@@ -1747,9 +1772,9 @@ Rolling bursts into flames that hurt and set enemies around on fire.,Rolling bur
 Bloodrage,Bloodrage,Rage Sanguinaire
 "Below half Health, you deal 20% more damage per level.","Below half Health, you deal 20% more damage per level.","Sous la moitié de ta Vie, tu infliges 20 % de Dégâts en plus par niveau."
 Burst Veins,Burst Veins,Veines Éclatées
-"A killing blow bursts out of the body: what it dealt beyond the Health left hurts the enemies around (at least 50% of your Damage per level, twice your Damage at most).","A killing blow bursts out of the body: what it dealt beyond the Health left hurts the enemies around (at least 50% of your Damage per level, twice your Damage at most).","Un coup fatal jaillit du corps : ce qu'il inflige au-delà de la Vie restante blesse les ennemis alentour (au moins 50 % de tes Dégâts par niveau, deux fois tes Dégâts au plus)."
+"A killing blow's excess damage bursts onto nearby enemies (at least 50% of your Damage per level, twice it at most).","A killing blow's excess damage bursts onto nearby enemies (at least 50% of your Damage per level, twice it at most).","L'excédent d'un coup fatal éclabousse les ennemis proches (au moins 50 % de tes Dégâts par niveau, deux fois au plus)."
 Cinder Wake,Cinder Wake,Sillage de Braises
-Rolling leaves a trail of embers for 3 s: enemies in it catch fire and take a little damage every half second.,Rolling leaves a trail of embers for 3 s: enemies in it catch fire and take a little damage every half second.,Ta roulade laisse une traînée de braises pendant 3 s : les ennemis qui s'y tiennent s'enflamment et subissent quelques dégâts chaque demi-seconde.
+Rolling leaves a trail of embers for 3 s: enemies in it catch fire and take a little damage every half second.,Rolling leaves a trail of embers for 3 s: enemies in it catch fire and take a little damage every half second.,Ta roulade laisse des braises 3 s : les ennemis qui s'y tiennent s'enflamment et subissent quelques dégâts.
 Cold Snap,Cold Snap,Coup de Froid
 Rolling releases a wave of cold that hurts and slows enemies around by 50%.,Rolling releases a wave of cold that hurts and slows enemies around by 50%.,Ta roulade libère une vague de froid qui blesse et ralentit de 50 % les ennemis alentour.
 Devotion,Devotion,Dévotion
@@ -1769,7 +1794,7 @@ Getting hit releases a wave of cold: enemies around you are thrown back and slow
 Kindling,Kindling,Amadou
 Burning enemies take 20% more damage per level.,Burning enemies take 20% more damage per level.,Les ennemis en feu subissent 20 % de Dégâts en plus par niveau.
 Leaping Bolt,Leaping Bolt,Foudre Bondissante
-"A critical hit leaps as lightning to the nearest other enemy (one more leap per level), striking it for 70% of the critical hit.","A critical hit leaps as lightning to the nearest other enemy (one more leap per level), striking it for 70% of the critical hit.",Un coup critique bondit en éclair jusqu'à l'ennemi le plus proche (un bond de plus par niveau) et le frappe pour 70 % du coup critique.
+A critical hit leaps as lightning to the nearest other enemy for 70% of it (one more leap per level).,A critical hit leaps as lightning to the nearest other enemy for 70% of it (one more leap per level).,Un coup critique bondit en éclair sur l'ennemi le plus proche pour 70 % de sa force (un bond de plus par niveau).
 Precision,Precision,Précision
 Your first blow on an unhurt enemy is always a critical hit.,Your first blow on an unhurt enemy is always a critical hit.,Ton premier coup sur un ennemi indemne est toujours un coup critique.
 Rime Halo,Rime Halo,Nimbe de Givre
@@ -1802,11 +1827,11 @@ Hydra's Quiver,Hydra's Quiver,Carquois de l'Hydre
 "Everything you shoot fires 1 more projectile per level, fireballs included (2 more at most with Prism runes; the volley shares its damage).","Everything you shoot fires 1 more projectile per level, fireballs included (2 more at most with Prism runes; the volley shares its damage).","Tout ce que tu tires part avec 1 projectile de plus par niveau, boules de feu comprises (2 de plus au maximum avec les runes Prisme ; la salve partage ses Dégâts)."
 Phoenix Feather,Phoenix Feather,Plume de Phénix
 "Once per level, a killing blow sends you to the Threshold: slay 8 foes in 25 s (more in later acts) to return where you fell, at half Health (a quarter in a boss fight).","Once per level, a killing blow sends you to the Threshold: slay 8 foes in 25 s (more in later acts) to return where you fell, at half Health (a quarter in a boss fight).","Une fois par niveau, un coup fatal t'envoie au Seuil : abats 8 ennemis en 25 s (plus aux actes suivants) pour revenir où tu es tombé, à la moitié de ta Vie (un quart en combat de boss)."
-Restless Storm,Restless Storm,Orage sans Repos
-"While foes are near, lightning strikes the nearest every 0.7 s as you move; stand still a second and it strikes you.","While foes are near, lightning strikes the nearest every 0.7 s as you move; stand still a second and it strikes you.","Tant que des ennemis sont proches, la foudre frappe le plus proche toutes les 0,7 s quand tu bouges ; reste immobile une seconde et c'est toi qu'elle frappe."
+Restless Storm,Restless Storm,Tempête sans Repos
+"While foes are near, lightning strikes the nearest every 0.7 s as you move; stand still a second and it strikes you.","While foes are near, lightning strikes the nearest every 0.7 s as you move; stand still a second and it strikes you.","Près des ennemis, la foudre frappe le plus proche toutes les 0,7 s quand tu bouges ; immobile une seconde, c'est toi qu'elle frappe."
 Sage's Codex,Sage's Codex,Codex du Sage
 Starving Litany,Starving Litany,Litanie Affamée
-"Your skills no longer recharge with time, only when you slay: a quarter of their wait a kill, 3% a blow on a warden. The roll is spared.","Your skills no longer recharge with time, only when you slay: a quarter of their wait a kill, 3% a blow on a warden. The roll is spared.","Tes compétences ne se rechargent plus avec le temps, seulement quand tu tues : un quart de leur attente par ennemi abattu, 3 % par coup porté à un gardien. La roulade est épargnée."
+"Skills no longer recharge with time, only by slaying: a quarter of their wait a kill, 3% a blow on a warden. Not the roll.","Skills no longer recharge with time, only by slaying: a quarter of their wait a kill, 3% a blow on a warden. Not the roll.","Les compétences ne se rechargent qu'en tuant : un quart de leur attente par ennemi abattu, 3 % par coup sur un gardien. Pas la roulade."
 War Banner,War Banner,Bannière de Guerre
 Arcane,Arcane,Arcanes
 Using a skill also fires a ring of 8 arcane bolts.,Using a skill also fires a ring of 8 arcane bolts.,Utiliser une compétence tire aussi un anneau de 8 traits arcaniques.
@@ -1961,6 +1986,8 @@ Bladed Gale,Bladed Gale,Bourrasque d'Acier
 A fan of seven stars that pierce a first enemy.,A fan of seven stars that pierce a first enemy.,Un éventail de sept étoiles qui transpercent un premier ennemi.
 Glacial Lance,Glacial Lance,Lance Glaciaire
 A great ice shard that shatters into a frost nova: enemies around are slowed.,A great ice shard that shatters into a frost nova: enemies around are slowed.,Un grand éclat de glace qui se brise en nova de givre : les ennemis autour sont ralentis.
+Thunderfall Cut,Thunderfall Cut,Taille du Tonnerre
+"A wide double crescent, then lightning leaps from the nearest foe to three more.","A wide double crescent, then lightning leaps from the nearest foe to three more.","Un large double croissant, puis la foudre bondit de l'ennemi le plus proche sur trois autres."
 Judgement,Judgement,Jugement
 A wide blessed crescent in front of you.,A wide blessed crescent in front of you.,Un large croissant béni devant toi.
 Flaying Arc,Flaying Arc,Arc Écorcheur
@@ -3210,6 +3237,11 @@ grammar:gender:Shuriken,grammar:gender:Shuriken,m
 grammar:gender:Frost Staff,grammar:gender:Frost Staff,m
 grammar:gender:Templar Sword,grammar:gender:Templar Sword,f
 grammar:gender:Whip,grammar:gender:Whip,m
+grammar:gender:Ashen Codex,grammar:gender:Ashen Codex,m
+grammar:gender:Heartsplitter,grammar:gender:Heartsplitter,m
+grammar:gender:Rimeheart Staff,grammar:gender:Rimeheart Staff,m
+grammar:gender:Riven Bow,grammar:gender:Riven Bow,m
+grammar:gender:Stormhowl,grammar:gender:Stormhowl,m
 grammar:gender:Ash Lizard,grammar:gender:Ash Lizard,m
 grammar:gender:Gloom Bat,grammar:gender:Gloom Bat,f
 grammar:gender:Horned Beast,grammar:gender:Horned Beast,f

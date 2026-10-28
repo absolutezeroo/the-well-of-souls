@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ContentCatalog" load_steps=333 format=3]
+[gd_resource type="Resource" script_class="ContentCatalog" load_steps=338 format=3]
 
 [ext_resource type="Script" path="res://src/game/content_catalog.gd" id="1"]
 [ext_resource type="Resource" path="res://data/affixes/brutal.tres" id="2"]
@@ -38,300 +38,305 @@
 [ext_resource type="Resource" path="res://data/elites/vengeful.tres" id="36"]
 [ext_resource type="Resource" path="res://data/elites/venomous.tres" id="37"]
 [ext_resource type="Resource" path="res://data/items/weapons/monster/acid_spit.tres" id="38"]
-[ext_resource type="Resource" path="res://data/items/weapons/axe.tres" id="39"]
-[ext_resource type="Resource" path="res://data/items/weapons/big_sword.tres" id="40"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/bite.tres" id="41"]
-[ext_resource type="Resource" path="res://data/items/consumables/bomb.tres" id="42"]
-[ext_resource type="Resource" path="res://data/items/keys/bone_key.tres" id="43"]
-[ext_resource type="Resource" path="res://data/items/weapons/book.tres" id="44"]
-[ext_resource type="Resource" path="res://data/items/weapons/bow.tres" id="45"]
-[ext_resource type="Resource" path="res://data/items/armors/chain_mail.tres" id="46"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/claws.tres" id="47"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/club.tres" id="48"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/demon_club.tres" id="49"]
-[ext_resource type="Resource" path="res://data/runes/echo.tres" id="50"]
-[ext_resource type="Resource" path="res://data/runes/ember.tres" id="51"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/eye_beam_bolt.tres" id="52"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/fire_breath.tres" id="53"]
-[ext_resource type="Resource" path="res://data/items/consumables/fire_scroll.tres" id="54"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/fire_touch.tres" id="55"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/frost_bite.tres" id="56"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/frost_fang.tres" id="57"]
-[ext_resource type="Resource" path="res://data/runes/fury.tres" id="58"]
-[ext_resource type="Resource" path="res://data/runes/gale.tres" id="59"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/ghost_flame.tres" id="60"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/gilded_mote.tres" id="61"]
-[ext_resource type="Resource" path="res://data/items/consumables/greater_health_potion.tres" id="62"]
-[ext_resource type="Resource" path="res://data/items/weapons/hammer.tres" id="63"]
-[ext_resource type="Resource" path="res://data/items/consumables/haste_draught.tres" id="64"]
-[ext_resource type="Resource" path="res://data/items/consumables/health_potion.tres" id="65"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/hex_staff.tres" id="66"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/ink_bolt.tres" id="67"]
-[ext_resource type="Resource" path="res://data/items/armors/iron_helm.tres" id="68"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/jade_fang.tres" id="69"]
-[ext_resource type="Resource" path="res://data/items/weapons/katana.tres" id="70"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/keeper_katana.tres" id="71"]
-[ext_resource type="Resource" path="res://data/items/weapons/lance.tres" id="72"]
-[ext_resource type="Resource" path="res://data/items/armors/leather_armor.tres" id="73"]
-[ext_resource type="Resource" path="res://data/items/armors/leather_cap.tres" id="74"]
-[ext_resource type="Resource" path="res://data/runes/leech.tres" id="75"]
-[ext_resource type="Resource" path="res://data/items/weapons/magic_wand.tres" id="76"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/maul.tres" id="77"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/moss_spores.tres" id="78"]
-[ext_resource type="Resource" path="res://data/items/weapons/ninjaku.tres" id="79"]
-[ext_resource type="Resource" path="res://data/items/weapons/pickaxe.tres" id="80"]
-[ext_resource type="Resource" path="res://data/items/armors/plate_armor.tres" id="81"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/poison_fang.tres" id="82"]
-[ext_resource type="Resource" path="res://data/runes/prism.tres" id="83"]
-[ext_resource type="Resource" path="res://data/runes/pyre.tres" id="84"]
-[ext_resource type="Resource" path="res://data/items/consumables/rage_elixir.tres" id="85"]
-[ext_resource type="Resource" path="res://data/items/weapons/rapier.tres" id="86"]
-[ext_resource type="Resource" path="res://data/runes/rime.tres" id="87"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/rusty_blade.tres" id="88"]
-[ext_resource type="Resource" path="res://data/items/weapons/sai.tres" id="89"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/sand_breath.tres" id="90"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/sand_clod.tres" id="91"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/scimitar.tres" id="92"]
-[ext_resource type="Resource" path="res://data/items/armors/shadow_cloak.tres" id="93"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/shadow_staff.tres" id="94"]
-[ext_resource type="Resource" path="res://data/runes/shatter.tres" id="95"]
-[ext_resource type="Resource" path="res://data/items/weapons/shuriken.tres" id="96"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/slam.tres" id="97"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/slime_slam.tres" id="98"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/soul_flame.tres" id="99"]
-[ext_resource type="Resource" path="res://data/runes/spark.tres" id="100"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/spirit_touch.tres" id="101"]
-[ext_resource type="Resource" path="res://data/items/weapons/stick.tres" id="102"]
-[ext_resource type="Resource" path="res://data/items/weapons/templar_sword.tres" id="103"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/tengu_blade.tres" id="104"]
-[ext_resource type="Resource" path="res://data/items/tomes/tome_fire.tres" id="105"]
-[ext_resource type="Resource" path="res://data/items/tomes/tome_frost.tres" id="106"]
-[ext_resource type="Resource" path="res://data/items/tomes/tome_healing.tres" id="107"]
-[ext_resource type="Resource" path="res://data/items/tomes/tome_thunder.tres" id="108"]
-[ext_resource type="Resource" path="res://data/items/tomes/tome_war.tres" id="109"]
-[ext_resource type="Resource" path="res://data/items/tomes/tome_wind.tres" id="110"]
-[ext_resource type="Resource" path="res://data/items/weapons/monster/water_jet.tres" id="111"]
-[ext_resource type="Resource" path="res://data/items/weapons/whip.tres" id="112"]
-[ext_resource type="Resource" path="res://data/monsters/abyss/abyss_eye.tres" id="113"]
-[ext_resource type="Resource" path="res://data/monsters/ash_lizard.tres" id="114"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/azure_wyrm.tres" id="115"]
-[ext_resource type="Resource" path="res://data/monsters/bat.tres" id="116"]
-[ext_resource type="Resource" path="res://data/monsters/beast.tres" id="117"]
-[ext_resource type="Resource" path="res://data/monsters/big_slime.tres" id="118"]
-[ext_resource type="Resource" path="res://data/monsters/abyss/blood_drinker.tres" id="119"]
-[ext_resource type="Resource" path="res://data/monsters/bomber.tres" id="120"]
-[ext_resource type="Resource" path="res://data/monsters/bone_lizard.tres" id="121"]
-[ext_resource type="Resource" path="res://data/monsters/abyss/breach_warden.tres" id="122"]
-[ext_resource type="Resource" path="res://data/monsters/brood_mother.tres" id="123"]
-[ext_resource type="Resource" path="res://data/monsters/abyss/cinder_wraith.tres" id="124"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/crimson_tengu.tres" id="125"]
-[ext_resource type="Resource" path="res://data/monsters/cyclops.tres" id="126"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/demon_cyclops.tres" id="127"]
-[ext_resource type="Resource" path="res://data/monsters/dragon.tres" id="128"]
-[ext_resource type="Resource" path="res://data/monsters/dune_rex.tres" id="129"]
-[ext_resource type="Resource" path="res://data/monsters/ember_heart.tres" id="130"]
-[ext_resource type="Resource" path="res://data/monsters/eye.tres" id="131"]
-[ext_resource type="Resource" path="res://data/monsters/flam.tres" id="132"]
-[ext_resource type="Resource" path="res://data/monsters/frost_skull.tres" id="133"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/giant_frog.tres" id="134"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/gilded_hoarder.tres" id="135"]
-[ext_resource type="Resource" path="res://data/monsters/gilded_moth.tres" id="136"]
-[ext_resource type="Resource" path="res://data/monsters/gold_racoon.tres" id="137"]
-[ext_resource type="Resource" path="res://data/monsters/abyss/horned_augur.tres" id="138"]
-[ext_resource type="Resource" path="res://data/monsters/abyss/horned_carcass.tres" id="139"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/jade_wyrm.tres" id="140"]
-[ext_resource type="Resource" path="res://data/monsters/kappa.tres" id="141"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/king_slime.tres" id="142"]
-[ext_resource type="Resource" path="res://data/monsters/lantern.tres" id="143"]
-[ext_resource type="Resource" path="res://data/monsters/larva.tres" id="144"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/master_toma.tres" id="145"]
-[ext_resource type="Resource" path="res://data/monsters/mole.tres" id="146"]
-[ext_resource type="Resource" path="res://data/monsters/moss_heart.tres" id="147"]
-[ext_resource type="Resource" path="res://data/monsters/mushroom.tres" id="148"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/nameless_effigy.tres" id="149"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/nameless_keeper.tres" id="150"]
-[ext_resource type="Resource" path="res://data/monsters/octopus.tres" id="151"]
-[ext_resource type="Resource" path="res://data/monsters/owl.tres" id="152"]
-[ext_resource type="Resource" path="res://data/monsters/rat.tres" id="153"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/red_samurai.tres" id="154"]
-[ext_resource type="Resource" path="res://data/monsters/red_viper.tres" id="155"]
-[ext_resource type="Resource" path="res://data/monsters/reptile.tres" id="156"]
-[ext_resource type="Resource" path="res://data/monsters/sand_drake.tres" id="157"]
-[ext_resource type="Resource" path="res://data/monsters/sand_drummer.tres" id="158"]
-[ext_resource type="Resource" path="res://data/monsters/abyss/scarlet_fiend.tres" id="159"]
-[ext_resource type="Resource" path="res://data/monsters/abyss/shade_stalker.tres" id="160"]
-[ext_resource type="Resource" path="res://data/monsters/shaman.tres" id="161"]
-[ext_resource type="Resource" path="res://data/monsters/shell_guard.tres" id="162"]
-[ext_resource type="Resource" path="res://data/monsters/skeleton.tres" id="163"]
-[ext_resource type="Resource" path="res://data/monsters/skull.tres" id="164"]
-[ext_resource type="Resource" path="res://data/monsters/slime.tres" id="165"]
-[ext_resource type="Resource" path="res://data/monsters/snake.tres" id="166"]
-[ext_resource type="Resource" path="res://data/monsters/sorcerer.tres" id="167"]
-[ext_resource type="Resource" path="res://data/monsters/soul_moth.tres" id="168"]
-[ext_resource type="Resource" path="res://data/monsters/spider.tres" id="169"]
-[ext_resource type="Resource" path="res://data/monsters/spirit.tres" id="170"]
-[ext_resource type="Resource" path="res://data/monsters/stone_mole.tres" id="171"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/sun_wraith.tres" id="172"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/the_maw.tres" id="173"]
-[ext_resource type="Resource" path="res://data/monsters/thief_racoon.tres" id="174"]
-[ext_resource type="Resource" path="res://data/monsters/bosses/weeping_spirit.tres" id="175"]
-[ext_resource type="Resource" path="res://data/oaths/colossus.tres" id="176"]
-[ext_resource type="Resource" path="res://data/oaths/duelist.tres" id="177"]
-[ext_resource type="Resource" path="res://data/oaths/plunderer.tres" id="178"]
-[ext_resource type="Resource" path="res://data/oaths/scholar.tres" id="179"]
-[ext_resource type="Resource" path="res://data/perks/common/arcane_focus.tres" id="180"]
-[ext_resource type="Resource" path="res://data/perks/common/arcane_power.tres" id="181"]
-[ext_resource type="Resource" path="res://data/perks/common/blazing_roll.tres" id="182"]
-[ext_resource type="Resource" path="res://data/perks/relics/bleeding_stride.tres" id="183"]
-[ext_resource type="Resource" path="res://data/monsters/abyss/thirst.tres" id="184"]
-[ext_resource type="Resource" path="res://data/perks/common/bloodrage.tres" id="185"]
-[ext_resource type="Resource" path="res://data/perks/common/burst_veins.tres" id="186"]
-[ext_resource type="Resource" path="res://data/perks/common/cinder_wake.tres" id="187"]
-[ext_resource type="Resource" path="res://data/perks/common/cold_snap.tres" id="188"]
-[ext_resource type="Resource" path="res://data/perks/common/devotion.tres" id="189"]
-[ext_resource type="Resource" path="res://data/perks/common/echo.tres" id="190"]
-[ext_resource type="Resource" path="res://data/perks/relics/executioner.tres" id="191"]
-[ext_resource type="Resource" path="res://data/perks/common/fortune.tres" id="192"]
-[ext_resource type="Resource" path="res://data/perks/common/frenzy.tres" id="193"]
-[ext_resource type="Resource" path="res://data/perks/common/frostbite.tres" id="194"]
-[ext_resource type="Resource" path="res://data/perks/relics/funeral_pyre.tres" id="195"]
-[ext_resource type="Resource" path="res://data/perks/relics/guardian_ring.tres" id="196"]
-[ext_resource type="Resource" path="res://data/perks/relics/heart_of_winter.tres" id="197"]
-[ext_resource type="Resource" path="res://data/perks/common/ice_shards.tres" id="198"]
-[ext_resource type="Resource" path="res://data/perks/common/ignite.tres" id="199"]
-[ext_resource type="Resource" path="res://data/perks/common/iron_skin.tres" id="200"]
-[ext_resource type="Resource" path="res://data/perks/common/kindling.tres" id="201"]
-[ext_resource type="Resource" path="res://data/perks/common/leaping_bolt.tres" id="202"]
-[ext_resource type="Resource" path="res://data/perks/relics/multishot.tres" id="203"]
-[ext_resource type="Resource" path="res://data/perks/relics/phoenix_feather.tres" id="204"]
-[ext_resource type="Resource" path="res://data/perks/common/precision.tres" id="205"]
-[ext_resource type="Resource" path="res://data/perks/relics/restless_storm.tres" id="206"]
-[ext_resource type="Resource" path="res://data/perks/common/rime_halo.tres" id="207"]
-[ext_resource type="Resource" path="res://data/perks/common/riven_glyph.tres" id="208"]
-[ext_resource type="Resource" path="res://data/perks/relics/sages_codex.tres" id="209"]
-[ext_resource type="Resource" path="res://data/perks/common/shock_roll.tres" id="210"]
-[ext_resource type="Resource" path="res://data/perks/relics/starving_litany.tres" id="211"]
-[ext_resource type="Resource" path="res://data/perks/common/strength.tres" id="212"]
-[ext_resource type="Resource" path="res://data/perks/common/swiftness.tres" id="213"]
-[ext_resource type="Resource" path="res://data/perks/common/thorns.tres" id="214"]
-[ext_resource type="Resource" path="res://data/perks/common/thunderclap.tres" id="215"]
-[ext_resource type="Resource" path="res://data/perks/common/vampirism.tres" id="216"]
-[ext_resource type="Resource" path="res://data/perks/common/vitality.tres" id="217"]
-[ext_resource type="Resource" path="res://data/perks/relics/war_banner.tres" id="218"]
-[ext_resource type="Resource" path="res://data/monster_ranks/elite.tres" id="219"]
-[ext_resource type="Resource" path="res://data/monster_ranks/epic.tres" id="220"]
-[ext_resource type="Resource" path="res://data/monster_ranks/legendary.tres" id="221"]
-[ext_resource type="Resource" path="res://data/monster_ranks/shiny.tres" id="222"]
-[ext_resource type="Resource" path="res://data/skills/player/arcane_bolt.tres" id="223"]
-[ext_resource type="Resource" path="res://data/skills/player/arrow_rain.tres" id="224"]
-[ext_resource type="Resource" path="res://data/skills/player/battle_cry.tres" id="225"]
-[ext_resource type="Resource" path="res://data/skills/player/blink.tres" id="226"]
-[ext_resource type="Resource" path="res://data/skills/monster/burrow.tres" id="227"]
-[ext_resource type="Resource" path="res://data/skills/boss/call_embers.tres" id="228"]
-[ext_resource type="Resource" path="res://data/skills/boss/call_embers_fierce.tres" id="229"]
-[ext_resource type="Resource" path="res://data/skills/boss/call_skeletons.tres" id="230"]
-[ext_resource type="Resource" path="res://data/skills/boss/call_skeletons_fierce.tres" id="231"]
-[ext_resource type="Resource" path="res://data/skills/boss/call_spirits.tres" id="232"]
-[ext_resource type="Resource" path="res://data/skills/boss/call_spirits_fierce.tres" id="233"]
-[ext_resource type="Resource" path="res://data/skills/boss/call_tadpoles.tres" id="234"]
-[ext_resource type="Resource" path="res://data/skills/boss/call_tadpoles_fierce.tres" id="235"]
-[ext_resource type="Resource" path="res://data/skills/boss/call_thieves.tres" id="236"]
-[ext_resource type="Resource" path="res://data/skills/boss/call_thieves_fierce.tres" id="237"]
-[ext_resource type="Resource" path="res://data/skills/monster/charge.tres" id="238"]
-[ext_resource type="Resource" path="res://data/skills/player/cleave.tres" id="239"]
-[ext_resource type="Resource" path="res://data/skills/boss/coil_rush.tres" id="240"]
-[ext_resource type="Resource" path="res://data/skills/boss/coil_rush_fierce.tres" id="241"]
-[ext_resource type="Resource" path="res://data/skills/boss/coin_storm.tres" id="242"]
-[ext_resource type="Resource" path="res://data/skills/boss/coin_storm_fierce.tres" id="243"]
-[ext_resource type="Resource" path="res://data/skills/player/dash.tres" id="244"]
-[ext_resource type="Resource" path="res://data/skills/player/dash_strike.tres" id="245"]
-[ext_resource type="Resource" path="res://data/skills/monster/dive.tres" id="246"]
-[ext_resource type="Resource" path="res://data/skills/monster/ember_mend.tres" id="247"]
-[ext_resource type="Resource" path="res://data/skills/boss/eye_beam.tres" id="248"]
-[ext_resource type="Resource" path="res://data/skills/boss/eye_beam_fierce.tres" id="249"]
-[ext_resource type="Resource" path="res://data/skills/boss/feather_storm.tres" id="250"]
-[ext_resource type="Resource" path="res://data/skills/boss/feather_tempest.tres" id="251"]
-[ext_resource type="Resource" path="res://data/skills/boss/feather_tempest_fierce.tres" id="252"]
-[ext_resource type="Resource" path="res://data/skills/boss/fire_ring.tres" id="253"]
-[ext_resource type="Resource" path="res://data/skills/boss/fire_ring_fierce.tres" id="254"]
-[ext_resource type="Resource" path="res://data/skills/player/fire_wave.tres" id="255"]
-[ext_resource type="Resource" path="res://data/skills/player/fireball.tres" id="256"]
-[ext_resource type="Resource" path="res://data/skills/player/fissure.tres" id="257"]
-[ext_resource type="Resource" path="res://data/skills/boss/flame_arc.tres" id="258"]
-[ext_resource type="Resource" path="res://data/skills/boss/flame_arc_fierce.tres" id="259"]
-[ext_resource type="Resource" path="res://data/skills/player/flurry.tres" id="260"]
-[ext_resource type="Resource" path="res://data/skills/boss/frog_leap.tres" id="261"]
-[ext_resource type="Resource" path="res://data/skills/boss/frog_leap_fierce.tres" id="262"]
-[ext_resource type="Resource" path="res://data/skills/boss/frost_breath.tres" id="263"]
-[ext_resource type="Resource" path="res://data/skills/boss/frost_breath_fierce.tres" id="264"]
-[ext_resource type="Resource" path="res://data/skills/player/frost_nova.tres" id="265"]
-[ext_resource type="Resource" path="res://data/skills/monster/gilded_ward.tres" id="266"]
-[ext_resource type="Resource" path="res://data/skills/boss/glacial_dive.tres" id="267"]
-[ext_resource type="Resource" path="res://data/skills/boss/glacial_dive_fierce.tres" id="268"]
-[ext_resource type="Resource" path="res://data/skills/player/ground_slam.tres" id="269"]
-[ext_resource type="Resource" path="res://data/skills/boss/hailstorm.tres" id="270"]
-[ext_resource type="Resource" path="res://data/skills/boss/hailstorm_fierce.tres" id="271"]
-[ext_resource type="Resource" path="res://data/skills/boss/hoard_leap.tres" id="272"]
-[ext_resource type="Resource" path="res://data/skills/boss/hoard_leap_fierce.tres" id="273"]
-[ext_resource type="Resource" path="res://data/skills/player/holy_light.tres" id="274"]
-[ext_resource type="Resource" path="res://data/skills/player/holy_shield.tres" id="275"]
-[ext_resource type="Resource" path="res://data/skills/player/ice_shards.tres" id="276"]
-[ext_resource type="Resource" path="res://data/skills/monster/ink_ring.tres" id="277"]
-[ext_resource type="Resource" path="res://data/skills/player/kunai_fan.tres" id="278"]
-[ext_resource type="Resource" path="res://data/skills/player/lash.tres" id="279"]
-[ext_resource type="Resource" path="res://data/skills/monster/lay_brood.tres" id="280"]
-[ext_resource type="Resource" path="res://data/skills/boss/maw_call_damned.tres" id="281"]
-[ext_resource type="Resource" path="res://data/skills/boss/maw_call_damned_fierce.tres" id="282"]
-[ext_resource type="Resource" path="res://data/skills/boss/maw_false_dawn.tres" id="283"]
-[ext_resource type="Resource" path="res://data/skills/boss/maw_sun_gaze.tres" id="284"]
-[ext_resource type="Resource" path="res://data/skills/boss/maw_tentacles.tres" id="285"]
-[ext_resource type="Resource" path="res://data/skills/boss/maw_tentacles_fierce.tres" id="286"]
-[ext_resource type="Resource" path="res://data/skills/monster/mend_allies.tres" id="287"]
-[ext_resource type="Resource" path="res://data/skills/monster/blink.tres" id="288"]
-[ext_resource type="Resource" path="res://data/skills/monster/volley.tres" id="289"]
-[ext_resource type="Resource" path="res://data/skills/player/piercing_thrust.tres" id="290"]
-[ext_resource type="Resource" path="res://data/skills/boss/poison_spit.tres" id="291"]
-[ext_resource type="Resource" path="res://data/skills/boss/poison_spit_fierce.tres" id="292"]
-[ext_resource type="Resource" path="res://data/skills/boss/quake.tres" id="293"]
-[ext_resource type="Resource" path="res://data/skills/boss/quake_fierce.tres" id="294"]
-[ext_resource type="Resource" path="res://data/skills/player/riposte.tres" id="295"]
-[ext_resource type="Resource" path="res://data/skills/player/rock_spike.tres" id="296"]
-[ext_resource type="Resource" path="res://data/skills/boss/sandstorm.tres" id="297"]
-[ext_resource type="Resource" path="res://data/skills/player/shadow_step.tres" id="298"]
-[ext_resource type="Resource" path="res://data/skills/monster/shaman_heal.tres" id="299"]
-[ext_resource type="Resource" path="res://data/skills/player/shuriken_storm.tres" id="300"]
-[ext_resource type="Resource" path="res://data/skills/boss/slime_rain.tres" id="301"]
-[ext_resource type="Resource" path="res://data/skills/boss/slime_split.tres" id="302"]
-[ext_resource type="Resource" path="res://data/skills/boss/slime_split_fierce.tres" id="303"]
-[ext_resource type="Resource" path="res://data/skills/boss/slime_storm.tres" id="304"]
-[ext_resource type="Resource" path="res://data/skills/boss/slime_storm_fierce.tres" id="305"]
-[ext_resource type="Resource" path="res://data/skills/player/smite.tres" id="306"]
-[ext_resource type="Resource" path="res://data/skills/boss/solar_flare.tres" id="307"]
-[ext_resource type="Resource" path="res://data/skills/boss/solar_flare_fierce.tres" id="308"]
-[ext_resource type="Resource" path="res://data/skills/monster/soul_ward.tres" id="309"]
-[ext_resource type="Resource" path="res://data/skills/player/spark_nova.tres" id="310"]
-[ext_resource type="Resource" path="res://data/skills/player/spear_throw.tres" id="311"]
-[ext_resource type="Resource" path="res://data/skills/monster/spore_cloud.tres" id="312"]
-[ext_resource type="Resource" path="res://data/skills/player/sundering_blow.tres" id="313"]
-[ext_resource type="Resource" path="res://data/skills/boss/tengu_dash.tres" id="314"]
-[ext_resource type="Resource" path="res://data/skills/boss/tengu_dash_fierce.tres" id="315"]
-[ext_resource type="Resource" path="res://data/skills/monster/throw_bomb.tres" id="316"]
-[ext_resource type="Resource" path="res://data/skills/player/thunder.tres" id="317"]
-[ext_resource type="Resource" path="res://data/skills/boss/toma_dash.tres" id="318"]
-[ext_resource type="Resource" path="res://data/skills/boss/toma_dash_fierce.tres" id="319"]
-[ext_resource type="Resource" path="res://data/skills/boss/toma_lantern.tres" id="320"]
-[ext_resource type="Resource" path="res://data/skills/boss/toma_lantern_fierce.tres" id="321"]
-[ext_resource type="Resource" path="res://data/skills/boss/toma_wide_slash.tres" id="322"]
-[ext_resource type="Resource" path="res://data/skills/boss/toxic_bloom.tres" id="323"]
-[ext_resource type="Resource" path="res://data/skills/boss/toxic_bloom_fierce.tres" id="324"]
-[ext_resource type="Resource" path="res://data/skills/boss/venom_spit.tres" id="325"]
-[ext_resource type="Resource" path="res://data/skills/boss/venom_spit_fierce.tres" id="326"]
-[ext_resource type="Resource" path="res://data/skills/player/volley.tres" id="327"]
-[ext_resource type="Resource" path="res://data/skills/boss/wailing_ring.tres" id="328"]
-[ext_resource type="Resource" path="res://data/skills/boss/wailing_ring_fierce.tres" id="329"]
-[ext_resource type="Resource" path="res://data/skills/monster/war_cry.tres" id="330"]
-[ext_resource type="Resource" path="res://data/skills/monster/war_drum.tres" id="331"]
-[ext_resource type="Resource" path="res://data/skills/player/whirlwind.tres" id="332"]
+[ext_resource type="Resource" path="res://data/items/weapons/evolved/ashen_codex.tres" id="39"]
+[ext_resource type="Resource" path="res://data/items/weapons/axe.tres" id="40"]
+[ext_resource type="Resource" path="res://data/items/weapons/big_sword.tres" id="41"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/bite.tres" id="42"]
+[ext_resource type="Resource" path="res://data/items/consumables/bomb.tres" id="43"]
+[ext_resource type="Resource" path="res://data/items/keys/bone_key.tres" id="44"]
+[ext_resource type="Resource" path="res://data/items/weapons/book.tres" id="45"]
+[ext_resource type="Resource" path="res://data/items/weapons/bow.tres" id="46"]
+[ext_resource type="Resource" path="res://data/items/armors/chain_mail.tres" id="47"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/claws.tres" id="48"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/club.tres" id="49"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/demon_club.tres" id="50"]
+[ext_resource type="Resource" path="res://data/runes/echo.tres" id="51"]
+[ext_resource type="Resource" path="res://data/runes/ember.tres" id="52"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/eye_beam_bolt.tres" id="53"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/fire_breath.tres" id="54"]
+[ext_resource type="Resource" path="res://data/items/consumables/fire_scroll.tres" id="55"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/fire_touch.tres" id="56"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/frost_bite.tres" id="57"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/frost_fang.tres" id="58"]
+[ext_resource type="Resource" path="res://data/runes/fury.tres" id="59"]
+[ext_resource type="Resource" path="res://data/runes/gale.tres" id="60"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/ghost_flame.tres" id="61"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/gilded_mote.tres" id="62"]
+[ext_resource type="Resource" path="res://data/items/consumables/greater_health_potion.tres" id="63"]
+[ext_resource type="Resource" path="res://data/items/weapons/hammer.tres" id="64"]
+[ext_resource type="Resource" path="res://data/items/consumables/haste_draught.tres" id="65"]
+[ext_resource type="Resource" path="res://data/items/consumables/health_potion.tres" id="66"]
+[ext_resource type="Resource" path="res://data/items/weapons/evolved/heartsplitter.tres" id="67"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/hex_staff.tres" id="68"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/ink_bolt.tres" id="69"]
+[ext_resource type="Resource" path="res://data/items/armors/iron_helm.tres" id="70"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/jade_fang.tres" id="71"]
+[ext_resource type="Resource" path="res://data/items/weapons/katana.tres" id="72"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/keeper_katana.tres" id="73"]
+[ext_resource type="Resource" path="res://data/items/weapons/lance.tres" id="74"]
+[ext_resource type="Resource" path="res://data/items/armors/leather_armor.tres" id="75"]
+[ext_resource type="Resource" path="res://data/items/armors/leather_cap.tres" id="76"]
+[ext_resource type="Resource" path="res://data/runes/leech.tres" id="77"]
+[ext_resource type="Resource" path="res://data/items/weapons/magic_wand.tres" id="78"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/maul.tres" id="79"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/moss_spores.tres" id="80"]
+[ext_resource type="Resource" path="res://data/items/weapons/ninjaku.tres" id="81"]
+[ext_resource type="Resource" path="res://data/items/weapons/pickaxe.tres" id="82"]
+[ext_resource type="Resource" path="res://data/items/armors/plate_armor.tres" id="83"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/poison_fang.tres" id="84"]
+[ext_resource type="Resource" path="res://data/runes/prism.tres" id="85"]
+[ext_resource type="Resource" path="res://data/runes/pyre.tres" id="86"]
+[ext_resource type="Resource" path="res://data/items/consumables/rage_elixir.tres" id="87"]
+[ext_resource type="Resource" path="res://data/items/weapons/rapier.tres" id="88"]
+[ext_resource type="Resource" path="res://data/runes/rime.tres" id="89"]
+[ext_resource type="Resource" path="res://data/items/weapons/evolved/rimeheart_staff.tres" id="90"]
+[ext_resource type="Resource" path="res://data/items/weapons/evolved/riven_bow.tres" id="91"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/rusty_blade.tres" id="92"]
+[ext_resource type="Resource" path="res://data/items/weapons/sai.tres" id="93"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/sand_breath.tres" id="94"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/sand_clod.tres" id="95"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/scimitar.tres" id="96"]
+[ext_resource type="Resource" path="res://data/items/armors/shadow_cloak.tres" id="97"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/shadow_staff.tres" id="98"]
+[ext_resource type="Resource" path="res://data/runes/shatter.tres" id="99"]
+[ext_resource type="Resource" path="res://data/items/weapons/shuriken.tres" id="100"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/slam.tres" id="101"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/slime_slam.tres" id="102"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/soul_flame.tres" id="103"]
+[ext_resource type="Resource" path="res://data/runes/spark.tres" id="104"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/spirit_touch.tres" id="105"]
+[ext_resource type="Resource" path="res://data/items/weapons/stick.tres" id="106"]
+[ext_resource type="Resource" path="res://data/items/weapons/evolved/stormhowl.tres" id="107"]
+[ext_resource type="Resource" path="res://data/items/weapons/templar_sword.tres" id="108"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/tengu_blade.tres" id="109"]
+[ext_resource type="Resource" path="res://data/items/tomes/tome_fire.tres" id="110"]
+[ext_resource type="Resource" path="res://data/items/tomes/tome_frost.tres" id="111"]
+[ext_resource type="Resource" path="res://data/items/tomes/tome_healing.tres" id="112"]
+[ext_resource type="Resource" path="res://data/items/tomes/tome_thunder.tres" id="113"]
+[ext_resource type="Resource" path="res://data/items/tomes/tome_war.tres" id="114"]
+[ext_resource type="Resource" path="res://data/items/tomes/tome_wind.tres" id="115"]
+[ext_resource type="Resource" path="res://data/items/weapons/monster/water_jet.tres" id="116"]
+[ext_resource type="Resource" path="res://data/items/weapons/whip.tres" id="117"]
+[ext_resource type="Resource" path="res://data/monsters/abyss/abyss_eye.tres" id="118"]
+[ext_resource type="Resource" path="res://data/monsters/ash_lizard.tres" id="119"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/azure_wyrm.tres" id="120"]
+[ext_resource type="Resource" path="res://data/monsters/bat.tres" id="121"]
+[ext_resource type="Resource" path="res://data/monsters/beast.tres" id="122"]
+[ext_resource type="Resource" path="res://data/monsters/big_slime.tres" id="123"]
+[ext_resource type="Resource" path="res://data/monsters/abyss/blood_drinker.tres" id="124"]
+[ext_resource type="Resource" path="res://data/monsters/bomber.tres" id="125"]
+[ext_resource type="Resource" path="res://data/monsters/bone_lizard.tres" id="126"]
+[ext_resource type="Resource" path="res://data/monsters/abyss/breach_warden.tres" id="127"]
+[ext_resource type="Resource" path="res://data/monsters/brood_mother.tres" id="128"]
+[ext_resource type="Resource" path="res://data/monsters/abyss/cinder_wraith.tres" id="129"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/crimson_tengu.tres" id="130"]
+[ext_resource type="Resource" path="res://data/monsters/cyclops.tres" id="131"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/demon_cyclops.tres" id="132"]
+[ext_resource type="Resource" path="res://data/monsters/dragon.tres" id="133"]
+[ext_resource type="Resource" path="res://data/monsters/dune_rex.tres" id="134"]
+[ext_resource type="Resource" path="res://data/monsters/ember_heart.tres" id="135"]
+[ext_resource type="Resource" path="res://data/monsters/eye.tres" id="136"]
+[ext_resource type="Resource" path="res://data/monsters/flam.tres" id="137"]
+[ext_resource type="Resource" path="res://data/monsters/frost_skull.tres" id="138"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/giant_frog.tres" id="139"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/gilded_hoarder.tres" id="140"]
+[ext_resource type="Resource" path="res://data/monsters/gilded_moth.tres" id="141"]
+[ext_resource type="Resource" path="res://data/monsters/gold_racoon.tres" id="142"]
+[ext_resource type="Resource" path="res://data/monsters/abyss/horned_augur.tres" id="143"]
+[ext_resource type="Resource" path="res://data/monsters/abyss/horned_carcass.tres" id="144"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/jade_wyrm.tres" id="145"]
+[ext_resource type="Resource" path="res://data/monsters/kappa.tres" id="146"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/king_slime.tres" id="147"]
+[ext_resource type="Resource" path="res://data/monsters/lantern.tres" id="148"]
+[ext_resource type="Resource" path="res://data/monsters/larva.tres" id="149"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/master_toma.tres" id="150"]
+[ext_resource type="Resource" path="res://data/monsters/mole.tres" id="151"]
+[ext_resource type="Resource" path="res://data/monsters/moss_heart.tres" id="152"]
+[ext_resource type="Resource" path="res://data/monsters/mushroom.tres" id="153"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/nameless_effigy.tres" id="154"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/nameless_keeper.tres" id="155"]
+[ext_resource type="Resource" path="res://data/monsters/octopus.tres" id="156"]
+[ext_resource type="Resource" path="res://data/monsters/owl.tres" id="157"]
+[ext_resource type="Resource" path="res://data/monsters/rat.tres" id="158"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/red_samurai.tres" id="159"]
+[ext_resource type="Resource" path="res://data/monsters/red_viper.tres" id="160"]
+[ext_resource type="Resource" path="res://data/monsters/reptile.tres" id="161"]
+[ext_resource type="Resource" path="res://data/monsters/sand_drake.tres" id="162"]
+[ext_resource type="Resource" path="res://data/monsters/sand_drummer.tres" id="163"]
+[ext_resource type="Resource" path="res://data/monsters/abyss/scarlet_fiend.tres" id="164"]
+[ext_resource type="Resource" path="res://data/monsters/abyss/shade_stalker.tres" id="165"]
+[ext_resource type="Resource" path="res://data/monsters/shaman.tres" id="166"]
+[ext_resource type="Resource" path="res://data/monsters/shell_guard.tres" id="167"]
+[ext_resource type="Resource" path="res://data/monsters/skeleton.tres" id="168"]
+[ext_resource type="Resource" path="res://data/monsters/skull.tres" id="169"]
+[ext_resource type="Resource" path="res://data/monsters/slime.tres" id="170"]
+[ext_resource type="Resource" path="res://data/monsters/snake.tres" id="171"]
+[ext_resource type="Resource" path="res://data/monsters/sorcerer.tres" id="172"]
+[ext_resource type="Resource" path="res://data/monsters/soul_moth.tres" id="173"]
+[ext_resource type="Resource" path="res://data/monsters/spider.tres" id="174"]
+[ext_resource type="Resource" path="res://data/monsters/spirit.tres" id="175"]
+[ext_resource type="Resource" path="res://data/monsters/stone_mole.tres" id="176"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/sun_wraith.tres" id="177"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/the_maw.tres" id="178"]
+[ext_resource type="Resource" path="res://data/monsters/thief_racoon.tres" id="179"]
+[ext_resource type="Resource" path="res://data/monsters/bosses/weeping_spirit.tres" id="180"]
+[ext_resource type="Resource" path="res://data/oaths/colossus.tres" id="181"]
+[ext_resource type="Resource" path="res://data/oaths/duelist.tres" id="182"]
+[ext_resource type="Resource" path="res://data/oaths/plunderer.tres" id="183"]
+[ext_resource type="Resource" path="res://data/oaths/scholar.tres" id="184"]
+[ext_resource type="Resource" path="res://data/perks/common/arcane_focus.tres" id="185"]
+[ext_resource type="Resource" path="res://data/perks/common/arcane_power.tres" id="186"]
+[ext_resource type="Resource" path="res://data/perks/common/blazing_roll.tres" id="187"]
+[ext_resource type="Resource" path="res://data/perks/relics/bleeding_stride.tres" id="188"]
+[ext_resource type="Resource" path="res://data/monsters/abyss/thirst.tres" id="189"]
+[ext_resource type="Resource" path="res://data/perks/common/bloodrage.tres" id="190"]
+[ext_resource type="Resource" path="res://data/perks/common/burst_veins.tres" id="191"]
+[ext_resource type="Resource" path="res://data/perks/common/cinder_wake.tres" id="192"]
+[ext_resource type="Resource" path="res://data/perks/common/cold_snap.tres" id="193"]
+[ext_resource type="Resource" path="res://data/perks/common/devotion.tres" id="194"]
+[ext_resource type="Resource" path="res://data/perks/common/echo.tres" id="195"]
+[ext_resource type="Resource" path="res://data/perks/relics/executioner.tres" id="196"]
+[ext_resource type="Resource" path="res://data/perks/common/fortune.tres" id="197"]
+[ext_resource type="Resource" path="res://data/perks/common/frenzy.tres" id="198"]
+[ext_resource type="Resource" path="res://data/perks/common/frostbite.tres" id="199"]
+[ext_resource type="Resource" path="res://data/perks/relics/funeral_pyre.tres" id="200"]
+[ext_resource type="Resource" path="res://data/perks/relics/guardian_ring.tres" id="201"]
+[ext_resource type="Resource" path="res://data/perks/relics/heart_of_winter.tres" id="202"]
+[ext_resource type="Resource" path="res://data/perks/common/ice_shards.tres" id="203"]
+[ext_resource type="Resource" path="res://data/perks/common/ignite.tres" id="204"]
+[ext_resource type="Resource" path="res://data/perks/common/iron_skin.tres" id="205"]
+[ext_resource type="Resource" path="res://data/perks/common/kindling.tres" id="206"]
+[ext_resource type="Resource" path="res://data/perks/common/leaping_bolt.tres" id="207"]
+[ext_resource type="Resource" path="res://data/perks/relics/multishot.tres" id="208"]
+[ext_resource type="Resource" path="res://data/perks/relics/phoenix_feather.tres" id="209"]
+[ext_resource type="Resource" path="res://data/perks/common/precision.tres" id="210"]
+[ext_resource type="Resource" path="res://data/perks/relics/restless_storm.tres" id="211"]
+[ext_resource type="Resource" path="res://data/perks/common/rime_halo.tres" id="212"]
+[ext_resource type="Resource" path="res://data/perks/common/riven_glyph.tres" id="213"]
+[ext_resource type="Resource" path="res://data/perks/relics/sages_codex.tres" id="214"]
+[ext_resource type="Resource" path="res://data/perks/common/shock_roll.tres" id="215"]
+[ext_resource type="Resource" path="res://data/perks/relics/starving_litany.tres" id="216"]
+[ext_resource type="Resource" path="res://data/perks/common/strength.tres" id="217"]
+[ext_resource type="Resource" path="res://data/perks/common/swiftness.tres" id="218"]
+[ext_resource type="Resource" path="res://data/perks/common/thorns.tres" id="219"]
+[ext_resource type="Resource" path="res://data/perks/common/thunderclap.tres" id="220"]
+[ext_resource type="Resource" path="res://data/perks/common/vampirism.tres" id="221"]
+[ext_resource type="Resource" path="res://data/perks/common/vitality.tres" id="222"]
+[ext_resource type="Resource" path="res://data/perks/relics/war_banner.tres" id="223"]
+[ext_resource type="Resource" path="res://data/monster_ranks/elite.tres" id="224"]
+[ext_resource type="Resource" path="res://data/monster_ranks/epic.tres" id="225"]
+[ext_resource type="Resource" path="res://data/monster_ranks/legendary.tres" id="226"]
+[ext_resource type="Resource" path="res://data/monster_ranks/shiny.tres" id="227"]
+[ext_resource type="Resource" path="res://data/skills/player/arcane_bolt.tres" id="228"]
+[ext_resource type="Resource" path="res://data/skills/player/arrow_rain.tres" id="229"]
+[ext_resource type="Resource" path="res://data/skills/player/battle_cry.tres" id="230"]
+[ext_resource type="Resource" path="res://data/skills/player/blink.tres" id="231"]
+[ext_resource type="Resource" path="res://data/skills/monster/burrow.tres" id="232"]
+[ext_resource type="Resource" path="res://data/skills/boss/call_embers.tres" id="233"]
+[ext_resource type="Resource" path="res://data/skills/boss/call_embers_fierce.tres" id="234"]
+[ext_resource type="Resource" path="res://data/skills/boss/call_skeletons.tres" id="235"]
+[ext_resource type="Resource" path="res://data/skills/boss/call_skeletons_fierce.tres" id="236"]
+[ext_resource type="Resource" path="res://data/skills/boss/call_spirits.tres" id="237"]
+[ext_resource type="Resource" path="res://data/skills/boss/call_spirits_fierce.tres" id="238"]
+[ext_resource type="Resource" path="res://data/skills/boss/call_tadpoles.tres" id="239"]
+[ext_resource type="Resource" path="res://data/skills/boss/call_tadpoles_fierce.tres" id="240"]
+[ext_resource type="Resource" path="res://data/skills/boss/call_thieves.tres" id="241"]
+[ext_resource type="Resource" path="res://data/skills/boss/call_thieves_fierce.tres" id="242"]
+[ext_resource type="Resource" path="res://data/skills/monster/charge.tres" id="243"]
+[ext_resource type="Resource" path="res://data/skills/player/cleave.tres" id="244"]
+[ext_resource type="Resource" path="res://data/skills/boss/coil_rush.tres" id="245"]
+[ext_resource type="Resource" path="res://data/skills/boss/coil_rush_fierce.tres" id="246"]
+[ext_resource type="Resource" path="res://data/skills/boss/coin_storm.tres" id="247"]
+[ext_resource type="Resource" path="res://data/skills/boss/coin_storm_fierce.tres" id="248"]
+[ext_resource type="Resource" path="res://data/skills/player/dash.tres" id="249"]
+[ext_resource type="Resource" path="res://data/skills/player/dash_strike.tres" id="250"]
+[ext_resource type="Resource" path="res://data/skills/monster/dive.tres" id="251"]
+[ext_resource type="Resource" path="res://data/skills/monster/ember_mend.tres" id="252"]
+[ext_resource type="Resource" path="res://data/skills/boss/eye_beam.tres" id="253"]
+[ext_resource type="Resource" path="res://data/skills/boss/eye_beam_fierce.tres" id="254"]
+[ext_resource type="Resource" path="res://data/skills/boss/feather_storm.tres" id="255"]
+[ext_resource type="Resource" path="res://data/skills/boss/feather_tempest.tres" id="256"]
+[ext_resource type="Resource" path="res://data/skills/boss/feather_tempest_fierce.tres" id="257"]
+[ext_resource type="Resource" path="res://data/skills/boss/fire_ring.tres" id="258"]
+[ext_resource type="Resource" path="res://data/skills/boss/fire_ring_fierce.tres" id="259"]
+[ext_resource type="Resource" path="res://data/skills/player/fire_wave.tres" id="260"]
+[ext_resource type="Resource" path="res://data/skills/player/fireball.tres" id="261"]
+[ext_resource type="Resource" path="res://data/skills/player/fissure.tres" id="262"]
+[ext_resource type="Resource" path="res://data/skills/boss/flame_arc.tres" id="263"]
+[ext_resource type="Resource" path="res://data/skills/boss/flame_arc_fierce.tres" id="264"]
+[ext_resource type="Resource" path="res://data/skills/player/flurry.tres" id="265"]
+[ext_resource type="Resource" path="res://data/skills/boss/frog_leap.tres" id="266"]
+[ext_resource type="Resource" path="res://data/skills/boss/frog_leap_fierce.tres" id="267"]
+[ext_resource type="Resource" path="res://data/skills/boss/frost_breath.tres" id="268"]
+[ext_resource type="Resource" path="res://data/skills/boss/frost_breath_fierce.tres" id="269"]
+[ext_resource type="Resource" path="res://data/skills/player/frost_nova.tres" id="270"]
+[ext_resource type="Resource" path="res://data/skills/monster/gilded_ward.tres" id="271"]
+[ext_resource type="Resource" path="res://data/skills/boss/glacial_dive.tres" id="272"]
+[ext_resource type="Resource" path="res://data/skills/boss/glacial_dive_fierce.tres" id="273"]
+[ext_resource type="Resource" path="res://data/skills/player/ground_slam.tres" id="274"]
+[ext_resource type="Resource" path="res://data/skills/boss/hailstorm.tres" id="275"]
+[ext_resource type="Resource" path="res://data/skills/boss/hailstorm_fierce.tres" id="276"]
+[ext_resource type="Resource" path="res://data/skills/boss/hoard_leap.tres" id="277"]
+[ext_resource type="Resource" path="res://data/skills/boss/hoard_leap_fierce.tres" id="278"]
+[ext_resource type="Resource" path="res://data/skills/player/holy_light.tres" id="279"]
+[ext_resource type="Resource" path="res://data/skills/player/holy_shield.tres" id="280"]
+[ext_resource type="Resource" path="res://data/skills/player/ice_shards.tres" id="281"]
+[ext_resource type="Resource" path="res://data/skills/monster/ink_ring.tres" id="282"]
+[ext_resource type="Resource" path="res://data/skills/player/kunai_fan.tres" id="283"]
+[ext_resource type="Resource" path="res://data/skills/player/lash.tres" id="284"]
+[ext_resource type="Resource" path="res://data/skills/monster/lay_brood.tres" id="285"]
+[ext_resource type="Resource" path="res://data/skills/boss/maw_call_damned.tres" id="286"]
+[ext_resource type="Resource" path="res://data/skills/boss/maw_call_damned_fierce.tres" id="287"]
+[ext_resource type="Resource" path="res://data/skills/boss/maw_false_dawn.tres" id="288"]
+[ext_resource type="Resource" path="res://data/skills/boss/maw_sun_gaze.tres" id="289"]
+[ext_resource type="Resource" path="res://data/skills/boss/maw_tentacles.tres" id="290"]
+[ext_resource type="Resource" path="res://data/skills/boss/maw_tentacles_fierce.tres" id="291"]
+[ext_resource type="Resource" path="res://data/skills/monster/mend_allies.tres" id="292"]
+[ext_resource type="Resource" path="res://data/skills/monster/blink.tres" id="293"]
+[ext_resource type="Resource" path="res://data/skills/monster/volley.tres" id="294"]
+[ext_resource type="Resource" path="res://data/skills/player/piercing_thrust.tres" id="295"]
+[ext_resource type="Resource" path="res://data/skills/boss/poison_spit.tres" id="296"]
+[ext_resource type="Resource" path="res://data/skills/boss/poison_spit_fierce.tres" id="297"]
+[ext_resource type="Resource" path="res://data/skills/boss/quake.tres" id="298"]
+[ext_resource type="Resource" path="res://data/skills/boss/quake_fierce.tres" id="299"]
+[ext_resource type="Resource" path="res://data/skills/player/riposte.tres" id="300"]
+[ext_resource type="Resource" path="res://data/skills/player/rock_spike.tres" id="301"]
+[ext_resource type="Resource" path="res://data/skills/boss/sandstorm.tres" id="302"]
+[ext_resource type="Resource" path="res://data/skills/player/shadow_step.tres" id="303"]
+[ext_resource type="Resource" path="res://data/skills/monster/shaman_heal.tres" id="304"]
+[ext_resource type="Resource" path="res://data/skills/player/shuriken_storm.tres" id="305"]
+[ext_resource type="Resource" path="res://data/skills/boss/slime_rain.tres" id="306"]
+[ext_resource type="Resource" path="res://data/skills/boss/slime_split.tres" id="307"]
+[ext_resource type="Resource" path="res://data/skills/boss/slime_split_fierce.tres" id="308"]
+[ext_resource type="Resource" path="res://data/skills/boss/slime_storm.tres" id="309"]
+[ext_resource type="Resource" path="res://data/skills/boss/slime_storm_fierce.tres" id="310"]
+[ext_resource type="Resource" path="res://data/skills/player/smite.tres" id="311"]
+[ext_resource type="Resource" path="res://data/skills/boss/solar_flare.tres" id="312"]
+[ext_resource type="Resource" path="res://data/skills/boss/solar_flare_fierce.tres" id="313"]
+[ext_resource type="Resource" path="res://data/skills/monster/soul_ward.tres" id="314"]
+[ext_resource type="Resource" path="res://data/skills/player/spark_nova.tres" id="315"]
+[ext_resource type="Resource" path="res://data/skills/player/spear_throw.tres" id="316"]
+[ext_resource type="Resource" path="res://data/skills/monster/spore_cloud.tres" id="317"]
+[ext_resource type="Resource" path="res://data/skills/player/sundering_blow.tres" id="318"]
+[ext_resource type="Resource" path="res://data/skills/boss/tengu_dash.tres" id="319"]
+[ext_resource type="Resource" path="res://data/skills/boss/tengu_dash_fierce.tres" id="320"]
+[ext_resource type="Resource" path="res://data/skills/monster/throw_bomb.tres" id="321"]
+[ext_resource type="Resource" path="res://data/skills/player/thunder.tres" id="322"]
+[ext_resource type="Resource" path="res://data/skills/boss/toma_dash.tres" id="323"]
+[ext_resource type="Resource" path="res://data/skills/boss/toma_dash_fierce.tres" id="324"]
+[ext_resource type="Resource" path="res://data/skills/boss/toma_lantern.tres" id="325"]
+[ext_resource type="Resource" path="res://data/skills/boss/toma_lantern_fierce.tres" id="326"]
+[ext_resource type="Resource" path="res://data/skills/boss/toma_wide_slash.tres" id="327"]
+[ext_resource type="Resource" path="res://data/skills/boss/toxic_bloom.tres" id="328"]
+[ext_resource type="Resource" path="res://data/skills/boss/toxic_bloom_fierce.tres" id="329"]
+[ext_resource type="Resource" path="res://data/skills/boss/venom_spit.tres" id="330"]
+[ext_resource type="Resource" path="res://data/skills/boss/venom_spit_fierce.tres" id="331"]
+[ext_resource type="Resource" path="res://data/skills/player/volley.tres" id="332"]
+[ext_resource type="Resource" path="res://data/skills/boss/wailing_ring.tres" id="333"]
+[ext_resource type="Resource" path="res://data/skills/boss/wailing_ring_fierce.tres" id="334"]
+[ext_resource type="Resource" path="res://data/skills/monster/war_cry.tres" id="335"]
+[ext_resource type="Resource" path="res://data/skills/monster/war_drum.tres" id="336"]
+[ext_resource type="Resource" path="res://data/skills/player/whirlwind.tres" id="337"]
 
 [resource]
 script = ExtResource("1")
@@ -373,300 +378,305 @@ entries = Dictionary[String, Resource]({
 "elite:vengeful": ExtResource("36"),
 "elite:venomous": ExtResource("37"),
 "item:acid_spit": ExtResource("38"),
-"item:axe": ExtResource("39"),
-"item:big_sword": ExtResource("40"),
-"item:bite": ExtResource("41"),
-"item:bomb": ExtResource("42"),
-"item:bone_key": ExtResource("43"),
-"item:book": ExtResource("44"),
-"item:bow": ExtResource("45"),
-"item:chain_mail": ExtResource("46"),
-"item:claws": ExtResource("47"),
-"item:club": ExtResource("48"),
-"item:demon_club": ExtResource("49"),
-"item:echo_rune": ExtResource("50"),
-"item:ember_rune": ExtResource("51"),
-"item:eye_beam_bolt": ExtResource("52"),
-"item:fire_breath": ExtResource("53"),
-"item:fire_scroll": ExtResource("54"),
-"item:fire_touch": ExtResource("55"),
-"item:frost_bite": ExtResource("56"),
-"item:frost_fang": ExtResource("57"),
-"item:fury_rune": ExtResource("58"),
-"item:gale_rune": ExtResource("59"),
-"item:ghost_flame": ExtResource("60"),
-"item:gilded_mote": ExtResource("61"),
-"item:greater_health_potion": ExtResource("62"),
-"item:hammer": ExtResource("63"),
-"item:haste_draught": ExtResource("64"),
-"item:health_potion": ExtResource("65"),
-"item:hex_staff": ExtResource("66"),
-"item:ink_bolt": ExtResource("67"),
-"item:iron_helm": ExtResource("68"),
-"item:jade_fang": ExtResource("69"),
-"item:katana": ExtResource("70"),
-"item:keeper_katana": ExtResource("71"),
-"item:lance": ExtResource("72"),
-"item:leather_armor": ExtResource("73"),
-"item:leather_cap": ExtResource("74"),
-"item:leech_rune": ExtResource("75"),
-"item:magic_wand": ExtResource("76"),
-"item:maul": ExtResource("77"),
-"item:moss_spores": ExtResource("78"),
-"item:ninjaku": ExtResource("79"),
-"item:pickaxe": ExtResource("80"),
-"item:plate_armor": ExtResource("81"),
-"item:poison_fang": ExtResource("82"),
-"item:prism_rune": ExtResource("83"),
-"item:pyre_rune": ExtResource("84"),
-"item:rage_elixir": ExtResource("85"),
-"item:rapier": ExtResource("86"),
-"item:rime_rune": ExtResource("87"),
-"item:rusty_blade": ExtResource("88"),
-"item:sai": ExtResource("89"),
-"item:sand_breath": ExtResource("90"),
-"item:sand_clod": ExtResource("91"),
-"item:scimitar": ExtResource("92"),
-"item:shadow_cloak": ExtResource("93"),
-"item:shadow_staff": ExtResource("94"),
-"item:shatter_rune": ExtResource("95"),
-"item:shuriken": ExtResource("96"),
-"item:slam": ExtResource("97"),
-"item:slime_slam": ExtResource("98"),
-"item:soul_flame": ExtResource("99"),
-"item:spark_rune": ExtResource("100"),
-"item:spirit_touch": ExtResource("101"),
-"item:stick": ExtResource("102"),
-"item:templar_sword": ExtResource("103"),
-"item:tengu_blade": ExtResource("104"),
-"item:tome_fire": ExtResource("105"),
-"item:tome_frost": ExtResource("106"),
-"item:tome_healing": ExtResource("107"),
-"item:tome_thunder": ExtResource("108"),
-"item:tome_war": ExtResource("109"),
-"item:tome_wind": ExtResource("110"),
-"item:water_jet": ExtResource("111"),
-"item:whip": ExtResource("112"),
-"monster:abyss_eye": ExtResource("113"),
-"monster:ash_lizard": ExtResource("114"),
-"monster:azure_wyrm": ExtResource("115"),
-"monster:bat": ExtResource("116"),
-"monster:beast": ExtResource("117"),
-"monster:big_slime": ExtResource("118"),
-"monster:blood_drinker": ExtResource("119"),
-"monster:bomber": ExtResource("120"),
-"monster:bone_lizard": ExtResource("121"),
-"monster:breach_warden": ExtResource("122"),
-"monster:brood_mother": ExtResource("123"),
-"monster:cinder_wraith": ExtResource("124"),
-"monster:crimson_tengu": ExtResource("125"),
-"monster:cyclops": ExtResource("126"),
-"monster:demon_cyclops": ExtResource("127"),
-"monster:dragon": ExtResource("128"),
-"monster:dune_rex": ExtResource("129"),
-"monster:ember_heart": ExtResource("130"),
-"monster:eye": ExtResource("131"),
-"monster:flam": ExtResource("132"),
-"monster:frost_skull": ExtResource("133"),
-"monster:giant_frog": ExtResource("134"),
-"monster:gilded_hoarder": ExtResource("135"),
-"monster:gilded_moth": ExtResource("136"),
-"monster:gold_racoon": ExtResource("137"),
-"monster:horned_augur": ExtResource("138"),
-"monster:horned_carcass": ExtResource("139"),
-"monster:jade_wyrm": ExtResource("140"),
-"monster:kappa": ExtResource("141"),
-"monster:king_slime": ExtResource("142"),
-"monster:lantern": ExtResource("143"),
-"monster:larva": ExtResource("144"),
-"monster:master_toma": ExtResource("145"),
-"monster:mole": ExtResource("146"),
-"monster:moss_heart": ExtResource("147"),
-"monster:mushroom": ExtResource("148"),
-"monster:nameless_effigy": ExtResource("149"),
-"monster:nameless_keeper": ExtResource("150"),
-"monster:octopus": ExtResource("151"),
-"monster:owl": ExtResource("152"),
-"monster:rat": ExtResource("153"),
-"monster:red_samurai": ExtResource("154"),
-"monster:red_viper": ExtResource("155"),
-"monster:reptile": ExtResource("156"),
-"monster:sand_drake": ExtResource("157"),
-"monster:sand_drummer": ExtResource("158"),
-"monster:scarlet_fiend": ExtResource("159"),
-"monster:shade_stalker": ExtResource("160"),
-"monster:shaman": ExtResource("161"),
-"monster:shell_guard": ExtResource("162"),
-"monster:skeleton": ExtResource("163"),
-"monster:skull": ExtResource("164"),
-"monster:slime": ExtResource("165"),
-"monster:snake": ExtResource("166"),
-"monster:sorcerer": ExtResource("167"),
-"monster:soul_moth": ExtResource("168"),
-"monster:spider": ExtResource("169"),
-"monster:spirit": ExtResource("170"),
-"monster:stone_mole": ExtResource("171"),
-"monster:sun_wraith": ExtResource("172"),
-"monster:the_maw": ExtResource("173"),
-"monster:thief_racoon": ExtResource("174"),
-"monster:weeping_spirit": ExtResource("175"),
-"oath:colossus": ExtResource("176"),
-"oath:duelist": ExtResource("177"),
-"oath:plunderer": ExtResource("178"),
-"oath:scholar": ExtResource("179"),
-"perk:arcane_focus": ExtResource("180"),
-"perk:arcane_power": ExtResource("181"),
-"perk:blazing_roll": ExtResource("182"),
-"perk:bleeding_stride": ExtResource("183"),
-"perk:blood_thirst": ExtResource("184"),
-"perk:bloodrage": ExtResource("185"),
-"perk:burst_veins": ExtResource("186"),
-"perk:cinder_wake": ExtResource("187"),
-"perk:cold_snap": ExtResource("188"),
-"perk:devotion": ExtResource("189"),
-"perk:echo": ExtResource("190"),
-"perk:executioner": ExtResource("191"),
-"perk:fortune": ExtResource("192"),
-"perk:frenzy": ExtResource("193"),
-"perk:frostbite": ExtResource("194"),
-"perk:funeral_pyre": ExtResource("195"),
-"perk:guardian_ring": ExtResource("196"),
-"perk:heart_of_winter": ExtResource("197"),
-"perk:ice_shards": ExtResource("198"),
-"perk:ignite": ExtResource("199"),
-"perk:iron_skin": ExtResource("200"),
-"perk:kindling": ExtResource("201"),
-"perk:leaping_bolt": ExtResource("202"),
-"perk:multishot": ExtResource("203"),
-"perk:phoenix_feather": ExtResource("204"),
-"perk:precision": ExtResource("205"),
-"perk:restless_storm": ExtResource("206"),
-"perk:rime_halo": ExtResource("207"),
-"perk:riven_glyph": ExtResource("208"),
-"perk:sages_codex": ExtResource("209"),
-"perk:shock_roll": ExtResource("210"),
-"perk:starving_litany": ExtResource("211"),
-"perk:strength": ExtResource("212"),
-"perk:swiftness": ExtResource("213"),
-"perk:thorns": ExtResource("214"),
-"perk:thunderclap": ExtResource("215"),
-"perk:vampirism": ExtResource("216"),
-"perk:vitality": ExtResource("217"),
-"perk:war_banner": ExtResource("218"),
-"rank:elite": ExtResource("219"),
-"rank:epic": ExtResource("220"),
-"rank:legendary": ExtResource("221"),
-"rank:shiny": ExtResource("222"),
-"skill:arcane_bolt": ExtResource("223"),
-"skill:arrow_rain": ExtResource("224"),
-"skill:battle_cry": ExtResource("225"),
-"skill:blink": ExtResource("226"),
-"skill:burrow": ExtResource("227"),
-"skill:call_embers": ExtResource("228"),
-"skill:call_embers_fierce": ExtResource("229"),
-"skill:call_skeletons": ExtResource("230"),
-"skill:call_skeletons_fierce": ExtResource("231"),
-"skill:call_spirits": ExtResource("232"),
-"skill:call_spirits_fierce": ExtResource("233"),
-"skill:call_tadpoles": ExtResource("234"),
-"skill:call_tadpoles_fierce": ExtResource("235"),
-"skill:call_thieves": ExtResource("236"),
-"skill:call_thieves_fierce": ExtResource("237"),
-"skill:charge": ExtResource("238"),
-"skill:cleave": ExtResource("239"),
-"skill:coil_rush": ExtResource("240"),
-"skill:coil_rush_fierce": ExtResource("241"),
-"skill:coin_storm": ExtResource("242"),
-"skill:coin_storm_fierce": ExtResource("243"),
-"skill:dash": ExtResource("244"),
-"skill:dash_strike": ExtResource("245"),
-"skill:dive": ExtResource("246"),
-"skill:ember_mend": ExtResource("247"),
-"skill:eye_beam": ExtResource("248"),
-"skill:eye_beam_fierce": ExtResource("249"),
-"skill:feather_storm": ExtResource("250"),
-"skill:feather_tempest": ExtResource("251"),
-"skill:feather_tempest_fierce": ExtResource("252"),
-"skill:fire_ring": ExtResource("253"),
-"skill:fire_ring_fierce": ExtResource("254"),
-"skill:fire_wave": ExtResource("255"),
-"skill:fireball": ExtResource("256"),
-"skill:fissure": ExtResource("257"),
-"skill:flame_arc": ExtResource("258"),
-"skill:flame_arc_fierce": ExtResource("259"),
-"skill:flurry": ExtResource("260"),
-"skill:frog_leap": ExtResource("261"),
-"skill:frog_leap_fierce": ExtResource("262"),
-"skill:frost_breath": ExtResource("263"),
-"skill:frost_breath_fierce": ExtResource("264"),
-"skill:frost_nova": ExtResource("265"),
-"skill:gilded_ward": ExtResource("266"),
-"skill:glacial_dive": ExtResource("267"),
-"skill:glacial_dive_fierce": ExtResource("268"),
-"skill:ground_slam": ExtResource("269"),
-"skill:hailstorm": ExtResource("270"),
-"skill:hailstorm_fierce": ExtResource("271"),
-"skill:hoard_leap": ExtResource("272"),
-"skill:hoard_leap_fierce": ExtResource("273"),
-"skill:holy_light": ExtResource("274"),
-"skill:holy_shield": ExtResource("275"),
-"skill:ice_shards": ExtResource("276"),
-"skill:ink_ring": ExtResource("277"),
-"skill:kunai_fan": ExtResource("278"),
-"skill:lash": ExtResource("279"),
-"skill:lay_brood": ExtResource("280"),
-"skill:maw_call_damned": ExtResource("281"),
-"skill:maw_call_damned_fierce": ExtResource("282"),
-"skill:maw_false_dawn": ExtResource("283"),
-"skill:maw_sun_gaze": ExtResource("284"),
-"skill:maw_tentacles": ExtResource("285"),
-"skill:maw_tentacles_fierce": ExtResource("286"),
-"skill:mend_allies": ExtResource("287"),
-"skill:monster/blink": ExtResource("288"),
-"skill:monster/volley": ExtResource("289"),
-"skill:piercing_thrust": ExtResource("290"),
-"skill:poison_spit": ExtResource("291"),
-"skill:poison_spit_fierce": ExtResource("292"),
-"skill:quake": ExtResource("293"),
-"skill:quake_fierce": ExtResource("294"),
-"skill:riposte": ExtResource("295"),
-"skill:rock_spike": ExtResource("296"),
-"skill:sandstorm": ExtResource("297"),
-"skill:shadow_step": ExtResource("298"),
-"skill:shaman_heal": ExtResource("299"),
-"skill:shuriken_storm": ExtResource("300"),
-"skill:slime_rain": ExtResource("301"),
-"skill:slime_split": ExtResource("302"),
-"skill:slime_split_fierce": ExtResource("303"),
-"skill:slime_storm": ExtResource("304"),
-"skill:slime_storm_fierce": ExtResource("305"),
-"skill:smite": ExtResource("306"),
-"skill:solar_flare": ExtResource("307"),
-"skill:solar_flare_fierce": ExtResource("308"),
-"skill:soul_ward": ExtResource("309"),
-"skill:spark_nova": ExtResource("310"),
-"skill:spear_throw": ExtResource("311"),
-"skill:spore_cloud": ExtResource("312"),
-"skill:sundering_blow": ExtResource("313"),
-"skill:tengu_dash": ExtResource("314"),
-"skill:tengu_dash_fierce": ExtResource("315"),
-"skill:throw_bomb": ExtResource("316"),
-"skill:thunder": ExtResource("317"),
-"skill:toma_dash": ExtResource("318"),
-"skill:toma_dash_fierce": ExtResource("319"),
-"skill:toma_lantern": ExtResource("320"),
-"skill:toma_lantern_fierce": ExtResource("321"),
-"skill:toma_wide_slash": ExtResource("322"),
-"skill:toxic_bloom": ExtResource("323"),
-"skill:toxic_bloom_fierce": ExtResource("324"),
-"skill:venom_spit": ExtResource("325"),
-"skill:venom_spit_fierce": ExtResource("326"),
-"skill:volley": ExtResource("327"),
-"skill:wailing_ring": ExtResource("328"),
-"skill:wailing_ring_fierce": ExtResource("329"),
-"skill:war_cry": ExtResource("330"),
-"skill:war_drum": ExtResource("331"),
-"skill:whirlwind": ExtResource("332")
+"item:ashen_codex": ExtResource("39"),
+"item:axe": ExtResource("40"),
+"item:big_sword": ExtResource("41"),
+"item:bite": ExtResource("42"),
+"item:bomb": ExtResource("43"),
+"item:bone_key": ExtResource("44"),
+"item:book": ExtResource("45"),
+"item:bow": ExtResource("46"),
+"item:chain_mail": ExtResource("47"),
+"item:claws": ExtResource("48"),
+"item:club": ExtResource("49"),
+"item:demon_club": ExtResource("50"),
+"item:echo_rune": ExtResource("51"),
+"item:ember_rune": ExtResource("52"),
+"item:eye_beam_bolt": ExtResource("53"),
+"item:fire_breath": ExtResource("54"),
+"item:fire_scroll": ExtResource("55"),
+"item:fire_touch": ExtResource("56"),
+"item:frost_bite": ExtResource("57"),
+"item:frost_fang": ExtResource("58"),
+"item:fury_rune": ExtResource("59"),
+"item:gale_rune": ExtResource("60"),
+"item:ghost_flame": ExtResource("61"),
+"item:gilded_mote": ExtResource("62"),
+"item:greater_health_potion": ExtResource("63"),
+"item:hammer": ExtResource("64"),
+"item:haste_draught": ExtResource("65"),
+"item:health_potion": ExtResource("66"),
+"item:heartsplitter": ExtResource("67"),
+"item:hex_staff": ExtResource("68"),
+"item:ink_bolt": ExtResource("69"),
+"item:iron_helm": ExtResource("70"),
+"item:jade_fang": ExtResource("71"),
+"item:katana": ExtResource("72"),
+"item:keeper_katana": ExtResource("73"),
+"item:lance": ExtResource("74"),
+"item:leather_armor": ExtResource("75"),
+"item:leather_cap": ExtResource("76"),
+"item:leech_rune": ExtResource("77"),
+"item:magic_wand": ExtResource("78"),
+"item:maul": ExtResource("79"),
+"item:moss_spores": ExtResource("80"),
+"item:ninjaku": ExtResource("81"),
+"item:pickaxe": ExtResource("82"),
+"item:plate_armor": ExtResource("83"),
+"item:poison_fang": ExtResource("84"),
+"item:prism_rune": ExtResource("85"),
+"item:pyre_rune": ExtResource("86"),
+"item:rage_elixir": ExtResource("87"),
+"item:rapier": ExtResource("88"),
+"item:rime_rune": ExtResource("89"),
+"item:rimeheart_staff": ExtResource("90"),
+"item:riven_bow": ExtResource("91"),
+"item:rusty_blade": ExtResource("92"),
+"item:sai": ExtResource("93"),
+"item:sand_breath": ExtResource("94"),
+"item:sand_clod": ExtResource("95"),
+"item:scimitar": ExtResource("96"),
+"item:shadow_cloak": ExtResource("97"),
+"item:shadow_staff": ExtResource("98"),
+"item:shatter_rune": ExtResource("99"),
+"item:shuriken": ExtResource("100"),
+"item:slam": ExtResource("101"),
+"item:slime_slam": ExtResource("102"),
+"item:soul_flame": ExtResource("103"),
+"item:spark_rune": ExtResource("104"),
+"item:spirit_touch": ExtResource("105"),
+"item:stick": ExtResource("106"),
+"item:stormhowl": ExtResource("107"),
+"item:templar_sword": ExtResource("108"),
+"item:tengu_blade": ExtResource("109"),
+"item:tome_fire": ExtResource("110"),
+"item:tome_frost": ExtResource("111"),
+"item:tome_healing": ExtResource("112"),
+"item:tome_thunder": ExtResource("113"),
+"item:tome_war": ExtResource("114"),
+"item:tome_wind": ExtResource("115"),
+"item:water_jet": ExtResource("116"),
+"item:whip": ExtResource("117"),
+"monster:abyss_eye": ExtResource("118"),
+"monster:ash_lizard": ExtResource("119"),
+"monster:azure_wyrm": ExtResource("120"),
+"monster:bat": ExtResource("121"),
+"monster:beast": ExtResource("122"),
+"monster:big_slime": ExtResource("123"),
+"monster:blood_drinker": ExtResource("124"),
+"monster:bomber": ExtResource("125"),
+"monster:bone_lizard": ExtResource("126"),
+"monster:breach_warden": ExtResource("127"),
+"monster:brood_mother": ExtResource("128"),
+"monster:cinder_wraith": ExtResource("129"),
+"monster:crimson_tengu": ExtResource("130"),
+"monster:cyclops": ExtResource("131"),
+"monster:demon_cyclops": ExtResource("132"),
+"monster:dragon": ExtResource("133"),
+"monster:dune_rex": ExtResource("134"),
+"monster:ember_heart": ExtResource("135"),
+"monster:eye": ExtResource("136"),
+"monster:flam": ExtResource("137"),
+"monster:frost_skull": ExtResource("138"),
+"monster:giant_frog": ExtResource("139"),
+"monster:gilded_hoarder": ExtResource("140"),
+"monster:gilded_moth": ExtResource("141"),
+"monster:gold_racoon": ExtResource("142"),
+"monster:horned_augur": ExtResource("143"),
+"monster:horned_carcass": ExtResource("144"),
+"monster:jade_wyrm": ExtResource("145"),
+"monster:kappa": ExtResource("146"),
+"monster:king_slime": ExtResource("147"),
+"monster:lantern": ExtResource("148"),
+"monster:larva": ExtResource("149"),
+"monster:master_toma": ExtResource("150"),
+"monster:mole": ExtResource("151"),
+"monster:moss_heart": ExtResource("152"),
+"monster:mushroom": ExtResource("153"),
+"monster:nameless_effigy": ExtResource("154"),
+"monster:nameless_keeper": ExtResource("155"),
+"monster:octopus": ExtResource("156"),
+"monster:owl": ExtResource("157"),
+"monster:rat": ExtResource("158"),
+"monster:red_samurai": ExtResource("159"),
+"monster:red_viper": ExtResource("160"),
+"monster:reptile": ExtResource("161"),
+"monster:sand_drake": ExtResource("162"),
+"monster:sand_drummer": ExtResource("163"),
+"monster:scarlet_fiend": ExtResource("164"),
+"monster:shade_stalker": ExtResource("165"),
+"monster:shaman": ExtResource("166"),
+"monster:shell_guard": ExtResource("167"),
+"monster:skeleton": ExtResource("168"),
+"monster:skull": ExtResource("169"),
+"monster:slime": ExtResource("170"),
+"monster:snake": ExtResource("171"),
+"monster:sorcerer": ExtResource("172"),
+"monster:soul_moth": ExtResource("173"),
+"monster:spider": ExtResource("174"),
+"monster:spirit": ExtResource("175"),
+"monster:stone_mole": ExtResource("176"),
+"monster:sun_wraith": ExtResource("177"),
+"monster:the_maw": ExtResource("178"),
+"monster:thief_racoon": ExtResource("179"),
+"monster:weeping_spirit": ExtResource("180"),
+"oath:colossus": ExtResource("181"),
+"oath:duelist": ExtResource("182"),
+"oath:plunderer": ExtResource("183"),
+"oath:scholar": ExtResource("184"),
+"perk:arcane_focus": ExtResource("185"),
+"perk:arcane_power": ExtResource("186"),
+"perk:blazing_roll": ExtResource("187"),
+"perk:bleeding_stride": ExtResource("188"),
+"perk:blood_thirst": ExtResource("189"),
+"perk:bloodrage": ExtResource("190"),
+"perk:burst_veins": ExtResource("191"),
+"perk:cinder_wake": ExtResource("192"),
+"perk:cold_snap": ExtResource("193"),
+"perk:devotion": ExtResource("194"),
+"perk:echo": ExtResource("195"),
+"perk:executioner": ExtResource("196"),
+"perk:fortune": ExtResource("197"),
+"perk:frenzy": ExtResource("198"),
+"perk:frostbite": ExtResource("199"),
+"perk:funeral_pyre": ExtResource("200"),
+"perk:guardian_ring": ExtResource("201"),
+"perk:heart_of_winter": ExtResource("202"),
+"perk:ice_shards": ExtResource("203"),
+"perk:ignite": ExtResource("204"),
+"perk:iron_skin": ExtResource("205"),
+"perk:kindling": ExtResource("206"),
+"perk:leaping_bolt": ExtResource("207"),
+"perk:multishot": ExtResource("208"),
+"perk:phoenix_feather": ExtResource("209"),
+"perk:precision": ExtResource("210"),
+"perk:restless_storm": ExtResource("211"),
+"perk:rime_halo": ExtResource("212"),
+"perk:riven_glyph": ExtResource("213"),
+"perk:sages_codex": ExtResource("214"),
+"perk:shock_roll": ExtResource("215"),
+"perk:starving_litany": ExtResource("216"),
+"perk:strength": ExtResource("217"),
+"perk:swiftness": ExtResource("218"),
+"perk:thorns": ExtResource("219"),
+"perk:thunderclap": ExtResource("220"),
+"perk:vampirism": ExtResource("221"),
+"perk:vitality": ExtResource("222"),
+"perk:war_banner": ExtResource("223"),
+"rank:elite": ExtResource("224"),
+"rank:epic": ExtResource("225"),
+"rank:legendary": ExtResource("226"),
+"rank:shiny": ExtResource("227"),
+"skill:arcane_bolt": ExtResource("228"),
+"skill:arrow_rain": ExtResource("229"),
+"skill:battle_cry": ExtResource("230"),
+"skill:blink": ExtResource("231"),
+"skill:burrow": ExtResource("232"),
+"skill:call_embers": ExtResource("233"),
+"skill:call_embers_fierce": ExtResource("234"),
+"skill:call_skeletons": ExtResource("235"),
+"skill:call_skeletons_fierce": ExtResource("236"),
+"skill:call_spirits": ExtResource("237"),
+"skill:call_spirits_fierce": ExtResource("238"),
+"skill:call_tadpoles": ExtResource("239"),
+"skill:call_tadpoles_fierce": ExtResource("240"),
+"skill:call_thieves": ExtResource("241"),
+"skill:call_thieves_fierce": ExtResource("242"),
+"skill:charge": ExtResource("243"),
+"skill:cleave": ExtResource("244"),
+"skill:coil_rush": ExtResource("245"),
+"skill:coil_rush_fierce": ExtResource("246"),
+"skill:coin_storm": ExtResource("247"),
+"skill:coin_storm_fierce": ExtResource("248"),
+"skill:dash": ExtResource("249"),
+"skill:dash_strike": ExtResource("250"),
+"skill:dive": ExtResource("251"),
+"skill:ember_mend": ExtResource("252"),
+"skill:eye_beam": ExtResource("253"),
+"skill:eye_beam_fierce": ExtResource("254"),
+"skill:feather_storm": ExtResource("255"),
+"skill:feather_tempest": ExtResource("256"),
+"skill:feather_tempest_fierce": ExtResource("257"),
+"skill:fire_ring": ExtResource("258"),
+"skill:fire_ring_fierce": ExtResource("259"),
+"skill:fire_wave": ExtResource("260"),
+"skill:fireball": ExtResource("261"),
+"skill:fissure": ExtResource("262"),
+"skill:flame_arc": ExtResource("263"),
+"skill:flame_arc_fierce": ExtResource("264"),
+"skill:flurry": ExtResource("265"),
+"skill:frog_leap": ExtResource("266"),
+"skill:frog_leap_fierce": ExtResource("267"),
+"skill:frost_breath": ExtResource("268"),
+"skill:frost_breath_fierce": ExtResource("269"),
+"skill:frost_nova": ExtResource("270"),
+"skill:gilded_ward": ExtResource("271"),
+"skill:glacial_dive": ExtResource("272"),
+"skill:glacial_dive_fierce": ExtResource("273"),
+"skill:ground_slam": ExtResource("274"),
+"skill:hailstorm": ExtResource("275"),
+"skill:hailstorm_fierce": ExtResource("276"),
+"skill:hoard_leap": ExtResource("277"),
+"skill:hoard_leap_fierce": ExtResource("278"),
+"skill:holy_light": ExtResource("279"),
+"skill:holy_shield": ExtResource("280"),
+"skill:ice_shards": ExtResource("281"),
+"skill:ink_ring": ExtResource("282"),
+"skill:kunai_fan": ExtResource("283"),
+"skill:lash": ExtResource("284"),
+"skill:lay_brood": ExtResource("285"),
+"skill:maw_call_damned": ExtResource("286"),
+"skill:maw_call_damned_fierce": ExtResource("287"),
+"skill:maw_false_dawn": ExtResource("288"),
+"skill:maw_sun_gaze": ExtResource("289"),
+"skill:maw_tentacles": ExtResource("290"),
+"skill:maw_tentacles_fierce": ExtResource("291"),
+"skill:mend_allies": ExtResource("292"),
+"skill:monster/blink": ExtResource("293"),
+"skill:monster/volley": ExtResource("294"),
+"skill:piercing_thrust": ExtResource("295"),
+"skill:poison_spit": ExtResource("296"),
+"skill:poison_spit_fierce": ExtResource("297"),
+"skill:quake": ExtResource("298"),
+"skill:quake_fierce": ExtResource("299"),
+"skill:riposte": ExtResource("300"),
+"skill:rock_spike": ExtResource("301"),
+"skill:sandstorm": ExtResource("302"),
+"skill:shadow_step": ExtResource("303"),
+"skill:shaman_heal": ExtResource("304"),
+"skill:shuriken_storm": ExtResource("305"),
+"skill:slime_rain": ExtResource("306"),
+"skill:slime_split": ExtResource("307"),
+"skill:slime_split_fierce": ExtResource("308"),
+"skill:slime_storm": ExtResource("309"),
+"skill:slime_storm_fierce": ExtResource("310"),
+"skill:smite": ExtResource("311"),
+"skill:solar_flare": ExtResource("312"),
+"skill:solar_flare_fierce": ExtResource("313"),
+"skill:soul_ward": ExtResource("314"),
+"skill:spark_nova": ExtResource("315"),
+"skill:spear_throw": ExtResource("316"),
+"skill:spore_cloud": ExtResource("317"),
+"skill:sundering_blow": ExtResource("318"),
+"skill:tengu_dash": ExtResource("319"),
+"skill:tengu_dash_fierce": ExtResource("320"),
+"skill:throw_bomb": ExtResource("321"),
+"skill:thunder": ExtResource("322"),
+"skill:toma_dash": ExtResource("323"),
+"skill:toma_dash_fierce": ExtResource("324"),
+"skill:toma_lantern": ExtResource("325"),
+"skill:toma_lantern_fierce": ExtResource("326"),
+"skill:toma_wide_slash": ExtResource("327"),
+"skill:toxic_bloom": ExtResource("328"),
+"skill:toxic_bloom_fierce": ExtResource("329"),
+"skill:venom_spit": ExtResource("330"),
+"skill:venom_spit_fierce": ExtResource("331"),
+"skill:volley": ExtResource("332"),
+"skill:wailing_ring": ExtResource("333"),
+"skill:wailing_ring_fierce": ExtResource("334"),
+"skill:war_cry": ExtResource("335"),
+"skill:war_drum": ExtResource("336"),
+"skill:whirlwind": ExtResource("337")
 })
 legacy_paths = Dictionary[String, String]({
 "res://data/affixes/brutal.tres": "affix:brutal",
@@ -728,6 +738,11 @@ legacy_paths = Dictionary[String, String]({
 "res://data/items/weapons/big_sword.tres": "item:big_sword",
 "res://data/items/weapons/book.tres": "item:book",
 "res://data/items/weapons/bow.tres": "item:bow",
+"res://data/items/weapons/evolved/ashen_codex.tres": "item:ashen_codex",
+"res://data/items/weapons/evolved/heartsplitter.tres": "item:heartsplitter",
+"res://data/items/weapons/evolved/rimeheart_staff.tres": "item:rimeheart_staff",
+"res://data/items/weapons/evolved/riven_bow.tres": "item:riven_bow",
+"res://data/items/weapons/evolved/stormhowl.tres": "item:stormhowl",
 "res://data/items/weapons/hammer.tres": "item:hammer",
 "res://data/items/weapons/katana.tres": "item:katana",
 "res://data/items/weapons/lance.tres": "item:lance",

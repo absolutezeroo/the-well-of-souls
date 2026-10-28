@@ -20,6 +20,10 @@ The hero has **4 skill buttons**:
 | Mage | Spark Wand, Frost Staff (its shards chill: 20% slower for 1 s), Ember Tome | Spark Nova, Arcane Bolt, Frost Nova (slow), Ice Shards (slow), Fireball, Fire Wave (burn) |
 | Paladin | Templar Sword | Smite (damage + heal), Holy Shield (Armor + heal; both heal half during a boss fight) |
 
+Five weapons (Katana, Bow, Frost Staff, Ember Tome, War Hammer) **evolve** at a forge once
+their sockets all hold the runes of one family and that family is awake: Stormhowl, Riven Bow,
+Rimeheart Staff, Ashen Codex, Heartsplitter ([loot.md](loot.md#weapon-evolutions)).
+
 The weapon in the hero's hand is animated frame by frame with the attack. For weapons without a
 hand-drawn sheet, the sheet is baked from the item sprite rotated around its handle (a swing,
 a heavy swing, a thrust, a lash or an aim; 4 directions x 4 frames, `assets/weapons/attack/`).
@@ -100,6 +104,7 @@ charge and moving slower meanwhile. A weapon carrying an element unleashes it in
 | Frost Staff | Glacial Lance | a great ice shard (drawn bigger, 16 directions) shattering into a frost nova (radius 64) that slows 50% for 2 s (2.7 vs 1.05) | 2.57 | 1.0 | 50% |
 | Spark Wand | Forked Wrath | a bolt from the hand to the closest enemy ahead, leaping to 3 more (each 70% of the last; 2.1 vs 0.85) | 2.47 | 0.85 | 55% |
 | Ember Tome | Pyre Heart | a great fireball exploding (radius 64), burning (4.0 vs 3 x 0.6) | 2.22 | 1.05 | 50% |
+| Stormhowl (evolved Katana) | Thunderfall Cut | the crescent (2.0), then lightning from the nearest foe leaping to 3 more (0.8, -30% a leap) | 2.8 | 0.8 | 55% |
 
 Shown: a gauge of twelve steps on the floor around his feet and on the attack button's rim, in
 the element the weapon carries (steel when plain), the weapon held up in his hand with the

@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/items/item_affix_def.gd" id="1_yyyii"]
+[ext_resource type="SpriteFrames" path="res://data/visuals/weapons/bow.tres" id="2_iu3jd"]
+[ext_resource type="AudioStream" path="res://data/audio/launch.tres" id="3_d1n4l"]
+[ext_resource type="AudioStream" path="res://data/audio/impact_light.tres" id="4_mt01t"]
+[ext_resource type="Texture2D" path="res://assets/weapons/bow.png" id="5_xamar"]
+[ext_resource type="Texture2D" path="res://assets/projectiles/bow_arrow.png" id="6_6xh4s"]
+[ext_resource type="Script" path="res://src/definitions/items/weapon_def.gd" id="7_wbbmo"]
+[ext_resource type="Script" path="res://src/definitions/skill_def.gd" id="8_eswvm"]
+[ext_resource type="Resource" path="res://data/skills/player/volley.tres" id="9_cg45v"]
+[ext_resource type="Resource" path="res://data/skills/player/arrow_rain.tres" id="10_dy2j0"]
+[ext_resource type="Resource" path="res://data/vfx/sheets/arrow.tres" id="sheet_arrow"]
+[ext_resource type="Texture2D" path="res://assets/weapons/back/bow.png" id="back_sprite"]
+[ext_resource type="Resource" path="res://data/skills/charged/bow.tres" id="charged"]
+[ext_resource type="Resource" path="res://data/items/weapons/bow.tres" id="evo_from"]
+[ext_resource type="Resource" path="res://data/perks/synergies/arcane.tres" id="evo_family"]
+[ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="evo_passive_base"]
+[ext_resource type="Script" path="res://src/definitions/passives/split_shot_passive.gd" id="evo_passive"]
+[ext_resource type="Resource" path="res://data/vfx/elements/arcane.tres" id="evo_arcane"]
+
+[sub_resource type="Resource" id="carried_1"]
+script = ExtResource("evo_passive")
+element = ExtResource("evo_arcane")
+
+[resource]
+script = ExtResource("7_wbbmo")
+charged = ExtResource("charged")
+kind = 1
+cooldown = 0.42
+reach = 460.0
+knockback = 90.0
+attack_animation = 3
+attack_frames = ExtResource("2_iu3jd")
+skills = Array[ExtResource("8_eswvm")]([ExtResource("9_cg45v"), ExtResource("10_dy2j0")])
+attack_sound = ExtResource("3_d1n4l")
+hit_sound = ExtResource("4_mt01t")
+projectile_texture = ExtResource("6_6xh4s")
+projectile_sheet = ExtResource("sheet_arrow")
+projectile_frames = 1
+projectile_speed = 600.0
+pierce = 1
+projectile_damage = 0.9
+projectile_glow = 0.0
+slot = 0
+value = 80
+id = &"riven_bow"
+display_name = "Riven Bow"
+description = "A bow strung with a riven glyph: each arrow that strikes a foe splits into three arcane bolts that fly on."
+icon = ExtResource("5_xamar")
+glyph = "B"
+color = Color(0.654902, 0.7882353, 0.34117648, 1)
+spawn_weight = 0
+back_sprite = ExtResource("back_sprite")
+element = ExtResource("evo_arcane")
+carried = Array[ExtResource("evo_passive_base")]([SubResource("carried_1")])
+evolved_from = ExtResource("evo_from")
+evolution_family = ExtResource("evo_family")
+evolution_hint = "Those glyphs on the limbs want to split. Give it every rune of the arcane."

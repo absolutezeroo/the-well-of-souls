@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/definitions/items/item_affix_def.gd" id="1_hgxcw"]
+[ext_resource type="SpriteFrames" path="res://data/visuals/weapons/hammer.tres" id="1_muuec"]
+[ext_resource type="AudioStream" path="res://data/audio/slash_heavy.tres" id="2_dlb3h"]
+[ext_resource type="Script" path="res://src/definitions/stat_block.gd" id="3_5gd55"]
+[ext_resource type="AudioStream" path="res://data/audio/hit_heavy.tres" id="4_ippst"]
+[ext_resource type="Texture2D" path="res://assets/weapons/hammer.png" id="5_hgxcw"]
+[ext_resource type="Script" path="res://src/definitions/items/weapon_def.gd" id="6_jfn3b"]
+[ext_resource type="Script" path="res://src/definitions/skill_def.gd" id="7_ippst"]
+[ext_resource type="Resource" path="res://data/skills/player/ground_slam.tres" id="8_hgxcw"]
+[ext_resource type="Resource" path="res://data/skills/player/fissure.tres" id="9_jfn3b"]
+[ext_resource type="Texture2D" path="res://assets/weapons/back/hammer.png" id="back_sprite"]
+[ext_resource type="Resource" path="res://data/skills/charged/hammer.tres" id="charged"]
+[ext_resource type="Resource" path="res://data/items/weapons/hammer.tres" id="evo_from"]
+[ext_resource type="Resource" path="res://data/perks/synergies/blood.tres" id="evo_family"]
+[ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="evo_passive_base"]
+[ext_resource type="Script" path="res://src/definitions/passives/overkill_burst_passive.gd" id="evo_passive"]
+[ext_resource type="Resource" path="res://data/vfx/elements/blood.tres" id="evo_blood"]
+
+[sub_resource type="Resource" id="Resource_scl1l"]
+script = ExtResource("3_5gd55")
+move_speed = -20.0
+
+[sub_resource type="Resource" id="carried_1"]
+script = ExtResource("evo_passive")
+radius = 64.0
+minimum = 0.6
+cap = 3.0
+element = ExtResource("evo_blood")
+
+[resource]
+script = ExtResource("6_jfn3b")
+charged = ExtResource("charged")
+damage = 14
+cooldown = 0.95
+reach = 34.0
+knockback = 420.0
+attack_animation = 2
+attack_frames = ExtResource("1_muuec")
+skills = Array[ExtResource("7_ippst")]([ExtResource("8_hgxcw"), ExtResource("9_jfn3b")])
+arc_degrees = 120.0
+trail_color = Color(0.95, 0.9, 0.85, 0.85)
+attack_sound = ExtResource("2_dlb3h")
+hit_sound = ExtResource("4_ippst")
+slot = 0
+bonuses = SubResource("Resource_scl1l")
+value = 70
+id = &"heartsplitter"
+display_name = "Heartsplitter"
+description = "What its blow deals past a foe's last Health bursts out of the body onto the foes around."
+icon = ExtResource("5_hgxcw")
+glyph = "W"
+color = Color(0.6784314, 0.70980394, 0.7411765, 1)
+min_depth = 3
+spawn_weight = 0
+back_sprite = ExtResource("back_sprite")
+element = ExtResource("evo_blood")
+carried = Array[ExtResource("evo_passive_base")]([SubResource("carried_1")])
+evolved_from = ExtResource("evo_from")
+evolution_family = ExtResource("evo_family")
+evolution_hint = "It drinks when it lands. Wet its runes in blood and see."

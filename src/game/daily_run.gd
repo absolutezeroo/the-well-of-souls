@@ -32,7 +32,7 @@ static func floor_seed(day: int, depth: int) -> int:
 
 ## The weapon everyone starts that day with (among the weapons that can be found).
 static func weapon(content: ContentDB, day: int) -> WeaponDef:
-	var choices := content.items.filter(func(item: ItemDef) -> bool: return item is WeaponDef and not content.locked_items.has(item))
+	var choices := content.items.filter(func(item: ItemDef) -> bool: return item is WeaponDef and (item as WeaponDef).evolved_from == null and not content.locked_items.has(item))  # (an evolved weapon is made, never a start)
 	return _pick(choices, day, 1) as WeaponDef
 
 

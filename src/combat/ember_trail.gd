@@ -57,6 +57,20 @@ func setup(source: Actor, def: EmberTrailPassive, stacks: int) -> void:
 		add_child(_light)
 
 
+## Embers lying where something landed (a shot of the Ashen Codex: ShotEmbersPassive), not left
+## by a roll: `count` of them around `at`, burning as `def` says.
+func lay_at(source: Actor, def: EmberTrailPassive, at: Vector2, count: int = 3) -> void:
+	setup(source, def, 1)
+	_points.clear()
+	_born.clear()
+	position = at
+	for i in count:
+		_drop(at + Vector2.from_angle(TAU * i / maxi(count, 1) + 0.4) * (SPACING * 0.6 if count > 1 else 0.0))
+	_laying = false
+	if _light:
+		_light.position = Vector2.ZERO
+
+
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(_world) or _world.floor_id != _floor_id:
 		queue_free()  # its floor was left

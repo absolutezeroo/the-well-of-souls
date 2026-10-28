@@ -17,6 +17,7 @@ const TWISTS := ["bleeding_stride", "starving_litany", "restless_storm", "funera
 func run_unit() -> void:
 	_test_behaviour_share()
 	_test_twists()
+	_test_evolutions()
 
 
 ## A third of the perks that are not plain staples change how you play (a new action in the
@@ -90,6 +91,72 @@ func _test_twists() -> void:
 		var relic := DailyRun.relic(CONTENT, 20000 + day)
 		daily_ok = daily_ok and relic != null and not relic.twist
 	check(daily_ok, "the daily run's relic is never one (the day is the same for everyone)")
+
+
+## Every evolved weapon: made from a weapon one can start with, asking for one family, never
+## found or a start, its held attack in the charged attacks' range, and doing something new.
+func _test_evolutions() -> void:
+	var evolved := WeaponEvolution.all(CONTENT)
+	check(evolved.size() >= 4, "at least 4 weapons evolve (%d)" % evolved.size())
+	var bases := {}
+	for weapon in evolved:
+		var base := weapon.evolved_from
+		check(base != null and (CONTENT.items.has(base) or CONTENT.player.starting_equipment.has(base)) and base.evolved_from == null, "%s evolves from a weapon of the game" % weapon.id)
+		check(not bases.has(base), "%s: one evolution per weapon" % weapon.id)
+		bases[base] = true
+		check(weapon.evolution_family != null and CONTENT.synergies.has(weapon.evolution_family), "%s asks for a family" % weapon.id)
+		check(weapon.spawn_weight == 0 and weapon.resource_path.begins_with("res://data/items/weapons/evolved/"), "%s is never found nor sold (no spawn weight)" % weapon.id)
+		check(not weapon.description.is_empty() and not weapon.evolution_hint.is_empty(), "%s says what it does, and the smith hints at it" % weapon.id)
+		check(not weapon.carried.is_empty() or weapon.charged != base.charged, "%s does something its weapon doesn't (a gift or a held attack of its own)" % weapon.id)
+		check(weapon.icon == base.icon and weapon.attack_frames == base.attack_frames, "%s keeps its weapon's art (no new art source)" % weapon.id)
+		if weapon.charged != base.charged:
+			var total := 0.0
+			for effect in weapon.charged.effects:
+				var multiplier: float = effect.get("damage_multiplier") if effect.get("damage_multiplier") != null else 0.0
+				total += multiplier * (effect.get("count") if effect is ProjectileEffect else 1)
+			var basic := weapon.projectile_damage * weapon.projectile_count if weapon.kind == WeaponDef.Kind.RANGED else 1.0
+			check(total / basic >= 2.2 and total / basic <= 3.0 and weapon.charged.id == weapon.id, "%s's held attack hits %.2fx a basic attack (2.2-3)" % [weapon.id, total / basic])
+	var starts: Array[WeaponDef] = []
+	for upgrade in CONTENT.upgrades:
+		if upgrade.armory:
+			starts.append_array(upgrade.armory_weapons)
+	for oath in CONTENT.soul_tree.oaths():
+		if oath.starting_weapon:
+			starts.append(oath.starting_weapon)
+	check(bases.keys().all(func(b: WeaponDef) -> bool: return starts.has(b)), "every weapon that evolves is one a run can start with")
+	var daily_ok := true
+	for day in 200:
+		daily_ok = daily_ok and DailyRun.weapon(CONTENT, 30000 + day).evolved_from == null
+	check(daily_ok, "the daily run never starts with an evolved weapon")
+	# The rule: every socket a rune of the family, the family awake.
+	var katana: WeaponDef = load("res://data/items/weapons/katana.tres")
+	var storm_form := WeaponEvolution.of(CONTENT, katana)
+	check(storm_form != null and storm_form.id == &"stormhowl", "the Katana's evolved form is found")
+	var spark: RuneDef = load("res://data/runes/spark.tres")
+	var ember: RuneDef = load("res://data/runes/ember.tres")
+	var sharp := _affix("sharp")
+	var rare := LootRoller.make(katana, ItemRarity.RARE, [sharp] as Array[ItemAffixDef], [spark] as Array[RuneDef], 6)
+	var perks := PerkSet.new()
+	check(not WeaponEvolution.is_ready(rare, storm_form, perks), "...not with a free socket and the family asleep")
+	check(WeaponEvolution.missing(rare, storm_form, perks).contains("1 of 2"), "...and it says what is missing (%s)" % WeaponEvolution.missing(rare, storm_form, perks))
+	rare.runes.append(ember)
+	for id: String in ["frenzy", "thunderclap", "shock_roll"]:
+		perks.add(_perk(id))
+	check(not WeaponEvolution.is_ready(rare, storm_form, perks), "...not with a rune of another family")
+	rare.runes[1] = spark
+	check(WeaponEvolution.is_ready(rare, storm_form, perks), "...ready: both sockets Storm runes, Storm awake")
+	var evolved_copy := WeaponEvolution.evolve(rare, storm_form)
+	check(evolved_copy.base_item == storm_form and evolved_copy.rarity == ItemRarity.RARE and evolved_copy.item_level == 6 and evolved_copy.affixes == [sharp], "the evolved weapon keeps its rarity, affixes and item level")
+	check(evolved_copy.runes.is_empty() and evolved_copy.free_sockets() == 2, "...the runes melt into it: its sockets are free")
+	var saved := LootRoller.from_data(LootRoller.to_data(evolved_copy)) as WeaponDef
+	check(saved != null and saved.base_item == storm_form and saved.evolved_from == katana, "...and a saved run keeps it")
+
+
+func _affix(id: String) -> ItemAffixDef:
+	for affix in CONTENT.item_affixes:
+		if String(affix.id) == id:
+			return affix
+	return null
 
 
 # --- The game suite ----------------------------------------------------------------------
@@ -423,3 +490,95 @@ func _test_warden_choice(game: Game) -> void:
 	check(after.filter(func(p: PerkDef) -> bool: return p.twist).size() == 1 and not after.has(rerolled[at]), "...banishing it brings another one")
 	game.perk_panel.chosen.emit(after[0])
 	await _frames(2)
+
+
+# --- Weapon evolutions ----------------------------------------------------------------------
+
+## Tempering at the forge: the hint, then the button once ready; the evolved weapon worn, its gift
+## working; the profile and the codex remember it.
+func run_evolutions(game: Game) -> void:
+	var world := game.world
+	var player := game.player
+	Profile.evolutions = {}
+	var katana: WeaponDef = load("res://data/items/weapons/katana.tres")
+	var spark: RuneDef = load("res://data/runes/spark.tres")
+	var worn := LootRoller.make(katana, ItemRarity.COMMON, [] as Array[ItemAffixDef], [] as Array[RuneDef], 2)
+	player.equipment.equip(worn)
+	player.inventory.items.clear()
+	player.inventory.add(spark)
+	var cell := world.map.world_to_cell(world.find_open_point_near(player.global_position + Vector2(90, 0), 40.0))
+	var forge := world.spawn_forge(CONTENT.dungeon.forge, cell)
+	await _frames(2)
+	game.open_forge(forge)
+	await _frames(2)
+	var panel := game.menus.forge
+	var line := panel.find_child("SmithLine", true, false) as Label
+	var temper := panel.find_child("TemperButton", true, false) as Button
+	var storm_form: WeaponDef = load("res://data/items/weapons/evolved/stormhowl.tres")
+	check(panel.visible and line.text == tr("\"%s\"") % tr(storm_form.evolution_hint) and not temper.visible, "the forge: a Katana that could evolve gets the smith's hint (%s)" % line.text)
+	check(panel.set_rune(spark), "a Storm rune goes in")
+	for id: String in ["frenzy", "thunderclap", "shock_roll"]:
+		player.perks.add(_perk(id))
+	panel._refresh()
+	check(temper.visible and not temper.disabled, "its socket full of Storm, the Storm family awake: Temper shows (%s)" % temper.text)
+	check(panel.evolve(), "...and tempers it")
+	var now := player.get_weapon()
+	check(now.base_item is WeaponDef and (now.base_item as WeaponDef).id == &"stormhowl" and now.item_level == 2 and now.runes.is_empty(), "the hero wears the Stormhowl, item level kept, the rune melted (%s)" % now.display_name)
+	check(Profile.has_evolved(&"stormhowl"), "the profile remembers it")
+	check(player.skills.skills.size() > 0 and player.get_weapon().charged.id == &"stormhowl", "its held attack is its own")
+	panel._refresh()
+	check(not temper.visible and line.text.begins_with("\"") and line.text != tr("\"%s\"") % tr(storm_form.evolution_hint), "nothing more to temper: the smith speaks his own words again")
+	panel.close()
+	await _frames(2)
+	# A gift carried by the weapon works while worn (the Riven Bow's arrows split).
+	var bow: WeaponDef = load("res://data/items/weapons/evolved/riven_bow.tres")
+	player.equipment.equip(LootRoller.make(bow, ItemRarity.MAGIC, [] as Array[ItemAffixDef], [] as Array[RuneDef], 2))
+	var carried := player.perks.all_entries().any(func(e: PerkSet.Entry) -> bool: return e.gear_tag == &"weapon:riven_bow" and e.granted[0] is SplitShotPassive)
+	check(carried, "the Riven Bow's split works while it is worn")
+	player.equipment.equip(worn)
+	check(not player.perks.all_entries().any(func(e: PerkSet.Entry) -> bool: return e.gear_tag == &"weapon:riven_bow"), "...and stops when it is put away")
+	# Each gift on a real floor: a shot's nova, a shot's embers, a blow's burst.
+	await _clear_monsters(world)
+	var direction := await _lane(world, player, 200.0)
+	for kit: Array in [["rimeheart_staff", "a nova of frost hurts and chills the foe beside"], ["ashen_codex", "embers burn on the floor"], ["heartsplitter", "the killing blow bursts onto the foe beside"]]:
+		var weapon: WeaponDef = load("res://data/items/weapons/evolved/%s.tres" % kit[0])
+		player.equipment.equip(LootRoller.make(weapon, ItemRarity.COMMON, [] as Array[ItemAffixDef], [] as Array[RuneDef], 2))
+		var struck := _dummy(world, player.global_position + direction * 70.0, 9999 if kit[0] != "heartsplitter" else 4)
+		var beside := _dummy(world, player.global_position + direction * 70.0 + direction.orthogonal() * 34.0)
+		await _frames(2)
+		if kit[0] == "heartsplitter":
+			struck.take_hit(Combat.make_hit_from(player, 80))
+		else:
+			var spec := ProjectileSpec.new()
+			spec.damage = 10
+			spec.speed = 500.0
+			spec.max_distance = 300.0
+			world.fire_projectiles(player, direction, spec)
+		await _frames(20)
+		var did := false
+		match kit[0]:
+			"rimeheart_staff":
+				did = beside.hp < beside.get_max_hp() and beside.statuses.is_slowed()
+			"ashen_codex":
+				did = not _trails(world).is_empty()
+			"heartsplitter":
+				did = struck.is_dead and beside.hp < beside.get_max_hp()
+		check(did, "%s: %s" % [kit[0], kit[1]])
+		for body in [struck, beside]:
+			if is_instance_valid(body):
+				body.queue_free()
+		await _frames(2)
+	player.equipment.equip(worn)
+	# The codex names the one made, hints at the others.
+	var codex: CodexPanel = load("res://src/ui/codex/codex_panel.tscn").instantiate()
+	add_child(codex)
+	await _frames(1)
+	codex.open(CONTENT, CodexPanel.Tab.ACHIEVEMENTS)
+	await _frames(2)
+	var texts := codex.find_children("*", "Label", true, false).map(func(l: Node) -> String: return (l as Label).text)
+	check(texts.has(tr("Stormhowl")) and texts.has(tr("Weapon evolutions: %d of %d") % [1, WeaponEvolution.all(CONTENT).size()]), "the codex shows the Stormhowl made")
+	check(texts.count("???") >= WeaponEvolution.all(CONTENT).size() - 1, "...and hides the others behind the smith's hints")
+	codex.queue_free()
+	Profile.evolutions = {}
+	await _frames(2)
+

@@ -160,10 +160,11 @@ func _rebuild_all() -> void:
 			_ticking.append(entry)
 
 
-## The affixes and runes of what the actor wears: those with passives join the events (two
-## items with the same affix, two identical runes, count twice).
+## The affixes and runes of what the actor wears, and what its weapon does by itself
+## (WeaponDef.carried): those with passives join the events (two items with the same affix, two
+## identical runes, count twice).
 ## Counters carry over (the 3 hits towards a Spark rune's lightning survive swapping a helmet).
-func set_gear(affixes: Array[ItemAffixDef], runes: Array[RuneDef] = []) -> void:
+func set_gear(affixes: Array[ItemAffixDef], runes: Array[RuneDef] = [], weapons: Array[WeaponDef] = []) -> void:
 	# The run state of what was worn, by source and occurrence (two identical runes: two entries).
 	var kept := {}
 	for entry in _gear:
@@ -176,6 +177,9 @@ func set_gear(affixes: Array[ItemAffixDef], runes: Array[RuneDef] = []) -> void:
 	for rune in runes:
 		if rune:
 			_add_gear(rune, rune.passives, StringName("rune:%s" % rune.id), seen, kept)
+	for weapon in weapons:
+		if weapon:
+			_add_gear(weapon, weapon.carried, StringName("weapon:%s" % weapon.id), seen, kept)
 	_rebuild_all()
 
 

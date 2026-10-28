@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="SpriteFrames" path="res://data/visuals/weapons/katana.tres" id="1_5k6wr"]
+[ext_resource type="Script" path="res://src/definitions/items/item_affix_def.gd" id="1_r15cl"]
+[ext_resource type="AudioStream" path="res://data/audio/slash.tres" id="2_gj8km"]
+[ext_resource type="AudioStream" path="res://data/audio/hit.tres" id="3_2uv4q"]
+[ext_resource type="Texture2D" path="res://assets/weapons/katana.png" id="4_akday"]
+[ext_resource type="Script" path="res://src/definitions/items/weapon_def.gd" id="5_r15cl"]
+[ext_resource type="Script" path="res://src/definitions/skill_def.gd" id="6_akday"]
+[ext_resource type="Resource" path="res://data/skills/player/whirlwind.tres" id="7_r15cl"]
+[ext_resource type="Resource" path="res://data/skills/player/dash_strike.tres" id="8_jh3j1"]
+[ext_resource type="Texture2D" path="res://assets/weapons/back/katana.png" id="back_sprite"]
+[ext_resource type="Resource" path="res://data/skills/charged/stormhowl.tres" id="charged"]
+[ext_resource type="Resource" path="res://data/items/weapons/katana.tres" id="evo_from"]
+[ext_resource type="Resource" path="res://data/perks/synergies/storm.tres" id="evo_family"]
+[ext_resource type="Resource" path="res://data/vfx/elements/storm.tres" id="evo_element"]
+
+[resource]
+script = ExtResource("5_r15cl")
+charged = ExtResource("charged")
+damage = 5
+cooldown = 0.38
+reach = 32.0
+attack_frames = ExtResource("1_5k6wr")
+skills = Array[ExtResource("6_akday")]([ExtResource("7_r15cl"), ExtResource("8_jh3j1")])
+arc_degrees = 120.0
+attack_sound = ExtResource("2_gj8km")
+hit_sound = ExtResource("3_2uv4q")
+slot = 0
+value = 70
+id = &"stormhowl"
+display_name = "Stormhowl"
+description = "A katana a storm sleeps in: its blows land in lightning, and its held cut calls lightning onto the foes it strikes."
+icon = ExtResource("4_akday")
+glyph = "K"
+color = Color(0.84705883, 0.8862745, 0.9098039, 1)
+spawn_weight = 0
+back_sprite = ExtResource("back_sprite")
+element = ExtResource("evo_element")
+evolved_from = ExtResource("evo_from")
+evolution_family = ExtResource("evo_family")
+evolution_hint = "That blade hums when the sky cracks. It wants storm, all of it."

@@ -109,6 +109,7 @@ func test_cases() -> Array:
 		["hints", _on_game(func(game: Game) -> void: await (_borrow(FirstRunTests.new()) as FirstRunTests).run_hints(game))],
 		["behaviour_perks", _on_game(func(game: Game) -> void: await (_borrow(VarietyTests.new()) as VarietyTests).run_behaviour_perks(game))],
 		["twist_relics", _on_game(func(game: Game) -> void: await (_borrow(VarietyTests.new()) as VarietyTests).run_twist_relics(game))],
+		["evolutions", _on_game(func(game: Game) -> void: await (_borrow(VarietyTests.new()) as VarietyTests).run_evolutions(game))],
 	]
 
 

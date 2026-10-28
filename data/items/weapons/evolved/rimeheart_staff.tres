@@ -1,0 +1,68 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="SpriteFrames" path="res://data/visuals/weapons/stick.tres" id="1_ouylt"]
+[ext_resource type="AudioStream" path="res://data/audio/launch.tres" id="2_a4df1"]
+[ext_resource type="Texture2D" path="res://assets/weapons/stick.png" id="3_pgssx"]
+[ext_resource type="Script" path="res://src/definitions/items/weapon_def.gd" id="5_0gw0y"]
+[ext_resource type="Script" path="res://src/definitions/skill_def.gd" id="6_cf2k4"]
+[ext_resource type="Resource" path="res://data/skills/player/frost_nova.tres" id="7_0gw0y"]
+[ext_resource type="Resource" path="res://data/skills/player/ice_shards.tres" id="8_wnfc2"]
+[ext_resource type="Resource" path="res://data/vfx/elements/frost.tres" id="vfx_frost"]
+[ext_resource type="Script" path="res://src/definitions/effects/on_hit_status.gd" id="vfx_on_hit_status"]
+[ext_resource type="Texture2D" path="res://assets/weapons/back/stick.png" id="back_sprite"]
+[ext_resource type="Resource" path="res://data/skills/charged/stick.tres" id="charged"]
+[ext_resource type="Resource" path="res://data/items/weapons/stick.tres" id="evo_from"]
+[ext_resource type="Resource" path="res://data/perks/synergies/frost.tres" id="evo_family"]
+[ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="evo_passive_base"]
+[ext_resource type="Script" path="res://src/definitions/passives/shot_nova_passive.gd" id="evo_passive"]
+[ext_resource type="Script" path="res://src/definitions/effects/on_hit_status.gd" id="evo_status"]
+[ext_resource type="Resource" path="res://data/vfx/elements/frost.tres" id="evo_frost"]
+
+[sub_resource type="Resource" id="chill"]
+script = ExtResource("vfx_on_hit_status")
+slow = 0.2
+slow_duration = 1.0
+
+[sub_resource type="Resource" id="carried_chill"]
+script = ExtResource("evo_status")
+slow = 0.3
+slow_duration = 1.2
+
+[sub_resource type="Resource" id="carried_1"]
+script = ExtResource("evo_passive")
+status = SubResource("carried_chill")
+element = ExtResource("evo_frost")
+
+[resource]
+script = ExtResource("5_0gw0y")
+charged = ExtResource("charged")
+on_hit = SubResource("chill")
+element = ExtResource("vfx_frost")
+kind = 1
+damage = 10
+cooldown = 0.8
+reach = 520.0
+knockback = 160.0
+attack_animation = 3
+attack_frames = ExtResource("1_ouylt")
+skills = Array[ExtResource("6_cf2k4")]([ExtResource("7_0gw0y"), ExtResource("8_wnfc2")])
+attack_sound = ExtResource("2_a4df1")
+projectile_speed = 680.0
+projectile_radius = 6.0
+pierce = 1
+projectile_damage = 1.05
+slot = 0
+value = 70
+id = &"rimeheart_staff"
+display_name = "Rimeheart Staff"
+description = "Its shards burst where they strike: a nova of frost hurts and chills the foes around."
+icon = ExtResource("3_pgssx")
+glyph = "F"
+color = Color(0.29803923, 0.7882353, 0.9411765, 1)
+min_depth = 3
+spawn_weight = 0
+back_sprite = ExtResource("back_sprite")
+carried = Array[ExtResource("evo_passive_base")]([SubResource("carried_1")])
+evolved_from = ExtResource("evo_from")
+evolution_family = ExtResource("evo_family")
+evolution_hint = "Cold enough to crack stone. Colder still, if you feed it frost."

@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="SpriteFrames" path="res://data/visuals/weapons/book.tres" id="1_umhj5"]
+[ext_resource type="AudioStream" path="res://data/audio/fireball.tres" id="2_vpncv"]
+[ext_resource type="Texture2D" path="res://assets/weapons/book.png" id="3_ayg2s"]
+[ext_resource type="Script" path="res://src/definitions/items/weapon_def.gd" id="5_w0bwa"]
+[ext_resource type="Script" path="res://src/definitions/skill_def.gd" id="6_uhthc"]
+[ext_resource type="Resource" path="res://data/skills/player/fireball.tres" id="7_w0bwa"]
+[ext_resource type="Resource" path="res://data/skills/player/fire_wave.tres" id="8_hkjf3"]
+[ext_resource type="Resource" path="res://data/vfx/elements/fire.tres" id="vfx_fire"]
+[ext_resource type="Texture2D" path="res://assets/weapons/back/book.png" id="back_sprite"]
+[ext_resource type="Resource" path="res://data/skills/charged/book.tres" id="charged"]
+[ext_resource type="Resource" path="res://data/items/weapons/book.tres" id="evo_from"]
+[ext_resource type="Resource" path="res://data/perks/synergies/inferno.tres" id="evo_family"]
+[ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="evo_passive_base"]
+[ext_resource type="Script" path="res://src/definitions/passives/shot_embers_passive.gd" id="evo_passive"]
+[ext_resource type="Script" path="res://src/definitions/effects/on_hit_status.gd" id="evo_status"]
+[ext_resource type="Resource" path="res://data/vfx/elements/fire.tres" id="evo_fire"]
+
+[sub_resource type="Resource" id="carried_burn"]
+script = ExtResource("evo_status")
+burn_damage = 2
+
+[sub_resource type="Resource" id="carried_1"]
+script = ExtResource("evo_passive")
+life = 2.0
+damage_multiplier = 0.12
+status = SubResource("carried_burn")
+element = ExtResource("evo_fire")
+embers = 2
+
+[resource]
+script = ExtResource("5_w0bwa")
+charged = ExtResource("charged")
+kind = 1
+damage = 5
+cooldown = 0.55
+reach = 380.0
+attack_animation = 3
+attack_frames = ExtResource("1_umhj5")
+skills = Array[ExtResource("6_uhthc")]([ExtResource("7_w0bwa"), ExtResource("8_hkjf3")])
+attack_sound = ExtResource("2_vpncv")
+projectile_speed = 360.0
+projectile_radius = 7.0
+projectile_count = 3
+spread_degrees = 26.0
+projectile_damage = 0.6
+slot = 0
+value = 70
+id = &"ashen_codex"
+display_name = "Ashen Codex"
+description = "Its embers set the floor alight where they strike a foe: whoever stands in the fire burns."
+icon = ExtResource("3_ayg2s")
+glyph = "E"
+color = Color(1, 0.54901963, 0.25882354, 1)
+min_depth = 4
+spawn_weight = 0
+element = ExtResource("vfx_fire")
+back_sprite = ExtResource("back_sprite")
+back_kind = 1
+carried = Array[ExtResource("evo_passive_base")]([SubResource("carried_1")])
+evolved_from = ExtResource("evo_from")
+evolution_family = ExtResource("evo_family")
+evolution_hint = "The pages still smoulder. Feed them every ember you find, and something to burn for."

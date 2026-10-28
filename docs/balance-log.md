@@ -3,6 +3,25 @@
 Dated entries, newest first: what was measured, what changed and why, before/after numbers, open
 questions. How to measure: [balance.md](balance.md).
 
+## 2026-10-28 - Five weapon evolutions (made at a forge)
+
+What changed: Stormhowl, Riven Bow, Rimeheart Staff, Ashen Codex and Heartsplitter
+(docs/design/loot.md "Weapon evolutions"). An evolved weapon keeps its weapon's numbers (damage,
+speed, reach, skills), its rarity, affixes and item level; what it adds is a gift (a split, a
+nova, embers, a burst: `WeaponDef.carried`) or a held attack of its own (Thunderfall Cut: 2.0 +
+0.8 x a basic hit, in the charged attacks' 2.2-3 band), and it costs every rune of its sockets.
+The tools now walk `data/items/weapons/evolved/` with the weapons (BalanceContent). Model
+(Normal, act II and III): the same weapon DPS as their weapons (Stormhowl 71 / 133 like the
+Katana, Riven Bow 62 / 120 like the Bow...), the gifts being procs the model leaves out; their
+worth is in the engine's weapon arena (below, when measured) and close to the perk each gift
+copies (Riven Glyph, Burst Veins, Cinder Wake's embers) without its perk slot, against the runes
+melted into it.
+
+Also: Leaping Bolt no longer adds +3% crit chance (its card, the longest of the commons with the
+Storm family's box, pushed the perk choice 3 units off a 720-line screen in French: `title.pc`);
+its value was measured with it (+4%), now a little less, a build-around that asks for crits.
+Burst Veins' and Starving Litany's texts were shortened for the same reason (same numbers).
+
 ## 2026-10-28 - Five relics that bend a rule (one in every warden's choice)
 
 What changed: Bleeding Stride, Starving Litany, Restless Storm, Funeral Pyre and Heart of Winter

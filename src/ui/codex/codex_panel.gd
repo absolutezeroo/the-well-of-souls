@@ -18,7 +18,7 @@ const TAB_NAMES := ["Quests", "Bestiary", "Achievements", "Runs", "Voices", "Tip
 const TAB_HELP := [
 	"Track your village requests and bounties here. Return recovered items to the resident who asked for them. Spend your souls at the village Shrine. Daily and weekly bounties follow real-world dates.",  # i18n
 	"Every monster you meet goes in here. Slay more of a kind to raise your hunter rank with it: each rank pays souls, and Mastered also gives +%d%% damage against that kind for good. Choose a monster for its attacks and challenges.",  # i18n
-	"Big goals across all your runs. Reaching one pays its souls at once.",  # i18n
+	"Big goals across all your runs. Reaching one pays its souls at once. Below them, the weapons you can evolve at a forge.",  # i18n
 	"Your last runs, newest first. Gold is lost when a run ends; souls are kept.",  # i18n
 	"What the Vigil-Keeper and the keepers of the Well told you, kept here. They say more as your descents go deeper.",  # i18n
 	"Every tip the tutorial gave you, to read again.",  # i18n
@@ -341,6 +341,13 @@ func _fill_achievements() -> void:
 		return _closeness(a) > _closeness(b))
 	for achievement: AchievementDef in sorted:
 		_list.add_child(CodexRows.achievement_row(achievement))
+	# The weapons' evolved forms, after the feats: made ones named, the others a hint.
+	var evolved := WeaponEvolution.all(_content)
+	if not evolved.is_empty():
+		var made := evolved.filter(func(w: WeaponDef) -> bool: return Profile.has_evolved(w.id)).size()
+		_list.add_child(UiSkin.label(tr("Weapon evolutions: %d of %d") % [made, evolved.size()], Fonts.BODY, UiSkin.GOLD))
+		for weapon in evolved:
+			_list.add_child(CodexRows.evolution_row(weapon))
 
 
 static func _closeness(achievement: AchievementDef) -> float:

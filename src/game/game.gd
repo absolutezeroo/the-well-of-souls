@@ -609,7 +609,7 @@ func open_forge(forge: Forge) -> void:
 	if _can_open_menu():
 		Sfx.play_ui(Sfx.bank.ui_open)
 		_set_paused(true)
-		menus.forge.open(forge, player)
+		menus.forge.open(forge, player, content)
 
 
 func open_pause_menu() -> void:

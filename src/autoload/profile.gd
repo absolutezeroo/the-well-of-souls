@@ -32,7 +32,7 @@ const SAVE_SHAPE := {
 		"skills": ["string"], "perks": [{"id": "string", "stacks": "number"}]
 	}], "ending_receipts": {"*": "string"},
 	"quests_claimed": {"*": ["string"]}, "keeper": "dict", "keepers_freed": ["dict"], "history": ["dict"],
-	"assist": "bool", "assist_deaths": "number",
+	"assist": "bool", "assist_deaths": "number", "evolutions": {"*": "number"},
 }
 
 var souls := 0
@@ -58,6 +58,9 @@ var stats := {}
 var achievements := {}
 ## The last runs, newest first (see add_history()).
 var history: Array = []
+## Weapon evolutions made at a forge (the evolved WeaponDef id -> 1): the codex shows them, the
+## forge names their recipe (docs/design/loot.md "Weapon evolutions").
+var evolutions := {}
 ## Stats counted during each day and week ("d20380" / "w2911" -> stat -> value), and the
 ## quests already paid in them ("d20380" -> [quest ids]). Only the current ones are kept.
 var period_stats := {}
@@ -500,6 +503,18 @@ func mark_intro_seen() -> void:
 	save_profile()
 
 
+func has_evolved(id: StringName) -> bool:
+	return evolutions.has(String(id))
+
+
+## A weapon evolution was made for the first time: the codex and the forge know it from now on.
+func record_evolution(id: StringName) -> void:
+	if has_evolved(id):
+		return
+	evolutions[String(id)] = 1
+	save_profile()
+
+
 func has_seen_hint(id: StringName) -> bool:
 	return hints_seen.has(String(id))
 
@@ -666,6 +681,7 @@ func reset() -> void:
 	daily_best = 0
 	daily_streak = 0
 	hints_seen = {}
+	evolutions = {}
 	best_times = {}
 	best_splits = {}
 	oath = &""
@@ -719,7 +735,7 @@ func to_data() -> Dictionary:
 		"period_stats": period_stats, "quests_claimed": quests_claimed,
 		"seen_monsters": seen_monsters, "bestiary_ranks": bestiary_ranks, "challenges_done": challenges_done, "shinies": shinies,
 		"daily_day": daily_day, "daily_score": daily_score, "daily_best": daily_best, "daily_streak": daily_streak,
-		"hints_seen": hints_seen,
+		"hints_seen": hints_seen, "evolutions": evolutions,
 		"best_times": best_times, "best_splits": best_splits,
 		"oath": String(oath), "starting_weapon": String(starting_weapon), "worn": worn,
 		"runs_since_reset": runs_since_reset,
@@ -851,6 +867,7 @@ func _read(data: Dictionary) -> void:
 	daily_best = int(data.get("daily_best", 0))
 	daily_streak = int(data.get("daily_streak", 0))
 	hints_seen = _ints(data.get("hints_seen", {}))
+	evolutions = _ints(data.get("evolutions", {}))
 	best_times = _ints(data.get("best_times", {}))
 	oath = StringName(data.get("oath", ""))
 	starting_weapon = StringName(data.get("starting_weapon", ""))

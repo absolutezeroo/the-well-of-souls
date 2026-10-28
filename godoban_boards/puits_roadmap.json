@@ -1,6 +1,6 @@
 {
   "name": "Le Puits des Âmes — Roadmap",
-  "next_id": 437,
+  "next_id": 439,
   "tags": [
     "pc",
     "test",
@@ -574,8 +574,8 @@
     {
       "id": "task_35",
       "title": "Évolutions d'armes",
-      "description": "Idée proposée : une arme qui évolue selon des conditions.\nRoadmap RPG du 26/10/2026 : R6.3 (task_325), docs/rpg-roadmap.md. Évolutions d’armes à requalifier pour une progression durable. Statut historique conservé ; voir le nouveau cadrage avant reprise.",
-      "status": "backlog",
+      "description": "Idée proposée : une arme qui évolue selon des conditions.\nRoadmap RPG du 26/10/2026 : R6.3 (task_325), docs/rpg-roadmap.md. Évolutions d’armes à requalifier pour une progression durable. Statut historique conservé ; voir le nouveau cadrage avant reprise.\nS23 (28/10) : fait. Cinq évolutions d'armes, une par famille (docs/design/loot.md « Weapon evolutions ») : Katana + Tempête → Hurle-Tempête (coups en foudre, taille chargée qui appelle la foudre), Arc + Arcanes → Arc Fendu (chaque flèche qui touche se fend en 3 traits), Bâton de Givre + Givre → Bâton Cœur-de-Givre (ses éclats se brisent en nova de givre), Grimoire des Braises + Brasier → Codex des Cendres (ses braises embrasent le sol), Marteau de Guerre + Sang → Fend-Cœur (l'excédent d'un coup fatal éclabousse). Condition : chaque emplacement de l'arme tient une rune de la famille et la famille est éveillée ; à une forge, « Tremper » (les runes fondent, rareté/affixes/niveau gardés). L'indice du forgeron avant la première fois, puis la recette ; le codex (Exploits) les liste, « ??? » tant qu'elles ne sont pas faites. Aucun nouvel art (icônes et feuilles des armes de base). Captures : scratchpad fix_variety/evolutions.\nÀ vérifier sur le S23 : la forge en français (la réplique du forgeron qui donne l'indice puis la recette, le bouton « Tremper en … » à la place de « Retirer ») ; la Taille du Tonnerre se lit ; les braises du Codex ne gênent pas la lecture des sorts.",
+      "status": "review",
       "priority": "low",
       "epic_id": "epic_7",
       "due_date": null,
@@ -583,7 +583,7 @@
         "idée"
       ],
       "created_at": 1792685000,
-      "updated_at": 1792973386
+      "updated_at": 1793189177
     },
     {
       "id": "task_36",
@@ -6590,6 +6590,36 @@
       ],
       "created_at": 1793187229,
       "updated_at": 1793187229
+    },
+    {
+      "id": "task_437",
+      "title": "Évolutions : aussi dans les restes d'un gardien ?",
+      "description": "Aujourd'hui une arme n'évolue qu'à une forge (30 % des étages, jamais à l'étage d'un boss). Si les joueurs ratent souvent la forge, proposer aussi l'évolution dans les restes d'un gardien (comme le coffre de boss de Vampire Survivors). Mesurer d'abord combien de parties remplissent la condition sans croiser de forge.",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "contenu"
+      ],
+      "created_at": 1793189177,
+      "updated_at": 1793189177
+    },
+    {
+      "id": "task_438",
+      "title": "Évolutions pour les autres armes (Saï, Lance, Fouet, Shuriken...)",
+      "description": "Cinq armes évoluent (Katana, Arc, Bâton de Givre, Grimoire des Braises, Marteau). Les onze autres armes de l'Arsenal attendent la leur, une famille chacune, une nouvelle façon de jouer sans nouvel art (WeaponDef.carried, une attaque chargée propre).",
+      "status": "backlog",
+      "priority": "low",
+      "epic_id": "epic_7",
+      "due_date": null,
+      "tags": [
+        "idée",
+        "contenu"
+      ],
+      "created_at": 1793189177,
+      "updated_at": 1793189177
     }
   ]
 }
