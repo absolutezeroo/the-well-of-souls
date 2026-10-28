@@ -13,6 +13,7 @@ heal_per_stack = 3
 
 [resource]
 script = ExtResource("4_e4it1")
+role = 2
 id = &"vampirism"
 display_name = "Vampirism"
 description = "Slaying an enemy heals 3 Health per level (summoned monsters don't count)."

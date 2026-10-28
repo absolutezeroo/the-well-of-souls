@@ -23,6 +23,7 @@ status = SubResource("Resource_burn")
 
 [resource]
 script = ExtResource("5_7gmcb")
+role = 2
 id = &"thorns"
 display_name = "Burning Thorns"
 description = "Enemies that hit you up close take 4 damage per level and catch fire."

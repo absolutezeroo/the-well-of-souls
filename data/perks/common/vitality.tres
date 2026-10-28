@@ -13,6 +13,7 @@ max_hp = 15
 
 [resource]
 script = ExtResource("4_ti6cu")
+role = 1
 id = &"vitality"
 display_name = "Vitality"
 icon = ExtResource("2_pl2sn")

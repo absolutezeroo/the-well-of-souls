@@ -23,6 +23,7 @@ element = ExtResource("vfx_fire")
 
 [resource]
 script = ExtResource("5_85sbx")
+role = 2
 id = &"blazing_roll"
 display_name = "Blazing Roll"
 description = "Rolling bursts into flames that hurt and set enemies around on fire."

@@ -26,6 +26,7 @@ status = SubResource("Resource_chill")
 
 [resource]
 script = ExtResource("4_60bjh")
+role = 2
 id = &"iron_skin"
 display_name = "Frost Armor"
 description = "Getting hit releases a wave of cold: enemies around you are thrown back and slowed by 40% (once every 3 s)."

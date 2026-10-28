@@ -15,6 +15,7 @@ element = ExtResource("vfx_fire")
 
 [resource]
 script = ExtResource("4_jspq3")
+role = 2
 id = &"ignite"
 display_name = "Ignite"
 description = "Your hits set enemies on fire: 3 damage per level every half second, for 3 s."

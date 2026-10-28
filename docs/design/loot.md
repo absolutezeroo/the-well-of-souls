@@ -18,7 +18,11 @@
   joined to the hero's `PerkSet` by `set_gear()`; their `description` shows on the item):
   **Vampiric** (heal on kill), **Shocking** (every 4th hit chains lightning), **of Embers**
   (burning enemies explode), **Shattering** (+25% on slowed enemies), **of Echoes** (skills may be
-  ready again at once), **of Thorns**.
+  ready again at once), **of Thorns**. Every affix has a **role** (builds.md "Roles"): the plain
+  numbers are staples; the themed ones are build-arounds and name their element's family
+  (`ItemAffixDef.family`, as a rune does): Burning and of Embers Inferno, Frozen and Shattering
+  Frost, Thundering (`shocking`) Storm, Vampiric Blood, of Echoes Arcane. A tag: an affix wakes no
+  family.
 - **Rarity you can see** (`RarityLookDef`, `data/items/rarity_looks.tres`; docs/vfx.md section
   10): each rarity keeps the signs of the one below and adds one. On the floor, Common lies
   plain; Magic has a blue rim and a glint running over it; Rare a gold rim, a gold ring under it

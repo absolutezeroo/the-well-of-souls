@@ -10,6 +10,7 @@ damage_per_stack = 3
 
 [resource]
 script = ExtResource("3_c623u")
+role = 1
 is_prefix = false
 slots = 4
 passives = Array[ExtResource("1_me5p7")]([SubResource("Resource_oggvu")])

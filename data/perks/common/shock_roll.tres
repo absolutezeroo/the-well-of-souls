@@ -14,6 +14,7 @@ element = ExtResource("vfx_storm")
 
 [resource]
 script = ExtResource("4_h3flf")
+role = 2
 id = &"shock_roll"
 display_name = "Shock Roll"
 description = "Rolling releases a shockwave that hurts and pushes enemies away."

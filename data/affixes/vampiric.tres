@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://src/definitions/passives/passive.gd" id="1_n1viu"]
 [ext_resource type="Script" path="res://src/definitions/passives/heal_on_kill_passive.gd" id="2_748mr"]
 [ext_resource type="Script" path="res://src/definitions/items/item_affix_def.gd" id="3_yl7ir"]
+[ext_resource type="Resource" path="res://data/perks/synergies/blood.tres" id="role_family"]
 
 [sub_resource type="Resource" id="Resource_ju5io"]
 script = ExtResource("2_748mr")
@@ -10,6 +11,8 @@ heal_per_stack = 1
 
 [resource]
 script = ExtResource("3_yl7ir")
+role = 2
+family = ExtResource("role_family")
 slots = 1
 passives = Array[ExtResource("1_n1viu")]([SubResource("Resource_ju5io")])
 id = &"vampiric"

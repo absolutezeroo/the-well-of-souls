@@ -9,6 +9,7 @@ max_hp = 12
 
 [resource]
 script = ExtResource("2_km6wg")
+role = 1
 is_prefix = false
 bonuses = SubResource("Resource_wrung")
 id = &"of_the_bear"

@@ -9,6 +9,7 @@ attack = 2
 
 [resource]
 script = ExtResource("2_rjr30")
+role = 1
 is_prefix = false
 bonuses = SubResource("Resource_2dq2s")
 id = &"of_fury"

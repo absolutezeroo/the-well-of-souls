@@ -6217,8 +6217,8 @@
     {
       "id": "task_412",
       "title": "Chance et choix : pitié, soin avant boss, pas de répétition, rôles déclarés",
-      "description": "Audit du 28/10 : aucune protection contre la malchance sur la rareté (loot_roller.gd) ; pas de soin garanti avant un boss sauf en Pèlerin ; tirages avec remise pour événements, malédictions, rencontres, pactes et épreuves (voir task_277) ; aucun rôle (pilier ou « à construire ») déclaré sur les atouts et affixes, 0 affixe sur 22 relié à une famille (Brûlant et des Braises → Brasier, Gelé et Fracassant → Givre, Électrique → Orage, Vampirique → Sang, des Échos → Arcane). Décision du propriétaire : le sort des 4 atouts sans famille (Force, Précision, Fortune, Bannière de guerre).",
-      "status": "backlog",
+      "description": "Audit du 28/10 : aucune protection contre la malchance sur la rareté (loot_roller.gd) ; pas de soin garanti avant un boss sauf en Pèlerin ; tirages avec remise pour événements, malédictions, rencontres, pactes et épreuves (voir task_277) ; aucun rôle (pilier ou « à construire ») déclaré sur les atouts et affixes, 0 affixe sur 22 relié à une famille (Brûlant et des Braises → Brasier, Gelé et Fracassant → Givre, Électrique → Orage, Vampirique → Sang, des Échos → Arcane). Décision du propriétaire : le sort des 4 atouts sans famille (Force, Précision, Fortune, Bannière de guerre).\n\nEn cours le 28/10 (décision 0012, branche fix/pacing) : rôle déclaré (pilier ou « à construire ») sur les 28 atouts et reliques et les 22 affixes ; Force, Précision, Fortune et Bannière de guerre piliers hors famille ; affixes à thème reliés à la famille de leur élément (ItemAffixDef.family). Reste : pitié, soin avant boss, tirages sans remise.",
+      "status": "in_progress",
       "priority": "medium",
       "epic_id": "epic_2",
       "due_date": null,
@@ -6227,7 +6227,7 @@
         "économie"
       ],
       "created_at": 1793161745,
-      "updated_at": 1793161745
+      "updated_at": 1793166309
     },
     {
       "id": "task_413",

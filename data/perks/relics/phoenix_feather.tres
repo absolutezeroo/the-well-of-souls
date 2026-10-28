@@ -15,6 +15,7 @@ trial = ExtResource("7_trial")
 
 [resource]
 script = ExtResource("4_hn4sr")
+role = 2
 id = &"phoenix_feather"
 display_name = "Phoenix Feather"
 description = "Once per level, a killing blow sends you to the Threshold: slay 8 foes in 25 s (more in later acts) to return where you fell, at half Health (a quarter in a boss fight)."

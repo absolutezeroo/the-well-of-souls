@@ -9,6 +9,7 @@ move_speed = 12.0
 
 [resource]
 script = ExtResource("2_3eh0v")
+role = 1
 slots = 6
 bonuses = SubResource("Resource_bqu41")
 id = &"light"

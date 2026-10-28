@@ -11,6 +11,7 @@ chance_per_stack = 0.12
 
 [resource]
 script = ExtResource("4_cy2a7")
+role = 1
 id = &"fortune"
 display_name = "Fortune"
 description = "Slain monsters have a 12% chance per level to drop extra loot."
