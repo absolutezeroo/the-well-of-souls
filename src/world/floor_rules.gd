@@ -101,9 +101,21 @@ func elite_chance() -> float:
 	return config.elite_chance_at(depth) * difficulty.elite_chance + (event.elite_chance_bonus if event else 0.0)
 
 
-## Extra monsters in each room (and on top of the per-room cap).
+## Extra monsters in each room of DungeonConfig.room_cells (and on top of the per-room cap).
 func extra_monsters() -> int:
 	return floori(config.extra_monsters_per_depth * (depth - 1)) + difficulty.extra_monsters
+
+
+## A fight room's share of monsters (decision 0012): its open ground `cells` against
+## DungeonConfig.room_cells, times the first floor's DungeonConfig.monsters_per_room plus the
+## floor's extra ones; between monsters_per_room_min and max_monsters_per_room(), then the event's
+## count. A share, not bodies: a tough monster takes DungeonConfig.tough_cost of it
+## (FloorPopulator). `roll` in [0, 1) rounds the fraction up that often (the floor's dice: the same
+## seed lays the same count).
+func room_monsters(cells: int, roll: float) -> int:
+	var share := float(cells) / maxf(config.room_cells, 1.0) * (config.monsters_per_room + extra_monsters())
+	var count := clampi(floori(share + roll), config.monsters_per_room_min, max_monsters_per_room())
+	return roundi(count * monster_count_scale())
 
 
 func monster_count_scale() -> float:

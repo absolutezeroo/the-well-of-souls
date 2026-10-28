@@ -33,8 +33,9 @@ Quests and the bestiary count everywhere. On every card, the souls line is red b
 above.
 
 Bigger floors get more of everything with their rooms: monsters, chests, hazards, encounters and
-items lying around. A floor starts with at most `max_monsters_per_floor` (110) monsters, so the
-phone keeps up on Nightmare; the seal never asks for more than `seal_max` (50) kills.
+items lying around. A floor starts with at most `max_monsters_per_floor` (130, an elite or a big
+body counting 2: about 100 monsters), so the phone keeps up on Nightmare; the seal never asks for
+more than `seal_max` (50) kills. How the monsters spread over the rooms: dungeon.md "Pacing".
 
 Pilgrim, Keeper and Martyr are open; **Nightmare unlocks after a win on Martyr** (`unlocked_by`).
 **Ascension**: a Nightmare win opens **Nightmare +1**, a +1 win opens +2, up to +10

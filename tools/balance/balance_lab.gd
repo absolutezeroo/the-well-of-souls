@@ -525,13 +525,14 @@ func roll_room(act: int, depth: int, count: int, rng_seed: int) -> Array:
 	return result
 
 
-## Monsters in a room at `depth` on `difficulty` (DungeonConfig: the middle of the per-room
-## range, plus the depth's and the difficulty's extra ones, capped).
+## Monsters in a room of DungeonConfig.room_cells open cells at `depth` on `difficulty`
+## (FloorRules.room_monsters(): the first floor's monsters_per_room, the depth's and the
+## difficulty's extra ones, capped; what a room held before the rooms were counted by size, so
+## the measures keep their room; a floor's rooms hold that times their size).
 func room_size(depth: int, difficulty: DifficultyDef) -> int:
 	var config := content.dungeon
 	var rules := FloorRules.make(config, difficulty, null, depth)
-	var base := roundi((config.monsters_per_room_min + config.monsters_per_room_max) * 0.5)
-	return mini(base + rules.extra_monsters(), config.max_monsters_per_room + difficulty.extra_monsters)
+	return rules.room_monsters(config.room_cells, 0.5)
 
 
 ## What a pack fight did: when each monster was first hurt and when it died (a one-hit kill

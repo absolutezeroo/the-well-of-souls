@@ -39,6 +39,14 @@ var _tween: Tween
 var _hint: HintDef
 ## Reads the taps on the board (its keys are the OK button's: Keys.NONE).
 var _tap := TapGate.new(TapGate.Keys.NONE)
+## The ring's pulse as last drawn, in steps (PULSE_STEPS): redrawn when it moved a step.
+var _drawn_pulse := -1
+## The arrow's triangle and its shadow, filled in place (no array built every draw).
+var _arrow := PackedVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
+var _arrow_shadow := PackedVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
+
+## The ring's pulse is drawn again this many times over its swing (not every frame).
+const PULSE_STEPS := 12
 
 
 func _init() -> void:
@@ -154,7 +162,14 @@ func _place() -> void:
 func _process(delta: float) -> void:
 	if visible and target.has_area():
 		_time += delta
-		queue_redraw()
+		var step := roundi(_pulse() * PULSE_STEPS)
+		if step != _drawn_pulse:
+			_drawn_pulse = step
+			queue_redraw()
+
+
+func _pulse() -> float:
+	return 0.5 + 0.5 * sin(_time * 5.0)
 
 
 ## A tap on the board dismisses the hint, read through the TapGate (keys are the OK button's):
@@ -175,7 +190,7 @@ func _draw() -> void:
 		return
 	var center := target.get_center()
 	var radius := maxf(target.size.x, target.size.y) * 0.5 + 10.0
-	var pulse := 0.5 + 0.5 * sin(_time * 5.0)
+	var pulse := _pulse()
 	draw_arc(center, radius + pulse * 6.0, 0.0, TAU, 48, Color(RING_COLOR, 0.35 + 0.45 * pulse), 4.0)
 	draw_arc(center, radius + 14.0 + pulse * 6.0, 0.0, TAU, 48, Color(RING_COLOR, 0.15 * pulse), 2.0)
 	var from := (size * 0.5 - center)
@@ -184,6 +199,11 @@ func _draw() -> void:
 	var side := direction.orthogonal() * 16.0
 	var back := tip + direction * 26.0
 	var shadow := Vector2(2, 3)
-	draw_colored_polygon(PackedVector2Array([tip + shadow, back + side + shadow, back - side + shadow]), Color(0.1, 0.05, 0.03, 0.8))
-	draw_colored_polygon(PackedVector2Array([tip, back + side, back - side]), RING_COLOR)
+	_arrow[0] = tip
+	_arrow[1] = back + side
+	_arrow[2] = back - side
+	for i in 3:
+		_arrow_shadow[i] = _arrow[i] + shadow
+	draw_colored_polygon(_arrow_shadow, Color(0.1, 0.05, 0.03, 0.8))
+	draw_colored_polygon(_arrow, RING_COLOR)
 	draw_line(back, back + direction * 22.0, RING_COLOR, 7.0)

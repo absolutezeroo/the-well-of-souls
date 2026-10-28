@@ -33,6 +33,43 @@ Feel numbers (presentation.md "Feel limits"): one input buffer of 0.12 s (was an
 0.3 s, counted in game time) for the attack, the roll and the skills, in real time
 (`PlayerDef.input_buffer`; core_tests' pin updated with it).
 
+## 2026-10-28 - Floor pacing, bad-luck protection, a heal before bosses (decision 0012)
+
+**Monsters by the room's size.** A fight room's share is now `room_cells` (70) open cells per
+`monsters_per_room` (2) on the first floor, plus the floor's extra ones per 70 cells too
+(`FloorRules.room_monsters()`), between 1 and `max_monsters_per_room` (9, was 6: a great hall may
+hold more, a side room fewer); an elite or a big body (radius 14+) counts 2 (`tough_cost`); the
+floor's cap counts the same way (`max_monsters_per_floor` 130, was 110 bodies: about 100 bodies).
+Calm rooms on the way (`max_fights_in_a_row` 3) hold none. `room_cells` was set so a floor holds
+what it did: measured on the same 960 floors (`tools/levels/floor_report.py`, 20 seeds, every
+floor, the four difficulties), monsters a floor 47 / 65 / 86 / 97 before, 49 / 68 / 90 / 97 after
+(Pilgrim / Keeper / Martyr / Nightmare), elites and big bodies counted twice 55 / 80 / 108 / 125
+before, 57 / 83 / 113 / 123 after: the same fight, spread by size (r(open cells, monsters) 0.02 ->
+0.64). The seal (70% of the floor's monsters) follows. The balance tools' room (`BalanceLab.
+room_size()`) is a room of `room_cells` cells: what a room held before, except the deepest rooms on
+Normal and up, now one monster more where the old cap of 6 cut them (model, `--mode=model`: same
+rooms to floor 6, then +1 where capped).
+
+**Chests**: one a floor at least (`chests_min` 1, `chests_max` 1, times the floor's size: two on
+Martyr and Nightmare floors), was 0-2: 1.56 a floor before, 1.60 after, never none (35% of floors
+had none).
+
+**An elite at the peak** (from floor 2) on floors whose ambush or pact door isn't there: about
+0.3 more elites a floor on average, within the counts above (it counts 2 in its room).
+
+**Bad-luck protection** (`pity_after` 20, `pity_growth` 1): simulated on the plain odds (Rare or
+better 5.7% on floor 1, 10% around floor 5, 15% around floor 9), the share of Rare finds becomes
+7.4% / 10.8% / 15.4% (+30% / +8% / +3%) and the longest run without one 230 / 103 / 55 finds ->
+38 / 34 / 29. Kept gentle on purpose: it cuts the long droughts, not the odds.
+
+**A heal before every boss**: the Spring of the Last Vigil heals whole in the boss floor's first
+room on every difficulty (Pilgrim already healed 25% on each new floor). The balance tools' boss
+fights already start from a set Health (`BalanceArena`), so their measures don't move; in play a
+hero who drinks meets the boss whole, whatever the floor before cost him.
+
+Open: the floor's real length (3-6 min on the phone, telemetry `floor_times`), the density and the
+calm rooms' share to tune by playing (roadmap).
+
 ## 2026-10-27 - Heal share only where the hero was hurt (tools only)
 
 The heal share targets (arena "heal share", model "heal share") now judge only fights where the

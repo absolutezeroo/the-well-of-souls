@@ -13,6 +13,7 @@ attack_speed = 0.12
 
 [resource]
 script = ExtResource("4_mkv7n")
+role = 1
 id = &"frenzy"
 display_name = "Frenzy"
 icon = ExtResource("2_fek4i")

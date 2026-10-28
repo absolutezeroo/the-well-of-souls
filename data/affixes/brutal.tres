@@ -9,6 +9,7 @@ attack = 4
 
 [resource]
 script = ExtResource("2_fk245")
+role = 1
 slots = 1
 bonuses = SubResource("Resource_8rxcb")
 id = &"brutal"

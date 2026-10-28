@@ -15,6 +15,7 @@ script = ExtResource("4_v4ul8")
 
 [resource]
 script = ExtResource("4_iviqe")
+role = 1
 id = &"precision"
 display_name = "Precision"
 description = "Your first blow on an unhurt enemy is always a critical hit."

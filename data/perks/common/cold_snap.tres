@@ -25,6 +25,7 @@ status = SubResource("Resource_hkbic")
 
 [resource]
 script = ExtResource("5_s1k5s")
+role = 2
 id = &"cold_snap"
 display_name = "Cold Snap"
 description = "Rolling releases a wave of cold that hurts and slows enemies around by 50%."

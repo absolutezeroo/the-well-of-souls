@@ -18,6 +18,9 @@ enum Rarity { COMMON, RARE }
 @export_range(0, 100) var weight: int = 10
 ## Its families (Inferno, Frost...): each different perk of a family counts once.
 @export var synergies: Array[SynergyDef] = []
+## A staple (a solid pick in any build) or a build-around (asks for its family, which it names
+## in `synergies`): BuildRole. Force, Precision, Fortune and the War Banner: staples, no family.
+@export var role: BuildRole.Role = BuildRole.Role.UNSET
 
 @export_group("Effects (per stack)")
 @export var bonuses: StatBlock

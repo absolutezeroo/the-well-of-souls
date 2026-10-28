@@ -9,6 +9,7 @@ poison_damage = 3
 
 [resource]
 script = ExtResource("2_ve6lb")
+role = 1
 slots = 1
 on_hit = SubResource("Resource_8ujd2")
 id = &"venomous"

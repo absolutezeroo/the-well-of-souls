@@ -19,6 +19,7 @@ element = ExtResource("vfx_storm")
 
 [resource]
 script = ExtResource("5_lu8fu")
+role = 2
 id = &"thunderclap"
 display_name = "Thunderclap"
 description = "Critical hits release a shockwave that hurts the enemies around the target."

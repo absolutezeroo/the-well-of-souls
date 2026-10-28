@@ -13,6 +13,7 @@ script = ExtResource("3_uu1ki")
 
 [resource]
 script = ExtResource("4_pjoay")
+role = 2
 id = &"devotion"
 display_name = "Devotion"
 description = "Using a skill (not the roll) heals 3 Health per level."

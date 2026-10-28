@@ -40,7 +40,7 @@ static func show_damage(actor: Actor, damage: int, color: Color, crit: bool) -> 
 	var entry: Array = _numbers.get(key, [])
 	if not entry.is_empty():
 		var shown: FloatingText = null
-		if is_instance_valid(entry[0]):
+		if is_instance_valid(entry[0]) and (entry[0] as Node).is_inside_tree():  # (not back in its pool)
 			shown = entry[0] as FloatingText
 		if shown and now - int(entry[4]) <= MERGE_WINDOW_MS and entry[3] == color and shown.shown_text() == entry[1]:
 			var total: int = entry[2] + damage

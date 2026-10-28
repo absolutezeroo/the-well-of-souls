@@ -14,6 +14,12 @@ var _world: World
 var _entities: Node2D
 var _projectiles: Node2D
 var _effects: Node2D
+## Shots and damage numbers done with, kept to be fired and shown again (NodePool): a fight makes
+## dozens a second. Freed with the World (free_pools()).
+var shot_pool := NodePool.new()
+var text_pool := NodePool.new()
+## Monsters called in later (defer_monsters()), oldest first: one put down a frame.
+var _pending: Array[SpawnBatch] = []
 
 ## A typed deferred batch. Holds weak targets, never captured actor nodes in lambdas.
 class SpawnBatch:
@@ -24,6 +30,11 @@ class SpawnBatch:
 	var radius := 0.0
 	var target: WeakRef
 	var generation := 0
+	## Called in by a summoner (Monster.summoned: worth nothing), out of its element's ring (null:
+	## a puff of smoke); none once the floor holds `max_alive` monsters (0: no limit).
+	var summoned := false
+	var element: VfxElementDef
+	var max_alive := 0
 
 
 func _init(world: World, entities: Node2D, projectiles: Node2D, effects: Node2D) -> void:
@@ -42,7 +53,10 @@ func spawn_monster(def: MonsterDef, at: Vector2) -> Monster:
 	return monster
 
 
-func defer_monsters(kinds: Array[MonsterDef], count: int, at: Vector2, radius: float, target: Actor) -> void:
+## `count` monsters of `kinds` (empty: the floor's) put down around `at` from the next frames on,
+## one a frame (docs/performance.md: one heavy instantiation a frame at most), coming for
+## `target`. A batch of an older floor is dropped.
+func defer_monsters(kinds: Array[MonsterDef], count: int, at: Vector2, radius: float, target: Actor) -> SpawnBatch:
 	var batch := SpawnBatch.new()
 	batch.kinds = kinds.duplicate()
 	batch.count = count
@@ -50,18 +64,87 @@ func defer_monsters(kinds: Array[MonsterDef], count: int, at: Vector2, radius: f
 	batch.radius = radius
 	batch.target = weakref(target)
 	batch.generation = _world.floor_id
-	_spawn_batch.call_deferred(batch)
+	_pending.append(batch)
+	_schedule()
+	return batch
 
 
-func _spawn_batch(batch: SpawnBatch) -> void:
-	if is_instance_valid(_world) and _world.floor_id == batch.generation:
-		for i in batch.count:
-			var kind: MonsterDef = batch.kinds.pick_random() if not batch.kinds.is_empty() else _world.pick_monster()
-			if kind == null:
-				break
-			var monster := spawn_monster(kind, _world.find_open_point_near(batch.at, batch.radius, WorldSpace.room_for(kind)))
-			monster.target = batch.target.get_ref() as Actor if batch.target else null
-			Vfx.puff(_world, monster.global_position)
+## Monsters still to be put down (defer_monsters()).
+func pending_monsters() -> int:
+	var left := 0
+	for batch in _pending:
+		left += batch.count
+	return left
+
+
+func _schedule() -> void:
+	if not is_instance_valid(_world) or not _world.is_inside_tree():
+		return
+	var tree := _world.get_tree()
+	if not tree.process_frame.is_connected(_spawn_next):
+		tree.process_frame.connect(_spawn_next, CONNECT_ONE_SHOT)
+
+
+## One monster of the oldest batch (this frame's one), then the next frame for the rest.
+func _spawn_next() -> void:
+	while not _pending.is_empty():
+		var batch := _pending[0]
+		if not is_instance_valid(_world) or _world.floor_id != batch.generation or batch.count <= 0 \
+				or (batch.max_alive > 0 and _world.monster_count() >= batch.max_alive):
+			_pending.pop_front()
+			continue
+		batch.count -= 1
+		if batch.count <= 0:
+			_pending.pop_front()
+		if spawn_from(batch):
+			break
+	if not _pending.is_empty():
+		_schedule()
+
+
+## One monster of `batch`, put down now; null if it has no kind to call.
+func spawn_from(batch: SpawnBatch) -> Monster:
+	var kind: MonsterDef = batch.kinds.pick_random() if not batch.kinds.is_empty() else _world.pick_monster()
+	if kind == null:
+		return null
+	var at := _world.find_open_point_near(batch.at, batch.radius, WorldSpace.room_for(kind))
+	var monster := spawn_monster(kind, at)
+	monster.target = batch.target.get_ref() as Actor if batch.target else null
+	if batch.summoned:
+		monster.summoned = true
+	if batch.element:
+		Vfx.pop(_world, at + Vector2(0, -10), batch.element, 14.0, Vector2.UP)
+		Vfx.nova(_world, at, 16.0, batch.element)
+	else:
+		Vfx.puff(_world, monster.global_position)
+	return monster
+
+
+## The kept shots and numbers freed (the World goes).
+func free_pools() -> void:
+	shot_pool.clear()
+	text_pool.clear()
+
+
+## A damage number, a heal, a word over someone (FloatingText), from the pool when one is kept.
+func floating_text(at: Vector2, text: String, color: Color) -> FloatingText:
+	var number := text_pool.take() as FloatingText
+	if number:
+		number.restart(at, text, color)
+	else:
+		number = FloatingText.create(at, text, color)
+		number.pool = text_pool
+	_world.spawn_vfx(number)
+	return number
+
+
+## A shot, from the pool when one is kept (Projectile.setup() makes it new again).
+func _new_shot() -> Projectile:
+	var shot := shot_pool.take() as Projectile
+	if shot == null:
+		shot = PROJECTILE_SCENE.instantiate() as Projectile
+		shot.pool = shot_pool
+	return shot
 
 
 func spawn_loot(item: ItemDef, at: Vector2, quality: float = 1.0) -> ItemPickup:
@@ -70,11 +153,14 @@ func spawn_loot(item: ItemDef, at: Vector2, quality: float = 1.0) -> ItemPickup:
 	if item is ConsumableDef and _world.player and not _world.ledger.numbering and _world.player.pack.carried_count(item) >= _world.config().consumable_carry_cap:
 		spawn_gold(at, maxi(_world.config().consumable_gold_min, roundi(item.value * _world.config().consumable_gold_share)))
 		return null
-	return spawn_item(roll_item(item, _world.rules.drop_quality(quality)), at)
+	# Found while the floor is played (not laid by its seed): the run's bad-luck protection counts it.
+	return spawn_item(roll_item(item, _world.rules.drop_quality(quality), null if _world.ledger.numbering else _world.luck), at)
 
 
-func roll_item(item: ItemDef, quality: float = 1.0) -> ItemDef:
-	return LootRoller.roll(item, _world.depth, quality, _world.config(), _world.content_db().item_affixes, _world.rng)
+## `luck`: a find the run's bad-luck protection counts (RunLuck.rare_drought); null for the
+## merchant's stock and what the floor's seed lays.
+func roll_item(item: ItemDef, quality: float = 1.0, luck: RunLuck = null) -> ItemDef:
+	return LootRoller.roll(item, _world.depth, quality, _world.config(), _world.content_db().item_affixes, _world.rng, ItemRarity.COMMON, luck)
 
 
 func spawn_gold(at: Vector2, amount: int) -> void:
@@ -177,7 +263,7 @@ func fire_projectiles(shooter: Actor, direction: Vector2, spec: ProjectileSpec, 
 		elif spec.count > 1:
 			angle = lerpf(-spec.spread_degrees * 0.5, spec.spread_degrees * 0.5, float(i) / (spec.count - 1))
 		var shot_direction := direction.rotated(deg_to_rad(angle))
-		var projectile := PROJECTILE_SCENE.instantiate() as Projectile
+		var projectile := _new_shot()
 		projectile.setup(shooter, shot_direction, spec)
 		if from == Vector2.INF:
 			projectile.position = shooter.global_position + shot_direction * (shooter.radius * 0.5)
@@ -301,7 +387,7 @@ func spawn_quicksand(def: QuicksandDef, rect: Rect2i) -> Quicksand:
 
 
 func fire_trap_projectile(from: Vector2, direction: Vector2, spec: ProjectileSpec) -> void:
-	var projectile := PROJECTILE_SCENE.instantiate() as Projectile
+	var projectile := _new_shot()
 	projectile.setup_trap(_world, direction, spec)
 	projectile.position = from
 	_projectiles.add_child.call_deferred(projectile)

@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://src/definitions/passives/kill_burst_passive.gd" id="3_ca7df"]
 [ext_resource type="Script" path="res://src/definitions/items/item_affix_def.gd" id="4_4m12d"]
 [ext_resource type="Resource" path="res://data/vfx/elements/fire.tres" id="vfx_fire"]
+[ext_resource type="Resource" path="res://data/perks/synergies/inferno.tres" id="role_family"]
 
 [sub_resource type="Resource" id="Resource_ittn7"]
 script = ExtResource("2_8xws5")
@@ -20,6 +21,8 @@ blast_element = ExtResource("vfx_fire")
 
 [resource]
 script = ExtResource("4_4m12d")
+role = 2
+family = ExtResource("role_family")
 is_prefix = false
 slots = 1
 passives = Array[ExtResource("1_fxish")]([SubResource("Resource_k21oc")])

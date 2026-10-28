@@ -9,6 +9,7 @@ crit_chance = 0.08
 
 [resource]
 script = ExtResource("2_75cdq")
+role = 1
 slots = 1
 bonuses = SubResource("Resource_fu8v1")
 id = &"precise"

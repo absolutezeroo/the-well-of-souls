@@ -9,7 +9,7 @@ extends FloorKind
 func twist(world: World, content: ContentDB) -> FloorRoute:
 	if world.depth <= 1:
 		return null
-	var rolled := FloorRoute.roll_twist(content, world.depth, world.rng, world.difficulty, world.tuning)
+	var rolled := FloorRoute.roll_twist(content, world.depth, world.rng, world.difficulty, world.tuning, world.luck, world.depth + 1)
 	# The Dawn Knell's omen (remote settings) on every normal floor, after the usual rolls.
 	var omen := FloorRoute.omen_of(content, world.tuning)
 	if omen:

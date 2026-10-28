@@ -66,6 +66,28 @@ Call it only when what `_draw()` shows changed:
   `NOTIFICATION_VISIBILITY_CHANGED`); a HUD widget sets its parts only when the state they show
   changed (`Hud` belt, weapon and temperature; `PactLine` colour).
 
+**Pools: what comes and goes by the dozen is kept, not made again** (decision of the design
+audit, docs/design/pillars.md "Performance on the phone"). A shot (`Projectile`) and a damage number
+(`FloatingText`) done with go back to their World's pool (`NodePool`, `WorldSpawner.shot_pool`,
+`text_pool`): taken out of the tree at the end of the frame (it may be in a physics callback) and
+kept, out of the physics and the groups; the next one fired or shown comes out of the pool and is
+set up as new (`Projectile._reset()`, `FloatingText.restart()`). A pool keeps 48 at most (one more
+is freed); the World frees what its pools keep when it goes. A pooled node must forget everything
+of its last life in its setup: its hits, its trail, its halo and distortion children, its z.
+
+**One heavy instantiation a frame.** Monsters called in (a trapped chest's, a slime's split, a
+summoner's: `WorldSpawner.defer_monsters()`) come one a frame from the next frame on; a summoner's
+first comes at once (`SummonEffect`), the rest after it. The ambushes' waves already came one at a
+time (`ambush_spawn_interval`).
+
+**Polls stop when there is nothing to find.** The tutorial looks around for its cues (a merchant
+near, a chest near: group scans and lines of sight) four times a second only while a hint they
+bring is still to see on this profile (`Tutorial._world_cues_left()`); `MenuNav` keeps the menus'
+group as last asked and asks the tree again only when a menu came or went (`_refresh_menus()`),
+with no dictionary built each frame; a weapon's aura ages its motes in place and reuses dead ones'
+dictionaries; the hint ring is drawn again when its pulse moved a step (12 over its swing), its
+arrow from two arrays kept.
+
 **Quadratic loops get a grid.** Every monster looking at every other one (`MonsterSteering.keep_spacing`) asks
 `World.activity.buckets` (`MonsterBuckets`) for those in the cells around it: the same ones, in the
 same order, so the same sums and the same seeded fights. A line of sight asked every frame is
@@ -151,7 +173,8 @@ godot --headless --fixed-fps 60 res://tools/perf/perf_probe.tscn [-- --fight-fra
    monsters of 8 kinds (melee, ranged, casters, fliers) around it, its Health refilled, for
    `--fight-frames` physics frames. Each frame's physics part (from the physics step's start to
    the process step's) and process part (the scripts' `_process` and every `_draw`) are kept:
-   average, 95th percentile and the worst frame.
+   average, 95th and 99th percentile (P99: what a phone's frame rate is judged on), the worst
+   frame, and the share of frames over 16.7 ms (a missed 60 fps frame).
 
 On Linux it measures the main thread's CPU time (`/proc/thread-self/schedstat`), so other
 programs on the machine count little; elsewhere the wall clock. The numbers depend on the
@@ -191,6 +214,23 @@ after, the same within the machine's noise. With `--floors=1` the fight's digest
 from one run to the next on either side (the same code; task card in the roadmap). It follows
 the memory layout, not the game's clock: with address randomization off
 (`setarch x86_64 -R godot ...`) the runs mostly agree, so compare fights that way or over a few runs.
+
+**Pools, one instantiation a frame, quiet polls (2026-10-28, task_414).** The same VM, the probe
+with `--floors=2` (P99 added), two runs each, alternated, the main thread's CPU time; before = the
+code without the pools (the floors' pacing already in):
+
+| | before | after |
+|---|---|---|
+| Fight, process part average | 0.79 / 0.87 ms | 0.68 / 0.66 ms |
+| Fight, process part P99 | 5.48 / 4.30 ms | 4.01 / 3.56 ms |
+| Fight, frame average | 4.90 / 5.30 ms | 4.61 / 4.69 ms |
+| Fight, frame P95 | 8.97 / 9.58 ms | 7.99 / 7.99 ms |
+| Fight, frame P99 | 13.16 / 14.26 ms | 12.38 / 11.89 ms |
+| Frames over 16.7 ms | 0.4 / 0.4% | 0.3 / 0.2% |
+
+The fights go otherwise run to run (kills 47-58), so read these as a trend, not a measure: the
+process part (the scripts, the drawing) about 15% lighter, the worst frames a little better. The
+phone's renderer and allocator, where pools matter most, are not measured headless (task_98).
 
 What is left (the roadmap has the cards): floor generation's hot spots are the dressing's
 grounds (`FloorDresser._lay_ground`, dictionaries per cell), the ceiling's chunks and their mote

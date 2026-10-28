@@ -22,6 +22,7 @@ shard_status = SubResource("Resource_m4462")
 
 [resource]
 script = ExtResource("5_sfge4")
+role = 2
 id = &"ice_shards"
 display_name = "Ice Shards"
 description = "Slain enemies burst into 4 ice shards (+1 per level) that slow."

@@ -13,6 +13,7 @@ bonus_per_stack = 0.75
 
 [resource]
 script = ExtResource("4_eiqjs")
+role = 2
 id = &"executioner"
 display_name = "Executioner"
 description = "+75% damage per level against enemies below 35% Health."

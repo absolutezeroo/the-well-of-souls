@@ -93,7 +93,10 @@ func _test_boss_fight(game: Game) -> void:
 	summon.count = 2
 	var count_before := world.monster_count()
 	summon.apply(boss, Vector2.RIGHT)
-	check(world.monster_count() == count_before + 2, "summons appear")
+	# The first at once, the next one a frame later (one heavy instantiation a frame at most).
+	check(world.monster_count() == count_before + 1, "the first summon appears at once")
+	await _frames(2)
+	check(world.monster_count() == count_before + 2, "summons appear, one a frame")
 	# A boss's adds feed no "on kill" heal (Vampirism, the Blood family), summoned or not.
 	check(world.is_boss_fight(), "a boss fight is on")
 	var stray := world.spawn_monster(load("res://data/monsters/slime.tres"), boss.global_position + Vector2(0, 70))

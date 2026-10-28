@@ -11,6 +11,7 @@ attack = 2
 
 [resource]
 script = ExtResource("4_4ypqm")
+role = 1
 id = &"strength"
 display_name = "Strength"
 icon = ExtResource("2_10vs8")

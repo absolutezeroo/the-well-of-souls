@@ -16,6 +16,10 @@ extends Resource
 @export var room_min_size: int = 7
 @export var room_max_size: int = 13
 @export_range(1, 5) var corridor_width: int = 3
+## Rock kept between two rooms of a normal floor, in cells. Less than
+## DungeonGenerator.MIN_WALL_THICKNESS and smooth() opens the wall between them: the two rooms
+## merge into one sprawling space (decision 0012).
+@export_range(2, 6) var room_gap: int = 3
 ## The chasms and pools of shaped rooms (RoomShapeDef) in a biome without its own
 ## (BiomeDef.chasm, BiomeDef.pool), and the pillars of a shape without one.
 @export var chasm: PitDef
@@ -43,12 +47,22 @@ extends Resource
 @export_range(0.0, 5.0) var family_bias: float = 1.0
 
 @export_group("Population")
+## Monsters follow a room's size (decision 0012): a room of `room_cells` open ground cells gets
+## `monsters_per_room` on the first floor, plus the floor's extra ones (FloorRules.extra_monsters());
+## a room twice as big gets twice as many (FloorRules.room_monsters()). A fight room gets
+## `monsters_per_room_min` at least, `max_monsters_per_room` at most.
+@export_range(20, 400) var room_cells: int = 104
+@export_range(0.5, 6.0, 0.05) var monsters_per_room: float = 2.0
 @export var monsters_per_room_min: int = 1
-@export var monsters_per_room_max: int = 3
-## Extra monsters per room for each depth below the first.
+## Extra monsters per room (of `room_cells`) for each depth below the first.
 @export var extra_monsters_per_depth: float = 0.5
 @export var max_monsters_per_room: int = 6
-## The most monsters a floor starts with (the phone keeps up; rooms get fewer when over).
+## A tough monster takes more of its room's share: an elite (any rank) or a big body (its radius at
+## least `tough_radius`) counts as `tough_cost` monsters.
+@export_range(1, 4) var tough_cost: int = 2
+@export var tough_radius: float = 14.0
+## The most monsters a floor starts with, counted as the rooms' shares (a tough one counts
+## `tough_cost`): the phone keeps up; rooms get fewer when over.
 @export var max_monsters_per_floor: int = 110
 @export var items_per_floor: int = 4
 
@@ -64,10 +78,23 @@ extends Resource
 @export_range(0, 20) var hazard_groups_max: int = 5
 
 @export_group("Chests")
-## Chests lying around a floor (some are trapped: see ChestDef).
+## Chests lying around a floor (some are trapped: see ChestDef), times the floor's size. One at
+## least (decision 0012: a treasure on every floor), the first in a dead end, else a calm room on
+## the way (FloorPacing).
 @export var chest: ChestDef
-@export_range(0, 6) var chests_min: int = 0
-@export_range(0, 6) var chests_max: int = 2
+@export_range(1, 6) var chests_min: int = 1
+@export_range(1, 6) var chests_max: int = 1
+
+@export_group("Pacing")
+## Fight rooms in a row at most on the way from the start to the stairs: the one after is kept
+## calm (no monsters; an encounter, a chest or nothing but its crates). See FloorPacing.
+@export_range(0, 10) var max_fights_in_a_row: int = 3
+## Where along the way (0 the start, 1 the stairs) the floor peaks: the ambush, the pact door, or
+## else an elite in a fight room there. The merchant and the forge come after it (the release).
+@export_range(0.0, 1.0, 0.05) var peak_from: float = 0.6
+@export_range(0.0, 1.0, 0.05) var peak_to: float = 0.8
+## From this floor on, a floor with neither ambush nor pact door at its peak gets an elite there.
+@export_range(1, 20) var peak_elite_min_depth: int = 2
 
 @export_group("Ambushes")
 ## Chance for a floor to have an ambush room: it looks empty, then the exits close and
@@ -95,6 +122,12 @@ extends Resource
 @export var rare_weight_per_depth: float = 1.0
 @export var epic_weight: float = 0.6
 @export var epic_weight_per_depth: float = 0.4
+## Bad-luck protection (decision 0012): after `pity_after` pieces of equipment found in a row
+## without a Rare or better (RunLuck.rare_drought; not the merchant's, not what a floor lays), the
+## Rare and Epic weights grow by `pity_growth` for each further piece, until one comes
+## (LootRoller.pity_scale()). 0: no protection.
+@export_range(0, 100) var pity_after: int = 20
+@export_range(0.0, 5.0, 0.05) var pity_growth: float = 1.0
 ## Quality of what bosses drop (1 = a common monster; elites: MonsterRankDef.loot_quality).
 @export var boss_loot_quality: float = 5.0
 ## A boss at a rare rank (Fell, Legendary...) drops better still: its quality times 1 + this per
@@ -253,6 +286,9 @@ extends Resource
 @export var arena_size: Vector2i = Vector2i(21, 15)
 ## Arenas the bosses fight in (shapes, pillars, changes by phase), one picked per boss floor.
 @export var arenas: Array[ArenaDef] = []
+## A heal before every boss (decision 0012): this spring stands by where the hero arrives on a
+## boss floor (and the hidden floor, and the bottom of the Well), on every difficulty.
+@export var boss_spring: EncounterDef
 
 @export_group("Sustain")
 ## How much the hero heals from hits, kills and skills (Leech, Vampirism, the Blood family...):

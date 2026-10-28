@@ -13,6 +13,7 @@ skill_power = 0.12
 
 [resource]
 script = ExtResource("4_jcf7v")
+role = 1
 id = &"arcane_power"
 display_name = "Arcane Power"
 icon = ExtResource("2_wq1kv")

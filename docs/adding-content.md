@@ -34,7 +34,7 @@ you can; by hand, keep the `[ext_resource]` paths right.
 | A new kind of effect | New script in `src/definitions/effects/` extending `Effect`, override `apply()` |
 | A new monster ability | A `MonsterTrait` subclass in `src/definitions/monster_traits/`, add it to a monster's Traits |
 | A new monster AI state | New state script in `src/ai/states/`, add a node for it in `monster.tscn` |
-| A perk | New `PerkDef` in `data/perks/`, add it to `content_db.tres` > Perks |
+| A perk | New `PerkDef` in `data/perks/`, add it to `content_db.tres` > Perks; its `role` (staple or build-around, builds.md "Roles"; a build-around names its family) |
 | A new kind of perk | New script in `src/definitions/passives/` extending `Passive`, override the hooks you need |
 | A boss | New `BossDef` in `data/monsters/bosses/`, set it as an act's Boss, and give it a chronicle (below, "The story") |
 | A shrine upgrade | New `UpgradeDef` in `data/upgrades/`, add it to `content_db.tres` > Upgrades |
@@ -64,7 +64,7 @@ you can; by hand, keep the `[ext_resource]` paths right.
 | An encounter | New `EncounterDef` in `data/encounters/` (choices, costs, outcomes, the `verb` on the Interact button by it), add it to `content_db.tres` > Encounters |
 | A pact (a pact door's rule) | New `PactDef` in `data/pacts/` (a rule, waves, elites, relics, max Health cost), add it to `dungeon_config.tres` > Pacts |
 | A new kind of pact rule | New script in `src/definitions/pacts/` extending `PactRule`: `describe()`, `status_text()`, listen in `_on_begin()`, call `_break()` |
-| An item affix | New `ItemAffixDef` in `data/affixes/` (prefix or suffix, slots, stats, on-hit or passives + description), add it to `content_db.tres` > Item Affixes |
+| An item affix | New `ItemAffixDef` in `data/affixes/` (prefix or suffix, slots, stats, on-hit or passives + description, its `role`; a themed one its element's `family`), add it to `content_db.tres` > Item Affixes |
 | Story texts | Edit `data/story/story.tres` (intro pages, death lines...); an act's line is its `ActDef` > Lore |
 | A boss's story, a fragment, a condition, a deed, a cinematic step | See "The story" below |
 | A speaker, a line of dialogue, an advice of the Vigil-Keeper, a condition on the run | See "Dialogue" below |

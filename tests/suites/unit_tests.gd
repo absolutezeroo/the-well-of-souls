@@ -33,6 +33,7 @@ func test_cases() -> Array:
 		["perks", _test_perks],
 		["sustain", _test_sustain],
 		["synergies", _test_synergies],
+		["roles", _test_roles],
 		["family_themes", _test_family_themes],
 		["bestiary", _test_bestiary],
 		["monster_ranks", _test_monster_ranks],
@@ -64,10 +65,12 @@ func test_cases() -> Array:
 		["text_grid", _test_text_grid],
 		["charged_attacks", _test_charged_attacks],
 		["blows_in_four_directions", _test_blows_in_four_directions],
-		["perf", func() -> void: await _part(PerfTests.new(), func(suite: PerfTests) -> void: suite.run_unit())],
+		["perf", func() -> void: await _part(PerfTests.new(), func(suite: PerfTests) -> void: await suite.run_unit())],
 		["sound", func() -> void: await _part(SoundTests.new(), func(suite: SoundTests) -> void: suite.run())],
 		["vfx", func() -> void: await _part(VfxTests.new(), func(suite: VfxTests) -> void: suite.run())],
 		["level", func() -> void: await _part(LevelTests.new(), func(suite: LevelTests) -> void: suite.run_unit())],
+		["pacing", func() -> void: await _part(PacingTests.new(), func(suite: PacingTests) -> void: suite.run_unit())],
+		["luck", func() -> void: await _part(LuckTests.new(), func(suite: LuckTests) -> void: suite.run_unit())],
 		["floor_determinism", func() -> void: await _part(FloorDeterminismTests.new(), func(suite: FloorDeterminismTests) -> void: await suite.run_unit())],
 		["debug", func() -> void: await _part(DebugTests.new(), func(suite: DebugTests) -> void: suite.run_unit())],
 		["leaderboard", func() -> void: await _part(LeaderboardTests.new(), func(suite: LeaderboardTests) -> void: await suite.run_unit())],
@@ -1880,6 +1883,46 @@ func _test_bestiary() -> void:
 	check(own.met(kill), "its own challenge: with the right weapon")
 	check(Profile.complete_challenge(frog.id, own.id, own.souls) and not Profile.complete_challenge(frog.id, own.id, own.souls) and Profile.is_challenge_done(frog.id, own.id), "a challenge is done (and paid) once")
 	Profile.reset()
+
+
+## Every perk, relic and affix has a purpose; a build-around belongs to a family.
+func _test_roles() -> void:
+	var unset: Array[String] = []
+	var lone: Array[String] = []
+	for perk in CONTENT.perks:
+		if perk.role == BuildRole.Role.UNSET:
+			unset.append(String(perk.id))
+		elif perk.role == BuildRole.Role.BUILD_AROUND and not perk.synergies.any(func(s: SynergyDef) -> bool: return CONTENT.synergies.has(s)):
+			lone.append(String(perk.id))
+	for affix in CONTENT.item_affixes:
+		if affix.role == BuildRole.Role.UNSET:
+			unset.append(String(affix.id))
+		elif affix.role == BuildRole.Role.BUILD_AROUND and not CONTENT.synergies.has(affix.family):
+			lone.append(String(affix.id))
+		if affix.family:
+			check(CONTENT.synergies.has(affix.family), "%s: its family %s is listed" % [affix.id, affix.family.id])
+	check(unset.is_empty(), "every perk, relic and affix says if it is a staple or a build-around (decision 0012: %s)" % ", ".join(unset))
+	check(lone.is_empty(), "every build-around belongs to a family (%s)" % ", ".join(lone))
+	for id: String in ["strength", "precision", "fortune", "war_banner"]:
+		var perk := _perk(id)
+		check(perk != null and perk.role == BuildRole.Role.STAPLE and perk.synergies.is_empty(), "%s: a staple, in no family (docs/design/builds.md)" % id)
+	var themed := {&"burning": &"inferno", &"of_embers": &"inferno", &"frozen": &"frost", &"shattering": &"frost", &"shocking": &"storm", &"vampiric": &"blood", &"of_echoes": &"arcane"}
+	for id: StringName in themed:
+		var affix := _affix_named(id)
+		check(affix != null and affix.role == BuildRole.Role.BUILD_AROUND and affix.family != null and affix.family.id == themed[id], "%s joins its element's family, %s" % [id, themed[id]])
+	var families := {}
+	for perk in CONTENT.perks:
+		if perk.role == BuildRole.Role.BUILD_AROUND:
+			for synergy in perk.synergies:
+				families[synergy] = true
+	check(CONTENT.synergies.all(func(s: SynergyDef) -> bool: return families.has(s)), "every family has something to build around")
+
+
+func _affix_named(id: StringName) -> ItemAffixDef:
+	for affix in CONTENT.item_affixes:
+		if affix.id == id:
+			return affix
+	return null
 
 
 ## Perk families: sound data, waking at 3 different perks, saved and loaded.

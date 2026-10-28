@@ -9,6 +9,7 @@ cooldown_reduction = 0.08
 
 [resource]
 script = ExtResource("2_gfg2l")
+role = 1
 is_prefix = false
 bonuses = SubResource("Resource_ap762")
 id = &"of_haste"

@@ -288,6 +288,7 @@ func _begin_run(saved: Dictionary, daily: bool = false) -> void:
 			Profile.start_daily(day)
 	world.difficulty = run.difficulty
 	world.run_bosses = run.bosses
+	world.luck = run.luck
 	world.clear_floor()  # the last run's merchant must not pass its locked stock on
 	world.floors_without_forge = int(saved.get("floors_without_forge", 0))
 	world.kept_stock.clear()
@@ -698,7 +699,7 @@ func _enter_floor(resumed: bool = false) -> void:
 	if run.leads_to_finale():
 		world.next_routes = [content.dungeon.finale.route()] as Array[FloorRoute]  # one way: down
 	else:
-		world.next_routes = FloorRoute.offer(content, depth + 1, difficulty, run.route_seed(depth + 1), run.tuning)
+		world.next_routes = _offer(depth + 1)
 	first_steps.begin_floor(FirstSteps.wanted(content, run), player, world)  # (before the floor is laid)
 	world.build_floor(depth, content, _route_to(depth))
 	world.place_player(player)
@@ -754,9 +755,19 @@ func _fight_act() -> ActDef:
 func _route_to(floor_depth: int) -> FloorRoute:
 	if not run.routes.has(floor_depth):
 		return null
-	var offered := FloorRoute.offer(content, floor_depth, difficulty, run.route_seed(floor_depth), run.tuning)
+	var offered := _offer(floor_depth)
 	var index: int = run.routes[floor_depth]
 	return offered[index] if index >= 0 and index < offered.size() else null
+
+
+## The ways down to floor `floor_depth`, offered on the floor above it: the same whenever they are
+## asked (when that floor is laid, when the next one rebuilds the way taken), so the curses and
+## events they leave out (RunLuck: no repeats) are those of the floors above the one showing them,
+## and that floor's own twist when a way led to it (recorded when its stairs were taken).
+func _offer(floor_depth: int) -> Array[FloorRoute]:
+	var shown_on := floor_depth - 1
+	var below := shown_on + 1 if run.routes.has(shown_on) else shown_on
+	return FloorRoute.offer(content, floor_depth, difficulty, run.route_seed(floor_depth), run.tuning, run.luck, below)
 
 
 func _on_stairs_reached(route: int = 0) -> void:
@@ -767,6 +778,9 @@ func _on_stairs_reached(route: int = 0) -> void:
 		hidden.spend_key()
 	elif world.next_routes.size() >= 2:
 		run.routes[depth + 1] = clampi(route, 0, world.next_routes.size() - 1)
+		var way := world.next_routes[run.routes[depth + 1]]
+		run.luck.record(RunLuck.CURSE, way.curse, depth + 1)  # (what the next floor's offer leaves out)
+		run.luck.record(RunLuck.EVENT, way.floor_event, depth + 1)
 	Sfx.play_ui(Sfx.bank.stairs)
 	_transitioning = true
 	# Fade to black, build the next floor, fade back in.
